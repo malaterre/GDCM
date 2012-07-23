@@ -51,6 +51,7 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
     else
       {
       Dummy.SetName( "Generic Group Length" );
+      Dummy.SetKeyword( "GenericGroupLength" );
       bool retired = true; // Since DICOM 2008, all (but 0002,0004) group length are retired
       Dummy.SetVR( VR::UL );
       Dummy.SetVM( VM::VM1 );
@@ -80,6 +81,8 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
         {
         std::string pc ( "Illegal Element" );
         Dummy.SetName( pc.c_str() );
+        std::string kw ( "IllegalElement" );
+        Dummy.SetKeyword( kw.c_str() );
         Dummy.SetVR( VR::INVALID );
         Dummy.SetVM( VM::VM0 );
         Dummy.SetRetired( false ); // ??
@@ -93,6 +96,8 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
         assert( tag.IsPrivate() );
         std::string pc ( "Private Creator" );
         Dummy.SetName( pc.c_str() );
+        std::string kw ( "Private Creator" );
+        Dummy.SetKeyword( pc.c_str() );
         Dummy.SetVR( VR::LO );
         Dummy.SetVM( VM::VM1 );
         Dummy.SetRetired( false );
@@ -100,7 +105,8 @@ const DictEntry &Dicts::GetDictEntry(const Tag& tag, const char *owner) const
         }
       else
         {
-        Dummy.SetName( "Private Element without Private Creator" );
+        Dummy.SetName( "Private Element Without Private Creator" );
+        Dummy.SetKeyword( "PrivateElementWithoutPrivateCreator" );
         Dummy.SetVR( VR::INVALID );
         Dummy.SetVM( VM::VM0 );
         return Dummy;
