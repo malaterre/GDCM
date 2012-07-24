@@ -31,38 +31,39 @@ namespace gdcm
 class GDCM_EXPORT OpenSSLPasswordBasedEncryptionCMS : public PasswordBasedEncryptionCMS
 {
 public:
-  OpenSSLPasswordBasedEncryptionCMS() : password(NULL)
+  OpenSSLPasswordBasedEncryptionCMS() : password(NULL), internalCipherType(CreateCipher(cipherType))
   {
   }
 
-  typedef enum {
-    DES_CIPHER,    // DES
-    DES3_CIPHER,   // Triple DES
-    AES128_CIPHER, // CBC AES
-    AES192_CIPHER, // '   '
-    AES256_CIPHER  // '   '
-  } CipherTypes;
+  ~OpenSSLPasswordBasedEncryptionCMS()
+  {
+    if (password) delete[] password;
+  }
 
   //TODO: character limitations for PBE ???
   void SetPassword(const char * pass)
   {
-    passwordLength = strlen(pass);
-    password = new char[passwordLength + 1];
-    //if (password == NULL)
-    memcpy(password, pass, passwordLength);
+    SetPassword(pass, strlen(pass));
   }
+
   void SetPassword(const char * pass, size_t passLen)
   {
+    assert(pass);
+
+    if (password)
+      {
+      delete[] password;
+      }
+
     passwordLength = passLen;
     password = new char[passLen];
-    //if (password == NULL)
     memcpy(password, pass, passLen);
   }
 
   /// create a PKCS#7 envelopedData structure
   virtual bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const 
   {
-    if (password == NULL) throw;
+    if (password == NULL) throw; //or assert
     BIO *in = NULL, *out = NULL;
     CMS_ContentInfo *cms = NULL;
     int flags = (CMS_BINARY | CMS_PARTIAL); //CMS_DETACHED
@@ -78,11 +79,11 @@ public:
       }
 
     //load randomness ?
-    /*if( len > (size_t)std::numeric_limits<int>::max() )
+    if( len > (size_t)std::numeric_limits<int>::max() )
       {
       gdcmErrorMacro( "len is too big: " << len );
       return false;
-      }*/
+      }
 
     in = BIO_new_mem_buf((void*)array, (int)len);
     if(!in)
@@ -98,21 +99,21 @@ public:
       goto err;
       }
 
-    const EVP_CIPHER *cipher = EVP_des_ede3_cbc();
-    cms = CMS_encrypt(NULL, in, cipher, flags);
+    cms = CMS_encrypt(NULL, in, internalCipherType, flags);
     if (!cms)
       {
       gdcmErrorMacro( "Error at creating the CMS strucutre." );
       goto err;
       }
 
-    unsigned char* pwri_tmp = (unsigned char *)BUF_strdup((char *)password);
+    unsigned char* pwri_tmp = (unsigned char *)BUF_memdup(password, passwordLength);
+    
     if (!pwri_tmp)
       goto err;
 
     if (!CMS_add0_recipient_password(cms,
         -1, NID_undef, NID_undef,
-          pwri_tmp, -1, NULL))
+          pwri_tmp, passwordLength, NULL))
       goto err;
     pwri_tmp = NULL;
 
@@ -143,7 +144,7 @@ public:
 
     if (!ret)
       {
-      fprintf(stderr, "Error Decrypting Data\n");
+      fprintf(stderr, "Error Encrypting Data\n");
       ERR_print_errors_fp(stderr);
       outlen = 0;
       }
@@ -158,33 +159,25 @@ public:
 
     return ret;
   }
+
   virtual bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const
   {
     BIO *in = NULL, *out = NULL;
     CMS_ContentInfo *cms = NULL;
-    int flags = (CMS_BINARY | CMS_PARTIAL); //CMS_DETACHED
     bool ret = false;
-
-    // RAND_status() and RAND_event() return 1 if the PRNG has been seeded with
-    // enough data, 0 otherwise.
-    if( !RAND_status() )
-      {
-      gdcmErrorMacro( "PRNG was not seeded properly" );
-      outlen = 0;
-      return false;
-      }
-
-    //load randomness ?
-    /*if( len > (size_t)std::numeric_limits<int>::max() )
-      {
-      gdcmErrorMacro( "len is too big: " << len );
-      return false;
-      }*/
+    int flags = CMS_DETACHED | CMS_BINARY;
 
     in = BIO_new_mem_buf((void*)array, (int)len);
     if(!in)
       {
       gdcmErrorMacro( "BIO_new_mem_buf" );
+      goto err;
+      }
+
+    cms = d2i_CMS_bio(in, NULL);
+    if (!cms)
+      {
+      gdcmErrorMacro( "Error when parsing the CMS structure." );
       goto err;
       }
 
@@ -195,31 +188,16 @@ public:
       goto err;
       }
 
-    const EVP_CIPHER *cipher = EVP_des_ede3_cbc();
-    cms = CMS_encrypt(NULL, in, cipher, flags);
-    if (!cms)
+    if (!CMS_decrypt_set1_password(cms, (unsigned char*)password, passwordLength))
       {
-      gdcmErrorMacro( "Error at creating the CMS strucutre." );
+      gdcmErrorMacro( "Error at setting the decryption password." );
       goto err;
       }
 
-    unsigned char* pwri_tmp = (unsigned char *)BUF_strdup((char *)password);
-    if (!pwri_tmp)
-      goto err;
-
-    if (!CMS_add0_recipient_password(cms,
-        -1, NID_undef, NID_undef,
-          pwri_tmp, -1, NULL))
-      goto err;
-    pwri_tmp = NULL;
-
-    if (!CMS_final(cms, in, NULL, flags))
-      goto err;
-
-    if (!i2d_CMS_bio(out, cms))
+    if (!CMS_decrypt(cms, NULL, NULL, NULL, out, flags))
       {
-      gdcmErrorMacro( "Error at writing CMS structure to output." );
-      return false;
+      gdcmErrorMacro( "Error at decrypting CMS structure" );
+      goto err;
       }
 
     BUF_MEM *bptr;
@@ -227,13 +205,12 @@ public:
 
     if (bptr->length > outlen)
       {
-      //TODO: how to treat this ???
       gdcmErrorMacro( "Supplied output buffer too small: " << bptr->length << " bytes needed." );
       goto err;
+      //TODO: how to treat this ???
       }
     memcpy(output, bptr->data, bptr->length);
     outlen = bptr->length;
-  
     ret = true;
 
     err:
@@ -257,7 +234,10 @@ public:
   }
 
   virtual void SetCipherType(CipherTypes type)
-  {
+  { 
+    internalCipherType = CreateCipher(type);
+    //TODO: how to handle error ? use exceptions or not ?
+    if (internalCipherType == NULL) throw;
     cipherType = type;
   }
 
@@ -267,8 +247,34 @@ public:
     return cipherType;
   }
 
+private:
+  static const EVP_CIPHER* CreateCipher( PasswordBasedEncryptionCMS::CipherTypes ciphertype)
+  {
+    const EVP_CIPHER *cipher = 0;
+    switch( ciphertype )
+      {
+    case PasswordBasedEncryptionCMS::DES_CIPHER:    // DES
+      cipher = EVP_des_cbc();
+      break;
+    case PasswordBasedEncryptionCMS::DES3_CIPHER:   // Triple DES
+      cipher = EVP_des_ede3_cbc();
+      break;
+    case PasswordBasedEncryptionCMS::AES128_CIPHER: // CBC AES
+      cipher = EVP_aes_128_cbc();
+      break;
+    case PasswordBasedEncryptionCMS::AES192_CIPHER: // '   '
+      cipher = EVP_aes_192_cbc();
+      break;
+    case PasswordBasedEncryptionCMS::AES256_CIPHER: // '   '
+      cipher = EVP_aes_256_cbc();
+      break;
+      }
+    return cipher;
+  }
+
 protected:
   CipherTypes cipherType;
+  const EVP_CIPHER *internalCipherType;
   char * password;
   size_t passwordLength;
 

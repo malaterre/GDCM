@@ -24,9 +24,6 @@
 
 int TestCryptographicMessageSyntax(int, char *[])
 {
-  //gdcm::CryptographicMessageSyntax o;
-  //(void)o;
-
   const char *input = "12345";
   size_t inputlen = 5;
 
@@ -111,11 +108,6 @@ int TestCryptographicMessageSyntax(int, char *[])
     assert(strncmp(input, decout, inputlen) == 0);
     }
 
-  // IMPORTANT: OpenSSL seems not to be able to decrypt the
-  // messages with OAEP RSA padding, maybe that's only available
-  // in the cms_* implementation.
-  // ...
-  // In CAPI can't find a way to specify the RSA padding
   for (int i = 0; i < 4; i++)
     {
     outlen = 5000;
@@ -129,6 +121,48 @@ int TestCryptographicMessageSyntax(int, char *[])
     }
 
 #endif
+#endif
+
+  return 0;
+}
+
+int TestPasswordBasedEncryption(int, char *[])
+{
+  const char *input = "12345";
+  size_t inputlen = 5;
+
+  std::string certpath = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/certificate.pem" );
+  std::string keypath = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/privatekey.pem" );
+  std::string encrypted_vector = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/encrypted_text" );
+
+  std::string encrypted_dicomdir = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/securedicomfileset/DICOMDIR" );
+  std::string encrypted_image = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/securedicomfileset/IMAGES/IMAGE1" );
+
+  char output[5000], decout[5000];
+  size_t outlen = 5000, decoutlen = 5000;
+
+  gdcm::PasswordBasedEncryptionCMS::CipherTypes ciphers[] = {
+    gdcm::PasswordBasedEncryptionCMS::AES128_CIPHER,
+    gdcm::PasswordBasedEncryptionCMS::AES192_CIPHER,
+    gdcm::PasswordBasedEncryptionCMS::AES256_CIPHER,
+    gdcm::PasswordBasedEncryptionCMS::DES3_CIPHER,
+    };
+
+#ifdef GDCM_USE_SYSTEM_OPENSSL
+  gdcm::CryptoFactory& ossl = gdcm::CryptoFactory::getFactoryInstance(0);
+  gdcm::PasswordBasedEncryptionCMS& opbe = ossl.CreatePBECMSProvider();
+
+  opbe.SetPassword("password");
+  for (int i = 0; i < 4; i++)
+    {
+    outlen = 5000;
+    decoutlen = 5000;
+    opbe.SetCipherType(ciphers[i]);
+    opbe.Encrypt(output, outlen, input, inputlen);
+    opbe.Decrypt(decout, decoutlen, output, outlen);
+    assert(decoutlen == inputlen);
+    assert(strncmp(input, decout, inputlen) == 0);
+    }
 #endif
 
   return 0;

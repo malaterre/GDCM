@@ -18,7 +18,7 @@ namespace gdcm
 {
 
 CAPICMS::~CAPICMS() {
-  for (vector<PCCERT_CONTEXT>::iterator it = certifList.begin(); it != certifList.end(); it++)
+  for (vector<PCCERT_CONTEXT>::iterator it = certifList.begin(); it != certifList.end(); ++it)
     {
     if (! CertFreeCertificateContext(*it))
       {
