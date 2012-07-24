@@ -20,6 +20,8 @@
 #include "gdcmFilename.h"
 #include "gdcmTesting.h"
 
+//#undef WIN32
+
 int TestCryptographicMessageSyntax(int, char *[])
 {
   //gdcm::CryptographicMessageSyntax o;
@@ -63,11 +65,15 @@ int TestCryptographicMessageSyntax(int, char *[])
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   for (int i = 0; i < 4; i++)
     {
+    outlen = 5000;
+    decoutlen = 5000;
     ocms.SetCipherType(ciphers[i]);
     ocms.Encrypt(output, outlen, input, inputlen);
     ocms.Decrypt(decout, decoutlen, output, outlen);
+    assert(decoutlen == inputlen);
     assert(strncmp(input, decout, inputlen) == 0);
     }
+  decoutlen = 5000;
   ocms.Decrypt(decout, decoutlen, test_vector, tvlen);
   assert(decoutlen == strlen("1234567890abcdefghijklmnopqrstuvwxyz"));
   assert(strncmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
@@ -76,11 +82,15 @@ int TestCryptographicMessageSyntax(int, char *[])
 #ifdef WIN32
   for (int i = 0; i < 4; i++)
     {
+    outlen = 5000;
+    decoutlen = 5000;
     ccms.SetCipherType(ciphers[i]);
     ccms.Encrypt(output, outlen, input, inputlen);
     ccms.Decrypt(decout, decoutlen, output, outlen);
+    assert(decoutlen == inputlen);
     assert(strncmp(input, decout, inputlen) == 0);
     }
+  decoutlen = 5000;
   ocms.Decrypt(decout, decoutlen, test_vector, tvlen);
   assert(decoutlen == strlen("1234567890abcdefghijklmnopqrstuvwxyz"));
   assert(strncmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
@@ -91,10 +101,13 @@ int TestCryptographicMessageSyntax(int, char *[])
 
   for (int i = 0; i < 4; i++)
     {
+    outlen = 5000;
+    decoutlen = 5000;
     ocms.SetCipherType(ciphers[i]);
     ccms.SetCipherType(ciphers[i]);
     ocms.Encrypt(output, outlen, input, inputlen);
     ccms.Decrypt(decout, decoutlen, output, outlen);
+    assert(decoutlen == inputlen);
     assert(strncmp(input, decout, inputlen) == 0);
     }
 
@@ -103,15 +116,17 @@ int TestCryptographicMessageSyntax(int, char *[])
   // in the cms_* implementation.
   // ...
   // In CAPI can't find a way to specify the RSA padding
-  /*for (int i = 0; i < 4; i++)
+  for (int i = 0; i < 4; i++)
     {
+    outlen = 5000;
+    decoutlen = 5000;
     ocms.SetCipherType(ciphers[i]);
     ccms.SetCipherType(ciphers[i]);
     ccms.Encrypt(output, outlen, input, inputlen);
     ocms.Decrypt(decout, decoutlen, output, outlen);
+    assert(decoutlen == inputlen);
     assert(strncmp(input, decout, inputlen) == 0);
-
-    }*/
+    }
 
 #endif
 #endif

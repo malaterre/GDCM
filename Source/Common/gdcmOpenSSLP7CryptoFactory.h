@@ -11,49 +11,47 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-#ifndef GDCMCAPIFACTORY_H
-#define GDCMCAPIFACTORY_H
+#ifndef GDCMOPENSSLP7FACTORY_H
+#define GDCMOPENSSLP7FACTORY_H
 
 #include <iostream>
 #include "gdcmCryptoFactory.h"
-#include "gdcmCAPICryptographicMessageSyntax.h"
-
-//#include <Windows.h> //for linux different id needed
+#include "gdcmOpenSSLCryptographicMessageSyntax.h"
+#include "gdcmOpenSSLPasswordBasedEncryptionCMS.h"
 
 using namespace std;
 
 namespace gdcm
 {
-class GDCM_EXPORT CAPICryptoFactory : public CryptoFactory
+class GDCM_EXPORT OpenSSLP7CryptoFactory : public CryptoFactory
 {
-  //static CAPICryptoFactory asd;
 public:
-  CAPICryptoFactory(CryptoLibs id) : CryptoFactory(id)
-    {
-    cout << "CAPI Factory created (and registered?)" << endl;
-    //CryptoFactory::AddLib(1, this);
-    }
+  OpenSSLP7CryptoFactory(CryptoLibs id) : CryptoFactory(id)
+  {
+    cout << "OpenSSL Factory created (and registered?)" << endl;
+    //CryptoFactory::AddLib(0, this);
+  }
     
 public:
   CryptographicMessageSyntax& CreateCMSProvider()
-    {
-    return *(new CAPICMS());
-    }
-  
+  {
+    return *(new OpenSSLCMS());
+  }
+
   PasswordBasedEncryptionCMS& CreatePBECMSProvider()
   {
     throw;
     //return *(new OpenSSLCMS());
   }
+
   bool getStatus()
-    {
+  {
     return 0;
-    }
+  }
 
 private:
-  CAPICryptoFactory(){}
-
+  OpenSSLP7CryptoFactory(){}
 };
-} // end namespace gdcm
-#endif //GDCMCAPIFACTORY_H
+}
+
+#endif //GDCMOPENSSLP7FACTORY_H

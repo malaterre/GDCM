@@ -21,6 +21,7 @@ using namespace std;
 #include "gdcmCAPICryptoFactory.h"
 #endif
 #include "gdcmOpenSSLCryptoFactory.h"
+#include "gdcmOpenSSLP7CryptoFactory.h"
 
 namespace gdcm
 {
@@ -30,6 +31,7 @@ namespace gdcm
     static CAPICryptoFactory capi(CryptoFactory::CAPI);
     #endif
     static OpenSSLCryptoFactory ossl(CryptoFactory::OPENSSL);
+    static OpenSSLP7CryptoFactory osslp7(CryptoFactory::OPENSSLP7);
 
     if (getMap()[id] == NULL) 
       {

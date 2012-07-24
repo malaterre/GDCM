@@ -11,16 +11,14 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
-#ifndef GDCMOPENSSLCMS_H
-#define GDCMOPENSSLCMS_H
+#ifndef GDCMOPENSSLP7CMS_H
+#define GDCMOPENSSLP7CMS_H
 
 #include <iostream>
 #include "gdcmCryptographicMessageSyntax.h"
 //#include "gdcmTypes.h"
 using namespace std;
-#include <openssl/cms.h>
-#include <openssl/evp.h>
+
 namespace gdcm
 {
 class CryptographicMessageSyntaxInternals;
@@ -36,11 +34,11 @@ class CryptographicMessageSyntaxInternals;
  *
  */
 
-class GDCM_EXPORT OpenSSLCMS : public CryptographicMessageSyntax
+class GDCM_EXPORT OpenSSLP7CMS : public CryptographicMessageSyntax
 {
 public:
-  OpenSSLCMS();
-  ~OpenSSLCMS();
+  OpenSSLP7CMS();
+  ~OpenSSLP7CMS();
   
     // X.509
   bool ParseCertificateFile( const char *filename );
@@ -49,24 +47,20 @@ public:
   /// Set Cipher Type.
   /// Default is: AES256_CIPHER
   void SetCipherType(CipherTypes type);
-  //CipherTypes GetCipherType() const;
+  CipherTypes GetCipherType() const;
 
   /// create a PKCS#7 envelopedData structure
   bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
   bool Decrypt(char *output, size_t &outlen, const char *array, size_t len);
   bool EncryptXP(char *output, size_t &outlen, const char *array, size_t len) { return false;}
 
-private:
-  ::stack_st_X509 *recips;//STACK_OF(X509) *recips;
-  ::EVP_PKEY *pkey;
-  const EVP_CIPHER *cipher;
+  private:
+  CryptographicMessageSyntaxInternals *Internals;
 
-private:
-  OpenSSLCMS(const OpenSSLCMS&);  // Not implemented.
-  void operator=(const OpenSSLCMS&);  // Not implemented.
-  const EVP_CIPHER *CreateCipher( CryptographicMessageSyntax::CipherTypes ciphertype);
-
+  private:
+  OpenSSLP7CMS(const OpenSSLP7CMS&);  // Not implemented.
+  void operator=(const OpenSSLP7CMS&);  // Not implemented.
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //GDCMOPENSSLCMS_H
+#endif //GDCMOPENSSLP7CMS_H

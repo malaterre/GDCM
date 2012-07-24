@@ -12,22 +12,8 @@
 
 =========================================================================*/
 
-#include "gdcmOpenSSLCryptoFactory.h"
-#include <openssl\evp.h>
-#include <openssl\err.h>
-namespace gdcm
-{
-bool OpenSSLCryptoFactory::Initialize()
-{
-  //TODO: review
-  static bool Initialized = false;
-  if (!Initialized)
-    {
-    //http://www.openssl.org/docs/crypto/OpenSSL_add_all_algorithms.html
-    OpenSSL_add_all_algorithms();
-    ERR_load_crypto_strings();
-    Initialized = true;
-    }
-  return true;
-}
-}
+#include "gdcmOpenSSLP7CryptoFactory.h"
+
+//namespace gdcm{
+  //gdcm::OpenSSLCryptoFactory osslf;
+//}

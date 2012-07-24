@@ -16,6 +16,7 @@
 
 
 #include "gdcmCryptographicMessageSyntax.h"
+#include "gdcmPasswordBasedEncryptionCMS.h"
 #include <map>
 
 namespace gdcm
@@ -24,12 +25,13 @@ class GDCM_EXPORT CryptoFactory
 {
 public:
   virtual CryptographicMessageSyntax& CreateCMSProvider() = 0;
+  virtual PasswordBasedEncryptionCMS& CreatePBECMSProvider() = 0;
 
   virtual bool getStatus() = 0;
 
   static CryptoFactory& getFactoryInstance(int id);
 
-  enum CryptoLibs {OPENSSL, CAPI};
+  enum CryptoLibs {OPENSSL, CAPI, OPENSSLP7};
 
 protected:
   CryptoFactory(CryptoLibs id)

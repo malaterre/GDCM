@@ -25,8 +25,6 @@
 
 #include "Helper.h"
 
-//#include "cms.asn1\EnvelopedData.h"
-
 #pragma comment(lib, "Crypt32.lib")
 
 namespace gdcm
@@ -40,9 +38,6 @@ public:
   }
 
   ~CAPICMS();
-
-  void Encrypt();
-  void Decrypt();
 
 public:
   // X.509

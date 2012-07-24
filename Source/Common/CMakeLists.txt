@@ -117,9 +117,9 @@ SET(Common_SRCS
   #gdcmCryptographicMessageSyntax.cxx
 
   gdcmCryptographicMessageSyntax.cxx
+  gdcmPasswordBasedEncryptionCMS.cxx
   gdcmCryptoFactory.cxx
-  gdcmOpenSSLCryptoFactory.cxx
-  gdcmOpenSSLCryptographicMessageSyntax.cxx
+
 
   gdcmASN1.cxx
   gdcmObject.cxx
@@ -145,6 +145,16 @@ SET(Common_SRCS ${Common_SRCS}
   Helper.cxx
 )
 ENDIF(WIN32)
+
+IF(GDCM_USE_SYSTEM_OPENSSL)
+SET(Common_SRCS ${Common_SRCS}
+  gdcmOpenSSLCryptoFactory.cxx
+  gdcmOpenSSLCryptographicMessageSyntax.cxx
+  gdcmOpenSSLPasswordBasedEncryptionCMS.cxx
+  gdcmOpenSSLP7CryptoFactory.cxx
+  gdcmOpenSSLP7CryptographicMessageSyntax.cxx
+)
+ENDIF(GDCM_USE_SYSTEM_OPENSSL)
 
 IF(GDCM_BUILD_TESTING)
 SET(Common_SRCS ${Common_SRCS}

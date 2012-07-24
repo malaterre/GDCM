@@ -1,5 +1,5 @@
-#ifndef GDCMCMS_H
-#define GDCMCMS_H
+#ifndef gdcmPasswordBasedEncryptionCMS_H
+#define gdcmPasswordBasedEncryptionCMS_H
 
 #include <iostream>
 using namespace std;
@@ -8,11 +8,10 @@ using namespace std;
 
 namespace gdcm
 {
-class GDCM_EXPORT CryptographicMessageSyntax
+class GDCM_EXPORT PasswordBasedEncryptionCMS
 {
 public:
-  
-  CryptographicMessageSyntax() : cipherType(AES128_CIPHER)
+  PasswordBasedEncryptionCMS() : cipherType(AES128_CIPHER)
   {
   }
 
@@ -24,14 +23,12 @@ public:
     AES256_CIPHER  // '   '
   } CipherTypes;
 
-     // X.509
-  virtual bool ParseCertificateFile( const char *filename ) = 0;
-  virtual bool ParseKeyFile( const char *filename ) = 0;
+  virtual void SetPassword(const char * pass) = 0; // For null-terminated strings
+  virtual void SetPassword(const char * pass, size_t passLen) = 0; //For general binary data
 
   /// create a PKCS#7 envelopedData structure
   virtual bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const = 0;
-  virtual bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) = 0;
-  virtual bool EncryptXP(char *output, size_t &outlen, const char *array, size_t len) = 0;
+  virtual bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const = 0;
 
   virtual void SetCipherType(CipherTypes type)
   {
@@ -50,4 +47,4 @@ protected:
 };
 }
 
-#endif //GDCMCMS_H
+#endif //gdcmOpenSSLPasswordBasedEncryptionCMS_H

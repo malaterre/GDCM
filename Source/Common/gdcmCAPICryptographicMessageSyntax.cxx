@@ -32,14 +32,6 @@ CAPICMS::~CAPICMS() {
     }
 }
 
-void CAPICMS::Encrypt()
-{}
-
-void CAPICMS::Decrypt()
-{
-  cout << "Decrypt with CAPI" << endl;
-}
-
 bool CAPICMS::ParseCertificateFile( const char *filename ) {
   bool ret = true;
   BYTE * certHexBuf = NULL;
