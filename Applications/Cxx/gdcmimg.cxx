@@ -739,6 +739,7 @@ int main (int argc, char *argv[])
   if( inputextension )
     {
     if(  gdcm::System::StrCaseCmp(inputextension,".raw") == 0
+      || gdcm::System::StrCaseCmp(inputextension,".rawl") == 0 // kakadu convention for raw little endian
       || gdcm::System::StrCaseCmp(inputextension,".gray") == 0
       || gdcm::System::StrCaseCmp(inputextension,".rgb") == 0 )
       {
