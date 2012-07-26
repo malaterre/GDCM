@@ -2,6 +2,11 @@
 
 \page gdcmimg Manipulate DICOM image file.
 
+gdcmimg is a low level tool to allow de-/encapsulation from/to DICOM image.
+This tool does not understand Transfer Syntax conversion. It will encapsulate
+the raw data as-is. This has some impact in some cases, see special warnings
+below.
+
 \section synopsis SYNOPSIS
 
 \verbatim
@@ -33,8 +38,9 @@ file-out  output filename
 \subsection options options
 \verbatim
      --endian %s       Endianness (LSB/MSB).
-  -d --depth %d        Depth (8/16/32).
+  -d --depth %d        Depth (Either 8/16/32 or BitsAllocated eg. 12 when known).
      --sign %s         Pixel sign (0/1).
+     --spp  %d         Sample Per Pixel (1/3).
   -s --size %d,%d      Size.
   -C --sop-class-uid   SOP Class UID (name or value).
   -T --study-uid       Study UID.
@@ -74,18 +80,18 @@ file-out  output filename
   GDCM_ROOT_UID Root UID
 \endverbatim
 
-\section supported Supported File Format (appropriate file extension)
-gdcmimg will base it's conversion process based on the file extension. Follows
-the list of recognized file extension. When no extension is found, DICOM file
-is assumed.
+\section supported Supported File Format (appropriate file extension) gdcmimg
+will base it's conversion process based on the file extension. Follows the list
+of recognized file extension. When no extension is found, DICOM file is
+assumed.
 
 input format
 \verbatim
-  * RAW       (raw, gray, rgb)
+  * RAW       (raw, rawl, gray, rgb)
   * RLE       (rle)
   * PNM       (pgm, pnm, ppm)
   * JPEG-LS   (jls)
-  * JPEG 2000 (jp2, j2k, j2c, jpc)
+  * JPEG 2000 (jp2, j2k, j2c, jpx, jpc)
   * JPEG      (jpg, jpeg, ljpg, ljpeg)
   * DICOM     ()
 \endverbatim
@@ -103,7 +109,7 @@ For file format such as RLE or RAW, user is expected to fill in information
 required to find the dimension and type of input data as there is no other way
 to find this information. For all other file format, the properties are derived
 from the file format itself.
-PNM file are supposed to be big endian.
+PNM file are supposed to be big endian (important for depth > 8)
 
 \section usage Typical usage
 \subsection blank_out Remove a rectangular part of the image
@@ -114,37 +120,51 @@ To fill the region [0,100]x[0,100] of a DICOM image simply do:
 $ gdcmimg --fill 0 --region 0,100,0,100 -i input.dcm -o output_black.dcm
 \endverbatim
 
-Warning: if the Pixel Data is compressed, the image is first decompressed so that pixel can be set to 0,
-but it is not recompressed.
+Warning: if the Pixel Data is compressed, the image is first decompressed so
+that pixel can be set to 0, but it is not recompressed.
 
 \subsection convert_raw Convert RAW to DICOM
 
-Recognized extension is .raw, .gray or .rgb (case insensitive)
+Recognized extension is .raw, .rawl, .gray or .rgb (case insensitive)
 
 \verbatim
 $ gdcmimg --size 512,512 --depth 16 -i input.raw -o output.dcm
 \endverbatim
 
-the image will be a Secondary Capture
+the image will be a Secondary Capture.
 
-When the input is 3 component, one need to specify explicitely the Samples Per Pixel:
+When the input is 3 component, one need to specify explicitely the Samples Per
+Pixel:
 
 \verbatim
 $ gdcmimg --size 512,512 --spp 3  input_rgb.raw output_rgb.dcm
 \endverbatim
 
-When the filename contains .rgb as file extension output is automatically recognized as RGB
-no need to specify --spp
+When the filename contains .rgb as file extension output is automatically
+recognized as RGB no need to specify --spp
 
 \verbatim
 $ gdcmimg --size 512,512 input.rgb output_rgb.dcm
 \endverbatim
 
-You can use the \b dd cmd line to skip any header you would like to discard, for instance,
-if you would like to skip the first 108 bytes, simply do:
+You can use the \b dd cmd line to skip any header you would like to discard,
+for instance, if you would like to skip the first 108 bytes, simply do:
 
 \verbatim
 $ dd skip=108 bs=1 if=input.raw of=output.raw
+\endverbatim
+
+.raw and .rawl extension are equivalent. You need to explicitely specify the
+endianess manually:
+
+\verbatim
+$ gdcmimg --endian MSB --size 512,512 --depth 16 -i input.raw -o output.dcm
+\endverbatim
+
+or
+
+\verbatim
+$ gdcmimg --endian LSB --size 512,512 --depth 16 -i input.raw -o output.dcm
 \endverbatim
 
 \subsection pnm Convert PGM/PNM/PPM to DICOM
@@ -178,13 +198,16 @@ the image will be a Secondary Capture
 
 \subsection j2k Convert J2K to DICOM
 
-Recognized extensions are .j2k, .jp2, .jpc (case insensitive)
+Recognized extensions are .j2k, .jp2, .jpc, jpx, j2c (case insensitive)
 
 \verbatim
 $ gdcmimg -i input.j2k -o output.dcm
 \endverbatim
 
-the image will be a Secondary Capture
+the image will be a Secondary Capture.
+
+All Pixel informations (Bits Stored/Allocated...) will be derived from the
+image itself, and not from the command line options.
 
 \subsection sopclassuid Specifying a SOP Class UID
 
@@ -206,6 +229,18 @@ $ gdcmimg 1.jpg 2.jpg 3.jpg 4.jpg output.dcm
 \section warning Warning
 
 There are a couple of issues with gdcmimg implementation:
+
+For RAW file, one should pay attention that when using --endian MSB the Pixel
+Data will be encapsulated as is (not touched by gdcmimg). Therefore the only
+possible transfer syntax available is Implicit VR Big Endian DLX (G.E Private).
+GDCM does handle this private Transfer Syntax. So if you need to convert this
+Transfer Syntax to another one (and allow Pixel Data manipulation), you can
+use:
+
+\verbatim
+$ gdcmconv --raw --force input_big_endian_dlx.raw -o output_implicit_vr_little_endian.dcm
+\endverbatim
+
 For JFIF file and JP2 file (with header) the header is copied into the Pixel
 Data element which is illegal for JP2.
 Use gdcmconv to properly re-encode a JP2/JFIF file into J2K/JPG.
