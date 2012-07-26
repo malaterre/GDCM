@@ -126,7 +126,7 @@ void PrintHelp()
   std::cout << "  -o --output    Output filename" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "     --endian %s       Endianness (LSB/MSB)." << std::endl;
-  std::cout << "  -d --depth %d        Depth (8/16/32)." << std::endl;
+  std::cout << "  -d --depth %d        Depth (Either 8/16/32 or BitsAllocated eg. 12 when known)." << std::endl;
   std::cout << "     --sign %s         Pixel sign (0/1)." << std::endl;
   std::cout << "     --spp  %d         Sample Per Pixel (1/3)." << std::endl;
   std::cout << "  -s --size %d,%d      Size." << std::endl;
@@ -352,21 +352,24 @@ bool GetPixelFormat( gdcm::PixelFormat & pf, int depth, int bpp, int sign, int p
 {
   if( depth )
     {
-    switch(bpp)
+    if( bpp <= 8 )
       {
-    case 8:
       pf = gdcm::PixelFormat::UINT8;
-      break;
-    case 16:
+      }
+    else if( bpp > 8 && bpp <= 16 )
+      {
       pf = gdcm::PixelFormat::UINT16;
-      break;
-    case 32:
+      }
+    else if( bpp > 16 && bpp <= 32 )
+      {
       pf = gdcm::PixelFormat::UINT32;
-      break;
-    default:
+      }
+    else
+      {
       std::cerr << "Invalid depth: << " << bpp << std::endl;
       return false;
       }
+    pf.SetBitsStored( bpp );
     }
   if( sign )
     {
@@ -722,7 +725,11 @@ int main (int argc, char *argv[])
 
   if( depth )
     {
-    if( bpp != 8 && bpp != 16 && bpp != 32 ) return 1;
+    if( bpp < 1 || bpp > 32 )
+      {
+      std::cerr << "Invalid depth for pixel: " << bpp << std::endl;
+      return 1;
+      }
     }
   if( sign )
     {
