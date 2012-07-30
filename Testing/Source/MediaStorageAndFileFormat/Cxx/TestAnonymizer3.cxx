@@ -106,9 +106,9 @@ int TestAnonymizer3(int , char *[])
 
 // Encrypt
 {
-  //gdcm::CryptographicMessageSyntax cms;
-  gdcm::CryptoFactory& capi = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
-  gdcm::CryptographicMessageSyntax& cms = capi.CreateCMSProvider();
+  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
+  auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
+  gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
   if( !cms.ParseCertificateFile( certpath.c_str() ) )
     {
     return 1;

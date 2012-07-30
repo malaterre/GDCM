@@ -20,14 +20,17 @@
 
 namespace gdcm
 {
+
+class CryptoLibraryNotFound : public Exception {};
+
 class GDCM_EXPORT CryptoFactory
 {
 public:
   enum CryptoLib {OPENSSL, CAPI, OPENSSLP7};
 
-  virtual CryptographicMessageSyntax& CreateCMSProvider() = 0;
-  virtual PasswordBasedEncryptionCMS& CreatePBECMSProvider() = 0;
-  static CryptoFactory& getFactoryInstance(CryptoLib id);
+  virtual CryptographicMessageSyntax* CreateCMSProvider() = 0;
+  virtual PasswordBasedEncryptionCMS* CreatePBECMSProvider() = 0;
+  static CryptoFactory* getFactoryInstance(CryptoLib id);
 
 protected:
   CryptoFactory(CryptoLib id)
@@ -48,6 +51,7 @@ protected:
 
 protected:
   CryptoFactory(){}
+  ~CryptoFactory(){};
 };
 }
 #endif //GDCMCRYPTOFACTORY_H

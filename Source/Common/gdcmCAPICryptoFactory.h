@@ -24,8 +24,8 @@ class GDCM_EXPORT CAPICryptoFactory : public CryptoFactory
 public:
   CAPICryptoFactory(CryptoLib id);
     
-  CryptographicMessageSyntax& CreateCMSProvider();
-  PasswordBasedEncryptionCMS& CreatePBECMSProvider();
+  CryptographicMessageSyntax* CreateCMSProvider();
+  PasswordBasedEncryptionCMS* CreatePBECMSProvider();
 
 private:
   CAPICryptoFactory(){}

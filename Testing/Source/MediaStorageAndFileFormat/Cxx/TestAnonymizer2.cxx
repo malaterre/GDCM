@@ -59,9 +59,9 @@ int TestAnonymize2(const char *subdir, const char *filename)
 
 // Encrypt
 {
-  //gdcm::CryptographicMessageSyntax cms;
-  gdcm::CryptoFactory& cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(2);
-  gdcm::CryptographicMessageSyntax& cms = cryptoFactory.CreateCMSProvider();
+  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
+  auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
+  gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
 
   if( !cms.ParseCertificateFile( certpath.c_str() ) )
     {
@@ -119,9 +119,9 @@ int TestAnonymize2(const char *subdir, const char *filename)
 }
 // Decrypt
 {
-  //gdcm::CryptographicMessageSyntax cms;
-  gdcm::CryptoFactory& cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(2);
-  gdcm::CryptographicMessageSyntax& cms = cryptoFactory.CreateCMSProvider();
+  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
+  auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
+  gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
   if( !cms.ParseKeyFile( keypath.c_str() ) )
     {
     std::cerr << "Could not parse key: " << keypath << std::endl;

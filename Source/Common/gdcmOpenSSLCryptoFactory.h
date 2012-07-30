@@ -34,16 +34,16 @@ public:
   }
     
 public:
-  CryptographicMessageSyntax& CreateCMSProvider()
+  CryptographicMessageSyntax* CreateCMSProvider()
   {
     Initialize();
-    return *(new OpenSSLCMS());
+    return new OpenSSLCMS();
   }
 
-  PasswordBasedEncryptionCMS& CreatePBECMSProvider()
+  PasswordBasedEncryptionCMS* CreatePBECMSProvider()
   {
     Initialize();
-    return *(new OpenSSLPasswordBasedEncryptionCMS());
+    return new OpenSSLPasswordBasedEncryptionCMS();
     //throw;
     //return *(new OpenSSLCMS());
   }

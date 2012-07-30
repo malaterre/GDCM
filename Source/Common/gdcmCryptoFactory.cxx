@@ -29,7 +29,7 @@ using namespace std;
 namespace gdcm
 {
 
-CryptoFactory& CryptoFactory::getFactoryInstance(CryptoLib id)
+CryptoFactory* CryptoFactory::getFactoryInstance(CryptoLib id)
 {
 #ifdef WIN32
   static CAPICryptoFactory capi(CryptoFactory::CAPI);
@@ -41,9 +41,9 @@ CryptoFactory& CryptoFactory::getFactoryInstance(CryptoLib id)
   if (getInstanceMap()[id] == NULL) 
     {
     cout << "No crypto factory registered with id " << id << endl;
-    throw NULL;
+    throw CryptoLibraryNotFound();
     }
-  return *getInstanceMap()[id];
+  return getInstanceMap()[id];
 }
 
 }

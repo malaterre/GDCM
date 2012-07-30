@@ -33,15 +33,14 @@ public:
   }
     
 public:
-  CryptographicMessageSyntax& CreateCMSProvider()
+  CryptographicMessageSyntax* CreateCMSProvider()
   {
-    return *(new OpenSSLCMS());
+    return new OpenSSLCMS();
   }
 
-  PasswordBasedEncryptionCMS& CreatePBECMSProvider()
+  PasswordBasedEncryptionCMS* CreatePBECMSProvider()
   {
-    throw;
-    //return *(new OpenSSLCMS());
+    return NULL;
   }
 
   bool getStatus()

@@ -16,6 +16,8 @@ public:
   {
   }
 
+  virtual ~CryptographicMessageSyntax() {}
+
   typedef enum {
     DES_CIPHER,    // DES
     DES3_CIPHER,   // Triple DES

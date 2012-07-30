@@ -23,14 +23,14 @@ CAPICryptoFactory::CAPICryptoFactory(CryptoLib id) : CryptoFactory(id)
   cout << "CAPI Factory registered." << endl;
 }
 
-CryptographicMessageSyntax& CAPICryptoFactory::CreateCMSProvider()
+CryptographicMessageSyntax* CAPICryptoFactory::CreateCMSProvider()
 {
-  return *(new CAPICMS());
+  return new CAPICMS();
 }
 
-PasswordBasedEncryptionCMS& CAPICryptoFactory::CreatePBECMSProvider()
+PasswordBasedEncryptionCMS* CAPICryptoFactory::CreatePBECMSProvider()
 {
-  throw;
+  return NULL;
 }
 
 }
