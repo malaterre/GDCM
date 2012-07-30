@@ -27,7 +27,7 @@ namespace gdcm
 class GDCM_EXPORT OpenSSLCryptoFactory : public CryptoFactory
 {
 public:
-  OpenSSLCryptoFactory(CryptoLibs id) : CryptoFactory(id)
+  OpenSSLCryptoFactory(CryptoLib id) : CryptoFactory(id)
   {
     cout << "OpenSSL Factory created (and registered?)" << endl;
     //CryptoFactory::AddLib(0, this);

@@ -32,40 +32,26 @@ namespace gdcm
 class GDCM_EXPORT CAPICMS : public CryptographicMessageSyntax
 {
 public:
-  CAPICMS() {
-  initialized = Initialize();
-  hRsaPrivK = 0;
-  }
-
+  CAPICMS();
   ~CAPICMS();
 
-public:
   // X.509
   bool ParseCertificateFile( const char *filename );
-public:
   bool ParseKeyFile( const char *filename );
 
   /// create a PKCS#7 envelopedData structure
   bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
-
-  // params: sym enc alg, 
-  // [rsa:oeap]
-  bool EncryptXP(char *output, size_t &outlen, const char *array, size_t len);
-  
-  // Using external private key
-  bool Decrypt(char *output, size_t &outlen, const char *array, size_t len);
+  bool EncryptXP(char *output, size_t &outlen, const char *array, size_t len); // params: sym enc alg, [rsa:oeap]
+  bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const;
 
 private:
   static ALG_ID getAlgIdByObjId(const char * pszObjId);
-
   LPSTR getCipherObjId() const;
 
 private:
   bool initialized;
   HCRYPTPROV hProv;
   vector<PCCERT_CONTEXT> certifList;
-  //PCCERT_CONTEXT certt;
-  //PCCERT_CONTEXT * certa;
   HCRYPTKEY hRsaPrivK;
 
   bool Initialize();

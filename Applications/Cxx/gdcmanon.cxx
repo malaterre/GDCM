@@ -751,7 +751,7 @@ int main(int argc, char *argv[])
 
   // Get private key/certificate
 
-  gdcm::CryptoFactory::CryptoLibs crypto_lib;
+  gdcm::CryptoFactory::CryptoLib crypto_lib;
 #ifdef WIN32
   crypto_lib = gdcm::CryptoFactory::CAPI;
 #else

@@ -310,7 +310,7 @@ err:
   return ret;
 }
 
-bool OpenSSLCMS::Decrypt(char *output, size_t &outlen, const char *array, size_t len) //const
+bool OpenSSLCMS::Decrypt(char *output, size_t &outlen, const char *array, size_t len) const
 {
   BIO *in = NULL, *out = NULL;
   CMS_ContentInfo *cms = NULL;

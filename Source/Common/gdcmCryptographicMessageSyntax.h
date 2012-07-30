@@ -30,7 +30,7 @@ public:
 
   /// create a PKCS#7 envelopedData structure
   virtual bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const = 0;
-  virtual bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) = 0;
+  virtual bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const = 0;
   virtual bool EncryptXP(char *output, size_t &outlen, const char *array, size_t len) = 0;
 
   virtual void SetCipherType(CipherTypes type)

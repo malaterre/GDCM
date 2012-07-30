@@ -20,24 +20,30 @@ using namespace std;
 #ifdef WIN32
 #include "gdcmCAPICryptoFactory.h"
 #endif
+
+#ifdef GDCM_USE_SYSTEM_OPENSSL
 #include "gdcmOpenSSLCryptoFactory.h"
 #include "gdcmOpenSSLP7CryptoFactory.h"
+#endif
 
 namespace gdcm
 {
-  CryptoFactory& CryptoFactory::getFactoryInstance(int id)
-  {
-    #ifdef WIN32
-    static CAPICryptoFactory capi(CryptoFactory::CAPI);
-    #endif
-    static OpenSSLCryptoFactory ossl(CryptoFactory::OPENSSL);
-    static OpenSSLP7CryptoFactory osslp7(CryptoFactory::OPENSSLP7);
 
-    if (getMap()[id] == NULL) 
-      {
-      cout << "No crypto library registered by id " << id << endl;
-      exit(0);
-      }
-    return *getMap()[id];
-  }
+CryptoFactory& CryptoFactory::getFactoryInstance(CryptoLib id)
+{
+#ifdef WIN32
+  static CAPICryptoFactory capi(CryptoFactory::CAPI);
+#endif
+#ifdef GDCM_USE_SYSTEM_OPENSSL
+  static OpenSSLCryptoFactory ossl(CryptoFactory::OPENSSL);
+  static OpenSSLP7CryptoFactory osslp7(CryptoFactory::OPENSSLP7);
+#endif
+  if (getInstanceMap()[id] == NULL) 
+    {
+    cout << "No crypto factory registered with id " << id << endl;
+    throw NULL;
+    }
+  return *getInstanceMap()[id];
+}
+
 }

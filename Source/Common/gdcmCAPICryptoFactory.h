@@ -15,41 +15,17 @@
 #ifndef GDCMCAPIFACTORY_H
 #define GDCMCAPIFACTORY_H
 
-#include <iostream>
 #include "gdcmCryptoFactory.h"
-#include "gdcmCAPICryptographicMessageSyntax.h"
-
-//#include <Windows.h> //for linux different id needed
-
-using namespace std;
 
 namespace gdcm
 {
 class GDCM_EXPORT CAPICryptoFactory : public CryptoFactory
 {
-  //static CAPICryptoFactory asd;
 public:
-  CAPICryptoFactory(CryptoLibs id) : CryptoFactory(id)
-    {
-    cout << "CAPI Factory created (and registered?)" << endl;
-    //CryptoFactory::AddLib(1, this);
-    }
+  CAPICryptoFactory(CryptoLib id);
     
-public:
-  CryptographicMessageSyntax& CreateCMSProvider()
-    {
-    return *(new CAPICMS());
-    }
-  
-  PasswordBasedEncryptionCMS& CreatePBECMSProvider()
-  {
-    throw;
-    //return *(new OpenSSLCMS());
-  }
-  bool getStatus()
-    {
-    return 0;
-    }
+  CryptographicMessageSyntax& CreateCMSProvider();
+  PasswordBasedEncryptionCMS& CreatePBECMSProvider();
 
 private:
   CAPICryptoFactory(){}

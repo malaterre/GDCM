@@ -284,7 +284,7 @@ bool OpenSSLP7CMS::Encrypt(char *output, size_t &outlen, const char *array, size
 /*
  $ openssl smime -decrypt -in /tmp/debug.der -inform DER -recip /tmp/server.pem -inkey CA_key.pem
 */
-bool OpenSSLP7CMS::Decrypt(char *output, size_t &outlen, const char *array, size_t len) //const
+bool OpenSSLP7CMS::Decrypt(char *output, size_t &outlen, const char *array, size_t len) const
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   CryptographicMessageSyntaxInternals *x509 = Internals;
@@ -309,11 +309,11 @@ bool OpenSSLP7CMS::Decrypt(char *output, size_t &outlen, const char *array, size
 
   EVP_PKEY *pkey = x509->GetPrivateKey();
 
-  /*if( len > (size_t)std::numeric_limits<int>::max() )
+  if( len > (size_t)std::numeric_limits<int>::max() )
     {
     //gdcmErrorMacro( "len is too big: " << len );
     return false;
-    }*/
+    }
   data = BIO_new_mem_buf((void*)array, (int)len);
   if(!data) goto err;
 

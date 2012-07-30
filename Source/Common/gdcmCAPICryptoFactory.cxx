@@ -13,12 +13,24 @@
 =========================================================================*/
 
 #include "gdcmCAPICryptoFactory.h"
+#include "gdcmCAPICryptographicMessageSyntax.h"
 
-//#include "gdcmCryptoFactory.h"
-//#include "gdcmCAPICryptographicMessageSyntax.h"
+namespace gdcm
+{
 
-//namespace
-//  {
-  //gdcm::CAPICryptoFactory gdcm::CAPICryptoFactory::asd;
-  //gdcm::CAPICryptoFactory capif;
-//  }
+CAPICryptoFactory::CAPICryptoFactory(CryptoLib id) : CryptoFactory(id)
+{
+  cout << "CAPI Factory registered." << endl;
+}
+
+CryptographicMessageSyntax& CAPICryptoFactory::CreateCMSProvider()
+{
+  return *(new CAPICMS());
+}
+
+PasswordBasedEncryptionCMS& CAPICryptoFactory::CreatePBECMSProvider()
+{
+  throw;
+}
+
+}

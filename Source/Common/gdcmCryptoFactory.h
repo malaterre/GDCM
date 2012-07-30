@@ -14,7 +14,6 @@
 #ifndef GDCMCRYPTOFACTORY_H
 #define GDCMCRYPTOFACTORY_H
 
-
 #include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmPasswordBasedEncryptionCMS.h"
 #include <map>
@@ -24,30 +23,27 @@ namespace gdcm
 class GDCM_EXPORT CryptoFactory
 {
 public:
+  enum CryptoLib {OPENSSL, CAPI, OPENSSLP7};
+
   virtual CryptographicMessageSyntax& CreateCMSProvider() = 0;
   virtual PasswordBasedEncryptionCMS& CreatePBECMSProvider() = 0;
-
-  virtual bool getStatus() = 0;
-
-  static CryptoFactory& getFactoryInstance(int id);
-
-  enum CryptoLibs {OPENSSL, CAPI, OPENSSLP7};
+  static CryptoFactory& getFactoryInstance(CryptoLib id);
 
 protected:
-  CryptoFactory(CryptoLibs id)
+  CryptoFactory(CryptoLib id)
   {
     AddLib(id, this);
   }
 
-  static std::map<int, CryptoFactory*>& getMap()
+  static std::map<CryptoLib, CryptoFactory*>& getInstanceMap()
   {
-    static std::map<int, CryptoFactory*> libs;
+    static std::map<CryptoLib, CryptoFactory*> libs;
     return libs;
   }
 
-  static void AddLib(int id, CryptoFactory* f)
+  static void AddLib(CryptoLib id, CryptoFactory* f)
   {
-    getMap().insert(pair<int, CryptoFactory*>(id, f));
+    getInstanceMap().insert(pair<CryptoLib, CryptoFactory*>(id, f));
   }
 
 protected:

@@ -16,6 +16,10 @@
 
 namespace gdcm
 {
+CAPICMS::CAPICMS() : hRsaPrivK(0)
+{
+  initialized = Initialize();
+}
 
 CAPICMS::~CAPICMS() {
   for (vector<PCCERT_CONTEXT>::iterator it = certifList.begin(); it != certifList.end(); ++it)
@@ -25,7 +29,9 @@ CAPICMS::~CAPICMS() {
       printf("Error at releasing certificate context.");
       }
     }
-  //relese CSP
+
+  if (hRsaPrivK) CryptDestroyKey(hRsaPrivK);
+
   if (!CryptReleaseContext(hProv, 0))
     {
     printf("Error when releasing context: 0x%x", GetLastError());
@@ -52,7 +58,6 @@ bool CAPICMS::ParseCertificateFile( const char *filename ) {
     if ( !CryptStringToBinaryA( (LPCSTR)certHexBuf, 0, CRYPT_STRING_BASE64_ANY, NULL, &certBinLen, NULL, NULL ) )
       {
       fprintf( stderr, "CryptStringToBinary failed. Err: %dn", GetLastError() );
-      //return false;
       throw NULL;
       }
     cout << certBinLen;
@@ -62,7 +67,6 @@ bool CAPICMS::ParseCertificateFile( const char *filename ) {
     if ( !CryptStringToBinaryA( (LPCSTR)certHexBuf, 0, CRYPT_STRING_BASE64_ANY, certBin, &certBinLen, NULL, NULL ) )
       {
       fprintf( stderr, "CryptStringToBinary failed. Err: %dn", GetLastError() );
-      //return false;
       throw NULL;
       }
     
@@ -72,7 +76,6 @@ bool CAPICMS::ParseCertificateFile( const char *filename ) {
     if (certContext == NULL)
       {
       cout << "error at creating context" << hex << GetLastError();
-      //return false;
       throw NULL;
       }
 
@@ -80,7 +83,7 @@ bool CAPICMS::ParseCertificateFile( const char *filename ) {
   }
   catch (void *)
   {
-    ret =false;
+    ret = false;
   }
 
   if (certBin) delete[] certBin;
@@ -93,12 +96,11 @@ bool CAPICMS::ParseKeyFile( const char *filename ) {
   bool ret = true;
   BYTE * keyHexBuffer;
   DWORD keyHexBufferLen, keyBinBufferLen, keyBlobLen;
-  LPBYTE keyBinBuffer, keyBlob;
+  BYTE *keyBinBuffer, *keyBlob;
   HCRYPTKEY hKey = NULL;
   try {
     if (!Helper::LoadFileWin(filename, (char *&)keyHexBuffer, keyHexBufferLen))
       {
-      //return false;
       throw NULL;
       }
 
@@ -165,10 +167,10 @@ bool CAPICMS::Encrypt(char *output, size_t &outlen, const char *array, size_t le
   if(! CryptEncryptMessage(&EncryptParams, certifList.size(), (PCCERT_CONTEXT *)&certifList[0], (BYTE *)array, len, (BYTE *)output, (DWORD *)&outlen) )
     {
     printf("Couldn't encrypt message. Error 0x%.8X\n", GetLastError());
-  if (GetLastError() == CRYPT_E_UNKNOWN_ALGO)
-    {
-    gdcmErrorMacro("Unknown encryption algorithm. If on Windows XP please use only 3DES.");
-    }
+    if (GetLastError() == CRYPT_E_UNKNOWN_ALGO)
+      {
+      gdcmErrorMacro("Unknown encryption algorithm. If on Windows XP please use only 3DES.");
+      }
     return false;
     }
   return true;
@@ -224,7 +226,7 @@ bool CAPICMS::EncryptXP(char *output, size_t &outlen, const char *array, size_t 
     printf("CryptEncodeObjectEx SEQUENCE_OF_ANY failed with error 0x%.8X\n", GetLastError());
   }
 
-  CRYPT_OID_INFO oi;
+  //CRYPT_OID_INFO oi;
   //oi.
 
   //CryptRegisterOIDInfo(
@@ -241,7 +243,7 @@ bool CAPICMS::EncryptXP(char *output, size_t &outlen, const char *array, size_t 
     printf("CryptEncodeObjectEx X509_OCTET_STRING failed with error 0x%.8X\n", GetLastError());
   }*/
 
-  Helper::PrintHex(out, olen);
+  //Helper::PrintHex(out, olen);
   Helper::DumpToFile("D:\\Desktop\\exp1", out, olen);
     
   return false;
@@ -271,7 +273,7 @@ bool CAPICMS::EncryptXP(char *output, size_t &outlen, const char *array, size_t 
   return false;
 }
 
-bool CAPICMS::Decrypt(char *output, size_t &outlen, const char *array, size_t len) {
+bool CAPICMS::Decrypt(char *output, size_t &outlen, const char *array, size_t len) const {
   /*CRYPT_DATA_BLOB EncryptedMessageBlob;
   EncryptedMessageBlob.cbData = len;
   EncryptedMessageBlob.pbData = (BYTE*) array; //???*/
@@ -637,26 +639,25 @@ ALG_ID CAPICMS::getAlgIdByObjId(const char * pszObjId)
 
 LPSTR CAPICMS::getCipherObjId() const
 {
-  if (cipherType == CipherTypes::AES128_CIPHER)
+  if (cipherType == AES128_CIPHER)
     {
     return szOID_NIST_AES128_CBC;
     }
-  else if (cipherType == CipherTypes::AES192_CIPHER)
+  else if (cipherType == AES192_CIPHER)
     {
     return szOID_NIST_AES192_CBC;
     }
-  else if (cipherType == CipherTypes::AES256_CIPHER)
+  else if (cipherType == AES256_CIPHER)
     {
     return szOID_NIST_AES256_CBC;
     }
-  else if (cipherType == CipherTypes::DES3_CIPHER)
+  else if (cipherType == DES3_CIPHER)
     {
     return szOID_RSA_DES_EDE3_CBC;
     }
   return 0;
 }
 
-// Need to append L" (Prototype)" to the provider type in Windows XP.
 bool CAPICMS::Initialize() {
   DWORD dwResult;
   if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) //CRYPT_VERIFYCONTEXT aes decr in cryptmsgcontrol not working
@@ -674,32 +675,31 @@ bool CAPICMS::Initialize() {
   else if (dwResult == NTE_KEYSET_NOT_DEF)
     {
       //Probably WinXP
-    if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV_XP /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) //CRYPT_VERIFYCONTEXT aes decr in cryptmsgcontrol not working
-    {
-    dwResult = GetLastError();
-    if (dwResult == NTE_BAD_KEYSET)
-      {
-      if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV_XP /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_NEWKEYSET | CRYPT_VERIFYCONTEXT))
+      if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV_XP /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) //CRYPT_VERIFYCONTEXT aes decr in cryptmsgcontrol not working
       {
       dwResult = GetLastError();
-      cout << "Error [0x%x]: CryptAcquireContext() failed.";
-      return false;
+      if (dwResult == NTE_BAD_KEYSET)
+        {
+        if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV_XP /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_NEWKEYSET | CRYPT_VERIFYCONTEXT))
+          {
+          dwResult = GetLastError();
+          cout << "Error [0x%x]: CryptAcquireContext() failed.";
+          return false;
+          }
+        }
+      else 
+        {
+        dwResult = GetLastError();
+        return false;
+        }
       }
-      }
+    }
     else 
       {
       dwResult = GetLastError();
       return false;
       }
     }
-    }
-    else 
-      {
-      dwResult = GetLastError();
-      return false;
-      }
-    }
-  //initialized = true;
   return true;
 }
 }

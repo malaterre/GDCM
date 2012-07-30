@@ -10,13 +10,13 @@ namespace gdcm
 class Helper
 {
   public:
-  static void PrintHex(unsigned char* data, unsigned long len)
-  {
-    for (int i = 0; i < len; i++) printf("%02x", data[i]);
-    printf("\n");
-  }
+  //static void PrintHex(unsigned char* data, int len)
+  //{
+  //  for (int i = 0; i < len; i++) printf("%02x", data[i]);
+  //  printf("\n");
+  //}
 
-  static void ReverseBytes(unsigned char* data, unsigned long len)
+  static void ReverseBytes(unsigned char* data, int len)
   {
     unsigned char temp;
     for (int i = 0; i < len/2; i++)
@@ -28,7 +28,7 @@ class Helper
     printf("\n");
   }
 
-  static void HexToBin(unsigned char* data, unsigned long len, unsigned char* out, unsigned long outLen)
+  /*static void HexToBin(unsigned char* data, unsigned long len, unsigned char* out, unsigned long outLen)
   {
     if (len % 2) return;
     //out = new unsigned char[len/2];
@@ -40,7 +40,7 @@ class Helper
       a[3] = data[i+1];
       out[i/2] = strtoul(a, NULL, 0);
     }
-  }
+  }*/
 
   static void DumpToFile(const char * filename, unsigned char* data, unsigned long len)
   {

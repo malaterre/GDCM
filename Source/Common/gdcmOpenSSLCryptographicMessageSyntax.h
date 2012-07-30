@@ -53,7 +53,7 @@ public:
 
   /// create a PKCS#7 envelopedData structure
   bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
-  bool Decrypt(char *output, size_t &outlen, const char *array, size_t len);
+  bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const;
   bool EncryptXP(char *output, size_t &outlen, const char *array, size_t len) { return false;}
 
 private:

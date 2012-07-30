@@ -11,7 +11,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-//#include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmCryptoFactory.h"
 #include "Helper.h"
 
@@ -19,8 +18,6 @@
 
 #include "gdcmFilename.h"
 #include "gdcmTesting.h"
-
-//#undef WIN32
 
 int TestCryptographicMessageSyntax(int, char *[])
 {
@@ -32,14 +29,14 @@ int TestCryptographicMessageSyntax(int, char *[])
   std::string encrypted_vector = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/encrypted_text" );
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  gdcm::CryptoFactory& ossl = gdcm::CryptoFactory::getFactoryInstance(0);
+  gdcm::CryptoFactory& ossl = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
   gdcm::CryptographicMessageSyntax& ocms = ossl.CreateCMSProvider();
   ocms.ParseKeyFile(keypath.c_str());
   ocms.ParseCertificateFile(certpath.c_str());
 #endif
 
 #ifdef WIN32
-  gdcm::CryptoFactory& capi = gdcm::CryptoFactory::getFactoryInstance(1);
+  gdcm::CryptoFactory& capi = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::CAPI);
   gdcm::CryptographicMessageSyntax& ccms = capi.CreateCMSProvider();
   ccms.ParseCertificateFile(certpath.c_str());
   ccms.ParseKeyFile(keypath.c_str());
@@ -149,7 +146,7 @@ int TestPasswordBasedEncryption(int, char *[])
     };
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  gdcm::CryptoFactory& ossl = gdcm::CryptoFactory::getFactoryInstance(0);
+  gdcm::CryptoFactory& ossl = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
   gdcm::PasswordBasedEncryptionCMS& opbe = ossl.CreatePBECMSProvider();
 
   opbe.SetPassword("password");
@@ -159,10 +156,20 @@ int TestPasswordBasedEncryption(int, char *[])
     decoutlen = 5000;
     opbe.SetCipherType(ciphers[i]);
     opbe.Encrypt(output, outlen, input, inputlen);
+    //if (i == 0)
+    //  {
+    //  gdcm::Helper::DumpToFile("D:\\passdump", (unsigned char *) output, outlen);
+    //  }
     opbe.Decrypt(decout, decoutlen, output, outlen);
     assert(decoutlen == inputlen);
     assert(strncmp(input, decout, inputlen) == 0);
     }
+  char * ddir = new char[5000];
+  unsigned long ddirlen = 5000;
+  gdcm::Helper::LoadFileWin(encrypted_dicomdir.c_str(), ddir, ddirlen);
+  outlen = 5000;
+  assert(opbe.Decrypt(output, outlen, ddir, ddirlen));
+  assert(outlen > 0);
 #endif
 
   return 0;
