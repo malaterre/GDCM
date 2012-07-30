@@ -81,6 +81,7 @@ class vtkAngleWidget;
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
 #include "gdcmImageHelper.h"
+#include "gdcmReader.h"
 #include "gdcmTrace.h"
 #include "gdcmVersion.h"
 
@@ -881,6 +882,7 @@ int main(int argc, char *argv[])
     PrintHelp();
     return 1;
     }
+  gdcm::Reader testreader;
   vtkStringArray *names = vtkStringArray::New();
     {
     // Is it a single directory ? If so loop over all files contained in it:
@@ -894,7 +896,16 @@ int main(int argc, char *argv[])
       gdcm::Directory::FilenamesType const &files = d.GetFilenames();
       for( gdcm::Directory::FilenamesType::const_iterator it = files.begin(); it != files.end(); ++it )
         {
-        names->InsertNextValue( it->c_str() );
+        testreader.SetFileName( it->c_str() );
+        if( testreader.CanRead() )
+          {
+          names->InsertNextValue( it->c_str() );
+          }
+        else
+          {
+          if(verbose)
+            std::cerr << "Discarding non DICOM file: " << it->c_str() << std::endl;
+          }
         }
       }
     else // list of files passed directly on the cmd line:
@@ -914,7 +925,16 @@ int main(int argc, char *argv[])
             }
           else
             {
-            names->InsertNextValue( filename.c_str() );
+            testreader.SetFileName( filename.c_str() );
+            if( testreader.CanRead() )
+              {
+              names->InsertNextValue( filename.c_str() );
+              }
+            else
+              {
+              if(verbose)
+                std::cerr << "Discarding non DICOM file: " << filename.c_str() << std::endl;
+              }
             }
           }
         else
