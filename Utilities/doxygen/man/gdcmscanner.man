@@ -62,7 +62,7 @@ are traversed to see any results. This is quite cumbersome, on UNIX this can
 be worked around with the following trick:
 
 \verbatim
-$ find gdcmData -type d -exec gdcmscanner -t 10,10 -d {} -p \;
+$ find gdcmData -type d -exec gdcmscanner -t 10,10 -d {} -p ';'
 \endverbatim
 
 So all directory are locally traversed (no child directory are recursively
