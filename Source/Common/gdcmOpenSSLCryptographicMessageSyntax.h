@@ -46,6 +46,28 @@ public:
   bool ParseCertificateFile( const char *filename );
   bool ParseKeyFile( const char *filename );
 
+  // PBE
+  bool SetPassword(const char * pass)
+  {
+    return SetPassword(pass, strlen(pass));
+  }
+
+  bool SetPassword(const char * pass, size_t passLen)
+  {
+    assert(pass);
+
+    if (password)
+      {
+      delete[] password;
+      }
+
+    passwordLength = passLen;
+    password = new char[passLen];
+    memcpy(password, pass, passLen);
+    
+    return true;
+  }
+
   /// Set Cipher Type.
   /// Default is: AES256_CIPHER
   void SetCipherType(CipherTypes type);
@@ -54,12 +76,15 @@ public:
   /// create a PKCS#7 envelopedData structure
   bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
   bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const;
-  bool EncryptXP(char *output, size_t &outlen, const char *array, size_t len) { return false;}
 
 private:
   ::stack_st_X509 *recips;//STACK_OF(X509) *recips;
   ::EVP_PKEY *pkey;
   const EVP_CIPHER *cipher;
+
+  const EVP_CIPHER *internalCipherType;
+  char * password;
+  size_t passwordLength;
 
 private:
   OpenSSLCMS(const OpenSSLCMS&);  // Not implemented.

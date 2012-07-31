@@ -39,6 +39,16 @@ public:
   bool ParseCertificateFile( const char *filename );
   bool ParseKeyFile( const char *filename );
 
+  // PBE
+  virtual bool SetPassword(const char * pass)
+  {
+    return false;
+  }
+  virtual bool SetPassword(const char * pass, size_t passLen)
+  {
+    return false;
+  }
+
   /// create a PKCS#7 envelopedData structure
   bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
   bool EncryptXP(char *output, size_t &outlen, const char *array, size_t len); // params: sym enc alg, [rsa:oeap]

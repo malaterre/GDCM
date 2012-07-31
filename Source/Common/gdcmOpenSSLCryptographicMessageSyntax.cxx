@@ -195,7 +195,7 @@ namespace gdcm
 //#endif
 //};
 
-OpenSSLCMS::OpenSSLCMS():recips(NULL),pkey(NULL),cipher(NULL)
+OpenSSLCMS::OpenSSLCMS():recips(NULL),pkey(NULL),cipher(NULL),password(NULL), internalCipherType(CreateCipher(cipherType))
 {
   //Internals = new CryptographicMessageSyntaxInternals;
   recips = sk_X509_new_null();
@@ -209,6 +209,8 @@ OpenSSLCMS::~OpenSSLCMS()
   //p7 = NULL;
   //BIO_free_all(bio_buffer);
   sk_X509_free(recips);
+
+  if (password) delete[] password;
 }
 
 void OpenSSLCMS::SetCipherType( CryptographicMessageSyntax::CipherTypes type )
@@ -226,8 +228,10 @@ bool OpenSSLCMS::Encrypt(char *output, size_t &outlen, const char *array, size_t
 {
   BIO *in = NULL, *out = NULL;
   CMS_ContentInfo *cms = NULL;
-  int flags = CMS_BINARY;
+  int flags = CMS_BINARY | CMS_PARTIAL;//DETACHED??/
   bool ret = false;
+
+  if (!password && ::sk_X509_num(recips) == 0)
 
   // RAND_status() and RAND_event() return 1 if the PRNG has been seeded with
   // enough data, 0 otherwise.
@@ -255,6 +259,7 @@ bool OpenSSLCMS::Encrypt(char *output, size_t &outlen, const char *array, size_t
   out = BIO_new(BIO_s_mem());
   if (!out)
     {
+    gdcmErrorMacro( "Error at creating the output memory buffer." );
     goto err;
     }
 
@@ -262,8 +267,24 @@ bool OpenSSLCMS::Encrypt(char *output, size_t &outlen, const char *array, size_t
   cms = CMS_encrypt((::stack_st_X509*)recips, in, cipher, flags);
   if (!cms)
     {
+    gdcmErrorMacro( "Error at creating the CMS strucutre." );
     goto err;
     }
+
+  if (password)
+    {
+    unsigned char* pwri_tmp = (unsigned char *)BUF_memdup(password, passwordLength);
+    
+    if (!pwri_tmp)
+      goto err;
+
+    if (!CMS_add0_recipient_password(cms, -1, NID_undef, NID_undef, pwri_tmp, passwordLength, NULL))
+      goto err;
+    pwri_tmp = NULL;
+    }
+
+  if (!CMS_final(cms, in, NULL, flags))
+    goto err;
 
   if (! i2d_CMS_bio(out, cms))
     {
@@ -273,8 +294,6 @@ bool OpenSSLCMS::Encrypt(char *output, size_t &outlen, const char *array, size_t
 
   BUF_MEM *bptr;
   BIO_get_mem_ptr(out, &bptr);
-  //BIO_set_close(out, BIO_NOCLOSE); /* So BIO_free() leaves BUF_MEM alone */
-  //BIO_free(out);
 
   if (bptr->length > outlen)
     {
@@ -284,7 +303,6 @@ bool OpenSSLCMS::Encrypt(char *output, size_t &outlen, const char *array, size_t
     }
   memcpy(output, bptr->data, bptr->length);
   outlen = bptr->length;
-  //BUF_MEM_free(bptr);
   
   ret = true;
 
@@ -315,25 +333,47 @@ bool OpenSSLCMS::Decrypt(char *output, size_t &outlen, const char *array, size_t
   BIO *in = NULL, *out = NULL;
   CMS_ContentInfo *cms = NULL;
   bool ret = false;
-  int flags = CMS_BINARY;
+  int flags = CMS_DETACHED | CMS_BINARY; //DETACHED ???
 
-  //if (!rcert || !rkey)
-  //  goto err;
+  if (!password && ::sk_X509_num(recips) == 0)
+    {
+    gdcmErrorMacro( "No password or private key specified." );
+    goto err;
+    }
 
   in = BIO_new_mem_buf((void*)array, (int)len);
   if (!in)
+    {
+    gdcmErrorMacro( "BIO_new_mem_buf" );
     goto err;
+    }
 
   cms = d2i_CMS_bio(in, NULL);
   if (!cms)
+    {
+    gdcmErrorMacro( "Error when parsing the CMS structure." );
     goto err;
+    }
 
   out = BIO_new(BIO_s_mem());
   if (!out)
+    {
+    gdcmErrorMacro( "Error at creating the output memory buffer." );
     goto err;
+    }
+
+  if (password)
+    if (!CMS_decrypt_set1_password(cms, (unsigned char*)password, passwordLength))
+      {
+      gdcmErrorMacro( "Error at setting the decryption password." );
+      goto err;
+      }
 
   if (!CMS_decrypt(cms, pkey, NULL, NULL, out, flags))
+    {
+    gdcmErrorMacro( "Error at decrypting CMS structure" );
     goto err;
+    }
 
   BUF_MEM *bptr;
   BIO_get_mem_ptr(out, &bptr);
