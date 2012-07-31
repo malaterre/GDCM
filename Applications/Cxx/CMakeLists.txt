@@ -100,6 +100,13 @@ ELSE(GDCM_USE_SYSTEM_OPENJPEG)
     )
 ENDIF(GDCM_USE_SYSTEM_OPENJPEG)
 
+IF(NOT BUILD_SHARED_LIBS)
+  SET_SOURCE_FILES_PROPERTIES(gdcmstream.cxx
+                              PROPERTIES
+                              COMPILE_FLAGS -DOPJ_STATIC
+                              )
+ENDIF(NOT BUILD_SHARED_LIBS)
+
 FOREACH(exename ${GDCM_EXECUTABLE_NAME})
   IF(${exename} STREQUAL "gdcminfo")
     ADD_EXECUTABLE(${exename} ${exename}.cxx puff.c)
