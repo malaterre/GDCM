@@ -17,7 +17,6 @@
 #include <iostream>
 #include "gdcmCryptoFactory.h"
 #include "gdcmOpenSSLCryptographicMessageSyntax.h"
-#include "gdcmOpenSSLPasswordBasedEncryptionCMS.h"
 
 using namespace std;
 
@@ -36,11 +35,6 @@ public:
   CryptographicMessageSyntax* CreateCMSProvider()
   {
     return new OpenSSLCMS();
-  }
-
-  PasswordBasedEncryptionCMS* CreatePBECMSProvider()
-  {
-    return NULL;
   }
 
   bool getStatus()

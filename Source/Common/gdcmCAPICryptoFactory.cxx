@@ -28,9 +28,4 @@ CryptographicMessageSyntax* CAPICryptoFactory::CreateCMSProvider()
   return new CAPICMS();
 }
 
-PasswordBasedEncryptionCMS* CAPICryptoFactory::CreatePBECMSProvider()
-{
-  return NULL;
-}
-
 }

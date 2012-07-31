@@ -117,9 +117,7 @@ SET(Common_SRCS
   #gdcmCryptographicMessageSyntax.cxx
 
   gdcmCryptographicMessageSyntax.cxx
-  gdcmPasswordBasedEncryptionCMS.cxx
   gdcmCryptoFactory.cxx
-
 
   gdcmASN1.cxx
   gdcmObject.cxx
@@ -150,7 +148,6 @@ IF(GDCM_USE_SYSTEM_OPENSSL)
 SET(Common_SRCS ${Common_SRCS}
   gdcmOpenSSLCryptoFactory.cxx
   gdcmOpenSSLCryptographicMessageSyntax.cxx
-  gdcmOpenSSLPasswordBasedEncryptionCMS.cxx
   gdcmOpenSSLP7CryptoFactory.cxx
   gdcmOpenSSLP7CryptographicMessageSyntax.cxx
 )

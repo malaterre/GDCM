@@ -25,7 +25,6 @@ public:
   CAPICryptoFactory(CryptoLib id);
     
   CryptographicMessageSyntax* CreateCMSProvider();
-  PasswordBasedEncryptionCMS* CreatePBECMSProvider();
 
 private:
   CAPICryptoFactory(){}

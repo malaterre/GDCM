@@ -15,7 +15,6 @@
 #define GDCMCRYPTOFACTORY_H
 
 #include "gdcmCryptographicMessageSyntax.h"
-#include "gdcmPasswordBasedEncryptionCMS.h"
 #include <map>
 
 namespace gdcm
@@ -29,7 +28,6 @@ public:
   enum CryptoLib {OPENSSL, CAPI, OPENSSLP7};
 
   virtual CryptographicMessageSyntax* CreateCMSProvider() = 0;
-  virtual PasswordBasedEncryptionCMS* CreatePBECMSProvider() = 0;
   static CryptoFactory* getFactoryInstance(CryptoLib id);
 
 protected:
