@@ -12,12 +12,28 @@
 
 =========================================================================*/
 #include "gdcmCryptoFactory.h"
-#include "Helper.h"
-
 #include <string.h>
 
 #include "gdcmFilename.h"
 #include "gdcmTesting.h"
+
+static bool LoadFile(const char * filename, char* & buffer, size_t & bufLen)
+{
+  FILE * f = fopen(filename, "rb");
+  if (f == NULL)
+    {
+    gdcmErrorMacro("Couldn't open the file: " << filename);
+    return false;
+    }
+  fseek(f, 0L, SEEK_END);
+  long sz = ftell(f);
+  rewind(f);
+  buffer = new char[sz];
+  bufLen = sz;
+  while (sz)
+    sz -= fread(buffer + bufLen - sz, sizeof(char), sz, f);
+  return true;
+}
 
 int TestCryptographicMessageSyntax(int, char *[])
 {
@@ -55,8 +71,8 @@ int TestCryptographicMessageSyntax(int, char *[])
     };
 
   char * test_vector;
-  unsigned long tvlen;
-  gdcm::Helper::LoadFileWin(encrypted_vector.c_str(), test_vector, tvlen);
+  size_t tvlen;
+  LoadFile(encrypted_vector.c_str(), test_vector, tvlen);
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   for (int i = 0; i < 4; i++)
@@ -154,17 +170,13 @@ int TestPasswordBasedEncryption(int, char *[])
     decoutlen = 5000;
     ocms->SetCipherType(ciphers[i]);
     ocms->Encrypt(output, outlen, input, inputlen);
-    //if (i == 0)
-    //  {
-    //  gdcm::Helper::DumpToFile("D:\\passdump", (unsigned char *) output, outlen);
-    //  }
     ocms->Decrypt(decout, decoutlen, output, outlen);
     assert(decoutlen == inputlen);
     assert(strncmp(input, decout, inputlen) == 0);
     }
   char * ddir = new char[5000];
-  unsigned long ddirlen = 5000;
-  gdcm::Helper::LoadFileWin(encrypted_dicomdir.c_str(), ddir, ddirlen);
+  size_t ddirlen = 5000;
+  LoadFile(encrypted_dicomdir.c_str(), ddir, ddirlen);
   outlen = 5000;
   assert(ocms->Decrypt(output, outlen, ddir, ddirlen));
   assert(outlen > 0);

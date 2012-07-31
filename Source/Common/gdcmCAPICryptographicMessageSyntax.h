@@ -15,15 +15,11 @@
 #ifndef GDCMCAPICMS_H
 #define GDCMCAPICMS_H
 
-
-#include <iostream>
+//#include <iostream>
 #include "gdcmCryptographicMessageSyntax.h"
-
 #include <Windows.h>
 #include <WinCrypt.h>
 #include <vector>
-
-#include "Helper.h"
 
 #pragma comment(lib, "Crypt32.lib")
 
@@ -51,12 +47,14 @@ public:
 
   /// create a PKCS#7 envelopedData structure
   bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
-  bool EncryptXP(char *output, size_t &outlen, const char *array, size_t len); // params: sym enc alg, [rsa:oeap]
   bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const;
 
 private:
+  bool Initialize();
   static ALG_ID getAlgIdByObjId(const char * pszObjId);
   LPSTR getCipherObjId() const;
+  static void ReverseBytes(BYTE* data, DWORD len);
+  static bool LoadFile(const char * filename, BYTE* & buffer, DWORD & bufLen);
 
 private:
   bool initialized;
@@ -64,7 +62,6 @@ private:
   vector<PCCERT_CONTEXT> certifList;
   HCRYPTKEY hRsaPrivK;
 
-  bool Initialize();
 };
 }
 

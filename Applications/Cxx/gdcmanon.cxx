@@ -784,6 +784,11 @@ int main(int argc, char *argv[])
       {
       return 1;
       }
+    if (!password.empty() && !cms.SetPassword(password.c_str()) )
+      {
+      std::cerr << "Could not set the password " << std::endl;
+      return 1;
+      }
     cms.SetCipherType( ciphertype );
     }
 

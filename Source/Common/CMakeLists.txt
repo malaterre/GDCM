@@ -140,7 +140,6 @@ IF(WIN32)
 SET(Common_SRCS ${Common_SRCS}
   gdcmCAPICryptographicMessageSyntax.cxx
   gdcmCAPICryptoFactory.cxx
-  Helper.cxx
 )
 ENDIF(WIN32)
 
