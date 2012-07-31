@@ -27,7 +27,7 @@ class GDCM_EXPORT OpenSSLP7CryptoFactory : public CryptoFactory
 public:
   OpenSSLP7CryptoFactory(CryptoLib id) : CryptoFactory(id)
   {
-    cout << "OpenSSL Factory created (and registered?)" << endl;
+    gdcmDebugMacro( "OpenSSL (PKCS7) Factory registered." << endl );
     //CryptoFactory::AddLib(0, this);
   }
     
@@ -35,11 +35,6 @@ public:
   CryptographicMessageSyntax* CreateCMSProvider()
   {
     return new OpenSSLCMS();
-  }
-
-  bool getStatus()
-  {
-    return 0;
   }
 
 private:

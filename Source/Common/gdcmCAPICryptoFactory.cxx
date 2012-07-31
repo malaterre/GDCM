@@ -20,7 +20,7 @@ namespace gdcm
 
 CAPICryptoFactory::CAPICryptoFactory(CryptoLib id) : CryptoFactory(id)
 {
-  cout << "CAPI Factory registered." << endl;
+  gdcmDebugMacro( "CAPI Factory registered." << endl );
 }
 
 CryptographicMessageSyntax* CAPICryptoFactory::CreateCMSProvider()

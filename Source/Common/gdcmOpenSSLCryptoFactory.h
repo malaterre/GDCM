@@ -28,7 +28,7 @@ class GDCM_EXPORT OpenSSLCryptoFactory : public CryptoFactory
 public:
   OpenSSLCryptoFactory(CryptoLib id) : CryptoFactory(id)
   {
-    cout << "OpenSSL Factory created (and registered?)" << endl;
+    gdcmDebugMacro( "OpenSSL Factory registered." << endl );
     //CryptoFactory::AddLib(0, this);
   }
     
@@ -37,11 +37,6 @@ public:
   {
     Initialize();
     return new OpenSSLCMS();
-  }
-
-  bool getStatus()
-  {
-    return 0;
   }
 
 protected:

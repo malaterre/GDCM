@@ -312,9 +312,9 @@ err:
   if (!ret)
     {
     outlen = 0;
-    fprintf(stderr, "Error Decrypting Data\n");
-    ERR_load_crypto_strings();
-    ERR_print_errors_fp(stderr);
+    //fprintf(stderr, "Error Decrypting Data\n");
+    //ERR_load_crypto_strings();
+    //ERR_print_errors_fp(stderr);
     }
 
   if (cms)
@@ -397,9 +397,9 @@ err:
   if (!ret)
     {
     outlen = 0;
-    fprintf(stderr, "Error Decrypting Data\n");
-    ERR_load_crypto_strings();
-    ERR_print_errors_fp(stderr);
+    //fprintf(stderr, "Error Decrypting Data\n");
+    //ERR_load_crypto_strings();
+    //ERR_print_errors_fp(stderr);
     }
 
   if (cms)
