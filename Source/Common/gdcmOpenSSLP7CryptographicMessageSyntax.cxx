@@ -51,9 +51,6 @@ const EVP_CIPHER *CreateCipher( CryptographicMessageSyntax::CipherTypes cipherty
   const EVP_CIPHER *cipher = 0;
   switch( ciphertype )
     {
-  case CryptographicMessageSyntax::DES_CIPHER:    // DES
-    cipher = EVP_des_cbc();
-    break;
   case CryptographicMessageSyntax::DES3_CIPHER:   // Triple DES
     cipher = EVP_des_ede3_cbc();
     break;

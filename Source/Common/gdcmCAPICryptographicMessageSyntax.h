@@ -33,16 +33,20 @@ public:
   bool ParseKeyFile( const char *filename );
 
   // PBE
-  virtual bool SetPassword(const char * pass)
+  bool SetPassword(const char * pass)
   {
     gdcmWarningMacro( "CAPI does not support Password Based Encryption." );
     return false;
   }
-  virtual bool SetPassword(const char * pass, size_t passLen)
+  bool SetPassword(const char * pass, size_t passLen)
   {
     gdcmWarningMacro( "CAPI does not support Password Based Encryption." );
     return false;
   }
+
+  void SetCipherType(CipherTypes type);
+
+  CipherTypes GetCipherType() const;
 
   /// create a CMS envelopedData structure
   bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
@@ -66,6 +70,7 @@ private:
   HCRYPTPROV hProv;
   std::vector<PCCERT_CONTEXT> certifList;
   HCRYPTKEY hRsaPrivK;
+  CipherTypes cipherType;
 
 };
 

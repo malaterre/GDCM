@@ -29,9 +29,11 @@ namespace gdcm
 OpenSSLCryptographicMessageSyntax::OpenSSLCryptographicMessageSyntax() :
   recips(sk_X509_new_null()),
   pkey(NULL),
-  password(NULL), 
-  internalCipherType(CreateCipher(cipherType))
-{}
+  password(NULL)
+{
+  cipherType = AES128_CIPHER;
+  internalCipherType = CreateCipher(cipherType);
+}
 
 OpenSSLCryptographicMessageSyntax::~OpenSSLCryptographicMessageSyntax()
 {
@@ -44,6 +46,11 @@ void OpenSSLCryptographicMessageSyntax::SetCipherType( CryptographicMessageSynta
 {
   internalCipherType = CreateCipher(type);
   cipherType = type;
+}
+
+CryptographicMessageSyntax::CipherTypes OpenSSLCryptographicMessageSyntax::GetCipherType() const
+{
+  return cipherType;
 }
 
 bool OpenSSLCryptographicMessageSyntax::SetPassword(const char * pass)
@@ -174,7 +181,7 @@ bool OpenSSLCryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, co
   bool ret = false;
   int flags = /*CMS_DETACHED | */CMS_BINARY;
 
-  if (!password && ::sk_X509_num(recips) == 0)
+  if (!password && pkey == NULL)
     {
     gdcmErrorMacro( "No password or private key specified." );
     goto err;
@@ -293,9 +300,6 @@ const EVP_CIPHER* OpenSSLCryptographicMessageSyntax::CreateCipher( Cryptographic
   const EVP_CIPHER *cipher = 0;
   switch( ciphertype )
     {
-  case CryptographicMessageSyntax::DES_CIPHER:    // DES
-    cipher = EVP_des_cbc();
-    break;
   case CryptographicMessageSyntax::DES3_CIPHER:   // Triple DES
     cipher = EVP_des_ede3_cbc();
     break;

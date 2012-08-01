@@ -18,7 +18,7 @@ using namespace std;
 namespace gdcm
 {
 
-CAPICryptographicMessageSyntax::CAPICryptographicMessageSyntax() : hProv(0), hRsaPrivK(0)
+CAPICryptographicMessageSyntax::CAPICryptographicMessageSyntax() : hProv(0), hRsaPrivK(0), cipherType(AES128_CIPHER)
 {
   initialized = Initialize();
 }
@@ -131,6 +131,16 @@ err:
   return ret;
 }
 
+void CAPICryptographicMessageSyntax::SetCipherType(CryptographicMessageSyntax::CipherTypes type)
+{
+  cipherType = type;
+}
+
+CryptographicMessageSyntax::CipherTypes CAPICryptographicMessageSyntax::GetCipherType() const
+{
+  return cipherType;
+}
+
 bool CAPICryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const 
 {
   CRYPT_ALGORITHM_IDENTIFIER EncryptAlgorithm = {0};
@@ -141,6 +151,12 @@ bool CAPICryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const
   EncryptParams.dwMsgEncodingType = PKCS_7_ASN_ENCODING | X509_ASN_ENCODING;
   EncryptParams.hCryptProv = hProv;
   EncryptParams.ContentEncryptionAlgorithm = EncryptAlgorithm;
+
+  if (certifList.size() == 0)
+    {
+    gdcmErrorMacro("No recipients certificates loaded.");
+    return false;
+    }
 
   if(! CryptEncryptMessage(&EncryptParams, certifList.size(), (PCCERT_CONTEXT *)&certifList[0], (BYTE *)array, len, (BYTE *)output, (DWORD *)&outlen) )
     {
@@ -167,6 +183,12 @@ bool CAPICryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const
     DWORD cbKeySize;
     BYTE rgbKeyData[32]; //the maximum is 256 bit for aes
   } keyBlob = {0};
+
+  if (hRsaPrivK == 0)
+    {
+    gdcmErrorMacro("No private key loaded loaded.");
+    return false;
+    } 
 
   if (! (hMsg = CryptMsgOpenToDecode(CRYPT_ASN_ENCODING | X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, NULL, CMSG_ENVELOPED_DATA_PKCS_1_5_VERSION, NULL, NULL, NULL)) )
     {

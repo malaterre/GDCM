@@ -9,14 +9,13 @@ namespace gdcm
 class GDCM_EXPORT CryptographicMessageSyntax
 {
 public:
-  CryptographicMessageSyntax() : cipherType(AES128_CIPHER)
+  CryptographicMessageSyntax()
   {
   }
 
   virtual ~CryptographicMessageSyntax() {}
 
   typedef enum {
-    DES_CIPHER,    // DES
     DES3_CIPHER,   // Triple DES
     AES128_CIPHER, // CBC AES
     AES192_CIPHER, // '   '
@@ -36,18 +35,9 @@ public:
   /// decrypt content from a CMS envelopedData structure
   virtual bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const = 0;
 
-  virtual void SetCipherType(CipherTypes type)
-  {
-    cipherType = type;
-  }
+  virtual void SetCipherType(CipherTypes type) = 0;
 
-  virtual CipherTypes GetCipherType() const
-  {
-    return cipherType;
-  }
-
-protected:
-  CipherTypes cipherType;
+  virtual CipherTypes GetCipherType() const = 0;
 
 private:
   CryptographicMessageSyntax(const CryptographicMessageSyntax&);  // Not implemented.

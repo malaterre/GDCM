@@ -38,7 +38,7 @@ public:
   /// Set Cipher Type.
   /// Default is: AES256_CIPHER
   void SetCipherType(CipherTypes type);
-
+  CipherTypes GetCipherType() const;
   /// create a CMS envelopedData structure
   bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
   /// decrypt content from a PKCS#7 envelopedData structure
@@ -50,6 +50,7 @@ private:
   const EVP_CIPHER *internalCipherType;
   char * password;
   size_t passwordLength;
+  CipherTypes cipherType;
 
 private:
   OpenSSLCryptographicMessageSyntax(const OpenSSLCryptographicMessageSyntax&);  // Not implemented.

@@ -226,7 +226,6 @@ static void PrintHelp()
   std::cout << "  -c --certificate            Path to Certificate." << std::endl;
   std::cout << "  -p --password               Encryption passphrase." << std::endl;
   std::cout << "Encryption Algorithm Options:" << std::endl;
-  std::cout << "     --des                    DES." << std::endl;
   std::cout << "     --des3                   Triple DES." << std::endl;
   std::cout << "     --aes128                 AES 128." << std::endl;
   std::cout << "     --aes192                 AES 192." << std::endl;
@@ -250,11 +249,7 @@ static void PrintHelp()
 static gdcm::CryptographicMessageSyntax::CipherTypes GetFromString( const char * str )
 {
   gdcm::CryptographicMessageSyntax::CipherTypes ciphertype;
-  if( strcmp( str, "des" ) == 0 )
-    {
-    ciphertype = gdcm::CryptographicMessageSyntax::DES_CIPHER;
-    }
-  else if( strcmp( str, "des3" ) == 0 )
+  if( strcmp( str, "des3" ) == 0 )
     {
     ciphertype = gdcm::CryptographicMessageSyntax::DES3_CIPHER;
     }
@@ -294,13 +289,10 @@ int main(int argc, char *argv[])
   std::string password;
   int resourcespath = 0;
   int dumb_mode = 0;
-  int des = 0;
   int des3 = 0;
   int aes128 = 0;
   int aes192 = 0;
   int aes256 = 0;
-  //int rsapath = 0;
-  //int certpath = 0;
   int rootuid = 0;
   int verbose = 0;
   int warning = 0;
@@ -333,7 +325,6 @@ int main(int argc, char *argv[])
         {"certificate", required_argument, NULL, 'c'}, // 7
         {"password", required_argument, NULL, 'p'},
 
-        {"des", no_argument, &des, 1},
         {"des3", no_argument, &des3, 1},
         {"aes128", no_argument, &aes128, 1},
         {"aes192", no_argument, &aes192, 1},
@@ -620,16 +611,12 @@ int main(int argc, char *argv[])
     gdcm::CryptographicMessageSyntax::AES256_CIPHER;
   if( !dumb_mode )
     {
-    if( !des && !des3 && !aes128 && !aes192 && !aes256 )
+    if( !des3 && !aes128 && !aes192 && !aes256 )
       {
       aes256 = 1;
       }
 
-    if( des )
-      {
-      ciphertype = GetFromString( "des" );
-      }
-    else if( des3 )
+    if( des3 )
       {
       ciphertype = GetFromString( "des3" );
       }
