@@ -1,17 +1,14 @@
-#ifndef GDCMCMS_H
-#define GDCMCMS_H
-
-#include <iostream>
-using namespace std;
+#ifndef GDCMCRYPTOGRAPHICMESSAGESYNTAX_H
+#define GDCMCRYPTOGRAPHICMESSAGESYNTAX_H
 
 #include "gdcmTypes.h"
 
 namespace gdcm
 {
+
 class GDCM_EXPORT CryptographicMessageSyntax
 {
 public:
-  
   CryptographicMessageSyntax() : cipherType(AES128_CIPHER)
   {
   }
@@ -34,8 +31,9 @@ public:
   virtual bool SetPassword(const char * pass) = 0; // For null-terminated strings
   virtual bool SetPassword(const char * pass, size_t passLen) = 0; //For general binary data
 
-  /// create a PKCS#7 envelopedData structure
+  /// create a CMS envelopedData structure
   virtual bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const = 0;
+  /// decrypt content from a CMS envelopedData structure
   virtual bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const = 0;
 
   virtual void SetCipherType(CipherTypes type)
@@ -43,8 +41,7 @@ public:
     cipherType = type;
   }
 
-  //TODO: virtual ???
-  CipherTypes GetCipherType() const
+  virtual CipherTypes GetCipherType() const
   {
     return cipherType;
   }
@@ -52,7 +49,12 @@ public:
 protected:
   CipherTypes cipherType;
 
+private:
+  CryptographicMessageSyntax(const CryptographicMessageSyntax&);  // Not implemented.
+  void operator=(const CryptographicMessageSyntax&);  // Not implemented.
+
 };
+
 }
 
-#endif //GDCMCMS_H
+#endif //GDCMCRYPTOGRAPHICMESSAGESYNTAX_H

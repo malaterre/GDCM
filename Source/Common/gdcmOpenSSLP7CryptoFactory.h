@@ -11,14 +11,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef GDCMOPENSSLP7FACTORY_H
-#define GDCMOPENSSLP7FACTORY_H
+#ifndef GDCMOPENSSLP7CRYPTOFACTORY_H
+#define GDCMOPENSSLP7CRYPTOFACTORY_H
 
-#include <iostream>
 #include "gdcmCryptoFactory.h"
-#include "gdcmOpenSSLCryptographicMessageSyntax.h"
-
-using namespace std;
+#include "gdcmOpenSSLP7CryptographicMessageSyntax.h"
 
 namespace gdcm
 {
@@ -27,14 +24,13 @@ class GDCM_EXPORT OpenSSLP7CryptoFactory : public CryptoFactory
 public:
   OpenSSLP7CryptoFactory(CryptoLib id) : CryptoFactory(id)
   {
-    gdcmDebugMacro( "OpenSSL (PKCS7) Factory registered." << endl );
-    //CryptoFactory::AddLib(0, this);
+    gdcmDebugMacro( "OpenSSL (PKCS7) Factory registered." );
   }
     
 public:
   CryptographicMessageSyntax* CreateCMSProvider()
   {
-    return new OpenSSLCMS();
+    return new OpenSSLP7CryptographicMessageSyntax();
   }
 
 private:
@@ -42,4 +38,4 @@ private:
 };
 }
 
-#endif //GDCMOPENSSLP7FACTORY_H
+#endif //GDCMOPENSSLP7CRYPTOFACTORY_H

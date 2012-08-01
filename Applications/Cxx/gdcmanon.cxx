@@ -776,7 +776,7 @@ int main(int argc, char *argv[])
     }
 
   // Get private key/certificate
-  auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(crypto_factory->CreateCMSProvider());
+  std::auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(crypto_factory->CreateCMSProvider());
   gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
   if( !dumb_mode )
     {

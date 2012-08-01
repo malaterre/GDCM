@@ -20,8 +20,6 @@
 namespace gdcm
 {
 
-class CryptoLibraryNotFound : public Exception {};
-
 class GDCM_EXPORT CryptoFactory
 {
 public:
@@ -44,12 +42,16 @@ protected:
 
   static void AddLib(CryptoLib id, CryptoFactory* f)
   {
-    getInstanceMap().insert(pair<CryptoLib, CryptoFactory*>(id, f));
+    if (getInstanceMap().insert(std::pair<CryptoLib, CryptoFactory*>(id, f)).second == false)
+      {
+      gdcmErrorMacro( "Library already registered under id " << id );
+      }
   }
 
 protected:
   CryptoFactory(){}
   ~CryptoFactory(){};
 };
+
 }
 #endif //GDCMCRYPTOFACTORY_H

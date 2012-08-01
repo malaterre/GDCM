@@ -12,23 +12,23 @@
 
 =========================================================================*/
 
-#ifndef GDCMCAPIFACTORY_H
-#define GDCMCAPIFACTORY_H
+#ifndef GDCMCAPICRYPTOFACTORY_H
+#define GDCMCAPICRYPTOFACTORY_H
 
 #include "gdcmCryptoFactory.h"
 
 namespace gdcm
 {
+
 class GDCM_EXPORT CAPICryptoFactory : public CryptoFactory
 {
 public:
   CAPICryptoFactory(CryptoLib id);
-    
   CryptographicMessageSyntax* CreateCMSProvider();
 
 private:
-  CAPICryptoFactory(){}
-
+  CAPICryptoFactory() {}
 };
+
 } // end namespace gdcm
-#endif //GDCMCAPIFACTORY_H
+#endif //GDCMCAPICRYPTOFACTORY_H

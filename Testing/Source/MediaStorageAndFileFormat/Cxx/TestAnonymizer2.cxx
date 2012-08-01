@@ -60,7 +60,7 @@ int TestAnonymize2(const char *subdir, const char *filename)
 // Encrypt
 {
   gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
-  auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
+  std::auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
   gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
 
   if( !cms.ParseCertificateFile( certpath.c_str() ) )
@@ -120,7 +120,7 @@ int TestAnonymize2(const char *subdir, const char *filename)
 // Decrypt
 {
   gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
-  auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
+  std::auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
   gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
   if( !cms.ParseKeyFile( keypath.c_str() ) )
     {

@@ -15,9 +15,6 @@
 #include "gdcmOpenSSLP7CryptographicMessageSyntax.h"
 #include "gdcmTrace.h"
 
-//#define gdcmDebugMacro(mess) cout << mess;
-//#define GDCM_USE_SYSTEM_OPENSSL
-
 #include <limits> // numeric_limits
 
 #include <stdio.h> // stderr
@@ -148,21 +145,21 @@ public:
       bool b = Initialize();
       if ( !b )
         {
-        //gdcmErrorMacro( "Initialize" );
+        gdcmErrorMacro( "Initialize" );
         return false;
         }
       Initialized = true;
       }
 
-    /*if( len > (size_t)std::numeric_limits<int>::max() )
+    if( len > (size_t)std::numeric_limits<int>::max() )
       {
-      //gdcmErrorMacro( "len is too big: " << len );
+      gdcmErrorMacro( "len is too big: " << len );
       return false;
-      }*/
+      }
     BIO *data = BIO_new_mem_buf((void*)array, (int)len);
     if(!data)
       {
-      //gdcmErrorMacro( "BIO_new_mem_buf" );
+      gdcmErrorMacro( "BIO_new_mem_buf" );
       return false;
       }
 
@@ -179,13 +176,13 @@ public:
     int bflush = BIO_flush(p7bio);
     if( bflush != 1 )
       {
-      //gdcmErrorMacro( "BIO_flush: " << bflush );
+      gdcmErrorMacro( "BIO_flush: " << bflush );
       return false;
       }
 
     if (!PKCS7_dataFinal(p7,p7bio))
       {
-      //gdcmErrorMacro( "PKCS7_dataFinal" );
+      gdcmErrorMacro( "PKCS7_dataFinal" );
       return false;
       }
 
@@ -194,7 +191,7 @@ public:
     // BIOs are an exception, they return 0 for success and -1 for failure.
     if( BIO_reset(bio_buffer) != 1 )
       {
-      //gdcmErrorMacro( "BIO_reset" );
+      gdcmErrorMacro( "BIO_reset" );
       return false;
       }
 
@@ -203,10 +200,10 @@ public:
 
     char *binary;
     long biolen = BIO_get_mem_data(bio_buffer,&binary);
-    //gdcmAssertMacro( biolen >= 0 );
+    gdcmAssertMacro( biolen >= 0 );
     if ( outlen < (size_t)biolen )
       {
-      //gdcmErrorMacro( "Allocation issue: " << outlen << " vs " << biolen << " from " << len );
+      gdcmErrorMacro( "Allocation issue: " << outlen << " vs " << biolen << " from " << len );
       return false;
       }
     outlen = biolen;
@@ -231,17 +228,17 @@ private:
 #endif
 };
 
-OpenSSLP7CMS::OpenSSLP7CMS()
+OpenSSLP7CryptographicMessageSyntax::OpenSSLP7CryptographicMessageSyntax()
 {
   Internals = new CryptographicMessageSyntaxInternals;
 }
 
-OpenSSLP7CMS::~OpenSSLP7CMS()
+OpenSSLP7CryptographicMessageSyntax::~OpenSSLP7CryptographicMessageSyntax()
 {
   delete Internals;
 }
 
-void OpenSSLP7CMS::SetCipherType( CryptographicMessageSyntax::CipherTypes type )
+void OpenSSLP7CryptographicMessageSyntax::SetCipherType( CryptographicMessageSyntax::CipherTypes type )
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   Internals->SetCipherType( type );
@@ -250,7 +247,7 @@ void OpenSSLP7CMS::SetCipherType( CryptographicMessageSyntax::CipherTypes type )
 #endif
 }
 
-CryptographicMessageSyntax::CipherTypes OpenSSLP7CMS::GetCipherType() const
+CryptographicMessageSyntax::CipherTypes OpenSSLP7CryptographicMessageSyntax::GetCipherType() const
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   return Internals->GetCipherType();
@@ -259,14 +256,14 @@ CryptographicMessageSyntax::CipherTypes OpenSSLP7CMS::GetCipherType() const
 #endif
 }
 
-bool OpenSSLP7CMS::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const
+bool OpenSSLP7CryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   // RAND_status() and RAND_event() return 1 if the PRNG has been seeded with
   // enough data, 0 otherwise.
   if( !RAND_status() )
     {
-    //gdcmErrorMacro( "PRNG was not seeded properly" );
+    gdcmErrorMacro( "PRNG was not seeded properly" );
     outlen = 0;
     return false;
     }
@@ -284,7 +281,7 @@ bool OpenSSLP7CMS::Encrypt(char *output, size_t &outlen, const char *array, size
 /*
  $ openssl smime -decrypt -in /tmp/debug.der -inform DER -recip /tmp/server.pem -inkey CA_key.pem
 */
-bool OpenSSLP7CMS::Decrypt(char *output, size_t &outlen, const char *array, size_t len) const
+bool OpenSSLP7CryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const char *array, size_t len) const
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   CryptographicMessageSyntaxInternals *x509 = Internals;
@@ -311,7 +308,7 @@ bool OpenSSLP7CMS::Decrypt(char *output, size_t &outlen, const char *array, size
 
   if( len > (size_t)std::numeric_limits<int>::max() )
     {
-    //gdcmErrorMacro( "len is too big: " << len );
+    gdcmErrorMacro( "len is too big: " << len );
     return false;
     }
   data = BIO_new_mem_buf((void*)array, (int)len);
@@ -413,7 +410,7 @@ err:
 }
 
 
-bool OpenSSLP7CMS::ParseKeyFile( const char *keyfile)
+bool OpenSSLP7CryptographicMessageSyntax::ParseKeyFile( const char *keyfile)
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   ::BIO *in;
@@ -438,7 +435,7 @@ bool OpenSSLP7CMS::ParseKeyFile( const char *keyfile)
 #endif
 }
 
-bool OpenSSLP7CMS::ParseCertificateFile( const char *keyfile)
+bool OpenSSLP7CryptographicMessageSyntax::ParseCertificateFile( const char *keyfile)
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   STACK_OF(X509) *recips = Internals->GetRecipients();
@@ -467,4 +464,3 @@ bool OpenSSLP7CMS::ParseCertificateFile( const char *keyfile)
 
 
 } // end namespace gdcm
-

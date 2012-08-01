@@ -15,7 +15,6 @@
 using namespace std;
 
 #include "gdcmCryptoFactory.h"
-#include <map>
 
 #ifdef WIN32
 #include "gdcmCAPICryptoFactory.h"
@@ -38,12 +37,14 @@ CryptoFactory* CryptoFactory::getFactoryInstance(CryptoLib id)
   static OpenSSLCryptoFactory ossl(CryptoFactory::OPENSSL);
   static OpenSSLP7CryptoFactory osslp7(CryptoFactory::OPENSSLP7);
 #endif
-  if (getInstanceMap()[id] == NULL) 
+  std::map<CryptoLib, CryptoFactory*>::iterator it = getInstanceMap().find(id);
+  if (it == getInstanceMap().end())
     {
-    cout << "No crypto factory registered with id " << id << endl;
-    throw CryptoLibraryNotFound();
+    //std::cout << "No crypto factory registered with id " << id << std::endl;
+    return NULL;
     }
-  return getInstanceMap()[id];
+  assert(it->second);
+  return it->second;
 }
 
 }

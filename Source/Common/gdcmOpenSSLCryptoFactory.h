@@ -12,39 +12,37 @@
 
 =========================================================================*/
 
-#ifndef GDCMOPENSSLFACTORY_H
-#define GDCMOPENSSLFACTORY_H
+#ifndef GDCMOPENSSLCRYPTOFACTORY_H
+#define GDCMOPENSSLCRYPTOFACTORY_H
 
-#include <iostream>
 #include "gdcmCryptoFactory.h"
 #include "gdcmOpenSSLCryptographicMessageSyntax.h"
 
-using namespace std;
-
 namespace gdcm
 {
+
 class GDCM_EXPORT OpenSSLCryptoFactory : public CryptoFactory
 {
 public:
   OpenSSLCryptoFactory(CryptoLib id) : CryptoFactory(id)
   {
-    gdcmDebugMacro( "OpenSSL Factory registered." << endl );
-    //CryptoFactory::AddLib(0, this);
+    gdcmDebugMacro( "OpenSSL Factory registered." );
   }
     
 public:
   CryptographicMessageSyntax* CreateCMSProvider()
   {
-    Initialize();
-    return new OpenSSLCMS();
+    InitOpenSSL();
+    return new OpenSSLCryptographicMessageSyntax();
   }
 
 protected:
-  bool Initialize();
+  void InitOpenSSL();
 
 private:
   OpenSSLCryptoFactory(){}
 };
+
 }
 
-#endif //GDCMOPENSSLFACTORY_H
+#endif //GDCMOPENSSLCRYPTOFACTORY_H

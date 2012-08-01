@@ -13,6 +13,7 @@
 =========================================================================*/
 #include "gdcmCryptoFactory.h"
 #include <string.h>
+#include <memory>
 
 #include "gdcmFilename.h"
 #include "gdcmTesting.h"
@@ -48,14 +49,14 @@ int TestCryptographicMessageSyntax(int, char *[])
   gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSLP7)->CreateCMSProvider();//FIXME: destroy
 
   gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
-  auto_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
+  std::auto_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
   ocms->ParseKeyFile(keypath.c_str());
   ocms->ParseCertificateFile(certpath.c_str());
 #endif
 
 #ifdef WIN32
   gdcm::CryptoFactory* capi = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::CAPI);
-  auto_ptr<gdcm::CryptographicMessageSyntax> ccms(capi->CreateCMSProvider());
+  std::auto_ptr<gdcm::CryptographicMessageSyntax> ccms(capi->CreateCMSProvider());
   ccms->ParseCertificateFile(certpath.c_str());
   ccms->ParseKeyFile(keypath.c_str());
 #endif
@@ -161,7 +162,7 @@ int TestPasswordBasedEncryption(int, char *[])
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
-  auto_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
+  std::auto_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
 
   ocms->SetPassword("password");
   for (int i = 0; i < 4; i++)

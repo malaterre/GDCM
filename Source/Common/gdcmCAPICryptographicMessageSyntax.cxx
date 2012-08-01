@@ -13,34 +13,35 @@
 =========================================================================*/
 
 #include "gdcmCAPICryptographicMessageSyntax.h"
-#include <memory>
+using namespace std;
 
 namespace gdcm
 {
 
-CAPICMS::CAPICMS() : hRsaPrivK(0)
+CAPICryptographicMessageSyntax::CAPICryptographicMessageSyntax() : hProv(0), hRsaPrivK(0)
 {
   initialized = Initialize();
 }
 
-CAPICMS::~CAPICMS() {
+CAPICryptographicMessageSyntax::~CAPICryptographicMessageSyntax() {
   for (vector<PCCERT_CONTEXT>::iterator it = certifList.begin(); it != certifList.end(); ++it)
     {
-    if (! CertFreeCertificateContext(*it))
+    CertFreeCertificateContext(*it);
+    /*if (! CertFreeCertificateContext(*it))
       {
-      printf("Error at releasing certificate context.");
-      }
+      gdcmWarningMacro( "Error at releasing certificate context: " << std::hex << GetLastError() );
+      }*/
     }
 
   if (hRsaPrivK) CryptDestroyKey(hRsaPrivK);
 
   if (!CryptReleaseContext(hProv, 0))
     {
-    printf("Error when releasing context: 0x%x", GetLastError());
+    gdcmWarningMacro("Error when releasing context: 0x" << std::hex << GetLastError());
     }
 }
 
-bool CAPICMS::ParseCertificateFile( const char *filename ) {
+bool CAPICryptographicMessageSyntax::ParseCertificateFile( const char *filename ) {
   bool ret = false;
   BYTE *certHexBuf = NULL, *certBin = NULL;
   DWORD certHexBufLen, certBinLen;
@@ -51,14 +52,14 @@ bool CAPICMS::ParseCertificateFile( const char *filename ) {
   // Call to get the needed amount of space
   if ( !CryptStringToBinaryA( (LPCSTR)certHexBuf, 0, CRYPT_STRING_BASE64_ANY, NULL, &certBinLen, NULL, NULL ) )
     {
-    fprintf( stderr, "CryptStringToBinary failed. Err: %dn", GetLastError() );
+    gdcmErrorMacro( "CryptStringToBinary failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
   certBin = new BYTE[certBinLen];
   // Convert from PEM format to DER format - removes header and footer and decodes from base64
   if ( !CryptStringToBinaryA( (LPCSTR)certHexBuf, 0, CRYPT_STRING_BASE64_ANY, certBin, &certBinLen, NULL, NULL ) )
     {
-    fprintf( stderr, "CryptStringToBinary failed. Err: %dn", GetLastError() );
+    gdcmErrorMacro( "CryptStringToBinary failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
     
@@ -66,7 +67,7 @@ bool CAPICMS::ParseCertificateFile( const char *filename ) {
   certContext = CertCreateCertificateContext(X509_ASN_ENCODING, certBin, certBinLen);
   if (certContext == NULL)
     {
-    cout << "error at creating context" << hex << GetLastError();
+    gdcmErrorMacro( "CertCreateCertificateContext failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
   certifList.push_back(certContext);
@@ -80,7 +81,7 @@ err:
   return ret;
 }
 
-bool CAPICMS::ParseKeyFile( const char *filename ) {
+bool CAPICryptographicMessageSyntax::ParseKeyFile( const char *filename ) {
   bool ret = false;
   BYTE *keyHexBuffer = NULL, *keyBinBuffer = NULL, *keyBlob = NULL;
   DWORD keyHexBufferLen, keyBinBufferLen, keyBlobLen;
@@ -91,31 +92,31 @@ bool CAPICMS::ParseKeyFile( const char *filename ) {
 
   if ( !CryptStringToBinaryA((LPCSTR)keyHexBuffer, 0, CRYPT_STRING_BASE64_ANY, NULL, &keyBinBufferLen, NULL, NULL) )
     {
-    printf("Failed to convert BASE64 private key. Error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "Failed to convert from BASE64. CryptStringToBinary failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
   keyBinBuffer = new BYTE[keyBinBufferLen];
   if ( !CryptStringToBinaryA((LPCSTR)keyHexBuffer, 0, CRYPT_STRING_BASE64_ANY, keyBinBuffer, &keyBinBufferLen, NULL, NULL) )
     {
-    printf("Failed to convert BASE64 private key. Error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "Failed to convert from BASE64. CryptStringToBinary failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
 
   if (!CryptDecodeObjectEx(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, PKCS_RSA_PRIVATE_KEY, keyBinBuffer, keyBinBufferLen, 0, NULL, NULL, &keyBlobLen))
     {
-    printf("Failed to parse private key. Error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "Failed to parse private key. CryptDecodeObjectEx failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
   keyBlob = new BYTE[keyBlobLen];
   if (!CryptDecodeObjectEx(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, PKCS_RSA_PRIVATE_KEY, keyBinBuffer, keyBinBufferLen, 0, NULL, keyBlob, &keyBlobLen))
     {
-    printf("Failed to parse private key. Error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "Failed to parse private key. CryptDecodeObjectEx failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
 
   if (!CryptImportKey(hProv, keyBlob, keyBlobLen, NULL, 0, &hKey))
     {
-    printf("CryptImportKey failed with error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "CryptImportKey failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
   if (hRsaPrivK) CryptDestroyKey(hRsaPrivK);
@@ -130,7 +131,7 @@ err:
   return ret;
 }
 
-bool CAPICMS::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const 
+bool CAPICryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const 
 {
   CRYPT_ALGORITHM_IDENTIFIER EncryptAlgorithm = {0};
   EncryptAlgorithm.pszObjId = getCipherObjId();
@@ -143,8 +144,9 @@ bool CAPICMS::Encrypt(char *output, size_t &outlen, const char *array, size_t le
 
   if(! CryptEncryptMessage(&EncryptParams, certifList.size(), (PCCERT_CONTEXT *)&certifList[0], (BYTE *)array, len, (BYTE *)output, (DWORD *)&outlen) )
     {
-    printf("Couldn't encrypt message. Error 0x%.8X\n", GetLastError());
-    if (GetLastError() == CRYPT_E_UNKNOWN_ALGO)
+    DWORD dwResult = GetLastError();
+    gdcmErrorMacro( "Couldn't encrypt message. CryptEncryptMessage failed with error 0x" << std::hex << dwResult );
+    if (dwResult == CRYPT_E_UNKNOWN_ALGO)
       {
       gdcmErrorMacro("Unknown encryption algorithm. If on Windows XP please use only 3DES.");
       }
@@ -153,7 +155,7 @@ bool CAPICMS::Encrypt(char *output, size_t &outlen, const char *array, size_t le
   return true;
 }
 
-bool CAPICMS::Decrypt(char *output, size_t &outlen, const char *array, size_t len) const 
+bool CAPICryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const char *array, size_t len) const 
 {
   bool ret = false;
   HCRYPTMSG hMsg = NULL;
@@ -168,26 +170,26 @@ bool CAPICMS::Decrypt(char *output, size_t &outlen, const char *array, size_t le
 
   if (! (hMsg = CryptMsgOpenToDecode(CRYPT_ASN_ENCODING | X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, NULL, CMSG_ENVELOPED_DATA_PKCS_1_5_VERSION, NULL, NULL, NULL)) )
     {
-    printf("MsgOpenToDecode failed with error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "MsgOpenToDecode failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
     
   if(! CryptMsgUpdate(hMsg, (BYTE*)array, len, TRUE))
     {
-    printf("MsgUpdate failed with error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "MsgUpdate failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
 
   DWORD dwMessageType, cbMessageTypeLen;
   if(! CryptMsgGetParam(hMsg, CMSG_TYPE_PARAM, 0, &dwMessageType, &cbMessageTypeLen)) 
     {
-    printf("CryptMsgGetParam CMSG_TYPE_PARAM failed with error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "CryptMsgGetParam CMSG_TYPE_PARAM failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
 
   if(dwMessageType != CMSG_ENVELOPED) 
     {
-    printf("Wrong message type ( != CMSG_ENVELOPED )\n");
+    gdcmErrorMacro("Wrong message type ( != CMSG_ENVELOPED )");
     goto err;
     }
 
@@ -195,19 +197,19 @@ bool CAPICMS::Decrypt(char *output, size_t &outlen, const char *array, size_t le
   DWORD kekAlgLen;
   if(! CryptGetKeyParam(hRsaPrivK, KP_ALGID, (BYTE*)&kekAlg, &kekAlgLen, 0)) 
     {
-    printf("MsgGetParam KP_ALGID failed with error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "MsgGetParam KP_ALGID failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
   if (kekAlg != CALG_RSA_KEYX) 
     {
-    printf("Key encryption algorithm is not RSA.");
+    gdcmErrorMacro( "Key encryption algorithm is not RSA." );
     goto err;
     }
 
   DWORD nrOfRecipeints, nrOfRecipientsLen;
   if(! CryptMsgGetParam(hMsg, CMSG_RECIPIENT_COUNT_PARAM, 0, &nrOfRecipeints, &nrOfRecipientsLen))
     {
-    printf("Decode CMSG_RECIPIENT_COUNT_PARAM failed with error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "Decode CMSG_RECIPIENT_COUNT_PARAM failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
 
@@ -221,13 +223,13 @@ bool CAPICMS::Decrypt(char *output, size_t &outlen, const char *array, size_t le
     DWORD cbRecipientInfoLen;
     if(! CryptMsgGetParam(hMsg, CMSG_CMS_RECIPIENT_INFO_PARAM, i, NULL, &cbRecipientInfoLen))
       {
-      printf("MsgGetParam CMSG_CMS_RECIPIENT_INFO_PARAM size failed with error 0x%.8X\n", GetLastError());
+      gdcmErrorMacro( "MsgGetParam CMSG_CMS_RECIPIENT_INFO_PARAM size failed with error 0x" << std::hex << GetLastError() );
       goto err;
       }
     recipientInfo = (PCMSG_CMS_RECIPIENT_INFO) new BYTE[cbRecipientInfoLen];
     if(! CryptMsgGetParam(hMsg, CMSG_CMS_RECIPIENT_INFO_PARAM, i, recipientInfo, &cbRecipientInfoLen))
       {
-      printf("MsgGetParam CMSG_CMS_RECIPIENT_INFO_PARAM failed with error 0x%.8X\n", GetLastError());
+      gdcmErrorMacro( "MsgGetParam CMSG_CMS_RECIPIENT_INFO_PARAM failed with error 0x" << std::hex << GetLastError() );
       goto err;
       }
 
@@ -255,13 +257,13 @@ bool CAPICMS::Decrypt(char *output, size_t &outlen, const char *array, size_t le
   DWORD cekAlgLen;
   if(! CryptMsgGetParam(hMsg, CMSG_ENVELOPE_ALGORITHM_PARAM, 0, NULL, &cekAlgLen))
     {
-    printf("MsgGetParam CMSG_ENVELOPE_ALGORITHM_PARAM failed with error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "MsgGetParam CMSG_ENVELOPE_ALGORITHM_PARAM failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
   cekAlg = (PCRYPT_ALGORITHM_IDENTIFIER) new BYTE[cekAlgLen];
   if(! CryptMsgGetParam(hMsg, CMSG_ENVELOPE_ALGORITHM_PARAM, 0, cekAlg, &cekAlgLen))
     {
-    printf("MsgGetParam CMSG_ENVELOPE_ALGORITHM_PARAM failed with error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "MsgGetParam CMSG_ENVELOPE_ALGORITHM_PARAM failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
 
@@ -276,43 +278,43 @@ bool CAPICMS::Decrypt(char *output, size_t &outlen, const char *array, size_t le
 
   if (!CryptImportKey(hProv, (BYTE*)&keyBlob, sizeof(keyBlob), NULL, NULL, &hCEK))
     {
-    fprintf( stderr, "Import AES key failed. Err: 0x%.8X", GetLastError() );
+    gdcmErrorMacro( "CryptImportKey failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
 
   if(! CryptSetKeyParam(hCEK, KP_IV, (BYTE *) cekAlg->Parameters.pbData+2, 0)) //+2 for ASN header ???
     {
-    printf("SetKeyParam KP_IV failed with error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "SetKeyParam KP_IV failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
 
   DWORD dwMode = CRYPT_MODE_CBC;
   if(! CryptSetKeyParam(hCEK, KP_MODE, (BYTE*) &dwMode, 0))
     {
-    printf("SetKeyParam KP_MODE failed with error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "SetKeyParam KP_MODE failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
 
   DWORD bareContentLen;
   if(! CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, NULL, &bareContentLen))
     {
-    printf("MsgGetParam CMSG_BARE_CONTENT_PARAM size failed with error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "MsgGetParam CMSG_BARE_CONTENT_PARAM size failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
   bareContent = new BYTE[bareContentLen];
   if(! CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, bareContent, &bareContentLen))
     {
-    printf("MsgGetParam CMSG_BARE_CONTENT_PARAM failed with error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "MsgGetParam CMSG_BARE_CONTENT_PARAM failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
 
   if (! CryptDecrypt(hCEK, NULL, TRUE, NULL, bareContent, &bareContentLen))
     {
-    printf("Decrypting data failed with error 0x%.8X\n", GetLastError());
+    gdcmErrorMacro( "CryptDecrypt failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
 
-    if (bareContentLen > outlen)
+  if (bareContentLen > outlen)
     {
     gdcmErrorMacro( "Supplied output buffer too small: " << bareContentLen << " bytes needed." );
     goto err;
@@ -331,7 +333,7 @@ err:
   return ret;
 }
 
-ALG_ID CAPICMS::getAlgIdByObjId(const char * pszObjId)
+ALG_ID CAPICryptographicMessageSyntax::getAlgIdByObjId(const char * pszObjId)
 {
   if (strcmp(pszObjId, szOID_NIST_AES128_CBC) == 0)
     {
@@ -352,7 +354,7 @@ ALG_ID CAPICMS::getAlgIdByObjId(const char * pszObjId)
   return 0;
 }
 
-LPSTR CAPICMS::getCipherObjId() const
+LPSTR CAPICryptographicMessageSyntax::getCipherObjId() const
 {
   if (cipherType == AES128_CIPHER)
     {
@@ -373,7 +375,7 @@ LPSTR CAPICMS::getCipherObjId() const
   return 0;
 }
 
-bool CAPICMS::Initialize() {
+bool CAPICryptographicMessageSyntax::Initialize() {
   DWORD dwResult;
   if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) //CRYPT_VERIFYCONTEXT aes decr in cryptmsgcontrol not working
     {
@@ -383,13 +385,14 @@ bool CAPICMS::Initialize() {
       if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV, PROV_RSA_AES, CRYPT_NEWKEYSET | CRYPT_VERIFYCONTEXT))
         {
         dwResult = GetLastError();
-        cout << "Error [0x%x]: CryptAcquireContext() failed.";
+        gdcmErrorMacro(  "CryptAcquireContext() failed:" << std::hex << dwResult);
         return false;
         }
       }
   else if (dwResult == NTE_KEYSET_NOT_DEF)
     {
       //Probably WinXP
+      gdcmWarningMacro( "Certificate based encryption is supported on Windows XP only using 3DES." );
       if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV_XP /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) //CRYPT_VERIFYCONTEXT aes decr in cryptmsgcontrol not working
       {
       dwResult = GetLastError();
@@ -398,7 +401,7 @@ bool CAPICMS::Initialize() {
         if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV_XP /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_NEWKEYSET | CRYPT_VERIFYCONTEXT))
           {
           dwResult = GetLastError();
-          cout << "Error [0x%x]: CryptAcquireContext() failed.";
+          gdcmErrorMacro( "CryptAcquireContext() failed: " << std::hex << dwResult );
           return false;
           }
         }
@@ -418,7 +421,7 @@ bool CAPICMS::Initialize() {
   return true;
 }
 
-void CAPICMS::ReverseBytes(BYTE* data, DWORD len)
+void CAPICryptographicMessageSyntax::ReverseBytes(BYTE* data, DWORD len)
 {
   BYTE temp;
   for (DWORD i = 0; i < len/2; i++)
@@ -429,7 +432,7 @@ void CAPICMS::ReverseBytes(BYTE* data, DWORD len)
   }
 }
 
-bool CAPICMS::LoadFile(const char * filename, BYTE* & buffer, DWORD & bufLen)
+bool CAPICryptographicMessageSyntax::LoadFile(const char * filename, BYTE* & buffer, DWORD & bufLen)
 {
   FILE * f = fopen(filename, "rb");
   if (f == NULL)
@@ -458,4 +461,4 @@ bool CAPICMS::LoadFile(const char * filename, BYTE* & buffer, DWORD & bufLen)
   return true;
 }
 
-}
+} // end namespace gdcm

@@ -12,86 +12,51 @@
 
 =========================================================================*/
 
-#ifndef GDCMOPENSSLCMS_H
-#define GDCMOPENSSLCMS_H
+#ifndef GDCMOPENSSLCRYPTOGRAPHICMESSAGESYNTAX_H
+#define GDCMOPENSSLCRYPTOGRAPHICMESSAGESYNTAX_H
 
-#include <iostream>
 #include "gdcmCryptographicMessageSyntax.h"
-//#include "gdcmTypes.h"
-using namespace std;
 #include <openssl/cms.h>
 #include <openssl/evp.h>
 namespace gdcm
 {
-class CryptographicMessageSyntaxInternals;
-//-----------------------------------------------------------------------------
 
-/**
- * \brief
- * Class for CryptographicMessageSyntax encryption. This is just a simple
- * wrapper around openssl PKCS7_encrypt functionalities
- *
- * See online documentation
- * http://www.openssl.org/docs/crypto/PKCS7_encrypt.html
- *
- */
-
-class GDCM_EXPORT OpenSSLCMS : public CryptographicMessageSyntax
+class GDCM_EXPORT OpenSSLCryptographicMessageSyntax : public CryptographicMessageSyntax
 {
 public:
-  OpenSSLCMS();
-  ~OpenSSLCMS();
+  OpenSSLCryptographicMessageSyntax();
+  ~OpenSSLCryptographicMessageSyntax();
   
-    // X.509
+  // X.509
   bool ParseCertificateFile( const char *filename );
   bool ParseKeyFile( const char *filename );
 
   // PBE
-  bool SetPassword(const char * pass)
-  {
-    return SetPassword(pass, strlen(pass));
-  }
-
-  bool SetPassword(const char * pass, size_t passLen)
-  {
-    assert(pass);
-
-    if (password)
-      {
-      delete[] password;
-      }
-
-    passwordLength = passLen;
-    password = new char[passLen];
-    memcpy(password, pass, passLen);
-    
-    return true;
-  }
+  bool SetPassword(const char * pass);
+  bool SetPassword(const char * pass, size_t passLen);
 
   /// Set Cipher Type.
   /// Default is: AES256_CIPHER
   void SetCipherType(CipherTypes type);
-  //CipherTypes GetCipherType() const;
 
-  /// create a PKCS#7 envelopedData structure
+  /// create a CMS envelopedData structure
   bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
+  /// decrypt content from a PKCS#7 envelopedData structure
   bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const;
 
 private:
   ::stack_st_X509 *recips;//STACK_OF(X509) *recips;
   ::EVP_PKEY *pkey;
-  const EVP_CIPHER *cipher;
-
   const EVP_CIPHER *internalCipherType;
   char * password;
   size_t passwordLength;
 
 private:
-  OpenSSLCMS(const OpenSSLCMS&);  // Not implemented.
-  void operator=(const OpenSSLCMS&);  // Not implemented.
+  OpenSSLCryptographicMessageSyntax(const OpenSSLCryptographicMessageSyntax&);  // Not implemented.
+  void operator=(const OpenSSLCryptographicMessageSyntax&);  // Not implemented.
   const EVP_CIPHER *CreateCipher( CryptographicMessageSyntax::CipherTypes ciphertype);
 
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //GDCMOPENSSLCMS_H
+#endif //GDCMOPENSSLCRYPTOGRAPHICMESSAGESYNTAX_H

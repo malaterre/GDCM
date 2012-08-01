@@ -12,24 +12,21 @@
 
 =========================================================================*/
 
-#ifndef GDCMCAPICMS_H
-#define GDCMCAPICMS_H
+#ifndef GDCMCAPICRYPTOGRAPHICMESSAGESYNTAX_H
+#define GDCMCAPICRYPTOGRAPHICMESSAGESYNTAX_H
 
-//#include <iostream>
 #include "gdcmCryptographicMessageSyntax.h"
 #include <Windows.h>
 #include <WinCrypt.h>
 #include <vector>
 
-#pragma comment(lib, "Crypt32.lib")
-
 namespace gdcm
 {
-class GDCM_EXPORT CAPICMS : public CryptographicMessageSyntax
+class GDCM_EXPORT CAPICryptographicMessageSyntax : public CryptographicMessageSyntax
 {
 public:
-  CAPICMS();
-  ~CAPICMS();
+  CAPICryptographicMessageSyntax();
+  ~CAPICryptographicMessageSyntax();
 
   // X.509
   bool ParseCertificateFile( const char *filename );
@@ -38,16 +35,24 @@ public:
   // PBE
   virtual bool SetPassword(const char * pass)
   {
+    gdcmWarningMacro( "CAPI does not support Password Based Encryption." );
     return false;
   }
   virtual bool SetPassword(const char * pass, size_t passLen)
   {
+    gdcmWarningMacro( "CAPI does not support Password Based Encryption." );
     return false;
   }
 
-  /// create a PKCS#7 envelopedData structure
+  /// create a CMS envelopedData structure
   bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
+  /// decrypt content from a CMS envelopedData structure
   bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const;
+
+  bool getInitialized()
+  {
+    return initialized;
+  }
 
 private:
   bool Initialize();
@@ -59,10 +64,11 @@ private:
 private:
   bool initialized;
   HCRYPTPROV hProv;
-  vector<PCCERT_CONTEXT> certifList;
+  std::vector<PCCERT_CONTEXT> certifList;
   HCRYPTKEY hRsaPrivK;
 
 };
-}
 
-#endif //GDCMCAPICMS_H
+} // end namespace gdcm
+
+#endif //GDCMCAPICRYPTOGRAPHICMESSAGESYNTAX_H

@@ -11,13 +11,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef GDCMOPENSSLP7CMS_H
-#define GDCMOPENSSLP7CMS_H
+#ifndef GDCMOPENSSLP7CRYPTOGRAPHICMESSAGESYNTAX_H
+#define GDCMOPENSSLP7CRYPTOGRAPHICMESSAGESYNTAX_H
 
-#include <iostream>
 #include "gdcmCryptographicMessageSyntax.h"
-//#include "gdcmTypes.h"
-using namespace std;
+#include "gdcmTypes.h"
 
 namespace gdcm
 {
@@ -33,12 +31,11 @@ class CryptographicMessageSyntaxInternals;
  * http://www.openssl.org/docs/crypto/PKCS7_encrypt.html
  *
  */
-
-class GDCM_EXPORT OpenSSLP7CMS : public CryptographicMessageSyntax
+class GDCM_EXPORT OpenSSLP7CryptographicMessageSyntax : public CryptographicMessageSyntax
 {
 public:
-  OpenSSLP7CMS();
-  ~OpenSSLP7CMS();
+  OpenSSLP7CryptographicMessageSyntax();
+  ~OpenSSLP7CryptographicMessageSyntax();
   
     // X.509
   bool ParseCertificateFile( const char *filename );
@@ -62,15 +59,16 @@ public:
 
   /// create a PKCS#7 envelopedData structure
   bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const;
+
+  /// decrypt content from a PKCS#7 envelopedData structure
   bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const;
 
 private:
   CryptographicMessageSyntaxInternals *Internals;
-
 private:
-  OpenSSLP7CMS(const OpenSSLP7CMS&);  // Not implemented.
-  void operator=(const OpenSSLP7CMS&);  // Not implemented.
+  OpenSSLP7CryptographicMessageSyntax(const OpenSSLP7CryptographicMessageSyntax&);  // Not implemented.
+  void operator=(const OpenSSLP7CryptographicMessageSyntax&);  // Not implemented.
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------
-#endif //GDCMOPENSSLP7CMS_H
+#endif //GDCMOPENSSLP7CRYPTOGRAPHICMESSAGESYNTAX_H

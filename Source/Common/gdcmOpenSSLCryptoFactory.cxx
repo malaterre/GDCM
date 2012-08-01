@@ -17,17 +17,16 @@
 #include <openssl\err.h>
 namespace gdcm
 {
-bool OpenSSLCryptoFactory::Initialize()
+
+void OpenSSLCryptoFactory::InitOpenSSL()
 {
-  //TODO: review
   static bool Initialized = false;
   if (!Initialized)
     {
-    //http://www.openssl.org/docs/crypto/OpenSSL_add_all_algorithms.html
     OpenSSL_add_all_algorithms();
     ERR_load_crypto_strings();
     Initialized = true;
     }
-  return true;
 }
+
 }
