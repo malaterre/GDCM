@@ -250,11 +250,6 @@ namespace gdcm
         {
         // \0 is found ...
         }
-      else if ( !( isprint((unsigned char)c) ) )
-        {
-        assert( 0 );
-        gdcmErrorMacro( "Should not happen" );
-        }
       else if(c == '&')
         os << "&amp;";
       else if(c == '<')
