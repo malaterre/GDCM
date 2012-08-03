@@ -48,7 +48,7 @@ XMLPrinter::~XMLPrinter()
 // there are only two bytes...
 
 VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const DataSet & ds,
-  const DataElement &de)
+  const DataElement &de, const TransferSyntax & ts)
 {
 
   const ByteValue *bv = de.GetByteValue();
@@ -310,7 +310,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
               const char *suid = UIDgen.Generate();
               os << "<BulkData uuid = \""<<
                 suid << "\" />\n";
-              HandleBulkData( suid, bv->GetPointer(), bv->GetLength() );
+              HandleBulkData( suid, ts, bv->GetPointer(), bv->GetLength() );
               }
             }
           }
@@ -360,7 +360,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
             const char *suid = UIDgen.Generate();
             os << "<BulkData uuid = \""<<
               suid << "\" />\n";
-            HandleBulkData( suid, bv->GetPointer(), bv->GetLength() );
+            HandleBulkData( suid, ts, bv->GetPointer(), bv->GetLength() );
             }
           }
         }
@@ -380,7 +380,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
   return refvr;
 }
 
-void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
+void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, const TransferSyntax & ts, std::ostream & os)
 {
   if( !sqi ) return;
   
@@ -409,7 +409,7 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
     os << ">\n";
     */
     os << "<Item number = \"" << noItems++ << "\">\n";
-    PrintDataSet(ds, os);
+    PrintDataSet(ds, ts, os);
     /*
     if( deitem.GetVL().IsUndefined() )
       {
@@ -427,7 +427,7 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
   */  
 }
 
-void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
+void XMLPrinter::PrintDataSet(const DataSet &ds, const TransferSyntax & ts, std::ostream &os)
 {
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
@@ -444,28 +444,28 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
 
     
     os << "<DicomAttribute  " ;
-    VR refvr = PrintDataElement(os, dicts, ds, de);
+    VR refvr = PrintDataElement(os, dicts, ds, de, ts);
 
     if( refvr == VR::SQ /*|| sqi*/ )
       {
       SmartPointer<SequenceOfItems> sqi2 = de.GetValueAsSQ();
-      PrintSQ(sqi2, os);
+      PrintSQ(sqi2, ts, os);
       }
     else if ( sqf )
       {
       os << "<Item number = \"1\">\n"; 
       const BasicOffsetTable & table = sqf->GetTable();
       os << "<DicomAttribute  ";
-      PrintDataElement(os,dicts,ds,table);
+      PrintDataElement(os,dicts,ds,table, ts);
       os << "</DicomAttribute>\n";
       os << "</Item>\n";
       unsigned int numfrag = sqf->GetNumberOfFragments();
       for(unsigned int i = 0; i < numfrag; i++)
         {
-        os << "<Item number = \"" << i+2 << "\">\n"; 
+        os << "<Item number = \"" << i+2 << "\">\n";
         const Fragment& frag = sqf->GetFragment(i);
         os << "<DicomAttribute  ";
-        PrintDataElement(os,dicts,ds,frag); 
+        PrintDataElement(os,dicts,ds,frag, ts);
         os << "</DicomAttribute>\n";
         os << "</Item>\n";
         }
@@ -489,6 +489,8 @@ void XMLPrinter::Print(std::ostream& os)
   const Tag CharacterEncoding(0x0008,0x0005);
 
   const DataSet &ds = F->GetDataSet();
+  const FileMetaInformation &header = F->GetHeader();
+  const TransferSyntax &ts = header.GetDataSetTransferSyntax();
 
   os << "<?xml version=\"1.0\" encoding=\"";
   if(ds.FindDataElement(CharacterEncoding))
@@ -536,14 +538,14 @@ void XMLPrinter::Print(std::ostream& os)
     }
   os << "<NativeDicomModel xmlns=\"http://dicom.nema.org/PS3.19/models/NativeDICOM\">\n";
 
-  PrintDataSet(ds, os);
+  PrintDataSet(ds, ts, os);
 
   os << "</NativeDicomModel>";
 }
 
 // Drop BulkData by default.
 // Application programmer can override this mecanism
-void XMLPrinter::HandleBulkData(const char *uuid,
+void XMLPrinter::HandleBulkData(const char *uuid, const TransferSyntax & ts,
   const char *bulkdata, size_t bulklen)
 {
   (void)uuid;

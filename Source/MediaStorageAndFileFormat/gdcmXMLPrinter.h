@@ -109,21 +109,21 @@ public:
   void Print(std::ostream& os);
 
   // Print an individual dataset
-  void PrintDataSet(const DataSet &ds, std::ostream& os);
+  void PrintDataSet(const DataSet &ds, const TransferSyntax & ts, std::ostream& os);
   
   //void PrintUID(std::ostream &os);
 
   /// Virtual function mecanism to allow application programmer to
   /// override the default mecanism for BulkData handling. By default
   /// GDCM will simply discard the BulkData and only write the UUID
-  virtual void HandleBulkData(const char *uuid,
+  virtual void HandleBulkData(const char *uuid, const TransferSyntax &ts,
     const char *bulkdata, size_t bulklen);
 
 protected:
 
-  VR PrintDataElement(std::ostream &os, const Dicts &dicts, const DataSet & ds, const DataElement &de );
+  VR PrintDataElement(std::ostream &os, const Dicts &dicts, const DataSet & ds, const DataElement &de, const TransferSyntax & ts);
   
-  void PrintSQ(const SequenceOfItems *sqi, std::ostream &os);
+  void PrintSQ(const SequenceOfItems *sqi, const TransferSyntax & ts, std::ostream &os);
     
   PrintStyles PrintStyle;
   

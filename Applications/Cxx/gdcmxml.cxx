@@ -53,12 +53,22 @@ using namespace gdcm;
 class SimpleFileXMLPrinter : public XMLPrinter
 {
 public:
-  void HandleBulkData(const char *uuid,
+  void HandleBulkData(const char *uuid, const TransferSyntax & ts,
     const char *bulkdata, size_t bulklen)
     {
+    // Store Bulk Data
     std::ofstream out( uuid, std::ios::binary );
     out.write( bulkdata, bulklen );
     out.close();
+    std::string tsfn = uuid;
+    tsfn += ".ts";
+    // Need to store Transfer Syntax for later getData() implementation
+    // See Sup118 for details
+    const char *tsstring = ts.GetString();
+    assert( tsstring );
+    std::ofstream out2( tsfn.c_str(), std::ios::binary );
+    out2.write( tsstring, strlen(tsstring) );
+    out2.close();
     }
 };
 
