@@ -17,6 +17,8 @@
 #include "gdcmVersion.h"
 #include "gdcmFileMetaInformation.h"
 #include "gdcmDataSet.h"
+#include "gdcmDataElement.h"
+#include "gdcmAttribute.h"
 #include "gdcmPrivateTag.h"
 #include "gdcmValidate.h"
 #include "gdcmWriter.h"
@@ -28,6 +30,7 @@
 #include "gdcmASN1.h"
 #include "gdcmFile.h"
 #include "gdcmXMLPrinter.h"
+#include "gdcmPrinter.h"
 
 #ifdef GDCM_USE_SYSTEM_LIBXML2
 #include <libxml/xmlreader.h>
@@ -85,64 +88,290 @@ void PrintHelp()
 }
 
 #ifdef GDCM_USE_SYSTEM_LIBXML2
-static void processNode(xmlTextReaderPtr reader) 
-{
-  const xmlChar *name, *value;
-  name = xmlTextReaderConstName(reader);
+void HandlePN()
+	{
+	}
+void HandleSequence(SequenceOfItems &sqi,xmlTextReaderPtr reader,DataSet &DS,int depth);
+void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ )
+{		
+	 int ret;	
+   //int ret = xmlTextReaderRead(reader);/**/
+   //ret = xmlTextReaderRead(reader); /* moving past tag <NativeDicomModel> */
+   const char *name = (const char*)xmlTextReaderConstName(reader);
+	 //printf("%s\n",name);				
 
-  if (name == NULL)
-    name = BAD_CAST "--";
+#define LoadValueASCII(type) \
+  case type: \
+    		{ \
+      	int count =0; \
+      	name = (const char*)xmlTextReaderConstName(reader); \
+      	if(strcmp(name,"DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15)\
+      		break;\
+      	char values[10][100] = {"","","","","","","","","",""}; \
+      	Element<type,VM::VM1_n> el; \
+    		while(strcmp(name,"Value") == 0) \
+    			{ \
+    			ret = xmlTextReaderRead(reader); \
+    			char *value = (char*)xmlTextReaderConstValue(reader); \
+    			strcpy((char *)values[count++],value); \
+    			ret = xmlTextReaderRead(reader);/*Value ending tag*/ \
+    			name = (const char*)xmlTextReaderConstName(reader); \
+    			ret = xmlTextReaderRead(reader);ret = xmlTextReaderRead(reader); \
+    			name = (const char*)xmlTextReaderConstName(reader); \
+    			} \
+    		el.SetLength( (count) * vr.GetSizeof() ); \
+    		int total = 0; \
+    		while(total < count) \
+    			{ \
+    			el.SetValue(/*(typename VRToType<VR::CS>::Type)*/values[total],total); \
+    			total++; \
+    			} \
+    		de = el.GetAsDataElement(); \
+    		}break
 
-  value = xmlTextReaderConstValue(reader);
-  printf("%d %d %s %d %d", 
-      xmlTextReaderDepth(reader),
-      xmlTextReaderNodeType(reader),
-      name,
-      xmlTextReaderIsEmptyElement(reader),
-      xmlTextReaderHasValue(reader));
-      
-  if(value == NULL)
-    printf("\n");
-  else 
-    {
-    if (xmlStrlen(value) > 40)
-      printf(" %.40s...\n", value);
-    else
-      printf(" %s\n", value);
-    }
+#define LoadValueInteger(type) \
+  case type: \
+    		{ \
+      	int count =0; \
+      	name = (const char*)xmlTextReaderConstName(reader); \
+      	if(strcmp(name,"DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15)\
+      		break;\
+      	int values[10]; \
+      	Element<type,VM::VM1_n> el; \
+    		while(strcmp(name,"Value") == 0) \
+    			{ \
+    			ret = xmlTextReaderRead(reader); \
+    			char *value_char = (char*)xmlTextReaderConstValue(reader); \
+    			sscanf(value_char,"%d",&(values[count++]));  \
+    			ret = xmlTextReaderRead(reader);/*Value ending tag*/ \
+    			name = (const char*)xmlTextReaderConstName(reader); \
+    			ret = xmlTextReaderRead(reader);ret = xmlTextReaderRead(reader); \
+    			name = (const char*)xmlTextReaderConstName(reader); \
+    			} \
+    		el.SetLength( (count) * vr.GetSizeof() ); \
+    		int total = 0; \
+    		while(total < count) \
+    			{ \
+    			el.SetValue(values[total],total); \
+    			total++; \
+    			} \
+    		de = el.GetAsDataElement(); \
+    		}break
+
+#define LoadValueFloat(type) \
+  case type: \
+    		{ \
+      	int count =0; \
+      	name = (const char*)xmlTextReaderConstName(reader); \
+      	if(strcmp(name,"DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15)\
+      		break;\
+      	float values[10]; \
+      	Element<type,VM::VM1_n> el; \
+    		while(strcmp(name,"Value") == 0) \
+    			{ \
+    			ret = xmlTextReaderRead(reader); \
+    			char *value_char = (char*)xmlTextReaderConstValue(reader); \
+    			sscanf(value_char,"%f",&(values[count++]));  \
+    			ret = xmlTextReaderRead(reader);/*Value ending tag*/ \
+    			name = (const char*)xmlTextReaderConstName(reader); \
+    			ret = xmlTextReaderRead(reader);ret = xmlTextReaderRead(reader); \
+    			name = (const char*)xmlTextReaderConstName(reader); \
+    			} \
+    		el.SetLength( (count) * vr.GetSizeof() ); \
+    		int total = 0; \
+    		while(total < count) \
+    			{ \
+    			el.SetValue(values[total],total); \
+    			total++; \
+    			} \
+    		de = el.GetAsDataElement(); \
+    		}break
+
+#define LoadValueDouble(type) \
+  case type: \
+    		{ \
+      	int count =0; \
+      	name = (const char*)xmlTextReaderConstName(reader); \
+      	if(strcmp(name,"DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15)\
+      		break;\
+      	double values[10]; \
+      	Element<type,VM::VM1_n> el; \
+    		while(strcmp(name,"Value") == 0) \
+    			{ \
+    			ret = xmlTextReaderRead(reader); \
+    			char *value_char = (char*)xmlTextReaderConstValue(reader); \
+    			sscanf(value_char,"%lf",&(values[count++]));  \
+    			ret = xmlTextReaderRead(reader);/*Value ending tag*/ \
+    			name = (const char*)xmlTextReaderConstName(reader); \
+    			ret = xmlTextReaderRead(reader);ret = xmlTextReaderRead(reader); \
+    			name = (const char*)xmlTextReaderConstName(reader); \
+    			} \
+    		el.SetLength( (count) * vr.GetSizeof() ); \
+    		int total = 0; \
+    		while(total < count) \
+    			{ \
+    			el.SetValue(values[total],total); \
+    			total++; \
+    			} \
+    		de = el.GetAsDataElement(); \
+    		}break
+    		
+          
+   while(  (xmlTextReaderDepth(reader)!=0) && !(SetSQ && (xmlTextReaderDepth(reader)==depth) && (strcmp(name,"Item")==0)  )  )
+		{
+   	if(strcmp(name,"DicomAttribute") == 0)
+			{
+			DataElement de;
+			
+			/* Reading Tag */
+			char *tag_read =(char *)xmlTextReaderGetAttribute(reader,(const unsigned char*)"tag");
+  		Tag t;
+  		if(!t.ReadFromContinuousString((const char *)tag_read))
+  			assert(0 && "Invalid Tag!");
+		  
+		  /* Reading VR */
+		  char vr_read[3] = "";
+		  strcpy(vr_read, (const char *)xmlTextReaderGetAttribute(reader,(const unsigned char*)"vr"));
+		  vr_read[2]='\0';
+  		const gdcm::VR vr = gdcm::VR::GetVRType(vr_read);
+  		
+  		ret=xmlTextReaderRead(reader);// at 14 NodeType
+  		
+		  ret=xmlTextReaderRead(reader);// should be at value tag or BulkData tag or Item Tag
+		  /* Load Value */
+		  switch(vr)
+		  	{
+		  	LoadValueASCII(VR::AE);
+		  	LoadValueASCII(VR::AS);
+				LoadValueASCII(VR::CS);
+				LoadValueASCII(VR::DA);
+				LoadValueFloat(VR::DS);
+				LoadValueASCII(VR::DT);
+				LoadValueInteger(VR::IS);
+				LoadValueASCII(VR::LO);
+				LoadValueASCII(VR::LT);				
+				LoadValueASCII(VR::SH);
+				LoadValueASCII(VR::ST);
+				LoadValueASCII(VR::TM);
+				LoadValueASCII(VR::UI);
+				LoadValueASCII(VR::UT);
+				LoadValueInteger(VR::SS);
+    		LoadValueInteger(VR::UL);
+ 				LoadValueInteger(VR::SL);
+    		LoadValueInteger(VR::US);
+    		LoadValueFloat(VR::FL);
+    		LoadValueDouble(VR::FD);
+    		case VR::SQ:
+    			{
+    			SequenceOfItems sqi;
+    			HandleSequence(sqi,reader,DS,xmlTextReaderDepth(reader));
+    			de.SetValue(sqi);
+    			}break;
+    		
+    		case VR::PN:
+    			{
+    			HandlePN();
+    			}break;	
+    			
+    		default:
+    			assert(0 && "Unknown VR");	
+		  	};
+		  
+		  /*Modify de to insert*/
+		  
+		  de.SetTag(t);	  
+		  
+		  DS.Insert(de);
+		  /*
+		  while(xmlTextReaderNodeType(reader) != 15)
+		  	ret = xmlTextReaderRead(reader);
+		  
+		  if(strcmp((const char*)xmlTextReaderConstName(reader),"DicomAttribute") == 0)
+		  	{
+		  	while(xmlTextReaderNodeType(reader) != 15 && strcmp((const char*)xmlTextReaderConstName(reader),"DicomAttribute") == 0)
+		  		{
+		  		if(xmlTextReaderDepth(reader) == 0)
+		  			return;
+		  		}
+		  	}
+		  else
+		  	assert("No proper end tag" && 0);		
+		  */
+		  /*Read Next DataElement*/
+		  
+		  
+			}
+		//ret = xmlTextReaderRead(reader);	
+		//name = (const char*)xmlTextReaderConstName(reader);
+			   	
+   	}
 }
 
-static void WriteDataSet(xmlTextReaderPtr reader, gdcm::Filename file2)
+void HandleSequence(SequenceOfItems &sqi, xmlTextReaderPtr reader,DataSet &DS,int depth)
 {
-  DataSet DS;
-  DataElement de;
+	int ret;	
+  const char *name = (const char*)xmlTextReaderConstName(reader);// Should be item
+    
+  ret = xmlTextReaderRead(reader);
+  ret = xmlTextReaderRead(reader);//at /Dicom
+  name = (const char*)xmlTextReaderConstName(reader);
+  /*if((strcmp(name,"Item") == 0) && (xmlTextReaderDepth(reader) == depth) && (xmlTextReaderNodeType(reader) == 15) )
+  	{
+  	ret = xmlTextReaderRead(reader);ret = xmlTextReaderRead(reader);ret = xmlTextReaderRead(reader);
+  	name = (const char*)xmlTextReaderConstName(reader);
+   	return;// Empty SQ
+   	}*/  
+  
+  do  
+  	{
+  	Item item;
+  	DataSet NestedDS;
+  	PopulateDataSet(reader,NestedDS,depth,true);
+  	item.SetNestedDataSet(NestedDS);
+  	sqi.AddItem(item);
+  	ret = xmlTextReaderRead(reader);
+  	ret = xmlTextReaderRead(reader);
+  	name = (const char*)xmlTextReaderConstName(reader);
+  	}while(!(strcmp(name,"Item") == 0) && (xmlTextReaderDepth(reader) == depth));
+  ret = xmlTextReaderRead(reader);
+  ret = xmlTextReaderRead(reader);	
+}
+
+void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
+{
+	//populate DS
+	int ret = xmlTextReaderRead(reader);
+	if(ret == -1)
+		assert(0 && "unable to read");
+	//while(xmlTextReaderDepth(reader) != 1)
+	//ret = xmlTextReaderRead(reader);
+	ret = xmlTextReaderRead(reader);
+	ret = xmlTextReaderRead(reader);// at first element
+	
+	DataSet DS;
+	if(xmlTextReaderDepth(reader) == 1 && strcmp((const char*)xmlTextReaderConstName(reader),"DicomAttribute") == 0)  
+  	PopulateDataSet(reader,DS,1,false);
+  
+  //add to File 
   File F;
-  Writer W;
-  
-  //populate DS
-  int ret = xmlTextReaderRead(reader);
-  while (ret == 1) 
-    {
-    processNode(reader);
-    ret = xmlTextReaderRead(reader);
-    }
-  xmlFreeTextReader(reader);
-  if (ret != 0) 
-    {
-    fprintf(stderr, "Failed to parse XML file\n");
-    exit(1);
-    }
-  
-  //add to File  
   F.SetDataSet(DS);
   
+  //Validate - possibly from gdcmValidate Class
+  
+  
+  Printer printer;
+  printer.SetFile ( F );
+  //printer.SetColor( color != 0);
+  printer.Print( std::cout );
   //add to Writer
+  Writer W;
   W.SetFile(F);  
   W.CheckFileMetaInformationOff();
   W.SetFileName(file2.GetFileName());
   
   //finally write to file
-  W.Write();    
+  W.Write(); 
+  
 }
 
 static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
@@ -170,7 +399,7 @@ static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
   //reader = xmlReaderForFile(filename, "UTF-8", 0);
   if (reader != NULL) 
     {
-    WriteDataSet(reader, file2);
+    WriteDICOM(reader, file2);
     } 
   else 
     {
@@ -370,6 +599,8 @@ int main (int argc, char *argv[])
      * this is to debug memory for regression tests
      */
     xmlMemoryDump();
+#else
+		printf("\nPlease configure Cmake options with GDCM_USE_SYSTEM_LIBXML2 as ON and compile!\n");    
 #endif
     }
 }

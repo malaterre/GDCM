@@ -239,10 +239,10 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       if( el.GetLength() ) { \
       os << "<Value number = \"1\" >" ;os << "" << el.GetValue();os << "</Value>\n"; \
       VL l = (long) el.GetLength(); \
-      for(unsigned long i = 2; i <= l; ++i) \
+      for(unsigned long i = 1; i < l; ++i) \
       { \
-      os << "<Value number = \"" << i << "\" >" ;\
-      os << "\\" << el.GetValue(i);os << "</Value>\n";} \
+      os << "<Value number = \"" << (i+1) << "\" >" ;\
+      os << el.GetValue(i);os << "</Value>\n";} \
       os << ""; } \
       else { if( de.IsEmpty() ) \
                  {} } } \
@@ -309,7 +309,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
               {
               const char *suid = UIDgen.Generate();
               os << "<BulkData uuid = \""<<
-                suid << "\" />";
+                suid << "\" />\n";
               HandleBulkData( suid, bv->GetPointer(), bv->GetLength() );
               }
             }
@@ -359,7 +359,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
             {
             const char *suid = UIDgen.Generate();
             os << "<BulkData uuid = \""<<
-              suid << "\" />";
+              suid << "\" />\n";
             HandleBulkData( suid, bv->GetPointer(), bv->GetLength() );
             }
           }
@@ -376,7 +376,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       }
     }
 
-  os << "\n";
+  //os << "\n";
   return refvr;
 }
 
@@ -408,7 +408,7 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
       }
     os << ">\n";
     */
-    os << "<Item number = \"" << noItems << "\">\n"; 
+    os << "<Item number = \"" << noItems++ << "\">\n";
     PrintDataSet(ds, os);
     /*
     if( deitem.GetVL().IsUndefined() )
@@ -417,7 +417,7 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, std::ostream & os)
       }
     os << "</DicomAttribute>\n\n";  
     */
-    os << "</Item>";
+    os << "</Item>\n";
     }
   /*
   if( sqi->GetLength().IsUndefined() )
@@ -457,7 +457,7 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
       const BasicOffsetTable & table = sqf->GetTable();
       os << "<DicomAttribute  ";
       PrintDataElement(os,dicts,ds,table);
-      os << "</DicomAttribute>\n\n";
+      os << "</DicomAttribute>\n";
       os << "</Item>\n";
       unsigned int numfrag = sqf->GetNumberOfFragments();
       for(unsigned int i = 0; i < numfrag; i++)
@@ -466,7 +466,7 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
         const Fragment& frag = sqf->GetFragment(i);
         os << "<DicomAttribute  ";
         PrintDataElement(os,dicts,ds,frag); 
-        os << "</DicomAttribute>\n\n";
+        os << "</DicomAttribute>\n";
         os << "</Item>\n";
         }
       //os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"SequenceDelimitationItem\"/>\n";
@@ -475,7 +475,7 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, std::ostream &os)
       {
       // This is a byte value, so it should have been already treated.
       }
-    os << "</DicomAttribute>\n\n";
+    os << "</DicomAttribute>\n";
     }
 }
 
@@ -523,7 +523,7 @@ void XMLPrinter::Print(std::ostream& os)
         os << "ISO-8859-8";
       else
         os << "UTF-8";
-      os << "\"?>\n\n";
+      os << "\"?>\n";
       }
     else
       {
@@ -534,11 +534,11 @@ void XMLPrinter::Print(std::ostream& os)
     {
     os << "UTF-8\"?>\n\n";
     }
-  os << "<NativeDicomModel xmlns=\"http://dicom.nema.org/PS3.19/models/NativeDICOM\">\n\n";
+  os << "<NativeDicomModel xmlns=\"http://dicom.nema.org/PS3.19/models/NativeDICOM\">\n";
 
   PrintDataSet(ds, os);
 
-  os << "\n</NativeDicomModel>";
+  os << "</NativeDicomModel>";
 }
 
 // Drop BulkData by default.
