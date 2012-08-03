@@ -50,15 +50,15 @@ int TestCryptographicMessageSyntax(int, char *[])
 
   gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
   std::auto_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
-  ocms->ParseKeyFile(keypath.c_str());
-  ocms->ParseCertificateFile(certpath.c_str());
+  assert(ocms->ParseKeyFile(keypath.c_str()));
+  assert(ocms->ParseCertificateFile(certpath.c_str()));
 #endif
 
 #ifdef WIN32
   gdcm::CryptoFactory* capi = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::CAPI);
   std::auto_ptr<gdcm::CryptographicMessageSyntax> ccms(capi->CreateCMSProvider());
-  ccms->ParseCertificateFile(certpath.c_str());
-  ccms->ParseKeyFile(keypath.c_str());
+  assert(ccms->ParseCertificateFile(certpath.c_str()));
+  assert(ccms->ParseKeyFile(keypath.c_str()));
 #endif
   
   char output[5000], decout[5000];
@@ -73,7 +73,7 @@ int TestCryptographicMessageSyntax(int, char *[])
 
   char * test_vector;
   size_t tvlen;
-  LoadFile(encrypted_vector.c_str(), test_vector, tvlen);
+  assert(LoadFile(encrypted_vector.c_str(), test_vector, tvlen));
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   for (int i = 0; i < 4; i++)
@@ -81,13 +81,13 @@ int TestCryptographicMessageSyntax(int, char *[])
     outlen = 5000;
     decoutlen = 5000;
     ocms->SetCipherType(ciphers[i]);
-    ocms->Encrypt(output, outlen, input, inputlen);
-    ocms->Decrypt(decout, decoutlen, output, outlen);
+    assert(ocms->Encrypt(output, outlen, input, inputlen));
+    assert(ocms->Decrypt(decout, decoutlen, output, outlen));
     assert(decoutlen == inputlen);
     assert(strncmp(input, decout, inputlen) == 0);
     }
   decoutlen = 5000;
-  ocms->Decrypt(decout, decoutlen, test_vector, tvlen);
+  assert(ocms->Decrypt(decout, decoutlen, test_vector, tvlen));
   assert(decoutlen == strlen("1234567890abcdefghijklmnopqrstuvwxyz"));
   assert(strncmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
 #endif
@@ -98,28 +98,27 @@ int TestCryptographicMessageSyntax(int, char *[])
     outlen = 5000;
     decoutlen = 5000;
     ccms->SetCipherType(ciphers[i]);
-    ccms->Encrypt(output, outlen, input, inputlen);
-    ccms->Decrypt(decout, decoutlen, output, outlen);
+    assert(ccms->Encrypt(output, outlen, input, inputlen));
+    assert(ccms->Decrypt(decout, decoutlen, output, outlen));
     assert(decoutlen == inputlen);
     assert(strncmp(input, decout, inputlen) == 0);
     }
   decoutlen = 5000;
-  ocms->Decrypt(decout, decoutlen, test_vector, tvlen);
+  assert(ocms->Decrypt(decout, decoutlen, test_vector, tvlen));
   assert(decoutlen == strlen("1234567890abcdefghijklmnopqrstuvwxyz"));
   assert(strncmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
 #endif
 
 #ifdef WIN32
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-
   for (int i = 0; i < 4; i++)
     {
     outlen = 5000;
     decoutlen = 5000;
     ocms->SetCipherType(ciphers[i]);
     ccms->SetCipherType(ciphers[i]);
-    ocms->Encrypt(output, outlen, input, inputlen);
-    ccms->Decrypt(decout, decoutlen, output, outlen);
+    assert(ocms->Encrypt(output, outlen, input, inputlen));
+    assert(ccms->Decrypt(decout, decoutlen, output, outlen));
     assert(decoutlen == inputlen);
     assert(strncmp(input, decout, inputlen) == 0);
     }
@@ -130,8 +129,8 @@ int TestCryptographicMessageSyntax(int, char *[])
     decoutlen = 5000;
     ocms->SetCipherType(ciphers[i]);
     ccms->SetCipherType(ciphers[i]);
-    ccms->Encrypt(output, outlen, input, inputlen);
-    ocms->Decrypt(decout, decoutlen, output, outlen);
+    assert(ccms->Encrypt(output, outlen, input, inputlen));
+    assert(ocms->Decrypt(decout, decoutlen, output, outlen));
     assert(decoutlen == inputlen);
     assert(strncmp(input, decout, inputlen) == 0);
     }
@@ -164,20 +163,20 @@ int TestPasswordBasedEncryption(int, char *[])
   gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
   std::auto_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
 
-  ocms->SetPassword("password");
+  assert(ocms->SetPassword("password"));
   for (int i = 0; i < 4; i++)
     {
     outlen = 5000;
     decoutlen = 5000;
     ocms->SetCipherType(ciphers[i]);
-    ocms->Encrypt(output, outlen, input, inputlen);
-    ocms->Decrypt(decout, decoutlen, output, outlen);
+    assert(ocms->Encrypt(output, outlen, input, inputlen));
+    assert(ocms->Decrypt(decout, decoutlen, output, outlen));
     assert(decoutlen == inputlen);
     assert(strncmp(input, decout, inputlen) == 0);
     }
   char * ddir = new char[5000];
   size_t ddirlen = 5000;
-  LoadFile(encrypted_dicomdir.c_str(), ddir, ddirlen);
+  assert(LoadFile(encrypted_dicomdir.c_str(), ddir, ddirlen));
   outlen = 5000;
   assert(ocms->Decrypt(output, outlen, ddir, ddirlen));
   assert(outlen > 0);
