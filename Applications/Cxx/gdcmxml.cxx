@@ -367,7 +367,10 @@ void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
   F.SetDataSet(DS);
   
   //Validate - possibly from gdcmValidate Class
- 	  
+ 	FileMetaInformation meta;// = F.GetHeader();
+ 	const TransferSyntax ts;
+	meta.SetDataSetTransferSyntax(ts);
+	F.SetHeader(meta);  
   Printer printer;
   printer.SetFile ( F );
   //printer.SetColor( color != 0);
