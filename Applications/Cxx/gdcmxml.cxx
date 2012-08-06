@@ -292,6 +292,10 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
 		  de.SetTag(t);	  
 		  
 		  DS.Insert(de);
+		  
+		  ret=xmlTextReaderRead(reader);// at 14 NodeType
+  		
+		  ret=xmlTextReaderRead(reader);
 		  /*
 		  while(xmlTextReaderNodeType(reader) != 15)
 		  	ret = xmlTextReaderRead(reader);
@@ -362,31 +366,45 @@ void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
 	if(xmlTextReaderDepth(reader) == 1 && strcmp((const char*)xmlTextReaderConstName(reader),"DicomAttribute") == 0)  
   	PopulateDataSet(reader,DS,1,false);
   
+  //DataElement de;
+  //Tag t(0xFFFe,0xE0DD);
+  //de.SetTag(t);
+  //DS.Insert(de);
   //add to File 
-  File F;
-  F.SetDataSet(DS);
+  File *F = new File();
+  F->SetDataSet(DS);
   
   //Validate - possibly from gdcmValidate Class
- 	FileMetaInformation meta;// = F.GetHeader();
+ 	FileMetaInformation meta = F->GetHeader();
  	const TransferSyntax ts;
 	meta.SetDataSetTransferSyntax(ts);
-	F.SetHeader(meta);  
-  Printer printer;
-  printer.SetFile ( F );
-  //printer.SetColor( color != 0);
-  printer.Print( std::cout );
-  
+	F->SetHeader(meta);  
+	
+	//Validate - possibly from gdcmValidate Class
+	
+	//Validate V;
+	//V.SetFile(F);
+	//V.Validation();
+  //F = V.GetValidatedFile(); 
   //add to Writer
   
   if(!file2.IsEmpty())
   	{
-  	Writer W;
-  	W.SetFile(F);  
-  	//W.CheckFileMetaInformationOff();
-  	W.SetFileName(file2.GetFileName());  	
+  	Writer W;  	
+  	W.SetFileName(file2.GetFileName());
+  	W.SetFile(*F);
+  	//W.CheckFileMetaInformationOff();   	
+
   	//finally write to file
   	W.Write(); 
   	}
+  else
+  	{
+  	Printer printer;
+  	printer.SetFile ( *F );
+  	printer.SetColor(1);
+  	printer.Print( std::cout );
+  	}  		
 }
 
 static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
