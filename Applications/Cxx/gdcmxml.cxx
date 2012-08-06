@@ -105,8 +105,6 @@ void HandleSequence(SequenceOfItems &sqi,xmlTextReaderPtr reader,DataSet &DS,int
 void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ )
 {		
 	 int ret;	
-   //int ret = xmlTextReaderRead(reader);/**/
-   //ret = xmlTextReaderRead(reader); /* moving past tag <NativeDicomModel> */
    const char *name = (const char*)xmlTextReaderConstName(reader);
 	 //printf("%s\n",name);				
 
@@ -133,7 +131,7 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
     		int total = 0; \
     		while(total < count) \
     			{ \
-    			el.SetValue(/*(typename VRToType<VR::CS>::Type)*/values[total],total); \
+    			el.SetValue(values[total],total); \
     			total++; \
     			} \
     		de = el.GetAsDataElement(); \
@@ -248,6 +246,7 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
   		ret=xmlTextReaderRead(reader);// at 14 NodeType
   		
 		  ret=xmlTextReaderRead(reader);// should be at value tag or BulkData tag or Item Tag
+		  
 		  /* Load Value */
 		  switch(vr)
 		  	{
@@ -352,8 +351,7 @@ void HandleSequence(SequenceOfItems &sqi, xmlTextReaderPtr reader,DataSet &DS,in
 }
 
 void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
-{
-	//populate DS
+{	
 	int ret = xmlTextReaderRead(reader);
 	if(ret == -1)
 		assert(0 && "unable to read");
@@ -362,6 +360,7 @@ void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
 	ret = xmlTextReaderRead(reader);
 	ret = xmlTextReaderRead(reader);// at first element
 	
+	//populate DS
 	DataSet DS;
 	if(xmlTextReaderDepth(reader) == 1 && strcmp((const char*)xmlTextReaderConstName(reader),"DicomAttribute") == 0)  
   	PopulateDataSet(reader,DS,1,false);
@@ -371,6 +370,8 @@ void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
   //de.SetTag(t);
   //DS.Insert(de);
   //add to File 
+  
+  //store in heap
   File *F = new File();
   F->SetDataSet(DS);
   
