@@ -237,6 +237,10 @@ public:
   /// The notation comes from the DICOM standard, and is handy to use from a
   /// command line program
   bool ReadFromCommaSeparatedString(const char *str);
+  
+  /// Read From XML formatted tag value eg. tag = "12345678"
+  /// It comes in useful when reading tag values from XML file(in NativeDICOMModel)
+  bool ReadFromContinuousString(const char *str);
 
   /// Read from a pipe separated string (GDCM 1.x compat only). Do not use in newer code
   /// \see ReadFromCommaSeparatedString
