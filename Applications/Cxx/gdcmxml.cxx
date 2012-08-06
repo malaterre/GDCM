@@ -367,21 +367,23 @@ void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
   F.SetDataSet(DS);
   
   //Validate - possibly from gdcmValidate Class
-  
-  
+ 	  
   Printer printer;
   printer.SetFile ( F );
   //printer.SetColor( color != 0);
   printer.Print( std::cout );
+  
   //add to Writer
-  Writer W;
-  W.SetFile(F);  
-  W.CheckFileMetaInformationOff();
-  W.SetFileName(file2.GetFileName());
   
-  //finally write to file
-  W.Write(); 
-  
+  if(!file2.IsEmpty())
+  	{
+  	Writer W;
+  	W.SetFile(F);  
+  	//W.CheckFileMetaInformationOff();
+  	W.SetFileName(file2.GetFileName());  	
+  	//finally write to file
+  	W.Write(); 
+  	}
 }
 
 static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
