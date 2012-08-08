@@ -87,7 +87,7 @@ bool TestCMSProvider(gdcm::CryptographicMessageSyntax& cms, const char * provNam
       {
       std::cerr << provName << " using " << cip2str[ciphers[i]] << ": decryted length different from original (" << decoutlen << " != " << tstr_l << ")" << std::endl;
       }
-    if (strncmp(tstr, decout, tstr_l) != 0)
+    if (memcmp(tstr, decout, tstr_l) != 0)
       {
       std::cerr << provName << " using " << cip2str[ciphers[i]] << ": decryted data different from original" << std::endl;
       }
@@ -96,7 +96,7 @@ bool TestCMSProvider(gdcm::CryptographicMessageSyntax& cms, const char * provNam
   size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
   //cms.Decrypt(decout, decoutlen, test_vector, tvlen);
   assert(decoutlen == strlen("1234567890abcdefghijklmnopqrstuvwxyz"));
-  assert(strncmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
+  assert(memcmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
   
   return true;
 }
@@ -151,13 +151,13 @@ int TestCryptographicMessageSyntax(int, char *[])
       break;
       }
     assert(decoutlen == tstr_l);
-    assert(strncmp(tstr, decout, tstr_l) == 0);
+    assert(memcmp(tstr, decout, tstr_l) == 0);
     }
   char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
   size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
   ocms->Decrypt(decout, decoutlen, test_vector, tvlen);
   assert(decoutlen == strlen("1234567890abcdefghijklmnopqrstuvwxyz"));
-  assert(strncmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
+  assert(memcmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
 }
 #endif*/
 
@@ -171,13 +171,13 @@ int TestCryptographicMessageSyntax(int, char *[])
     ccms->Encrypt(encout, encoutlen, tstr, tstr_l);
     ccms->Decrypt(decout, decoutlen, encout, encoutlen);
     assert(decoutlen == tstr_l);
-    assert(strncmp(tstr, decout, tstr_l) == 0);
+    assert(memcmp(tstr, decout, tstr_l) == 0);
     }
   char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
   size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
   ocms->Decrypt(decout, decoutlen, test_vector, tvlen);
   assert(decoutlen == strlen("1234567890abcdefghijklmnopqrstuvwxyz"));
-  assert(strncmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
+  assert(memcmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
 }
 #endif*/
 
@@ -193,7 +193,7 @@ int TestCryptographicMessageSyntax(int, char *[])
     ocms->Encrypt(encout, encoutlen, tstr, tstr_l);
     ccms->Decrypt(decout, decoutlen, encout, encoutlen);
     assert(decoutlen == tstr_l);
-    assert(strncmp(tstr, decout, tstr_l) == 0);
+    assert(memcmp(tstr, decout, tstr_l) == 0);
     }
 
   for (int i = 0; i < 4; i++)
@@ -205,7 +205,7 @@ int TestCryptographicMessageSyntax(int, char *[])
     ccms->Encrypt(encout, encoutlen, tstr, tstr_l);
     ocms->Decrypt(decout, decoutlen, encout, encoutlen);
     assert(decoutlen == tstr_l);
-    assert(strncmp(tstr, decout, tstr_l) == 0);
+    assert(memcmp(tstr, decout, tstr_l) == 0);
     }
 
 #endif
@@ -235,7 +235,7 @@ int TestPasswordBasedEncryption(int, char *[])
     ocms->Encrypt(encout, encoutlen, tstr, tstr_l);
     ocms->Decrypt(decout, decoutlen, encout, encoutlen);
     assert(decoutlen == tstr_l);
-    assert(strncmp(tstr, decout, tstr_l) == 0);
+    assert(memcmp(tstr, decout, tstr_l) == 0);
     }
   char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
   size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
