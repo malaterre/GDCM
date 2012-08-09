@@ -530,7 +530,6 @@ void JLSOutputStream::AddScan(const void* pbyteComp, const JlsParamaters* pparam
   _icompLast += 1;
   _segments.push_back(EncodeStartOfScan(pparams,pparams->ilv == ILV_NONE ? _icompLast : -1));
 
-  Size size = Size(pparams->width, pparams->height);
   int ccomp = pparams->ilv == ILV_NONE ? 1 : pparams->components;
     _segments.push_back(new JpegImageDataSegment(pbyteComp, *pparams, _icompLast, ccomp));
 }
