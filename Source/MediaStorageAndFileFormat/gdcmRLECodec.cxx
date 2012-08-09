@@ -340,7 +340,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     bufferrgb = new char [ image_len ];
     }
 
-  int MaxNumSegments = 1;
+  unsigned int MaxNumSegments = 1;
   if( GetPixelFormat().GetBitsAllocated() == 8 )
     {
     MaxNumSegments *= 1;
@@ -479,7 +479,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     assert( image_len % MaxNumSegments == 0 );
     const size_t input_seg_length = image_len / MaxNumSegments;
     std::string datastr;
-    for(int seg = 0; seg < MaxNumSegments; ++seg )
+    for(unsigned int seg = 0; seg < MaxNumSegments; ++seg )
       {
       size_t partition = input_seg_length;
       const char *ptr = ptr_img + seg * input_seg_length;
