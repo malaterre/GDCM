@@ -517,7 +517,6 @@ bool JPEGLSCodec::DecodeExtent(
       size_t curoffset = std::accumulate( offsets.begin(), offsets.begin() + z, 0 );
       is.seekg( thestart + curoffset + 8 * z, std::ios::beg );
       is.seekg( 8, std::ios::cur );
-      std::streampos relstart = is.tellg();
 
       const size_t buf_size = offsets[z];
       char *dummy_buffer = new char[ buf_size ];
