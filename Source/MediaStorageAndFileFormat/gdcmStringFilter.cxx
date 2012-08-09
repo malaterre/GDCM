@@ -185,9 +185,11 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
       // move to next state
       state = 2;
       assert( subtokens[1] == "number" );
-      const gdcm::ByteValue *bv = curde->GetByteValue();
+#if !defined(NDEBUG)
+      const gdcm::ByteValue * const bv = curde->GetByteValue();
       assert( bv );
       //bv->Print( std::cout << std::endl );
+#endif
       }
     else
       {
@@ -525,8 +527,10 @@ std::string StringFilter::FromString(const Tag&t, const char * value, size_t len
     {
     // VM1_n
     vl = count * vr.GetSizeof();
+#if !defined(NDEBUG)
     VM check  = VM::GetVMTypeFromLength(count, 1);
     assert( vm.Compatible( check ) );
+#endif
     }
 
   //if( vl != vm.GetLength() * vr.GetSizeof() )
