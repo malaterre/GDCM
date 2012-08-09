@@ -569,14 +569,13 @@ bool JPEGCodec::DecodeExtent(
       size_t curoffset = std::accumulate( offsets.begin(), offsets.begin() + z, 0 );
       is.seekg( thestart + curoffset + 8 * z, std::ios::beg );
       is.seekg( 8, std::ios::cur );
-      std::streampos relstart = is.tellg();
 
       //const size_t buf_size = offsets[z];
       //char *dummy_buffer = new char[ buf_size ];
       //is.read( dummy_buffer, buf_size );
 
       std::stringstream os;
-      bool b = DecodeByStreams(is, os);
+      const bool b = DecodeByStreams(is, os); (void)b;
       assert( b );
       /* free the memory containing the code-stream */
       //delete[] dummy_buffer;

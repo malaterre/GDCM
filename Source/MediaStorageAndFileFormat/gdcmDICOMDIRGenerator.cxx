@@ -357,8 +357,11 @@ void SingleDataElementInserter(gdcm::DataSet &ds, gdcm::Scanner const & scanner)
 {
   Attribute<Group,Element> patientsname;
   gdcm::Scanner::ValuesType patientsnames = scanner.GetValues( patientsname.GetTag() );
-  unsigned int npatient = patientsnames.size();
+#ifndef NDEBUG
+  const unsigned int npatient = patientsnames.size();
   assert( npatient == 1 );
+#endif
+
   gdcm::Scanner::ValuesType::const_iterator it = patientsnames.begin();
   patientsname.SetValue( it->c_str() );
   ds.Insert( patientsname.GetAsDataElement() );

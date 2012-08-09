@@ -556,8 +556,6 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 
 size_t RLECodec::DecodeFragment(Fragment const & frag, char *buffer, unsigned long llen)
 {
-  const unsigned int * dimensions = this->GetDimensions();
-  const PixelFormat & pf = this->GetPixelFormat();
 
   std::stringstream is;
   const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
@@ -568,7 +566,11 @@ size_t RLECodec::DecodeFragment(Fragment const & frag, char *buffer, unsigned lo
   delete[] mybuffer;
   std::stringstream os;
   SetLength( llen );
+#if !defined(NDEBUG)
+  const unsigned int * const dimensions = this->GetDimensions();
+  const PixelFormat & pf = this->GetPixelFormat();
   assert( llen == dimensions[0] * dimensions[1] * pf.GetPixelSize() );
+#endif
   bool r = DecodeByStreams(is, os);
   assert( r == true );
   (void)r; //warning removal
@@ -631,7 +633,7 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
     for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
       {
       const Fragment &frag = sf->GetFragment(i);
-      size_t check = DecodeFragment(frag, buffer + pos, llen);
+      const size_t check = DecodeFragment(frag, buffer + pos, llen); (void)check;
       assert( check == llen );
       pos += llen;
       }
@@ -673,12 +675,11 @@ bool RLECodec::DecodeExtent(
     }
   for( unsigned int z = zmin; z <= zmax; ++z )
     {
-    std::streampos prestart = is.tellg();
     frag.ReadPreValue<SwapperNoOp>(is);
     std::streampos start = is.tellg();
 
     SetLength( dimensions[0] * dimensions[1] * pf.GetPixelSize() );
-    bool r = DecodeByStreams(is, os);
+    const bool r = DecodeByStreams(is, os); (void)r;
     assert( r );
 
     // handle DICOM padding
