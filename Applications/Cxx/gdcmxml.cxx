@@ -108,6 +108,16 @@ void PrintHelp()
 
 #ifdef GDCM_USE_SYSTEM_LIBXML2
 
+#define CHECK_READER \
+	if(ret == -1) \
+    assert(0 && "unable to read");
+		
+#define SKIP_WHITE_SPACES \
+  if(xmlTextReaderNodeType(reader) == 14 xmlTextReaderNodeType(reader) == 13\
+    ret = xmlTextReaderRead(reader);\
+ CHECK_READER   
+   
+
 void HandleBulkData(const char *uuid, DataElement &de)
   {
   // Load Bulk Data
