@@ -72,8 +72,10 @@ public:
     }
 };
 
+//Global Variables
 int loadBulkData = 0;
 int loadTransferSyntax = 0;
+TransferSyntax ts;
 
 void PrintVersion()
 {
@@ -106,34 +108,47 @@ void PrintHelp()
 
 #ifdef GDCM_USE_SYSTEM_LIBXML2
 
-void HandleBulkData(const char *uuid, const TransferSyntax & ts,DataElement &de)
+void HandleBulkData(const char *uuid, DataElement &de)
   {
   // Load Bulk Data
-  std::ifstream file( uuid, std::ios::in|std::ios::binary|std::ios::ate );//open file with pointer at file end  
-  std::ifstream::pos_type size;
-	char *bulkData;
-	
-  if (file.is_open())
+  if(loadBulkData)
   	{
-    size = file.tellg();    
-    bulkData = new char [size];
-    file.seekg (0, std::ios::beg);
-    file.read (bulkData, size);
-    file.close();
-    
-    ByteValue *bv = new ByteValue(bulkData,(int)size);
-    de.SetValue(*bv);
-  	}	
+  	std::ifstream file( uuid, std::ios::in|std::ios::binary|std::ios::ate );//open file with pointer at file end  
+  		
+  	if (file.is_open())
+  		{
+    	std::ifstream::pos_type size = file.tellg();    
+    	char *bulkData = new char [size];
+    	file.seekg (0, std::ios::beg);
+    	file.read (bulkData, size);
+    	file.close();
+    	
+    	ByteValue *bv = new ByteValue(bulkData,(int)size);
+    	de.SetValue(*bv);
+  		}	
+  	}
   	
-  std::string tsfn = uuid;
-  tsfn += ".ts";
-  // Need to store Transfer Syntax for later getData() implementation
-  // See Sup118 for details
-  const char *tsstring = ts.GetString();
-  assert( tsstring );
-  std::ofstream out2( tsfn.c_str(), std::ios::binary );
-  out2.write( tsstring, strlen(tsstring) );
-  out2.close();
+  if(loadTransferSyntax)
+ 		{
+ 		std::string tsfn = uuid;
+    tsfn += ".ts";
+    std::ifstream file( tsfn.c_str(), std::ios::in|std::ios::binary|std::ios::ate );//open file with pointer at file end  
+  	if (file.is_open())
+  		{
+    	std::ifstream::pos_type size = file.tellg();    
+    	char *tsstring = new char [size];
+    	file.seekg (0, std::ios::beg);
+    	file.read (tsstring, size);
+    	file.close();
+    	TransferSyntax::TSType tsType = TransferSyntax::GetTSType(tsstring);
+    	const TransferSyntax ts_temp(tsType);
+    	
+    	if(ts_temp.IsValid())
+    		{    		
+    		ts = tsType;
+    		}    	
+  		}		
+ 	  }  
   }
 
 void HandlePN()
@@ -417,12 +432,7 @@ void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
   
   //Validate - possibly from gdcmValidate Class
  	FileMetaInformation meta = F->GetHeader();
- 	const TransferSyntax ts;
- 	if(loadTransferSyntax)
- 		{
- 		
- 	  }
-	meta.SetDataSetTransferSyntax(ts);
+ 	meta.SetDataSetTransferSyntax(ts);
 	F->SetHeader(meta);  
 	
 	//Validate - possibly from gdcmValidate Class
