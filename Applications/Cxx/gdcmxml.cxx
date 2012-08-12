@@ -121,7 +121,7 @@ void HandleBulkData(const char *uuid, const TransferSyntax & ts,DataElement &de)
     file.read (bulkData, size);
     file.close();
     
-    ByteValue *bv = new ByteValue(bulkData,size);
+    ByteValue *bv = new ByteValue(bulkData,(int)size);
     de.SetValue(*bv);
   	}	
   	
