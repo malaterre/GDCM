@@ -111,15 +111,18 @@ void HandleBulkData(const char *uuid, const TransferSyntax & ts,DataElement &de)
   // Load Bulk Data
   std::ifstream file( uuid, std::ios::in|std::ios::binary|std::ios::ate );//open file with pointer at file end  
   std::ifstream::pos_type size;
-	char *bulkdata;
+	char *bulkData;
 	
   if (file.is_open())
   	{
-    size = file.tellg();
-    bulkdata = new char [size];
-    file.seekg (0, ios::beg);
-    file.read (bulkdata, size);
+    size = file.tellg();    
+    bulkData = new char [size];
+    file.seekg (0, std::ios::beg);
+    file.read (bulkData, size);
     file.close();
+    
+    ByteValue *bv = new ByteValue(bulkData,size);
+    de.SetValue(*bv);
   	}	
   	
   std::string tsfn = uuid;
