@@ -88,13 +88,17 @@ void PrintHelp()
   std::cout << "  -i --input     Filename1" << std::endl;
   std::cout << "  -o --output    Filename2" << std::endl;
   std::cout << "General Options:" << std::endl;
-  std::cout << "  -B --loadBulkData   for DICOM -> XML, loads all bulk data like Pixel Data (by default UUID are written)." << std::endl;
   std::cout << "  -V --verbose        more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning        print warning info." << std::endl;
   std::cout << "  -D --debug          print debug info." << std::endl;
   std::cout << "  -E --error          print error info." << std::endl;
   std::cout << "  -h --help           print help." << std::endl;
   std::cout << "  -v --version        print version." << std::endl;
+  std::cout << "Options for Dicom to XML:" << std::endl;
+  std::cout << "  -B --loadBulkData   Loads bulk data into a binary file named \"UUID\"(by default UUID are written)." << std::endl;
+  std::cout << "Options for Dicom to XML:" << std::endl;
+  std::cout << "  -B --loadBulkData   Loads bulk data from a binary file named as the \"UUID\" in XML file(by default UUID are written)."<< std::endl;
+  std::cout << "  -T --TransferSyntax Loads transfer syntax from file (default is LittleEndianImplicit)" << std::endl; 
 }
 
 #ifdef GDCM_USE_SYSTEM_LIBXML2
@@ -449,6 +453,7 @@ int main (int argc, char *argv[])
   gdcm::Filename file1;
   gdcm::Filename file2;
   int loadBulkData = 0;
+  int loadTransferSyntax = 0;
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -463,6 +468,7 @@ int main (int argc, char *argv[])
         {"input", 1, 0, 0},
         {"output", 1, 0, 0},
         {"loadBulkData", 0, &loadBulkData, 1},
+        {"TransferSyntax", 0, &loadBulkData, 1},
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
         {"debug", 0, &debug, 1},
@@ -511,6 +517,10 @@ int main (int argc, char *argv[])
     case 'B':
       loadBulkData = 1;
       break;
+    
+    case 'T':
+      loadTransferSyntax = 1;
+      break;  
 
     case 'V':
       verbose = 1;
@@ -594,23 +604,39 @@ int main (int argc, char *argv[])
       std::cerr << "Failed to read: " << file1 << std::endl;
       return 1;
       }
-
-    //SimpleFileXMLPrinter printer;
-    XMLPrinter printer;
-    printer.SetFile ( reader.GetFile() );
-    printer.SetStyle ( (XMLPrinter::PrintStyles)loadBulkData );
-
-    if( file2.IsEmpty() )
-      {
-      printer.Print( std::cout );
-      }
+    
+    if(loadBulkData)
+    {
+      SimpleFileXMLPrinter printer;    	
+    	printer.SetFile ( reader.GetFile() );
+    	if( file2.IsEmpty() )
+    	  {
+    	  printer.Print( std::cout );
+    	  }
+    	else
+    	  {
+    	  std::ofstream outfile;
+    	  outfile.open (file2.GetFileName());
+    	  printer.Print( outfile );
+    	  outfile.close();
+        }
+    } 
     else
-      {
-      std::ofstream outfile;
-      outfile.open (file2.GetFileName());
-      printer.Print( outfile );
-      outfile.close();
-      }
+    {
+      XMLPrinter printer;
+    	printer.SetFile ( reader.GetFile() );
+    	if( file2.IsEmpty() )
+    	  {
+    	  printer.Print( std::cout );
+    	  }
+    	else
+    	  {
+    	  std::ofstream outfile;
+    	  outfile.open (file2.GetFileName());
+    	  printer.Print( outfile );
+    	  outfile.close();
+        }
+    }   	  
     return 0;
     }
   else
