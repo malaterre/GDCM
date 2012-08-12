@@ -451,7 +451,26 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, const TransferSyntax & ts, std:
       PrintSQ(sqi2, ts, os);
       }
     else if ( sqf )
-      {      
+      {
+      /*I have appended all fragments into one by calling the GetBuffer method in 
+      gdcmSequenceOfFragments which does not write the Table to the buffer.
+      It is slightly buggy as the size returnes includes that of the table.
+      Should I get the Table size and subtract it?
+      Or should I append the table as well in the BulkData??
+      */
+      unsigned long size = sqf->ComputeByteLength();
+      char *bulkData = new char [size];
+      if(sqf->GetBuffer(bulkData, size))
+      	{
+      	if(size)
+      		{
+      		const char *suid = UIDgen.Generate();
+        	os << "<BulkData uuid = \""<<
+        				 suid << "\" />\n";
+        	HandleBulkData( suid, ts, bulkData, size);
+      		}
+      	}
+      /*      
       const BasicOffsetTable & table = sqf->GetTable();
       const ByteValue *bv = table.GetByteValue();
       
@@ -476,7 +495,7 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, const TransferSyntax & ts, std:
         	HandleBulkData( suid, ts, bv->GetPointer(), bv->GetLength() );
         	}        
         }
-      
+      */
       }
     else
       {
