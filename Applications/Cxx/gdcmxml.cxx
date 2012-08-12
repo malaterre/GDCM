@@ -108,17 +108,19 @@ void PrintHelp()
 
 void HandleBulkData(const char *uuid, const TransferSyntax & ts,DataElement &de)
   {
-  // Store Bulk Data
-  std::ifstream in( uuid, std::ios::binary );
-  if(in)
+  // Load Bulk Data
+  std::ifstream file( uuid, std::ios::in|std::ios::binary|std::ios::ate );//open file with pointer at file end  
+  std::ifstream::pos_type size;
+	char *bulkdata;
+	
+  if (file.is_open())
   	{
-  	in.write( bulkdata, bulklen );
-  	ByteValue *bv = de.GetByteValue();
-  	bv->
-  	in.close();
-    }
-  else  
-  	in.close();
+    size = file.tellg();
+    bulkdata = new char [size];
+    file.seekg (0, ios::beg);
+    file.read (bulkdata, size);
+    file.close();
+  	}	
   	
   std::string tsfn = uuid;
   tsfn += ".ts";
@@ -477,7 +479,7 @@ static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
   else 
     {
     fprintf(stderr, "Unable to open %s\n", file1.GetFileName());
-     }
+    }
 }
 #endif // GDCM_USE_SYSTEM_LIBXML2
 
