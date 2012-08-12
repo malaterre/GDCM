@@ -590,6 +590,10 @@ int main (int argc, char *argv[])
     PrintHelp();
     return 0;
     }
+    
+  gdcm::Trace::SetDebug( debug != 0);
+  gdcm::Trace::SetWarning( warning != 0);
+  gdcm::Trace::SetError( error != 0);  
   
   const char *file1extension = file1.GetExtension();
   //const char *file2extension = file2.GetExtension();
@@ -643,7 +647,7 @@ int main (int argc, char *argv[])
     {
 #ifdef GDCM_USE_SYSTEM_LIBXML2
     /*
-     * this initialize the library and check potential ABI mismatches
+     * This initializes the library and checks potential ABI mismatches
      * between the version it was compiled for and the actual shared
      * library used.
      */
@@ -656,7 +660,7 @@ int main (int argc, char *argv[])
      */
     xmlCleanupParser();
     /*
-     * this is to debug memory for regression tests
+     * This is to debug memory for regression tests.
      */
     xmlMemoryDump();
 #else
