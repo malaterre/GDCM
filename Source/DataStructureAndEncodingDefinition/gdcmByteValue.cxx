@@ -244,7 +244,7 @@ namespace gdcm
         {
         count++;
         os << "</Value>\n";
-        os << "\t<Value number = \"" << count << "\" >";
+        os << "<Value number = \"" << count << "\" >";
         }
       else if ( !c )
         {

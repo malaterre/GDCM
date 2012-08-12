@@ -243,7 +243,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       { \
       os << "<Value number = \"" << (i+1) << "\" >" ;\
       os << el.GetValue(i);os << "</Value>\n";} \
-      os << ""; } \
+      } \
       else { if( de.IsEmpty() ) \
                  {} } } \
       else { assert( de.IsEmpty()); } \
