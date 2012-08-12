@@ -72,6 +72,9 @@ public:
     }
 };
 
+int loadBulkData = 0;
+int loadTransferSyntax = 0;
+
 void PrintVersion()
 {
   std::cout << "gdcmxml: gdcm " << gdcm::Version::GetVersion() << " ";
@@ -102,10 +105,38 @@ void PrintHelp()
 }
 
 #ifdef GDCM_USE_SYSTEM_LIBXML2
+
+void HandleBulkData(const char *uuid, const TransferSyntax & ts,DataElement &de)
+  {
+  // Store Bulk Data
+  std::ifstream in( uuid, std::ios::binary );
+  if(in)
+  	{
+  	in.write( bulkdata, bulklen );
+  	ByteValue *bv = de.GetByteValue();
+  	bv->
+  	in.close();
+    }
+  else  
+  	in.close();
+  	
+  std::string tsfn = uuid;
+  tsfn += ".ts";
+  // Need to store Transfer Syntax for later getData() implementation
+  // See Sup118 for details
+  const char *tsstring = ts.GetString();
+  assert( tsstring );
+  std::ofstream out2( tsfn.c_str(), std::ios::binary );
+  out2.write( tsstring, strlen(tsstring) );
+  out2.close();
+  }
+
 void HandlePN()
 	{
 	}
+	
 void HandleSequence(SequenceOfItems &sqi,xmlTextReaderPtr reader,DataSet &DS,int depth);
+
 void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ )
 {		
 	 int ret;	
@@ -382,6 +413,10 @@ void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
   //Validate - possibly from gdcmValidate Class
  	FileMetaInformation meta = F->GetHeader();
  	const TransferSyntax ts;
+ 	if(loadTransferSyntax)
+ 		{
+ 		
+ 	  }
 	meta.SetDataSetTransferSyntax(ts);
 	F->SetHeader(meta);  
 	
@@ -451,8 +486,7 @@ int main (int argc, char *argv[])
   int c;
   //int digit_optind = 0;
   gdcm::Filename file1;
-  gdcm::Filename file2;
-  int loadBulkData = 0;
+  gdcm::Filename file2;  
   int loadTransferSyntax = 0;
   int verbose = 0;
   int warning = 0;
