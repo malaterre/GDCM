@@ -263,7 +263,7 @@ namespace gdcm
       else
         os << c;
       }
-    os << "</Value>";
+    os << "</Value>\n";
     }
 
   void ByteValue::PrintHexXML(std::ostream &os ) const
