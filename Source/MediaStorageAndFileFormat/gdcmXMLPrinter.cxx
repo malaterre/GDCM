@@ -43,7 +43,7 @@ XMLPrinter::~XMLPrinter()
 {
 }
 
-// Carreied forward from Printer Class
+// Carried forward from Printer Class
 // SIEMENS_GBS_III-16-ACR_NEMA_1.acr is a tough kid: 0009,1131 is supposed to be VR::UL, but
 // there are only two bytes...
 
@@ -434,6 +434,7 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, const TransferSyntax & ts, std:
   const Dict &d = dicts.GetPublicDict(); (void)d;
 
   DataSet::ConstIterator it = ds.Begin();
+  UUIDGenerator UIDgen;
   
   for( ; it != ds.End(); ++it )
     {
@@ -453,21 +454,37 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, const TransferSyntax & ts, std:
       }
     else if ( sqf )
       {
-      os << "<Item number = \"1\">\n"; 
+      //os << "<Item number = \"1\">\n"; 
       const BasicOffsetTable & table = sqf->GetTable();
-      os << "<DicomAttribute  ";
-      PrintDataElement(os,dicts,ds,table, ts);
-      os << "</DicomAttribute>\n";
-      os << "</Item>\n";
+      //os << "<DicomAttribute  ";
+      //PrintDataElement(os,dicts,ds,table, ts);
+      const ByteValue *bv = table.GetByteValue();
+      if(bv->GetLength())
+      	{
+        const char *suid = UIDgen.Generate();
+        os << "<BulkData uuid = \""<<
+        			 suid << "\" />\n";
+        HandleBulkData( suid, ts, bv->GetPointer(), bv->GetLength() );
+        }
+      //os << "</DicomAttribute>\n";
+      //os << "</Item>\n";
       unsigned int numfrag = sqf->GetNumberOfFragments();
       for(unsigned int i = 0; i < numfrag; i++)
         {
-        os << "<Item number = \"" << i+2 << "\">\n";
+        //os << "<Item number = \"" << i+2 << "\">\n";
         const Fragment& frag = sqf->GetFragment(i);
-        os << "<DicomAttribute  ";
-        PrintDataElement(os,dicts,ds,frag, ts);
-        os << "</DicomAttribute>\n";
-        os << "</Item>\n";
+        const ByteValue *bv = frag.GetByteValue();
+        //os << "<DicomAttribute  ";
+        //PrintDataElement(os,dicts,ds,frag, ts);
+        if(bv->GetLength())
+      	{
+        	const char *suid = UIDgen.Generate();
+        	os << "<BulkData uuid = \""<<
+        				 suid << "\" />\n";
+        	HandleBulkData( suid, ts, bv->GetPointer(), bv->GetLength() );
+        	}
+        //os << "</DicomAttribute>\n";
+        //os << "</Item>\n";
         }
       //os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"SequenceDelimitationItem\"/>\n";
       }
@@ -544,7 +561,7 @@ void XMLPrinter::Print(std::ostream& os)
 }
 
 // Drop BulkData by default.
-// Application programmer can override this mecanism
+// Application programmer can override this mechanism.
 void XMLPrinter::HandleBulkData(const char *uuid, const TransferSyntax & ts,
   const char *bulkdata, size_t bulklen)
 {
