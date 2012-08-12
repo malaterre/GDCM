@@ -439,10 +439,8 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, const TransferSyntax & ts, std:
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
-
     
     const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
-
     
     os << "<DicomAttribute  " ;
     VR refvr = PrintDataElement(os, dicts, ds, de, ts);
@@ -453,12 +451,10 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, const TransferSyntax & ts, std:
       PrintSQ(sqi2, ts, os);
       }
     else if ( sqf )
-      {
-      //os << "<Item number = \"1\">\n"; 
+      {      
       const BasicOffsetTable & table = sqf->GetTable();
-      //os << "<DicomAttribute  ";
-      //PrintDataElement(os,dicts,ds,table, ts);
       const ByteValue *bv = table.GetByteValue();
+      
       if(bv->GetLength())
       	{
         const char *suid = UIDgen.Generate();
@@ -466,27 +462,21 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, const TransferSyntax & ts, std:
         			 suid << "\" />\n";
         HandleBulkData( suid, ts, bv->GetPointer(), bv->GetLength() );
         }
-      //os << "</DicomAttribute>\n";
-      //os << "</Item>\n";
+      
       unsigned int numfrag = sqf->GetNumberOfFragments();
       for(unsigned int i = 0; i < numfrag; i++)
-        {
-        //os << "<Item number = \"" << i+2 << "\">\n";
+        {        
         const Fragment& frag = sqf->GetFragment(i);
         const ByteValue *bv = frag.GetByteValue();
-        //os << "<DicomAttribute  ";
-        //PrintDataElement(os,dicts,ds,frag, ts);
         if(bv->GetLength())
-      	{
+      		{
         	const char *suid = UIDgen.Generate();
         	os << "<BulkData uuid = \""<<
         				 suid << "\" />\n";
         	HandleBulkData( suid, ts, bv->GetPointer(), bv->GetLength() );
-        	}
-        //os << "</DicomAttribute>\n";
-        //os << "</Item>\n";
+        	}        
         }
-      //os << "<DicomAttribute    tag = \"fffee0dd\"  VR = \"UN\" keyword = \"SequenceDelimitationItem\"/>\n";
+      
       }
     else
       {
