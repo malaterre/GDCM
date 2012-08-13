@@ -353,7 +353,7 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
     		case VR::OW:
     			{
     			//Presently should be at BulkData
-    			assert(!(CHECK_NAME("BulkData")));
+    			//assert(!(CHECK_NAME("BulkData")));
     			char * uuid = (char *)xmlTextReaderGetAttribute(reader,(const unsigned char*)"uuid");
     			HandleBulkData(uuid,de);
     			}break;		
