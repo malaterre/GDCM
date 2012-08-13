@@ -360,7 +360,10 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
     			HandleBulkData(uuid,de);
     			READ_NEXT
     			}break;		
-    			
+    		
+    		case VR::UN:
+    			assert(0 && "UN not Handled yet");
+    			    			
     		default:
     			assert(0 && "Unknown VR");	
 		  	};
