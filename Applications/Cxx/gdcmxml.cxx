@@ -111,12 +111,13 @@ void PrintHelp()
 #define CHECK_READER \
 	if(ret == -1) \
     assert(0 && "unable to read");
-		
-#define SKIP_WHITE_SPACES \
-  if(xmlTextReaderNodeType(reader) == 14 xmlTextReaderNodeType(reader) == 13\
+
+#define READ_NEXT\
+  ret = xmlTextReaderRead(reader);\
+  CHECK_READER\
+  if(xmlTextReaderNodeType(reader) == 14 || xmlTextReaderNodeType(reader) == 13)\
     ret = xmlTextReaderRead(reader);\
- CHECK_READER   
-   
+  CHECK_READER   
 
 void HandleBulkData(const char *uuid, DataElement &de)
   {
@@ -417,11 +418,10 @@ void HandleSequence(SequenceOfItems &sqi, xmlTextReaderPtr reader,DataSet &DS,in
 
 void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
 {	
-	int ret = xmlTextReaderRead(reader);
-	if(ret == -1)
-		assert(0 && "unable to read");
-	//while(xmlTextReaderDepth(reader) != 1)
-	//ret = xmlTextReaderRead(reader);
+	int ret;
+	
+	READ_NEXT
+	
 	ret = xmlTextReaderRead(reader);
 	ret = xmlTextReaderRead(reader);// at first element
 	
