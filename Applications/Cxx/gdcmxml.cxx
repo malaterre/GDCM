@@ -119,6 +119,9 @@ void PrintHelp()
     ret = xmlTextReaderRead(reader);\
   CHECK_READER   
 
+#define CHECK_NAME(value)\
+	strcmp((const char*)xmlTextReaderConstName(reader),value) \ 
+
 void HandleBulkData(const char *uuid, DataElement &de)
   {
   // Load Bulk Data
@@ -344,7 +347,14 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
     		case VR::PN:
     			{
     			HandlePN();
-    			}break;	
+    			}break;
+    		
+    		case VR::OB:
+    		case VR::OW:
+    			{
+    			//Presently should be at BulkData
+    			assert(!(CHECK_NAME("BulkData"));
+    			}break;		
     			
     		default:
     			assert(0 && "Unknown VR");	
