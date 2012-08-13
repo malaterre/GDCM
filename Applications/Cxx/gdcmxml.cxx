@@ -169,7 +169,7 @@ void HandlePN()
 	{
 	}
 	
-void HandleSequence(SequenceOfItems &sqi,xmlTextReaderPtr reader,DataSet &DS,int depth);
+void HandleSequence(SequenceOfItems *sqi,xmlTextReaderPtr reader,int depth);
 
 void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ )
 {		
@@ -339,9 +339,9 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
     		LoadValueDouble(VR::FD);
     		case VR::SQ:
     			{
-    			SequenceOfItems sqi;
-    			HandleSequence(sqi,reader,DS,xmlTextReaderDepth(reader));
-    			de.SetValue(sqi);
+    			SequenceOfItems *sqi = new SequenceOfItems();
+    			HandleSequence(sqi,reader,xmlTextReaderDepth(reader));
+    			de.SetValue(*sqi);
     			}break;
     		
     		case VR::PN:
@@ -377,13 +377,13 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
    	}
 }
 
-void HandleSequence(SequenceOfItems &sqi, xmlTextReaderPtr reader,DataSet &DS,int depth)
+void HandleSequence(SequenceOfItems *sqi, xmlTextReaderPtr reader,int depth)
 {
 	int ret;
 	
 	while(!(  CHECK_NAME("DicomAttribute") == 0  && xmlTextReaderDepth(reader) == (depth - 1)  &&  xmlTextReaderNodeType(reader) == 15 )  )
 		{
-		if(	 CHECK_NAME("Item") == 0  &&  xmlTextReaderDepth(reader) == depth && xmlTextReaderNodeType(reader) == 15)
+		if(	 CHECK_NAME("Item") == 0  &&  xmlTextReaderDepth(reader) == depth && xmlTextReaderNodeType(reader) == 1)
 			{
 			
 			READ_NEXT	
@@ -392,11 +392,11 @@ void HandleSequence(SequenceOfItems &sqi, xmlTextReaderPtr reader,DataSet &DS,in
 				{
 				//start of an item
 				//Create Nested DataSet
-				Item item;
-  			DataSet NestedDS;
-  			PopulateDataSet(reader,NestedDS,depth,true);
-  			item.SetNestedDataSet(NestedDS);
-  			sqi.AddItem(item);
+				//Item item;
+  			//DataSet NestedDS;
+  			//PopulateDataSet(reader,NestedDS,xmlTextReaderDepth(reader),true);
+  			//item.SetNestedDataSet(NestedDS);
+  			//sqi.AddItem(item);
 				
 			  }			  
 			else
@@ -404,6 +404,8 @@ void HandleSequence(SequenceOfItems &sqi, xmlTextReaderPtr reader,DataSet &DS,in
 			
 			READ_NEXT	  
 			}
+		else
+		  assert("Empty Item or Invalid XML2");	
 		}		
 		
   
