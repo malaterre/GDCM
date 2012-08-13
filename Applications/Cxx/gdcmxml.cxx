@@ -294,7 +294,7 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
     		}break
     		
           
-   while(  (xmlTextReaderDepth(reader)!=0) && !(SetSQ && (xmlTextReaderDepth(reader)==depth) && (strcmp(name,"Item")==0)  )  )
+   while(  (xmlTextReaderDepth(reader)!=0) && !(SetSQ && (xmlTextReaderNodeType(reader) == 15) && (strcmp(name,"Item")==0)  )  )
 		{
    	if(strcmp(name,"DicomAttribute") == 0)
 			{
@@ -354,7 +354,7 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
     			{
     			//Presently should be at BulkData
     			//std::cout << (const char*)xmlTextReaderConstName(reader) << std::endl ;
-    			//assert(((CHECK_NAME("BulkData")) == 0));
+    			assert(((CHECK_NAME("BulkData")) == 0));
     			char * uuid = (char *)xmlTextReaderGetAttribute(reader,(const unsigned char*)"uuid");
     			HandleBulkData(uuid,de);
     			READ_NEXT
@@ -381,16 +381,35 @@ void HandleSequence(SequenceOfItems &sqi, xmlTextReaderPtr reader,DataSet &DS,in
 {
 	int ret;
 	
-	READ_NEXT
-	/*
 	while(!(  CHECK_NAME("DicomAttribute") == 0  && xmlTextReaderDepth(reader) == (depth - 1)  &&  xmlTextReaderNodeType(reader) == 15 )  )
 		{
-		if(	 CHECK_NAME("Item") == 0  &&  xmlTextReaderDepth(reader) == depth && xmlTextReaderNodeType(reader) == 15)	
-		}	
+		if(	 CHECK_NAME("Item") == 0  &&  xmlTextReaderDepth(reader) == depth && xmlTextReaderNodeType(reader) == 15)
+			{
+			
+			READ_NEXT	
+			
+			if(	 CHECK_NAME("DicomAttribute") == 0  &&  xmlTextReaderDepth(reader) == (depth + 1) && xmlTextReaderNodeType(reader) == 1)
+				{
+				//start of an item
+				//Create Nested DataSet
+				Item item;
+  			DataSet NestedDS;
+  			PopulateDataSet(reader,NestedDS,depth,true);
+  			item.SetNestedDataSet(NestedDS);
+  			sqi.AddItem(item);
+				
+			  }			  
+			else
+				assert("Empty Item or Invalid XML");
+			
+			READ_NEXT	  
+			}
+		}		
+		
   
-  const char *name = (const char*)xmlTextReaderConstName(reader);// Should be item
+  //const char *name = (const char*)xmlTextReaderConstName(reader);// Should be item
   
-  READ_NEXT*/
+  //READ_NEXT
   
   //name = (const char*)xmlTextReaderConstName(reader);
   /*if((strcmp(name,"Item") == 0) && (xmlTextReaderDepth(reader) == depth) && (xmlTextReaderNodeType(reader) == 15) )
