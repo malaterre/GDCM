@@ -353,9 +353,11 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
     		case VR::OW:
     			{
     			//Presently should be at BulkData
-    			//assert(!(CHECK_NAME("BulkData")));
+    			//std::cout << (const char*)xmlTextReaderConstName(reader) << std::endl ;
+    			//assert(((CHECK_NAME("BulkData")) == 0));
     			char * uuid = (char *)xmlTextReaderGetAttribute(reader,(const unsigned char*)"uuid");
     			HandleBulkData(uuid,de);
+    			READ_NEXT
     			}break;		
     			
     		default:
@@ -377,19 +379,27 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
 
 void HandleSequence(SequenceOfItems &sqi, xmlTextReaderPtr reader,DataSet &DS,int depth)
 {
-	int ret;	
+	int ret;
+	
+	READ_NEXT
+	/*
+	while(!(  CHECK_NAME("DicomAttribute") == 0  && xmlTextReaderDepth(reader) == (depth - 1)  &&  xmlTextReaderNodeType(reader) == 15 )  )
+		{
+		if(	 CHECK_NAME("Item") == 0  &&  xmlTextReaderDepth(reader) == depth && xmlTextReaderNodeType(reader) == 15)	
+		}	
+  
   const char *name = (const char*)xmlTextReaderConstName(reader);// Should be item
-    
-  ret = xmlTextReaderRead(reader);
-  ret = xmlTextReaderRead(reader);//at /Dicom
-  name = (const char*)xmlTextReaderConstName(reader);
+  
+  READ_NEXT*/
+  
+  //name = (const char*)xmlTextReaderConstName(reader);
   /*if((strcmp(name,"Item") == 0) && (xmlTextReaderDepth(reader) == depth) && (xmlTextReaderNodeType(reader) == 15) )
   	{
   	ret = xmlTextReaderRead(reader);ret = xmlTextReaderRead(reader);ret = xmlTextReaderRead(reader);
   	name = (const char*)xmlTextReaderConstName(reader);
    	return;// Empty SQ
    	}*/  
-  
+  /*
   do  
   	{
   	Item item;
@@ -402,7 +412,7 @@ void HandleSequence(SequenceOfItems &sqi, xmlTextReaderPtr reader,DataSet &DS,in
   	name = (const char*)xmlTextReaderConstName(reader);
   	}while(!(strcmp(name,"Item") == 0) && (xmlTextReaderDepth(reader) == depth));
   ret = xmlTextReaderRead(reader);
-  ret = xmlTextReaderRead(reader);	
+  ret = xmlTextReaderRead(reader);	*/
 }
 
 void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
