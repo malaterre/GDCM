@@ -185,12 +185,12 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
       	Element<type,VM::VM1_n> el; \
     		while(strcmp(name,"Value") == 0) \
     			{ \
-    			ret = xmlTextReaderRead(reader); \
+    			READ_NEXT \
     			char *value = (char*)xmlTextReaderConstValue(reader); \
     			strcpy((char *)values[count++],value); \
-    			ret = xmlTextReaderRead(reader);/*Value ending tag*/ \
+    			READ_NEXT /*Value ending tag*/ \
     			name = (const char*)xmlTextReaderConstName(reader); \
-    			ret = xmlTextReaderRead(reader);ret = xmlTextReaderRead(reader); \
+    			READ_NEXT \
     			name = (const char*)xmlTextReaderConstName(reader); \
     			} \
     		el.SetLength( (count) * vr.GetSizeof() ); \
@@ -214,12 +214,12 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
       	Element<type,VM::VM1_n> el; \
     		while(strcmp(name,"Value") == 0) \
     			{ \
-    			ret = xmlTextReaderRead(reader); \
+    			READ_NEXT \
     			char *value_char = (char*)xmlTextReaderConstValue(reader); \
     			sscanf(value_char,"%d",&(values[count++]));  \
-    			ret = xmlTextReaderRead(reader);/*Value ending tag*/ \
+    			READ_NEXT /*Value ending tag*/ \
     			name = (const char*)xmlTextReaderConstName(reader); \
-    			ret = xmlTextReaderRead(reader);ret = xmlTextReaderRead(reader); \
+    			READ_NEXT \
     			name = (const char*)xmlTextReaderConstName(reader); \
     			} \
     		el.SetLength( (count) * vr.GetSizeof() ); \
@@ -243,12 +243,12 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
       	Element<type,VM::VM1_n> el; \
     		while(strcmp(name,"Value") == 0) \
     			{ \
-    			ret = xmlTextReaderRead(reader); \
+    			READ_NEXT \
     			char *value_char = (char*)xmlTextReaderConstValue(reader); \
     			sscanf(value_char,"%f",&(values[count++]));  \
-    			ret = xmlTextReaderRead(reader);/*Value ending tag*/ \
+    			READ_NEXT /*Value ending tag*/ \
     			name = (const char*)xmlTextReaderConstName(reader); \
-    			ret = xmlTextReaderRead(reader);ret = xmlTextReaderRead(reader); \
+    			READ_NEXT \
     			name = (const char*)xmlTextReaderConstName(reader); \
     			} \
     		el.SetLength( (count) * vr.GetSizeof() ); \
@@ -272,12 +272,12 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
       	Element<type,VM::VM1_n> el; \
     		while(strcmp(name,"Value") == 0) \
     			{ \
-    			ret = xmlTextReaderRead(reader); \
+    			READ_NEXT \
     			char *value_char = (char*)xmlTextReaderConstValue(reader); \
     			sscanf(value_char,"%lf",&(values[count++]));  \
-    			ret = xmlTextReaderRead(reader);/*Value ending tag*/ \
+    			READ_NEXT/*Value ending tag*/ \
     			name = (const char*)xmlTextReaderConstName(reader); \
-    			ret = xmlTextReaderRead(reader);ret = xmlTextReaderRead(reader); \
+    			READ_NEXT \
     			name = (const char*)xmlTextReaderConstName(reader); \
     			} \
     		el.SetLength( (count) * vr.GetSizeof() ); \
@@ -309,9 +309,7 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
 		  vr_read[2]='\0';
   		const gdcm::VR vr = gdcm::VR::GetVRType(vr_read);
   		
-  		ret=xmlTextReaderRead(reader);// at 14 NodeType
-  		
-		  ret=xmlTextReaderRead(reader);// should be at value tag or BulkData tag or Item Tag
+  		READ_NEXT  /* should be at Value tag or BulkData tag or Item Tag */
 		  
 		  /* Load Value */
 		  switch(vr)
@@ -352,36 +350,15 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
     			assert(0 && "Unknown VR");	
 		  	};
 		  
-		  /*Modify de to insert*/
+		  /*Modify de before insert*/
 		  
 		  de.SetTag(t);	  
 		  
 		  DS.Insert(de);
 		  
-		  ret=xmlTextReaderRead(reader);// at 14 NodeType
-  		
-		  ret=xmlTextReaderRead(reader);
-		  /*
-		  while(xmlTextReaderNodeType(reader) != 15)
-		  	ret = xmlTextReaderRead(reader);
-		  
-		  if(strcmp((const char*)xmlTextReaderConstName(reader),"DicomAttribute") == 0)
-		  	{
-		  	while(xmlTextReaderNodeType(reader) != 15 && strcmp((const char*)xmlTextReaderConstName(reader),"DicomAttribute") == 0)
-		  		{
-		  		if(xmlTextReaderDepth(reader) == 0)
-		  			return;
-		  		}
-		  	}
-		  else
-		  	assert("No proper end tag" && 0);		
-		  */
-		  /*Read Next DataElement*/
-		  
-		  
-			}
-		//ret = xmlTextReaderRead(reader);	
-		//name = (const char*)xmlTextReaderConstName(reader);
+		  READ_NEXT // To next Element
+		  		  
+			}	
 			   	
    	}
 }
@@ -422,8 +399,7 @@ void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
 	
 	READ_NEXT
 	
-	ret = xmlTextReaderRead(reader);
-	ret = xmlTextReaderRead(reader);// at first element
+	READ_NEXT   // at first element "DicomAttribute"
 	
 	//populate DS
 	DataSet DS;
