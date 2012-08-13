@@ -294,9 +294,11 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
     		}break
     		
           
-   while(  (xmlTextReaderDepth(reader)!=0) && !(SetSQ && (xmlTextReaderNodeType(reader) == 15) && (strcmp(name,"Item")==0)  )  )
+   while(  (xmlTextReaderDepth(reader)!=0))// || !(SetSQ && (xmlTextReaderNodeType(reader) == 15) && (strcmp(name,"Item")==0)  )  )
 		{
-   	if(strcmp(name,"DicomAttribute") == 0)
+		if(SetSQ && (xmlTextReaderNodeType(reader) == 15) && CHECK_NAME("Item") == 0 )
+		   return;
+   	if(CHECK_NAME("DicomAttribute") == 0)
 			{
 			DataElement de;
 			
@@ -353,7 +355,6 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
     		case VR::OW:
     			{
     			//Presently should be at BulkData
-    			//std::cout << (const char*)xmlTextReaderConstName(reader) << std::endl ;
     			assert(((CHECK_NAME("BulkData")) == 0));
     			char * uuid = (char *)xmlTextReaderGetAttribute(reader,(const unsigned char*)"uuid");
     			HandleBulkData(uuid,de);
@@ -385,18 +386,21 @@ void HandleSequence(SequenceOfItems *sqi, xmlTextReaderPtr reader,int depth)
 		{
 		if(	 CHECK_NAME("Item") == 0  &&  xmlTextReaderDepth(reader) == depth && xmlTextReaderNodeType(reader) == 1)
 			{
-			
+			//at Item
 			READ_NEXT	
-			
+			//assert(0 && "Hi1");
+			//at DicomAtt
 			if(	 CHECK_NAME("DicomAttribute") == 0  &&  xmlTextReaderDepth(reader) == (depth + 1) && xmlTextReaderNodeType(reader) == 1)
 				{
 				//start of an item
 				//Create Nested DataSet
-				//Item item;
-  			//DataSet NestedDS;
-  			//PopulateDataSet(reader,NestedDS,xmlTextReaderDepth(reader),true);
-  			//item.SetNestedDataSet(NestedDS);
-  			//sqi.AddItem(item);
+				//assert(0 && "Hi2");
+				Item *item = new Item();
+  			DataSet *NestedDS = new DataSet() ;
+  			PopulateDataSet(reader,*NestedDS,xmlTextReaderDepth(reader),true);
+  			item->SetNestedDataSet(*NestedDS);
+  			sqi->AddItem(*item);
+  			//assert(0 && "Hi3");
 				
 			  }			  
 			else
@@ -405,7 +409,7 @@ void HandleSequence(SequenceOfItems *sqi, xmlTextReaderPtr reader,int depth)
 			READ_NEXT	  
 			}
 		else
-		  assert("Empty Item or Invalid XML2");	
+		  assert("Expected Item");	
 		}		
 		
   
