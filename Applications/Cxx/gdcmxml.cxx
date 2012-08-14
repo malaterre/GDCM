@@ -491,8 +491,12 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
     			}break;		
     		
     		case VR::UN:
-    			assert(0 && "UN not Handled yet");
-    			    			
+    			{
+    			int depth_UN=xmlTextReaderDepth(reader);
+    			while(!(CHECK_NAME("DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15 && depth_UN == xmlTextReaderDepth(reader)))
+    				READ_NEXT
+    			//assert(0 && "UN not Handled yet");
+    			}break;    			
     		default:
     			assert(0 && "Unknown VR");	
 		  	};
