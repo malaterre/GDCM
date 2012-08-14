@@ -101,7 +101,7 @@ void PrintHelp()
   std::cout << "  -v --version        print version." << std::endl;
   std::cout << "Options for Dicom to XML:" << std::endl;
   std::cout << "  -B --loadBulkData   Loads bulk data into a binary file named \"UUID\"(by default UUID are written)." << std::endl;
-  std::cout << "Options for Dicom to XML:" << std::endl;
+  std::cout << "Options for XML to Dicom:" << std::endl;
   std::cout << "  -B --loadBulkData   Loads bulk data from a binary file named as the \"UUID\" in XML file(by default UUID are written)."<< std::endl;
   std::cout << "  -T --TransferSyntax Loads transfer syntax from file (default is LittleEndianImplicit)" << std::endl; 
 }
@@ -165,8 +165,136 @@ void HandleBulkData(const char *uuid, DataElement &de)
  	  }  
   }
 
-void HandlePN()
+void HandlePN(xmlTextReaderPtr reader,DataElement &de)
 	{
+	if(CHECK_NAME("DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15)
+		return;//empty element
+	else if(!(CHECK_NAME("PersonName") == 0))
+		assert(0 && "Invalid XML");
+		
+	int depth_curr = xmlTextReaderDepth(reader);
+	int ret;
+	std::string name;
+	READ_NEXT;
+	READ_NEXT;
+	while(!(CHECK_NAME("DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15))
+		{
+		READ_NEXT
+		if(xmlTextReaderNodeType(reader) == 3)
+			{
+			name += (char*)xmlTextReaderConstValue(reader);
+			name += "^";
+			}
+		if((CHECK_NAME("Ideographic") == 0 || CHECK_NAME("Phonetic") == 0)	&& xmlTextReaderNodeType(reader) == 3)
+			{
+			name += "=";
+			}
+			
+		}
+	
+	gdcm::ByteValue *bv1 = new ByteValue( name.c_str(), name.length() );
+	de.SetValue(*bv1);
+	return;
+	
+	/*
+	READ_NEXT//at ByteValue
+	
+	
+
+	//char *temp_name=new char[500];
+	std::string name;
+	int count =0;
+	//while(!(CHECK_NAME("PersonName") == 0 && xmlTextReaderDepth(reader) == depth_curr && xmlTextReaderNodeType(reader) == 15))
+		//{
+	if(CHECK_NAME("SingleByte") == 0)
+		{
+		  
+		  READ_NEXT
+		  
+			if(CHECK_NAME("FamilyName") == 0)
+				{
+				READ_NEXT
+				if(xmlTextReaderNodeType(reader) == 3)
+					{
+					//append here
+					count +=strlen((char*)xmlTextReaderConstValue(reader));
+					name += (char*)xmlTextReaderConstValue(reader);
+					name += "^";
+					}
+				READ_NEXT//at </FamilyName>
+				READ_NEXT//at </SingleByte>
+				//READ_NEXT//may be new name or at </PersonName>
+				//if(CHECK_NAME("ByteValue") == 0)
+					//READ_NEXT 	
+				}
+			if(CHECK_NAME("GivenName") == 0)
+				{
+				READ_NEXT
+				if(xmlTextReaderNodeType(reader) == 3)
+					{
+					//append here
+					name += (char*)xmlTextReaderConstValue(reader);
+					name += "^";
+					}
+				READ_NEXT
+				READ_NEXT
+				}
+			if(CHECK_NAME("MiddleName") == 0)
+				{
+				READ_NEXT
+				if(xmlTextReaderNodeType(reader) == 3)
+					{
+					//append here
+					name += (char*)xmlTextReaderConstValue(reader);
+					name += "^";
+					}
+				READ_NEXT
+				READ_NEXT
+				}
+			if(CHECK_NAME("NamePrefix") == 0)
+				{
+				READ_NEXT
+				if(xmlTextReaderNodeType(reader) == 3)
+					{
+					//append here
+					name += (char*)xmlTextReaderConstValue(reader);
+					name += "^";
+					}
+				READ_NEXT
+				READ_NEXT
+				}
+			if(CHECK_NAME("NameSuffix") == 0)
+				{
+				READ_NEXT
+				if(xmlTextReaderNodeType(reader) == 3)
+					{
+					//append here
+					name += (char*)xmlTextReaderConstValue(reader);
+					name += "^";
+					}
+				READ_NEXT
+				READ_NEXT
+				}
+			READ_NEXT//starts new or end tag PersonName	
+			//name += "=";
+		}
+	if(CHECK_NAME("Ideographic") == 0)
+		{
+		
+		}	
+	if(CHECK_NAME("Phonetic") == 0)
+		{
+		}	
+	
+	//Set Value in de
+	Element<VR::PN,VM::VM1_n> el;
+	el.SetValue(name.c_str(),0);
+	de = el.GetAsDataElement();
+	
+	READ_NEXT//at correct place for Populate DataSet
+	return;	
+		*/
+		
 	}
 	
 void HandleSequence(SequenceOfItems *sqi,xmlTextReaderPtr reader,int depth);
@@ -348,7 +476,8 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
     		
     		case VR::PN:
     			{
-    			HandlePN();
+    			//Current node must be Person Name
+    			HandlePN(reader,de);
     			}break;
     		
     		case VR::OB:
@@ -520,7 +649,7 @@ static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
   fread(buffer, sizeof(char), numBytes, in);
   fclose(in);
   reader = xmlReaderForMemory  (buffer, numBytes, NULL, NULL, 0);
-  //reader = xmlReaderForFile(filename, "UTF-8", 0);
+  //reader = xmlReaderForFile(filename, "UTF-8", 0); Not Working!!
   if (reader != NULL) 
     {
     WriteDICOM(reader, file2);
