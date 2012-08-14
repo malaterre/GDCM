@@ -185,7 +185,7 @@ void HandlePN(xmlTextReaderPtr reader,DataElement &de)
 			name += (char*)xmlTextReaderConstValue(reader);
 			name += "^";
 			}
-		if((CHECK_NAME("Ideographic") == 0 || CHECK_NAME("Phonetic") == 0)	&& xmlTextReaderNodeType(reader) == 3)
+		if((CHECK_NAME("Ideographic") == 0 || CHECK_NAME("Phonetic") == 0)	&& xmlTextReaderNodeType(reader) == 1)
 			{
 			name += "=";
 			}
