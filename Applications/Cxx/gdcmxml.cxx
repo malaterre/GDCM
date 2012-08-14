@@ -447,6 +447,8 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
 		  /* Load Value */
 		  switch(vr)
 		  	{
+		  	
+        //LoadValueInteger(VR::AT); FIX THIS!!
 		  	LoadValueASCII(VR::AE);
 		  	LoadValueASCII(VR::AS);
 				LoadValueASCII(VR::CS);
@@ -480,6 +482,7 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
     			HandlePN(reader,de);
     			}break;
     		
+    		case VR::OF:
     		case VR::OB:
     		case VR::OW:
     			{
@@ -686,7 +689,7 @@ int main (int argc, char *argv[])
         {"input", 1, 0, 0},
         {"output", 1, 0, 0},
         {"loadBulkData", 0, &loadBulkData, 1},
-        {"TransferSyntax", 0, &loadBulkData, 1},
+        {"TransferSyntax", 0, &loadTransferSyntax, 1},
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
         {"debug", 0, &debug, 1},
@@ -695,7 +698,7 @@ int main (int argc, char *argv[])
         {"version", 0, &version, 1},
         {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:o:BVWDEhv";
+    static const char short_options[] = "i:o:BTVWDEhv";
     c = getopt_long (argc, argv, short_options,
       long_options, &option_index);
     if (c == -1)
