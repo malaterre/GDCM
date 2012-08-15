@@ -23,7 +23,7 @@ static bool LoadFile(const char * filename, char* & buffer, size_t & bufLen)
   FILE * f = fopen(filename, "rb");
   if (f == NULL)
     {
-    gdcmErrorMacro("Couldn't open the file: " << filename);
+    //gdcmErrorMacro("Couldn't open the file: " << filename);
     return false;
     }
   fseek(f, 0L, SEEK_END);
@@ -72,7 +72,7 @@ bool TestCMSProvider(gdcm::CryptographicMessageSyntax& cms, const char * provNam
     bool encryptSuccess = cms.Encrypt(encout, encoutlen, tstr, tstr_l);
     if (!encryptSuccess)
       {
-      gdcmWarningMacro(provName << " using " << cip2str[ciphers[i]] << ": encryption failed");
+      std::cerr << provName << " using " << cip2str[ciphers[i]] << ": encryption failed" << std::endl;
       ret = false;
       break;
       }
@@ -86,18 +86,136 @@ bool TestCMSProvider(gdcm::CryptographicMessageSyntax& cms, const char * provNam
     if (decoutlen != tstr_l)
       {
       std::cerr << provName << " using " << cip2str[ciphers[i]] << ": decryted length different from original (" << decoutlen << " != " << tstr_l << ")" << std::endl;
+      ret = false;
+      break;
       }
     if (memcmp(tstr, decout, tstr_l) != 0)
       {
       std::cerr << provName << " using " << cip2str[ciphers[i]] << ": decryted data different from original" << std::endl;
+      ret = false;
+      break;
       }
     }
+  
+  return ret;
+}
+
+bool TestCMSVector(gdcm::CryptographicMessageSyntax& cms, const char * provName)
+{
   char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
   size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
-  //cms.Decrypt(decout, decoutlen, test_vector, tvlen);
-  assert(decoutlen == strlen("1234567890abcdefghijklmnopqrstuvwxyz"));
-  assert(memcmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
-  
+  std::string encrypted_filename = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/encrypted_text" );
+  const char * tv_plaintext = "1234567890abcdefghijklmnopqrstuvwxyz";
+  size_t tv_plaintext_len = strlen(tv_plaintext);
+
+  char * test_vector;
+  size_t tvlen;
+  if (!LoadFile(encrypted_filename.c_str(), test_vector, tvlen))
+    {
+    std::cerr << "Couldn't load encrypted file: " << encrypted_filename << std::endl;
+    return false;
+    }
+  bool decryptSuccess = cms.Decrypt(decout, decoutlen, test_vector, tvlen);
+  if (!decryptSuccess)
+    {
+    std::cerr << provName << " test vector decryption failed" << std::endl;
+    return false;
+    }
+  if (decoutlen != tv_plaintext_len)
+    {
+    std::cerr << provName << " test vector decryted length different from original (" << decoutlen << " != " << tstr_l << ")" << std::endl;
+    return false;
+    }
+  if (memcmp(tv_plaintext, decout, tv_plaintext_len) != 0)
+    {
+    std::cerr << provName << " test vector decryted data different from original" << std::endl;
+    return false;
+    }
+
+  return true;
+}
+
+bool TestCMSCompatibility(gdcm::CryptographicMessageSyntax& cms1, const char * provName1, gdcm::CryptographicMessageSyntax& cms2, const char * provName2)
+{
+  char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
+  size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
+  std::string encrypted_vector = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/encrypted_text" );
+
+  for (int i = 0; i < 4; i++)
+    {
+    bool ret = true;
+    char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
+    size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
+    cms1.SetCipherType(ciphers[i]);
+    cms2.SetCipherType(ciphers[i]);
+
+    bool encryptSuccess = cms1.Encrypt(encout, encoutlen, tstr, tstr_l);
+    if (!encryptSuccess)
+      {
+      std::cerr << provName1 << " & " << provName2 << " using " << cip2str[ciphers[i]] << ": encryption failed" << std::endl;
+      ret = false;
+      break;
+      }
+    bool decryptSuccess = cms2.Decrypt(decout, decoutlen, encout, encoutlen);
+    if (!decryptSuccess)
+      {
+      std::cerr << provName1 << " & " << provName2 << " using " << cip2str[ciphers[i]] << ": decryption failed" << std::endl;
+      ret = false;
+      break;
+      }
+    if (decoutlen != tstr_l)
+      {
+      std::cerr <<  provName1 << " & " << provName2 << " using " << cip2str[ciphers[i]] << ": decryted length different from original (" << decoutlen << " != " << tstr_l << ")" << std::endl;
+      ret = false;
+      break;
+      }
+    if (memcmp(tstr, decout, tstr_l) != 0)
+      {
+      std::cerr <<  provName1 << " & " << provName2 << " using " << cip2str[ciphers[i]] << ": decryted data different from original" << std::endl;
+      ret = false;
+      break;
+      }
+    }
+
+  /*for (int i = 0; i < 4; i++)
+    {
+    bool ret = true;
+    char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
+    size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
+    cms1.SetCipherType(ciphers[i]);
+    cms2.SetCipherType(ciphers[i]);
+    //cms2.Encrypt(encout, encoutlen, tstr, tstr_l);
+    //cms1.Decrypt(decout, decoutlen, encout, encoutlen);
+    //assert(decoutlen == tstr_l);
+    //assert(memcmp(tstr, decout, tstr_l) == 0);
+
+    bool encryptSuccess = cms1.Encrypt(encout, encoutlen, tstr, tstr_l);
+    if (!encryptSuccess)
+      {
+      std::cerr << provName1 << " & " << provName2 << " using " << cip2str[ciphers[i]] << ": encryption failed" << std::endl;
+      ret = false;
+      break;
+      }
+    bool decryptSuccess = cms2.Decrypt(decout, decoutlen, encout, encoutlen);
+    if (!decryptSuccess)
+      {
+      std::cerr << provName1 << " & " << provName2 << " using " << cip2str[ciphers[i]] << ": decryption failed" << std::endl;
+      ret = false;
+      break;
+      }
+    if (decoutlen != tstr_l)
+      {
+      std::cerr <<  provName1 << " & " << provName2 << " using " << cip2str[ciphers[i]] << ": decryted length different from original (" << decoutlen << " != " << tstr_l << ")" << std::endl;
+      ret = false;
+      break;
+      }
+    if (memcmp(tstr, decout, tstr_l) != 0)
+      {
+      std::cerr <<  provName1 << " & " << provName2 << " using " << cip2str[ciphers[i]] << ": decryted data different from original" << std::endl;
+      ret = false;
+      break;
+      }
+    }*/
   return true;
 }
 
@@ -105,21 +223,15 @@ int TestCryptographicMessageSyntax(int, char *[])
 {
   std::string certpath = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/certificate.pem" );
   std::string keypath = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/privatekey.pem" );
-  std::string encrypted_vector = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/encrypted_text" );
-
-  char * test_vector;
-  size_t tvlen;
-  if (!LoadFile(encrypted_vector.c_str(), test_vector, tvlen))
-    {
-    /////////////////???
-    }
+  bool bret = true;
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
   std::auto_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
   ocms->ParseKeyFile(keypath.c_str());
   ocms->ParseCertificateFile(certpath.c_str());
-  TestCMSProvider(*ocms, "OpenSSL");
+  bret = TestCMSProvider(*ocms, "OpenSSL") && bret;
+  bret = TestCMSVector(*ocms, "OpenSSL") && bret;
 #endif
 
 #ifdef WIN32
@@ -127,91 +239,18 @@ int TestCryptographicMessageSyntax(int, char *[])
   std::auto_ptr<gdcm::CryptographicMessageSyntax> ccms(capi->CreateCMSProvider());
   ccms->ParseCertificateFile(certpath.c_str());
   ccms->ParseKeyFile(keypath.c_str());
-  TestCMSProvider(*ccms, "CAPI");
+  bret = TestCMSProvider(*ccms, "CAPI") && bret;
+  bret = TestCMSVector(*ccms, "CAPI") && bret;
 #endif
   
-/*
-#ifdef GDCM_USE_SYSTEM_OPENSSL
-{  
-  for (int i = 0; i < 4; i++)
-    {
-    char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
-    size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
-    ocms->SetCipherType(ciphers[i]);
-    bool encryptSuccess = ocms->Encrypt(encout, encoutlen, tstr, tstr_l);
-    if (!encryptSuccess)
-      {
-      gdcmWarningMacro("Encryption with OpenSSL failed using " << cip2str[ciphers[i]]);
-      break;
-      }
-    bool decryptSuccess = ocms->Decrypt(decout, decoutlen, encout, encoutlen);
-    if (!decryptSuccess)
-      {
-      std::cerr << "Encryption with OpenSSL failed using " << cip2str[ciphers[i]];
-      break;
-      }
-    assert(decoutlen == tstr_l);
-    assert(memcmp(tstr, decout, tstr_l) == 0);
-    }
-  char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
-  size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
-  ocms->Decrypt(decout, decoutlen, test_vector, tvlen);
-  assert(decoutlen == strlen("1234567890abcdefghijklmnopqrstuvwxyz"));
-  assert(memcmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
-}
-#endif*/
-
-/*#ifdef WIN32
-{  
-  for (int i = 0; i < 4; i++)
-    {
-    char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
-    size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
-    ccms->SetCipherType(ciphers[i]);
-    ccms->Encrypt(encout, encoutlen, tstr, tstr_l);
-    ccms->Decrypt(decout, decoutlen, encout, encoutlen);
-    assert(decoutlen == tstr_l);
-    assert(memcmp(tstr, decout, tstr_l) == 0);
-    }
-  char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
-  size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
-  ocms->Decrypt(decout, decoutlen, test_vector, tvlen);
-  assert(decoutlen == strlen("1234567890abcdefghijklmnopqrstuvwxyz"));
-  assert(memcmp(decout, "1234567890abcdefghijklmnopqrstuvwxyz", strlen("1234567890abcdefghijklmnopqrstuvwxyz")) == 0);
-}
-#endif*/
-
 #ifdef WIN32
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-
-  for (int i = 0; i < 4; i++)
-    {
-    char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
-    size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
-    ocms->SetCipherType(ciphers[i]);
-    ccms->SetCipherType(ciphers[i]);
-    ocms->Encrypt(encout, encoutlen, tstr, tstr_l);
-    ccms->Decrypt(decout, decoutlen, encout, encoutlen);
-    assert(decoutlen == tstr_l);
-    assert(memcmp(tstr, decout, tstr_l) == 0);
-    }
-
-  for (int i = 0; i < 4; i++)
-    {
-    char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
-    size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
-    ocms->SetCipherType(ciphers[i]);
-    ccms->SetCipherType(ciphers[i]);
-    ccms->Encrypt(encout, encoutlen, tstr, tstr_l);
-    ocms->Decrypt(decout, decoutlen, encout, encoutlen);
-    assert(decoutlen == tstr_l);
-    assert(memcmp(tstr, decout, tstr_l) == 0);
-    }
-
+  bret = TestCMSCompatibility(*ocms, "OpenSSL", *ccms, "CAPI") && bret;
+  bret = TestCMSCompatibility(*ccms, "CAPI", *ocms, "OpenSSL") && bret;
 #endif
 #endif
 
-  return 0;
+  return (bret ? 0 : 1);
 }
 
 int TestPasswordBasedEncryption(int, char *[])
@@ -219,31 +258,31 @@ int TestPasswordBasedEncryption(int, char *[])
   std::string encrypted_dicomdir = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/securedicomfileset/DICOMDIR" );
   std::string encrypted_image = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/securedicomfileset/IMAGES/IMAGE1" );
 
-  //char encout[5000], decout[5000];
-  //size_t outlen = 5000, decoutlen = 5000;
-
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
   std::auto_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
 
   ocms->SetPassword("password");
-  for (int i = 0; i < 4; i++)
-    {
-    char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
-    size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
-    ocms->SetCipherType(ciphers[i]);
-    ocms->Encrypt(encout, encoutlen, tstr, tstr_l);
-    ocms->Decrypt(decout, decoutlen, encout, encoutlen);
-    assert(decoutlen == tstr_l);
-    assert(memcmp(tstr, decout, tstr_l) == 0);
-    }
-  char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
-  size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
+  if (!TestCMSProvider(*ocms, "OpenSSL"))
+    return 1;
+  
+  char decout[BUFSZ] = {0};
+  size_t decoutlen = BUFSZ;
   char * ddir = new char[5000];
   size_t ddirlen = 5000;
   LoadFile(encrypted_dicomdir.c_str(), ddir, ddirlen);
-  assert(ocms->Decrypt(encout, encoutlen, ddir, ddirlen));
-  assert(encoutlen > 0);
+  bool decryptSuccess = ocms->Decrypt(decout, decoutlen, ddir, ddirlen);
+  if (!decryptSuccess)
+    {
+    std::cerr << "OpenSSL sample DICOMDIR decryption failed" << std::endl;
+    return 1;
+    }
+  if (decoutlen == 0)
+    {
+    std::cerr << "OpenSSL sample DICOMDIR decrypted length == 0" << std::endl;
+    return 1;
+    }
+  
 #endif
 
   return 0;
