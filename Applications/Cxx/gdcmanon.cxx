@@ -225,6 +225,10 @@ static void PrintHelp()
   std::cout << "  -k --key                    Path to RSA Private Key." << std::endl;
   std::cout << "  -c --certificate            Path to Certificate." << std::endl;
   std::cout << "  -p --password               Encryption passphrase." << std::endl;
+  std::cout << "Crypto Library Options:" << std::endl;
+  std::cout << "     --openssl                OpenSSL (default on non-Windows systems)." << std::endl;
+  std::cout << "     --capi                   Microsoft CryptoAPI (default on Windows systems)." << std::endl;
+  std::cout << "     --openssl-p7             old OpenSSL implementation." << std::endl;
   std::cout << "Encryption Algorithm Options:" << std::endl;
   std::cout << "     --des3                   Triple DES." << std::endl;
   std::cout << "     --aes128                 AES 128." << std::endl;
@@ -338,6 +342,7 @@ int main(int argc, char *argv[])
         {"continue", no_argument, &continuemode, 1},
         {"openssl", no_argument, &crypto_api, 1},
         {"capi", no_argument, &crypto_api, 2},
+        {"openssl-p7", no_argument, &crypto_api, 3},
 
         {"verbose", no_argument, NULL, 'V'},
         {"warning", no_argument, NULL, 'W'},
@@ -594,6 +599,8 @@ int main(int argc, char *argv[])
     crypto_lib = gdcm::CryptoFactory::OPENSSL;
   else if (crypto_api == 2)
     crypto_lib = gdcm::CryptoFactory::CAPI;
+  else if (crypto_api == 3)
+    crypto_lib = gdcm::CryptoFactory::OPENSSLP7;
   
   gdcm::CryptoFactory* crypto_factory = NULL;
   if( deidentify || reidentify )
