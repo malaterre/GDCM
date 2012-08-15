@@ -25,8 +25,6 @@
 #include "gdcmSystem.h"
 
 #include "gdcmCryptoFactory.h"
-//#include "gdcmCAPICryptoFactory.h"
-//#include "gdcmOpenSSLCryptoFactory.h"
 
 int TestAnonymizer3(int , char *[])
 {
@@ -106,7 +104,16 @@ int TestAnonymizer3(int , char *[])
 
 // Encrypt
 {
+#ifdef WIN32
+  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::CAPI);
+#else
   gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
+#endif
+  if (cryptoFactory == NULL)
+    {
+    std::cerr << "Crypto library not available" << std::endl;
+    return 1;
+    }
   std::auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
   gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
   if( !cms.ParseCertificateFile( certpath.c_str() ) )

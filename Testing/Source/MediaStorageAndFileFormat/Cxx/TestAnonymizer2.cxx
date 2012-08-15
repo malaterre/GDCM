@@ -59,7 +59,16 @@ int TestAnonymize2(const char *subdir, const char *filename)
 
 // Encrypt
 {
+#ifdef WIN32
+  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::CAPI);
+#else
   gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
+#endif
+  if (cryptoFactory == NULL)
+    {
+    std::cerr << "Crypto library not available" << std::endl;
+    return 1;
+    }
   std::auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
   gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
 
@@ -119,7 +128,16 @@ int TestAnonymize2(const char *subdir, const char *filename)
 }
 // Decrypt
 {
+#ifdef WIN32
+  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::CAPI);
+#else
   gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
+#endif
+  if (cryptoFactory == NULL)
+    {
+    std::cerr << "Crypto library not available" << std::endl;
+    return 1;
+    }
   std::auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
   gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
   if( !cms.ParseKeyFile( keypath.c_str() ) )
