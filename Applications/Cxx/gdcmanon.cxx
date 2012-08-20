@@ -226,18 +226,19 @@ static void PrintHelp()
   std::cout << "  -c --certificate            Path to Certificate." << std::endl;
   std::cout << "  -p --password               Encryption passphrase." << std::endl;
   std::cout << "Crypto Library Options:" << std::endl;
-  std::cout << "     --openssl                OpenSSL (default on non-Windows systems)." << std::endl;
-  std::cout << "     --capi                   Microsoft CryptoAPI (default on Windows systems)." << std::endl;
-  std::cout << "     --openssl-p7             old OpenSSL implementation." << std::endl;
+  std::cout << "  --crypto=" << std::endl;
+  std::cout << "           openssl            OpenSSL (default on non-Windows systems)." << std::endl;
+  std::cout << "           capi               Microsoft CryptoAPI (default on Windows systems)." << std::endl;
+  std::cout << "           openssl-p7         Old OpenSSL implementation." << std::endl;
   std::cout << "Encryption Algorithm Options:" << std::endl;
   std::cout << "     --des3                   Triple DES." << std::endl;
   std::cout << "     --aes128                 AES 128." << std::endl;
   std::cout << "     --aes192                 AES 192." << std::endl;
   std::cout << "     --aes256                 AES 256 (default)." << std::endl;
   std::cout << "Dumb mode options:" << std::endl;
-  std::cout << "     --empty   %d,%d           DICOM tag(s) to empty" << std::endl;
-  std::cout << "     --remove  %d,%d           DICOM tag(s) to remove" << std::endl;
-  std::cout << "     --replace %d,%d=%s        DICOM tag(s) to replace" << std::endl;
+  std::cout << "     --empty   %d,%d          DICOM tag(s) to empty" << std::endl;
+  std::cout << "     --remove  %d,%d          DICOM tag(s) to remove" << std::endl;
+  std::cout << "     --replace %d,%d=%s       DICOM tag(s) to replace" << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose                more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning                print warning info." << std::endl;
@@ -314,6 +315,7 @@ int main(int argc, char *argv[])
   std::vector<gdcm::Tag> remove_tags;
   std::vector< std::pair<gdcm::Tag, std::string> > replace_tags_value;
   gdcm::Tag tag;
+  gdcm::CryptoFactory::CryptoLib crypto_lib;
 
   while (1) {
     //int this_option_optind = optind ? optind : 1;
@@ -336,13 +338,11 @@ int main(int argc, char *argv[])
 
         {"recursive", no_argument, NULL, 'r'},
         {"dumb", no_argument, &dumb_mode, 1},
-        {"empty", required_argument, &empty_tag, 1}, // 16
+        {"empty", required_argument, &empty_tag, 1}, // 15
         {"remove", required_argument, &remove_tag, 1},
         {"replace", required_argument, &replace_tag, 1},
         {"continue", no_argument, &continuemode, 1},
-        {"openssl", no_argument, &crypto_api, 1},
-        {"capi", no_argument, &crypto_api, 2},
-        {"openssl-p7", no_argument, &crypto_api, 3},
+        {"crypto", required_argument, &crypto_api, 1}, //19
 
         {"verbose", no_argument, NULL, 'V'},
         {"warning", no_argument, NULL, 'W'},
@@ -405,7 +405,7 @@ int main(int argc, char *argv[])
           //  assert( cert_path.empty() );
           //  cert_path = optarg;
           //  }
-          else if( option_index == 16 ) /* empty */
+          else if( option_index == 15 ) /* empty */
             {
             assert( strcmp(s, "empty") == 0 );
             if( !tag.ReadFromCommaSeparatedString(optarg) )
@@ -415,7 +415,7 @@ int main(int argc, char *argv[])
               }
             empty_tags.push_back( tag );
             }
-          else if( option_index == 17 ) /* remove */
+          else if( option_index == 16 ) /* remove */
             {
             assert( strcmp(s, "remove") == 0 );
             if( !tag.ReadFromCommaSeparatedString(optarg) )
@@ -425,7 +425,7 @@ int main(int argc, char *argv[])
               }
             remove_tags.push_back( tag );
             }
-          else if( option_index == 18 ) /* replace */
+          else if( option_index == 17 ) /* replace */
             {
             assert( strcmp(s, "replace") == 0 );
             if( !tag.ReadFromCommaSeparatedString(optarg) )
@@ -449,6 +449,21 @@ int main(int argc, char *argv[])
             //ss >> str;
             std::getline(ss, str); // do not skip whitespace
             replace_tags_value.push_back( std::make_pair(tag, str) );
+            }
+          else if( option_index == 19 ) /* crypto */
+            {
+            assert( strcmp(s, "crypto") == 0 );
+            if (strcmp(optarg, "openssl") == 0)
+              crypto_lib = gdcm::CryptoFactory::OPENSSL;
+            else if (strcmp(optarg, "capi") == 0)
+              crypto_lib = gdcm::CryptoFactory::CAPI;
+            else if (strcmp(optarg, "openssl-p7") == 0)
+              crypto_lib = gdcm::CryptoFactory::OPENSSLP7;
+            else
+              {
+              std::cerr << "Cryptography library id not recognized: " << optarg << std::endl;
+              return 1;
+              }
             }
           //printf (" with arg %s", optarg);
           }
@@ -589,19 +604,14 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-    gdcm::CryptoFactory::CryptoLib crypto_lib;
+  if (crypto_api == 0)
+    {
 #ifdef WIN32
   crypto_lib = gdcm::CryptoFactory::CAPI;
 #else
   crypto_lib = gdcm::CryptoFactory::OPENSSL;
 #endif
-  if (crypto_api == 1)
-    crypto_lib = gdcm::CryptoFactory::OPENSSL;
-  else if (crypto_api == 2)
-    crypto_lib = gdcm::CryptoFactory::CAPI;
-  else if (crypto_api == 3)
-    crypto_lib = gdcm::CryptoFactory::OPENSSLP7;
-  
+    }
   gdcm::CryptoFactory* crypto_factory = NULL;
   if( deidentify || reidentify )
     {
