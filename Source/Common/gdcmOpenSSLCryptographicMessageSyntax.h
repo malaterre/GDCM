@@ -32,7 +32,6 @@ public:
   bool ParseKeyFile( const char *filename );
 
   // PBE
-  bool SetPassword(const char * pass);
   bool SetPassword(const char * pass, size_t passLen);
 
   /// Set Cipher Type.

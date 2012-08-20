@@ -53,11 +53,6 @@ CryptographicMessageSyntax::CipherTypes OpenSSLCryptographicMessageSyntax::GetCi
   return cipherType;
 }
 
-bool OpenSSLCryptographicMessageSyntax::SetPassword(const char * pass)
-{
-  return SetPassword(pass, strlen(pass));
-}
-
 bool OpenSSLCryptographicMessageSyntax::SetPassword(const char * pass, size_t passLen)
   {
     assert(pass);

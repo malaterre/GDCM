@@ -27,8 +27,7 @@ public:
   virtual bool ParseKeyFile( const char *filename ) = 0;
 
   // PBE
-  virtual bool SetPassword(const char * pass) = 0; // For null-terminated strings
-  virtual bool SetPassword(const char * pass, size_t passLen) = 0; //For general binary data
+  virtual bool SetPassword(const char * pass, size_t passLen) = 0;
 
   /// create a CMS envelopedData structure
   virtual bool Encrypt(char *output, size_t &outlen, const char *array, size_t len) const = 0;

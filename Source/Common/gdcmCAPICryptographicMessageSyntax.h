@@ -33,11 +33,6 @@ public:
   bool ParseKeyFile( const char *filename );
 
   // PBE
-  bool SetPassword(const char * pass)
-  {
-    gdcmWarningMacro( "CAPI does not support Password Based Encryption." );
-    return false;
-  }
   bool SetPassword(const char * pass, size_t passLen)
   {
     gdcmWarningMacro( "CAPI does not support Password Based Encryption." );
