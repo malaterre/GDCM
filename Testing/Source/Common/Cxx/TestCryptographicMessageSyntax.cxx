@@ -262,7 +262,7 @@ int TestPasswordBasedEncryption(int, char *[])
   gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
   std::auto_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
 
-  ocms->SetPassword("password");
+  ocms->SetPassword("password", strlen("password"));
   if (!TestCMSProvider(*ocms, "OpenSSL"))
     return 1;
   
