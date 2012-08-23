@@ -52,6 +52,7 @@ GDCM_USE_SYSTEM_OPENJPEG:BOOL=OFF
 
 # To do some more testing for the anonymizer
 GDCM_USE_SYSTEM_OPENSSL:BOOL=ON
+GDCM_USE_SYSTEM_LIBXML2:BOOL=ON
 
 CMAKE_INSTALL_PREFIX:PATH=/tmp/local-gcc-rel
     "

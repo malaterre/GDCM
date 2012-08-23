@@ -12,6 +12,7 @@ macro(dashboard_hook_init)
     GDCM_BUILD_SHARED_LIBS:BOOL=ON
     GDCM_BUILD_APPLICATIONS:BOOL=ON
     GDCM_BUILD_EXAMPLES:BOOL=ON
+    GDCM_USE_SYSTEM_LIBXML2:BOOL=ON
     "
     )
 endmacro(dashboard_hook_init)
