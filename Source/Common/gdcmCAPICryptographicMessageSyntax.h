@@ -16,8 +16,8 @@
 #define GDCMCAPICRYPTOGRAPHICMESSAGESYNTAX_H
 
 #include "gdcmCryptographicMessageSyntax.h"
-#include <Windows.h>
-#include <WinCrypt.h>
+#include <windows.h>
+#include <wincrypt.h>
 #include <vector>
 
 namespace gdcm
