@@ -15,6 +15,8 @@
 #include "gdcmCAPICryptographicMessageSyntax.h"
 using namespace std;
 
+#include <stdio.h> // fseek
+
 namespace gdcm
 {
 
@@ -63,7 +65,7 @@ bool CAPICryptographicMessageSyntax::ParseCertificateFile( const char *filename 
     goto err;
     }
     
-  PCCERT_CONTEXT certContext = NULL;
+  PCCERT_CONTEXT certContext;
   certContext = CertCreateCertificateContext(X509_ASN_ENCODING, certBin, certBinLen);
   if (certContext == NULL)
     {
@@ -174,6 +176,7 @@ bool CAPICryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const
 bool CAPICryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const char *array, size_t len) const 
 {
   bool ret = false;
+  BYTE* cek = NULL;
   HCRYPTMSG hMsg = NULL;
   PCMSG_CMS_RECIPIENT_INFO recipientInfo = NULL;
   PCRYPT_ALGORITHM_IDENTIFIER cekAlg = NULL;
@@ -236,7 +239,7 @@ bool CAPICryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const
     }
 
   DWORD cekLen;
-  BYTE* cek = NULL;
+{
   BOOL foundRecipient = FALSE;
   for (DWORD i=0; i < nrOfRecipeints; i++)
     {
@@ -275,6 +278,7 @@ bool CAPICryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const
       gdcmErrorMacro( "No recipient found with the specified private key." );
       goto err;
     }
+}
 
   DWORD cekAlgLen;
   if(! CryptMsgGetParam(hMsg, CMSG_ENVELOPE_ALGORITHM_PARAM, 0, NULL, &cekAlgLen))
@@ -310,12 +314,14 @@ bool CAPICryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const
     goto err;
     }
 
+{
   DWORD dwMode = CRYPT_MODE_CBC;
   if(! CryptSetKeyParam(hCEK, KP_MODE, (BYTE*) &dwMode, 0))
     {
     gdcmErrorMacro( "SetKeyParam KP_MODE failed with error 0x" << std::hex << GetLastError() );
     goto err;
     }
+}
 
   DWORD bareContentLen;
   if(! CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, NULL, &bareContentLen))
@@ -357,6 +363,13 @@ err:
 
 ALG_ID CAPICryptographicMessageSyntax::getAlgIdByObjId(const char * pszObjId)
 {
+  // HACK: fix compilation on mingw64:
+#ifndef szOID_NIST_AES128_CBC
+#define szOID_NIST_AES128_CBC        "2.16.840.1.101.3.4.1.2"
+#define szOID_NIST_AES192_CBC        "2.16.840.1.101.3.4.1.22"
+#define szOID_NIST_AES256_CBC        "2.16.840.1.101.3.4.1.42"
+#endif
+
   if (strcmp(pszObjId, szOID_NIST_AES128_CBC) == 0)
     {
     return CALG_AES_128;

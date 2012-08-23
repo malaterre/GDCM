@@ -11,7 +11,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#pragma comment(lib, "Crypt32.lib")
+//#pragma comment(lib, "Crypt32.lib")
 
 #include "gdcmCAPICryptoFactory.h"
 #include "gdcmCAPICryptographicMessageSyntax.h"
