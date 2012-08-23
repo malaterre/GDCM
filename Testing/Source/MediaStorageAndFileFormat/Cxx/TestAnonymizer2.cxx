@@ -25,6 +25,8 @@
 #include "gdcmGlobal.h"
 #include "gdcmSystem.h"
 
+#include <memory> // std::auto_ptr
+
 namespace gdcm
 {
 int TestAnonymize2(const char *subdir, const char *filename)

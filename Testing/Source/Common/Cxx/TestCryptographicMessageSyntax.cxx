@@ -110,6 +110,7 @@ bool TestCMSVector(gdcm::CryptographicMessageSyntax& cms, const char * provName)
   size_t tv_plaintext_len = strlen(tv_plaintext);
 
   char * test_vector;
+  // FIXME : should I delete test_vector ?
   size_t tvlen;
   if (!LoadFile(encrypted_filename.c_str(), test_vector, tvlen))
     {
@@ -256,8 +257,11 @@ int TestCryptographicMessageSyntax(int, char *[])
 
 int TestPasswordBasedEncryption(int, char *[])
 {
-  std::string encrypted_dicomdir = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/securedicomfileset/DICOMDIR" );
-  std::string encrypted_image = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/securedicomfileset/IMAGES/IMAGE1" );
+  const char *directory = gdcm::Testing::GetDataRoot();
+  std::string encrypted_dicomdir =
+    gdcm::Filename::Join(directory, "/securedicomfileset/DICOMDIR" );
+  std::string encrypted_image =
+    gdcm::Filename::Join(directory, "/securedicomfileset/IMAGES/IMAGE1" );
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);

@@ -16,7 +16,9 @@
 #define GDCMOPENSSLCRYPTOGRAPHICMESSAGESYNTAX_H
 
 #include "gdcmCryptographicMessageSyntax.h"
+#ifdef GDCM_HAVE_CMS_RECIPIENT_PASSWORD
 #include <openssl/cms.h>
+#endif
 #include <openssl/evp.h>
 namespace gdcm
 {
@@ -44,7 +46,11 @@ public:
   bool Decrypt(char *output, size_t &outlen, const char *array, size_t len) const;
 
 private:
-  ::stack_st_X509 *recips;//STACK_OF(X509) *recips;
+#ifdef GDCM_HAVE_CMS_RECIPIENT_PASSWORD
+  ::stack_st_X509 *recips;
+#else
+  STACK_OF(X509) *recips;
+#endif
   ::EVP_PKEY *pkey;
   const EVP_CIPHER *internalCipherType;
   char * password;

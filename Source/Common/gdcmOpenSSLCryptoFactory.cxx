@@ -13,8 +13,8 @@
 =========================================================================*/
 
 #include "gdcmOpenSSLCryptoFactory.h"
-#include <openssl\evp.h>
-#include <openssl\err.h>
+#include <openssl/evp.h>
+#include <openssl/err.h>
 namespace gdcm
 {
 

@@ -25,6 +25,7 @@
 #include "gdcmSystem.h"
 
 #include "gdcmCryptoFactory.h"
+#include <memory> // std::auto_ptr
 
 int TestAnonymizer3(int , char *[])
 {
@@ -255,11 +256,11 @@ int TestAnonymizer3(int , char *[])
 
 if( sopinstanceuid_str1 == sopinstanceuid_str2 )
 {
-return 1;
+  return 1;
 }
 if( sopinstanceuid_str1 != refsopinstanceuid_str2 )
 {
-return 1;
+  return 1;
 }
 }
 
