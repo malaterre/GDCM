@@ -195,7 +195,7 @@ The flag --patientroot is just simply a wrapper around the syntax --key 8,52=PAT
 For instance one would write using DCMTK syntax:
 
 \verbatim
-findscu --patient dicom.example.com 11112 --key 8,52=PATIENT --key 10,10="F*"
+$ findscu --patient dicom.example.com 11112 --key 8,52=PATIENT --key 10,10="F*"
 \endverbatim
 
 This would become using GDCM syntax:
@@ -227,7 +227,7 @@ port (which may be different from the port to connect to the server).
 \section gdcmscu_portwarnings Port Warning
 
 Watch out that port ranging [1-1024] are reserved for admin and not easily accessible unless
-granted special priviliges. Therefore the default 104 DICOM port might be accessible to all
+granted special priviliges. Therefore the default 104 DICOM port might not be accessible to all
 your users.
 
 \section gdcmscu_ctorewarnings C-STORE Warnings
