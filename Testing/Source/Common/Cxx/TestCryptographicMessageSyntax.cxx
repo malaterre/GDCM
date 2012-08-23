@@ -13,6 +13,7 @@
 =========================================================================*/
 #include "gdcmCryptoFactory.h"
 #include <string.h>
+#include <stdio.h>
 #include <memory>
 
 #include "gdcmFilename.h"
