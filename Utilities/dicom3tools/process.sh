@@ -20,11 +20,11 @@
 # $ process.sh agfa.tpl
 
 # remove empty lines
-sed '/^$/d' $1 > /tmp/clean.tpl
+sed '/^\s*$/d' $1 > /tmp/clean.tpl
 # convert to xml
 sed 's/^.*$/<d3t tag="&\/>/' /tmp/clean.tpl > /tmp/dummy.xml
 # make sure to close quotes
-sed -i -e 's@) V@)" V@' /tmp/dummy.xml
+sed -i -e 's@)\s\s*V@)" V@' /tmp/dummy.xml
 #
 sed -i -e 's/&/\&amp;/g' /tmp/dummy.xml
 # add start of xml
