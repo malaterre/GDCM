@@ -364,6 +364,7 @@ err:
 ALG_ID CAPICryptographicMessageSyntax::getAlgIdByObjId(const char * pszObjId)
 {
   // HACK: fix compilation on mingw64:
+  // See: http://sourceforge.net/tracker/?func=detail&aid=3561209&group_id=202880&atid=983354
 #ifndef szOID_NIST_AES128_CBC
 #define szOID_NIST_AES128_CBC        "2.16.840.1.101.3.4.1.2"
 #define szOID_NIST_AES192_CBC        "2.16.840.1.101.3.4.1.22"
