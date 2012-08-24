@@ -653,7 +653,12 @@ static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
   if(buffer == NULL)
     return ;
 
-  fread(buffer, sizeof(char), numBytes, in);
+  size_t ret = fread(buffer, sizeof(char), numBytes, in);
+  if( numBytes != ret )
+    {
+    // FIXME how to return error code ?
+    return;
+    }
   fclose(in);
   reader = xmlReaderForMemory  (buffer, numBytes, NULL, NULL, 0);
   //reader = xmlReaderForFile(filename, "UTF-8", 0); Not Working!!
