@@ -420,12 +420,48 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
           } \
         de = el.GetAsDataElement(); \
         }break
+
+
+#define LoadValueAT(type)\
+  case type: \
+    		{ \
+				int count =0; \
+      	name = (const char*)xmlTextReaderConstName(reader);\
+      	if(strcmp(name,"DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15)\
+      		break;\
+      	Tag tags[10];\
+      	unsigned int group = 0, element = 0;\
+      	Element<type,VM::VM1_n> el;\
+    		while(strcmp(name,"Value") == 0)\
+    			{\
+    			READ_NEXT\
+    			char *value = (char*)xmlTextReaderConstValue(reader); \
+    			if( sscanf(value, "(%04x,%04x)", &group , &element) != 2 )\
+      			{\
+      				gdcmDebugMacro( "Problem reading AT: ");\
+      			} \
+      		tags[count].SetGroup( (uint16_t)group );\
+    			tags[count].SetElement( (uint16_t)element );count++;\
+    			READ_NEXT/*Value ending tag*/ \
+    			name = (const char*)xmlTextReaderConstName(reader); \
+    			READ_NEXT \
+    			name = (const char*)xmlTextReaderConstName(reader); \
+    			}\
+    		el.SetLength( (count) * vr.GetSizeof() ); \
+    		int total = 0; \
+    		while(total < count) \
+    			{ \
+    			el.SetValue(tags[total],total); \
+    			total++; \
+    			} \
+    		de = el.GetAsDataElement();\
+    		}break
         
           
-   while(  (xmlTextReaderDepth(reader)!=0))// || !(SetSQ && (xmlTextReaderNodeType(reader) == 15) && (strcmp(name,"Item")==0)  )  )
+   while( xmlTextReaderDepth(reader)!=0 )
     {
     if(SetSQ && (xmlTextReaderNodeType(reader) == 15) && CHECK_NAME("Item") == 0 )
-       return;
+      return;
      if(CHECK_NAME("DicomAttribute") == 0)
       {
       DataElement de;
@@ -448,7 +484,7 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
       switch(vr)
         {
         
-        //LoadValueInteger(VR::AT); FIX THIS!!
+        LoadValueInteger(VR::AT);
         LoadValueASCII(VR::AE);
         LoadValueASCII(VR::AS);
         LoadValueASCII(VR::CS);
@@ -465,7 +501,7 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
         LoadValueASCII(VR::UT);
         LoadValueInteger(VR::SS);
         LoadValueInteger(VR::UL);
-         LoadValueInteger(VR::SL);
+        LoadValueInteger(VR::SL);
         LoadValueInteger(VR::US);
         LoadValueFloat(VR::FL);
         LoadValueDouble(VR::FD);
