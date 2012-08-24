@@ -317,13 +317,17 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
         while(strcmp(name,"Value") == 0) \
           { \
           READ_NEXT \
+          if(CHECK_NAME("Value")  == 0)\
+          {READ_NEXT;}\
+          else{\
           char *value = (char*)xmlTextReaderConstValue(reader); \
           strcpy((char *)values[count++],value); \
           READ_NEXT /*Value ending tag*/ \
           name = (const char*)xmlTextReaderConstName(reader); \
           READ_NEXT \
-          name = (const char*)xmlTextReaderConstName(reader); \
+          name = (const char*)xmlTextReaderConstName(reader); }\
           } \
+        assert(CHECK_NAME("DicomAttribute") == 0);\
         el.SetLength( (count) * vr.GetSizeof() ); \
         int total = 0; \
         while(total < count) \
@@ -484,7 +488,7 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
       switch(vr)
         {
         
-        LoadValueInteger(VR::AT);
+        LoadValueAT(VR::AT);
         LoadValueASCII(VR::AE);
         LoadValueASCII(VR::AS);
         LoadValueASCII(VR::CS);
