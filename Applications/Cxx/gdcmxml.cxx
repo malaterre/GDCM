@@ -532,8 +532,8 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
         case VR::UN:
           {
           int depth_UN=xmlTextReaderDepth(reader);
-          while(!(CHECK_NAME("DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15 && depth_UN == xmlTextReaderDepth(reader)))
-            READ_NEXT
+          while(!(CHECK_NAME("DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15 && (depth_UN-1)  == xmlTextReaderDepth(reader)))
+            {READ_NEXT}
           //assert(0 && "UN not Handled yet");
           }break;          
         default:
@@ -585,34 +585,7 @@ void HandleSequence(SequenceOfItems *sqi, xmlTextReaderPtr reader,int depth)
       }
     else
       assert("Expected Item");  
-    }    
-    
-  
-  //const char *name = (const char*)xmlTextReaderConstName(reader);// Should be item
-  
-  //READ_NEXT
-  
-  //name = (const char*)xmlTextReaderConstName(reader);
-  /*if((strcmp(name,"Item") == 0) && (xmlTextReaderDepth(reader) == depth) && (xmlTextReaderNodeType(reader) == 15) )
-    {
-    ret = xmlTextReaderRead(reader);ret = xmlTextReaderRead(reader);ret = xmlTextReaderRead(reader);
-    name = (const char*)xmlTextReaderConstName(reader);
-     return;// Empty SQ
-     }*/  
-  /*
-  do  
-    {
-    Item item;
-    DataSet NestedDS;
-    PopulateDataSet(reader,NestedDS,depth,true);
-    item.SetNestedDataSet(NestedDS);
-    sqi.AddItem(item);
-    ret = xmlTextReaderRead(reader);
-    ret = xmlTextReaderRead(reader);
-    name = (const char*)xmlTextReaderConstName(reader);
-    }while(!(strcmp(name,"Item") == 0) && (xmlTextReaderDepth(reader) == depth));
-  ret = xmlTextReaderRead(reader);
-  ret = xmlTextReaderRead(reader);  */
+    }
 }
 
 void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
@@ -655,8 +628,7 @@ void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
     {
     Writer W;    
     W.SetFileName(file2.GetFileName());
-    W.SetFile(*F);
-    //W.CheckFileMetaInformationOff();     
+    W.SetFile(*F);      
 
     //finally write to file
     W.Write(); 
