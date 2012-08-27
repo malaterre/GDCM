@@ -277,7 +277,7 @@ static const MSModalityType MSModalityTypes[] = {
   {"  ", 2, 0},//StudyComponentManagementSOPClass
   {"  ", 2, 0},//DetachedVisitManagementSOPClass
   {"  ", 2, 0},//DetachedPatientManagementSOPClass
-  {"  ", 2, 0},//VideoEndoscopicImageStorage
+  {"ES", 3, 0},//VideoEndoscopicImageStorage
   {"  ", 2, 0},//GeneralElectricMagneticResonanceImageStorage
   {"  ", 2, 0},//GEPrivate3DModelStorage
   {"  ", 2, 0},//ToshibaPrivateDataStorage
