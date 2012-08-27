@@ -32,7 +32,7 @@ public:
   PresentationContext();
 
   /// Initialize Presentation Context with AbstractSyntax set to asname
-  /// and with a single TransferSyntax set to tsname (dfault to Implicit VR
+  /// and with a single TransferSyntax set to tsname (default to Implicit VR
   /// LittleEndian when not specified ).
   PresentationContext( UIDs::TSName asname,
     UIDs::TSName tsname = UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
