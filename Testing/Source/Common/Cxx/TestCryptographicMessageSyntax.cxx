@@ -60,12 +60,12 @@ const int tstr_l = strlen(tstr);
 
 bool TestCMSProvider(gdcm::CryptographicMessageSyntax& cms, const char * provName)
 {
-  bool ret = true;
-  std::string certpath = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/certificate.pem" );
-  std::string keypath = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/privatekey.pem" );
-  std::string encrypted_vector = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/encrypted_text" );
+  const std::string certpath = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/certificate.pem" );
+  const std::string keypath = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/privatekey.pem" );
+  const std::string encrypted_vector = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/encrypted_text" );
 
-  for (int i = 0; i < 4; i++)
+  bool ret = true;
+  for (unsigned int i = 0; i < 4; i++)
     {
     char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
     size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
@@ -139,9 +139,7 @@ bool TestCMSVector(gdcm::CryptographicMessageSyntax& cms, const char * provName)
 
 bool TestCMSCompatibility(gdcm::CryptographicMessageSyntax& cms1, const char * provName1, gdcm::CryptographicMessageSyntax& cms2, const char * provName2)
 {
-  char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
-  size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
-  std::string encrypted_vector = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/encrypted_text" );
+  const std::string encrypted_vector = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/encrypted_text" );
 
   for (int i = 0; i < 4; i++)
     {
@@ -179,7 +177,10 @@ bool TestCMSCompatibility(gdcm::CryptographicMessageSyntax& cms1, const char * p
       }
     }
 
-  /*for (int i = 0; i < 4; i++)
+  /*
+    char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
+    size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
+    for (int i = 0; i < 4; i++)
     {
     bool ret = true;
     char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};

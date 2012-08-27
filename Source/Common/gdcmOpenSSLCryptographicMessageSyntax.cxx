@@ -172,6 +172,10 @@ err:
 
   return ret;
 #else
+  (void)output;
+  (void)outlen;
+  (void)array;
+  (void)len;
   return false;
 #endif
 }
@@ -253,6 +257,10 @@ err:
 
   return ret;
 #else
+  (void)output;
+  (void)outlen;
+  (void)array;
+  (void)len;
   return false;
 #endif
 }

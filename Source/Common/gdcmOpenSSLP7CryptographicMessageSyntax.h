@@ -42,7 +42,7 @@ public:
   bool ParseKeyFile( const char *filename );
 
   // PBE
-  bool SetPassword(const char * pass, size_t passLen)
+  bool SetPassword(const char * /*pass*/, size_t /*passLen*/)
   {
     gdcmWarningMacro( "Openssl using PKCS7 does not support Password Based Encryption." );
     return false;
