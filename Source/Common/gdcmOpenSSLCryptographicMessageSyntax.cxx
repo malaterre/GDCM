@@ -72,7 +72,7 @@ bool OpenSSLCryptographicMessageSyntax::SetPassword(const char * pass, size_t pa
     return true;
   }
 
-bool OpenSSLCryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const
+bool OpenSSLCryptographicMessageSyntax::Encrypt(char * /*output*/, size_t &/*outlen*/, const char * /*array*/, size_t /*len*/) const
 {
 #ifdef GDCM_HAVE_CMS_RECIPIENT_PASSWORD
   BIO *in = NULL, *out = NULL;
@@ -180,7 +180,7 @@ err:
 #endif
 }
 
-bool OpenSSLCryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const char *array, size_t len) const
+bool OpenSSLCryptographicMessageSyntax::Decrypt(char * /*output*/, size_t & /*outlen*/, const char * /*array*/, size_t /*len*/) const
 {
 #ifdef GDCM_HAVE_CMS_RECIPIENT_PASSWORD
   BIO *in = NULL, *out = NULL;
