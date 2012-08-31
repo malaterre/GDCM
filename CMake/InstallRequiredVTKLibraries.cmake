@@ -1,5 +1,4 @@
-# - Install VTK
-# This module finds an installed .NET Software Development Kit.  It sets the following variables:
+# - Install VTK required libs for GDCM
 #
 #  Copyright (c) 2006-2011 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
@@ -8,31 +7,30 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-#message(${VTK_DIR}/bin)
-
 set(vtklist
+  vtkCommon
+  vtkFiltering
   vtkGraphics
   vtkHybrid
-  vtkImaging
   vtkIO
-  vtkjpeg
-  vtkmetaio
+  vtkImaging
+  vtkRendering
+  vtkWidgets
+# utilities
+  vtkDICOMParser
   vtkNetCDF
   vtkNetCDF_cxx
+  vtkexoIIc
+  vtkexpat
+  vtkfreetype
+  vtkftgl
+  vtkjpeg
+  vtkmetaio
   vtkpng
-  vtkRendering
   vtksys
   vtktiff
   vtkverdict
-  vtkWidgets
   vtkzlib
-  vtkCommon
-  vtkDICOMParser
-  vtkexoIIc
-  vtkexpat
-  vtkFiltering
-  vtkfreetype
-  vtkftgl
 )
 
 foreach(el ${vtklist})
@@ -49,6 +47,8 @@ IF(CMAKE_INSTALL_VTK_RUNTIME_LIBS)
       ENDIF(WIN32)
     ENDIF(NOT CMAKE_INSTALL_VTK_RUNTIME_DESTINATION)
     INSTALL(PROGRAMS ${CMAKE_INSTALL_VTK_RUNTIME_LIBS}
-      DESTINATION ${CMAKE_INSTALL_VTK_RUNTIME_DESTINATION})
+      DESTINATION ${CMAKE_INSTALL_VTK_RUNTIME_DESTINATION}
+      COMPONENT VTKLibraries
+    )
   ENDIF(NOT CMAKE_INSTALL_VTK_RUNTIME_LIBS_SKIP)
 ENDIF(CMAKE_INSTALL_VTK_RUNTIME_LIBS)
