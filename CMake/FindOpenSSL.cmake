@@ -30,6 +30,7 @@ SET(_OPENSSL_ROOT_HINTS
   )
 SET(_OPENSSL_ROOT_PATHS
   "C:/OpenSSL/"
+  "C:/OpenSSL-Win32/"
   )
 FIND_PATH(OPENSSL_ROOT_DIR
   NAMES include/openssl/ssl.h

@@ -719,6 +719,7 @@ int main(int argc, char *argv[])
   // All set, then load the XML files:
   if( !g.LoadResourcesFiles() )
     {
+    std::cerr << "Could not load XML file from specified path" << std::endl;
     return 1;
     }
 

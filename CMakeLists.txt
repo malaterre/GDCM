@@ -576,6 +576,12 @@ IF(WIN32)
   MARK_AS_ADVANCED(GDCM_DEBUG_POSTFIX)
 ENDIF(WIN32)
 
+if(GDCM_USE_VTK)
+if(WIN32)
+include(CMake/InstallRequiredVTKLibraries.cmake)
+endif()
+endif()
+
 #-----------------------------------------------------------------------------
 # CPack stuff
 IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
