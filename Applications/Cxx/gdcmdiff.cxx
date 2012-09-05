@@ -188,8 +188,9 @@ void display_element(std::ostream& os, const gdcm::DataElement& de,
   const gdcm::DictEntry& dictentry, const char * note, int depthSQ)
  {
   const gdcm::VR & vr = dictentry.GetVR();
+  const gdcm::VR & filevr = de.GetVR();
   os << std::string(depthSQ, ' '); //indent for SQ
-  os << de.GetTag() << ' ' << vr << ' ' << note;
+  os << de.GetTag() << ' ' << filevr << ' ' << note;
   if (vr & gdcm::VR::VRBINARY)
     {
     os << " binary";
