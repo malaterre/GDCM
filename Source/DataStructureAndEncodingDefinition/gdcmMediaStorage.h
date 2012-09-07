@@ -96,6 +96,7 @@ public:
     ComprehensiveSR,
     DetachedStudyManagementSOPClass,
     EncapsulatedPDFStorage,
+    EncapsulatedCDAStorage,
     StudyComponentManagementSOPClass,
     DetachedVisitManagementSOPClass,
     DetachedPatientManagementSOPClass,

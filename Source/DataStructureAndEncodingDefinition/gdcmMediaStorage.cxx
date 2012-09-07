@@ -92,6 +92,8 @@ static const char *MSStrings[] = {
   "1.2.840.10008.3.1.2.3.1",
   // EncapsulatedPDFStorage
   "1.2.840.10008.5.1.4.1.1.104.1",
+  // EncapsulatedCDAStorage
+  "1.2.840.10008.5.1.4.1.1.104.2",
   // StudyComponentManagementSOPClass
   "1.2.840.10008.3.1.2.3.2",
   // DetachedVisitManagementSOPClass
@@ -191,6 +193,7 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == DetachedVisitManagementSOPClass
     || ms == DetachedStudyManagementSOPClass
     || ms == EncapsulatedPDFStorage
+    || ms == EncapsulatedCDAStorage
     || ms == KeyObjectSelectionDocument
     || ms == HangingProtocolStorage
     || ms == MRSpectroscopyStorage
@@ -270,6 +273,7 @@ static const MSModalityType MSModalityTypes[] = {
   {"  ", 2, 0},//ComprehensiveSR
   {"  ", 2, 0},//DetachedStudyManagementSOPClass
   {"  ", 2, 0},//EncapsulatedPDFStorage
+  {"  ", 2, 0},//EncapsulatedCDAStorage
   {"  ", 2, 0},//StudyComponentManagementSOPClass
   {"  ", 2, 0},//DetachedVisitManagementSOPClass
   {"  ", 2, 0},//DetachedPatientManagementSOPClass

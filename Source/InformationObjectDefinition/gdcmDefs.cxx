@@ -120,6 +120,9 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
     case MediaStorage::EncapsulatedPDFStorage:
       iodname = "Encapsulated PDF IOD Modules";
       break;
+    case MediaStorage::EncapsulatedCDAStorage:
+      iodname = "Encapsulated CDA IOD Modules";
+      break;
     case MediaStorage::VLPhotographicImageStorage:
       iodname = "VL Photographic Image IOD Modules";
       break;
