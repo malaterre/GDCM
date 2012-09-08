@@ -605,7 +605,7 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   SET(CPACK_SOURCE_PACKAGE_FILE_NAME "gdcm-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
   IF(WIN32 AND NOT UNIX)
-    # There is a bug in NSI that does not handle full UNIX paths properly. Make
+    # There is a bug in NSIS that does not handle full UNIX paths properly. Make
     # sure there is at least one set of four (4) backlashes.
     SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\gdcmviewer.exe")
     SET(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY}")
