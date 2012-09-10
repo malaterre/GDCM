@@ -14,11 +14,11 @@ include_directories(
 # headers or def files instead
 if(NOT BUILD_SHARED_LIBS)
   add_definitions(-DOPJ_STATIC)
-endif(NOT BUILD_SHARED_LIBS)
+endif()
 
 
 # Loop over all executables:
 foreach(exe test_encoder test_decoder)
   add_executable(${exe} ${exe}.c)
   target_link_libraries(${exe} ${OPJ_PREFIX}openjpeg)
-endforeach(exe)
+endforeach()

@@ -10,7 +10,7 @@ if(WIN32 AND NOT CYGWIN)
   include_directories(
     "${GDCM_SOURCE_DIR}/Utilities/getopt"
   )
-endif(WIN32 AND NOT CYGWIN)
+endif()
 
 # Add the include paths
 include_directories(
@@ -32,8 +32,8 @@ include_directories(
 if(WIN32)
   if (BUILD_SHARED_LIBS)
     add_definitions(-DGETOPT_DLL)
-  endif (BUILD_SHARED_LIBS)
-endif(WIN32)
+  endif ()
+endif()
 
 set(GDCM_EXECUTABLE_NAME
   gdcmdump
@@ -65,13 +65,13 @@ if(GDCM_USE_SYSTEM_POPPLER)
   set(libpoppler_flags)
   if(LIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM)
     list(APPEND libpoppler_flags -DLIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM)
-  endif(LIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM)
+  endif()
   CHECK_CXX_SOURCE_COMPILES(
     "\#include <poppler/PDFDoc.h>\nint main() { PDFDoc d((GooString*)NULL,(GooString*)NULL,(GooString*)NULL); d.getPDFVersion(); return 0;}"
     LIBPOPPLER_PDFDOC_HAS_PDFVERSION)
   if(LIBPOPPLER_PDFDOC_HAS_PDFVERSION)
     list(APPEND libpoppler_flags -DLIBPOPPLER_PDFDOC_HAS_PDFVERSION)
-  endif(LIBPOPPLER_PDFDOC_HAS_PDFVERSION)
+  endif()
   if(libpoppler_flags)
     set_source_files_properties(
       ${CMAKE_CURRENT_SOURCE_DIR}/gdcminfo.cxx
@@ -79,39 +79,39 @@ if(GDCM_USE_SYSTEM_POPPLER)
     set_source_files_properties(
       ${CMAKE_CURRENT_SOURCE_DIR}/gdcmpdf.cxx
       PROPERTIES COMPILE_FLAGS ${libpoppler_flags})
-  endif(libpoppler_flags)
+  endif()
   include_directories(${POPPLER_INCLUDE_DIRS})
   set(GDCM_EXECUTABLE_NAME
     ${GDCM_EXECUTABLE_NAME}
     gdcmpdf
   )
-endif(GDCM_USE_SYSTEM_POPPLER)
+endif()
 
 if(GDCM_USE_SYSTEM_LIBXML2)
   include_directories(${LIBXML2_INCLUDE_DIR})
-endif(GDCM_USE_SYSTEM_LIBXML2)
+endif()
 
 if(GDCM_USE_SYSTEM_OPENJPEG)
   include_directories(${OPENJPEG_INCLUDE_DIRS} )
-else(GDCM_USE_SYSTEM_OPENJPEG)
+else()
   include_directories(
   "${GDCM_BINARY_DIR}/Utilities/gdcmopenjpeg"
     )
-endif(GDCM_USE_SYSTEM_OPENJPEG)
+endif()
 
 if(NOT BUILD_SHARED_LIBS)
   set_source_files_properties(gdcmstream.cxx
                               PROPERTIES
                               COMPILE_FLAGS -DOPJ_STATIC
                               )
-endif(NOT BUILD_SHARED_LIBS)
+endif()
 
 foreach(exename ${GDCM_EXECUTABLE_NAME})
   if(${exename} STREQUAL "gdcminfo")
     add_executable(${exename} ${exename}.cxx puff.c)
-  else(${exename} STREQUAL "gdcminfo")
+  else()
     add_executable(${exename} ${exename}.cxx)
-  endif(${exename} STREQUAL "gdcminfo")
+  endif()
   target_link_libraries(${exename} gdcmMSFF)
   if(${exename} STREQUAL "gdcmpdf")
     target_link_libraries(${exename} ${POPPLER_LIBRARIES})
@@ -124,24 +124,24 @@ foreach(exename ${GDCM_EXECUTABLE_NAME})
   elseif(${exename} STREQUAL "gdcminfo")
     if(GDCM_USE_SYSTEM_PODOFO)
       target_link_libraries(${exename} ${PODOFO_LIBRARIES})
-    endif(GDCM_USE_SYSTEM_PODOFO)
+    endif()
     if(GDCM_USE_SYSTEM_POPPLER)
       target_link_libraries(${exename} ${POPPLER_LIBRARIES})
-    endif(GDCM_USE_SYSTEM_POPPLER)
-  endif(${exename} STREQUAL "gdcmpdf")
+    endif()
+  endif()
   if(GDCM_EXECUTABLE_PROPERTIES)
     set_target_properties(${exename} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
-  endif(GDCM_EXECUTABLE_PROPERTIES)
+  endif()
   if(WIN32 AND NOT CYGWIN)
     target_link_libraries(${exename} gdcmgetopt)
-  endif(WIN32 AND NOT CYGWIN)
+  endif()
   if(NOT GDCM_INSTALL_NO_RUNTIME)
     install(TARGETS ${exename}
       EXPORT ${GDCM_TARGETS_NAME}
       RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
     )
-  endif(NOT GDCM_INSTALL_NO_RUNTIME)
-endforeach(exename)
+  endif()
+endforeach()
 
 #if(BUILD_TESTING)
 #  if(GDCM_DATA_ROOT)
@@ -152,8 +152,8 @@ endforeach(exename)
 #      ${GDCM_DATA_ROOT}
 #      ${GDCM_TEMP_DIRECTORY}/gdcmanon-gdcmdata
 #      )
-#  endif(GDCM_DATA_ROOT)
-#endif(BUILD_TESTING)
+#  endif()
+#endif()
 
 if(BUILD_TESTING)
   # http://www.na-mic.org/Wiki/index.php/CTSC:ARRA:Mockup
@@ -176,7 +176,7 @@ if(BUILD_TESTING)
     # Tag 0x0,0x902 reported as Acceptance of objects without Patient ID is disabled (error 43264)
     #add_test(gdcmscu-store-CONQUEST ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --store --call CONQUESTSRV1 joe.bwh.harvard.edu 11112 ${GDCM_DATA_ROOT}/SIEMENS_MAGNETOM-12-MONO2-FileSeq1.dcm)
     add_test(gdcmscu-store-dicomserver ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --store www.dicomserver.co.uk 11112 ${GDCM_DATA_ROOT}/SIEMENS_MAGNETOM-12-MONO2-FileSeq1.dcm)
-  endif(GDCM_DATA_ROOT)
+  endif()
   #add_test(gdcmscu-find-CONQUEST ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --find --patient --call CONQUESTSRV1 joe.bwh.harvard.edu 11112 --patientroot -k 10,10=X*)
   add_test(gdcmscu-find-dicomserver ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --find --patient www.dicomserver.co.uk 11112 --patientroot -k 10,20=*)
 
@@ -193,8 +193,8 @@ if(BUILD_TESTING)
     add_test(gdcmscu-find-${cstorefile}  ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --find --patient --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} --patientroot -k 10,10=A* -k 10,20)
     add_test(gdcmscu-move-${cstorefile}  ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --move  --patient --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} -o ${CMAKE_CURRENT_BINARY_DIR} --patientroot -k 10,10=Anonymized --port-scp ${GDCM_DICOM_CLIENT_PORT})
     add_test(gdcmscu-move-${cstorefile}  ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --move  --patient --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} -o ${CMAKE_CURRENT_BINARY_DIR} --patientroot -k 10,10=X* --port-scp ${GDCM_DICOM_CLIENT_PORT})
-    endforeach(cstorefile)
-  endif(GDCM_DATA_ROOT)
-  endif(GDCM_DICOM_SERVER_AETITLE)
+    endforeach()
+  endif()
+  endif()
 
-endif(BUILD_TESTING)
+endif()

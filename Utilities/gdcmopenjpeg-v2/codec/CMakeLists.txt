@@ -14,8 +14,8 @@ if(UNIX) #I am pretty sure only *nix sys have this anyway
   # Seems like we need the contrary:
   if(CMAKE_HAVE_GETOPT_H)
     set(DONT_HAVE_GETOPT 0)
-  endif(CMAKE_HAVE_GETOPT_H)
-endif(UNIX)
+  endif()
+endif()
 
 # If not getopt was found then add it to the lib:
 if(DONT_HAVE_GETOPT)
@@ -24,7 +24,7 @@ if(DONT_HAVE_GETOPT)
     ${common_SRCS}
     compat/getopt.c
   )
-endif(DONT_HAVE_GETOPT)
+endif()
 
 # Headers file are located here:
 include_directories(
@@ -35,7 +35,7 @@ include_directories(
 # headers or def files instead
 if(NOT BUILD_SHARED_LIBS)
   add_definitions(-DOPJ_STATIC)
-endif(NOT BUILD_SHARED_LIBS)
+endif()
 
 find_package(TIFF REQUIRED)
 find_package(PNG REQUIRED)
@@ -52,13 +52,13 @@ foreach(exe j2k_to_image image_to_j2k j2k_dump)
   # On unix you need to link to the math library:
   if(UNIX)
     target_link_libraries(${exe} m)
-  endif(UNIX)
+  endif()
   # Install exe
   install(TARGETS ${exe}
     EXPORT ${GDCM_TARGETS_NAME}
     DESTINATION ${OPENJPEG_INSTALL_BIN_DIR} COMPONENT Applications
   )
-endforeach(exe)
+endforeach()
 
 if(BUILD_TESTING)
 # Do testing here, once we know the examples are being built:
@@ -88,7 +88,7 @@ foreach(filename ${OPENJPEG_DATA_IMAGES_GLOB})
     add_test(i2j-${filename_temp}-${codec_type} ${EXECUTABLE_OUTPUT_PATH}/image_to_j2k -i ${filename_temp}.${codec_type} -o ${filename_temp}.${codec_type}${filename_ext})
     #if(UNIX)
     #  add_test(cmp-${filename_temp}-${codec_type} cmp ${filename} ${filename_temp}.${codec_type}${filename_ext})
-    #endif(UNIX)
-  endforeach(codec_type)
-endforeach(filename)
-endif(BUILD_TESTING)
+    #endif()
+  endforeach()
+endforeach()
+endif()

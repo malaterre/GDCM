@@ -32,4 +32,4 @@ set(GDCM_DICT_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmDICTTests")
 # Loop over files and create executables
 foreach(name ${DICT_TEST_SRCS})
   add_test(${name} ${GDCM_DICT_TESTS} ${name})
-endforeach(name)
+endforeach()

@@ -58,7 +58,7 @@ include_directories(
 #              ${PREP_DICT}
 #    COMMENT   "Generating gdcm${dict}.cxx based on ${dict}.dic"
 #    )
-#endforeach(dict)
+#endforeach()
 #
 #add_custom_command(
 #  OUTPUT    ${GDCM_BINARY_DIR}/Source/DataDictionary/gdcmDefaultGroupNames.cxx

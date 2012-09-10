@@ -57,12 +57,12 @@ if(MSVC)
     ${CMAKE_CURRENT_BINARY_DIR}/Python.h @ONLY
   )
   include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
-else(MSVC)
+else()
 # just plain including pyconfig.h is working...until one crazy python dev decide otherwise...
   include_directories(
     ${PYTHON_INCLUDE_PATH}
   )
-endif(MSVC)
+endif()
 set_source_files_properties(gdcmswig.i PROPERTIES CPLUSPLUS ON)
 
 set(GDCM_PYTHON_IMPLEMENTATION_NAME gdcmswig)
@@ -102,7 +102,7 @@ if(WIN32 AND NOT CYGWIN)
   set_target_properties(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES SUFFIX ".pyd")
   # shared libs on windows needs to be fully resolved
   SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} ${PYTHON_LIBRARIES})
-endif(WIN32 AND NOT CYGWIN)
+endif()
 set_target_properties(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 
 # swig generates a _gdcm.so and a gdcm.py, we need to copy gdcm.py to the proper place:
@@ -128,7 +128,7 @@ if(NOT GDCM_INSTALL_NO_LIBRARIES)
     ${CMAKE_CURRENT_SOURCE_DIR}/gdcm.py
     DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT PythonModule
   )
-endif(NOT GDCM_INSTALL_NO_LIBRARIES)
+endif()
 
 # Test that will try to load any class in the target language: python
 # it make sure swig was not broken accidentally
@@ -136,8 +136,8 @@ if(BUILD_TESTING)
   ADD_PYTHON_TEST(TestWrapPython TestWrap.py ${GDCM_SOURCE_DIR}/Source)
   if(GDCM_DOCUMENTATION)
     ADD_PYTHON_TEST(TestDoxy2SWIGPython doxy2swig.py ${GDCM_BINARY_DIR}/Utilities/doxygen/xml/index.xml ${GDCM_BINARY_DIR}/generated_docstrings.i)
-  endif(GDCM_DOCUMENTATION)
-endif(BUILD_TESTING)
+  endif()
+endif()
 
 # TODO
 # python -c "from distutils import sysconfig; print sysconfig.get_python_lib()"

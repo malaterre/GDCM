@@ -14,7 +14,7 @@ mark_as_advanced(Md5sum_EXECUTABLE)
 
 if (Md5sum_EXECUTABLE)
    set(Md5sum_FOUND TRUE)
-endif (Md5sum_EXECUTABLE)
+endif ()
 
 # Compute the md5sums file by doing a recursion of directory: `DIRECTORY`
 macro(COMPUTE_MD5SUMS DIRECTORY OUTPUT_FILE)
@@ -52,7 +52,7 @@ add_custom_command(
   COMMENT   "Generating md5sums"
   )
 
-endmacro(COMPUTE_MD5SUMS)
+endmacro()
 
 # Report the results.
 if(NOT Md5sum_FOUND)
@@ -60,9 +60,9 @@ if(NOT Md5sum_FOUND)
     "Md5sum was not found. Make sure the entries Md5sum_* are set.")
   if(NOT Md5sum_FIND_QUIETLY)
     message(STATUS "${Md5sum_DIR_MESSAGE}")
-  else(NOT Md5sum_FIND_QUIETLY)
+  else()
     if(Md5sum_FIND_REQUIRED)
       message(FATAL_ERROR "${Md5sum_DIR_MESSAGE}")
-    endif(Md5sum_FIND_REQUIRED)
-  endif(NOT Md5sum_FIND_QUIETLY)
-endif(NOT Md5sum_FOUND)
+    endif()
+  endif()
+endif()

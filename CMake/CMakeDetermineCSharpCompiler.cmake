@@ -18,35 +18,35 @@ if(NOT CMAKE_CSharp_COMPILER)
     get_filename_component(CMAKE_CSharp_COMPILER_INIT $ENV{CSHARP} PROGRAM PROGRAM_ARGS CMAKE_CSharp_FLAGS_ENV_INIT)
     if(CMAKE_CSharp_FLAGS_ENV_INIT)
       set(CMAKE_CSharp_COMPILER_ARG1 "${CMAKE_CSharp_FLAGS_ENV_INIT}" CACHE STRING "First argument to CSharp compiler")
-    endif(CMAKE_CSharp_FLAGS_ENV_INIT)
+    endif()
     if(NOT EXISTS ${CMAKE_CSharp_COMPILER_INIT})
       message(FATAL_ERROR "Could not find compiler set in environment variable CSHARP:\n$ENV{CSHARP}.")
-    endif(NOT EXISTS ${CMAKE_CSharp_COMPILER_INIT})
-  endif($ENV{CSHARP} MATCHES ".+")
+    endif()
+  endif()
 
   # next prefer the generator-specified compiler
   if(CMAKE_GENERATOR_CSHARP)
     if(NOT CMAKE_CSharp_COMPILER_INIT)
       set(CMAKE_CSharp_COMPILER_INIT ${CMAKE_GENERATOR_CSHARP})
-    endif(NOT CMAKE_CSharp_COMPILER_INIT)
-  endif(CMAKE_GENERATOR_CSHARP)
+    endif()
+  endif()
 
   # finally list compilers to try
   if(CMAKE_CSharp_COMPILER_INIT)
     set(CMAKE_CSharp_COMPILER_LIST ${CMAKE_CSharp_COMPILER_INIT})
-  else(CMAKE_CSharp_COMPILER_INIT)
+  else()
     # Known compilers:
     # mcs/gmcs/smcs # mono
     # csc: DotNet
     set(CMAKE_CSharp_COMPILER_LIST csc mcs gmcs smcs)
-  endif(CMAKE_CSharp_COMPILER_INIT)
+  endif()
 
   # Find the compiler.
   find_program(CMAKE_CSharp_COMPILER NAMES ${CMAKE_CSharp_COMPILER_LIST} DOC "CSharp compiler")
   if(CMAKE_CSharp_COMPILER_INIT AND NOT CMAKE_CSharp_COMPILER)
     set(CMAKE_CSharp_COMPILER "${CMAKE_CSharp_COMPILER_INIT}" CACHE FILEPATH "CSharp compiler" FORCE)
-  endif(CMAKE_CSharp_COMPILER_INIT AND NOT CMAKE_CSharp_COMPILER)
-endif(NOT CMAKE_CSharp_COMPILER)
+  endif()
+endif()
 mark_as_advanced(CMAKE_CSharp_COMPILER)
 
 get_filename_component(COMPILER_LOCATION "${CMAKE_CSharp_COMPILER}"

@@ -104,7 +104,7 @@ if(NOT BUILD_SHARED_LIBS)
                               PROPERTIES
                               COMPILE_FLAGS -DOPJ_STATIC
                               )
-endif(NOT BUILD_SHARED_LIBS)
+endif()
 
 
 # Add the include paths
@@ -124,42 +124,42 @@ include_directories(
 # CharLS
 if(GDCM_USE_JPEGLS)
   #include_directories("${GDCM_BINARY_DIR}/Utilities/gdcmcharls")
-endif(GDCM_USE_JPEGLS)
+endif()
 
 if(GDCM_USE_SYSTEM_CHARLS)
   include_directories(${CHARLS_INCLUDE_DIRS} )
-else(GDCM_USE_SYSTEM_CHARLS)
+else()
   include_directories(
   "${GDCM_BINARY_DIR}/Utilities/gdcmcharls"
     )
-endif(GDCM_USE_SYSTEM_CHARLS)
+endif()
 if(GDCM_USE_SYSTEM_OPENJPEG)
   include_directories(${OPENJPEG_INCLUDE_DIRS} )
-else(GDCM_USE_SYSTEM_OPENJPEG)
+else()
   include_directories(
   "${GDCM_BINARY_DIR}/Utilities/gdcmopenjpeg"
     )
-endif(GDCM_USE_SYSTEM_OPENJPEG)
+endif()
 if(GDCM_USE_SYSTEM_LJPEG)
   #message(${LJPEG_INCLUDE_DIRS} )
   include_directories(${LJPEG_INCLUDE_DIRS} )
-endif(GDCM_USE_SYSTEM_LJPEG)
+endif()
 if(NOT GDCM_USE_SYSTEM_ZLIB)
   include_directories(
     "${GDCM_BINARY_DIR}/Utilities/gdcmzlib"
   )
-endif(NOT GDCM_USE_SYSTEM_ZLIB)
+endif()
 if(GDCM_USE_SYSTEM_UUID)
   include_directories(
     ${UUID_INCLUDE_DIR}
   )
   set(GDCMUUID ${UUID_LIBRARIES})
-else(GDCM_USE_SYSTEM_UUID)
+else()
   include_directories(
     "${GDCM_BINARY_DIR}/Utilities/gdcmuuid" # uuid_mangle.h
   )
   set(GDCMUUID gdcmuuid)
-endif(GDCM_USE_SYSTEM_UUID)
+endif()
 
 add_library(gdcmMSFF ${MSFF_SRCS})
 
@@ -168,7 +168,7 @@ target_link_libraries(gdcmMSFF gdcmIOD gdcmDSED gdcmDICT ${GDCM_LJPEG_LIBRARIES}
 set_target_properties(gdcmMSFF PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "gdcmDSED;gdcmDICT;gdcmIOD")
 if(GDCM_USE_JPEGLS)
   target_link_libraries(gdcmMSFF ${GDCM_CHARLS_LIBRARIES})
-endif(GDCM_USE_JPEGLS)
+endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
   # I am getting:
@@ -177,16 +177,16 @@ if(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
 # CMakeFiles/gdcmMSFF.dir/gdcmImageWriter.obj(.text$_ZN4gdcm6WriterC2Ev[gdcm::Writer::Writer()]+0x3a):gdcmImageWriter.cxx: variable 'vtable for gdcm::Writer' can't be auto-imported. Please read the documentation for ld's --enable-auto-import for details.
 
   set_target_properties(gdcmMSFF PROPERTIES LINK_FLAGS "-Wl,--enable-runtime-pseudo-reloc")
-endif(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
+endif()
 #if(HAVE_UUIDCREATE)
 if(WIN32)
   # For UuidCreate
   # http://msdn.microsoft.com/en-us/library/aa379205(VS.85).aspx
   target_link_libraries(gdcmMSFF rpcrt4)
-#endif(HAVE_UUIDCREATE)
-else(WIN32)
+#endif()
+else()
 target_link_libraries(gdcmMSFF ${GDCMUUID})
-endif(WIN32)
+endif()
 
 # libs
 install_library(gdcmMSFF)

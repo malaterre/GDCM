@@ -93,7 +93,7 @@ if(WIN32 AND NOT CYGWIN)
       )
     mark_as_advanced(SSL_EAY LIB_EAY)
     set( OPENSSL_LIBRARIES ${SSL_EAY} ${LIB_EAY} )
-  else(MSVC)
+  else()
     # Not sure what to pick for -say- intel, let's use the toplevel ones and hope someone report issues:
     find_library(LIB_EAY NAMES libeay32
       PATHS ${OPENSSL_ROOT_DIR}/lib
@@ -103,8 +103,8 @@ if(WIN32 AND NOT CYGWIN)
       )
     mark_as_advanced(SSL_EAY LIB_EAY)
     set( OPENSSL_LIBRARIES ${SSL_EAY} ${LIB_EAY} )
-  endif(MSVC)
-else(WIN32 AND NOT CYGWIN)
+  endif()
+else()
 
   find_library(OPENSSL_SSL_LIBRARIES NAMES ssl ssleay32 ssleay32MD)
   find_library(OPENSSL_CRYPTO_LIBRARIES NAMES crypto)
@@ -112,7 +112,7 @@ else(WIN32 AND NOT CYGWIN)
 
   set(OPENSSL_LIBRARIES ${OPENSSL_SSL_LIBRARIES} ${OPENSSL_CRYPTO_LIBRARIES})
 
-endif(WIN32 AND NOT CYGWIN)
+endif()
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(OpenSSL DEFAULT_MSG

@@ -4,7 +4,7 @@ set(PACKAGE "socket++")
 
 # specific
 if(WIN32)
-else(WIN32)
+else()
   # FIXME this should be try_compile:
   set(EXTERN_C_BEGIN)
   set(SYS_SIGLIST sys_siglist)
@@ -32,7 +32,7 @@ else(WIN32)
   set(HAVE_WORKING_VFORK 1)
   set(RETSIGTYPE void)
   set(STDC_HEADERS 1)
-endif(WIN32)
+endif()
 
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
@@ -61,14 +61,14 @@ if(UNIX)
     ${libsocket___la_SOURCES}
     #sockunix.cpp sockunix.h
     )
-endif(UNIX)
+endif()
 
 add_library(${SOCKETXX_LIBRARY_NAME} ${libsocket___la_SOURCES})
 set_target_properties(${SOCKETXX_LIBRARY_NAME} PROPERTIES ${SOCKETXX_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 if(WIN32)
 #target_link_libraries(${SOCKETXX_LIBRARY_NAME} wsock32)
 target_link_libraries(${SOCKETXX_LIBRARY_NAME} ws2_32.lib)
-endif(WIN32)
+endif()
 
 #libsocketincludedir=$(includedir)/socket++
 #libsocketinclude_HEADERS = \
@@ -100,13 +100,13 @@ if(NOT SOCKETXX_INSTALL_NO_LIBRARIES)
     EXPORT ${GDCM_TARGETS_NAME}
       LIBRARY DESTINATION ${SOCKETXX_INSTALL_LIB_DIR} COMPONENT Development ${NAMELINK_ONLY}
     )
-  endif(NAMELINK_ONLY)
-endif(NOT SOCKETXX_INSTALL_NO_LIBRARIES)
+  endif()
+endif()
 
 if(NOT SOCKETXX_INSTALL_NO_DEVELOPMENT)
   file(GLOB header_files "*.h")
   install(FILES ${header_files}
     DESTINATION ${SOCKETXX_INSTALL_INCLUDE_DIR} COMPONENT Headers
   )
-endif(NOT SOCKETXX_INSTALL_NO_DEVELOPMENT)
+endif()
 

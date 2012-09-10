@@ -23,7 +23,7 @@ foreach(example ${GDCM_JAVA_TEST_SRCS})
   list(APPEND classfilesdep ${EXECUTABLE_OUTPUT_PATH}/${example}.class)
   set_source_files_properties(${EXECUTABLE_OUTPUT_PATH}/${example}.class PROPERTIES CLASSPATH "${EXECUTABLE_OUTPUT_PATH}/gdcm.jar")
   ADD_JAVA_TEST(${example}Java ${EXECUTABLE_OUTPUT_PATH}/${example})
-endforeach(example)
+endforeach()
 
 # 3. ok now add the target
 add_custom_target(GDCMJavaDSEDTests ALL

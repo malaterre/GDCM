@@ -13,7 +13,7 @@ if(DONT_HAVE_GETOPT)
     ${common_SRCS}
     ${OPENJPEG_SOURCE_DIR}/common/getopt.c
   )
-endif(DONT_HAVE_GETOPT)
+endif()
 
 # Headers file are located here:
 include_directories(
@@ -23,18 +23,18 @@ include_directories(
   )
 if(PNG_FOUND)
   include_directories(${PNG_INCLUDE_DIR})
-endif(PNG_FOUND)
+endif()
 if(TIFF_FOUND)
   include_directories(${TIFF_INCLUDE_DIR})
-endif(TIFF_FOUND)
+endif()
 
 if(WIN32)
   if(BUILD_SHARED_LIBS)
     add_definitions(-DOPJ_EXPORTS)
-  else(BUILD_SHARED_LIBS)
+  else()
     add_definitions(-DOPJ_STATIC)
-  endif(BUILD_SHARED_LIBS)
-endif(WIN32)
+  endif()
+endif()
 
 # Loop over all executables:
 foreach(exe j2k_to_image image_to_j2k j2k_dump)
@@ -42,23 +42,23 @@ foreach(exe j2k_to_image image_to_j2k j2k_dump)
   target_link_libraries(${exe} ${OPENJPEG_LIBRARY_NAME} ${LCMS_LIB})
   if(PNG_FOUND)
     target_link_libraries(${exe} ${PNG_LIBRARIES})
-  endif(PNG_FOUND)
+  endif()
   if(TIFF_FOUND)
     target_link_libraries(${exe} ${TIFF_LIBRARIES})
-  endif(TIFF_FOUND)
+  endif()
   add_test(${exe} ${EXECUTABLE_OUTPUT_PATH}/${exe})
   # calling those exe without option will make them fail always:
   set_tests_properties(${exe} PROPERTIES WILL_FAIL TRUE)
   # On unix you need to link to the math library:
   if(UNIX)
     target_link_libraries(${exe} m)
-  endif(UNIX)
+  endif()
   # Install exe
   install(TARGETS ${exe}
     EXPORT OpenJPEGTargets
     DESTINATION ${OPENJPEG_INSTALL_BIN_DIR} COMPONENT Applications
   )
-endforeach(exe)
+endforeach()
 
 # Install man pages
 install(
@@ -96,7 +96,7 @@ foreach(filename ${OPENJPEG_DATA_IMAGES_GLOB})
     add_test(i2j-${filename_temp}-${codec_type} ${EXECUTABLE_OUTPUT_PATH}/image_to_j2k -i ${filename_temp}.${codec_type} -o ${filename_temp}.${codec_type}${filename_ext})
     #if(UNIX)
     #  add_test(cmp-${filename_temp}-${codec_type} cmp ${filename} ${filename_temp}.${codec_type}${filename_ext})
-    #endif(UNIX)
-  endforeach(codec_type)
-endforeach(filename)
-endif(BUILD_TESTING)
+    #endif()
+  endforeach()
+endforeach()
+endif()

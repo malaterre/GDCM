@@ -6,7 +6,7 @@ if(NOT JPEG_NAMESPACE)
   set(JPEG_INSTALL_INCLUDE_DIR include/ljpeg-62)
   option(JPEG_BUILD_SHARED_LIBS "Build IJG/JPEG with shared libraries." OFF)
   set(BUILD_SHARED_LIBS ${JPEG_BUILD_SHARED_LIBS})
-endif(NOT JPEG_NAMESPACE)
+endif()
 # In all cases:
 string(TOLOWER ${JPEG_NAMESPACE} JPEG_LIBRARY_NAME)
 
@@ -20,7 +20,7 @@ include_regular_expression("^.*$")
 # let advanced user the option to define JPEG_API_VERSION:
 if(NOT DEFINED JPEG_API_VERSION)
   set(JPEG_API_VERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}")
-endif(NOT DEFINED JPEG_API_VERSION)
+endif()
 set(JPEG_LIBRARY_PROPERTIES ${JPEG_LIBRARY_PROPERTIES}
   VERSION "${GDCM_VERSION}"
   SOVERSION "${JPEG_API_VERSION}"
@@ -108,15 +108,15 @@ foreach(src
   )
   set(JPEG_SOURCES ${JPEG_SOURCES}
     "${CMAKE_CURRENT_SOURCE_DIR}/${src}")
-endforeach(src)
+endforeach()
 
 if (WIN32)
   if (BUILD_SHARED_LIBS)
     set(JPEGDLL 1)
-  else (BUILD_SHARED_LIBS)
+  else ()
     set(JPEGSTATIC 1)
-  endif (BUILD_SHARED_LIBS)
-endif (WIN32)
+  endif ()
+endif ()
 
 # By default support DICOMObjects bug, if this is a speed penalty for you
 # you should consider disabling it
@@ -160,7 +160,7 @@ foreach(bits 8 12 16)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/jinclude.h
                  ${CMAKE_CURRENT_BINARY_DIR}/${bits}/jinclude.h
                  COPYONLY)
-endforeach(bits)
+endforeach()
 
 # I could not get the depencencies in CMake to work properly so instead
 # have multiple directory for each target that will ensure proper recompilation
@@ -172,4 +172,4 @@ if(NOT JPEG_INSTALL_NO_DEVELOPMENT)
   install(FILES ${header_files}
     DESTINATION ${JPEG_INSTALL_INCLUDE_DIR} COMPONENT Headers
   )
-endif(NOT JPEG_INSTALL_NO_DEVELOPMENT)
+endif()

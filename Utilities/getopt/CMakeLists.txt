@@ -1,7 +1,7 @@
 if(NOT GETOPT_NAMESPACE)
   set(GETOPT_NAMESPACE "GETOPT")
   set(GETOPT_STANDALONE 1)
-endif(NOT GETOPT_NAMESPACE)
+endif()
 # In all cases:
 string(TOLOWER ${GETOPT_NAMESPACE} GETOPT_LIBRARY_NAME)
 
@@ -17,8 +17,8 @@ set(GETOPT_SRCS
 if(WIN32)
   if (BUILD_SHARED_LIBS)
     add_definitions(-DGETOPT_DLL)
-  endif (BUILD_SHARED_LIBS)
-endif(WIN32)
+  endif ()
+endif()
 
 #include_directories(BEFORE
 #  ${CMAKE_CURRENT_SOURCE_DIR}
@@ -45,7 +45,7 @@ if(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
   # For some reason mingw fails to export the optind which is clearly marked as exported (using extern symbol)
   # ... for now use this flag :
   set_target_properties(${GETOPT_LIBRARY_NAME} PROPERTIES LINK_FLAGS "-Wl,--export-all-symbols")
-endif(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
+endif()
 
 #if(BUILD_EXAMPLES)
 #if(GDCM_BUILD_TESTING)
@@ -58,9 +58,9 @@ endif(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
 #    ARCHIVE DESTINATION ${GETOPT_INSTALL_LIB_DIR} COMPONENT Development
 #  ${CPACK_NAMELINK_TYPE}
 #  )
-#endif(NOT GETOPT_INSTALL_NO_LIBRARIES)
-#endif(GDCM_BUILD_TESTING)
-#endif(BUILD_EXAMPLES)
+#endif()
+#endif()
+#endif()
 
 if(NOT GETOPT_INSTALL_NO_LIBRARIES)
   install(TARGETS ${GETOPT_LIBRARY_NAME}
@@ -72,6 +72,6 @@ if(NOT GETOPT_INSTALL_NO_LIBRARIES)
   #  install(TARGETS ${GETOPT_LIBRARY_NAME}
   #    LIBRARY DESTINATION ${GETOPT_INSTALL_LIB_DIR} COMPONENT Development ${NAMELINK_ONLY}
   #  )
-  #endif(NAMELINK_ONLY)
-endif(NOT GETOPT_INSTALL_NO_LIBRARIES)
+  #endif()
+endif()
 

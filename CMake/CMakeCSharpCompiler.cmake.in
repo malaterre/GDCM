@@ -51,6 +51,6 @@ set(CMAKE_SHARED_LIBRARY_CSharp_FLAGS "/target:library")
 #set(CMAKE_EXECUTABLE_RUNTIME_CSharp_FLAG "-foo")
 
 if(WIN32)
-else(WIN32)
+else()
   set(CMAKE_CSHARP_INTERPRETER ${MONO_EXECUTABLE})
-endif(WIN32)
+endif()

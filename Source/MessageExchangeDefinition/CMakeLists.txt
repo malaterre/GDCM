@@ -78,7 +78,7 @@ target_link_libraries(gdcmMEXD gdcmMSFF gdcmDICT gdcmDSED gdcmIOD socketxx)
 set_target_properties(gdcmMEXD PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 if(WIN32)
   target_link_libraries(gdcmMEXD ws2_32)
-endif(WIN32)
+endif()
 
 # libs
 install_library(gdcmMEXD)

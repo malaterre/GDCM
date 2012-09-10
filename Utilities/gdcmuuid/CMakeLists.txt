@@ -1,7 +1,7 @@
 if(NOT UUID_NAMESPACE)
   set(UUID_NAMESPACE "UUID")
   set(UUID_STANDALONE 1)
-endif(NOT UUID_NAMESPACE)
+endif()
 # In all cases:
 string(TOLOWER ${UUID_NAMESPACE} UUID_LIBRARY_NAME)
 
@@ -28,11 +28,11 @@ uuidP.h
 if(WIN32)
   if (BUILD_SHARED_LIBS)
     add_definitions(-DUUID_DLL)
-  endif (BUILD_SHARED_LIBS)
-endif(WIN32)
+  endif ()
+endif()
 
 if(COMMAND CHECK_INCLUDE_FILE_CONCAT)
-else(COMMAND CHECK_INCLUDE_FILE_CONCAT)
+else()
 include (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
 include (${CMAKE_ROOT}/Modules/CheckIncludeFiles.cmake)
 
@@ -40,9 +40,9 @@ macro(CHECK_INCLUDE_FILE_CONCAT FILE VARIABLE)
   CHECK_INCLUDE_FILES("${UUID_INCLUDES};${FILE}" ${VARIABLE})
   if(${VARIABLE})
     set(UUID_INCLUDES ${UUID_INCLUDES} ${FILE})
-  endif(${VARIABLE})
-endmacro(CHECK_INCLUDE_FILE_CONCAT)
-endif(COMMAND CHECK_INCLUDE_FILE_CONCAT)
+  endif()
+endmacro()
+endif()
 
 CHECK_INCLUDE_FILE_CONCAT("stdlib.h"       HAVE_STDLIB_H)
 if(UNIX) #Avoid polluting Win32 cmakecache
@@ -57,10 +57,10 @@ if(UNIX) #Avoid polluting Win32 cmakecache
   CHECK_INCLUDE_FILE_CONCAT("netinet/in.h"   HAVE_NETINET_IN_H)
   CHECK_INCLUDE_FILE_CONCAT("net/if_dl.h"    HAVE_NET_IF_DL_H)
   CHECK_INCLUDE_FILE_CONCAT("net/if_arp.h"   HAVE_NET_IF_ARP_H)
-endif(UNIX)
+endif()
 if(WIN32) #Avoid polluting UNIX cmakecache
   CHECK_INCLUDE_FILE_CONCAT("winsock.h"       HAVE_WINSOCK_H)
-endif(WIN32)
+endif()
 
 set(UUID_HAVES_ALL
   HAVE_STDLIB_H
@@ -82,13 +82,13 @@ set(UUID_HAVES)
 foreach(have ${UUID_HAVES_ALL})
   if(${${have}})
     set(UUID_HAVES "${UUID_HAVES} -D${have}")
-  endif(${${have}})
-endforeach(have)
+  endif()
+endforeach()
 # Pass all -D :
 if( UUID_HAVES )
 set_source_files_properties( ${UUID_SRCS}
   PROPERTIES COMPILE_FLAGS ${UUID_HAVES})
-endif( UUID_HAVES )
+endif()
 
 set(MANGLE_PREFIX ${UUID_LIBRARY_NAME})
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/uuid_mangle.h.in
@@ -101,17 +101,17 @@ include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
 add_library(${UUID_LIBRARY_NAME} ${UUID_SRCS})
 if(GDCM_LIBRARY_PROPERTIES)
 set_target_properties(${UUID_LIBRARY_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-endif(GDCM_LIBRARY_PROPERTIES)
+endif()
 if(WIN32 AND NOT CYGWIN)
   target_link_libraries(${UUID_LIBRARY_NAME} iphlpapi)
-endif(WIN32 AND NOT CYGWIN)
+endif()
 
 if(NOT UUID_INSTALL_BIN_DIR)
   set(UUID_INSTALL_BIN_DIR "bin")
-endif(NOT UUID_INSTALL_BIN_DIR)
+endif()
 if(NOT UUID_INSTALL_LIB_DIR)
   set(UUID_INSTALL_LIB_DIR "lib")
-endif(NOT UUID_INSTALL_LIB_DIR)
+endif()
 
 if(NOT UUID_INSTALL_NO_LIBRARIES)
   install(TARGETS ${UUID_LIBRARY_NAME}
@@ -121,4 +121,4 @@ if(NOT UUID_INSTALL_NO_LIBRARIES)
     ARCHIVE DESTINATION ${UUID_INSTALL_LIB_DIR} COMPONENT Development
   ${CPACK_NAMELINK_TYPE}
   )
-endif(NOT UUID_INSTALL_NO_LIBRARIES)
+endif()

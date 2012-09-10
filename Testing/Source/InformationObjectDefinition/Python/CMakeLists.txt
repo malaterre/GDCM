@@ -7,4 +7,4 @@ set(GDCM_PYTHON_TEST_SRCS
 # Loop over files and create executables
 foreach(name ${GDCM_PYTHON_TEST_SRCS})
   ADD_PYTHON_TEST(${name}Python ${name}.py)
-endforeach(name)
+endforeach()

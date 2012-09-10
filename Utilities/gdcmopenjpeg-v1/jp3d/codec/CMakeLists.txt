@@ -12,8 +12,8 @@ if(UNIX) #I am pretty sure only *nix sys have this anyway
   # Seems like we need the contrary:
   if(CMAKE_HAVE_GETOPT_H)
     set(DONT_HAVE_GETOPT 0)
-  endif(CMAKE_HAVE_GETOPT_H)
-endif(UNIX)
+  endif()
+endif()
 
 # If not getopt was found then add it to the lib:
 if(DONT_HAVE_GETOPT)
@@ -22,15 +22,15 @@ if(DONT_HAVE_GETOPT)
     ${common_SRCS}
     getopt.c
   )
-endif(DONT_HAVE_GETOPT)
+endif()
 
 if(WIN32)
   if(BUILD_SHARED_LIBS)
     add_definitions(-DOPJ_EXPORTS)
-  else(BUILD_SHARED_LIBS)
+  else()
     add_definitions(-DOPJ_STATIC)
-  endif(BUILD_SHARED_LIBS)
-endif(WIN32)
+  endif()
+endif()
 
 # Loop over all executables:
 foreach(exe jp3d_to_volume volume_to_jp3d)
@@ -39,9 +39,9 @@ foreach(exe jp3d_to_volume volume_to_jp3d)
   # On unix you need to link to the math library:
   if(UNIX)
     target_link_libraries(${exe} m)
-  endif(UNIX)
+  endif()
   # Install exe
   install_targets(/bin/ ${exe})
-endforeach(exe)
+endforeach()
 
 

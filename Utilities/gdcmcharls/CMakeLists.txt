@@ -1,7 +1,7 @@
 if(NOT CHARLS_NAMESPACE)
   set(CHARLS_NAMESPACE "CHARLS")
   set(CHARLS_STANDALONE 1)
-endif(NOT CHARLS_NAMESPACE)
+endif()
 # In all cases:
 string(TOLOWER ${CHARLS_NAMESPACE} CHARLS_LIBRARY_NAME)
 
@@ -23,13 +23,13 @@ mark_as_advanced(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 
 if(NOT CHARLS_INSTALL_BIN_DIR)
   set(CHARLS_INSTALL_BIN_DIR "bin")
-endif(NOT CHARLS_INSTALL_BIN_DIR)
+endif()
 if(NOT CHARLS_INSTALL_LIB_DIR)
   set(CHARLS_INSTALL_LIB_DIR "lib")
-endif(NOT CHARLS_INSTALL_LIB_DIR)
+endif()
 if(NOT CHARLS_INSTALL_INCLUDE_DIR)
   set(CHARLS_INSTALL_INCLUDE_DIR "include")
-endif(NOT CHARLS_INSTALL_INCLUDE_DIR)
+endif()
 
 #set(MANGLE_PREFIX ${JPEGLS_LIBRARY_NAME})
 #configure_file(${CMAKE_CURRENT_SOURCE_DIR}/jpegls_mangle.h.in
@@ -43,8 +43,8 @@ if(NOT CMAKE_BUILD_TYPE)
   # The following compiler option are only meant for GCC:
   if(CMAKE_COMPILER_IS_GNUCC)
     #set(CMAKE_CXX_FLAGS "-Wall -O3 -g" )
-  endif(CMAKE_COMPILER_IS_GNUCC)
-endif(NOT CMAKE_BUILD_TYPE)
+  endif()
+endif()
 
 #option(charls_BUILD_SHARED_LIBS "Build CharLS with shared libraries." OFF)
 #set(BUILD_SHARED_LIBS ${charls_BUILD_SHARED_LIBS})
@@ -69,15 +69,15 @@ if(NOT CHARLS_INSTALL_NO_LIBRARIES)
     EXPORT ${GDCM_TARGETS_NAME}
       LIBRARY DESTINATION ${CHARLS_INSTALL_LIB_DIR} COMPONENT Development ${NAMELINK_ONLY}
     )
-  endif(NAMELINK_ONLY)
-endif(NOT CHARLS_INSTALL_NO_LIBRARIES)
+  endif()
+endif()
 
 if(NOT CHARLS_INSTALL_NO_DEVELOPMENT)
   file(GLOB header_files "*.h")
   install(FILES ${header_files}
     DESTINATION ${CHARLS_INSTALL_INCLUDE_DIR} COMPONENT Headers
   )
-endif(NOT CHARLS_INSTALL_NO_DEVELOPMENT)
+endif()
 #add_executable(charlstest test/test.cpp test/time.cpp)
 #target_link_libraries (charlstest CharLS)
 

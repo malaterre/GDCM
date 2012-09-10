@@ -59,7 +59,7 @@ set(DSED_TEST_SRCS
   ${DSED_TEST_SRCS}
   TestLCNumeric
 )
-endif(GDCM_TESTING_USE_LC_NUMERIC)
+endif()
 if(GDCM_DATA_ROOT)
 set(DSED_TEST_SRCS
   ${DSED_TEST_SRCS}
@@ -68,13 +68,13 @@ set(DSED_TEST_SRCS
   TestPDBHeader
   TestSequenceOfItems2
   )
-endif(GDCM_DATA_ROOT)
+endif()
 if(GDCM_DATA_EXTRA_ROOT)
 set(DSED_TEST_SRCS
   ${DSED_TEST_SRCS}
   TestInvalidDICOMFiles
   )
-endif(GDCM_DATA_EXTRA_ROOT)
+endif()
 
 CHECK_INCLUDE_FILE("sys/mman.h"   GDCM_HAVE_SYS_MMAN_H)
 
@@ -83,7 +83,7 @@ if(GDCM_HAVE_SYS_MMAN_H)
   set(DSED_TEST_SRCS ${DSED_TEST_SRCS}
     TestReader3
   )
-endif(GDCM_HAVE_SYS_MMAN_H)
+endif()
 
 option(SHARED_PTR "shared_ptr" OFF)
 mark_as_advanced(SHARED_PTR)
@@ -92,7 +92,7 @@ if(SHARED_PTR)
     ${DSED_TEST_SRCS}
     TestCopyValue
     )
-endif(SHARED_PTR)
+endif()
 
 # Add the include paths
 include_directories(
@@ -111,7 +111,7 @@ add_executable(gdcmDSEDTests ${DSEDTests})
 target_link_libraries(gdcmDSEDTests gdcmDSED)
 if(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
   set_target_properties( gdcmDSEDTests PROPERTIES LINK_FLAGS "-Wl,--allow-multiple-definition")
-endif(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
+endif()
 
 #Don't understand why I need that ??
 set(GDCM_DSED_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmDSEDTests")
@@ -119,7 +119,7 @@ set(GDCM_DSED_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmDSEDTests")
 # Loop over files and create executables
 foreach(name ${DSED_TEST_SRCS})
   add_test(${name} ${GDCM_DSED_TESTS} ${name})
-endforeach(name)
+endforeach()
 
 # FIXME
 #add_executable(TestAttribute2 TestAttribute2.cxx)

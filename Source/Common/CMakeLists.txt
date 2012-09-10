@@ -14,8 +14,8 @@ mark_as_advanced(
 #if(WIN32)
 #  if (BUILD_SHARED_LIBS)
 #    add_definitions(-DPOLARSSL_DLL)
-#  endif (BUILD_SHARED_LIBS)
-#endif(WIN32)
+#  endif ()
+#endif()
 
 
 CHECK_INCLUDE_FILE_CONCAT("sys/time.h"     GDCM_HAVE_SYS_TIME_H)
@@ -59,7 +59,7 @@ CHECK_CXX_SOURCE_COMPILES(
   #HAVE_CMS_RECIPIENT_KEY)
     "\#include <openssl/cms.h>\nint main() { CMS_add0_recipient_password(0,0,0,0,0,0,0); return 0;}"
   GDCM_HAVE_CMS_RECIPIENT_PASSWORD)
-endif(GDCM_USE_SYSTEM_OPENSSL)
+endif()
 
 #-----------------------------------------------------------------------------
 # Provide compatibility options.
@@ -89,18 +89,18 @@ if(GDCM_BUILD_TESTING)
 include_directories(
   "${GDCM_BINARY_DIR}/Utilities/gdcmmd5"
 )
-endif(GDCM_BUILD_TESTING)
+endif()
 
 if(NOT GDCM_USE_SYSTEM_ZLIB)
 include_directories(
   "${GDCM_BINARY_DIR}/Utilities/gdcmzlib"
 )
-endif(NOT GDCM_USE_SYSTEM_ZLIB)
+endif()
 #if(NOT GDCM_USE_SYSTEM_POLARSSL)
 #include_directories(
 #  "${GDCM_SOURCE_DIR}/Utilities/gdcmpolarssl/include"
 #)
-#endif(NOT GDCM_USE_SYSTEM_POLARSSL)
+#endif()
 
 set(Common_SRCS
   gdcmVersion.cxx
@@ -141,7 +141,7 @@ set(Common_SRCS ${Common_SRCS}
   gdcmCAPICryptographicMessageSyntax.cxx
   gdcmCAPICryptoFactory.cxx
 )
-endif(WIN32)
+endif()
 
 if(GDCM_USE_SYSTEM_OPENSSL)
 set(Common_SRCS ${Common_SRCS}
@@ -150,13 +150,13 @@ set(Common_SRCS ${Common_SRCS}
   gdcmOpenSSLP7CryptoFactory.cxx
   gdcmOpenSSLP7CryptographicMessageSyntax.cxx
 )
-endif(GDCM_USE_SYSTEM_OPENSSL)
+endif()
 
 if(GDCM_BUILD_TESTING)
 set(Common_SRCS ${Common_SRCS}
   gdcmTesting.cxx
 )
-endif(GDCM_BUILD_TESTING)
+endif()
 
 add_library(gdcmCommon ${Common_SRCS})
 set_target_properties(gdcmCommon PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
@@ -164,23 +164,23 @@ set_target_properties(gdcmCommon PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTE
 #target_link_libraries(gdcmCommon ${GDCM_ZLIB_LIBRARIES}) # ${GDCM_POLARSSL_LIBRARIES})
 if(GDCM_BUILD_TESTING)
 target_link_libraries(gdcmCommon gdcmmd5 )
-endif(GDCM_BUILD_TESTING)
+endif()
 if(APPLE)
   target_link_libraries(gdcmCommon ${COREFOUNDATION_LIBRARY})
-endif(APPLE)
+endif()
 if(UNIX)
   target_link_libraries(gdcmCommon ${CMAKE_DL_LIBS})
-endif(UNIX)
+endif()
 
 if(WIN32)
   target_link_libraries(gdcmCommon ws2_32)
   target_link_libraries(gdcmCommon crypt32)
-endif(WIN32)
+endif()
 
 if(GDCM_USE_SYSTEM_OPENSSL)
   include_directories(${OPENSSL_INCLUDE_DIR})
   target_link_libraries(gdcmCommon ${OPENSSL_LIBRARIES})
-endif(GDCM_USE_SYSTEM_OPENSSL)
+endif()
 
 # libs
 install_library(gdcmCommon)
@@ -195,4 +195,4 @@ if(NOT GDCM_INSTALL_NO_DEVELOPMENT)
     "${GDCM_BINARY_DIR}/Source/Common/gdcmConfigure.h"
     DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT Headers
     )
-endif(NOT GDCM_INSTALL_NO_DEVELOPMENT)
+endif()

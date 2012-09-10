@@ -4,7 +4,7 @@ elseif(MINGW)
  add_definitions(-Os)
 elseif(WIN32)
   add_definitions(/Os)
-endif(UNIX OR CYGWIN)
+endif()
 #
 include_regular_expression("^.*$")
 # Defines the source code for the library
@@ -16,10 +16,10 @@ bio.c  cio.c  dwt.c  event.c  jp3d.c  jp3d_lib.c  mct.c  mqc.c  openjpeg.c  pi.c
 if(WIN32)
   if(BUILD_SHARED_LIBS)
     add_definitions(-DOPJ_EXPORTS)
-  else(BUILD_SHARED_LIBS)
+  else()
     add_definitions(-DOPJ_STATIC)
-  endif(BUILD_SHARED_LIBS)
-endif(WIN32)
+  endif()
+endif()
 add_library(${OPENJPEG_LIBRARY_NAME}_JP3D ${JP3DVM_SRCS})
 set_target_properties(${OPENJPEG_LIBRARY_NAME}_JP3D
   PROPERTIES

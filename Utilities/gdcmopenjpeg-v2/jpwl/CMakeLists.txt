@@ -30,7 +30,7 @@ add_library(openjpeg_JPWL ${JPWL_SRCS} ${OPJ_SRCS})
 # headers or def files instead
 #if(NOT BUILD_SHARED_LIBS)
 #  add_definitions(-DOPJ_STATIC)
-#endif(NOT BUILD_SHARED_LIBS)
+#endif()
 
 include_directories(
   ${OPENJPEG_SOURCE_DIR}/libopenjpeg
@@ -44,11 +44,11 @@ add_executable(JPWL_j2k_to_image
 target_link_libraries(JPWL_j2k_to_image openjpeg_JPWL ${TIFF_LIBRARIES})
 if(UNIX)
   target_link_libraries(JPWL_j2k_to_image m)
-endif(UNIX)
+endif()
 
 add_executable(JPWL_image_to_j2k
 ../codec/convert.c ../codec/image_to_j2k.c)
 target_link_libraries(JPWL_image_to_j2k openjpeg_JPWL ${TIFF_LIBRARIES})
 if(UNIX)
   target_link_libraries(JPWL_image_to_j2k m)
-endif(UNIX)
+endif()

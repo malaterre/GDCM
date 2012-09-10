@@ -53,7 +53,7 @@ if(NOT GDCM_USE_SYSTEM_ZLIB)
   include_directories(
     "${GDCM_BINARY_DIR}/Utilities/gdcmzlib"
     )
-endif(NOT GDCM_USE_SYSTEM_ZLIB)
+endif()
 
 
 add_library(gdcmDSED ${DSED_SRCS})

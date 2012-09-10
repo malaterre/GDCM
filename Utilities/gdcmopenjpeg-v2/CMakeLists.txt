@@ -11,12 +11,12 @@ cmake_minimum_required(VERSION 2.6)
 
 if(COMMAND CMAKE_POLICY)
   cmake_policy(SET CMP0003 NEW)
-endif(COMMAND CMAKE_POLICY)
+endif()
 
 if(NOT OPENJPEG_NAMESPACE)
   set(OPENJPEG_NAMESPACE "OPENJPEG")
   set(OPENJPEG_STANDALONE 1)
-endif(NOT OPENJPEG_NAMESPACE)
+endif()
 # In all cases:
 string(TOLOWER ${OPENJPEG_NAMESPACE} OPENJPEG_LIBRARY_NAME)
 
@@ -53,28 +53,28 @@ set(subdir "${projectname}-${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}")
 
 if(NOT OPENJPEG_INSTALL_BIN_DIR)
   set(OPENJPEG_INSTALL_BIN_DIR "bin")
-endif(NOT OPENJPEG_INSTALL_BIN_DIR)
+endif()
 
 if(NOT OPENJPEG_INSTALL_LIB_DIR)
   set(OPENJPEG_INSTALL_LIB_DIR "lib")
-endif(NOT OPENJPEG_INSTALL_LIB_DIR)
+endif()
 
 if(NOT OPENJPEG_INSTALL_DATA_DIR)
   set(OPENJPEG_INSTALL_DATA_DIR "share/${subdir}")
-endif(NOT OPENJPEG_INSTALL_DATA_DIR)
+endif()
 
 if(NOT OPENJPEG_INSTALL_INCLUDE_DIR)
   set(OPENJPEG_INSTALL_INCLUDE_DIR "include/${subdir}")
-endif(NOT OPENJPEG_INSTALL_INCLUDE_DIR)
+endif()
 
 if(NOT OPENJPEG_INSTALL_DOC_DIR)
   set(OPENJPEG_INSTALL_DOC_DIR "share/doc/${subdir}")
-endif(NOT OPENJPEG_INSTALL_DOC_DIR)
+endif()
 
 if(NOT OPENJPEG_INSTALL_PACKAGE_DIR)
   set(OPENJPEG_INSTALL_PACKAGE_DIR ${OPENJPEG_INSTALL_LIB_DIR}/${subdir}
     CACHE INTERNAL "")
-endif(NOT OPENJPEG_INSTALL_PACKAGE_DIR)
+endif()
 
 #-----------------------------------------------------------------------------
 # Test for some required system information.
@@ -111,7 +111,7 @@ set(MANGLE_PREFIX ${OPENJPEG_LIBRARY_NAME})
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle.h
                @ONLY)
-endif(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
+endif()
 
 #-----------------------------------------------------------------------------
 # Configure files with settings for use by the build.
@@ -124,7 +124,7 @@ if(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
       ${CMAKE_CURRENT_BINARY_DIR}/opj_configure.h
     DESTINATION ${OPENJPEG_INSTALL_INCLUDE_DIR} COMPONENT Headers
   )
-endif(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
+endif()
 
 
 #-----------------------------------------------------------------------------
@@ -137,7 +137,7 @@ subdirs(
 # Build example only if requested
 if(BUILD_EXAMPLES)
   # subdirs(codec)
-endif(BUILD_EXAMPLES)
+endif()
 
 #-----------------------------------------------------------------------------
 # For the documentation
@@ -145,7 +145,7 @@ option(BUILD_DOCUMENTATION "Build the doxygen documentation" OFF)
 mark_as_advanced(BUILD_DOCUMENTATION)
 if(BUILD_DOCUMENTATION)
   subdirs(doc)
-endif(BUILD_DOCUMENTATION)
+endif()
 
 #-----------------------------------------------------------------------------
 # For openjpeg team if they ever want CDash+CMake
@@ -153,7 +153,7 @@ option(BUILD_TESTING "Build the tests." OFF)
 if(BUILD_TESTING)
   enable_testing()
   include(CTest)
-endif(BUILD_TESTING)
+endif()
 
 #if(BUILD_TESTING)
 #set(CMAKE_MODULE_PATH "${OPENJPEG_SOURCE_DIR}/CMake")
@@ -164,7 +164,7 @@ endif(BUILD_TESTING)
 #    test_V2_tile_handling
 #    test_Free_image_V2_tile_handling
 #  )
-#endif(BUILD_TESTING)
+#endif()
 
 # Adding test with dataset from:
 # http://www.crc.ricoh.com/~gormish/jpeg2000conformance/
@@ -185,7 +185,7 @@ mark_as_advanced(JPEG2000_CONFORMANCE_DATA_ROOT)
 #  # set(CMAKE_C_FLAGS "-Wall -std=c99 ${CMAKE_C_FLAGS}") # FIXME: this setting prevented us from setting a coverage build.
 #  # Do not use ffast-math for all build, it would produce incorrect results, only set for release:
 #  set(CMAKE_C_FLAGS_RELEASE "-ffast-math ${CMAKE_C_FLAGS_RELEASE}")
-#endif(CMAKE_COMPILER_IS_GNUCC)
+#endif()
 
 # install all targets referenced as OPENJPEGTargets
 install(EXPORT ${GDCM_TARGETS_NAME} DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR})

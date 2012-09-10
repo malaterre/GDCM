@@ -25,16 +25,16 @@ set(OPENJPEG_SRCS
 if(WIN32)
   if(BUILD_SHARED_LIBS)
     add_definitions(-DOPJ_EXPORTS)
-  else(BUILD_SHARED_LIBS)
+  else()
     add_definitions(-DOPJ_STATIC)
-  endif(BUILD_SHARED_LIBS)
-endif(WIN32)
+  endif()
+endif()
 add_library(${OPENJPEG_LIBRARY_NAME} ${OPENJPEG_SRCS})
 set_target_properties(${OPENJPEG_LIBRARY_NAME} PROPERTIES
   ${OPENJPEG_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 if(UNIX)
   target_link_libraries(${OPENJPEG_LIBRARY_NAME} m)
-endif(UNIX)
+endif()
 
 
 # Install library
@@ -45,7 +45,7 @@ if(NOT OPENJPEG_INSTALL_NO_LIBRARIES)
     LIBRARY DESTINATION ${OPENJPEG_INSTALL_LIB_DIR} COMPONENT Libraries
     ARCHIVE DESTINATION ${OPENJPEG_INSTALL_LIB_DIR} COMPONENT Development
     )
-endif(NOT OPENJPEG_INSTALL_NO_LIBRARIES)
+endif()
 
 # Install includes files
 if(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
@@ -60,4 +60,4 @@ install(FILES openjpeg.h
 #install(
 #  FILES       ../doc/man/man3/libopenjpeg.3
 #  DESTINATION ${OPENJPEG_INSTALL_MAN_DIR}/man3)
-endif(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
+endif()

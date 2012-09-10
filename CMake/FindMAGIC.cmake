@@ -27,20 +27,20 @@ if (MAGIC_LIBRARY AND MAGIC_INCLUDE_DIR)
     set(MAGIC_LIBRARIES ${MAGIC_LIBRARY})
     set(MAGIC_INCLUDE_DIRS ${MAGIC_INCLUDE_DIR})
     set(MAGIC_FOUND "YES")
-else (MAGIC_LIBRARY AND MAGIC_INCLUDE_DIR)
+else ()
   set(MAGIC_FOUND "NO")
-endif (MAGIC_LIBRARY AND MAGIC_INCLUDE_DIR)
+endif ()
 
 
 if (MAGIC_FOUND)
    if (NOT MAGIC_FIND_QUIETLY)
       message(STATUS "Found MAGIC: ${MAGIC_LIBRARIES} ${MAGIC_INCLUDE_DIR}")
-   endif (NOT MAGIC_FIND_QUIETLY)
-else (MAGIC_FOUND)
+   endif ()
+else ()
    if (MAGIC_FIND_REQUIRED)
       message(FATAL_ERROR "Could not find MAGIC library")
-   endif (MAGIC_FIND_REQUIRED)
-endif (MAGIC_FOUND)
+   endif ()
+endif ()
 
 mark_as_advanced(
   MAGIC_LIBRARY

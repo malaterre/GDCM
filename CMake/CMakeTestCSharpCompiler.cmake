@@ -14,7 +14,7 @@ if(NOT CMAKE_CSharp_COMPILER_WORKS)
     ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/testCSharpCompiler.cs
     OUTPUT_VARIABLE OUTPUT)
   set(C_TEST_WAS_RUN 1)
-endif(NOT CMAKE_CSharp_COMPILER_WORKS)
+endif()
 
 if(NOT CMAKE_CSharp_COMPILER_WORKS)
   message(STATUS "Check for working CSharp compiler: ${CMAKE_CSharp_COMPILER} -- broken")
@@ -25,19 +25,19 @@ if(NOT CMAKE_CSharp_COMPILER_WORKS)
     "is not able to compile a simple test program.\nIt fails "
     "with the following output:\n ${OUTPUT}\n\n"
     "CMake will not be able to correctly generate this project.")
-else(NOT CMAKE_CSharp_COMPILER_WORKS)
+else()
   if(C_TEST_WAS_RUN)
     message(STATUS "Check for working CSharp compiler: ${CMAKE_CSharp_COMPILER} -- works")
     file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeOutput.log
       "Determining if the CSharp compiler works passed with "
       "the following output:\n${OUTPUT}\n\n")
-  endif(C_TEST_WAS_RUN)
+  endif()
   set(CMAKE_CSharp_COMPILER_WORKS 1 CACHE INTERNAL "")
 
   if(CMAKE_CSharp_COMPILER_FORCED)
     # The compiler configuration was forced by the user.
     # Assume the user has configured all compiler information.
-  else(CMAKE_CSharp_COMPILER_FORCED)
+  else()
     # Try to identify the ABI and configure it into CMakeCSharpCompiler.cmake
     include(${CMAKE_ROOT}/Modules/CMakeDetermineCompilerABI.cmake)
     CMAKE_DETERMINE_COMPILER_ABI(C ${CMAKE_ROOT}/Modules/CMakeCSharpCompilerABI.c)
@@ -47,5 +47,5 @@ else(NOT CMAKE_CSharp_COMPILER_WORKS)
       ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeCSharpCompiler.cmake
       @ONLY
       )
-  endif(CMAKE_CSharp_COMPILER_FORCED)
-endif(NOT CMAKE_CSharp_COMPILER_WORKS)
+  endif()
+endif()

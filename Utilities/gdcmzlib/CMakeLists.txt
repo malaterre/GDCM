@@ -1,7 +1,7 @@
 if(NOT ZLIB_NAMESPACE)
   set(ZLIB_NAMESPACE "ZLIB")
   set(ZLIB_STANDALONE 1)
-endif(NOT ZLIB_NAMESPACE)
+endif()
 # In all cases:
 string(TOLOWER ${ZLIB_NAMESPACE} ZLIB_LIBRARY_NAME)
 
@@ -38,11 +38,11 @@ if(WIN32)
       if(NOT BORLAND)
         if(NOT MINGW)
           set(ZLIB_SRCS ${ZLIB_SRCS} zlib.def zlib.rc  )
-        endif(NOT MINGW)
-      endif(NOT BORLAND) 
-    endif(NOT UNIX)   
-  endif(BUILD_SHARED_LIBS)
-endif(WIN32)
+        endif()
+      endif() 
+    endif()   
+  endif()
+endif()
 
   configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/zconf.in.h
@@ -65,4 +65,4 @@ if(NOT ZLIB_INSTALL_NO_LIBRARIES)
     ARCHIVE DESTINATION ${ZLIB_INSTALL_LIB_DIR} COMPONENT Development
   ${CPACK_NAMELINK_TYPE}
   )
-endif(NOT ZLIB_INSTALL_NO_LIBRARIES)
+endif()

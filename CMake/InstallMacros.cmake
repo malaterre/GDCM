@@ -26,8 +26,8 @@ macro (install_swig_module module_name module_type)
       LIBRARY DESTINATION ${MODDST}               COMPONENT ${module_type}Module
       ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT ${module_type}Module
       )
-  endif(NOT GDCM_INSTALL_NO_LIBRARIES)
-endmacro (install_swig_module)
+  endif()
+endmacro ()
 
 macro (install_library library)
   if(NOT GDCM_INSTALL_NO_LIBRARIES)
@@ -44,9 +44,9 @@ macro (install_library library)
         EXPORT ${GDCM_TARGETS_NAME}
         LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT DebugDevel ${NAMELINK_ONLY}
         )
-    endif(NAMELINK_ONLY)
-  endif(NOT GDCM_INSTALL_NO_LIBRARIES)
-endmacro (install_library)
+    endif()
+  endif()
+endmacro ()
 
 macro (install_pdb library)
   if (MSVC)
@@ -65,8 +65,8 @@ macro (install_pdb library)
             CONFIGURATIONS ${cfg}
             )
         endif()
-      endforeach(cfg ${CMAKE_CONFIGURATION_TYPES})
-    else(CMAKE_CONFIGURATION_TYPES)
+      endforeach()
+    else()
       # nmake
       # Same as above we need the explicit location_<config> variable to account for
       # the value of CMAKE_DEBUG_POSTFIX
@@ -79,9 +79,9 @@ macro (install_pdb library)
           COMPONENT DebugDevel
           )
       endif()
-    endif(CMAKE_CONFIGURATION_TYPES)
-  endif (MSVC)
-endmacro (install_pdb)
+    endif()
+  endif ()
+endmacro ()
 
 # At least one argument is required
 macro (install_includes glob_expression)
@@ -90,5 +90,5 @@ macro (install_includes glob_expression)
     install(FILES ${header_files}
       DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT Headers
       )
-  endif(NOT GDCM_INSTALL_NO_DEVELOPMENT)
-endmacro (install_includes)
+  endif()
+endmacro ()

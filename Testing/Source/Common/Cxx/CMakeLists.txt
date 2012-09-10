@@ -31,8 +31,8 @@ list(APPEND Common_TEST_SRCS
   )
 if(GDCM_USE_SYSTEM_OPENSSL)
   list(APPEND Common_TEST_SRCS TestSHA1)
-endif(GDCM_USE_SYSTEM_OPENSSL)
-endif(GDCM_DATA_ROOT)
+endif()
+endif()
 
 # Add the include paths
 include_directories(
@@ -54,7 +54,7 @@ set(GDCM_Common_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmCommonTests")
 foreach(name ${Common_TEST_SRCS})
 if(CMAKE_CROSSCOMPILING)
   add_test(${name} ${TARGET_SYSTEM_EMULATOR} ${GDCM_Common_TESTS}${CMAKE_EXECUTABLE_SUFFIX} ${name})
-else(CMAKE_CROSSCOMPILING)
+else()
   add_test(${name} ${GDCM_Common_TESTS} ${name})
-endif(CMAKE_CROSSCOMPILING)
-endforeach(name)
+endif()
+endforeach()

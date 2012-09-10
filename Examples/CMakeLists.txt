@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.4)
 # Remove these policy lines when CMake 2.6 is the minimum version.
 if(COMMAND CMAKE_POLICY)
   cmake_policy(SET CMP0003 NEW)
-endif(COMMAND CMAKE_POLICY)
+endif()
 
 # Choose behavior based on whether we are building inside the GDCM tree.
 if(GDCM_BINARY_DIR)
@@ -11,17 +11,17 @@ subdirs(Cxx)
 
 if(GDCM_WRAP_PYTHON)
   subdirs(Python)
-endif(GDCM_WRAP_PYTHON)
+endif()
 
 if(GDCM_WRAP_CSHARP)
   subdirs(Csharp)
-endif(GDCM_WRAP_CSHARP)
+endif()
 
 if(GDCM_WRAP_JAVA)
   subdirs(Java)
-endif(GDCM_WRAP_JAVA)
+endif()
 
-else(GDCM_BINARY_DIR)
+else()
 
   # We are building outside the GDCM tree.  Build the examples directly.
   project(GDCMExamples)
@@ -32,4 +32,4 @@ else(GDCM_BINARY_DIR)
 
   subdirs(Cxx)
 
-endif(GDCM_BINARY_DIR)
+endif()

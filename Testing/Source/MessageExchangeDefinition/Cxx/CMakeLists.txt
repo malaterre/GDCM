@@ -14,7 +14,7 @@ if(GDCM_DATA_ROOT)
     ${MEXD_TEST_SRCS}
     TestSCUFunctions
     )
-endif(GDCM_DATA_ROOT)
+endif()
 
 # Add the include paths
 include_directories(
@@ -47,11 +47,11 @@ foreach(name ${MEXD_TEST_SRCS})
       add_test(${name} ${GDCM_MEXD_TESTS} ${name} ${GDCM_DICOM_CLIENT_AETITLE}
         ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PORT}
         ${GDCM_DICOM_CLIENT_PORT} ${GDCM_DICOM_SERVER_PEER})
-    endif(GDCM_DICOM_SERVER_AETITLE)
+    endif()
   else()
     add_test(${name} ${GDCM_MEXD_TESTS} ${name})
   endif()
-endforeach(name)
+endforeach()
 
 set(DCMQRSCP_HOSTNAME gotlib)
 set(DCMQRSCP_PORT 5677)

@@ -47,7 +47,7 @@ set_target_properties(${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTIES PREFIX "")
 # ...
 if(UNIX)
   set_target_properties(${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "gdcm")
-endif(UNIX)
+endif()
 
 # See gdcm bug #3175803
 # This is fixed in SWIG 2.0.2:
@@ -81,4 +81,4 @@ if(NOT GDCM_INSTALL_NO_LIBRARIES)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gdcm.php
     DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT PHPModule
   )
-endif(NOT GDCM_INSTALL_NO_LIBRARIES)
+endif()

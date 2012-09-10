@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.6.0)
 
 if(COMMAND cmake_policy)
 cmake_policy(SET CMP0003 NEW)
-endif(COMMAND cmake_policy)
+endif()
 
 
 #-----------------------------------------------------------------------------
@@ -14,19 +14,19 @@ include(${VTK_USE_FILE})
 
 if(WIN32)
   set(GUI_EXECUTABLE WIN32)
-else(WIN32)
+else()
   if(APPLE)
     set(GUI_EXECUTABLE MACOSX_BUNDLE)
     if(VTK_USE_COCOA)
       set_source_files_properties(
         wxVTKRenderWindowInteractor.cxx
         PROPERTIES COMPILE_FLAGS "-ObjC++")
-    endif(VTK_USE_COCOA)
-  else(APPLE)
+    endif()
+  else()
     # Ok X11 for sure, but just check:
     if(NOT VTK_USE_X)
       message(FATAL_ERROR "You need to have VTK_USE_X")
-    endif(NOT VTK_USE_X)
+    endif()
     # See also:
     # FindGTK.cmake update
     # http://www.cmake.org/Bug/bug.php?op=show&bugid=3582
@@ -42,8 +42,8 @@ else(WIN32)
 
     # Can I require all my user to have the gl lib on linux, even if they do not really need it...
     set(WXGLCANVASLIBS "gl")
-  endif(APPLE)
-endif(WIN32)
+  endif()
+endif()
 
 # wxWidgets is required to build the project
 # For GTK we need a couple of stuff:
@@ -53,7 +53,7 @@ find_package(wxWidgets COMPONENTS base core adv ${WXGLCANVASLIBS})
 
 if(wxWidgets_FOUND)
   include( ${wxWidgets_USE_FILE} )
-endif(wxWidgets_FOUND)
+endif()
 
 include_directories(
   ${GDCM_BINARY_DIR}/Source/Common # gdcmConfigure.h

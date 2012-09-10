@@ -25,7 +25,7 @@ if(UNIX)
     ${GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR}
     "${GDCM_DATA_ROOT}/DICOMDIR*"
   )
-endif(UNIX)
+endif()
 
 # GLOB expression !
 file(GLOB GDCM_DATA_IMAGE_FILENAMES_GLOB
@@ -73,7 +73,7 @@ if(NOT GDCM_USE_PVRG)
     ${BLACK_LIST_READER}
     PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
   )
-endif(NOT GDCM_USE_PVRG)
+endif()
 if(GDCM_WORDS_BIGENDIAN)
   set(BLACK_LIST_READER
     ${BLACK_LIST_READER}
@@ -83,7 +83,7 @@ if(GDCM_WORDS_BIGENDIAN)
     SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm
     PICKER-16-MONO2-No_DicomV3_Preamble.dcm
   )
-endif(GDCM_WORDS_BIGENDIAN)
+endif()
 
 if(NOT GDCM_SUPPORT_BROKEN_IMPLEMENTATION)
   set(BLACK_LIST_READER
@@ -104,7 +104,7 @@ if(NOT GDCM_SUPPORT_BROKEN_IMPLEMENTATION)
     NM_Kakadu44_SOTmarkerincons.dcm
     MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm
     )
-endif(NOT GDCM_SUPPORT_BROKEN_IMPLEMENTATION)
+endif()
 
 set(GDCM_DATA_FILENAMES)
 set(GDCM_BLACK_LIST_READER_DATA_FILENAMES)
@@ -113,10 +113,10 @@ foreach(filename ${GDCM_DATA_FILENAMES_GLOB})
   string(REGEX MATCH ${filename_name} bad_dicom ${BLACK_LIST_READER})
   if(NOT bad_dicom)
     set(GDCM_DATA_FILENAMES "${GDCM_DATA_FILENAMES}\n\"${filename}\",")
-  else(NOT bad_dicom)
+  else()
     set(GDCM_BLACK_LIST_READER_DATA_FILENAMES "${GDCM_BLACK_LIST_READER_DATA_FILENAMES}\n\"${filename}\",")
-  endif(NOT bad_dicom)
-endforeach(filename)
+  endif()
+endforeach()
 
 
 # Populate GDCM_DATA_FILENAMES:

@@ -32,9 +32,9 @@ foreach(example ${VTKGDCM_JAVA_TEST_SRCS})
   set_source_files_properties(${EXECUTABLE_OUTPUT_PATH}/${example}.class PROPERTIES CLASSPATH "${classpath}")
   if(GDCM_WRAP_JAVA)
     ADD_JAVA_TEST(${example}Java ${EXECUTABLE_OUTPUT_PATH}/${example})
-  endif(GDCM_WRAP_JAVA)
+  endif()
 
-endforeach(example)
+endforeach()
 
 # 3. ok now add the target
 add_custom_target(VTKGDCMJavaTests ALL

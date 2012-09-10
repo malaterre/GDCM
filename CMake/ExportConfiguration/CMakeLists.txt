@@ -24,7 +24,7 @@ install( FILES ${GDCM_BINARY_DIR}/UseGDCM.cmake
 # install all targets referenced as ${GDCM_TARGETS_NAME}
 if(GDCM_STANDALONE)
   install(EXPORT ${GDCM_TARGETS_NAME} DESTINATION ${GDCM_INSTALL_PACKAGE_DIR})
-endif(GDCM_STANDALONE)
+endif()
 
 # [Prevent viral CMake dep]
 # See the following ref, which explain this mess.
@@ -73,7 +73,7 @@ endif(GDCM_STANDALONE)
 #      string(REGEX REPLACE "ADD_LIBRARY\\((.*) SHARED IMPORTED\\)" "\\1" out ${m})
 #      list(APPEND targets ${out})
 #    endif()
-#  endforeach(line)
+#  endforeach()
 #endif()
 #
 #set( exports )
@@ -87,7 +87,7 @@ endif(GDCM_STANDALONE)
 #      string(REGEX REPLACE "ADD_LIBRARY\\((.*) SHARED IMPORTED\\)" "\\1" out ${m})
 #      list(APPEND exports ${out})
 #    endif()
-#  endforeach(line)
+#  endforeach()
 #endif()
 
 #list(LENGTH targets targets_len)
@@ -108,5 +108,5 @@ file(WRITE ${GDCM_BINARY_DIR}/GDCMExports.cmake "")
 foreach(target ${targets})
   if(TARGET ${target})
     export(TARGETS ${target} FILE ${GDCM_BINARY_DIR}/GDCMExports.cmake APPEND)
-  endif(TARGET ${target})
-endforeach(target)
+  endif()
+endforeach()

@@ -17,7 +17,7 @@ if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
     TestvtkGDCMThreadedImageReader2
     TestvtkGDCMMetaImageWriter
   )
-endif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
+endif()
 
 # Need gdcmData
 if(GDCM_DATA_ROOT)
@@ -25,7 +25,7 @@ if(GDCM_DATA_ROOT)
     ${VTK_GDCM_TEST_SRCS}
     TestvtkGDCMImageReader2
     )
-endif(GDCM_DATA_ROOT)
+endif()
 # Need gdcmDataExtra
 if(GDCM_DATA_EXTRA_ROOT)
   set(VTK_GDCM_TEST_SRCS
@@ -33,7 +33,7 @@ if(GDCM_DATA_EXTRA_ROOT)
     TestvtkGDCMImageReader3
     TestvtkGDCMPolyDataReader
   )
-endif(GDCM_DATA_EXTRA_ROOT)
+endif()
 
 if(VTK_USE_RENDERING)
   if(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
@@ -41,8 +41,8 @@ if(VTK_USE_RENDERING)
       ${VTK_GDCM_TEST_SRCS}
       TestvtkGDCMThreadedImageReader
     )
-  endif(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
-endif(VTK_USE_RENDERING)
+  endif()
+endif()
 
 # Add the include paths
 include_directories(
@@ -58,10 +58,10 @@ target_link_libraries(gdcmvtkGDCMTests ${VTKGDCM_NAME} gdcmMSFF)
 if(VTK_USE_RENDERING)
   if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     target_link_libraries(gdcmvtkGDCMTests vtkRendering)
-  else( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+  else()
     target_link_libraries(gdcmvtkGDCMTests vtkVolumeRendering)
-  endif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-endif(VTK_USE_RENDERING)
+  endif()
+endif()
 
 # Need full path to executable:
 set(GDCM_VTK_GDCM_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmvtkGDCMTests")
@@ -69,4 +69,4 @@ set(GDCM_VTK_GDCM_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmvtkGDCMTests")
 # Loop over files and create executables
 foreach(name ${VTK_GDCM_TEST_SRCS})
   add_test(${name} ${GDCM_VTK_GDCM_TESTS} ${name})
-endforeach(name)
+endforeach()

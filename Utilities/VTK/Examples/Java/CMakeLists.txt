@@ -29,7 +29,7 @@ foreach(example ${examples})
     COMMENT "javac ${example}.java"
     )
   list(APPEND classfilesdep ${EXECUTABLE_OUTPUT_PATH}/${example}.class)
-endforeach(example)
+endforeach()
 
 # 3. ok now add the target
 add_custom_target(GDCMJavaVTKExample ALL
@@ -47,5 +47,5 @@ if(BUILD_TESTING)
     ADD_JAVA_TEST(TestReadSeriesIntoVTKJava ${EXECUTABLE_OUTPUT_PATH}/ReadSeriesIntoVTK)
     #set_source_files_properties(${EXECUTABLE_OUTPUT_PATH}/AWTMedical3.class PROPERTIES CLASSPATH "${EXECUTABLE_OUTPUT_PATH}/vtkgdcm.jar:${GDCM_VTK_JAVA_JAR}")
     #ADD_JAVA_TEST(TestAWTMedical3Java ${EXECUTABLE_OUTPUT_PATH}/AWTMedical3)
-  endif(GDCM_DATA_ROOT)
-endif(BUILD_TESTING)
+  endif()
+endif()

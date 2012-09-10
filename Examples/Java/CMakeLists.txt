@@ -23,7 +23,7 @@ foreach(example ${examples})
     COMMENT "javac ${example}.java"
     )
   list(APPEND classfilesdep ${EXECUTABLE_OUTPUT_PATH}/${example}.class)
-endforeach(example)
+endforeach()
 
 # 3. ok now add the target
 add_custom_target(GDCMJavaExample ALL
@@ -37,5 +37,5 @@ if(BUILD_TESTING)
   if(GDCM_DATA_ROOT)
     set_source_files_properties(${EXECUTABLE_OUTPUT_PATH}/HelloSimple.class PROPERTIES CLASSPATH "${EXECUTABLE_OUTPUT_PATH}/gdcm.jar")
     ADD_JAVA_TEST(TestHelloSimpleJava ${EXECUTABLE_OUTPUT_PATH}/HelloSimple ${GDCM_DATA_ROOT}/012345.002.050.dcm)
-  endif(GDCM_DATA_ROOT)
-endif(BUILD_TESTING)
+  endif()
+endif()

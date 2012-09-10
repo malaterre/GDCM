@@ -13,11 +13,11 @@
 
 if(WIN32)
   find_package(DotNETFrameworkSDK)
-else(WIN32)
+else()
   #TODO handle CSharp_FIND_QUIETLY
   #TODO handle CSharp_FIND_REQUIRED
   find_package(MONO)
-endif(WIN32)
+endif()
 
 # http://public.kitware.com/Bug/view.php?id=7757
 get_filename_component(current_list_path ${CMAKE_CURRENT_LIST_FILE} PATH)

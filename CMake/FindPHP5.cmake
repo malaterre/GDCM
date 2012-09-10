@@ -32,9 +32,9 @@ if(PHP5_FOUND_INCLUDE_PATH)
   set(php5_paths "${PHP5_POSSIBLE_INCLUDE_PATHS}")
   foreach(php5_path Zend main TSRM)
     set(php5_paths ${php5_paths} "${PHP5_FOUND_INCLUDE_PATH}/${php5_path}")
-  endforeach(php5_path Zend main TSRM)
+  endforeach()
   set(PHP5_INCLUDE_PATH "${php5_paths}" INTERNAL "PHP5 include paths")
-endif(PHP5_FOUND_INCLUDE_PATH)
+endif()
 
 find_program(PHP5_EXECUTABLE NAMES php5 php )
 

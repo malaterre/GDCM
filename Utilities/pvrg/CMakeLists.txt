@@ -21,9 +21,9 @@ set(
 #)
 if(MSVC)
 add_definitions(-DNOTRUNCATE)
-else(MSVC)
+else()
 add_definitions(-DSYSV -DNOTRUNCATE)
-endif(MSVC)
+endif()
 #add_definitions(-DIO_DEBUG)
 #add_library(pvrg ${PVRG_SRCS})
 

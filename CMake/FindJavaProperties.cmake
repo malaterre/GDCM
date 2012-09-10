@@ -88,5 +88,5 @@ if(${current_list_path}/GetSystemProperty.java IS_NEWER_THAN ${CMAKE_BINARY_DIR}
     mark_as_advanced(
       JavaProp_${property_cmake_name}
       )
-  endforeach(property)
+  endforeach()
 endif()

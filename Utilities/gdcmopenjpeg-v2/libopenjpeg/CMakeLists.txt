@@ -50,14 +50,14 @@ set(OPENJPEG_SRCS
 if(WIN32)
   if(BUILD_SHARED_LIBS)
     add_definitions(-DOPJ_EXPORTS)
-  else(BUILD_SHARED_LIBS)
+  else()
     add_definitions(-DOPJ_STATIC)
-  endif(BUILD_SHARED_LIBS)
-endif(WIN32)
+  endif()
+endif()
 
 if(ENABLE_PROFILING)
     add_definitions(-D_PROFILE)
-endif(ENABLE_PROFILING)
+endif()
 
 # Create the library
 add_library(${OPENJPEG_LIBRARY_NAME} ${OPENJPEG_SRCS})
@@ -65,7 +65,7 @@ set_target_properties(${OPENJPEG_LIBRARY_NAME} PROPERTIES
   ${OPENJPEG_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 if(UNIX)
   target_link_libraries(${OPENJPEG_LIBRARY_NAME} m)
-endif(UNIX)
+endif()
 
 
 # Install library
@@ -76,7 +76,7 @@ if(NOT OPENJPEG_INSTALL_NO_LIBRARIES)
     LIBRARY DESTINATION ${OPENJPEG_INSTALL_LIB_DIR} COMPONENT Libraries
     ARCHIVE DESTINATION ${OPENJPEG_INSTALL_LIB_DIR} COMPONENT Development
     )
-endif(NOT OPENJPEG_INSTALL_NO_LIBRARIES)
+endif()
 
 # Install includes files
 if(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
@@ -84,7 +84,7 @@ if(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
   install(FILES ${header_files}
     DESTINATION ${OPENJPEG_INSTALL_INCLUDE_DIR} COMPONENT Headers
     )
-endif(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
+endif()
 #install(FILES openjpeg.h
 #	DESTINATION ${OPENJPEG_INSTALL_INCLUDE_DIR} COMPONENT Headers
 #)

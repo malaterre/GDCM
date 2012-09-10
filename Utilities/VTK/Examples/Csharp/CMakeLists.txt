@@ -19,19 +19,19 @@ if(GDCM_USE_ACTIVIZ)
       COMMENT "Create ${example}.exe"
       )
     set(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
-  endforeach(example)
+  endforeach()
 
   if(BUILD_TESTING)
     get_filename_component(runtimepath ${ACTIVIZ_KITWARE_VTK_LIBRARY} PATH)
     if(GDCM_DATA_ROOT)
       set_source_files_properties(${GDCM_EXECUTABLE_DIR}/HelloActiviz5.exe PROPERTIES RUNTIMEPATH ${runtimepath})
       ADD_CSHARP_TEST(TestHelloActiviz5CSharp ${GDCM_EXECUTABLE_DIR}/HelloActiviz5.exe)
-    endif(GDCM_DATA_ROOT)
+    endif()
     set_source_files_properties(${GDCM_EXECUTABLE_DIR}/RefCounting.exe PROPERTIES RUNTIMEPATH ${runtimepath})
     ADD_CSHARP_TEST(TestRefCountingCSharp ${GDCM_EXECUTABLE_DIR}/RefCounting.exe)
-  endif(BUILD_TESTING)
+  endif()
 
-else(GDCM_USE_ACTIVIZ)
+else()
 
   set(CSHARP_EXAMPLES
     HelloVTKWorld
@@ -50,8 +50,8 @@ else(GDCM_USE_ACTIVIZ)
       COMMENT "Create ${example}.exe"
       )
     set(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
-  endforeach(example)
-endif(GDCM_USE_ACTIVIZ)
+  endforeach()
+endif()
 
 add_custom_target(VTKGDCMExampleCSharp ALL
   DEPENDS ${DEP}

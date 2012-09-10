@@ -28,4 +28,4 @@ if(GDCM_USE_KWSTYLE)
   #  )
 
   add_custom_target(StyleCheck DEPENDS ${GDCM_BINARY_DIR}/KWStyleReport.txt)
-endif(GDCM_USE_KWSTYLE)
+endif()

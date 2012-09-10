@@ -23,7 +23,7 @@ find_package(Qt4 4.4.3 COMPONENTS QtCore QtGui)
 # cmake 2.6.4 does not set it to advanced
 mark_as_advanced(QT_QMAKE_EXECUTABLE)
 
-endif(GDCM_BINARY_DIR)
+endif()
 
 set(EXAMPLES_SRCS
   DumpGEMSMovieGroup
@@ -79,13 +79,13 @@ set(EXAMPLES_SRCS
   Extracting_All_Resolution
   Fake_Image_Using_Stream_Image_Writer
   )
-endif(GDCM_USE_OPENJPEG_V2)
+endif()
 if(GDCM_USE_JPEGLS)
 set(EXAMPLES_SRCS
   ${EXAMPLES_SRCS}
   FixJAIBugJPEGLS
   )
-endif(GDCM_USE_JPEGLS)
+endif()
 
 if(QT4_FOUND)
   include(${QT_USE_FILE})
@@ -98,26 +98,26 @@ if(QT4_FOUND)
   target_link_libraries(ReadUTF8QtDir gdcmMSFF ${QT_LIBRARIES})
   add_executable(CStoreQtProgress CStoreQtProgress.cxx)
   target_link_libraries(CStoreQtProgress gdcmMEXD gdcmMSFF ${QT_LIBRARIES})
-endif(QT4_FOUND)
+endif()
 
 if(MAGIC_FOUND)
   include_directories(${MAGIC_INCLUDE_DIRS})
   add_executable(EncapsulateFileInRawData EncapsulateFileInRawData.cxx)
   target_link_libraries(EncapsulateFileInRawData gdcmMSFF ${MAGIC_LIBRARIES})
-endif(MAGIC_FOUND)
+endif()
 
 if(SQLITE3_FOUND)
   include_directories(${SQLITE3_INCLUDE_DIRS})
   add_executable(DumpToSQLITE3 DumpToSQLITE3.cxx)
   target_link_libraries(DumpToSQLITE3 gdcmMSFF ${SQLITE3_LIBRARIES})
-endif(SQLITE3_FOUND)
+endif()
 
 if(GDCM_BUILD_TESTING)
 set(EXAMPLES_SRCS
   ${EXAMPLES_SRCS}
   VolumeSorter
 )
-endif(GDCM_BUILD_TESTING)
+endif()
 
 foreach(example ${EXAMPLES_SRCS})
   add_executable(${example} ${example}.cxx)
@@ -126,7 +126,7 @@ foreach(example ${EXAMPLES_SRCS})
   else()
     target_link_libraries(${example} gdcmMSFF)
   endif()
-endforeach(example)
+endforeach()
 
 if(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
 #../../bin/libgdcmDSED.dll.a(d000469.o)(.text+0x0): multiple definition of `gdcm::VL gdcm::Item::GetLength<gdcm::ImplicitDataElement>() const'
@@ -138,4 +138,4 @@ if(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
 #../../bin/libgdcmDSED.dll.a(d000271.o)(.text+0x0): multiple definition of `std::istream& gdcm::DataSet::ReadWithLength<gdcm::ImplicitDataElement, gdcm::SwapperDoOp>(std::istream&, gdcm::VL&)'
 
   set_target_properties( ReadExplicitLengthSQIVR PROPERTIES LINK_FLAGS "-Wl,--allow-multiple-definition")
-endif(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
+endif()

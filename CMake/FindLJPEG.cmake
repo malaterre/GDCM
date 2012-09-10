@@ -28,20 +28,20 @@ if (LJPEG8_LIBRARY AND LJPEG_INCLUDE_DIR)
     set(LJPEG_LIBRARIES ${LJPEG8_LIBRARY} ${LJPEG12_LIBRARY} ${LJPEG16_LIBRARY})
     set(LJPEG_INCLUDE_DIRS ${LJPEG_INCLUDE_DIR})
     set(LJPEG_FOUND "YES")
-else (LJPEG8_LIBRARY AND LJPEG_INCLUDE_DIR)
+else ()
   set(LJPEG_FOUND "NO")
-endif (LJPEG8_LIBRARY AND LJPEG_INCLUDE_DIR)
+endif ()
 
 
 if (LJPEG_FOUND)
    if (NOT LJPEG_FIND_QUIETLY)
       message(STATUS "Found LJPEG: ${LJPEG_LIBRARIES}")
-   endif (NOT LJPEG_FIND_QUIETLY)
-else (LJPEG_FOUND)
+   endif ()
+else ()
    if (LJPEG_FIND_REQUIRED)
       message(FATAL_ERROR "Could not find LJPEG library")
-   endif (LJPEG_FIND_REQUIRED)
-endif (LJPEG_FOUND)
+   endif ()
+endif ()
 
 mark_as_advanced(
   LJPEG_LIBRARIES

@@ -20,19 +20,19 @@ if (POPPLER_LIBRARY AND POPPLER_INCLUDE_DIR)
     set(POPPLER_LIBRARIES ${POPPLER_LIBRARY})
     set(POPPLER_INCLUDE_DIRS ${POPPLER_INCLUDE_DIR} ${POPPLER_INCLUDE_DIR}/poppler)
     set(POPPLER_FOUND "YES")
-else (POPPLER_LIBRARY AND POPPLER_INCLUDE_DIR)
+else ()
   set(POPPLER_FOUND "NO")
-endif (POPPLER_LIBRARY AND POPPLER_INCLUDE_DIR)
+endif ()
 
 if (POPPLER_FOUND)
    if (NOT Poppler_FIND_QUIETLY)
       message(STATUS "Found POPPLER: ${POPPLER_LIBRARIES}")
    endif ()
-else (POPPLER_FOUND)
+else ()
    if (Poppler_FIND_REQUIRED)
       message(FATAL_ERROR "Could not find POPPLER library")
    endif ()
-endif (POPPLER_FOUND)
+endif ()
 
 mark_as_advanced(
   POPPLER_LIBRARY

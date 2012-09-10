@@ -7,10 +7,10 @@ if(GDCM_DOCUMENTATION)
 
   if(GDCM_DOXYGEN_NO_FOOTER)
     set(GDCM_HTML_FOOTER)
-  else(GDCM_DOXYGEN_NO_FOOTER)
+  else()
     # Otherwise use gdcm/piwik/sf.net footer:
     set(GDCM_HTML_FOOTER ${GDCM_SOURCE_DIR}/Utilities/doxygen/footer.html)
-  endif(GDCM_DOXYGEN_NO_FOOTER)
+  endif()
   configure_file(
     ${GDCM_SOURCE_DIR}/Utilities/doxygen/doxyfile.in
     ${GDCM_BINARY_DIR}/Utilities/doxygen/Doxyfile
@@ -42,7 +42,7 @@ if(GDCM_DOCUMENTATION)
   foreach(file ${examplefiles} ${vtkexamplefiles})
     get_filename_component(f ${file} NAME)
     set(DOXYFILE_EXAMPLES "${DOXYFILE_EXAMPLES}\n\\example ${f}")
-  endforeach(file)
+  endforeach()
   configure_file(
     ${GDCM_SOURCE_DIR}/Utilities/doxygen/TestsList.txt.in
     ${GDCM_BINARY_DIR}/Utilities/doxygen/TestsList.txt
@@ -55,14 +55,14 @@ if(GDCM_DOCUMENTATION)
     set(GDCM_DOC_TARBALL_LINK
       "http://gdcm.sourceforge.net/${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}/gdcm-${GDCM_VERSION}-doc.tar.gz"
     )
-  else(GDCM_MINOR_VERSION MATCHES "[02468]$")
+  else()
     set(GDCM_DOC_PDF_LINK
       "http://gdcm.sourceforge.net/gdcm-${GDCM_VERSION}.pdf"
     )
     set(GDCM_DOC_TARBALL_LINK
       "http://gdcm.sourceforge.net/gdcm-${GDCM_VERSION}-doc.tar.gz"
     )
-  endif(GDCM_MINOR_VERSION MATCHES "[02468]$")
+  endif()
   configure_file(
     ${GDCM_SOURCE_DIR}/Utilities/doxygen/README.txt.in
     ${GDCM_BINARY_DIR}/Utilities/doxygen/README.txt
@@ -147,14 +147,14 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
       ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
       DESTINATION ${GDCM_INSTALL_DOC_DIR}
     )
-  else(UNIX AND GDCM_PDF_DOCUMENTATION)
+  else()
     # make DoxygenDoc depends on the final tarball thus all file are garantee to be generated
     add_custom_target(GDCMDoxygenDoc
       ALL
       DEPENDS ${GDCM_DOC_TARBALL}
       COMMENT  "GDCM: Executing GDCMDoxygenDoc"
     )
-  endif(UNIX AND GDCM_PDF_DOCUMENTATION)
+  endif()
 
   # Install html pages:
   #install(FILES
@@ -203,8 +203,8 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     # from paraview). It always rerun -sigh-
     if(GDCM_VTK_DOCUMENTATION)
       set(BUILD_DOCUMENTATION 1)
-    endif(GDCM_VTK_DOCUMENTATION)
+    endif()
     subdirs(vtk)
-  endif(GDCM_USE_VTK)
+  endif()
 
-endif(GDCM_DOCUMENTATION)
+endif()

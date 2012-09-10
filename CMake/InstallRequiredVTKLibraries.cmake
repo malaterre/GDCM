@@ -35,20 +35,20 @@ set(vtklist
 
 foreach(el ${vtklist})
   list(APPEND CMAKE_INSTALL_VTK_RUNTIME_LIBS ${VTK_DIR}/bin/${el}.dll)
-endforeach(el)
+endforeach()
 
 if(CMAKE_INSTALL_VTK_RUNTIME_LIBS)
   if(NOT CMAKE_INSTALL_VTK_RUNTIME_LIBS_SKIP)
     if(NOT CMAKE_INSTALL_VTK_RUNTIME_DESTINATION)
       if(WIN32)
         set(CMAKE_INSTALL_VTK_RUNTIME_DESTINATION bin)
-      else(WIN32)
+      else()
         set(CMAKE_INSTALL_VTK_RUNTIME_DESTINATION lib)
-      endif(WIN32)
-    endif(NOT CMAKE_INSTALL_VTK_RUNTIME_DESTINATION)
+      endif()
+    endif()
     install(PROGRAMS ${CMAKE_INSTALL_VTK_RUNTIME_LIBS}
       DESTINATION ${CMAKE_INSTALL_VTK_RUNTIME_DESTINATION}
       COMPONENT VTKLibraries
     )
-  endif(NOT CMAKE_INSTALL_VTK_RUNTIME_LIBS_SKIP)
-endif(CMAKE_INSTALL_VTK_RUNTIME_LIBS)
+  endif()
+endif()

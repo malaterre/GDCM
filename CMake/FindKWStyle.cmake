@@ -23,11 +23,11 @@ find_program(KWSTYLE_EXECUTABLE
 #
 #  if(KWSTYLE_USE_VIM_FORMAT)
 #    set(KWSTYLE_ARGUMENTS -vim ${KWSTYLE_ARGUMENTS})
-#  endif(KWSTYLE_USE_VIM_FORMAT)
+#  endif()
 #
 #  if(KWSTYLE_USE_MSVC_FORMAT)
 #    set(KWSTYLE_ARGUMENTS -msvc ${KWSTYLE_ARGUMENTS})
-#  endif(KWSTYLE_USE_MSVC_FORMAT)
+#  endif()
 
 
 mark_as_advanced(

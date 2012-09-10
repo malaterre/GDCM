@@ -28,16 +28,16 @@ set(common_SRCS "")
 # If not getopt was found then add it to the lib:
 if(DONT_HAVE_GETOPT)
   set(common_SRCS ${OPENJPEG_SOURCE_DIR}/common/getopt.c)
-endif(DONT_HAVE_GETOPT)
+endif()
 
 # Build the library
 if(WIN32)
   if(BUILD_SHARED_LIBS)
     add_definitions(-DOPJ_EXPORTS)
-  else(BUILD_SHARED_LIBS)
+  else()
     add_definitions(-DOPJ_STATIC)
-  endif(BUILD_SHARED_LIBS)
-endif(WIN32)
+  endif()
+endif()
 add_library(${OPENJPEG_LIBRARY_NAME}_JPWL ${JPWL_SRCS} ${OPJ_SRCS})
 set_target_properties(${OPENJPEG_LIBRARY_NAME}_JPWL PROPERTIES ${OPENJPEG_LIBRARY_PROPERTIES})
 
@@ -55,13 +55,13 @@ include_directories(
 
 if(LCMS_INCLUDE_DIR)
   include_directories( ${LCMS_INCLUDE_DIR} )
-endif(LCMS_INCLUDE_DIR)
+endif()
 if(PNG_FOUND)
   include_directories(${PNG_INCLUDE_DIR})
-endif(PNG_FOUND)
+endif()
 if(TIFF_FOUND)
   include_directories(${TIFF_INCLUDE_DIR})
-endif(TIFF_FOUND)
+endif()
 
 
 add_executable(JPWL_j2k_to_image
@@ -75,13 +75,13 @@ ${common_SRCS}
 target_link_libraries(JPWL_j2k_to_image ${OPENJPEG_LIBRARY_NAME}_JPWL ${LCMS_LIB})
 if(PNG_FOUND)
   target_link_libraries(JPWL_j2k_to_image ${PNG_LIBRARIES})
-endif(PNG_FOUND)
+endif()
 if(TIFF_FOUND)
   target_link_libraries(JPWL_j2k_to_image ${TIFF_LIBRARIES})
-endif(TIFF_FOUND)
+endif()
 if(UNIX)
   target_link_libraries(JPWL_j2k_to_image m)
-endif(UNIX)
+endif()
 
 
 add_executable(JPWL_image_to_j2k
@@ -94,13 +94,13 @@ ${common_SRCS}
 target_link_libraries(JPWL_image_to_j2k ${OPENJPEG_LIBRARY_NAME}_JPWL ${LCMS_LIB})
 if(PNG_FOUND)
   target_link_libraries(JPWL_image_to_j2k ${PNG_LIBRARIES})
-endif(PNG_FOUND)
+endif()
 if(TIFF_FOUND)
   target_link_libraries(JPWL_image_to_j2k ${TIFF_LIBRARIES})
-endif(TIFF_FOUND)
+endif()
 if(UNIX)
   target_link_libraries(JPWL_image_to_j2k m)
-endif(UNIX)
+endif()
 
 install(TARGETS JPWL_image_to_j2k JPWL_j2k_to_image
   DESTINATION ${OPENJPEG_INSTALL_BIN_DIR} COMPONENT Binaries

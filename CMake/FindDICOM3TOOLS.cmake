@@ -56,6 +56,6 @@ mark_as_advanced(
 
 #if (NOT DCIODVFY_EXECUTABLE)
 #  set(DCIODVFY_FOUND "NO")
-#else (NOT DCIODVFY_EXECUTABLE)
+#else ()
 #  set(DCIODVFY_FOUND "YES")
-#endif (NOT DCIODVFY_EXECUTABLE)
+#endif ()

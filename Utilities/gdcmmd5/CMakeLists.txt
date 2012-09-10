@@ -1,7 +1,7 @@
 if(NOT MD5_NAMESPACE)
   set(MD5_NAMESPACE "MD5")
   set(MD5_STANDALONE 1)
-endif(NOT MD5_NAMESPACE)
+endif()
 # In all cases:
 string(TOLOWER ${MD5_NAMESPACE} MD5_LIBRARY_NAME)
 
@@ -9,7 +9,7 @@ project(${MD5_NAMESPACE} C)
 cmake_minimum_required(VERSION 2.2)
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
-endif(COMMAND cmake_policy)
+endif()
 
 # Do full dependency headers.
 include_regular_expression("^.*$")
@@ -21,10 +21,10 @@ set(MD5_SOURCES
 if (WIN32)
   if (BUILD_SHARED_LIBS)
     set(MD5DLL 1)
-  else (BUILD_SHARED_LIBS)
+  else ()
     set(MD5STATIC 1)
-  endif (BUILD_SHARED_LIBS)
-endif (WIN32)
+  endif ()
+endif ()
 
 # TODO
 # Optimized function needs to define:
@@ -47,14 +47,14 @@ add_library(${MD5_LIBRARY_NAME} ${MD5_SOURCES})
 
 if(GDCM_LIBRARY_PROPERTIES)
   set_target_properties(${MD5_LIBRARY_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-endif(GDCM_LIBRARY_PROPERTIES)
+endif()
 
 if(NOT MD5_INSTALL_BIN_DIR)
   set(MD5_INSTALL_BIN_DIR "bin")
-endif(NOT MD5_INSTALL_BIN_DIR)
+endif()
 if(NOT MD5_INSTALL_LIB_DIR)
   set(MD5_INSTALL_LIB_DIR "lib")
-endif(NOT MD5_INSTALL_LIB_DIR)
+endif()
 
 if(NOT MD5_INSTALL_NO_LIBRARIES)
   install(TARGETS ${MD5_LIBRARY_NAME}
@@ -64,7 +64,7 @@ if(NOT MD5_INSTALL_NO_LIBRARIES)
     ARCHIVE DESTINATION ${MD5_INSTALL_LIB_DIR} COMPONENT Development
   ${CPACK_NAMELINK_TYPE}
   )
-endif(NOT MD5_INSTALL_NO_LIBRARIES)
+endif()
 
 if(MD5_STANDALONE)
   # md5main
@@ -72,7 +72,7 @@ if(MD5_STANDALONE)
   target_link_libraries(md5main ${MD5_LIBRARY_NAME})
   if(UNIX)
     target_link_libraries(md5main -lm)
-  endif(UNIX)
+  endif()
   # md5cmp
   add_executable(md5cmp md5cmp.c)
   target_link_libraries(md5cmp ${MD5_LIBRARY_NAME})
@@ -86,5 +86,5 @@ if(MD5_STANDALONE)
   ${CPACK_NAMELINK_TYPE}
   )
 
-endif(MD5_STANDALONE)
+endif()
 

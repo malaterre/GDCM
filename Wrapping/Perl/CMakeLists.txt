@@ -31,7 +31,7 @@ set_target_properties(${SWIG_MODULE_perl_gdcm_REAL_NAME} PROPERTIES PREFIX "")
 
 if(UNIX)
   set_target_properties(${SWIG_MODULE_perl_gdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "gdcm")
-endif(UNIX)
+endif()
 
 
 # Let's copy gdcm.pm into the bin dir:
@@ -55,4 +55,4 @@ if(NOT GDCM_INSTALL_NO_LIBRARIES)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/gdcm.pm
     DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT PerlModule
   )
-endif(NOT GDCM_INSTALL_NO_LIBRARIES)
+endif()

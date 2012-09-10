@@ -30,7 +30,7 @@ if(BUILD_TESTING)
     BasicAnonymizer
     ClinicalTrialIdentificationWorkflow
     )
-endif(BUILD_TESTING)
+endif()
 
 set(DEP)
 # http://www.cmake.org/Wiki/CMake_FAQ#How_can_I_add_a_dependency_to_a_source_file_which_is_generated_in_a_subdirectory.3F
@@ -54,7 +54,7 @@ foreach(example ${CSHARP_EXAMPLES})
   add_dependencies(gdcm_sharp_${example} GDCMCSharp)
 
   set(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
-endforeach(example)
+endforeach()
 
 add_custom_target(GDCMExampleCSharp ALL
   DEPENDS ${DEP}
@@ -68,6 +68,6 @@ if(GDCM_DATA_ROOT)
 # TODO:
 #if(BUILD_EXAMPLES)
 #  ADD_CSHARP_TEST(HelloWorldCSharp ${GDCM_EXECUTABLE_DIR}/HelloWorld.exe ${GDCM_DATA_ROOT}/012345.002.050.dcm)
-#endif(BUILD_EXAMPLES)
-endif(GDCM_DATA_ROOT)
-endif(BUILD_TESTING)
+#endif()
+endif()
+endif()

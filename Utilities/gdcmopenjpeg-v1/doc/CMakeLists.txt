@@ -11,5 +11,5 @@ add_custom_target(doxygen
   ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.dox
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
-endif(DOXYGEN_EXECUTABLE)
+endif()
 

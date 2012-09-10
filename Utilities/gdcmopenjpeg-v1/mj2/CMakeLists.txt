@@ -3,7 +3,7 @@
 set(common_SRCS "")
 if(DONT_HAVE_GETOPT)
   set(common_SRCS ${OPENJPEG_SOURCE_DIR}/common/getopt.c)
-endif(DONT_HAVE_GETOPT)
+endif()
 
 # While mj2 executables do not use the API correctly, we do not link with the library but rather compile the sources files.
 set(OPJ_SRCS
@@ -31,7 +31,7 @@ set(MJ2_SRCS mj2.c mj2_convert.c)
 
 if(WIN32)
   add_definitions(-DOPJ_STATIC)
-endif(WIN32)
+endif()
 
 # Headers file are located here:
 include_directories(
@@ -49,7 +49,7 @@ add_executable(frames_to_mj2
 target_link_libraries(frames_to_mj2 ${LCMS_LIB})
 if(UNIX)
   target_link_libraries(frames_to_mj2 m)
-endif(UNIX)
+endif()
 
 add_executable(mj2_to_frames
     mj2_to_frames.c
@@ -61,7 +61,7 @@ add_executable(mj2_to_frames
 target_link_libraries(mj2_to_frames ${LCMS_LIB})
 if(UNIX)
   target_link_libraries(mj2_to_frames m)
-endif(UNIX)
+endif()
 
 add_executable(extract_j2k_from_mj2
     extract_j2k_from_mj2.c
@@ -71,7 +71,7 @@ add_executable(extract_j2k_from_mj2
 target_link_libraries(extract_j2k_from_mj2 ${LCMS_LIB})
 if(UNIX)
   target_link_libraries(extract_j2k_from_mj2 m)
-endif(UNIX)
+endif()
 
 add_executable(wrap_j2k_in_mj2
     wrap_j2k_in_mj2.c
@@ -81,7 +81,7 @@ add_executable(wrap_j2k_in_mj2
 target_link_libraries(wrap_j2k_in_mj2 ${LCMS_LIB})
 if(UNIX)
   target_link_libraries(wrap_j2k_in_mj2 m)
-endif(UNIX)
+endif()
 
 install(TARGETS frames_to_mj2 mj2_to_frames extract_j2k_from_mj2 wrap_j2k_in_mj2
 	DESTINATION bin)

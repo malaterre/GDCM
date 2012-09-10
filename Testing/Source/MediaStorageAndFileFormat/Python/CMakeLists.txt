@@ -18,14 +18,14 @@ if(BUILD_APPLICATIONS)
       ${GDCM_PYTHON_TEST_SRCS}
       TestDCMTKMD5 # need dcmdrle and dcmdjpeg
     )
-  endif(UNIX)
-  endif(DCMTK_DCMDUMP_EXECUTABLE)
-endif(BUILD_APPLICATIONS)
+  endif()
+  endif()
+endif()
 
 # Loop over files and create executables
 foreach(name ${GDCM_PYTHON_TEST_SRCS})
   ADD_PYTHON_TEST(${name}Python ${name}.py)
-endforeach(name)
+endforeach()
 
 # Special test that need extra arg:
 # TestKakaduDecompressionMD5
@@ -34,6 +34,6 @@ if(BUILD_APPLICATIONS)
   if(KDU_EXPAND_EXECUTABLE)
   if(UNIX)
     ADD_PYTHON_TEST(TestKakaduDecompressionMD5Python TestKakaduDecompressionMD5.py ${KDU_EXPAND_EXECUTABLE})
-  endif(UNIX)
-  endif(KDU_EXPAND_EXECUTABLE)
-endif(BUILD_APPLICATIONS)
+  endif()
+  endif()
+endif()

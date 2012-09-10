@@ -21,10 +21,10 @@
 # 000b37a1 T _uuid_generate_time
 if(APPLE)
   set(UUID_LIBRARY_VAR System)
-else(APPLE)
+else()
   # Linux type:
   set(UUID_LIBRARY_VAR uuid)
-endif(APPLE)
+endif()
 
 find_library(UUID_LIBRARY
   NAMES ${UUID_LIBRARY_VAR}
@@ -43,22 +43,22 @@ find_path(UUID_INCLUDE_DIR uuid/uuid.h
 if (UUID_LIBRARY AND UUID_INCLUDE_DIR)
   set(UUID_LIBRARIES ${UUID_LIBRARY})
   set(UUID_FOUND "YES")
-else (UUID_LIBRARY AND UUID_INCLUDE_DIR)
+else ()
   set(UUID_FOUND "NO")
-endif (UUID_LIBRARY AND UUID_INCLUDE_DIR)
+endif ()
 
 
 if (UUID_FOUND)
    if (NOT UUID_FIND_QUIETLY)
       message(STATUS "Found UUID: ${UUID_LIBRARIES}")
-   endif (NOT UUID_FIND_QUIETLY)
-else (UUID_FOUND)
+   endif ()
+else ()
    if (UUID_FIND_REQUIRED)
       message( "library: ${UUID_LIBRARY}" )
       message( "include: ${UUID_INCLUDE_DIR}" )
       message(FATAL_ERROR "Could not find UUID library")
-   endif (UUID_FIND_REQUIRED)
-endif (UUID_FOUND)
+   endif ()
+endif ()
 
 # Deprecated declarations.
 #set (NATIVE_UUID_INCLUDE_PATH ${UUID_INCLUDE_DIR} )

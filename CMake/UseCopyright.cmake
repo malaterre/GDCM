@@ -11,7 +11,7 @@ macro(CREATE_COPYRIGHT_FILE name)
   # Always cleanup the file:
   file(WRITE ${name} "")
   set(COPYRIGHT_MODULE_FILENAME ${name})
-endmacro(CREATE_COPYRIGHT_FILE)
+endmacro()
 
 # Append copyright file
 macro(APPEND_COPYRIGHT)
@@ -20,6 +20,6 @@ macro(APPEND_COPYRIGHT)
     foreach(filename ${ARGN})
       file(READ ${filename} content)
       file(APPEND ${COPYRIGHT_MODULE_FILENAME} ${content})
-    endforeach(filename)
-  endif(EXISTS ${COPYRIGHT_MODULE_FILENAME} )
-endmacro(APPEND_COPYRIGHT)
+    endforeach()
+  endif()
+endmacro()

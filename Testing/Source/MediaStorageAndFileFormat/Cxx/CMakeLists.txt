@@ -102,8 +102,8 @@ if(GDCM_DATA_ROOT)
         TestAnonymizer2
         TestAnonymizer3
         )
-    endif(GDCM_USE_SYSTEM_OPENSSL)
-endif(GDCM_DATA_ROOT)
+    endif()
+endif()
 
 # gdcmDataExtra
 if(GDCM_DATA_EXTRA_ROOT)
@@ -113,28 +113,28 @@ if(GDCM_DATA_EXTRA_ROOT)
     TestOverlay2
     TestImageRegionReader4
     )
-endif(GDCM_DATA_EXTRA_ROOT)
+endif()
 
 if(GDCM_USE_JPEGLS)
   set(MSFF_TEST_SRCS
     ${MSFF_TEST_SRCS}
     TestImageChangeTransferSyntax5
     )
-endif(GDCM_USE_JPEGLS)
+endif()
 
 if(GDCM_HAVE_PTHREAD_H)
   set(MSFF_TEST_SRCS
     ${MSFF_TEST_SRCS}
     TestUIDGenerator2
     )
-endif(GDCM_HAVE_PTHREAD_H)
+endif()
 
 if(GDCM_PIXEL_SPACING_DATA_ROOT)
   set(MSFF_TEST_SRCS
     ${MSFF_TEST_SRCS}
     TestImageReaderPixelSpacing
     )
-endif(GDCM_PIXEL_SPACING_DATA_ROOT)
+endif()
 
 # Add the include paths
 include_directories(
@@ -154,7 +154,7 @@ add_executable(gdcmMSFFTests ${MSFFTests})
 target_link_libraries(gdcmMSFFTests gdcmMSFF)
 if(GDCM_HAVE_PTHREAD_H)
 target_link_libraries(gdcmMSFFTests pthread)
-endif(GDCM_HAVE_PTHREAD_H)
+endif()
 
 #Don't understand why I need that ??
 set(GDCM_MSFF_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMSFFTests")
@@ -162,10 +162,10 @@ set(GDCM_MSFF_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMSFFTests")
 # Loop over files and create executables
 foreach(name ${MSFF_TEST_SRCS})
   add_test(${name} ${GDCM_MSFF_TESTS} ${name})
-endforeach(name)
+endforeach()
 if(GDCM_DATA_ROOT)
   set_tests_properties(TestDICOMDIRGenerator2 PROPERTIES WILL_FAIL ON)
-endif(GDCM_DATA_ROOT)
+endif()
 
 # We can only run the dcmtk cross-checking test *only* after all the tests have run
 # in particular once the TestWriter is done.
@@ -179,10 +179,10 @@ foreach(filename ${gdcm_data_filenames_glob})
         # -dc: disable correction
         add_test("DCMDUMP-${filename_name}" ${DCMTK_DCMDUMP_EXECUTABLE} -M -dc
           "${GDCM_TEMP_DIRECTORY}/TestWriter/${filename_name}")
-      endif(DCMTK_DCMDUMP_EXECUTABLE)
-    endif(GDCM_TEST_DCMTK)
-  endif(NOT bad_dicom)
-endforeach(filename)
+      endif()
+    endif()
+  endif()
+endforeach()
 
 # Repeat for dcdump
 foreach(filename ${gdcm_data_filenames_glob})
@@ -193,10 +193,10 @@ foreach(filename ${gdcm_data_filenames_glob})
       if(DCDUMP_EXECUTABLE)
         add_test("DCDUMP-${filename_name}" "${DCDUMP_EXECUTABLE}"
           "${GDCM_TEMP_DIRECTORY}/TestWriter/${filename_name}")
-      endif(DCDUMP_EXECUTABLE)
-    endif(GDCM_TEST_DICOM3TOOLS)
-  endif(NOT bad_dicom)
-endforeach(filename)
+      endif()
+    endif()
+  endif()
+endforeach()
 
 # There is a new test that compress all images using the jpeg compression alg:
 # try to decompress them with dcmtk:
@@ -216,11 +216,11 @@ foreach(filename ${gdcm_data_filenames_glob})
         if(is_dicomdir)
           #message("IS DICOMDIR ${filename_name}")
           set_tests_properties("DCMDJPEG-${filename_name}" PROPERTIES WILL_FAIL TRUE)
-        endif(is_dicomdir)
-      endif(DCMTK_DCMDJPEG_EXECUTABLE)
-    endif(GDCM_TEST_DCMTK)
-  endif(NOT bad_dicom)
-endforeach(filename)
+        endif()
+      endif()
+    endif()
+  endif()
+endforeach()
 
 file(MAKE_DIRECTORY "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax3/dcmdrle/")
 
@@ -238,12 +238,12 @@ foreach(filename ${gdcm_data_filenames_glob})
         if(is_dicomdir)
           #message("IS DICOMDIR ${filename_name}")
           set_tests_properties("DCMDRLE-${filename_name}" PROPERTIES WILL_FAIL TRUE)
-        endif(is_dicomdir)
+        endif()
         #
-      endif(DCMTK_DCMDRLE_EXECUTABLE)
-    endif(GDCM_TEST_DCMTK)
-  endif(NOT bad_dicom)
-endforeach(filename)
+      endif()
+    endif()
+  endif()
+endforeach()
 
 file(MAKE_DIRECTORY "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax5/dcmdjpls/")
 
@@ -262,13 +262,13 @@ foreach(filename ${gdcm_data_filenames_glob})
         if(is_dicomdir)
           #message("IS DICOMDIR ${filename_name}")
           set_tests_properties("DCMDJPLS-${filename_name}" PROPERTIES WILL_FAIL TRUE)
-        endif(is_dicomdir)
-        #endif(EXISTS "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax5/${filename_name}")
+        endif()
+        #endif()
         #
-      endif(DCMTK_DCMDJPLS_EXECUTABLE)
-    endif(GDCM_TEST_DCMTK)
-  endif(NOT bad_dicom)
-endforeach(filename)
+      endif()
+    endif()
+  endif()
+endforeach()
 
 # Need to SET_TESTS_PROPERTIES only *after* the loop is done (test need to have been declared first)
 if(GDCM_TEST_DCMTK)
@@ -276,16 +276,16 @@ if(GDCM_TEST_DCMTK)
     if(DCMTK_DCMDJPLS_EXECUTABLE)
       # No pixel data
       set_tests_properties("DCMDJPLS-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
-    endif(DCMTK_DCMDJPLS_EXECUTABLE)
+    endif()
     if(DCMTK_DCMDJPEG_EXECUTABLE)
       # No pixel data
       set_tests_properties("DCMDJPEG-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
-    endif(DCMTK_DCMDJPEG_EXECUTABLE)
+    endif()
     if(DCMTK_DCMDRLE_EXECUTABLE)
       # No pixel data
       set_tests_properties("DCMDRLE-ELSCINT1_PMSCT_RLE1.dcm" PROPERTIES WILL_FAIL TRUE)
       # It is missing the very last pixel, so technically is illegal
       set_tests_properties("DCMDRLE-ALOKA_SSD-8-MONO2-RLE-SQ.dcm" PROPERTIES WILL_FAIL TRUE)
-    endif(DCMTK_DCMDRLE_EXECUTABLE)
-  endif(GDCM_DATA_ROOT)
-endif(GDCM_TEST_DCMTK)
+    endif()
+  endif()
+endif()

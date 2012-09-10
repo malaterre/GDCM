@@ -1,7 +1,7 @@
 if(NOT EXPAT_NAMESPACE)
   set(EXPAT_NAMESPACE "EXPAT")
   set(EXPAT_STANDALONE 1)
-endif(NOT EXPAT_NAMESPACE)
+endif()
 # In all cases:
 string(TOLOWER ${EXPAT_NAMESPACE} EXPAT_LIBRARY_NAME)
 
@@ -25,10 +25,10 @@ include_regular_expression("^.*$")
 #if(WIN32)
 #  if(BUILD_SHARED_LIBS)
 #    set(EXPATDLL 1)
-#  else(BUILD_SHARED_LIBS)
+#  else()
 #    set (EXPATSTATIC 1)
-#  endif(BUILD_SHARED_LIBS)
-#endif(WIN32)
+#  endif()
+#endif()
 
 #-----------------------------------------------------------------------------
 include (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)

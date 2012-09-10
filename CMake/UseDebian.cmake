@@ -25,12 +25,12 @@ if(UNIX)
   if (NOT CMAKE_AR)
     message(STATUS "No ar, cannot proceed")
     set(DEBIAN_FOUND FALSE)
-  else (NOT CMAKE_AR)
+  else ()
     set(DEBIAN_FOUND TRUE)
     # Detect if CPack was included or not
     if (NOT DEFINED "CPACK_PACKAGE_NAME")
       message(FATAL_ERROR "CPack was not included, you should include CPack before Using UseDebian")
-    endif (NOT DEFINED "CPACK_PACKAGE_NAME")
+    endif ()
 
     macro(ADD_DEBIAN_TARGETS DEBNAME)
       # $ ar tv cmake_2.4.5-1_i386.deb
@@ -58,21 +58,21 @@ if(UNIX)
           ${CPACK_PACKAGE_NAME}
           DEBIAN_PACKAGE_NAME
           )
-      endif(NOT DEBIAN_PACKAGE_NAME)
+      endif()
       if(NOT DEBIAN_PACKAGE_DEPENDS)
         set(DEBIAN_PACKAGE_DEPENDS
           "libc6 (>= 2.3.1-6), libgcc1 (>= 1:3.4.2-12)"
           )
-      endif(NOT DEBIAN_PACKAGE_DEPENDS)
+      endif()
       if(NOT DEBIAN_ARCHITECTURE)
         # There is no such thing as i686 architecture on debian, you should use i386 instead
         # $ dpkg --print-architecture
         set(DEBIAN_ARCHITECTURE i386)
-      endif(NOT DEBIAN_ARCHITECTURE)
+      endif()
       if(NOT DEBIAN_PACKAGE_VERSION)
         set(DEBIAN_PACKAGE_VERSION
           ${CPACK_PACKAGE_VERSION})
-      endif(NOT DEBIAN_PACKAGE_VERSION)
+      endif()
 
       #message(${CMAKE_SYSTEM_PROCESSOR})
 
@@ -171,6 +171,6 @@ if(UNIX)
       set_directory_properties(PROPERTIES
         ADDITIONAL_MAKE_CLEAN_FILES "debian-binary;control;md5sums;debian_package;")
 
-    endmacro(ADD_DEBIAN_TARGETS DEBNAME)
-  endif (NOT CMAKE_AR)
-endif(UNIX)
+    endmacro()
+  endif ()
+endif()

@@ -36,7 +36,7 @@ foreach(dir ${JAVA_AWT_LIBRARY_DIRECTORIES})
     "${dir}/client"
     "${dir}/server"
     )
-endforeach(dir)
+endforeach()
 
 find_library(JAVA_AWT_LIBRARY NAMES jawt
   PATHS ${JAVA_AWT_LIBRARY_DIRECTORIES}
@@ -56,7 +56,7 @@ if(UNIX)
     # there is one also in headless but it does not work...
     PATHS ${JavaProp_SUN_BOOT_LIBRARY_PATH}/xawt
     )
-endif(UNIX)
+endif()
 
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(JNI  DEFAULT_MSG  JAVA_AWT_LIBRARY JAVA_JVM_LIBRARY
                                                     JAVA_INCLUDE_PATH  JAVA_INCLUDE_PATH2 JAVA_AWT_INCLUDE_PATH)

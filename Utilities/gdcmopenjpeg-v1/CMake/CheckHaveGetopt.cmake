@@ -6,10 +6,10 @@ if(UNIX) #I am pretty sure only *nix sys have this anyway
   # Seems like we need the contrary:
   if(CMAKE_HAVE_GETOPT_H)
     set(DONT_HAVE_GETOPT 0)
-  endif(CMAKE_HAVE_GETOPT_H)
-endif(UNIX)
+  endif()
+endif()
 
 if(DONT_HAVE_GETOPT)
   add_definitions(-DDONT_HAVE_GETOPT)
-endif(DONT_HAVE_GETOPT)
+endif()
 

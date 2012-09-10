@@ -28,7 +28,7 @@ if(NOT BUILD_SHARED_LIBS)
                               PROPERTIES
                               COMPILE_FLAGS -DXML_STATIC
                               )
-endif(NOT BUILD_SHARED_LIBS)
+endif()
 
 # Add the include paths
 include_directories(
@@ -65,7 +65,7 @@ file(GLOB GDCM_XML_TABLES_GLOB
 set(GDCM_XML_TABLES)
 foreach(filename ${GDCM_XML_TABLES_GLOB})
   set(GDCM_XML_TABLES "${GDCM_XML_TABLES}\n\"${filename}\",")
-endforeach(filename)
+endforeach()
 
 # Populate GDCM_DATA_IMAGES:
 configure_file(

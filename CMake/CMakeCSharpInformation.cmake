@@ -19,12 +19,12 @@
 
 if(CMAKE_USER_MAKE_RULES_OVERRIDE)
    include(${CMAKE_USER_MAKE_RULES_OVERRIDE})
-endif(CMAKE_USER_MAKE_RULES_OVERRIDE)
+endif()
 
 # Copy from CSharp, ref CXX ???
 if(CMAKE_USER_MAKE_RULES_OVERRIDE_CSHARP)
    include(${CMAKE_USER_MAKE_RULES_OVERRIDE_CSHARP})
-endif(CMAKE_USER_MAKE_RULES_OVERRIDE_CSHARP)
+endif()
 
 # <TARGET>
 # <TARGET_BASE> the target without the suffix
@@ -38,14 +38,14 @@ endif(CMAKE_USER_MAKE_RULES_OVERRIDE_CSHARP)
 if(NOT CMAKE_CSharp_CREATE_STATIC_LIBRARY)
 #  if(WIN32)
 #    set(class_files_mask "*.class")
-#  else(WIN32)
+#  else()
     set(class_files_mask ".")
-#  endif(WIN32)
+#  endif()
 
   set(CMAKE_CSharp_CREATE_STATIC_LIBRARY
       #"<CMAKE_CSharp_ARCHIVE> -cf <TARGET> -C <OBJECT_DIR> <OBJECTS>")
       "<CMAKE_CSharp_COMPILER> <CMAKE_STATIC_LIBRARY_CSharp_FLAGS> <OBJECTS> -out:<TARGET>")
-endif(NOT CMAKE_CSharp_CREATE_STATIC_LIBRARY)
+endif()
 
 # compile a CSharp file into an object file
 if(NOT CMAKE_CSharp_COMPILE_OBJECT)
@@ -55,7 +55,7 @@ if(NOT CMAKE_CSharp_COMPILE_OBJECT)
 
   # copy src version
   set(CMAKE_CSharp_COMPILE_OBJECT "<CMAKE_COMMAND> -E copy <SOURCE> <OBJECT>")
-endif(NOT CMAKE_CSharp_COMPILE_OBJECT)
+endif()
 
 if(NOT CMAKE_CSharp_LINK_EXECUTABLE)
   set(CMAKE_CSharp_LINK_EXECUTABLE
@@ -66,27 +66,27 @@ if(NOT CMAKE_CSharp_LINK_EXECUTABLE)
     #  'cmTryCompileExec' must have file extension.
     #"<CMAKE_CSharp_COMPILER> <FLAGS> <OBJECTS> -out:<TARGET>.exe <LINK_FLAGS> <LINK_LIBRARIES>")
     "<CMAKE_CSharp_COMPILER> <FLAGS> <OBJECTS> -out:<TARGET_BASE>.exe <LINK_FLAGS> <LINK_LIBRARIES>")
-endif(NOT CMAKE_CSharp_LINK_EXECUTABLE)
+endif()
 
 if(NOT CMAKE_CSharp_CREATE_SHARED_LIBRARY)
   set(CMAKE_CSharp_CREATE_SHARED_LIBRARY
       #"<CMAKE_CSharp_COMPILER> /target:library <OBJECTS> -out:<TARGET>")
       "<CMAKE_CSharp_COMPILER> <CMAKE_SHARED_LIBRARY_CSharp_FLAGS> <OBJECTS> -out:<TARGET>")
-endif(NOT CMAKE_CSharp_CREATE_SHARED_LIBRARY)
+endif()
 
 # set java include flag option and the separator for multiple include paths
 #set(CMAKE_INCLUDE_FLAG_CSharp "-classpath ")
 #if(WIN32 AND NOT CYGWIN)
 #  set(CMAKE_INCLUDE_FLAG_SEP_CSharp ";")
-#else(WIN32 AND NOT CYGWIN)
+#else()
 #  set(CMAKE_INCLUDE_FLAG_SEP_CSharp ":")
-#endif(WIN32 AND NOT CYGWIN)
+#endif()
 
 set(CMAKE_CSharp_FLAGS_INIT "$ENV{CSFLAGS} ${CMAKE_CSharp_FLAGS_INIT}")
 
 # avoid just having a space as the initial value for the cache
 if(CMAKE_CSharp_FLAGS_INIT STREQUAL " ")
   set(CMAKE_CSharp_FLAGS_INIT)
-endif(CMAKE_CSharp_FLAGS_INIT STREQUAL " ")
+endif()
 set (CMAKE_CSharp_FLAGS "${CMAKE_CSharp_FLAGS_INIT}" CACHE STRING
      "Flags used by the compiler during all build types.")

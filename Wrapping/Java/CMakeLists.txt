@@ -66,7 +66,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(
     ${swig_generated_file_fullname}
     PROPERTIES COMPILE_FLAGS "-fno-strict-aliasing")
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 add_custom_command(
   OUTPUT ${LIBRARY_OUTPUT_PATH}/gdcm.jar
@@ -98,4 +98,4 @@ if(NOT GDCM_INSTALL_NO_LIBRARIES)
   install(FILES ${LIBRARY_OUTPUT_PATH}/gdcm.jar
     DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT JavaModule
   )
-endif(NOT GDCM_INSTALL_NO_LIBRARIES)
+endif()
