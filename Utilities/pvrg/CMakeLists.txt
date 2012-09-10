@@ -1,5 +1,5 @@
 
-SET(
+set(
   PVRG_SRCS
   jpeg.c
   codec.c
@@ -15,20 +15,20 @@ SET(
 
 
 # might not be portable, so simply rename the function in the code itself...
-#SET_SOURCE_FILES_PROPERTIES(jpeg.c
+#set_source_files_properties(jpeg.c
 #  PROPERTIES
 #  COMPILE_FLAGS -Dmain=pvrgmain
 #)
-IF(MSVC)
-ADD_DEFINITIONS(-DNOTRUNCATE)
-ELSE(MSVC)
-ADD_DEFINITIONS(-DSYSV -DNOTRUNCATE)
-ENDIF(MSVC)
-#ADD_DEFINITIONS(-DIO_DEBUG)
-#ADD_LIBRARY(pvrg ${PVRG_SRCS})
+if(MSVC)
+add_definitions(-DNOTRUNCATE)
+else(MSVC)
+add_definitions(-DSYSV -DNOTRUNCATE)
+endif(MSVC)
+#add_definitions(-DIO_DEBUG)
+#add_library(pvrg ${PVRG_SRCS})
 
-ADD_EXECUTABLE(gdcmjpeg ${PVRG_SRCS})
-#TARGET_LINK_LIBRARIES(pvrgjpeg pvrg)
+add_executable(gdcmjpeg ${PVRG_SRCS})
+#target_link_libraries(pvrgjpeg pvrg)
 
 
 #

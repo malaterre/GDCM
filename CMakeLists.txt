@@ -1,16 +1,16 @@
-PROJECT(GDCM)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6.2) # Sorry I want the cpack/component
+project(GDCM)
+cmake_minimum_required(VERSION 2.6.2) # Sorry I want the cpack/component
 #-----------------------------------------------------------------------------
 # New cmake policy thingy
-IF(COMMAND CMAKE_POLICY)
-  CMAKE_POLICY(SET CMP0003 NEW)
-ENDIF(COMMAND CMAKE_POLICY)
-MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY CMAKE_BUILD_TYPE CMAKE_INSTALL_PREFIX)
-SET(GDCM_CMAKE_DIR "${GDCM_SOURCE_DIR}/CMake" CACHE INTERNAL "")
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${GDCM_CMAKE_DIR}")
+if(COMMAND CMAKE_POLICY)
+  cmake_policy(SET CMP0003 NEW)
+endif(COMMAND CMAKE_POLICY)
+mark_as_advanced(CMAKE_BACKWARDS_COMPATIBILITY CMAKE_BUILD_TYPE CMAKE_INSTALL_PREFIX)
+set(GDCM_CMAKE_DIR "${GDCM_SOURCE_DIR}/CMake" CACHE INTERNAL "")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${GDCM_CMAKE_DIR}")
 
-SET(GDCM_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grassroots DICOM. GDCM is yet another DICOM library.")
-SET(GDCM_PACKAGE_CONTACT "GDCM Developers <gdcm-developers@lists.sourceforge.net>")
+set(GDCM_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grassroots DICOM. GDCM is yet another DICOM library.")
+set(GDCM_PACKAGE_CONTACT "GDCM Developers <gdcm-developers@lists.sourceforge.net>")
 
 # TODO
 # http://www.vtk.org/pipermail/vtkusers/2007-May/090968.html
@@ -27,108 +27,108 @@ SET(GDCM_PACKAGE_CONTACT "GDCM Developers <gdcm-developers@lists.sourceforge.net
 
 #-----------------------------------------------------------------------------
 # Disallow insource build since I never test that
-STRING(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${GDCM_BINARY_DIR}" INSOURCE)
-GET_FILENAME_COMPONENT(PARENTDIR ${GDCM_BINARY_DIR} PATH)
-STRING(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${PARENTDIR}" INSOURCESUBDIR)
-IF(INSOURCE OR INSOURCESUBDIR)
-  MESSAGE(FATAL_ERROR "GDCM requires an out of source Build. "
+string(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${GDCM_BINARY_DIR}" INSOURCE)
+get_filename_component(PARENTDIR ${GDCM_BINARY_DIR} PATH)
+string(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${PARENTDIR}" INSOURCESUBDIR)
+if(INSOURCE OR INSOURCESUBDIR)
+  message(FATAL_ERROR "GDCM requires an out of source Build. "
     "Please create a separate binary directory and run CMake there.")
-ENDIF(INSOURCE OR INSOURCESUBDIR)
+endif(INSOURCE OR INSOURCESUBDIR)
 
 #----------------------------------------------------------------------------
-SET(GDCM_MAJOR_VERSION 2)
-SET(GDCM_MINOR_VERSION 3)
-SET(GDCM_BUILD_VERSION 0)
-SET(GDCM_VERSION
+set(GDCM_MAJOR_VERSION 2)
+set(GDCM_MINOR_VERSION 3)
+set(GDCM_BUILD_VERSION 0)
+set(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 # let advanced user the option to define GDCM_API_VERSION:
-IF(NOT DEFINED GDCM_API_VERSION)
-  SET(GDCM_API_VERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}")
-ENDIF(NOT DEFINED GDCM_API_VERSION)
-SET(GDCM_LIBRARY_PROPERTIES ${GDCM_LIBRARY_PROPERTIES}
+if(NOT DEFINED GDCM_API_VERSION)
+  set(GDCM_API_VERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}")
+endif(NOT DEFINED GDCM_API_VERSION)
+set(GDCM_LIBRARY_PROPERTIES ${GDCM_LIBRARY_PROPERTIES}
   VERSION "${GDCM_VERSION}"
   SOVERSION "${GDCM_API_VERSION}"
 )
-#SET(GDCM_EXECUTABLE_PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES}
+#set(GDCM_EXECUTABLE_PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES}
 #  VERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}"
 #)
-SET(GDCM_EXECUTABLE_PROPERTIES)
-IF(GDCM_NO_EXECUTABLE_PROPERTIES)
-  SET(GDCM_EXECUTABLE_PROPERTIES)
-  SET(python_site_package "python/dist-packages")
-ELSE(GDCM_NO_EXECUTABLE_PROPERTIES)
-  SET(python_site_package "")
-ENDIF(GDCM_NO_EXECUTABLE_PROPERTIES)
+set(GDCM_EXECUTABLE_PROPERTIES)
+if(GDCM_NO_EXECUTABLE_PROPERTIES)
+  set(GDCM_EXECUTABLE_PROPERTIES)
+  set(python_site_package "python/dist-packages")
+else(GDCM_NO_EXECUTABLE_PROPERTIES)
+  set(python_site_package "")
+endif(GDCM_NO_EXECUTABLE_PROPERTIES)
 
-SET(GDCM_STANDALONE 0)
+set(GDCM_STANDALONE 0)
 # Top level project (eg. ITK) should set GDCM_TARGETS_NAME
 # to define a particular behavior where GDCM does not call
 # install(EXPORT...)
 # This sets the default value for GDCM_STANDALONE
-IF(NOT GDCM_TARGETS_NAME)
-  SET(GDCM_TARGETS_NAME GDCMTargets)
-  SET(GDCM_STANDALONE 1)
-ENDIF(NOT GDCM_TARGETS_NAME)
+if(NOT GDCM_TARGETS_NAME)
+  set(GDCM_TARGETS_NAME GDCMTargets)
+  set(GDCM_STANDALONE 1)
+endif(NOT GDCM_TARGETS_NAME)
 #-----------------------------------------------------------------------------
 # PDB handling + Module handling
-INCLUDE(${GDCM_SOURCE_DIR}/CMake/InstallMacros.cmake)
+include(${GDCM_SOURCE_DIR}/CMake/InstallMacros.cmake)
 #-----------------------------------------------------------------------------
-INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseCopyright.cmake)
+include(${GDCM_SOURCE_DIR}/CMake/UseCopyright.cmake)
 CREATE_COPYRIGHT_FILE(${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt)
 APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt)
 APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/CMake/COPYING-CMAKE-SCRIPTS)
 
 #-----------------------------------------------------------------------------
-IF(GDCM_MINOR_VERSION MATCHES "[02468]$")
+if(GDCM_MINOR_VERSION MATCHES "[02468]$")
   # Are we building a release branch / tag (read: even number)?
   # By default dashboard are expected to run with Design by Contract on
   # to trigger any of the assert, but on the other hand no user really
   # can figure out they need to change this value
   # So unless the user *specifically* requested a particular cmake_build_type
   # do the work internally and append the NDEBUG def flag (hopefully portable)
-  IF(NOT CMAKE_BUILD_TYPE)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNDEBUG")
-  ENDIF(NOT CMAKE_BUILD_TYPE)
+  if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNDEBUG")
+  endif(NOT CMAKE_BUILD_TYPE)
   # Since we are on a release branch, chance is that people don't care about testing
   # let's disable it for them
-  SET(GDCM_BUILD_TESTING_DEFAULT OFF)
-ELSE(GDCM_MINOR_VERSION MATCHES "[02468]$")
-  SET(GDCM_BUILD_TESTING_DEFAULT ON)
-ENDIF(GDCM_MINOR_VERSION MATCHES "[02468]$")
+  set(GDCM_BUILD_TESTING_DEFAULT OFF)
+else(GDCM_MINOR_VERSION MATCHES "[02468]$")
+  set(GDCM_BUILD_TESTING_DEFAULT ON)
+endif(GDCM_MINOR_VERSION MATCHES "[02468]$")
 
 #-----------------------------------------------------------------------------
 # Disable deprecation warnings for standard C and STL functions in VS2005
 # and later
-IF(MSVC_VERSION EQUAL 1400 OR MSVC_VERSION GREATER 1400)
-  ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
-  ADD_DEFINITIONS(-D_SCL_SECURE_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS)
-ENDIF(MSVC_VERSION EQUAL 1400 OR MSVC_VERSION GREATER 1400)
+if(MSVC_VERSION EQUAL 1400 OR MSVC_VERSION GREATER 1400)
+  add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
+  add_definitions(-D_SCL_SECURE_NO_DEPRECATE -D_SCL_SECURE_NO_WARNINGS)
+endif(MSVC_VERSION EQUAL 1400 OR MSVC_VERSION GREATER 1400)
 
 #-----------------------------------------------------------------------------
 # Build shared lib by default
-OPTION(GDCM_BUILD_SHARED_LIBS "Build GDCM with shared libraries." OFF)
-SET(BUILD_SHARED_LIBS ${GDCM_BUILD_SHARED_LIBS})
+option(GDCM_BUILD_SHARED_LIBS "Build GDCM with shared libraries." OFF)
+set(BUILD_SHARED_LIBS ${GDCM_BUILD_SHARED_LIBS})
 
-IF(BUILD_SHARED_LIBS)
-IF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
-  SET(NAMELINK_ONLY NAMELINK_ONLY)
-  SET(NAMELINK_SKIP NAMELINK_SKIP)
-ELSE(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
-  SET(NAMELINK_ONLY)
-  SET(NAMELINK_SKIP)
-ENDIF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
-ENDIF(BUILD_SHARED_LIBS)
+if(BUILD_SHARED_LIBS)
+if(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
+  set(NAMELINK_ONLY NAMELINK_ONLY)
+  set(NAMELINK_SKIP NAMELINK_SKIP)
+else(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
+  set(NAMELINK_ONLY)
+  set(NAMELINK_SKIP)
+endif(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
+endif(BUILD_SHARED_LIBS)
 
 
 #-----------------------------------------------------------------------------
-SET (EXECUTABLE_OUTPUT_PATH ${GDCM_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
-SET (LIBRARY_OUTPUT_PATH ${GDCM_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
-MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
+set (EXECUTABLE_OUTPUT_PATH ${GDCM_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
+set (LIBRARY_OUTPUT_PATH ${GDCM_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
+mark_as_advanced(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 
 #-----------------------------------------------------------------------------
 # Adding GDCM_DATA_ROOT
-FIND_PATH(GDCM_DATA_ROOT test.acr ${GDCM_SOURCE_DIR}/Testing/Data $ENV{GDCM_DATA_ROOT})
-MARK_AS_ADVANCED(GDCM_DATA_ROOT)
+find_path(GDCM_DATA_ROOT test.acr ${GDCM_SOURCE_DIR}/Testing/Data $ENV{GDCM_DATA_ROOT})
+mark_as_advanced(GDCM_DATA_ROOT)
 # You can define a path where you extra the famous D. Clunie spacing dataset
 # http://www.dclunie.com/images/pixelspacingtestimages.zip
 # for example:
@@ -140,37 +140,37 @@ MARK_AS_ADVANCED(GDCM_DATA_ROOT)
 # $HOME/pixelspacingtestimages/DISCIMG/IMAGES/DXIMAGE
 # $HOME/pixelspacingtestimages/DISCIMG/IMAGES/MGIMAGE
 # $HOME/pixelspacingtestimages/DISCIMG/IMAGES/CRIMAGE
-MARK_AS_ADVANCED(GDCM_PIXEL_SPACING_DATA_ROOT)
+mark_as_advanced(GDCM_PIXEL_SPACING_DATA_ROOT)
 
 #-----------------------------------------------------------------------------
-FIND_PATH(GDCM_DATA_EXTRA_ROOT gdcmData.tar.gz
+find_path(GDCM_DATA_EXTRA_ROOT gdcmData.tar.gz
   ${GDCM_SOURCE_DIR}/../gdcmDataExtra
   $ENV{GDCM_DATA_EXTRA_ROOT}
   $ENV{PUB_DICT_PATH}/../../gdcmDataExtra
   )
-MARK_AS_ADVANCED(GDCM_DATA_EXTRA_ROOT)
+mark_as_advanced(GDCM_DATA_EXTRA_ROOT)
 
 # Define a temp directory in which we can output stuff
-SET(GDCM_TEMP_DIRECTORY "${GDCM_BINARY_DIR}/Testing/Temporary" CACHE PATH "Path to a valid temp directory")
-MARK_AS_ADVANCED(GDCM_TEMP_DIRECTORY)
+set(GDCM_TEMP_DIRECTORY "${GDCM_BINARY_DIR}/Testing/Temporary" CACHE PATH "Path to a valid temp directory")
+mark_as_advanced(GDCM_TEMP_DIRECTORY)
 
 #-----------------------------------------------------------------------------
-INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
-INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFiles.cmake)
+include (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
+include (${CMAKE_ROOT}/Modules/CheckIncludeFiles.cmake)
 # Check if header file exists and add it to the list.
-MACRO(CHECK_INCLUDE_FILE_CONCAT FILE VARIABLE)
+macro(CHECK_INCLUDE_FILE_CONCAT FILE VARIABLE)
   CHECK_INCLUDE_FILES("${UUID_INCLUDES};${FILE}" ${VARIABLE})
-  IF(${VARIABLE})
-    SET(UUID_INCLUDES ${UUID_INCLUDES} ${FILE})
-  ENDIF(${VARIABLE})
-ENDMACRO(CHECK_INCLUDE_FILE_CONCAT)
+  if(${VARIABLE})
+    set(UUID_INCLUDES ${UUID_INCLUDES} ${FILE})
+  endif(${VARIABLE})
+endmacro(CHECK_INCLUDE_FILE_CONCAT)
 
 CHECK_INCLUDE_FILE("stdint.h"       GDCM_HAVE_STDINT_H)
-IF(UNIX) #Avoid polluting Win32 cmakecache
+if(UNIX) #Avoid polluting Win32 cmakecache
   CHECK_INCLUDE_FILE("inttypes.h"     GDCM_HAVE_INTTYPES_H)
-ENDIF(UNIX)
+endif(UNIX)
 
-#INCLUDE(${GDCM_SOURCE_DIR}/CMake/gdcmPlatformCxxTests.cmake)
+#include(${GDCM_SOURCE_DIR}/CMake/gdcmPlatformCxxTests.cmake)
 #
 #GDCM_PLATFORM_CXX_TEST(GDCM_CXX_HAS_FUNCTION
 #    "Checking whether compiler has __FUNCTION__" DIRECT)
@@ -178,13 +178,13 @@ ENDIF(UNIX)
 
 #-----------------------------------------------------------------------------
 # Build the main lib...
-IF(MSVC)
-  INCLUDE_DIRECTORIES(
+if(MSVC)
+  include_directories(
     "${GDCM_SOURCE_DIR}/Utilities/C99"
   )
   # Process the install rules from C99
-  SUBDIRS(Utilities/C99)
-ENDIF(MSVC)
+  subdirs(Utilities/C99)
+endif(MSVC)
 
 # --------------------------------------------------------------------------
 # Configure the export configuration
@@ -203,80 +203,80 @@ ENDIF(MSVC)
 # --------------------------------------------------------------------------
 # Install directories
 
-STRING(TOLOWER ${PROJECT_NAME} projectname)
-SET(subdir "${projectname}-${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}")
+string(TOLOWER ${PROJECT_NAME} projectname)
+set(subdir "${projectname}-${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}")
 
-IF(NOT GDCM_INSTALL_BIN_DIR)
-  SET(GDCM_INSTALL_BIN_DIR "bin")
-ENDIF(NOT GDCM_INSTALL_BIN_DIR)
+if(NOT GDCM_INSTALL_BIN_DIR)
+  set(GDCM_INSTALL_BIN_DIR "bin")
+endif(NOT GDCM_INSTALL_BIN_DIR)
 
-IF(NOT GDCM_INSTALL_LIB_DIR)
-  #SET(GDCM_INSTALL_LIB_DIR "lib/${PROJECT_NAME}")
-  SET(GDCM_INSTALL_LIB_DIR "lib")
-ENDIF(NOT GDCM_INSTALL_LIB_DIR)
+if(NOT GDCM_INSTALL_LIB_DIR)
+  #set(GDCM_INSTALL_LIB_DIR "lib/${PROJECT_NAME}")
+  set(GDCM_INSTALL_LIB_DIR "lib")
+endif(NOT GDCM_INSTALL_LIB_DIR)
 
-IF(NOT GDCM_INSTALL_DATA_DIR)
-  SET(GDCM_INSTALL_DATA_DIR "share/${subdir}")
-ENDIF(NOT GDCM_INSTALL_DATA_DIR)
+if(NOT GDCM_INSTALL_DATA_DIR)
+  set(GDCM_INSTALL_DATA_DIR "share/${subdir}")
+endif(NOT GDCM_INSTALL_DATA_DIR)
 
-IF(NOT GDCM_INSTALL_INCLUDE_DIR)
-  SET(GDCM_INSTALL_INCLUDE_DIR "include/${subdir}")
-ENDIF(NOT GDCM_INSTALL_INCLUDE_DIR)
+if(NOT GDCM_INSTALL_INCLUDE_DIR)
+  set(GDCM_INSTALL_INCLUDE_DIR "include/${subdir}")
+endif(NOT GDCM_INSTALL_INCLUDE_DIR)
 
-IF(NOT GDCM_INSTALL_DOC_DIR)
-  SET(GDCM_INSTALL_DOC_DIR "share/doc/${subdir}")
-ENDIF(NOT GDCM_INSTALL_DOC_DIR)
+if(NOT GDCM_INSTALL_DOC_DIR)
+  set(GDCM_INSTALL_DOC_DIR "share/doc/${subdir}")
+endif(NOT GDCM_INSTALL_DOC_DIR)
 
-IF(NOT GDCM_INSTALL_MAN_DIR)
-  SET(GDCM_INSTALL_MAN_DIR "share/man")
-ENDIF(NOT GDCM_INSTALL_MAN_DIR)
+if(NOT GDCM_INSTALL_MAN_DIR)
+  set(GDCM_INSTALL_MAN_DIR "share/man")
+endif(NOT GDCM_INSTALL_MAN_DIR)
 
-IF(NOT GDCM_INSTALL_PACKAGE_DIR)
-  SET(GDCM_INSTALL_PACKAGE_DIR ${GDCM_INSTALL_LIB_DIR}/${subdir}
+if(NOT GDCM_INSTALL_PACKAGE_DIR)
+  set(GDCM_INSTALL_PACKAGE_DIR ${GDCM_INSTALL_LIB_DIR}/${subdir}
     CACHE INTERNAL "")
-ENDIF(NOT GDCM_INSTALL_PACKAGE_DIR)
+endif(NOT GDCM_INSTALL_PACKAGE_DIR)
 
-IF(NOT GDCM_VTK_INSTALL_PACKAGE_DIR)
-  SET(GDCM_VTK_INSTALL_PACKAGE_DIR ${VTK_INSTALL_PACKAGE_DIR})
-ENDIF(NOT GDCM_VTK_INSTALL_PACKAGE_DIR)
+if(NOT GDCM_VTK_INSTALL_PACKAGE_DIR)
+  set(GDCM_VTK_INSTALL_PACKAGE_DIR ${VTK_INSTALL_PACKAGE_DIR})
+endif(NOT GDCM_VTK_INSTALL_PACKAGE_DIR)
 
-IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
-  SET(GDCM_INSTALL_NO_DEVELOPMENT 0)
-ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
+if(NOT GDCM_INSTALL_NO_DEVELOPMENT)
+  set(GDCM_INSTALL_NO_DEVELOPMENT 0)
+endif(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 
-IF(NOT GDCM_INSTALL_NO_RUNTIME)
-  SET(GDCM_INSTALL_NO_RUNTIME 0)
-ENDIF(NOT GDCM_INSTALL_NO_RUNTIME)
+if(NOT GDCM_INSTALL_NO_RUNTIME)
+  set(GDCM_INSTALL_NO_RUNTIME 0)
+endif(NOT GDCM_INSTALL_NO_RUNTIME)
 
-IF(NOT GDCM_INSTALL_NO_DOCUMENTATION)
-  SET(GDCM_INSTALL_NO_DOCUMENTATION 0)
-ENDIF(NOT GDCM_INSTALL_NO_DOCUMENTATION)
+if(NOT GDCM_INSTALL_NO_DOCUMENTATION)
+  set(GDCM_INSTALL_NO_DOCUMENTATION 0)
+endif(NOT GDCM_INSTALL_NO_DOCUMENTATION)
 
-SET(GDCM_INSTALL_NO_LIBRARIES)
-IF(GDCM_BUILD_SHARED_LIBS)
-  IF(GDCM_INSTALL_NO_RUNTIME AND GDCM_INSTALL_NO_DEVELOPMENT)
-    SET(GDCM_INSTALL_NO_LIBRARIES 1)
-  ENDIF(GDCM_INSTALL_NO_RUNTIME AND GDCM_INSTALL_NO_DEVELOPMENT)
-ELSE(GDCM_BUILD_SHARED_LIBS)
-  IF(GDCM_INSTALL_NO_DEVELOPMENT)
-    SET(GDCM_INSTALL_NO_LIBRARIES 1)
-  ENDIF(GDCM_INSTALL_NO_DEVELOPMENT)
-ENDIF(GDCM_BUILD_SHARED_LIBS)
+set(GDCM_INSTALL_NO_LIBRARIES)
+if(GDCM_BUILD_SHARED_LIBS)
+  if(GDCM_INSTALL_NO_RUNTIME AND GDCM_INSTALL_NO_DEVELOPMENT)
+    set(GDCM_INSTALL_NO_LIBRARIES 1)
+  endif(GDCM_INSTALL_NO_RUNTIME AND GDCM_INSTALL_NO_DEVELOPMENT)
+else(GDCM_BUILD_SHARED_LIBS)
+  if(GDCM_INSTALL_NO_DEVELOPMENT)
+    set(GDCM_INSTALL_NO_LIBRARIES 1)
+  endif(GDCM_INSTALL_NO_DEVELOPMENT)
+endif(GDCM_BUILD_SHARED_LIBS)
 
 #-----------------------------------------------------------------------------
 #System stuff, mainly for packager or paranoid people with up-to-date lib moto
-OPTION(GDCM_USE_SYSTEM_ZLIB "Use system zlib" OFF)
-OPTION(GDCM_USE_SYSTEM_OPENSSL  "Use system OpenSSL" OFF)
-IF(UNIX)
+option(GDCM_USE_SYSTEM_ZLIB "Use system zlib" OFF)
+option(GDCM_USE_SYSTEM_OPENSSL  "Use system OpenSSL" OFF)
+if(UNIX)
   # Will search for the uuid_generate symbols.
   # Can be in libSystem.dylib or libuuid.so
-  OPTION(GDCM_USE_SYSTEM_UUID "Use system uuid" OFF)
-ENDIF(UNIX)
-OPTION(GDCM_USE_SYSTEM_EXPAT "Use system expat" OFF)
-OPTION(GDCM_USE_SYSTEM_LJPEG "Use system ljpeg (ijg lib)" OFF)
-OPTION(GDCM_USE_SYSTEM_OPENJPEG "Use system openjpeg" OFF)
-OPTION(GDCM_USE_SYSTEM_CHARLS "Use system charls" OFF)
-MARK_AS_ADVANCED(
+  option(GDCM_USE_SYSTEM_UUID "Use system uuid" OFF)
+endif(UNIX)
+option(GDCM_USE_SYSTEM_EXPAT "Use system expat" OFF)
+option(GDCM_USE_SYSTEM_LJPEG "Use system ljpeg (ijg lib)" OFF)
+option(GDCM_USE_SYSTEM_OPENJPEG "Use system openjpeg" OFF)
+option(GDCM_USE_SYSTEM_CHARLS "Use system charls" OFF)
+mark_as_advanced(
   GDCM_USE_SYSTEM_ZLIB
   GDCM_USE_SYSTEM_OPENSSL
   GDCM_USE_SYSTEM_UUID
@@ -285,137 +285,137 @@ MARK_AS_ADVANCED(
   GDCM_USE_SYSTEM_OPENJPEG
   GDCM_USE_SYSTEM_CHARLS
   )
-OPTION(GDCM_USE_SYSTEM_POPPLER "Use system poppler (pdf)" OFF)
-IF(GDCM_USE_SYSTEM_POPPLER)
-  FIND_PACKAGE(Poppler REQUIRED)
-ENDIF(GDCM_USE_SYSTEM_POPPLER)
-MARK_AS_ADVANCED(GDCM_USE_SYSTEM_POPPLER)
+option(GDCM_USE_SYSTEM_POPPLER "Use system poppler (pdf)" OFF)
+if(GDCM_USE_SYSTEM_POPPLER)
+  find_package(Poppler REQUIRED)
+endif(GDCM_USE_SYSTEM_POPPLER)
+mark_as_advanced(GDCM_USE_SYSTEM_POPPLER)
 
-#OPTION(GDCM_USE_SYSTEM_PODOFO "Use system podofo (pdf)" OFF)
-#IF(GDCM_USE_SYSTEM_PODOFO)
-#  #FIND_PACKAGE(PODOFO REQUIRED)
-#  IF(GDCM_USE_SYSTEM_POPPLER)
-#    MESSAGE(FATAL_ERROR "Choose only one podofo vs poppler")
-#  ENDIF(GDCM_USE_SYSTEM_POPPLER)
-#ENDIF(GDCM_USE_SYSTEM_PODOFO)
-#MARK_AS_ADVANCED(GDCM_USE_SYSTEM_PODOFO)
+#option(GDCM_USE_SYSTEM_PODOFO "Use system podofo (pdf)" OFF)
+#if(GDCM_USE_SYSTEM_PODOFO)
+#  #find_package(PODOFO REQUIRED)
+#  if(GDCM_USE_SYSTEM_POPPLER)
+#    message(FATAL_ERROR "Choose only one podofo vs poppler")
+#  endif(GDCM_USE_SYSTEM_POPPLER)
+#endif(GDCM_USE_SYSTEM_PODOFO)
+#mark_as_advanced(GDCM_USE_SYSTEM_PODOFO)
 
-OPTION(GDCM_USE_SYSTEM_LIBXML2 "Use LibXml2" OFF)
-IF(GDCM_USE_SYSTEM_LIBXML2)
-  FIND_PACKAGE(LibXml2)
-ENDIF(GDCM_USE_SYSTEM_LIBXML2)
-MARK_AS_ADVANCED(GDCM_USE_SYSTEM_LIBXML2)
+option(GDCM_USE_SYSTEM_LIBXML2 "Use LibXml2" OFF)
+if(GDCM_USE_SYSTEM_LIBXML2)
+  find_package(LibXml2)
+endif(GDCM_USE_SYSTEM_LIBXML2)
+mark_as_advanced(GDCM_USE_SYSTEM_LIBXML2)
 
-IF(GDCM_USE_SYSTEM_LJPEG)
-  FIND_PACKAGE(LJPEG REQUIRED)
-  SET(GDCM_LJPEG_LIBRARIES ${LJPEG_LIBRARIES})
-ELSE(GDCM_USE_SYSTEM_LJPEG)
-  SET(GDCM_LJPEG_LIBRARIES gdcmjpeg8 gdcmjpeg12 gdcmjpeg16)
-ENDIF(GDCM_USE_SYSTEM_LJPEG)
+if(GDCM_USE_SYSTEM_LJPEG)
+  find_package(LJPEG REQUIRED)
+  set(GDCM_LJPEG_LIBRARIES ${LJPEG_LIBRARIES})
+else(GDCM_USE_SYSTEM_LJPEG)
+  set(GDCM_LJPEG_LIBRARIES gdcmjpeg8 gdcmjpeg12 gdcmjpeg16)
+endif(GDCM_USE_SYSTEM_LJPEG)
 
-IF(GDCM_USE_SYSTEM_CHARLS)
-  FIND_PACKAGE(CharLS REQUIRED)
-  SET(GDCM_CHARLS_LIBRARIES ${CHARLS_LIBRARIES})
-ELSE(GDCM_USE_SYSTEM_CHARLS)
-  SET(GDCM_CHARLS_LIBRARIES gdcmcharls)
-ENDIF(GDCM_USE_SYSTEM_CHARLS)
+if(GDCM_USE_SYSTEM_CHARLS)
+  find_package(CharLS REQUIRED)
+  set(GDCM_CHARLS_LIBRARIES ${CHARLS_LIBRARIES})
+else(GDCM_USE_SYSTEM_CHARLS)
+  set(GDCM_CHARLS_LIBRARIES gdcmcharls)
+endif(GDCM_USE_SYSTEM_CHARLS)
 
-IF(GDCM_USE_SYSTEM_OPENJPEG)
+if(GDCM_USE_SYSTEM_OPENJPEG)
   # For some reason I cannot specify the version I want.
-  # FIND_PACKAGE(OpenJPEG 2.0 REQUIRED)
+  # find_package(OpenJPEG 2.0 REQUIRED)
   # oh well we should handle both 1.0 and 2.0 anyway...
-  FIND_PACKAGE(OpenJPEG REQUIRED)
-  SET(GDCM_OPENJPEG_LIBRARIES ${OPENJPEG_LIBRARIES})
-ELSE(GDCM_USE_SYSTEM_OPENJPEG)
-  SET(GDCM_OPENJPEG_LIBRARIES gdcmopenjpeg)
-  OPTION(GDCM_USE_OPENJPEG_V2 "Use openjpeg v2 version (advanced users only)." OFF)
-  MARK_AS_ADVANCED(GDCM_USE_OPENJPEG_V2)
-ENDIF(GDCM_USE_SYSTEM_OPENJPEG)
+  find_package(OpenJPEG REQUIRED)
+  set(GDCM_OPENJPEG_LIBRARIES ${OPENJPEG_LIBRARIES})
+else(GDCM_USE_SYSTEM_OPENJPEG)
+  set(GDCM_OPENJPEG_LIBRARIES gdcmopenjpeg)
+  option(GDCM_USE_OPENJPEG_V2 "Use openjpeg v2 version (advanced users only)." OFF)
+  mark_as_advanced(GDCM_USE_OPENJPEG_V2)
+endif(GDCM_USE_SYSTEM_OPENJPEG)
 
 # Very advanced user option:
 # This will cause building of the broken JPEG library released by the Standford PVRG group:
-OPTION(GDCM_USE_PVRG "Use pvrg lib, only turn it on if you know what you are doing." OFF)
-MARK_AS_ADVANCED(GDCM_USE_PVRG)
+option(GDCM_USE_PVRG "Use pvrg lib, only turn it on if you know what you are doing." OFF)
+mark_as_advanced(GDCM_USE_PVRG)
 
-OPTION(GDCM_USE_KAKADU "Use kakadu lib, only turn it on if you know what you are doing." OFF)
-MARK_AS_ADVANCED(GDCM_USE_KAKADU)
+option(GDCM_USE_KAKADU "Use kakadu lib, only turn it on if you know what you are doing." OFF)
+mark_as_advanced(GDCM_USE_KAKADU)
 
-IF(GDCM_USE_PVRG)
-  OPTION(GDCM_USE_SYSTEM_PVRG "Use system PVRG" OFF)
-  MARK_AS_ADVANCED(GDCM_USE_SYSTEM_PVRG)
-  IF(GDCM_USE_SYSTEM_PVRG)
-    FIND_PACKAGE(PVRGJPEG REQUIRED)
-  ENDIF(GDCM_USE_SYSTEM_PVRG)
-ENDIF(GDCM_USE_PVRG)
+if(GDCM_USE_PVRG)
+  option(GDCM_USE_SYSTEM_PVRG "Use system PVRG" OFF)
+  mark_as_advanced(GDCM_USE_SYSTEM_PVRG)
+  if(GDCM_USE_SYSTEM_PVRG)
+    find_package(PVRGJPEG REQUIRED)
+  endif(GDCM_USE_SYSTEM_PVRG)
+endif(GDCM_USE_PVRG)
 
 # Very advanced behavior only use if you want to keep backward compatible
 # behavior but possibly incorrect behavior.
-OPTION(GDCMV2_0_COMPATIBILITY "Preserve compatibility with GDCM 2.0 release" ON)
-MARK_AS_ADVANCED(GDCMV2_0_COMPATIBILITY)
+option(GDCMV2_0_COMPATIBILITY "Preserve compatibility with GDCM 2.0 release" ON)
+mark_as_advanced(GDCMV2_0_COMPATIBILITY)
 
-IF(GDCM_USE_KAKADU)
-  OPTION(GDCM_USE_SYSTEM_KAKADU "Use system KAKADU " ON)
-  MARK_AS_ADVANCED(GDCM_USE_SYSTEM_KAKADU)
-  IF(GDCM_USE_SYSTEM_KAKADU)
-    FIND_PACKAGE(KAKADU REQUIRED)
-  ELSE(GDCM_USE_SYSTEM_KAKADU)
-    MESSAGE(FATAL_ERROR "Not Implemented")
-  ENDIF(GDCM_USE_SYSTEM_KAKADU)
-ENDIF(GDCM_USE_KAKADU)
+if(GDCM_USE_KAKADU)
+  option(GDCM_USE_SYSTEM_KAKADU "Use system KAKADU " ON)
+  mark_as_advanced(GDCM_USE_SYSTEM_KAKADU)
+  if(GDCM_USE_SYSTEM_KAKADU)
+    find_package(KAKADU REQUIRED)
+  else(GDCM_USE_SYSTEM_KAKADU)
+    message(FATAL_ERROR "Not Implemented")
+  endif(GDCM_USE_SYSTEM_KAKADU)
+endif(GDCM_USE_KAKADU)
 
-IF(GDCM_USE_SYSTEM_ZLIB)
+if(GDCM_USE_SYSTEM_ZLIB)
   # If user say so, then this is a requirement !
-  FIND_PACKAGE(ZLIB REQUIRED)
-  SET(GDCM_ZLIB_LIBRARIES ${ZLIB_LIBRARIES})
-ELSE(GDCM_USE_SYSTEM_ZLIB)
-  SET(GDCM_ZLIB_LIBRARIES "gdcmzlib")
-ENDIF(GDCM_USE_SYSTEM_ZLIB)
+  find_package(ZLIB REQUIRED)
+  set(GDCM_ZLIB_LIBRARIES ${ZLIB_LIBRARIES})
+else(GDCM_USE_SYSTEM_ZLIB)
+  set(GDCM_ZLIB_LIBRARIES "gdcmzlib")
+endif(GDCM_USE_SYSTEM_ZLIB)
 
-IF(GDCM_USE_SYSTEM_OPENSSL)
-  FIND_PACKAGE(OpenSSL REQUIRED)
-ENDIF(GDCM_USE_SYSTEM_OPENSSL)
+if(GDCM_USE_SYSTEM_OPENSSL)
+  find_package(OpenSSL REQUIRED)
+endif(GDCM_USE_SYSTEM_OPENSSL)
 
-IF(GDCM_USE_SYSTEM_UUID)
+if(GDCM_USE_SYSTEM_UUID)
   # If user say so, then this is a requirement !
-  FIND_PACKAGE(UUID REQUIRED)
-  SET(GDCM_UUID_LIBRARIES ${UUID_LIBRARIES})
-ELSE(GDCM_USE_SYSTEM_UUID)
-  SET(GDCM_UUID_LIBRARIES "gdcmuuid")
-ENDIF(GDCM_USE_SYSTEM_UUID)
+  find_package(UUID REQUIRED)
+  set(GDCM_UUID_LIBRARIES ${UUID_LIBRARIES})
+else(GDCM_USE_SYSTEM_UUID)
+  set(GDCM_UUID_LIBRARIES "gdcmuuid")
+endif(GDCM_USE_SYSTEM_UUID)
 
-IF(GDCM_USE_SYSTEM_EXPAT)
+if(GDCM_USE_SYSTEM_EXPAT)
   # If user say so, then this is a requirement !
-  FIND_PACKAGE(EXPAT REQUIRED)
-  SET(GDCM_EXPAT_LIBRARIES ${EXPAT_LIBRARIES})
-ELSE(GDCM_USE_SYSTEM_EXPAT)
-  SET(GDCM_EXPAT_LIBRARIES "gdcmexpat")
-ENDIF(GDCM_USE_SYSTEM_EXPAT)
+  find_package(EXPAT REQUIRED)
+  set(GDCM_EXPAT_LIBRARIES ${EXPAT_LIBRARIES})
+else(GDCM_USE_SYSTEM_EXPAT)
+  set(GDCM_EXPAT_LIBRARIES "gdcmexpat")
+endif(GDCM_USE_SYSTEM_EXPAT)
 
 
 #-----------------------------------------------------------------------------
-OPTION(GDCM_BUILD_EXAMPLES "Build GDCM examples." OFF)
-SET(BUILD_EXAMPLES ${GDCM_BUILD_EXAMPLES})
+option(GDCM_BUILD_EXAMPLES "Build GDCM examples." OFF)
+set(BUILD_EXAMPLES ${GDCM_BUILD_EXAMPLES})
 
 #-----------------------------------------------------------------------------
 # Add the testing directories
-OPTION(GDCM_BUILD_TESTING "Build testing." ${GDCM_BUILD_TESTING_DEFAULT})
-SET(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
+option(GDCM_BUILD_TESTING "Build testing." ${GDCM_BUILD_TESTING_DEFAULT})
+set(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
 # Hide BUILD_TESTING as user tend to always turn all options on and then complains when something
 # does not work 'by default'
-MARK_AS_ADVANCED(BUILD_TESTING) # GDCM_BUILD_TESTING)
+mark_as_advanced(BUILD_TESTING) # GDCM_BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
-IF(GDCM_TESTING_USE_LC_NUMERIC)
-  SET(CMAKE_TESTDRIVER_BEFORE_TESTMAIN
+if(GDCM_TESTING_USE_LC_NUMERIC)
+  set(CMAKE_TESTDRIVER_BEFORE_TESTMAIN
     "setlocale(LC_ALL,\"fr_FR.UTF-8\");std::locale::global(std::locale(\"fr_FR.UTF-8\"));"
     )
-ENDIF(GDCM_TESTING_USE_LC_NUMERIC)
+endif(GDCM_TESTING_USE_LC_NUMERIC)
 
 #-----------------------------------------------------------------------------
 # Python install
-#FIND_PACKAGE(PythonInterp REQUIRED)
-#MACRO(GET_PYTHON_SITE_PACKAGE dir)
-#  EXECUTE_PROCESS(
+#find_package(PythonInterp REQUIRED)
+#macro(GET_PYTHON_SITE_PACKAGE dir)
+#  execute_process(
 #  COMMAND ${PYTHON_EXECUTABLE} "-c" "from distutils import sysconfig; print sysconfig.get_python_lib()"
 #  #WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
 #  RESULT_VARIABLE import_res
@@ -423,21 +423,21 @@ ENDIF(GDCM_TESTING_USE_LC_NUMERIC)
 #  ERROR_VARIABLE  import_error
 #    OUTPUT_STRIP_TRAILING_WHITESPACE
 #  )
-#  #SET(dir ${import_output})
-#ENDMACRO(GET_PYTHON_SITE_PACKAGE)
+#  #set(dir ${import_output})
+#endmacro(GET_PYTHON_SITE_PACKAGE)
 #
 #
 #GET_PYTHON_SITE_PACKAGE(python_site_package)
-#IF(import_output)
-#STRING(LENGTH ${import_output} len)
+#if(import_output)
+#string(LENGTH ${import_output} len)
 ## let's remove the "/usr/lib" part...
-#MATH(EXPR fileend "${len} - 9")
-#STRING(SUBSTRING ${import_output} 9 ${fileend} dummy1)
-#IF(UNIX)
-#  SET(python_site_package ${dummy1})
-#  MESSAGE(${python_site_package})
-#ENDIF(UNIX)
-#ENDIF(import_output)
+#math(EXPR fileend "${len} - 9")
+#string(SUBSTRING ${import_output} 9 ${fileend} dummy1)
+#if(UNIX)
+#  set(python_site_package ${dummy1})
+#  message(${python_site_package})
+#endif(UNIX)
+#endif(import_output)
 
 # On unix one have: "python2.4/site-packages"
 # while on Win32: "c:/Python24/Lib/site-packages/"
@@ -454,127 +454,127 @@ ENDIF(GDCM_TESTING_USE_LC_NUMERIC)
 
 #-----------------------------------------------------------------------------
 # Wrapping
-OPTION(GDCM_WRAP_PYTHON "build python wrapping" OFF)
-OPTION(GDCM_WRAP_PERL "perl wrapping (experimental !)" OFF)
-OPTION(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
-OPTION(GDCM_WRAP_JAVA "build java wrapping" OFF)
-OPTION(GDCM_WRAP_CSHARP "build csharp wrapping" OFF)
-MARK_AS_ADVANCED(GDCM_WRAP_PHP GDCM_WRAP_PERL)
-MARK_AS_ADVANCED(GDCM_USE_RLE)
-MARK_AS_ADVANCED(GDCM_USE_ACTIVIZ)
-OPTION(GDCM_USE_JPEGLS "Build GDCM with JPEG-LS support" ON)
-MARK_AS_ADVANCED(GDCM_USE_JPEGLS)
-IF(GDCM_WRAP_CSHARP)
-  FIND_PACKAGE(CSharp REQUIRED)
-  INCLUDE(${CSharp_USE_FILE})
-ENDIF(GDCM_WRAP_CSHARP)
+option(GDCM_WRAP_PYTHON "build python wrapping" OFF)
+option(GDCM_WRAP_PERL "perl wrapping (experimental !)" OFF)
+option(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
+option(GDCM_WRAP_JAVA "build java wrapping" OFF)
+option(GDCM_WRAP_CSHARP "build csharp wrapping" OFF)
+mark_as_advanced(GDCM_WRAP_PHP GDCM_WRAP_PERL)
+mark_as_advanced(GDCM_USE_RLE)
+mark_as_advanced(GDCM_USE_ACTIVIZ)
+option(GDCM_USE_JPEGLS "Build GDCM with JPEG-LS support" ON)
+mark_as_advanced(GDCM_USE_JPEGLS)
+if(GDCM_WRAP_CSHARP)
+  find_package(CSharp REQUIRED)
+  include(${CSharp_USE_FILE})
+endif(GDCM_WRAP_CSHARP)
 
-SET(GDCM_LIBRARY_DIR ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
-SET(GDCM_EXECUTABLE_DIR ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
+set(GDCM_LIBRARY_DIR ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
+set(GDCM_EXECUTABLE_DIR ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
 
 #-----------------------------------------------------------------------------
 # we need to link against CoreFoundation so that we can use CFBundle to get the executable path.
-IF(APPLE)
-  FIND_LIBRARY(COREFOUNDATION_LIBRARY CoreFoundation )
-ENDIF(APPLE)
+if(APPLE)
+  find_library(COREFOUNDATION_LIBRARY CoreFoundation )
+endif(APPLE)
 
 # Need to subdirs in Source/Common before Wrapping
 # to have gdcmConfigure.h around
-SUBDIRS(Utilities)
-ADD_SUBDIRECTORY(Source)
+subdirs(Utilities)
+add_subdirectory(Source)
 
-SUBDIRS(Wrapping)
-IF(GDCM_WRAP_CSHARP)
-  ADD_SUBDIRECTORY(Wrapping/Csharp)
-ENDIF(GDCM_WRAP_CSHARP)
+subdirs(Wrapping)
+if(GDCM_WRAP_CSHARP)
+  add_subdirectory(Wrapping/Csharp)
+endif(GDCM_WRAP_CSHARP)
 
 # After Wrapping please
-IF(BUILD_EXAMPLES)
-  SUBDIRS(Examples)
-ENDIF(BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
+  subdirs(Examples)
+endif(BUILD_EXAMPLES)
 
 #-----------------------------------------------------------------------------
 # Special CMake Module required when doing Python Testing
-IF(BUILD_TESTING AND GDCM_WRAP_PYTHON)
-  INCLUDE(${GDCM_SOURCE_DIR}/CMake/UsePythonTest.cmake)
-ENDIF(BUILD_TESTING AND GDCM_WRAP_PYTHON)
+if(BUILD_TESTING AND GDCM_WRAP_PYTHON)
+  include(${GDCM_SOURCE_DIR}/CMake/UsePythonTest.cmake)
+endif(BUILD_TESTING AND GDCM_WRAP_PYTHON)
 
 # Special CMake Module required when doing C# Testing
-IF(BUILD_TESTING AND GDCM_WRAP_CSHARP)
-  INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseCSharpTest.cmake)
-ENDIF(BUILD_TESTING AND GDCM_WRAP_CSHARP)
+if(BUILD_TESTING AND GDCM_WRAP_CSHARP)
+  include(${GDCM_SOURCE_DIR}/CMake/UseCSharpTest.cmake)
+endif(BUILD_TESTING AND GDCM_WRAP_CSHARP)
 
 # Special CMake Module required when doing Java Testing
-IF(BUILD_TESTING AND GDCM_WRAP_JAVA)
-  INCLUDE(${GDCM_SOURCE_DIR}/CMake/UseJavaTest.cmake)
-ENDIF(BUILD_TESTING AND GDCM_WRAP_JAVA)
+if(BUILD_TESTING AND GDCM_WRAP_JAVA)
+  include(${GDCM_SOURCE_DIR}/CMake/UseJavaTest.cmake)
+endif(BUILD_TESTING AND GDCM_WRAP_JAVA)
 
 #-----------------------------------------------------------------------------
 # Need pthread for the following class:
 CHECK_INCLUDE_FILE("pthread.h"      GDCM_HAVE_PTHREAD_H)
 
 # Big endian thing:
-INCLUDE (${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
+include (${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
 TEST_BIG_ENDIAN(GDCM_WORDS_BIGENDIAN)
 
-IF(BUILD_TESTING)
-  CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/CTestCustom.ctest.in
+if(BUILD_TESTING)
+  configure_file(${GDCM_SOURCE_DIR}/CMake/CTestCustom.ctest.in
       ${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest @ONLY)
-  FILE(WRITE ${GDCM_BINARY_DIR}/CTestCustom.cmake
-    "INCLUDE(\"${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest\")\n")
-  MARK_AS_ADVANCED(DART_TESTING_TIMEOUT)
-  ENABLE_TESTING()
-  INCLUDE(CTest)
-  SUBDIRS(Testing)
-  IF(NOT GDCM_DATA_ROOT)
-    MESSAGE("If you want to build the test suite, you must set GDCM_DATA_ROOT (advanced option) "
+  file(WRITE ${GDCM_BINARY_DIR}/CTestCustom.cmake
+    "include(\"${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest\")\n")
+  mark_as_advanced(DART_TESTING_TIMEOUT)
+  enable_testing()
+  include(CTest)
+  subdirs(Testing)
+  if(NOT GDCM_DATA_ROOT)
+    message("If you want to build the test suite, you must set GDCM_DATA_ROOT (advanced option) "
     "to the full path name of the gdcmData directory; if you don't want, disable GDCM_BUILD_TESTING.\n"
     "What is gdcmData? Please read: http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=General_questions#What_is_gdcmData_.3F")
-  ENDIF(NOT GDCM_DATA_ROOT)
-ENDIF(BUILD_TESTING)
+  endif(NOT GDCM_DATA_ROOT)
+endif(BUILD_TESTING)
 
 
 #-----------------------------------------------------------------------------
-OPTION(GDCM_DOCUMENTATION "Build source documentation using doxygen." OFF)
-IF(GDCM_DOCUMENTATION)
-  OPTION(GDCM_PDF_DOCUMENTATION "Build source doxygen using doxygen as pdf" ON)
-  MARK_AS_ADVANCED(GDCM_PDF_DOCUMENTATION)
-ENDIF(GDCM_DOCUMENTATION)
+option(GDCM_DOCUMENTATION "Build source documentation using doxygen." OFF)
+if(GDCM_DOCUMENTATION)
+  option(GDCM_PDF_DOCUMENTATION "Build source doxygen using doxygen as pdf" ON)
+  mark_as_advanced(GDCM_PDF_DOCUMENTATION)
+endif(GDCM_DOCUMENTATION)
 
 
 #-----------------------------------------------------------------------------
-OPTION(GDCM_USE_VTK "vtk bridge ?" OFF)
-IF(GDCM_USE_VTK AND GDCM_WRAP_CSHARP)
-  OPTION(GDCM_USE_ACTIVIZ "vtk/Activiz bridge ?" OFF)
-ENDIF(GDCM_USE_VTK AND GDCM_WRAP_CSHARP)
+option(GDCM_USE_VTK "vtk bridge ?" OFF)
+if(GDCM_USE_VTK AND GDCM_WRAP_CSHARP)
+  option(GDCM_USE_ACTIVIZ "vtk/Activiz bridge ?" OFF)
+endif(GDCM_USE_VTK AND GDCM_WRAP_CSHARP)
 
-IF(GDCM_USE_VTK)
-  OPTION(GDCM_USE_PARAVIEW "paraview plugin ?" OFF)
-  SUBDIRS(Utilities/VTK)
-ENDIF(GDCM_USE_VTK)
-
-#-----------------------------------------------------------------------------
-OPTION(GDCM_USE_WXWIDGETS "wxWidgets bridge ?" OFF)
-MARK_AS_ADVANCED(GDCM_USE_WXWIDGETS)
-IF(GDCM_USE_WXWIDGETS)
-  SUBDIRS(Utilities/wxWidgets)
-ENDIF(GDCM_USE_WXWIDGETS)
+if(GDCM_USE_VTK)
+  option(GDCM_USE_PARAVIEW "paraview plugin ?" OFF)
+  subdirs(Utilities/VTK)
+endif(GDCM_USE_VTK)
 
 #-----------------------------------------------------------------------------
-OPTION(GDCM_BUILD_APPLICATIONS "apps ?" OFF)
-SET(BUILD_APPLICATIONS ${GDCM_BUILD_APPLICATIONS})
-IF(BUILD_APPLICATIONS)
-  SUBDIRS(Applications)
-ENDIF(BUILD_APPLICATIONS)
+option(GDCM_USE_WXWIDGETS "wxWidgets bridge ?" OFF)
+mark_as_advanced(GDCM_USE_WXWIDGETS)
+if(GDCM_USE_WXWIDGETS)
+  subdirs(Utilities/wxWidgets)
+endif(GDCM_USE_WXWIDGETS)
+
+#-----------------------------------------------------------------------------
+option(GDCM_BUILD_APPLICATIONS "apps ?" OFF)
+set(BUILD_APPLICATIONS ${GDCM_BUILD_APPLICATIONS})
+if(BUILD_APPLICATIONS)
+  subdirs(Applications)
+endif(BUILD_APPLICATIONS)
 #-----------------------------------------------------------------------------
 # Allow user to set a postfix symbol to a target library name (eg. 'd')
-IF(WIN32)
-  SET(GDCM_DEBUG_POSTFIX "" CACHE STRING "Globally append a debug postfix symbols on all libraries")
+if(WIN32)
+  set(GDCM_DEBUG_POSTFIX "" CACHE STRING "Globally append a debug postfix symbols on all libraries")
   if(GDCM_DEBUG_POSTFIX)
     set(CMAKE_DEBUG_POSTFIX "${GDCM_DEBUG_POSTFIX}")
   endif(GDCM_DEBUG_POSTFIX)
-  MARK_AS_ADVANCED(GDCM_DEBUG_POSTFIX)
-ENDIF(WIN32)
+  mark_as_advanced(GDCM_DEBUG_POSTFIX)
+endif(WIN32)
 
 if(GDCM_USE_VTK)
 if(WIN32)
@@ -584,91 +584,91 @@ endif()
 
 #-----------------------------------------------------------------------------
 # CPack stuff
-IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
-  IF(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
-    SET(CMAKE_INSTALL_MFC_LIBRARIES 0)
-    SET(CMAKE_INSTALL_DEBUG_LIBRARIES 0)
-    IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
-      SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
-    ENDIF()
-    INCLUDE(${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake)
-  ENDIF(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
+if(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
+  if(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
+    set(CMAKE_INSTALL_MFC_LIBRARIES 0)
+    set(CMAKE_INSTALL_DEBUG_LIBRARIES 0)
+    if(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
+      set(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
+    endif()
+    include(${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake)
+  endif(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
 
-  SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${GDCM_PACKAGE_DESCRIPTION_SUMMARY})
-  SET(CPACK_PACKAGE_VENDOR "GDCM")
-  SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt")
-  SET(CPACK_RESOURCE_FILE_LICENSE    "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt")
-  SET(CPACK_PACKAGE_VERSION_MAJOR "${GDCM_MAJOR_VERSION}")
-  SET(CPACK_PACKAGE_VERSION_MINOR "${GDCM_MINOR_VERSION}")
-  SET(CPACK_PACKAGE_VERSION_PATCH "${GDCM_BUILD_VERSION}")
-  SET(CPACK_PACKAGE_INSTALL_DIRECTORY "GDCM ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
-  SET(CPACK_SOURCE_PACKAGE_FILE_NAME "gdcm-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY ${GDCM_PACKAGE_DESCRIPTION_SUMMARY})
+  set(CPACK_PACKAGE_VENDOR "GDCM")
+  set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt")
+  set(CPACK_RESOURCE_FILE_LICENSE    "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt")
+  set(CPACK_PACKAGE_VERSION_MAJOR "${GDCM_MAJOR_VERSION}")
+  set(CPACK_PACKAGE_VERSION_MINOR "${GDCM_MINOR_VERSION}")
+  set(CPACK_PACKAGE_VERSION_PATCH "${GDCM_BUILD_VERSION}")
+  set(CPACK_PACKAGE_INSTALL_DIRECTORY "GDCM ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
+  set(CPACK_SOURCE_PACKAGE_FILE_NAME "gdcm-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
-  IF(WIN32 AND NOT UNIX)
+  if(WIN32 AND NOT UNIX)
     # There is a bug in NSIS that does not handle full UNIX paths properly. Make
     # sure there is at least one set of four (4) backlashes.
-    SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\gdcmviewer.exe")
-    SET(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY}")
-    SET(CPACK_NSIS_HELP_LINK "http://gdcm.sourceforge.net")
-    SET(CPACK_NSIS_URL_INFO_ABOUT "http://gdcm.sourceforge.net")
-    SET(CPACK_NSIS_MODIFY_PATH ON)
-    # IF(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
-    # ELSE(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
-    # STRING(REPLACE ${PROJECT_NAME} ${CPACK_PACKAGE_INSTALL_DIRECTORY} dummy ${CMAKE_INSTALL_PREFIX} )
-    # SET(CMAKE_INSTALL_PREFIX ${dummy} CACHE PATH "" FORCE)
-    # ENDIF(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
+    set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\gdcmviewer.exe")
+    set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY}")
+    set(CPACK_NSIS_HELP_LINK "http://gdcm.sourceforge.net")
+    set(CPACK_NSIS_URL_INFO_ABOUT "http://gdcm.sourceforge.net")
+    set(CPACK_NSIS_MODIFY_PATH ON)
+    # if(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
+    # else(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
+    # string(REPLACE ${PROJECT_NAME} ${CPACK_PACKAGE_INSTALL_DIRECTORY} dummy ${CMAKE_INSTALL_PREFIX} )
+    # set(CMAKE_INSTALL_PREFIX ${dummy} CACHE PATH "" FORCE)
+    # endif(${CMAKE_INSTALL_PREFIX} MATCHES ${CPACK_PACKAGE_INSTALL_DIRECTORY})
 
-  ELSE(WIN32 AND NOT UNIX)
-    SET(CPACK_STRIP_FILES TRUE)
-    SET(CPACK_SOURCE_STRIP_FILES "")
-    SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
-  ENDIF(WIN32 AND NOT UNIX)
+  else(WIN32 AND NOT UNIX)
+    set(CPACK_STRIP_FILES TRUE)
+    set(CPACK_SOURCE_STRIP_FILES "")
+    set(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
+  endif(WIN32 AND NOT UNIX)
 
   # cygwin stff also copied from cmake
-  #IF(NOT DEFINED CPACK_PACKAGE_FILE_NAME)
+  #if(NOT DEFINED CPACK_PACKAGE_FILE_NAME)
   #  # if the CPACK_PACKAGE_FILE_NAME is not defined by the cache
   #  # default to source package - system, on cygwin system is not
   #  # needed
-  #  IF(CYGWIN)
-  #    SET(CPACK_PACKAGE_FILE_NAME "${CPACK_SOURCE_PACKAGE_FILE_NAME}")
-  #  ELSE(CYGWIN)
-  #    SET(CPACK_PACKAGE_FILE_NAME
+  #  if(CYGWIN)
+  #    set(CPACK_PACKAGE_FILE_NAME "${CPACK_SOURCE_PACKAGE_FILE_NAME}")
+  #  else(CYGWIN)
+  #    set(CPACK_PACKAGE_FILE_NAME
   #      "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${CPACK_SYSTEM_NAME}")
-  #  ENDIF(CYGWIN)
-  #ENDIF(NOT DEFINED CPACK_PACKAGE_FILE_NAME)
+  #  endif(CYGWIN)
+  #endif(NOT DEFINED CPACK_PACKAGE_FILE_NAME)
 
   #Cygwin stuff copied from cmake
-  IF(NOT DEFINED CPACK_SYSTEM_NAME)
+  if(NOT DEFINED CPACK_SYSTEM_NAME)
     # make sure package is not Cygwin-unknown, for Cygwin just
     # cygwin is good for the system name
-    IF("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
-      SET(CPACK_SYSTEM_NAME Cygwin)
-    ELSE("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
-      #SET(CMAKE_SYSTEM_PROCESSOR "x86_64")
-      #SET(CPACK_GENERATOR "TGZ;TBZ2")
-      #SET(CPACK_SOURCE_GENERATOR "TGZ;TBZ2")
-      SET(CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR})
-    ENDIF("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
-  ENDIF(NOT DEFINED CPACK_SYSTEM_NAME)
+    if("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
+      set(CPACK_SYSTEM_NAME Cygwin)
+    else("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
+      #set(CMAKE_SYSTEM_PROCESSOR "x86_64")
+      #set(CPACK_GENERATOR "TGZ;TBZ2")
+      #set(CPACK_SOURCE_GENERATOR "TGZ;TBZ2")
+      set(CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR})
+    endif("${CMAKE_SYSTEM_NAME}" STREQUAL "CYGWIN")
+  endif(NOT DEFINED CPACK_SYSTEM_NAME)
 
   # Need to set the architecture for debian package
-  SET(CPACK_PACKAGE_CONTACT ${GDCM_PACKAGE_CONTACT})
-  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, libstdc++6 (>= 4.0.2-4), libuuid1, zlib1g (>= 1:1.2.1), libgcc1 (>= 1:4.0.2), libexpat1, swig") # bug: missing dep to python...
-  SET(CPACK_DEBIAN_PACKAGE_SUGGESTS "dcmtk")
-  SET(CPACK_SOURCE_IGNORE_FILES "/\\\\.gitmodules" "/\\\\.git/" "TODO" "/Testing/Data/")
-  SET(CPACK_IGNORE_FILES ${CPACK_SOURCE_IGNORE_FILES})
+  set(CPACK_PACKAGE_CONTACT ${GDCM_PACKAGE_CONTACT})
+  set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, libstdc++6 (>= 4.0.2-4), libuuid1, zlib1g (>= 1:1.2.1), libgcc1 (>= 1:4.0.2), libexpat1, swig") # bug: missing dep to python...
+  set(CPACK_DEBIAN_PACKAGE_SUGGESTS "dcmtk")
+  set(CPACK_SOURCE_IGNORE_FILES "/\\\\.gitmodules" "/\\\\.git/" "TODO" "/Testing/Data/")
+  set(CPACK_IGNORE_FILES ${CPACK_SOURCE_IGNORE_FILES})
 
   # List executables
-  #SET(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
-  IF(CYGWIN)
-    SET(CPACK_CYGWIN_PATCH_NUMBER 1)
-    SET(CPACK_CYGWIN_BUILD_SCRIPT
+  #set(CPACK_PACKAGE_EXECUTABLES "gdcmviewer" "VIEWER")
+  if(CYGWIN)
+    set(CPACK_CYGWIN_PATCH_NUMBER 1)
+    set(CPACK_CYGWIN_BUILD_SCRIPT
     "${GDCM_BINARY_DIR}/@CPACK_PACKAGE_FILE_NAME@-@CPACK_CYGWIN_PATCH_NUMBER@.sh")
-    SET(CPACK_CYGWIN_PATCH_FILE
+    set(CPACK_CYGWIN_PATCH_FILE
   "${GDCM_BINARY_DIR}/@CPACK_PACKAGE_FILE_NAME@-@CPACK_CYGWIN_PATCH_NUMBER@.patch")
-    CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/Release/cygwin-patch.diff.in ${CPACK_CYGWIN_PATCH_FILE})
-    CONFIGURE_FILE(${GDCM_SOURCE_DIR}/CMake/Release/cygwin-package.sh.in ${CPACK_CYGWIN_BUILD_SCRIPT})
-  ENDIF(CYGWIN)
+    configure_file(${GDCM_SOURCE_DIR}/CMake/Release/cygwin-patch.diff.in ${CPACK_CYGWIN_PATCH_FILE})
+    configure_file(${GDCM_SOURCE_DIR}/CMake/Release/cygwin-package.sh.in ${CPACK_CYGWIN_BUILD_SCRIPT})
+  endif(CYGWIN)
 
   # Tell CPack all of the components to install. The "ALL"
   # refers to the fact that this is the set of components that
@@ -840,64 +840,64 @@ IF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_VTKPHPMODULE_INSTALL_TYPES Developer Full)
   set(CPACK_COMPONENT_PARAVIEWMODULE_INSTALL_TYPES Developer Full)
 
-  INCLUDE(CPack)
+  include(CPack)
 
-ENDIF(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
+endif(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
 
-MACRO(PROCESSONEDIR DIRNAME myoutput)
-  FILE(GLOB files
+macro(PROCESSONEDIR DIRNAME myoutput)
+  file(GLOB files
     ${DIRNAME}/*
   )
-  FOREACH(file ${files})
-    IF(IS_DIRECTORY ${file})
-      IF("${file}" MATCHES ".git")
-        #MESSAGE("${file} is git dir")
-      ELSE("${file}" MATCHES ".git")
-        #MESSAGE("${file} is dir")
+  foreach(file ${files})
+    if(IS_DIRECTORY ${file})
+      if("${file}" MATCHES ".git")
+        #message("${file} is git dir")
+      else("${file}" MATCHES ".git")
+        #message("${file} is dir")
         PROCESSONEDIR(${file} mytests2)
-        LIST(APPEND ${myoutput} ${mytests2})
-      ENDIF("${file}" MATCHES ".git")
-    ELSE(IS_DIRECTORY ${file})
-      #MESSAGE("${file} is file")
-      GET_FILENAME_COMPONENT(filename ${file} NAME)
-      IF("${filename}" MATCHES "Test" AND ${filename} MATCHES ".cxx")
-        STRING(LENGTH ${filename} filename_length)
-        #MESSAGE("${filename} is test, ${filename_length}")
-        MATH(EXPR fileend "${filename_length} - 4 - 4") # Need to remove 'Test' and '.cxx'
-        STRING(SUBSTRING ${filename} 4 ${fileend} classname)
-        #MESSAGE("${classname} is tested")
-        LIST(APPEND ${myoutput} ${classname})
-      ENDIF("${filename}" MATCHES "Test" AND ${filename} MATCHES ".cxx")
-    ENDIF(IS_DIRECTORY ${file})
-  ENDFOREACH(file)
-ENDMACRO(PROCESSONEDIR)
+        list(APPEND ${myoutput} ${mytests2})
+      endif("${file}" MATCHES ".git")
+    else(IS_DIRECTORY ${file})
+      #message("${file} is file")
+      get_filename_component(filename ${file} NAME)
+      if("${filename}" MATCHES "Test" AND ${filename} MATCHES ".cxx")
+        string(LENGTH ${filename} filename_length)
+        #message("${filename} is test, ${filename_length}")
+        math(EXPR fileend "${filename_length} - 4 - 4") # Need to remove 'Test' and '.cxx'
+        string(SUBSTRING ${filename} 4 ${fileend} classname)
+        #message("${classname} is tested")
+        list(APPEND ${myoutput} ${classname})
+      endif("${filename}" MATCHES "Test" AND ${filename} MATCHES ".cxx")
+    endif(IS_DIRECTORY ${file})
+  endforeach(file)
+endmacro(PROCESSONEDIR)
 
 #PROCESSONEDIR(
 #  ${CMAKE_CURRENT_SOURCE_DIR}/Testing/Source/Common
 #  theoutput
 #)
-#MESSAGE("${theoutput}")
+#message("${theoutput}")
 
 # For DICOM Q/R testing
-IF(GDCM_BUILD_TESTING)
-  SET(GDCM_DICOM_CLIENT_AETITLE "" CACHE STRING "DICOM CLIENT AETITLE")
-  SET(GDCM_DICOM_SERVER_AETITLE "" CACHE STRING "DICOM SERVER AETITLE")
-  SET(GDCM_DICOM_SERVER_PEER    "" CACHE STRING "DICOM SERVER PEER")
-  SET(GDCM_DICOM_SERVER_PORT    "" CACHE STRING "DICOM SERVER PORT")
-  SET(GDCM_DICOM_CLIENT_PORT    "" CACHE STRING "DICOM CLIENT PORT")
-  MARK_AS_ADVANCED(
+if(GDCM_BUILD_TESTING)
+  set(GDCM_DICOM_CLIENT_AETITLE "" CACHE STRING "DICOM CLIENT AETITLE")
+  set(GDCM_DICOM_SERVER_AETITLE "" CACHE STRING "DICOM SERVER AETITLE")
+  set(GDCM_DICOM_SERVER_PEER    "" CACHE STRING "DICOM SERVER PEER")
+  set(GDCM_DICOM_SERVER_PORT    "" CACHE STRING "DICOM SERVER PORT")
+  set(GDCM_DICOM_CLIENT_PORT    "" CACHE STRING "DICOM CLIENT PORT")
+  mark_as_advanced(
     GDCM_DICOM_CLIENT_AETITLE
     GDCM_DICOM_SERVER_AETITLE
     GDCM_DICOM_SERVER_PEER
     GDCM_DICOM_SERVER_PORT
     GDCM_DICOM_CLIENT_PORT
     )
-ENDIF(GDCM_BUILD_TESTING)
+endif(GDCM_BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 # Need to be the last operation:
-SET(GDCM_INCLUDE_PATH
+set(GDCM_INCLUDE_PATH
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
@@ -906,17 +906,17 @@ SET(GDCM_INCLUDE_PATH
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   )
-IF(MSVC)
-  SET(GDCM_INCLUDE_PATH
+if(MSVC)
+  set(GDCM_INCLUDE_PATH
     ${GDCM_INCLUDE_PATH}
     "${GDCM_SOURCE_DIR}/Utilities/C99"
   )
-ENDIF(MSVC)
-IF(GDCM_USE_VTK)
-    SET(GDCM_INCLUDE_PATH
+endif(MSVC)
+if(GDCM_USE_VTK)
+    set(GDCM_INCLUDE_PATH
       ${GDCM_INCLUDE_PATH}
       "${GDCM_SOURCE_DIR}/Utilities/VTK"
       )
-ENDIF(GDCM_USE_VTK)
-SET(GDCM_LIBRARY_DIRS ${LIBRARY_OUTPUT_PATH})
-SUBDIRS(CMake/ExportConfiguration)
+endif(GDCM_USE_VTK)
+set(GDCM_LIBRARY_DIRS ${LIBRARY_OUTPUT_PATH})
+subdirs(CMake/ExportConfiguration)

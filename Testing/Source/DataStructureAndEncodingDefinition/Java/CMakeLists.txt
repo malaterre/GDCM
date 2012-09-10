@@ -1,19 +1,19 @@
 # Define the tests for gdcm-java
-SET(GDCM_JAVA_TEST_SRCS
+set(GDCM_JAVA_TEST_SRCS
   TestReader
   )
 
 # Do not change anything after here:
-FIND_PACKAGE(Java REQUIRED) # javac, jar
-FIND_PACKAGE(JNI REQUIRED)
-INCLUDE_DIRECTORIES(
+find_package(Java REQUIRED) # javac, jar
+find_package(JNI REQUIRED)
+include_directories(
   ${JNI_INCLUDE_PATH}
   )
 
 set(classfilesdep)
 
-FOREACH(example ${GDCM_JAVA_TEST_SRCS})
-  ADD_CUSTOM_COMMAND(
+foreach(example ${GDCM_JAVA_TEST_SRCS})
+  add_custom_command(
     OUTPUT ${EXECUTABLE_OUTPUT_PATH}/${example}.class
     COMMAND ${Java_JAVAC_EXECUTABLE} ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java -d ${EXECUTABLE_OUTPUT_PATH} -classpath ${LIBRARY_OUTPUT_PATH}/gdcm.jar
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -21,14 +21,14 @@ FOREACH(example ${GDCM_JAVA_TEST_SRCS})
     COMMENT "javac ${example}.java"
     )
   list(APPEND classfilesdep ${EXECUTABLE_OUTPUT_PATH}/${example}.class)
-  SET_SOURCE_FILES_PROPERTIES(${EXECUTABLE_OUTPUT_PATH}/${example}.class PROPERTIES CLASSPATH "${EXECUTABLE_OUTPUT_PATH}/gdcm.jar")
+  set_source_files_properties(${EXECUTABLE_OUTPUT_PATH}/${example}.class PROPERTIES CLASSPATH "${EXECUTABLE_OUTPUT_PATH}/gdcm.jar")
   ADD_JAVA_TEST(${example}Java ${EXECUTABLE_OUTPUT_PATH}/${example})
-ENDFOREACH(example)
+endforeach(example)
 
 # 3. ok now add the target
-ADD_CUSTOM_TARGET(GDCMJavaDSEDTests ALL
+add_custom_target(GDCMJavaDSEDTests ALL
   DEPENDS ${classfilesdep}
   COMMENT "building gdcm java dsed tests"
 )
 # make sure gdcm.jar is built
-ADD_DEPENDENCIES(GDCMJavaDSEDTests GDCMJavaJar)
+add_dependencies(GDCMJavaDSEDTests GDCMJavaJar)

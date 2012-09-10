@@ -6,37 +6,37 @@
 # you will eventually like to prefix the library to avoid linking confusion
 # For this purpose you can define a CMake var: OPENJPEG_NAMESPACE to whatever you like
 # e.g.:
-# SET(OPENJPEG_NAMESPACE "GDCMOPENJPEG")
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+# set(OPENJPEG_NAMESPACE "GDCMOPENJPEG")
+cmake_minimum_required(VERSION 2.6)
 
-IF(COMMAND CMAKE_POLICY)
-  CMAKE_POLICY(SET CMP0003 NEW)
-ENDIF(COMMAND CMAKE_POLICY)
+if(COMMAND CMAKE_POLICY)
+  cmake_policy(SET CMP0003 NEW)
+endif(COMMAND CMAKE_POLICY)
 
-IF(NOT OPENJPEG_NAMESPACE)
-  SET(OPENJPEG_NAMESPACE "OPENJPEG")
-  SET(OPENJPEG_STANDALONE 1)
-ENDIF(NOT OPENJPEG_NAMESPACE)
+if(NOT OPENJPEG_NAMESPACE)
+  set(OPENJPEG_NAMESPACE "OPENJPEG")
+  set(OPENJPEG_STANDALONE 1)
+endif(NOT OPENJPEG_NAMESPACE)
 # In all cases:
-STRING(TOLOWER ${OPENJPEG_NAMESPACE} OPENJPEG_LIBRARY_NAME)
+string(TOLOWER ${OPENJPEG_NAMESPACE} OPENJPEG_LIBRARY_NAME)
 
-PROJECT(${OPENJPEG_NAMESPACE} C)
+project(${OPENJPEG_NAMESPACE} C)
 
 # Do full dependency headers.
-INCLUDE_REGULAR_EXPRESSION("^.*$")
+include_regular_expression("^.*$")
 
 #-----------------------------------------------------------------------------
 # OPENJPEG version number, useful for packaging and doxygen doc:
-SET(OPENJPEG_VERSION_MAJOR 1)
-SET(OPENJPEG_VERSION_MINOR 4)
-SET(OPENJPEG_VERSION_BUILD 0)
-SET(OPENJPEG_VERSION
+set(OPENJPEG_VERSION_MAJOR 1)
+set(OPENJPEG_VERSION_MINOR 4)
+set(OPENJPEG_VERSION_BUILD 0)
+set(OPENJPEG_VERSION
   "${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}.${OPENJPEG_VERSION_BUILD}")
-SET(PACKAGE_VERSION
+set(PACKAGE_VERSION
   "${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}.${OPENJPEG_VERSION_BUILD}")
 # This setting of SOVERSION assumes that any API change
 # will increment either the minor or major version number of openjpeg
-SET(OPENJPEG_LIBRARY_PROPERTIES
+set(OPENJPEG_LIBRARY_PROPERTIES
   VERSION   "${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}.${OPENJPEG_VERSION_BUILD}"
   SOVERSION "${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}"
 )
@@ -49,12 +49,12 @@ SET(OPENJPEG_LIBRARY_PROPERTIES
 
 # On Visual Studio 8 MS deprecated C. This removes all 1.276E1265 security
 # warnings
-IF(WIN32)
-  IF(NOT BORLAND)
-    IF(NOT CYGWIN)
-      IF(NOT MINGW)
-        IF(NOT ITK_ENABLE_VISUAL_STUDIO_DEPRECATED_C_WARNINGS)
-          ADD_DEFINITIONS(
+if(WIN32)
+  if(NOT BORLAND)
+    if(NOT CYGWIN)
+      if(NOT MINGW)
+        if(NOT ITK_ENABLE_VISUAL_STUDIO_DEPRECATED_C_WARNINGS)
+          add_definitions(
             -D_CRT_FAR_MAPPINGS_NO_DEPRECATE
             -D_CRT_IS_WCTYPE_NO_DEPRECATE
             -D_CRT_MANAGED_FP_NO_DEPRECATE
@@ -66,59 +66,59 @@ IF(WIN32)
             -D_CRT_VCCLRIT_NO_DEPRECATE
             -D_SCL_SECURE_NO_DEPRECATE
             )
-        ENDIF(NOT ITK_ENABLE_VISUAL_STUDIO_DEPRECATED_C_WARNINGS)
-      ENDIF(NOT MINGW)
-    ENDIF(NOT CYGWIN)
-  ENDIF(NOT BORLAND)
-ENDIF(WIN32)
+        endif(NOT ITK_ENABLE_VISUAL_STUDIO_DEPRECATED_C_WARNINGS)
+      endif(NOT MINGW)
+    endif(NOT CYGWIN)
+  endif(NOT BORLAND)
+endif(WIN32)
 
 
 # --------------------------------------------------------------------------
 # Install directories
 
-STRING(TOLOWER ${PROJECT_NAME} projectname)
-SET(subdir "${projectname}-${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}")
+string(TOLOWER ${PROJECT_NAME} projectname)
+set(subdir "${projectname}-${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}")
 
-IF(NOT OPENJPEG_INSTALL_BIN_DIR)
-  SET(OPENJPEG_INSTALL_BIN_DIR "bin")
-ENDIF(NOT OPENJPEG_INSTALL_BIN_DIR)
+if(NOT OPENJPEG_INSTALL_BIN_DIR)
+  set(OPENJPEG_INSTALL_BIN_DIR "bin")
+endif(NOT OPENJPEG_INSTALL_BIN_DIR)
 
-IF(NOT OPENJPEG_INSTALL_LIB_DIR)
-  SET(OPENJPEG_INSTALL_LIB_DIR "lib")
-ENDIF(NOT OPENJPEG_INSTALL_LIB_DIR)
+if(NOT OPENJPEG_INSTALL_LIB_DIR)
+  set(OPENJPEG_INSTALL_LIB_DIR "lib")
+endif(NOT OPENJPEG_INSTALL_LIB_DIR)
 
-IF(NOT OPENJPEG_INSTALL_DATA_DIR)
-  SET(OPENJPEG_INSTALL_DATA_DIR "share/${subdir}")
-ENDIF(NOT OPENJPEG_INSTALL_DATA_DIR)
+if(NOT OPENJPEG_INSTALL_DATA_DIR)
+  set(OPENJPEG_INSTALL_DATA_DIR "share/${subdir}")
+endif(NOT OPENJPEG_INSTALL_DATA_DIR)
 
-IF(NOT OPENJPEG_INSTALL_INCLUDE_DIR)
-  SET(OPENJPEG_INSTALL_INCLUDE_DIR "include/")
-ENDIF(NOT OPENJPEG_INSTALL_INCLUDE_DIR)
+if(NOT OPENJPEG_INSTALL_INCLUDE_DIR)
+  set(OPENJPEG_INSTALL_INCLUDE_DIR "include/")
+endif(NOT OPENJPEG_INSTALL_INCLUDE_DIR)
 
-IF(NOT OPENJPEG_INSTALL_MAN_DIR)
-  SET(OPENJPEG_INSTALL_MAN_DIR "share/man/")
-ENDIF(NOT OPENJPEG_INSTALL_MAN_DIR)
+if(NOT OPENJPEG_INSTALL_MAN_DIR)
+  set(OPENJPEG_INSTALL_MAN_DIR "share/man/")
+endif(NOT OPENJPEG_INSTALL_MAN_DIR)
 
-IF(NOT OPENJPEG_INSTALL_DOC_DIR)
-  SET(OPENJPEG_INSTALL_DOC_DIR "share/doc/${subdir}")
-ENDIF(NOT OPENJPEG_INSTALL_DOC_DIR)
+if(NOT OPENJPEG_INSTALL_DOC_DIR)
+  set(OPENJPEG_INSTALL_DOC_DIR "share/doc/${subdir}")
+endif(NOT OPENJPEG_INSTALL_DOC_DIR)
 
-IF(NOT OPENJPEG_INSTALL_PACKAGE_DIR)
-  SET(OPENJPEG_INSTALL_PACKAGE_DIR ${OPENJPEG_INSTALL_LIB_DIR}/${subdir}
+if(NOT OPENJPEG_INSTALL_PACKAGE_DIR)
+  set(OPENJPEG_INSTALL_PACKAGE_DIR ${OPENJPEG_INSTALL_LIB_DIR}/${subdir}
     CACHE INTERNAL "")
-ENDIF(NOT OPENJPEG_INSTALL_PACKAGE_DIR)
+endif(NOT OPENJPEG_INSTALL_PACKAGE_DIR)
 
 #-----------------------------------------------------------------------------
 # Test for some required system information.
-INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityC.cmake)
+include (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityC.cmake)
 
 #-----------------------------------------------------------------------------
 # Test for getopt being available in this system
-INCLUDE (${PROJECT_SOURCE_DIR}/CMake/CheckHaveGetopt.cmake )
+include (${PROJECT_SOURCE_DIR}/CMake/CheckHaveGetopt.cmake )
 
 #-----------------------------------------------------------------------------
 # Setup file for setting custom ctest vars
-CONFIGURE_FILE(
+configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/CTestCustom.cmake
   @ONLY
@@ -126,81 +126,81 @@ CONFIGURE_FILE(
 
 #-----------------------------------------------------------------------------
 # OpenJPEG build configuration options.
-#OPTION(BUILD_SHARED_LIBS "Build OpenJPEG shared library and link executables against it." ON)
+#option(BUILD_SHARED_LIBS "Build OpenJPEG shared library and link executables against it." ON)
 
 #-----------------------------------------------------------------------------
 
 
 # configure name mangling to allow multiple libraries to coexist
 # peacefully
-IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
-SET(MANGLE_PREFIX ${OPENJPEG_LIBRARY_NAME})
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
+set(MANGLE_PREFIX ${OPENJPEG_LIBRARY_NAME})
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle.h
                @ONLY)
-ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
+endif(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
 
-IF(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
-  INSTALL(FILES
+if(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
+  install(FILES
       ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle.h
     DESTINATION ${OPENJPEG_INSTALL_INCLUDE_DIR} COMPONENT Headers
   )
-ENDIF(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
+endif(NOT OPENJPEG_INSTALL_NO_DEVELOPMENT)
 
 #-----------------------------------------------------------------------------
 # Always build the library
-INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
-SUBDIRS(libopenjpeg)
+include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
+subdirs(libopenjpeg)
 
 #-----------------------------------------------------------------------------
 # Build CODEC executables ?
-#OPTION(OPJ_BUILD_CODEC "Build the CODEC executables" OFF)
-IF(OPJ_BUILD_CODEC)
-  SUBDIRS(codec)
-ENDIF(OPJ_BUILD_CODEC)
+#option(OPJ_BUILD_CODEC "Build the CODEC executables" OFF)
+if(OPJ_BUILD_CODEC)
+  subdirs(codec)
+endif(OPJ_BUILD_CODEC)
 
 #-----------------------------------------------------------------------------
 # Build MJ2 executables ?
-#OPTION(BUILD_MJ2 "Build the MJ2 executables." OFF)
-IF(BUILD_MJ2)
-  SUBDIRS(mj2)
-ENDIF(BUILD_MJ2)
+#option(BUILD_MJ2 "Build the MJ2 executables." OFF)
+if(BUILD_MJ2)
+  subdirs(mj2)
+endif(BUILD_MJ2)
 
 #-----------------------------------------------------------------------------
 # Build JPWL executables ?
-#OPTION(BUILD_JPWL "Build the JPWL executables" OFF)
-IF(BUILD_JPWL)
-  SUBDIRS(jpwl)
-ENDIF(BUILD_JPWL)
+#option(BUILD_JPWL "Build the JPWL executables" OFF)
+if(BUILD_JPWL)
+  subdirs(jpwl)
+endif(BUILD_JPWL)
 
 #-----------------------------------------------------------------------------
 # Build JP3D executables ?
-#OPTION(BUILD_JP3D "Build the JP3D executables" OFF)
-IF(BUILD_JP3D)
-  SUBDIRS(jp3d)
-ENDIF(BUILD_JP3D)
+#option(BUILD_JP3D "Build the JP3D executables" OFF)
+if(BUILD_JP3D)
+  subdirs(jp3d)
+endif(BUILD_JP3D)
 
 #-----------------------------------------------------------------------------
 # Build INDEXER_JPIP executables ?
-#OPTION(BUILD_INDEXER_JPIP "Build the INDEXER_JPIP executables" OFF)
-IF(BUILD_INDEXER_JPIP AND NOT UNIX)
-  SUBDIRS(indexer_JPIP)
-ENDIF(BUILD_INDEXER_JPIP AND NOT UNIX)
+#option(BUILD_INDEXER_JPIP "Build the INDEXER_JPIP executables" OFF)
+if(BUILD_INDEXER_JPIP AND NOT UNIX)
+  subdirs(indexer_JPIP)
+endif(BUILD_INDEXER_JPIP AND NOT UNIX)
 
 #-----------------------------------------------------------------------------
 # Build DOCUMENTATION ?
-#OPTION(BUILD_DOC "Build the doxygen documentation" OFF)
-IF(BUILD_DOC)
-  SUBDIRS(doc)
-ENDIF(BUILD_DOC)
+#option(BUILD_DOC "Build the doxygen documentation" OFF)
+if(BUILD_DOC)
+  subdirs(doc)
+endif(BUILD_DOC)
 
 #-----------------------------------------------------------------------------
 # For openjpeg team if they ever want CDash+CMake
-OPTION(BUILD_TESTING "Build the tests." OFF)
-IF(BUILD_TESTING)
-  ENABLE_TESTING()
-  INCLUDE(CTest)
-ENDIF(BUILD_TESTING)
+option(BUILD_TESTING "Build the tests." OFF)
+if(BUILD_TESTING)
+  enable_testing()
+  include(CTest)
+endif(BUILD_TESTING)
 
 # Adding test with dataset from:
 # http://www.crc.ricoh.com/~gormish/jpeg2000conformance/
@@ -208,46 +208,46 @@ ENDIF(BUILD_TESTING)
 # http://www.jpeg.org/jpeg2000guide/testimages/testimages.html
 #-----------------------------------------------------------------------------
 # Adding JPEG2000_CONFORMANCE_DATA_ROOT
-FIND_PATH(JPEG2000_CONFORMANCE_DATA_ROOT testimages.html
+find_path(JPEG2000_CONFORMANCE_DATA_ROOT testimages.html
   ${OPENJPEG_SOURCE_DIR}/../jpeg2000testimages
   $ENV{JPEG2000_CONFORMANCE_DATA_ROOT}
 )
-MARK_AS_ADVANCED(JPEG2000_CONFORMANCE_DATA_ROOT)
+mark_as_advanced(JPEG2000_CONFORMANCE_DATA_ROOT)
 
 #-----------------------------------------------------------------------------
 # Compiler specific flags:
-IF(CMAKE_COMPILER_IS_GNUCC)
+if(CMAKE_COMPILER_IS_GNUCC)
   # For all builds, make sure openjpeg is std99 compliant:
-  # SET(CMAKE_C_FLAGS "-Wall -std=c99 ${CMAKE_C_FLAGS}") # FIXME: this setting prevented us from setting a coverage build.
+  # set(CMAKE_C_FLAGS "-Wall -std=c99 ${CMAKE_C_FLAGS}") # FIXME: this setting prevented us from setting a coverage build.
   # Do not use ffast-math for all build, it would produce incorrect results, only set for release:
-  #SET(CMAKE_C_FLAGS_RELEASE "-ffast-math ${CMAKE_C_FLAGS_RELEASE}")
-ENDIF(CMAKE_COMPILER_IS_GNUCC)
+  #set(CMAKE_C_FLAGS_RELEASE "-ffast-math ${CMAKE_C_FLAGS_RELEASE}")
+endif(CMAKE_COMPILER_IS_GNUCC)
 
 # install CHANGES and LICENSE
-#INSTALL(
+#install(
 #  FILES       CHANGES
 #              LICENSE
 #  DESTINATION ${OPENJPEG_INSTALL_DOC_DIR})
 #
-#IF(UNIX OR CYGWIN)
-#  SET(CMAKE_INCLUDE_PATH /usr/include /usr/local/include /opt/include
+#if(UNIX OR CYGWIN)
+#  set(CMAKE_INCLUDE_PATH /usr/include /usr/local/include /opt/include
 #	/opt/local/include /usr/include/libpng /usr/include/libpng14
 #	/usr/include/libpng12 /usr/local/include/libpng
 #	/usr/local/include/libpng14 /usr/local/include/libpng12
 #	/opt/include/libpng /opt/include/libpng14 /opt/include/libpng12
 #	/opt/local/include/libpng /opt/local/include/libpng14
 #	/opt/local/include/libpng12 )
-#  SET(CMAKE_LIBRARY_PATH /usr/lib /usr/local/lib /opt/lib /opt/local/lib)
-#ELSEIF(WIN32)
-#  SET(CMAKE_INCLUDE_PATH ${OPENJPEG_SOURCE_DIR}/libs/libtiff
+#  set(CMAKE_LIBRARY_PATH /usr/lib /usr/local/lib /opt/lib /opt/local/lib)
+#elseif(WIN32)
+#  set(CMAKE_INCLUDE_PATH ${OPENJPEG_SOURCE_DIR}/libs/libtiff
 #	${OPENJPEG_SOURCE_DIR}/libs/png ${OPENJPEG_SOURCE_DIR}/libs/lcms2
 #	C:/WINDOWS/system32/user )
-#  SET(CMAKE_LIBRARY_PATH ${OPENJPEG_SOURCE_DIR}/libs/libtiff
+#  set(CMAKE_LIBRARY_PATH ${OPENJPEG_SOURCE_DIR}/libs/libtiff
 #        ${OPENJPEG_SOURCE_DIR}/libs/png ${OPENJPEG_SOURCE_DIR}/libs/lcms2
 #	C:/WINDOWS/system32/user )
-#ENDIF()
+#endif()
 #
-INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
+include (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
 CHECK_INCLUDE_FILE("strings.h"       HAVE_STRINGS_H)
 CHECK_INCLUDE_FILE("inttypes.h"      HAVE_INTTYPES_H)
 CHECK_INCLUDE_FILE("memory.h"        HAVE_MEMORY_H)
@@ -258,120 +258,120 @@ CHECK_INCLUDE_FILE("sys/stat.h"      HAVE_SYS_STAT_H)
 CHECK_INCLUDE_FILE("sys/types.h"     HAVE_SYS_TYPES_H)
 CHECK_INCLUDE_FILE("unistd.h"        HAVE_UNISTD_H)
 
-#FIND_FILE(HAVE_STRINGS_H_FOUND strings.h)
-#IF(NOT HAVE_STRINGS_H_FOUND STREQUAL "HAVE_STRINGS_H_FOUND-NOTFOUND")
-#  FIND_FILE(HAVE_STRINGS_H strings.h)
-#  SET(HAS_STRINGS_H 1)
-#ENDIF()
-#FIND_FILE(HAVE_INTTYPES_H_FOUND inttypes.h)
-#IF(NOT HAVE_INTTYPES_H_FOUND STREQUAL "HAVE_INTTYPES_H_FOUND-NOTFOUND")
-#  FIND_FILE(HAVE_INTTYPES_H inttypes.h)
-#  SET(HAS_INTTYPES_H 1)
-#ENDIF()
-#FIND_FILE(HAVE_MEMORY_H_FOUND memory.h)
-#IF(NOT HAVE_MEMORY_H_FOUND STREQUAL "HAVE_MEMORY_H_FOUND-NOTFOUND")
-#  FIND_FILE(HAVE_MEMORY_H memory.h)
-#  SET(HAS_MEMORY_H 1)
-#ENDIF()
-#FIND_FILE(HAVE_STDINT_H_FOUND stdint.h)
-#IF(NOT HAVE_STDINT_H_FOUND STREQUAL "HAVE_STDINT_H_FOUND-NOTFOUND")
-#  FIND_FILE(HAVE_STDINT_H stdint.h)
-#  SET(HAS_STDINT_H 1)
-#ENDIF()
-#FIND_FILE(HAVE_STDLIB_H_FOUND stdlib.h)
-#IF(NOT HAVE_STDLIB_H_FOUND STREQUAL "HAVE_STDLIB_H_FOUND-NOTFOUND")
-#  FIND_FILE(HAVE_STDLIB_H stdlib.h)
-#  SET(HAS_STDLIB_H 1)
-#ENDIF()
-#FIND_FILE(HAVE_STRING_H_FOUND string.h)
-#IF(NOT HAVE_STRING_H_FOUND STREQUAL "HAVE_STRING_H_FOUND-NOTFOUND")
-#  FIND_FILE(HAVE_STRING_H string.h)
-#  SET(HAS_STRING_H 1)
-#ENDIF()
-#FIND_FILE(HAVE_SYS_STAT_H_FOUND sys/stat.h)
-#IF(NOT HAVE_SYS_STAT_H_FOUND STREQUAL "HAVE_SYS_STAT_H_FOUND-NOTFOUND")
-#  FIND_FILE(HAVE_SYS_STAT_H sys/stat.h)
-#  SET(HAS_SYS_STAT_H 1)
-#ENDIF()
-#FIND_FILE(HAVE_SYS_TYPES_H_FOUND sys/types.h)
-#IF(NOT HAVE_SYS_TYPES_H_FOUND STREQUAL "HAVE_SYS_TYPES_H_FOUND-NOTFOUND")
-#  FIND_FILE(HAVE_SYS_TYPES_H sys/types.h)
-#  SET(HAS_SYS_TYPES_H 1)
-#ENDIF()
-#FIND_FILE(HAVE_UNISTD_H_FOUND unistd.h)
-#IF(NOT HAVE_UNISTD_H_FOUND STREQUAL "HAVE_UNISTD_H_FOUND-NOTFOUND")
-#  FIND_FILE(HAVE_UNISTD_H unistd.h)
-#  SET(HAS_UNISTD_H 1)
-#ENDIF()
+#find_file(HAVE_STRINGS_H_FOUND strings.h)
+#if(NOT HAVE_STRINGS_H_FOUND STREQUAL "HAVE_STRINGS_H_FOUND-NOTFOUND")
+#  find_file(HAVE_STRINGS_H strings.h)
+#  set(HAS_STRINGS_H 1)
+#endif()
+#find_file(HAVE_INTTYPES_H_FOUND inttypes.h)
+#if(NOT HAVE_INTTYPES_H_FOUND STREQUAL "HAVE_INTTYPES_H_FOUND-NOTFOUND")
+#  find_file(HAVE_INTTYPES_H inttypes.h)
+#  set(HAS_INTTYPES_H 1)
+#endif()
+#find_file(HAVE_MEMORY_H_FOUND memory.h)
+#if(NOT HAVE_MEMORY_H_FOUND STREQUAL "HAVE_MEMORY_H_FOUND-NOTFOUND")
+#  find_file(HAVE_MEMORY_H memory.h)
+#  set(HAS_MEMORY_H 1)
+#endif()
+#find_file(HAVE_STDINT_H_FOUND stdint.h)
+#if(NOT HAVE_STDINT_H_FOUND STREQUAL "HAVE_STDINT_H_FOUND-NOTFOUND")
+#  find_file(HAVE_STDINT_H stdint.h)
+#  set(HAS_STDINT_H 1)
+#endif()
+#find_file(HAVE_STDLIB_H_FOUND stdlib.h)
+#if(NOT HAVE_STDLIB_H_FOUND STREQUAL "HAVE_STDLIB_H_FOUND-NOTFOUND")
+#  find_file(HAVE_STDLIB_H stdlib.h)
+#  set(HAS_STDLIB_H 1)
+#endif()
+#find_file(HAVE_STRING_H_FOUND string.h)
+#if(NOT HAVE_STRING_H_FOUND STREQUAL "HAVE_STRING_H_FOUND-NOTFOUND")
+#  find_file(HAVE_STRING_H string.h)
+#  set(HAS_STRING_H 1)
+#endif()
+#find_file(HAVE_SYS_STAT_H_FOUND sys/stat.h)
+#if(NOT HAVE_SYS_STAT_H_FOUND STREQUAL "HAVE_SYS_STAT_H_FOUND-NOTFOUND")
+#  find_file(HAVE_SYS_STAT_H sys/stat.h)
+#  set(HAS_SYS_STAT_H 1)
+#endif()
+#find_file(HAVE_SYS_TYPES_H_FOUND sys/types.h)
+#if(NOT HAVE_SYS_TYPES_H_FOUND STREQUAL "HAVE_SYS_TYPES_H_FOUND-NOTFOUND")
+#  find_file(HAVE_SYS_TYPES_H sys/types.h)
+#  set(HAS_SYS_TYPES_H 1)
+#endif()
+#find_file(HAVE_UNISTD_H_FOUND unistd.h)
+#if(NOT HAVE_UNISTD_H_FOUND STREQUAL "HAVE_UNISTD_H_FOUND-NOTFOUND")
+#  find_file(HAVE_UNISTD_H unistd.h)
+#  set(HAS_UNISTD_H 1)
+#endif()
 #
 # Does the system have png library installed ?
 #
-#FIND_PACKAGE(PNG)
+#find_package(PNG)
 #
-IF(PNG_FOUND)
-  SET(HAVE_PNG_H 1)
-  SET(HAVE_LIBPNG 1)
-ENDIF()
+if(PNG_FOUND)
+  set(HAVE_PNG_H 1)
+  set(HAVE_LIBPNG 1)
+endif()
 #
 # Does the system have tiff library installed ?
 # 
-#FIND_PACKAGE(TIFF)
+#find_package(TIFF)
 #
-IF(TIFF_FOUND)
-  SET(HAVE_TIFF_H 1)
-  SET(HAVE_LIBTIFF 1)
-ENDIF()
+if(TIFF_FOUND)
+  set(HAVE_TIFF_H 1)
+  set(HAVE_LIBTIFF 1)
+endif()
 #
 #
 # Does the system have lcms library installed ?
 #
-SET(LCMS_LIB "")
-#FIND_FILE(LCMS2_HEADER_FOUND lcms2.h)
+set(LCMS_LIB "")
+#find_file(LCMS2_HEADER_FOUND lcms2.h)
 #
-IF(LCMS2_HEADER_FOUND STREQUAL "LCMS2_HEADER_FOUND-NOTFOUND")
- SET(LCMS2_HEADER_FOUND "")
-ENDIF()
-IF(LCMS2_HEADER_FOUND)
- FIND_PATH(LCMS_INCLUDE_DIR  lcms2.h)
- IF(UNIX OR CYGWIN)
-   FIND_LIBRARY(HAVE_LIBLCMS2 lcms2)
- ELSE()
-   FIND_LIBRARY(HAVE_LIBLCMS2 lcms2_static.lib)
- ENDIF() 
- IF(HAVE_LIBLCMS2 STREQUAL "HAVE_LIBLCMS2-NOTFOUND")
-  SET(HAVE_LIBLCMS2 "")
- ENDIF()
- IF(HAVE_LIBLCMS2)
-  SET(LCMS_LIB "${HAVE_LIBLCMS2}")
-  SET(HAVE_LCMS2_LIB 1)
-  SET(HAVE_LCMS2_H 1)
- ENDIF()
-ENDIF()
-#IF(NOT LCMS2_HEADER_FOUND)
-# FIND_FILE(LCMS1_HEADER_FOUND lcms.h)
-# IF(LCMS1_HEADER_FOUND STREQUAL "LCMS1_HEADER_FOUND-NOTFOUND")
-#  SET(LCMS1_HEADER_FOUND "")
-# ENDIF()
-# IF(LCMS1_HEADER_FOUND)
-#  FIND_PATH(LCMS_INCLUDE_DIR  lcms.h)
-#  FIND_LIBRARY(HAVE_LIBLCMS1 lcms)
-#  IF(HAVE_LIBLCMS1 STREQUAL "HAVE_LIBLCMS1-NOTFOUND")
-#   SET(HAVE_LIBLCMS1 "")
-#  ENDIF()
-#  IF(HAVE_LIBLCMS1)
-#   SET(LCMS_LIB "${HAVE_LIBLCMS1}")
-#   SET(HAVE_LCMS1_LIB 1)
-#   SET(HAVE_LCMS1_H 1)
-#  ENDIF()
-# ENDIF()
-#ENDIF()
+if(LCMS2_HEADER_FOUND STREQUAL "LCMS2_HEADER_FOUND-NOTFOUND")
+ set(LCMS2_HEADER_FOUND "")
+endif()
+if(LCMS2_HEADER_FOUND)
+ find_path(LCMS_INCLUDE_DIR  lcms2.h)
+ if(UNIX OR CYGWIN)
+   find_library(HAVE_LIBLCMS2 lcms2)
+ else()
+   find_library(HAVE_LIBLCMS2 lcms2_static.lib)
+ endif() 
+ if(HAVE_LIBLCMS2 STREQUAL "HAVE_LIBLCMS2-NOTFOUND")
+  set(HAVE_LIBLCMS2 "")
+ endif()
+ if(HAVE_LIBLCMS2)
+  set(LCMS_LIB "${HAVE_LIBLCMS2}")
+  set(HAVE_LCMS2_LIB 1)
+  set(HAVE_LCMS2_H 1)
+ endif()
+endif()
+#if(NOT LCMS2_HEADER_FOUND)
+# find_file(LCMS1_HEADER_FOUND lcms.h)
+# if(LCMS1_HEADER_FOUND STREQUAL "LCMS1_HEADER_FOUND-NOTFOUND")
+#  set(LCMS1_HEADER_FOUND "")
+# endif()
+# if(LCMS1_HEADER_FOUND)
+#  find_path(LCMS_INCLUDE_DIR  lcms.h)
+#  find_library(HAVE_LIBLCMS1 lcms)
+#  if(HAVE_LIBLCMS1 STREQUAL "HAVE_LIBLCMS1-NOTFOUND")
+#   set(HAVE_LIBLCMS1 "")
+#  endif()
+#  if(HAVE_LIBLCMS1)
+#   set(LCMS_LIB "${HAVE_LIBLCMS1}")
+#   set(HAVE_LCMS1_LIB 1)
+#   set(HAVE_LCMS1_H 1)
+#  endif()
+# endif()
+#endif()
 #
 # generate opj_config.h
-CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/opj_configh.cmake.in"
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/opj_configh.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/opj_config.h"
   @ONLY 
 )
-#MARK_AS_ADVANCED( HAVE_INTTYPES_H_FOUND HAVE_LIBLCMS2 HAVE_MEMORY_H
+#mark_as_advanced( HAVE_INTTYPES_H_FOUND HAVE_LIBLCMS2 HAVE_MEMORY_H
 #  HAVE_MEMORY_H_FOUND     HAVE_STDINT_H_FOUND     HAVE_STDLIB_H_FOUND
 #  HAVE_STRINGS_H          HAVE_STRINGS_H_FOUND    HAVE_STRING_H
 #  HAVE_STRING_H_FOUND     HAVE_SYS_STAT_H         HAVE_SYS_STAT_H_FOUND
@@ -379,10 +379,10 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/opj_configh.cmake.in"
 #  LCMS_INCLUDE_DIR        OPJ_BUILD_CODEC         )
 # install all targets referenced as OPENJPEGTargets
 #install(EXPORT ${GDCM_TARGETS_NAME} DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR})
-#CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/CMake/OpenJPEGConfig.cmake.in
+#configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/CMake/OpenJPEGConfig.cmake.in
 #  ${CMAKE_CURRENT_BINARY_DIR}/OpenJPEGConfig.cmake
 #  @ONLY
 #)
-#INSTALL( FILES ${CMAKE_CURRENT_BINARY_DIR}/OpenJPEGConfig.cmake
+#install( FILES ${CMAKE_CURRENT_BINARY_DIR}/OpenJPEGConfig.cmake
 #  DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR}
 #)

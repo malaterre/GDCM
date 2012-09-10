@@ -17,7 +17,7 @@
 # I can't get FindJNI.cmake to work, so instead re-write one more robust
 # which only requires javac and java being in the PATH
 
-GET_FILENAME_COMPONENT(current_list_path ${CMAKE_CURRENT_LIST_FILE} PATH)
+get_filename_component(current_list_path ${CMAKE_CURRENT_LIST_FILE} PATH)
 find_package(Java 1.5 REQUIRED)
 
 # need to re-run everytime the setting for Java has changed:
@@ -85,7 +85,7 @@ if(${current_list_path}/GetSystemProperty.java IS_NEWER_THAN ${CMAKE_BINARY_DIR}
     set(JavaProp_${property_cmake_name} ${${property_cmake_name}}
       CACHE STRING "Java Prop Value for: ${property}" FORCE
       )
-    MARK_AS_ADVANCED(
+    mark_as_advanced(
       JavaProp_${property_cmake_name}
       )
   endforeach(property)

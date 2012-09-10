@@ -1,10 +1,10 @@
-#SUBDIRS(Cxx Python)
-SUBDIRS(Cxx)
+#subdirs(Cxx Python)
+subdirs(Cxx)
 
-IF(GDCM_WRAP_CSHARP)
-  SUBDIRS(Csharp)
-ENDIF(GDCM_WRAP_CSHARP)
+if(GDCM_WRAP_CSHARP)
+  subdirs(Csharp)
+endif(GDCM_WRAP_CSHARP)
 
-IF(GDCM_WRAP_JAVA)
-  SUBDIRS(Java)
-ENDIF(GDCM_WRAP_JAVA)
+if(GDCM_WRAP_JAVA)
+  subdirs(Java)
+endif(GDCM_WRAP_JAVA)

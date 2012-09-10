@@ -14,13 +14,13 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-FIND_PROGRAM(RSYNC_EXECUTABLE
+find_program(RSYNC_EXECUTABLE
   NAMES rsync
   PATHS
   /usr/bin
   /usr/local/bin
   )
 
-MARK_AS_ADVANCED(
+mark_as_advanced(
   RSYNC_EXECUTABLE
   )

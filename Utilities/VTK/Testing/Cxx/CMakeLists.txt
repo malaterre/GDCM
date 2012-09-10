@@ -1,6 +1,6 @@
 # Define the tests for vtk-gdcm
 # vtkGDCM
-SET(VTK_GDCM_TEST_SRCS
+set(VTK_GDCM_TEST_SRCS
   TestvtkGDCMImageReader
   TestvtkGDCMImageReader4
   TestvtkGDCMImageReaderIsLossy
@@ -9,64 +9,64 @@ SET(VTK_GDCM_TEST_SRCS
   #TestvtkGDCMImageActor
   #TestvtkGDCMImageViewer
 )
-IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
-  SET(VTK_GDCM_TEST_SRCS
+if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
+  set(VTK_GDCM_TEST_SRCS
     ${VTK_GDCM_TEST_SRCS}
     TestvtkGDCMImageWriter1
     TestvtkGDCMImageWriter2
     TestvtkGDCMThreadedImageReader2
     TestvtkGDCMMetaImageWriter
   )
-ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
+endif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
 
 # Need gdcmData
-IF(GDCM_DATA_ROOT)
-  SET(VTK_GDCM_TEST_SRCS
+if(GDCM_DATA_ROOT)
+  set(VTK_GDCM_TEST_SRCS
     ${VTK_GDCM_TEST_SRCS}
     TestvtkGDCMImageReader2
     )
-ENDIF(GDCM_DATA_ROOT)
+endif(GDCM_DATA_ROOT)
 # Need gdcmDataExtra
-IF(GDCM_DATA_EXTRA_ROOT)
-  SET(VTK_GDCM_TEST_SRCS
+if(GDCM_DATA_EXTRA_ROOT)
+  set(VTK_GDCM_TEST_SRCS
     ${VTK_GDCM_TEST_SRCS}
     TestvtkGDCMImageReader3
     TestvtkGDCMPolyDataReader
   )
-ENDIF(GDCM_DATA_EXTRA_ROOT)
+endif(GDCM_DATA_EXTRA_ROOT)
 
-IF(VTK_USE_RENDERING)
-  IF(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
-    SET(VTK_GDCM_TEST_SRCS
+if(VTK_USE_RENDERING)
+  if(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
+    set(VTK_GDCM_TEST_SRCS
       ${VTK_GDCM_TEST_SRCS}
       TestvtkGDCMThreadedImageReader
     )
-  ENDIF(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
-ENDIF(VTK_USE_RENDERING)
+  endif(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
+endif(VTK_USE_RENDERING)
 
 # Add the include paths
-INCLUDE_DIRECTORIES(
+include_directories(
   "${GDCM_SOURCE_DIR}/Utilities/VTK"
   "${GDCM_BINARY_DIR}/Testing/Source/Data" # for gdcmDataImages.h
   )
 
-CREATE_TEST_SOURCELIST(vtkGDCMTests gdcmvtkGDCMTests.cxx ${VTK_GDCM_TEST_SRCS}
+create_test_sourcelist(vtkGDCMTests gdcmvtkGDCMTests.cxx ${VTK_GDCM_TEST_SRCS}
   EXTRA_INCLUDE gdcmTestDriver.h
   )
-ADD_EXECUTABLE(gdcmvtkGDCMTests ${vtkGDCMTests})
-TARGET_LINK_LIBRARIES(gdcmvtkGDCMTests ${VTKGDCM_NAME} gdcmMSFF)
-IF(VTK_USE_RENDERING)
-  IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-    TARGET_LINK_LIBRARIES(gdcmvtkGDCMTests vtkRendering)
-  ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-    TARGET_LINK_LIBRARIES(gdcmvtkGDCMTests vtkVolumeRendering)
-  ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-ENDIF(VTK_USE_RENDERING)
+add_executable(gdcmvtkGDCMTests ${vtkGDCMTests})
+target_link_libraries(gdcmvtkGDCMTests ${VTKGDCM_NAME} gdcmMSFF)
+if(VTK_USE_RENDERING)
+  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+    target_link_libraries(gdcmvtkGDCMTests vtkRendering)
+  else( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+    target_link_libraries(gdcmvtkGDCMTests vtkVolumeRendering)
+  endif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+endif(VTK_USE_RENDERING)
 
 # Need full path to executable:
-SET(GDCM_VTK_GDCM_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmvtkGDCMTests")
+set(GDCM_VTK_GDCM_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmvtkGDCMTests")
 
 # Loop over files and create executables
-FOREACH(name ${VTK_GDCM_TEST_SRCS})
-  ADD_TEST(${name} ${GDCM_VTK_GDCM_TESTS} ${name})
-ENDFOREACH(name)
+foreach(name ${VTK_GDCM_TEST_SRCS})
+  add_test(${name} ${GDCM_VTK_GDCM_TESTS} ${name})
+endforeach(name)

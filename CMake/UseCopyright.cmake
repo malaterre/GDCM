@@ -7,19 +7,19 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-MACRO(CREATE_COPYRIGHT_FILE name)
+macro(CREATE_COPYRIGHT_FILE name)
   # Always cleanup the file:
-  FILE(WRITE ${name} "")
-  SET(COPYRIGHT_MODULE_FILENAME ${name})
-ENDMACRO(CREATE_COPYRIGHT_FILE)
+  file(WRITE ${name} "")
+  set(COPYRIGHT_MODULE_FILENAME ${name})
+endmacro(CREATE_COPYRIGHT_FILE)
 
 # Append copyright file
-MACRO(APPEND_COPYRIGHT)
+macro(APPEND_COPYRIGHT)
   # need to raise an error if COPYRIGHT_MODULE_FILENAME is not set...
-  IF(EXISTS ${COPYRIGHT_MODULE_FILENAME} )
-    FOREACH(filename ${ARGN})
-      FILE(READ ${filename} content)
-      FILE(APPEND ${COPYRIGHT_MODULE_FILENAME} ${content})
-    ENDFOREACH(filename)
-  ENDIF(EXISTS ${COPYRIGHT_MODULE_FILENAME} )
-ENDMACRO(APPEND_COPYRIGHT)
+  if(EXISTS ${COPYRIGHT_MODULE_FILENAME} )
+    foreach(filename ${ARGN})
+      file(READ ${filename} content)
+      file(APPEND ${COPYRIGHT_MODULE_FILENAME} ${content})
+    endforeach(filename)
+  endif(EXISTS ${COPYRIGHT_MODULE_FILENAME} )
+endmacro(APPEND_COPYRIGHT)

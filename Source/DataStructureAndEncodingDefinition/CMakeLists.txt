@@ -1,6 +1,6 @@
 # Define the srcs for Data Structure and Encoding Definitions
 # DSED
-SET(DSED_SRCS
+set(DSED_SRCS
   gdcmTag.cxx
   gdcmTagToVR.cxx
   gdcmPrivateTag.cxx
@@ -37,7 +37,7 @@ SET(DSED_SRCS
   )
 
 # Add the include paths
-INCLUDE_DIRECTORIES(
+include_directories(
   # Bin:
   "${GDCM_BINARY_DIR}/Source/Common"
 
@@ -49,18 +49,18 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Utilities"
  )
 
-IF(NOT GDCM_USE_SYSTEM_ZLIB)
-  INCLUDE_DIRECTORIES(
+if(NOT GDCM_USE_SYSTEM_ZLIB)
+  include_directories(
     "${GDCM_BINARY_DIR}/Utilities/gdcmzlib"
     )
-ENDIF(NOT GDCM_USE_SYSTEM_ZLIB)
+endif(NOT GDCM_USE_SYSTEM_ZLIB)
 
 
-ADD_LIBRARY(gdcmDSED ${DSED_SRCS})
-TARGET_LINK_LIBRARIES(gdcmDSED gdcmCommon)
+add_library(gdcmDSED ${DSED_SRCS})
+target_link_libraries(gdcmDSED gdcmCommon)
 # zlib stuff are actually included (template) so we need to link them here.
-TARGET_LINK_LIBRARIES(gdcmDSED ${GDCM_ZLIB_LIBRARIES})
-SET_TARGET_PROPERTIES(gdcmDSED PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "gdcmCommon")
+target_link_libraries(gdcmDSED ${GDCM_ZLIB_LIBRARIES})
+set_target_properties(gdcmDSED PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "gdcmCommon")
 
 # libs
 install_library(gdcmDSED)

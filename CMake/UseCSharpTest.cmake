@@ -1,14 +1,14 @@
 # Add a python test from a python file
 # One cannot simply do:
-# SET(ENV{PYTHONPATH} ${LIBRARY_OUTPUT_PATH})
-# SET(my_test "from test_mymodule import *\;test_mymodule()")
-# ADD_TEST(PYTHON-TEST-MYMODULE  python -c ${my_test})
+# set(ENV{PYTHONPATH} ${LIBRARY_OUTPUT_PATH})
+# set(my_test "from test_mymodule import *\;test_mymodule()")
+# add_test(PYTHON-TEST-MYMODULE  python -c ${my_test})
 # Since cmake is only transmitting the ADD_TEST line to ctest thus you are loosing
 # the env var. The only way to store the env var is to physically write in the cmake script
 # whatever PYTHONPATH you want and then add the test as 'cmake -P python_test.cmake'
 #
 # Usage:
-# SET_SOURCE_FILES_PROPERTIES(test.py PROPERTIES PYTHONPATH
+# set_source_files_properties(test.py PROPERTIES PYTHONPATH
 #   "${LIBRARY_OUTPUT_PATH}:${VTK_DIR}")
 # ADD_PYTHON_TEST(PYTHON-TEST test.py)
 #
@@ -20,38 +20,38 @@
 #
 
 # Need python interpreter:
-#FIND_PACKAGE(PythonInterp REQUIRED)
-#MARK_AS_ADVANCED(PYTHON_EXECUTABLE)
+#find_package(PythonInterp REQUIRED)
+#mark_as_advanced(PYTHON_EXECUTABLE)
 # UseCSharp.cmake
 
-MACRO(ADD_CSHARP_TEST TESTNAME FILENAME)
-  GET_SOURCE_FILE_PROPERTY(loc ${FILENAME} LOCATION)
-  GET_SOURCE_FILE_PROPERTY(pyenv ${FILENAME} RUNTIMEPATH)
-  IF(CMAKE_CONFIGURATION_TYPES)
+macro(ADD_CSHARP_TEST TESTNAME FILENAME)
+  get_source_file_property(loc ${FILENAME} LOCATION)
+  get_source_file_property(pyenv ${FILENAME} RUNTIMEPATH)
+  if(CMAKE_CONFIGURATION_TYPES)
     # I cannot use CMAKE_CFG_INTDIR since it expand to "$(OutDir)"
-    IF(pyenv)
-      SET(pyenv "${pyenv};${LIBRARY_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}")
-    ELSE(pyenv)
-      SET(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_BUILD_TYPE})
-      #SET(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
-      #SET(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_CONFIG_TYPE})
-      #SET(pyenv ${LIBRARY_OUTPUT_PATH}/\${CMAKE_CONFIG_TYPE})
-    ENDIF(pyenv)
-  ELSE(CMAKE_CONFIGURATION_TYPES)
-    IF(pyenv)
-      SET(pyenv ${pyenv}:${LIBRARY_OUTPUT_PATH})
-    ELSE(pyenv)
-      SET(pyenv ${LIBRARY_OUTPUT_PATH})
-    ENDIF(pyenv)
-   ENDIF(CMAKE_CONFIGURATION_TYPES)
-  STRING(REGEX REPLACE ";" " " wo_semicolumn "${ARGN}")
-  FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME}.cmake
+    if(pyenv)
+      set(pyenv "${pyenv};${LIBRARY_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}")
+    else(pyenv)
+      set(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_BUILD_TYPE})
+      #set(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
+      #set(pyenv ${LIBRARY_OUTPUT_PATH}/${CMAKE_CONFIG_TYPE})
+      #set(pyenv ${LIBRARY_OUTPUT_PATH}/\${CMAKE_CONFIG_TYPE})
+    endif(pyenv)
+  else(CMAKE_CONFIGURATION_TYPES)
+    if(pyenv)
+      set(pyenv ${pyenv}:${LIBRARY_OUTPUT_PATH})
+    else(pyenv)
+      set(pyenv ${LIBRARY_OUTPUT_PATH})
+    endif(pyenv)
+   endif(CMAKE_CONFIGURATION_TYPES)
+  string(REGEX REPLACE ";" " " wo_semicolumn "${ARGN}")
+  file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME}.cmake
 "
-  SET(ENV{LD_LIBRARY_PATH} ${pyenv})
-  SET(ENV{MONO_PATH} ${pyenv})
-  #MESSAGE(\"pyenv: ${pyenv}\")
+  set(ENV{LD_LIBRARY_PATH} ${pyenv})
+  set(ENV{MONO_PATH} ${pyenv})
+  #message(\"pyenv: ${pyenv}\")
   #message( \"wo_semicolumn: ${wo_semicolumn}\" )
-  EXECUTE_PROCESS(
+  execute_process(
     COMMAND ${CMAKE_CSHARP_INTERPRETER} ${loc} ${wo_semicolumn}
     #WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
     RESULT_VARIABLE import_res
@@ -60,24 +60,24 @@ MACRO(ADD_CSHARP_TEST TESTNAME FILENAME)
     )
 
   # Pass the output back to ctest
-  IF(import_output)
-    MESSAGE("\${import_output}")
-  ENDIF(import_output)
-  IF(import_res)
-    MESSAGE(SEND_ERROR "\${import_res}")
-  ENDIF(import_res)
+  if(import_output)
+    message("\${import_output}")
+  endif(import_output)
+  if(import_res)
+    message(SEND_ERROR "\${import_res}")
+  endif(import_res)
 "
 )
-  ADD_TEST(${TESTNAME} ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME}.cmake)
-ENDMACRO(ADD_CSHARP_TEST)
+  add_test(${TESTNAME} ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME}.cmake)
+endmacro(ADD_CSHARP_TEST)
 
 # Byte compile recursively a directory (DIRNAME)
-#MACRO(ADD_PYTHON_COMPILEALL_TEST DIRNAME)
+#macro(ADD_PYTHON_COMPILEALL_TEST DIRNAME)
 #  # First get the path:
-#  GET_FILENAME_COMPONENT(temp_path "${PYTHON_LIBRARIES}" PATH)
+#  get_filename_component(temp_path "${PYTHON_LIBRARIES}" PATH)
 #  # Find the python script:
-#  GET_FILENAME_COMPONENT(PYTHON_COMPILE_ALL_PY "${temp_path}/../compileall.py" ABSOLUTE)
+#  get_filename_component(PYTHON_COMPILE_ALL_PY "${temp_path}/../compileall.py" ABSOLUTE)
 #  # add test, use DIRNAME to create uniq name for the test:
-#  ADD_TEST(COMPILE_ALL-${DIRNAME} ${PYTHON_EXECUTABLE} "${PYTHON_COMPILE_ALL_PY}" -q ${DIRNAME})
-#ENDMACRO(ADD_PYTHON_COMPILEALL_TEST)
+#  add_test(COMPILE_ALL-${DIRNAME} ${PYTHON_EXECUTABLE} "${PYTHON_COMPILE_ALL_PY}" -q ${DIRNAME})
+#endmacro(ADD_PYTHON_COMPILEALL_TEST)
 #

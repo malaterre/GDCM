@@ -12,51 +12,51 @@
 #   CMAKE_RANLIB
 #   CMAKE_COMPILER_IS_GNUGNAT
 
-IF(NOT CMAKE_CSharp_COMPILER)
+if(NOT CMAKE_CSharp_COMPILER)
   # prefer the environment variable CSHARP
-  IF($ENV{CSHARP} MATCHES ".+")
-    GET_FILENAME_COMPONENT(CMAKE_CSharp_COMPILER_INIT $ENV{CSHARP} PROGRAM PROGRAM_ARGS CMAKE_CSharp_FLAGS_ENV_INIT)
-    IF(CMAKE_CSharp_FLAGS_ENV_INIT)
-      SET(CMAKE_CSharp_COMPILER_ARG1 "${CMAKE_CSharp_FLAGS_ENV_INIT}" CACHE STRING "First argument to CSharp compiler")
-    ENDIF(CMAKE_CSharp_FLAGS_ENV_INIT)
-    IF(NOT EXISTS ${CMAKE_CSharp_COMPILER_INIT})
-      MESSAGE(FATAL_ERROR "Could not find compiler set in environment variable CSHARP:\n$ENV{CSHARP}.")
-    ENDIF(NOT EXISTS ${CMAKE_CSharp_COMPILER_INIT})
-  ENDIF($ENV{CSHARP} MATCHES ".+")
+  if($ENV{CSHARP} MATCHES ".+")
+    get_filename_component(CMAKE_CSharp_COMPILER_INIT $ENV{CSHARP} PROGRAM PROGRAM_ARGS CMAKE_CSharp_FLAGS_ENV_INIT)
+    if(CMAKE_CSharp_FLAGS_ENV_INIT)
+      set(CMAKE_CSharp_COMPILER_ARG1 "${CMAKE_CSharp_FLAGS_ENV_INIT}" CACHE STRING "First argument to CSharp compiler")
+    endif(CMAKE_CSharp_FLAGS_ENV_INIT)
+    if(NOT EXISTS ${CMAKE_CSharp_COMPILER_INIT})
+      message(FATAL_ERROR "Could not find compiler set in environment variable CSHARP:\n$ENV{CSHARP}.")
+    endif(NOT EXISTS ${CMAKE_CSharp_COMPILER_INIT})
+  endif($ENV{CSHARP} MATCHES ".+")
 
   # next prefer the generator-specified compiler
-  IF(CMAKE_GENERATOR_CSHARP)
-    IF(NOT CMAKE_CSharp_COMPILER_INIT)
-      SET(CMAKE_CSharp_COMPILER_INIT ${CMAKE_GENERATOR_CSHARP})
-    ENDIF(NOT CMAKE_CSharp_COMPILER_INIT)
-  ENDIF(CMAKE_GENERATOR_CSHARP)
+  if(CMAKE_GENERATOR_CSHARP)
+    if(NOT CMAKE_CSharp_COMPILER_INIT)
+      set(CMAKE_CSharp_COMPILER_INIT ${CMAKE_GENERATOR_CSHARP})
+    endif(NOT CMAKE_CSharp_COMPILER_INIT)
+  endif(CMAKE_GENERATOR_CSHARP)
 
   # finally list compilers to try
-  IF(CMAKE_CSharp_COMPILER_INIT)
-    SET(CMAKE_CSharp_COMPILER_LIST ${CMAKE_CSharp_COMPILER_INIT})
-  ELSE(CMAKE_CSharp_COMPILER_INIT)
+  if(CMAKE_CSharp_COMPILER_INIT)
+    set(CMAKE_CSharp_COMPILER_LIST ${CMAKE_CSharp_COMPILER_INIT})
+  else(CMAKE_CSharp_COMPILER_INIT)
     # Known compilers:
     # mcs/gmcs/smcs # mono
     # csc: DotNet
-    SET(CMAKE_CSharp_COMPILER_LIST csc mcs gmcs smcs)
-  ENDIF(CMAKE_CSharp_COMPILER_INIT)
+    set(CMAKE_CSharp_COMPILER_LIST csc mcs gmcs smcs)
+  endif(CMAKE_CSharp_COMPILER_INIT)
 
   # Find the compiler.
-  FIND_PROGRAM(CMAKE_CSharp_COMPILER NAMES ${CMAKE_CSharp_COMPILER_LIST} DOC "CSharp compiler")
-  IF(CMAKE_CSharp_COMPILER_INIT AND NOT CMAKE_CSharp_COMPILER)
-    SET(CMAKE_CSharp_COMPILER "${CMAKE_CSharp_COMPILER_INIT}" CACHE FILEPATH "CSharp compiler" FORCE)
-  ENDIF(CMAKE_CSharp_COMPILER_INIT AND NOT CMAKE_CSharp_COMPILER)
-ENDIF(NOT CMAKE_CSharp_COMPILER)
-MARK_AS_ADVANCED(CMAKE_CSharp_COMPILER)
+  find_program(CMAKE_CSharp_COMPILER NAMES ${CMAKE_CSharp_COMPILER_LIST} DOC "CSharp compiler")
+  if(CMAKE_CSharp_COMPILER_INIT AND NOT CMAKE_CSharp_COMPILER)
+    set(CMAKE_CSharp_COMPILER "${CMAKE_CSharp_COMPILER_INIT}" CACHE FILEPATH "CSharp compiler" FORCE)
+  endif(CMAKE_CSharp_COMPILER_INIT AND NOT CMAKE_CSharp_COMPILER)
+endif(NOT CMAKE_CSharp_COMPILER)
+mark_as_advanced(CMAKE_CSharp_COMPILER)
 
-GET_FILENAME_COMPONENT(COMPILER_LOCATION "${CMAKE_CSharp_COMPILER}"
+get_filename_component(COMPILER_LOCATION "${CMAKE_CSharp_COMPILER}"
   PATH)
 
 
-#INCLUDE(CMakeFindBinUtils)
+#include(CMakeFindBinUtils)
 
 # configure variables set in this file for fast reload later on
-CONFIGURE_FILE(
+configure_file(
   #${CMAKE_ROOT}/Modules/CMakeCSharpCompiler.cmake.in
   ${CMAKE_MODULE_PATH}/CMakeCSharpCompiler.cmake.in
   #  "${CMAKE_PLATFORM_ROOT_BIN}/CMakeCSharpCompiler.cmake"
@@ -64,4 +64,4 @@ CONFIGURE_FILE(
   @ONLY
   )
 
-SET(CMAKE_CSharp_COMPILER_ENV_VAR "CSC")
+set(CMAKE_CSharp_COMPILER_ENV_VAR "CSC")

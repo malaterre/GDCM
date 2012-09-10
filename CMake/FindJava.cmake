@@ -29,7 +29,7 @@
 #  License text for the above reference.)
 
 # The HINTS option should only be used for values computed from the system.
-SET(_JAVA_HINTS
+set(_JAVA_HINTS
   "[HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\\2.0;JavaHome]/bin"
   "[HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\\1.9;JavaHome]/bin"
   "[HKEY_LOCAL_MACHINE\\SOFTWARE\\JavaSoft\\Java Development Kit\\1.8;JavaHome]/bin"
@@ -42,7 +42,7 @@ SET(_JAVA_HINTS
   )
 # Hard-coded guesses should still go in PATHS. This ensures that the user
 # environment can always override hard guesses.
-SET(_JAVA_PATHS
+set(_JAVA_PATHS
   /usr/lib/java/bin
   /usr/share/java/bin
   /usr/local/java/bin
@@ -53,59 +53,59 @@ SET(_JAVA_PATHS
   /usr/lib/j2sdk1.5-sun/bin
   /opt/sun-jdk-1.5.0.04/bin
   )
-FIND_PROGRAM(Java_JAVA_EXECUTABLE
+find_program(Java_JAVA_EXECUTABLE
   NAMES java
   HINTS ${_JAVA_HINTS}
   PATHS ${_JAVA_PATHS}
 )
 
-IF(Java_JAVA_EXECUTABLE)
+if(Java_JAVA_EXECUTABLE)
     set(_java_version_acceptable TRUE)
-    EXECUTE_PROCESS(COMMAND ${Java_JAVA_EXECUTABLE} -version
+    execute_process(COMMAND ${Java_JAVA_EXECUTABLE} -version
       RESULT_VARIABLE res
       OUTPUT_VARIABLE var
       ERROR_VARIABLE var # sun-java output to stderr
       OUTPUT_STRIP_TRAILING_WHITESPACE
       ERROR_STRIP_TRAILING_WHITESPACE)
-    IF( res )
-      MESSAGE( FATAL_ERROR "Error executing java -version" )
-    ELSE()
+    if( res )
+      message( FATAL_ERROR "Error executing java -version" )
+    else()
       # extract major/minor version and patch level from "java -version" output
       # Tested on linux using
       # 1. Sun / Sun OEM
       # 2. OpenJDK 1.6
       # 3. GCJ 1.5
       # 4. Kaffe 1.4.2
-      IF(var MATCHES "java version \"[0-9]+\\.[0-9]+\\.[0-9_]+[oem-]*\".*")
+      if(var MATCHES "java version \"[0-9]+\\.[0-9]+\\.[0-9_]+[oem-]*\".*")
         # This is most likely Sun / OpenJDK, or maybe GCJ-java compat layer
-        STRING( REGEX REPLACE ".* version \"([0-9]+\\.[0-9]+\\.[0-9_]+)[oem-]*\".*"
+        string( REGEX REPLACE ".* version \"([0-9]+\\.[0-9]+\\.[0-9_]+)[oem-]*\".*"
                 "\\1" Java_VERSION_STRING "${var}" )
-      ELSEIF(var MATCHES "java full version \"kaffe-[0-9]+\\.[0-9]+\\.[0-9_]+\".*")
+      elseif(var MATCHES "java full version \"kaffe-[0-9]+\\.[0-9]+\\.[0-9_]+\".*")
         # Kaffe style
-        STRING( REGEX REPLACE "java full version \"kaffe-([0-9]+\\.[0-9]+\\.[0-9_]+).*"
+        string( REGEX REPLACE "java full version \"kaffe-([0-9]+\\.[0-9]+\\.[0-9_]+).*"
                 "\\1" Java_VERSION_STRING "${var}" )
-      ELSE()
-        IF(NOT Java_FIND_QUIETLY)
+      else()
+        if(NOT Java_FIND_QUIETLY)
           message(WARNING "regex not supported: ${var}. Please report")
           set(_java_version_acceptable FALSE)
-        ENDIF(NOT Java_FIND_QUIETLY)
-      ENDIF()
-      STRING( REGEX REPLACE "([0-9]+).*" "\\1" Java_VERSION_MAJOR "${Java_VERSION_STRING}" )
-      STRING( REGEX REPLACE "[0-9]+\\.([0-9]+).*" "\\1" Java_VERSION_MINOR "${Java_VERSION_STRING}" )
-      STRING( REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" Java_VERSION_PATCH "${Java_VERSION_STRING}" )
+        endif(NOT Java_FIND_QUIETLY)
+      endif()
+      string( REGEX REPLACE "([0-9]+).*" "\\1" Java_VERSION_MAJOR "${Java_VERSION_STRING}" )
+      string( REGEX REPLACE "[0-9]+\\.([0-9]+).*" "\\1" Java_VERSION_MINOR "${Java_VERSION_STRING}" )
+      string( REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" Java_VERSION_PATCH "${Java_VERSION_STRING}" )
       # warning tweak version can be empty:
-      STRING( REGEX REPLACE "[0-9]+\\.[0-9]+\\.[0-9]+\\_?([0-9]*)$" "\\1" Java_VERSION_TWEAK "${Java_VERSION_STRING}" )
+      string( REGEX REPLACE "[0-9]+\\.[0-9]+\\.[0-9]+\\_?([0-9]*)$" "\\1" Java_VERSION_TWEAK "${Java_VERSION_STRING}" )
       if( Java_VERSION_TWEAK STREQUAL "" ) # check case where tweak is not defined
         set(Java_VERSION ${Java_VERSION_MAJOR}.${Java_VERSION_MINOR}.${Java_VERSION_PATCH})
       else( )
         set(Java_VERSION ${Java_VERSION_MAJOR}.${Java_VERSION_MINOR}.${Java_VERSION_PATCH}.${Java_VERSION_TWEAK})
       endif( )
       # display info
-      #MESSAGE( STATUS "Java version ${Java_VERSION_STRING} configured successfully!" ) # keep me, used for debug
-      IF(NOT Java_FIND_QUIETLY)
-        MESSAGE( STATUS "Java version ${Java_VERSION} configured successfully!" )
-      ENDIF(NOT Java_FIND_QUIETLY)
-    ENDIF()
+      #message( STATUS "Java version ${Java_VERSION_STRING} configured successfully!" ) # keep me, used for debug
+      if(NOT Java_FIND_QUIETLY)
+        message( STATUS "Java version ${Java_VERSION} configured successfully!" )
+      endif(NOT Java_FIND_QUIETLY)
+    endif()
 
     # check version if requested:
     if( Java_FIND_VERSION )
@@ -118,20 +118,20 @@ IF(Java_JAVA_EXECUTABLE)
         endif("${Java_VERSION}" VERSION_GREATER "${Java_FIND_VERSION}")
       endif( Java_FIND_VERSION_EXACT )
     endif( Java_FIND_VERSION )
-ENDIF(Java_JAVA_EXECUTABLE)
+endif(Java_JAVA_EXECUTABLE)
 
 get_filename_component(Java_JAVA_PATH ${Java_JAVA_EXECUTABLE} PATH)
 
 # Prefer same path as java
 find_program(Java_JAR_EXECUTABLE NAMES jar PATHS ${Java_JAVA_PATH} NO_DEFAULT_PATH)
-FIND_PROGRAM(Java_JAR_EXECUTABLE
+find_program(Java_JAR_EXECUTABLE
   NAMES jar
   HINTS ${_JAVA_HINTS}
   PATHS ${_JAVA_PATHS}
 )
 
 find_program(Java_JAVAC_EXECUTABLE NAMES javac PATHS ${Java_JAVA_PATH} NO_DEFAULT_PATH)
-FIND_PROGRAM(Java_JAVAC_EXECUTABLE
+find_program(Java_JAVAC_EXECUTABLE
   NAMES javac
   HINTS ${_JAVA_HINTS}
   PATHS ${_JAVA_PATHS}
@@ -145,7 +145,7 @@ find_package_handle_standard_args(Java DEFAULT_MSG
   _java_version_acceptable
 )
 
-MARK_AS_ADVANCED(
+mark_as_advanced(
   Java_JAVA_EXECUTABLE
   Java_JAR_EXECUTABLE
   Java_JAVAC_EXECUTABLE

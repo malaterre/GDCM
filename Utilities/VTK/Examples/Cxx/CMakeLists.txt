@@ -1,16 +1,16 @@
-INCLUDE_DIRECTORIES(
+include_directories(
   ${GDCM_SOURCE_DIR}/Utilities/VTK
   )
 
 
-IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
-  SET(GDCM_VTK_APPS
+if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
+  set(GDCM_VTK_APPS
     ConvertSingleBitTo8Bits
     GenerateRTSTRUCT
     offscreenimage
   )
-  IF(VTK_USE_RENDERING)
-    SET(GDCM_VTK_APPS
+  if(VTK_USE_RENDERING)
+    set(GDCM_VTK_APPS
       ${GDCM_VTK_APPS}
       gdcmorthoplanes
       gdcmreslice
@@ -21,47 +21,47 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
       gdcmvolume
       rtstructapp
       )
-  ENDIF(VTK_USE_RENDERING)
-  IF(GDCM_BUILD_TESTING)
-    SET(GDCM_VTK_APPS
+  endif(VTK_USE_RENDERING)
+  if(GDCM_BUILD_TESTING)
+    set(GDCM_VTK_APPS
       ${GDCM_VTK_APPS}
       ConvertRGBToLuminance
       Convert16BitsTo8Bits
       ConvertMultiFrameToSingleFrame
       MagnifyFile
       )
-    IF(GDCM_DATA_EXTRA_ROOT)
-      IF(VTK_USE_RENDERING)
-        SET(GDCM_VTK_APPS
+    if(GDCM_DATA_EXTRA_ROOT)
+      if(VTK_USE_RENDERING)
+        set(GDCM_VTK_APPS
           ${GDCM_VTK_APPS}
           reslicesphere
           )
-      ENDIF(VTK_USE_RENDERING)
-    ENDIF(GDCM_DATA_EXTRA_ROOT)
-  ENDIF(GDCM_BUILD_TESTING)
-ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
+      endif(VTK_USE_RENDERING)
+    endif(GDCM_DATA_EXTRA_ROOT)
+  endif(GDCM_BUILD_TESTING)
+endif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
 
-FOREACH(app ${GDCM_VTK_APPS})
-  ADD_EXECUTABLE(${app} ${app}.cxx)
-  #SET_TARGET_PROPERTIES(${app} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
-  TARGET_LINK_LIBRARIES(${app} ${VTKGDCM_NAME} ${vtkgdcm_LIBS})
-  TARGET_LINK_LIBRARIES(${app} gdcmDSED gdcmMSFF gdcmCommon)
-  IF(GDCM_BUILD_TESTING)
+foreach(app ${GDCM_VTK_APPS})
+  add_executable(${app} ${app}.cxx)
+  #set_target_properties(${app} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
+  target_link_libraries(${app} ${VTKGDCM_NAME} ${vtkgdcm_LIBS})
+  target_link_libraries(${app} gdcmDSED gdcmMSFF gdcmCommon)
+  if(GDCM_BUILD_TESTING)
     # gdcmTesting is in Common:
-    TARGET_LINK_LIBRARIES(${app} gdcmCommon)
-  ENDIF(GDCM_BUILD_TESTING)
-  IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
-    IF(VTK_USE_RENDERING)
-      TARGET_LINK_LIBRARIES(${app} vtkWidgets vtkVolumeRendering)
-    ENDIF(VTK_USE_RENDERING)
-  ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
-ENDFOREACH(app)
+    target_link_libraries(${app} gdcmCommon)
+  endif(GDCM_BUILD_TESTING)
+  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
+    if(VTK_USE_RENDERING)
+      target_link_libraries(${app} vtkWidgets vtkVolumeRendering)
+    endif(VTK_USE_RENDERING)
+  endif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
+endforeach(app)
 
-IF(GDCM_HAVE_PTHREAD_H)
+if(GDCM_HAVE_PTHREAD_H)
 # Dev only: I dont need to install that one:
-  ADD_EXECUTABLE(threadgdcm threadgdcm.cxx)
-  TARGET_LINK_LIBRARIES(threadgdcm gdcmMSFF pthread vtkIO)
-ENDIF(GDCM_HAVE_PTHREAD_H)
+  add_executable(threadgdcm threadgdcm.cxx)
+  target_link_libraries(threadgdcm gdcmMSFF pthread vtkIO)
+endif(GDCM_HAVE_PTHREAD_H)
 
-#ADD_EXECUTABLE(gdcm2vtk gdcm2vtk.cxx)
-#TARGET_LINK_LIBRARIES(gdcm2vtk gdcmMSFF pthread)
+#add_executable(gdcm2vtk gdcm2vtk.cxx)
+#target_link_libraries(gdcm2vtk gdcmMSFF pthread)

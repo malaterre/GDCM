@@ -1,5 +1,5 @@
 # Add the include paths
-INCLUDE_DIRECTORIES(
+include_directories(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
@@ -16,7 +16,7 @@ INCLUDE_DIRECTORIES(
   "${GDCM_BINARY_DIR}/Utilities/socketxx/socket++" # config.h
   )
 
-SET(MessageExchangeDefinition_SRCS
+set(MessageExchangeDefinition_SRCS
   gdcmAAbortPDU.cxx
   gdcmRoleSelectionSub.cxx
   gdcmSOPClassExtendedNegociationSub.cxx
@@ -73,9 +73,9 @@ SET(MessageExchangeDefinition_SRCS
   gdcmUserInformation.cxx
   )
 
-ADD_LIBRARY(gdcmMEXD ${MessageExchangeDefinition_SRCS})
-TARGET_LINK_LIBRARIES(gdcmMEXD gdcmMSFF gdcmDICT gdcmDSED gdcmIOD socketxx)
-SET_TARGET_PROPERTIES(gdcmMEXD PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
+add_library(gdcmMEXD ${MessageExchangeDefinition_SRCS})
+target_link_libraries(gdcmMEXD gdcmMSFF gdcmDICT gdcmDSED gdcmIOD socketxx)
+set_target_properties(gdcmMEXD PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 if(WIN32)
   target_link_libraries(gdcmMEXD ws2_32)
 endif(WIN32)

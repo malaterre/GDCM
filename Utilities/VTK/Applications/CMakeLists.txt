@@ -1,53 +1,53 @@
 # Build the vtk-gdcm simple viewer
-INCLUDE_DIRECTORIES(
+include_directories(
   ${GDCM_SOURCE_DIR}/Utilities/VTK
   )
 
-IF(WIN32 AND NOT CYGWIN)
-  INCLUDE_DIRECTORIES(
+if(WIN32 AND NOT CYGWIN)
+  include_directories(
     "${GDCM_SOURCE_DIR}/Utilities/getopt"
   )
-ENDIF(WIN32 AND NOT CYGWIN)
-IF(WIN32)
-  IF (BUILD_SHARED_LIBS)
-    ADD_DEFINITIONS(-DGETOPT_DLL)
-  ENDIF (BUILD_SHARED_LIBS)
-ENDIF(WIN32)
+endif(WIN32 AND NOT CYGWIN)
+if(WIN32)
+  if (BUILD_SHARED_LIBS)
+    add_definitions(-DGETOPT_DLL)
+  endif (BUILD_SHARED_LIBS)
+endif(WIN32)
 
-SET(GDCM_VTK_APPS
+set(GDCM_VTK_APPS
   gdcm2vtk
   )
-IF(VTK_USE_RENDERING)
-  SET(GDCM_VTK_APPS
+if(VTK_USE_RENDERING)
+  set(GDCM_VTK_APPS
     ${GDCM_VTK_APPS}
     gdcmviewer # vtkImageViewer2
     gdcm2pnm
     )
-ENDIF(VTK_USE_RENDERING)
+endif(VTK_USE_RENDERING)
 
-FOREACH(app ${GDCM_VTK_APPS})
-  ADD_EXECUTABLE(${app} ${app}.cxx)
-  IF(GDCM_EXECUTABLE_PROPERTIES)
-    SET_TARGET_PROPERTIES(${app} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
-  ENDIF(GDCM_EXECUTABLE_PROPERTIES)
-  TARGET_LINK_LIBRARIES(${app} ${VTKGDCM_NAME})
-  TARGET_LINK_LIBRARIES(${app} vtkCommon vtkFiltering vtkIO vtkImaging)
-  TARGET_LINK_LIBRARIES(${app} gdcmDSED gdcmMSFF gdcmCommon)
-  IF(VTK_USE_RENDERING)
-    TARGET_LINK_LIBRARIES(${app} vtkRendering)
+foreach(app ${GDCM_VTK_APPS})
+  add_executable(${app} ${app}.cxx)
+  if(GDCM_EXECUTABLE_PROPERTIES)
+    set_target_properties(${app} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
+  endif(GDCM_EXECUTABLE_PROPERTIES)
+  target_link_libraries(${app} ${VTKGDCM_NAME})
+  target_link_libraries(${app} vtkCommon vtkFiltering vtkIO vtkImaging)
+  target_link_libraries(${app} gdcmDSED gdcmMSFF gdcmCommon)
+  if(VTK_USE_RENDERING)
+    target_link_libraries(${app} vtkRendering)
 
-  IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
-    TARGET_LINK_LIBRARIES(${app} vtkWidgets)
-  ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
-  ENDIF(VTK_USE_RENDERING)
-  IF(WIN32 AND NOT CYGWIN)
-    TARGET_LINK_LIBRARIES(${app} gdcmgetopt)
-  ENDIF(WIN32 AND NOT CYGWIN)
-  IF(NOT GDCM_INSTALL_NO_RUNTIME)
-    INSTALL(TARGETS ${app}
+  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
+    target_link_libraries(${app} vtkWidgets)
+  endif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
+  endif(VTK_USE_RENDERING)
+  if(WIN32 AND NOT CYGWIN)
+    target_link_libraries(${app} gdcmgetopt)
+  endif(WIN32 AND NOT CYGWIN)
+  if(NOT GDCM_INSTALL_NO_RUNTIME)
+    install(TARGETS ${app}
       RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT VTKApplications
       LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKLibraries
       ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKDevelopment
     )
-  ENDIF(NOT GDCM_INSTALL_NO_RUNTIME)
-ENDFOREACH(app)
+  endif(NOT GDCM_INSTALL_NO_RUNTIME)
+endforeach(app)

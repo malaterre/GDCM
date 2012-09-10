@@ -1,8 +1,8 @@
 # Makefile for the main JPWL OpenJPEG codecs: JPWL_ j2k_to_image and JPWL_image_to_j2k
 
-ADD_DEFINITIONS(-DUSE_JPWL)
+add_definitions(-DUSE_JPWL)
 
-SET(OPJ_SRCS
+set(OPJ_SRCS
 ../libopenjpeg/bio.c
 ../libopenjpeg/cio.c
 ../libopenjpeg/dwt.c
@@ -22,49 +22,49 @@ SET(OPJ_SRCS
 ../libopenjpeg/tcd.c
 ../libopenjpeg/tgt.c
 )
-SET(JPWL_SRCS crc.c jpwl.c jpwl_lib.c rs.c)
+set(JPWL_SRCS crc.c jpwl.c jpwl_lib.c rs.c)
 
-SET(common_SRCS "")
+set(common_SRCS "")
 # If not getopt was found then add it to the lib:
-IF(DONT_HAVE_GETOPT)
-  SET(common_SRCS ${OPENJPEG_SOURCE_DIR}/common/getopt.c)
-ENDIF(DONT_HAVE_GETOPT)
+if(DONT_HAVE_GETOPT)
+  set(common_SRCS ${OPENJPEG_SOURCE_DIR}/common/getopt.c)
+endif(DONT_HAVE_GETOPT)
 
 # Build the library
-IF(WIN32)
-  IF(BUILD_SHARED_LIBS)
-    ADD_DEFINITIONS(-DOPJ_EXPORTS)
-  ELSE(BUILD_SHARED_LIBS)
-    ADD_DEFINITIONS(-DOPJ_STATIC)
-  ENDIF(BUILD_SHARED_LIBS)
-ENDIF(WIN32)
-ADD_LIBRARY(${OPENJPEG_LIBRARY_NAME}_JPWL ${JPWL_SRCS} ${OPJ_SRCS})
-SET_TARGET_PROPERTIES(${OPENJPEG_LIBRARY_NAME}_JPWL PROPERTIES ${OPENJPEG_LIBRARY_PROPERTIES})
+if(WIN32)
+  if(BUILD_SHARED_LIBS)
+    add_definitions(-DOPJ_EXPORTS)
+  else(BUILD_SHARED_LIBS)
+    add_definitions(-DOPJ_STATIC)
+  endif(BUILD_SHARED_LIBS)
+endif(WIN32)
+add_library(${OPENJPEG_LIBRARY_NAME}_JPWL ${JPWL_SRCS} ${OPJ_SRCS})
+set_target_properties(${OPENJPEG_LIBRARY_NAME}_JPWL PROPERTIES ${OPENJPEG_LIBRARY_PROPERTIES})
 
 # Install library
-INSTALL(TARGETS ${OPENJPEG_LIBRARY_NAME}_JPWL
+install(TARGETS ${OPENJPEG_LIBRARY_NAME}_JPWL
   DESTINATION ${OPENJPEG_INSTALL_LIB_DIR} COMPONENT Libraries
 )
 
 # Build executables
 
-INCLUDE_DIRECTORIES(
+include_directories(
   ${OPENJPEG_SOURCE_DIR}/libopenjpeg
   ${OPENJPEG_SOURCE_DIR}/common
   )
 
-IF(LCMS_INCLUDE_DIR)
-  INCLUDE_DIRECTORIES( ${LCMS_INCLUDE_DIR} )
-ENDIF(LCMS_INCLUDE_DIR)
-IF(PNG_FOUND)
-  INCLUDE_DIRECTORIES(${PNG_INCLUDE_DIR})
-ENDIF(PNG_FOUND)
-IF(TIFF_FOUND)
-  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-ENDIF(TIFF_FOUND)
+if(LCMS_INCLUDE_DIR)
+  include_directories( ${LCMS_INCLUDE_DIR} )
+endif(LCMS_INCLUDE_DIR)
+if(PNG_FOUND)
+  include_directories(${PNG_INCLUDE_DIR})
+endif(PNG_FOUND)
+if(TIFF_FOUND)
+  include_directories(${TIFF_INCLUDE_DIR})
+endif(TIFF_FOUND)
 
 
-ADD_EXECUTABLE(JPWL_j2k_to_image
+add_executable(JPWL_j2k_to_image
 ../codec/j2k_to_image.c
 ../codec/convert.c
 ../codec/index.c
@@ -72,36 +72,36 @@ ${OPENJPEG_SOURCE_DIR}/common/color.c
 ${common_SRCS}
 )
 
-TARGET_LINK_LIBRARIES(JPWL_j2k_to_image ${OPENJPEG_LIBRARY_NAME}_JPWL ${LCMS_LIB})
-IF(PNG_FOUND)
-  TARGET_LINK_LIBRARIES(JPWL_j2k_to_image ${PNG_LIBRARIES})
-ENDIF(PNG_FOUND)
-IF(TIFF_FOUND)
-  TARGET_LINK_LIBRARIES(JPWL_j2k_to_image ${TIFF_LIBRARIES})
-ENDIF(TIFF_FOUND)
-IF(UNIX)
-  TARGET_LINK_LIBRARIES(JPWL_j2k_to_image m)
-ENDIF(UNIX)
+target_link_libraries(JPWL_j2k_to_image ${OPENJPEG_LIBRARY_NAME}_JPWL ${LCMS_LIB})
+if(PNG_FOUND)
+  target_link_libraries(JPWL_j2k_to_image ${PNG_LIBRARIES})
+endif(PNG_FOUND)
+if(TIFF_FOUND)
+  target_link_libraries(JPWL_j2k_to_image ${TIFF_LIBRARIES})
+endif(TIFF_FOUND)
+if(UNIX)
+  target_link_libraries(JPWL_j2k_to_image m)
+endif(UNIX)
 
 
-ADD_EXECUTABLE(JPWL_image_to_j2k
+add_executable(JPWL_image_to_j2k
 ../codec/convert.c
 ../codec/index.c
 ../codec/image_to_j2k.c
 ${common_SRCS}
 )
 
-TARGET_LINK_LIBRARIES(JPWL_image_to_j2k ${OPENJPEG_LIBRARY_NAME}_JPWL ${LCMS_LIB})
-IF(PNG_FOUND)
-  TARGET_LINK_LIBRARIES(JPWL_image_to_j2k ${PNG_LIBRARIES})
-ENDIF(PNG_FOUND)
-IF(TIFF_FOUND)
-  TARGET_LINK_LIBRARIES(JPWL_image_to_j2k ${TIFF_LIBRARIES})
-ENDIF(TIFF_FOUND)
-IF(UNIX)
-  TARGET_LINK_LIBRARIES(JPWL_image_to_j2k m)
-ENDIF(UNIX)
+target_link_libraries(JPWL_image_to_j2k ${OPENJPEG_LIBRARY_NAME}_JPWL ${LCMS_LIB})
+if(PNG_FOUND)
+  target_link_libraries(JPWL_image_to_j2k ${PNG_LIBRARIES})
+endif(PNG_FOUND)
+if(TIFF_FOUND)
+  target_link_libraries(JPWL_image_to_j2k ${TIFF_LIBRARIES})
+endif(TIFF_FOUND)
+if(UNIX)
+  target_link_libraries(JPWL_image_to_j2k m)
+endif(UNIX)
 
-INSTALL(TARGETS JPWL_image_to_j2k JPWL_j2k_to_image
+install(TARGETS JPWL_image_to_j2k JPWL_j2k_to_image
   DESTINATION ${OPENJPEG_INSTALL_BIN_DIR} COMPONENT Binaries
 )

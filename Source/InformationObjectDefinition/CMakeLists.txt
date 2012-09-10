@@ -1,6 +1,6 @@
 # Define the srcs for the Information Object Definition
 # IOD
-SET(IOD_SRCS
+set(IOD_SRCS
   gdcmModule.cxx
   gdcmMacro.cxx
   gdcmModules.cxx
@@ -23,15 +23,15 @@ SET(IOD_SRCS
   )
 
 # expat stuff
-IF(NOT BUILD_SHARED_LIBS)
-  SET_SOURCE_FILES_PROPERTIES(gdcmTableReader.cxx
+if(NOT BUILD_SHARED_LIBS)
+  set_source_files_properties(gdcmTableReader.cxx
                               PROPERTIES
                               COMPILE_FLAGS -DXML_STATIC
                               )
-ENDIF(NOT BUILD_SHARED_LIBS)
+endif(NOT BUILD_SHARED_LIBS)
 
 # Add the include paths
-INCLUDE_DIRECTORIES(
+include_directories(
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
@@ -39,9 +39,9 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Utilities"
   )
 
-ADD_LIBRARY(gdcmIOD ${IOD_SRCS})
-TARGET_LINK_LIBRARIES(gdcmIOD gdcmDSED gdcmCommon ${GDCM_EXPAT_LIBRARIES})
-SET_TARGET_PROPERTIES(gdcmIOD PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "gdcmDSED;gdcmCommon")
+add_library(gdcmIOD ${IOD_SRCS})
+target_link_libraries(gdcmIOD gdcmDSED gdcmCommon ${GDCM_EXPAT_LIBRARIES})
+set_target_properties(gdcmIOD PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "gdcmDSED;gdcmCommon")
 
 # libs
 install_library(gdcmIOD)
@@ -52,23 +52,23 @@ install_includes("*.h" "*.txx")
 
 #-----------------------------------------------------------------------------
 # Install Part3.xml / Part4.xml
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/Part3.xml
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/Part3.xml
               ${CMAKE_CURRENT_SOURCE_DIR}/Part4.xml
   DESTINATION ${GDCM_INSTALL_DATA_DIR}/XML COMPONENT Libraries
 )
 
 #-----------------------------------------------------------------------------
-FILE(GLOB GDCM_XML_TABLES_GLOB
+file(GLOB GDCM_XML_TABLES_GLOB
   "${CMAKE_CURRENT_SOURCE_DIR}/*.xml"
   )
 
-SET(GDCM_XML_TABLES)
-FOREACH(filename ${GDCM_XML_TABLES_GLOB})
-  SET(GDCM_XML_TABLES "${GDCM_XML_TABLES}\n\"${filename}\",")
-ENDFOREACH(filename)
+set(GDCM_XML_TABLES)
+foreach(filename ${GDCM_XML_TABLES_GLOB})
+  set(GDCM_XML_TABLES "${GDCM_XML_TABLES}\n\"${filename}\",")
+endforeach(filename)
 
 # Populate GDCM_DATA_IMAGES:
-CONFIGURE_FILE(
+configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/gdcmTables.h.in"
   "${CMAKE_CURRENT_BINARY_DIR}/gdcmTables.h"
   )

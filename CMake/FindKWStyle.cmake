@@ -16,18 +16,18 @@ find_program(KWSTYLE_EXECUTABLE
   "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Kitware Inc.\\KWStyle 1.0.0]/bin"
   )
 
-#  OPTION(KWSTYLE_USE_VIM_FORMAT "Set KWStyle to generate errors with a VIM-compatible format." OFF)
-#  OPTION(KWSTYLE_USE_MSVC_FORMAT "Set KWStyle to generate errors with a VisualStudio-compatible format." OFF)
-#  MARK_AS_ADVANCED(KWSTYLE_USE_VIM_FORMAT)
-#  MARK_AS_ADVANCED(KWSTYLE_USE_MSVC_FORMAT)
+#  option(KWSTYLE_USE_VIM_FORMAT "Set KWStyle to generate errors with a VIM-compatible format." OFF)
+#  option(KWSTYLE_USE_MSVC_FORMAT "Set KWStyle to generate errors with a VisualStudio-compatible format." OFF)
+#  mark_as_advanced(KWSTYLE_USE_VIM_FORMAT)
+#  mark_as_advanced(KWSTYLE_USE_MSVC_FORMAT)
 #
-#  IF(KWSTYLE_USE_VIM_FORMAT)
-#    SET(KWSTYLE_ARGUMENTS -vim ${KWSTYLE_ARGUMENTS})
-#  ENDIF(KWSTYLE_USE_VIM_FORMAT)
+#  if(KWSTYLE_USE_VIM_FORMAT)
+#    set(KWSTYLE_ARGUMENTS -vim ${KWSTYLE_ARGUMENTS})
+#  endif(KWSTYLE_USE_VIM_FORMAT)
 #
-#  IF(KWSTYLE_USE_MSVC_FORMAT)
-#    SET(KWSTYLE_ARGUMENTS -msvc ${KWSTYLE_ARGUMENTS})
-#  ENDIF(KWSTYLE_USE_MSVC_FORMAT)
+#  if(KWSTYLE_USE_MSVC_FORMAT)
+#    set(KWSTYLE_ARGUMENTS -msvc ${KWSTYLE_ARGUMENTS})
+#  endif(KWSTYLE_USE_MSVC_FORMAT)
 
 
 mark_as_advanced(

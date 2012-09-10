@@ -1,28 +1,28 @@
-PROJECT(vtkgdcm)
+project(vtkgdcm)
 # We need VTK
 # Technically we require VTK 5.0 and above
-FIND_PACKAGE(VTK REQUIRED)
-MARK_AS_ADVANCED(VTK_DIR)
+find_package(VTK REQUIRED)
+mark_as_advanced(VTK_DIR)
 
 # Define the src for the vtk-gdcm bridge
-SET(vtkgdcm_SRCS
+set(vtkgdcm_SRCS
   vtkGDCMTesting.cxx
   vtkGDCMImageReader.cxx
   vtkGDCMImageWriter.cxx
   vtkGDCMMedicalImageProperties.cxx
   )
 
-IF(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
-  SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
+if(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
+  set(vtkgdcm_SRCS ${vtkgdcm_SRCS}
   vtkGDCMThreadedImageReader.cxx
   )
-ENDIF(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
+endif(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
 
-INCLUDE(${VTK_USE_FILE})
+include(${VTK_USE_FILE})
 
-INCLUDE(CheckCXXSourceCompiles)
-SET(CMAKE_REQUIRED_INCLUDES ${VTK_INCLUDE_DIRS})
-#SET(CMAKE_REQUIRED_LIBRARIES vtkVolumeRendering) # can't get it to work
+include(CheckCXXSourceCompiles)
+set(CMAKE_REQUIRED_INCLUDES ${VTK_INCLUDE_DIRS})
+#set(CMAKE_REQUIRED_LIBRARIES vtkVolumeRendering) # can't get it to work
 CHECK_CXX_SOURCE_COMPILES(
   "\#include <vtkSmartVolumeMapper.h>\nint main() { vtkSmartVolumeMapper* p; return 0;}"
   VTK_HAS_SMARTVOLUMEMAPPER)
@@ -30,7 +30,7 @@ CHECK_CXX_SOURCE_COMPILES(
   "\#include <vtkImageResliceMapper.h>\nint main() { vtkImageResliceMapper* p; return 0;}"
   VTK_HAS_IMAGERESLICEMAPPER)
 
-INCLUDE_DIRECTORIES(
+include_directories(
   ${GDCM_BINARY_DIR}/Source/Common
   ${GDCM_SOURCE_DIR}/Source/Common
   ${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition
@@ -40,38 +40,38 @@ INCLUDE_DIRECTORIES(
   )
 
 # FIXME: temp fix
-#IF(UNIX)
-#  LINK_DIRECTORIES(/usr/X11R6/lib)
-#ENDIF(UNIX)
+#if(UNIX)
+#  link_directories(/usr/X11R6/lib)
+#endif(UNIX)
 
 # List the kits from VTK that are needed by this project.
-SET(vtkgdcm_LIBS
+set(vtkgdcm_LIBS
   vtkCommon
   vtkIO
   vtkImaging
 )
-IF(VTK_USE_RENDERING)
-  SET(vtkgdcm_LIBS
+if(VTK_USE_RENDERING)
+  set(vtkgdcm_LIBS
     ${vtkgdcm_LIBS}
     vtkRendering
     )
-ENDIF(VTK_USE_RENDERING)
+endif(VTK_USE_RENDERING)
 
 # Use wrapping hints for this project.
-#SET(VTK_WRAP_HINTS "${PROJECT_SOURCE_DIR}/hints")
+#set(VTK_WRAP_HINTS "${PROJECT_SOURCE_DIR}/hints")
 
-SET(VTKGDCM_NAME vtkgdcm CACHE STRING "vtk-gdcm lib name")
-MARK_AS_ADVANCED(VTKGDCM_NAME)
+set(VTKGDCM_NAME vtkgdcm CACHE STRING "vtk-gdcm lib name")
+mark_as_advanced(VTKGDCM_NAME)
 
 # Create the instantiator for these classes.
 # FIXME: Are instantiator really needed when only doing python wrapping ?
-IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-  SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
+if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+  set(vtkgdcm_SRCS ${vtkgdcm_SRCS}
     ${CMAKE_CURRENT_SOURCE_DIR}/VTK4/vtkMedicalImageProperties.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/VTK4/vtkStringArray.cxx
   )
   # Setup vtkInstantiator registration for this library's classes.
-  INCLUDE_DIRECTORIES(
+  include_directories(
     ${GDCM_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/VTK4
@@ -83,8 +83,8 @@ IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     EXPORT_MACRO "" #GDCM_EXPORT
     HEADER_LOCATION ${GDCM_BINARY_DIR}
   )
-ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-  SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
+else( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+  set(vtkgdcm_SRCS ${vtkgdcm_SRCS}
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageMapToWindowLevelColors2.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageYBRToRGB.cxx
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageRGBToYBR.cxx
@@ -95,19 +95,19 @@ ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageMapToColors16.cxx
     #${CMAKE_CURRENT_SOURCE_DIR}/vtkImagePlanarComponentsToComponents.cxx
   )
-  IF(VTK_USE_RENDERING)
-  SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
+  if(VTK_USE_RENDERING)
+  set(vtkgdcm_SRCS ${vtkgdcm_SRCS}
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageColorViewer.cxx
     )
-  ENDIF(VTK_USE_RENDERING)
+  endif(VTK_USE_RENDERING)
 
-  #IF(GDCM_HAVE_PTHREAD_H)
-    SET(vtkgdcm_SRCS ${vtkgdcm_SRCS}
+  #if(GDCM_HAVE_PTHREAD_H)
+    set(vtkgdcm_SRCS ${vtkgdcm_SRCS}
     vtkGDCMThreadedImageReader2.cxx
     )
-  #ENDIF(GDCM_HAVE_PTHREAD_H)
+  #endif(GDCM_HAVE_PTHREAD_H)
 
-  SET(VTK_USE_INSTANTIATOR_NEW 1)
+  set(VTK_USE_INSTANTIATOR_NEW 1)
   VTK_MAKE_INSTANTIATOR3(
     "${VTKGDCM_NAME}Instantiator"
     vtkgdcmInstantiator_SRCS
@@ -116,90 +116,90 @@ ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     ${PROJECT_BINARY_DIR}
     "" #"${VTKGDCM_NAME}Configure.h"
   )
-ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+endif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 
 #Hum... not sure why this is needed.
-#IF(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
-#  ADD_LIBRARY(vtkgdcm STATIC ${vtkgdcm_SRCS} ${vtkgdcmInstantiator_SRCS})
-#ELSE(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
-  ADD_LIBRARY(${VTKGDCM_NAME} ${vtkgdcm_SRCS} ${vtkgdcmInstantiator_SRCS})
-#ENDIF(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
+#if(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
+#  add_library(vtkgdcm STATIC ${vtkgdcm_SRCS} ${vtkgdcmInstantiator_SRCS})
+#else(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
+  add_library(${VTKGDCM_NAME} ${vtkgdcm_SRCS} ${vtkgdcmInstantiator_SRCS})
+#endif(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
 
-SET_TARGET_PROPERTIES(${VTKGDCM_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} gdcmMSFF ${vtkgdcm_LIBS})
-IF(GDCM_HAVE_PTHREAD_H)
-  TARGET_LINK_LIBRARIES(${VTKGDCM_NAME} pthread)
-ENDIF(GDCM_HAVE_PTHREAD_H)
+set_target_properties(${VTKGDCM_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+target_link_libraries(${VTKGDCM_NAME} gdcmMSFF ${vtkgdcm_LIBS})
+if(GDCM_HAVE_PTHREAD_H)
+  target_link_libraries(${VTKGDCM_NAME} pthread)
+endif(GDCM_HAVE_PTHREAD_H)
 # prevent viral dep of vtkgdcm
-SET_PROPERTY(TARGET ${VTKGDCM_NAME} PROPERTY LINK_INTERFACE_LIBRARIES "")
-IF(NOT GDCM_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS ${VTKGDCM_NAME}
+set_property(TARGET ${VTKGDCM_NAME} PROPERTY LINK_INTERFACE_LIBRARIES "")
+if(NOT GDCM_INSTALL_NO_LIBRARIES)
+  install(TARGETS ${VTKGDCM_NAME}
     EXPORT ${GDCM_TARGETS_NAME}
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT VTKLibraries
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKLibraries #${NAMELINK_SKIP}
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKDevelopment
   )
 #if(NAMELINK_ONLY)
-#  INSTALL(TARGETS vtkgdcm
+#  install(TARGETS vtkgdcm
 #    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development ${NAMELINK_ONLY}
 #  )
 #  endif(NAMELINK_ONLY)
-ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
+endif(NOT GDCM_INSTALL_NO_LIBRARIES)
 
-IF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
-  SET(header_files_glob "*.h" "*.txx")
-  IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-    SET(header_files_glob ${header_files_glob}
+if(NOT GDCM_INSTALL_NO_DEVELOPMENT)
+  set(header_files_glob "*.h" "*.txx")
+  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+    set(header_files_glob ${header_files_glob}
       "VTK4/*.h"
     )
-  ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-  FILE(GLOB header_files ${header_files_glob})
-  INSTALL(FILES ${header_files}
+  endif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+  file(GLOB header_files ${header_files_glob})
+  install(FILES ${header_files}
     DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT VTKHeaders
   )
-ENDIF(NOT GDCM_INSTALL_NO_DEVELOPMENT)
+endif(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 
-IF(GDCM_WRAP_PHP)
-  IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-    MESSAGE(FATAL_ERROR "you need a newer VTK version >= 5.0")
-  ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+if(GDCM_WRAP_PHP)
+  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+    message(FATAL_ERROR "you need a newer VTK version >= 5.0")
+  endif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
 
-  FIND_PACKAGE(PHP5 REQUIRED)
-  INCLUDE_DIRECTORIES(
+  find_package(PHP5 REQUIRED)
+  include_directories(
     ${PHP5_INCLUDE_PATH}
     )
 
-  FIND_PACKAGE(SWIG REQUIRED)
-  MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
-  INCLUDE(${SWIG_USE_FILE})
-  SET_SOURCE_FILES_PROPERTIES(vtkgdcm.i PROPERTIES CPLUSPLUS ON)
-  #SET_SOURCE_FILES_PROPERTIES(vtkgdcm.i PROPERTIES COMPILE_FLAGS -DUSEACTIVIZ)
-  #IF(GDCM_USE_ACTIVIZ)
-  #SET(CMAKE_SWIG_FLAGS "-namespace vtkgdcm -dllimport vtkgdcmsharpglue -DUSEACTIVIZ")
-  #ELSE(GDCM_USE_ACTIVIZ)
-  #SET(CMAKE_SWIG_FLAGS "-namespace vtkgdcm -dllimport vtkgdcmsharpglue")
-  #ENDIF(GDCM_USE_ACTIVIZ)
-  #SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
+  find_package(SWIG REQUIRED)
+  mark_as_advanced(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
+  include(${SWIG_USE_FILE})
+  set_source_files_properties(vtkgdcm.i PROPERTIES CPLUSPLUS ON)
+  #set_source_files_properties(vtkgdcm.i PROPERTIES COMPILE_FLAGS -DUSEACTIVIZ)
+  #if(GDCM_USE_ACTIVIZ)
+  #set(CMAKE_SWIG_FLAGS "-namespace vtkgdcm -dllimport vtkgdcmsharpglue -DUSEACTIVIZ")
+  #else(GDCM_USE_ACTIVIZ)
+  #set(CMAKE_SWIG_FLAGS "-namespace vtkgdcm -dllimport vtkgdcmsharpglue")
+  #endif(GDCM_USE_ACTIVIZ)
+  #separate_arguments(CMAKE_SWIG_FLAGS)
 
   SWIG_ADD_MODULE(php_vtkgdcm php vtkgdcm.i)
   SWIG_LINK_LIBRARIES(php_vtkgdcm vtkgdcm)
-  TARGET_LINK_LIBRARIES(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} ${vtkgdcm_LIBS})
-  IF(UNIX)
-    SET_TARGET_PROPERTIES(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "vtkgdcm")
-  ENDIF(UNIX)
-  SET_TARGET_PROPERTIES(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES PREFIX "")
-  SET_TARGET_PROPERTIES(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
+  target_link_libraries(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} ${vtkgdcm_LIBS})
+  if(UNIX)
+    set_target_properties(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "vtkgdcm")
+  endif(UNIX)
+  set_target_properties(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES PREFIX "")
+  set_target_properties(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
   set_property(TARGET ${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTY NO_SONAME 1)
 
-IF(NOT GDCM_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS ${SWIG_MODULE_php_vtkgdcm_REAL_NAME}
+if(NOT GDCM_INSTALL_NO_LIBRARIES)
+  install(TARGETS ${SWIG_MODULE_php_vtkgdcm_REAL_NAME}
       EXPORT ${GDCM_TARGETS_NAME}
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries #${NAMELINK_SKIP}
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
   )
 #if(NAMELINK_ONLY)
-#  INSTALL(TARGETS ${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME}
+#  install(TARGETS ${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME}
 #    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development ${NAMELINK_ONLY}
 #  )
 #  endif(NAMELINK_ONLY)
@@ -214,99 +214,99 @@ add_custom_command(TARGET ${SWIG_MODULE_php_vtkgdcm_REAL_NAME}
 endif()
 
 # Let's copy vtkgdcm.php into the bin dir:
-ADD_CUSTOM_COMMAND(
+add_custom_command(
   OUTPUT ${LIBRARY_OUTPUT_PATH}/vtkgdcm.php
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/vtkgdcm.php ${LIBRARY_OUTPUT_PATH}/vtkgdcm.php
   DEPENDS "${swig_generated_file_fullname}"
   COMMENT "copying vtkgdcm.php"
 )
-ADD_CUSTOM_TARGET(VTKGDCMPHP ALL
+add_custom_target(VTKGDCMPHP ALL
   DEPENDS ${LIBRARY_OUTPUT_PATH}/vtkgdcm.php
   COMMENT "building vtkgdcm.php"
 )
-      INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/vtkgdcm.php
+      install(FILES ${LIBRARY_OUTPUT_PATH}/vtkgdcm.php
         DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKPythonModule
       )
 
-ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
-ENDIF(GDCM_WRAP_PHP)
+endif(NOT GDCM_INSTALL_NO_LIBRARIES)
+endif(GDCM_WRAP_PHP)
 
-IF(GDCM_WRAP_CSHARP)
-  IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-    MESSAGE(FATAL_ERROR "you need a newer VTK version >= 5.0")
-  ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-  IF(GDCM_USE_ACTIVIZ)
-    FIND_PACKAGE(ACTIVIZ REQUIRED)
-  ELSE(GDCM_USE_ACTIVIZ)
-    MESSAGE(STATUS "You are using the SWIG version of VTKGDCM. This is not compatible with Activiz")
-    FIND_PACKAGE(SWIG REQUIRED)
-    MARK_AS_ADVANCED(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
-    INCLUDE(${SWIG_USE_FILE})
-    SET_SOURCE_FILES_PROPERTIES(vtkgdcm.i PROPERTIES CPLUSPLUS ON)
-    #SET_SOURCE_FILES_PROPERTIES(vtkgdcm.i PROPERTIES COMPILE_FLAGS -DUSEACTIVIZ)
-  ENDIF(GDCM_USE_ACTIVIZ)
-  IF(GDCM_USE_ACTIVIZ)
-    #SET(CMAKE_SWIG_FLAGS "-namespace vtkgdcm -dllimport vtkgdcmsharpglue -DUSEACTIVIZ")
-  ELSE(GDCM_USE_ACTIVIZ)
-    SET(CMAKE_SWIG_FLAGS "-namespace vtkgdcm -dllimport vtkgdcmsharpglue")
-    SEPARATE_ARGUMENTS(CMAKE_SWIG_FLAGS)
+if(GDCM_WRAP_CSHARP)
+  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+    message(FATAL_ERROR "you need a newer VTK version >= 5.0")
+  endif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+  if(GDCM_USE_ACTIVIZ)
+    find_package(ACTIVIZ REQUIRED)
+  else(GDCM_USE_ACTIVIZ)
+    message(STATUS "You are using the SWIG version of VTKGDCM. This is not compatible with Activiz")
+    find_package(SWIG REQUIRED)
+    mark_as_advanced(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
+    include(${SWIG_USE_FILE})
+    set_source_files_properties(vtkgdcm.i PROPERTIES CPLUSPLUS ON)
+    #set_source_files_properties(vtkgdcm.i PROPERTIES COMPILE_FLAGS -DUSEACTIVIZ)
+  endif(GDCM_USE_ACTIVIZ)
+  if(GDCM_USE_ACTIVIZ)
+    #set(CMAKE_SWIG_FLAGS "-namespace vtkgdcm -dllimport vtkgdcmsharpglue -DUSEACTIVIZ")
+  else(GDCM_USE_ACTIVIZ)
+    set(CMAKE_SWIG_FLAGS "-namespace vtkgdcm -dllimport vtkgdcmsharpglue")
+    separate_arguments(CMAKE_SWIG_FLAGS)
     SWIG_ADD_MODULE(vtkgdcmsharpglue csharp vtkgdcm.i)
     SWIG_LINK_LIBRARIES(vtkgdcmsharpglue vtkgdcm)
     # Stupid cmake-swig module is doing that for us, when not needed
-    IF(UNIX)
-      SET_TARGET_PROPERTIES(${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
-    ENDIF(UNIX)
-    TARGET_LINK_LIBRARIES(${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME} ${vtkgdcm_LIBS})
-    IF(NOT GDCM_INSTALL_NO_LIBRARIES)
-      INSTALL(TARGETS ${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME}
+    if(UNIX)
+      set_target_properties(${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
+    endif(UNIX)
+    target_link_libraries(${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME} ${vtkgdcm_LIBS})
+    if(NOT GDCM_INSTALL_NO_LIBRARIES)
+      install(TARGETS ${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME}
         EXPORT ${GDCM_TARGETS_NAME}
         RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
         LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries #${NAMELINK_SKIP}
         ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
         )
-    ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
-  ENDIF(GDCM_USE_ACTIVIZ)
+    endif(NOT GDCM_INSTALL_NO_LIBRARIES)
+  endif(GDCM_USE_ACTIVIZ)
 
-  CONFIGURE_FILE(
+  configure_file(
     ${GDCM_SOURCE_DIR}/Wrapping/Csharp/key.snk
     ${CMAKE_CURRENT_BINARY_DIR}/key.snk
     COPYONLY)
 
-  IF(GDCM_USE_ACTIVIZ)
-    FIND_PACKAGE(Mummy REQUIRED)
-    MARK_AS_ADVANCED(Mummy_DIR)
-    IF(NOT Mummy_BASE_DIR)
-      MESSAGE(FATAL_ERROR "error: Mummy_BASE_DIR not defined. Please set Mummy_DIR to the directory containing MummyConfig.cmake")
-    ENDIF(NOT Mummy_BASE_DIR)
-    INCLUDE("${Mummy_DIR}/MummyCMakeMacros.cmake")
-    IF(NOT mummy_EXECUTABLE)
-      FIND_PROGRAM(mummy_EXECUTABLE mummy)
-    ENDIF(NOT mummy_EXECUTABLE)
-    MARK_AS_ADVANCED(mummy_EXECUTABLE)
-    IF(NOT mummy_EXECUTABLE)
-      MESSAGE(FATAL_ERROR "error: mummy not found. mummy_EXECUTABLE='${mummy_EXECUTABLE}'")
-    ENDIF(NOT mummy_EXECUTABLE)
+  if(GDCM_USE_ACTIVIZ)
+    find_package(Mummy REQUIRED)
+    mark_as_advanced(Mummy_DIR)
+    if(NOT Mummy_BASE_DIR)
+      message(FATAL_ERROR "error: Mummy_BASE_DIR not defined. Please set Mummy_DIR to the directory containing MummyConfig.cmake")
+    endif(NOT Mummy_BASE_DIR)
+    include("${Mummy_DIR}/MummyCMakeMacros.cmake")
+    if(NOT mummy_EXECUTABLE)
+      find_program(mummy_EXECUTABLE mummy)
+    endif(NOT mummy_EXECUTABLE)
+    mark_as_advanced(mummy_EXECUTABLE)
+    if(NOT mummy_EXECUTABLE)
+      message(FATAL_ERROR "error: mummy not found. mummy_EXECUTABLE='${mummy_EXECUTABLE}'")
+    endif(NOT mummy_EXECUTABLE)
 
-    IF(NOT gccxml_EXECUTABLE)
-      FIND_PROGRAM(gccxml_EXECUTABLE gccxml)
-    ENDIF(NOT gccxml_EXECUTABLE)
-    MARK_AS_ADVANCED(gccxml_EXECUTABLE)
-    IF(NOT gccxml_EXECUTABLE)
-      MESSAGE(FATAL_ERROR "error: gccxml not found. gccxml_EXECUTABLE='${gccxml_EXECUTABLE}'")
-    ENDIF(NOT gccxml_EXECUTABLE)
-    SET(gccxml_compiler "${CMAKE_CXX_COMPILER}")
-    IF(MSVC80)
-      SET(gccxml_compiler "msvc8")
-    ENDIF(MSVC80)
-    IF(MSVC90)
-      SET(gccxml_compiler "msvc9")
-    ENDIF(MSVC90)
-    #MESSAGE(STATUS "gccxml_compiler='${gccxml_compiler}'...")
-    SET(gccxml_include_args "")
-    FOREACH(dir ${Mummy_INCLUDE_DIRS} ${VTK_INCLUDE_DIRS})
-      SET(gccxml_include_args ${gccxml_include_args} "-I${dir}")
-    ENDFOREACH(dir)
-    CONFIGURE_FILE(
+    if(NOT gccxml_EXECUTABLE)
+      find_program(gccxml_EXECUTABLE gccxml)
+    endif(NOT gccxml_EXECUTABLE)
+    mark_as_advanced(gccxml_EXECUTABLE)
+    if(NOT gccxml_EXECUTABLE)
+      message(FATAL_ERROR "error: gccxml not found. gccxml_EXECUTABLE='${gccxml_EXECUTABLE}'")
+    endif(NOT gccxml_EXECUTABLE)
+    set(gccxml_compiler "${CMAKE_CXX_COMPILER}")
+    if(MSVC80)
+      set(gccxml_compiler "msvc8")
+    endif(MSVC80)
+    if(MSVC90)
+      set(gccxml_compiler "msvc9")
+    endif(MSVC90)
+    #message(STATUS "gccxml_compiler='${gccxml_compiler}'...")
+    set(gccxml_include_args "")
+    foreach(dir ${Mummy_INCLUDE_DIRS} ${VTK_INCLUDE_DIRS})
+      set(gccxml_include_args ${gccxml_include_args} "-I${dir}")
+    endforeach(dir)
+    configure_file(
       "${CMAKE_CURRENT_SOURCE_DIR}/MummySettings.xml.in"
       "${CMAKE_CURRENT_BINARY_DIR}/xml/MummySettings.xml"
       @ONLY
@@ -332,52 +332,52 @@ IF(GDCM_WRAP_CSHARP)
       vtkLookupTable16
       vtkRTStructSetProperties
       )
-    SET(kits gdcm)
+    set(kits gdcm)
     # foreach kit
     set(kit gdcm)
-    FOREACH(class ${theclasslist})
-      IF(NOT VTK_CLASS_WRAP_EXCLUDE_${class})
-        #SET(header "${VTK_${ukit}_HEADER_DIR}/${class}.h")
-        SET(header "${CMAKE_CURRENT_SOURCE_DIR}/${class}.h")
-        SET(cxxclass "${class}")
+    foreach(class ${theclasslist})
+      if(NOT VTK_CLASS_WRAP_EXCLUDE_${class})
+        #set(header "${VTK_${ukit}_HEADER_DIR}/${class}.h")
+        set(header "${CMAKE_CURRENT_SOURCE_DIR}/${class}.h")
+        set(cxxclass "${class}")
 
         # handle full paths
-        IF("${class}" MATCHES "^(\\/|.\\/|.\\\\|.:\\/|.:\\\\)")
-          SET(header "${class}.h")
-          STRING(REGEX MATCH "[^/]*$" cxxclass "${class}")
+        if("${class}" MATCHES "^(\\/|.\\/|.\\\\|.:\\/|.:\\\\)")
+          set(header "${class}.h")
+          string(REGEX MATCH "[^/]*$" cxxclass "${class}")
 
-          GET_FILENAME_COMPONENT(dir "${header}" PATH)
-          INCLUDE_DIRECTORIES("${dir}")
-        ENDIF("${class}" MATCHES "^(\\/|.\\/|.\\\\|.:\\/|.:\\\\)")
+          get_filename_component(dir "${header}" PATH)
+          include_directories("${dir}")
+        endif("${class}" MATCHES "^(\\/|.\\/|.\\\\|.:\\/|.:\\\\)")
 
-        SET(abstract 0)
-        IF(VTK_CLASS_ABSTRACT_${class})
-          SET(abstract 1)
-          SET_SOURCE_FILES_PROPERTIES(${header} PROPERTIES ABSTRACT 1)
-        ENDIF(VTK_CLASS_ABSTRACT_${class})
+        set(abstract 0)
+        if(VTK_CLASS_ABSTRACT_${class})
+          set(abstract 1)
+          set_source_files_properties(${header} PROPERTIES ABSTRACT 1)
+        endif(VTK_CLASS_ABSTRACT_${class})
 
         # Build one master in-memory table so that we don't have to re-do all the
         # logic in this nested FOREACH loop later on... Instead we'll simply iterate
         # the in-memory table built here:
         #
-        SET(WRAPPED_CLASS_TABLE ${WRAPPED_CLASS_TABLE} "${cxxclass} ${kit} ${abstract} ${header}")
+        set(WRAPPED_CLASS_TABLE ${WRAPPED_CLASS_TABLE} "${cxxclass} ${kit} ${abstract} ${header}")
 
 
-        SET(include_source_text "")
-        STRING(REGEX REPLACE "(.*).h" "\\1.cxx" source "${header}")
-        IF(EXISTS "${source}")
-          SET(include_source_text "#include \"${source}\"")
-        ELSE(EXISTS "${source}")
-          #MESSAGE(FATAL_ERROR "error: Source file '${source}' does not exist...")
-        ENDIF(EXISTS "${source}")
+        set(include_source_text "")
+        string(REGEX REPLACE "(.*).h" "\\1.cxx" source "${header}")
+        if(EXISTS "${source}")
+          set(include_source_text "#include \"${source}\"")
+        else(EXISTS "${source}")
+          #message(FATAL_ERROR "error: Source file '${source}' does not exist...")
+        endif(EXISTS "${source}")
 
-        CONFIGURE_FILE(
+        configure_file(
           "${CMAKE_CURRENT_SOURCE_DIR}/gccxml.cxx.in"
           "${CMAKE_CURRENT_BINARY_DIR}/xml/${cxxclass}_gccxml.cxx"
           @ONLY
         )
 
-        ADD_CUSTOM_COMMAND(
+        add_custom_command(
           OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/xml/${cxxclass}.xml
           COMMAND ${gccxml_EXECUTABLE}
           ARGS
@@ -408,7 +408,7 @@ IF(GDCM_WRAP_CSHARP)
 # targets that build the generated source code may build... That is controlled
 # by target level dependencies to reduce complexity.
 #
-        ADD_CUSTOM_COMMAND(
+        add_custom_command(
           OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/csharp/${cxxclass}-sentinel.txt
           COMMAND ${mummy_EXECUTABLE}
             --suppress-warnings 6005 6006 6009 6010 6012 6013 6015 6016 6017 6018 6019
@@ -425,103 +425,103 @@ IF(GDCM_WRAP_CSHARP)
             ${${cxxclass}_EXTRA_DEPENDENCIES}
         )
 
-        SET(${kit}_EL_SOURCES ${${kit}_EL_SOURCES} "${CMAKE_CURRENT_BINARY_DIR}/export-layer/${cxxclass}EL.cxx")
-        SET(ALLKITS_EL_SOURCES ${ALLKITS_EL_SOURCES} "${CMAKE_CURRENT_BINARY_DIR}/export-layer/${cxxclass}EL.cxx")
+        set(${kit}_EL_SOURCES ${${kit}_EL_SOURCES} "${CMAKE_CURRENT_BINARY_DIR}/export-layer/${cxxclass}EL.cxx")
+        set(ALLKITS_EL_SOURCES ${ALLKITS_EL_SOURCES} "${CMAKE_CURRENT_BINARY_DIR}/export-layer/${cxxclass}EL.cxx")
 
-        SET(${kit}_CS_SOURCES ${${kit}_CS_SOURCES} "${CMAKE_CURRENT_BINARY_DIR}/csharp/${cxxclass}.cs")
-        SET(ALLKITS_CS_SOURCES ${ALLKITS_CS_SOURCES} "${CMAKE_CURRENT_BINARY_DIR}/csharp/${cxxclass}.cs")
+        set(${kit}_CS_SOURCES ${${kit}_CS_SOURCES} "${CMAKE_CURRENT_BINARY_DIR}/csharp/${cxxclass}.cs")
+        set(ALLKITS_CS_SOURCES ${ALLKITS_CS_SOURCES} "${CMAKE_CURRENT_BINARY_DIR}/csharp/${cxxclass}.cs")
 
-        SET(${kit}_SENTINELS ${${kit}_SENTINELS} "${CMAKE_CURRENT_BINARY_DIR}/csharp/${cxxclass}-sentinel.txt")
-        SET(ALLKITS_SENTINELS ${ALLKITS_SENTINELS} "${CMAKE_CURRENT_BINARY_DIR}/csharp/${cxxclass}-sentinel.txt")
-      ENDIF(NOT VTK_CLASS_WRAP_EXCLUDE_${class})
-    ENDFOREACH(class)
+        set(${kit}_SENTINELS ${${kit}_SENTINELS} "${CMAKE_CURRENT_BINARY_DIR}/csharp/${cxxclass}-sentinel.txt")
+        set(ALLKITS_SENTINELS ${ALLKITS_SENTINELS} "${CMAKE_CURRENT_BINARY_DIR}/csharp/${cxxclass}-sentinel.txt")
+      endif(NOT VTK_CLASS_WRAP_EXCLUDE_${class})
+    endforeach(class)
 
-    ADD_CUSTOM_TARGET(
+    add_custom_target(
       "vtk${kit}GenerateWrappers" ALL
       DEPENDS ${${kit}_SENTINELS}
       )
-    SET_SOURCE_FILES_PROPERTIES(
+    set_source_files_properties(
       ${ALLKITS_EL_SOURCES}
       ${ALLKITS_CS_SOURCES}
       PROPERTIES GENERATED 1)
 
-    IF(VTK_BUILD_SHARED_LIBS)
-      SET(MV_ONE_EXPORT_LAYER_DLL 0)
-    ELSE(VTK_BUILD_SHARED_LIBS)
-      SET(MV_ONE_EXPORT_LAYER_DLL 1)
-    ENDIF(VTK_BUILD_SHARED_LIBS)
+    if(VTK_BUILD_SHARED_LIBS)
+      set(MV_ONE_EXPORT_LAYER_DLL 0)
+    else(VTK_BUILD_SHARED_LIBS)
+      set(MV_ONE_EXPORT_LAYER_DLL 1)
+    endif(VTK_BUILD_SHARED_LIBS)
 
-    IF(MV_ONE_EXPORT_LAYER_DLL)
+    if(MV_ONE_EXPORT_LAYER_DLL)
       message(FATAL_ERROR "Unimplemented")
-      #SET(AVDN_INSTALL_TARGETS ${AVDN_INSTALL_TARGETS} "Kitware.VTK.Unmanaged")
-      #ADD_LIBRARY(Kitware.VTK.Unmanaged SHARED ${ALLKITS_EL_SOURCES})
-      #SET(unmanaged_targets ${unmanaged_targets} "Kitware.VTK.Unmanaged")
-      #SET(unmanaged_dlls ${unmanaged_dlls} "${CMAKE_SHARED_LIBRARY_PREFIX}Kitware.VTK.Unmanaged${CMAKE_SHARED_LIBRARY_SUFFIX}")
-      #IF(WIN32)
-      #  TARGET_LINK_LIBRARIES(Kitware.VTK.Unmanaged "${exe_dir}/Kitware.mummy.Runtime.Unmanaged.lib")
-      #ELSE(WIN32)
-      #  TARGET_LINK_LIBRARIES(Kitware.VTK.Unmanaged "${exe_dir}/${CMAKE_SHARED_LIBRARY_PREFIX}Kitware.mummy.Runtime.Unmanaged${CMAKE_SHARED_LIBRARY_SUFFIX}")
-      #ENDIF(WIN32)
+      #set(AVDN_INSTALL_TARGETS ${AVDN_INSTALL_TARGETS} "Kitware.VTK.Unmanaged")
+      #add_library(Kitware.VTK.Unmanaged SHARED ${ALLKITS_EL_SOURCES})
+      #set(unmanaged_targets ${unmanaged_targets} "Kitware.VTK.Unmanaged")
+      #set(unmanaged_dlls ${unmanaged_dlls} "${CMAKE_SHARED_LIBRARY_PREFIX}Kitware.VTK.Unmanaged${CMAKE_SHARED_LIBRARY_SUFFIX}")
+      #if(WIN32)
+      #  target_link_libraries(Kitware.VTK.Unmanaged "${exe_dir}/Kitware.mummy.Runtime.Unmanaged.lib")
+      #else(WIN32)
+      #  target_link_libraries(Kitware.VTK.Unmanaged "${exe_dir}/${CMAKE_SHARED_LIBRARY_PREFIX}Kitware.mummy.Runtime.Unmanaged${CMAKE_SHARED_LIBRARY_SUFFIX}")
+      #endif(WIN32)
       ## TODO -- rename this CopyLibraries here too...
-      #ADD_DEPENDENCIES(Kitware.VTK.Unmanaged Kitware.mummy.CopyLibraries2)
-      #FOREACH(kit ${kits})
-      #  TARGET_LINK_LIBRARIES(Kitware.VTK.Unmanaged vtk${kit})
-      #  ADD_DEPENDENCIES(Kitware.VTK.Unmanaged "vtk${kit}GenerateWrappers")
-      #ENDFOREACH(kit)
-    ELSE(MV_ONE_EXPORT_LAYER_DLL)
-      INCLUDE_DIRECTORIES(${Mummy_INCLUDE_DIRS})
-      FOREACH(kit ${kits})
-        SET(AVDN_INSTALL_TARGETS ${AVDN_INSTALL_TARGETS} "Kitware.VTK.vtk${kit}.Unmanaged")
-        ADD_LIBRARY(Kitware.VTK.vtk${kit}.Unmanaged SHARED ${${kit}_EL_SOURCES})
-        SET(unmanaged_targets ${unmanaged_targets} "Kitware.VTK.vtk${kit}.Unmanaged")
-        SET(unmanaged_dlls ${unmanaged_dlls} "${CMAKE_SHARED_LIBRARY_PREFIX}Kitware.VTK.vtk${kit}.Unmanaged${CMAKE_SHARED_LIBRARY_SUFFIX}")
-        IF(WIN32)
-          TARGET_LINK_LIBRARIES(Kitware.VTK.vtk${kit}.Unmanaged "${exe_dir}/Kitware.mummy.Runtime.Unmanaged.lib")
-        ELSE(WIN32)
-          TARGET_LINK_LIBRARIES(Kitware.VTK.vtk${kit}.Unmanaged ${Mummy_RUNTIME_LINK_LIBRARIES})
-        ENDIF(WIN32)
-        TARGET_LINK_LIBRARIES(Kitware.VTK.vtk${kit}.Unmanaged vtk${kit})
-        TARGET_LINK_LIBRARIES(Kitware.VTK.vtk${kit}.Unmanaged vtkCommon)
+      #add_dependencies(Kitware.VTK.Unmanaged Kitware.mummy.CopyLibraries2)
+      #foreach(kit ${kits})
+      #  target_link_libraries(Kitware.VTK.Unmanaged vtk${kit})
+      #  add_dependencies(Kitware.VTK.Unmanaged "vtk${kit}GenerateWrappers")
+      #endforeach(kit)
+    else(MV_ONE_EXPORT_LAYER_DLL)
+      include_directories(${Mummy_INCLUDE_DIRS})
+      foreach(kit ${kits})
+        set(AVDN_INSTALL_TARGETS ${AVDN_INSTALL_TARGETS} "Kitware.VTK.vtk${kit}.Unmanaged")
+        add_library(Kitware.VTK.vtk${kit}.Unmanaged SHARED ${${kit}_EL_SOURCES})
+        set(unmanaged_targets ${unmanaged_targets} "Kitware.VTK.vtk${kit}.Unmanaged")
+        set(unmanaged_dlls ${unmanaged_dlls} "${CMAKE_SHARED_LIBRARY_PREFIX}Kitware.VTK.vtk${kit}.Unmanaged${CMAKE_SHARED_LIBRARY_SUFFIX}")
+        if(WIN32)
+          target_link_libraries(Kitware.VTK.vtk${kit}.Unmanaged "${exe_dir}/Kitware.mummy.Runtime.Unmanaged.lib")
+        else(WIN32)
+          target_link_libraries(Kitware.VTK.vtk${kit}.Unmanaged ${Mummy_RUNTIME_LINK_LIBRARIES})
+        endif(WIN32)
+        target_link_libraries(Kitware.VTK.vtk${kit}.Unmanaged vtk${kit})
+        target_link_libraries(Kitware.VTK.vtk${kit}.Unmanaged vtkCommon)
         set_property(TARGET Kitware.VTK.vtk${kit}.Unmanaged PROPERTY NO_SONAME 1)
         # TODO -- rename this CopyLibraries here too...
-        ADD_DEPENDENCIES(Kitware.VTK.vtk${kit}.Unmanaged Kitware.mummy.CopyLibraries2)
-        ADD_DEPENDENCIES(Kitware.VTK.vtk${kit}.Unmanaged "vtk${kit}GenerateWrappers")
-      ENDFOREACH(kit)
-    ENDIF(MV_ONE_EXPORT_LAYER_DLL)
+        add_dependencies(Kitware.VTK.vtk${kit}.Unmanaged Kitware.mummy.CopyLibraries2)
+        add_dependencies(Kitware.VTK.vtk${kit}.Unmanaged "vtk${kit}GenerateWrappers")
+      endforeach(kit)
+    endif(MV_ONE_EXPORT_LAYER_DLL)
 
     set(csc_EXECUTABLE ${CMAKE_CSHARP_COMPILER})
     # Set list of export-layer dlls in C# syntax as CMake variable
     # MV_EXPORTLAYER_DLL_VARIABLES. This gets configured into
     # WrappedObject.cs below.
     #
-    SET(MV_EXPORTLAYER_DLL_VARIABLES "")
-    FOREACH(kit ${kits})
-      SET(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    /// <summary>\n")
-      SET(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    /// Export layer functions for 'vtk${kit}' are exported from\n")
-      SET(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    /// the DLL named by the value of this variable.\n")
-      SET(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    /// </summary>\n")
+    set(MV_EXPORTLAYER_DLL_VARIABLES "")
+    foreach(kit ${kits})
+      set(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    /// <summary>\n")
+      set(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    /// Export layer functions for 'vtk${kit}' are exported from\n")
+      set(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    /// the DLL named by the value of this variable.\n")
+      set(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    /// </summary>\n")
 
-      IF(MV_ONE_EXPORT_LAYER_DLL)
-        SET(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    public const string vtk${kit}EL_dll = \"${CMAKE_SHARED_LIBRARY_PREFIX}Kitware.VTK.Unmanaged${CMAKE_SHARED_LIBRARY_SUFFIX}\";\n")
-      ELSE(MV_ONE_EXPORT_LAYER_DLL)
-        SET(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    public const string vtk${kit}EL_dll = \"${CMAKE_SHARED_LIBRARY_PREFIX}Kitware.VTK.vtk${kit}.Unmanaged${CMAKE_SHARED_LIBRARY_SUFFIX}\";\n")
-      ENDIF(MV_ONE_EXPORT_LAYER_DLL)
-    ENDFOREACH(kit)
+      if(MV_ONE_EXPORT_LAYER_DLL)
+        set(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    public const string vtk${kit}EL_dll = \"${CMAKE_SHARED_LIBRARY_PREFIX}Kitware.VTK.Unmanaged${CMAKE_SHARED_LIBRARY_SUFFIX}\";\n")
+      else(MV_ONE_EXPORT_LAYER_DLL)
+        set(MV_EXPORTLAYER_DLL_VARIABLES "${MV_EXPORTLAYER_DLL_VARIABLES}    public const string vtk${kit}EL_dll = \"${CMAKE_SHARED_LIBRARY_PREFIX}Kitware.VTK.vtk${kit}.Unmanaged${CMAKE_SHARED_LIBRARY_SUFFIX}\";\n")
+      endif(MV_ONE_EXPORT_LAYER_DLL)
+    endforeach(kit)
 
-    SET(csharp_namespace "Kitware.VTK.GDCM")
-    CONFIGURE_FILE(
+    set(csharp_namespace "Kitware.VTK.GDCM")
+    configure_file(
       "${CMAKE_CURRENT_SOURCE_DIR}/AssemblyInfo.cs.in"
       "${CMAKE_CURRENT_BINARY_DIR}/csharp/AssemblyInfo.cs"
       @ONLY
       )
 
-    SET(ALLKITS_CS_SOURCES
+    set(ALLKITS_CS_SOURCES
       ${ALLKITS_CS_SOURCES}
       "${CMAKE_CURRENT_BINARY_DIR}/csharp/AssemblyInfo.cs"
       ${CMAKE_CURRENT_SOURCE_DIR}/vtkGDCMImageReader_Extra.cs
       )
 
-    SET(AVDN_VTK_CSC_REFS ${ACTIVIZ_KITWARE_VTK_LIBRARY} ${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY})
+    set(AVDN_VTK_CSC_REFS ${ACTIVIZ_KITWARE_VTK_LIBRARY} ${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY})
     ADD_CSHARP_LIBRARY(
       "Kitware.VTK.GDCM" # name of library
       "${unmanaged_targets}" # list of CMake targets that need to build first
@@ -532,11 +532,11 @@ IF(GDCM_WRAP_CSHARP)
       ${ALLKITS_CS_SOURCES}
       )
 
-    FOREACH(kit ${kits})
-      ADD_DEPENDENCIES(Kitware.VTK.GDCM "vtk${kit}GenerateWrappers")
-    ENDFOREACH(kit)
+    foreach(kit ${kits})
+      add_dependencies(Kitware.VTK.GDCM "vtk${kit}GenerateWrappers")
+    endforeach(kit)
 
-    #    ADD_CUSTOM_COMMAND(
+    #    add_custom_command(
     #      OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
     #      COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs"
     #      #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs"
@@ -546,24 +546,24 @@ IF(GDCM_WRAP_CSHARP)
     #      COMMENT "csc *.cs"
     #      )
 
-    INSTALL(FILES
+    install(FILES
       ${GDCM_LIBRARY_DIR}/Kitware.VTK.GDCM.dll
       ${GDCM_LIBRARY_DIR}/Kitware.VTK.GDCM.xml
       DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKCSharpModule
       )
-    INSTALL(TARGETS Kitware.VTK.vtk${kit}.Unmanaged
+    install(TARGETS Kitware.VTK.vtk${kit}.Unmanaged
       EXPORT ${GDCM_TARGETS_NAME}
       RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT VTKLibraries
       LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKLibraries #${NAMELINK_SKIP}
       ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKDevelopment
       )
-  ELSE(GDCM_USE_ACTIVIZ)
-    CONFIGURE_FILE(
+  else(GDCM_USE_ACTIVIZ)
+    configure_file(
       ${CMAKE_CURRENT_SOURCE_DIR}/AssemblyInfo.cs.in
       ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
       @ONLY)
 
-    ADD_CUSTOM_COMMAND(
+    add_custom_command(
       OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
       COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs"
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -571,43 +571,43 @@ IF(GDCM_WRAP_CSHARP)
       ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
       COMMENT "csc *.cs"
       )
-    ADD_CUSTOM_TARGET(VTKGDCMCSharp ALL
+    add_custom_target(VTKGDCMCSharp ALL
       DEPENDS
       ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
       #${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll.config
       #${GDCM_EXECUTABLE_DIR}/HelloWorld.exe
       COMMENT "building vtkgdcm-sharp.dll"
       )
-    # because vtkgdcm-sharp.dll is constructed with custom commands, it need the INSTALL(FILES signature:
-    SET(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
-    INSTALL(FILES
+    # because vtkgdcm-sharp.dll is constructed with custom commands, it need the install(FILES signature:
+    set(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
+    install(FILES
       ${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll
       #${GDCM_LIBRARY_DIR2}/vtkgdcm-sharp.dll.config
       DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKCSharpModule
       )
-  ENDIF(GDCM_USE_ACTIVIZ)
+  endif(GDCM_USE_ACTIVIZ)
 
-  #ADD_CUSTOM_COMMAND(
+  #add_custom_command(
   #  OUTPUT  ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll.config
   #  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm-sharp.dll.config ${GDCM_LIBRARY_DIR}
   #  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm-sharp.dll.config
   #  COMMENT "Copying vtkgdcm-sharp.dll.config"
   #)
 
-ENDIF(GDCM_WRAP_CSHARP)
+endif(GDCM_WRAP_CSHARP)
 
-IF(GDCM_WRAP_JAVA)
-  IF(VTK_WRAP_JAVA)
-    FIND_PACKAGE(Java 1.5 REQUIRED) # javac, jar
-    FIND_PACKAGE(JNI REQUIRED)
-    INCLUDE_DIRECTORIES(${JNI_INCLUDE_DIRS})
-    SET(VTK_WRAP_JAVA3_INIT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+if(GDCM_WRAP_JAVA)
+  if(VTK_WRAP_JAVA)
+    find_package(Java 1.5 REQUIRED) # javac, jar
+    find_package(JNI REQUIRED)
+    include_directories(${JNI_INCLUDE_DIRS})
+    set(VTK_WRAP_JAVA3_INIT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
     # Lars Matthäus patch (package vtk => imply vtk subdir )
-    SET(VTK_JAVA_HOME ${CMAKE_CURRENT_BINARY_DIR}/java/vtk)
+    set(VTK_JAVA_HOME ${CMAKE_CURRENT_BINARY_DIR}/java/vtk)
     # This is *required* don't ask
-    MAKE_DIRECTORY(${VTK_JAVA_HOME})
-    INCLUDE(${VTK_CMAKE_DIR}/vtkWrapJava.cmake)
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+    make_directory(${VTK_JAVA_HOME})
+    include(${VTK_CMAKE_DIR}/vtkWrapJava.cmake)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
     VTK_WRAP_JAVA3(${VTKGDCM_NAME}Java vtkgdcmJAVA_SRCS "${vtkgdcm_SRCS}")
     # libvtk-java is a pain to handle...
@@ -620,25 +620,25 @@ IF(GDCM_WRAP_JAVA)
       message(STATUS "Implicitely adding debian package layout...")
       link_directories("/usr/lib/jni")
     endif()
-    MARK_AS_ADVANCED(GDCM_VTK_JAVA_JAR)
+    mark_as_advanced(GDCM_VTK_JAVA_JAR)
     if(EXISTS ${GDCM_VTK_JAVA_JAR})
     else(EXISTS ${GDCM_VTK_JAVA_JAR})
       message(FATAL_ERROR "Could not find vtk.jar file, VTK_JAVA_JAR is wrong: ${VTK_JAVA_JAR}, please set proper GDCM_VTK_JAVA_JAR: ${GDCM_VTK_JAVA_JAR} replacement var")
     endif(EXISTS ${GDCM_VTK_JAVA_JAR})
-    ADD_LIBRARY(${VTKGDCM_NAME}Java SHARED ${vtkgdcmJAVA_SRCS})
+    add_library(${VTKGDCM_NAME}Java SHARED ${vtkgdcmJAVA_SRCS})
     # special jnilib extension:
-    IF(APPLE)
-      SET_TARGET_PROPERTIES(${VTKGDCM_NAME}Java PROPERTIES SUFFIX ".jnilib")
-    ENDIF(APPLE)
-    TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Java ${VTKGDCM_NAME})
-    FOREACH(c ${vtkgdcm_LIBS})
-      TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Java ${c}Java)
-    ENDFOREACH(c)
+    if(APPLE)
+      set_target_properties(${VTKGDCM_NAME}Java PROPERTIES SUFFIX ".jnilib")
+    endif(APPLE)
+    target_link_libraries(${VTKGDCM_NAME}Java ${VTKGDCM_NAME})
+    foreach(c ${vtkgdcm_LIBS})
+      target_link_libraries(${VTKGDCM_NAME}Java ${c}Java)
+    endforeach(c)
     # Create the jar file:
     # I am pretty sure this *.java thingy will bite me one day, when someone will try
     # to recompile from an existing build tree with invalid generated *.java file...
     set(jflags $ENV{JFLAGS})
-    ADD_CUSTOM_COMMAND(
+    add_custom_command(
       OUTPUT ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
       #COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -cp ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
       # No such thing as -cp for javac only java is listed:
@@ -652,15 +652,15 @@ IF(GDCM_WRAP_JAVA)
       COMMENT   "javac *.java -> jar; jar cvf -> vtkgdcm.jar"
     )
     # Target to execute custom command:
-    ADD_CUSTOM_TARGET(VTKGDCMJavaJar ALL
+    add_custom_target(VTKGDCMJavaJar ALL
       DEPENDS ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
       COMMENT "building vtkgdcm.jar"
     )
-    ADD_DEPENDENCIES(VTKGDCMJavaJar vtkgdcmJavaJavaClasses)
+    add_dependencies(VTKGDCMJavaJar vtkgdcmJavaJavaClasses)
 
     # Install rules:
-    IF(NOT GDCM_INSTALL_NO_LIBRARIES)
-      INSTALL(TARGETS ${VTKGDCM_NAME}Java
+    if(NOT GDCM_INSTALL_NO_LIBRARIES)
+      install(TARGETS ${VTKGDCM_NAME}Java
       EXPORT ${GDCM_TARGETS_NAME}
         RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT VTKJavaModule
         LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKJavaModule #${NAMELINK_SKIP}
@@ -668,123 +668,123 @@ IF(GDCM_WRAP_JAVA)
       )
   #Development
   #if(NAMELINK_ONLY)
-  #  INSTALL(TARGETS ${VTKGDCM_NAME}Java
+  #  install(TARGETS ${VTKGDCM_NAME}Java
   #    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKJavaModule ${NAMELINK_ONLY}
   #  )
   #endif(NAMELINK_ONLY)
 
-    # because vtkgdcm.jar is constructed with custom commands, it need the INSTALL(FILES signature:
-    INSTALL(FILES ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
+    # because vtkgdcm.jar is constructed with custom commands, it need the install(FILES signature:
+    install(FILES ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
       DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKJavaModule
       )
-    ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
+    endif(NOT GDCM_INSTALL_NO_LIBRARIES)
 
-  ELSE(VTK_WRAP_JAVA)
-    MESSAGE(STATUS "GDCM_WRAP_JAVA canot be build without VTK_WRAP_JAVA")
-  ENDIF(VTK_WRAP_JAVA)
-ENDIF(GDCM_WRAP_JAVA)
+  else(VTK_WRAP_JAVA)
+    message(STATUS "GDCM_WRAP_JAVA canot be build without VTK_WRAP_JAVA")
+  endif(VTK_WRAP_JAVA)
+endif(GDCM_WRAP_JAVA)
 
-IF(GDCM_WRAP_PYTHON)
-  IF(VTK_WRAP_PYTHON)
-      SET(DEXTENSION "")
-    IF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+if(GDCM_WRAP_PYTHON)
+  if(VTK_WRAP_PYTHON)
+      set(DEXTENSION "")
+    if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
         VTK_WRAP_PYTHON2(${VTKGDCM_NAME}Python vtkgdcmPYTHON_SRCS ${vtkgdcm_SRCS})
-    ELSE( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-    INCLUDE(${VTK_CMAKE_DIR}/vtkWrapPython.cmake)
-        INCLUDE_DIRECTORIES(
+    else( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+    include(${VTK_CMAKE_DIR}/vtkWrapPython.cmake)
+        include_directories(
           ${PYTHON_INCLUDE_DIR}
           ${CMAKE_CURRENT_SOURCE_DIR}
         )
         VTK_WRAP_PYTHON3(${VTKGDCM_NAME}Python vtkgdcmPYTHON_SRCS "${vtkgdcm_SRCS}")
-      SET(DEXTENSION "D")
-    ENDIF( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-    ADD_LIBRARY(${VTKGDCM_NAME}PythonD ${vtkgdcmPYTHON_SRCS})
+      set(DEXTENSION "D")
+    endif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+    add_library(${VTKGDCM_NAME}PythonD ${vtkgdcmPYTHON_SRCS})
     # this is a library set the version:
     # do not set the version on the Python module:
-    SET_TARGET_PROPERTIES(${VTKGDCM_NAME}PythonD PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-    ADD_LIBRARY(${VTKGDCM_NAME}Python MODULE ${VTKGDCM_NAME}PythonInit.cxx)
+    set_target_properties(${VTKGDCM_NAME}PythonD PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+    add_library(${VTKGDCM_NAME}Python MODULE ${VTKGDCM_NAME}PythonInit.cxx)
     # do not set the version on the Python module:
-    #SET_TARGET_PROPERTIES(${VTKGDCM_NAME}Python PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-    TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}PythonD ${VTKGDCM_NAME} ${PYTHON_LIBRARY})
-    FOREACH(c ${vtkgdcm_LIBS} vtkFiltering)
-      TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}PythonD ${c}Python${DEXTENSION})
-    ENDFOREACH(c)
+    #set_target_properties(${VTKGDCM_NAME}Python PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+    target_link_libraries(${VTKGDCM_NAME}PythonD ${VTKGDCM_NAME} ${PYTHON_LIBRARY})
+    foreach(c ${vtkgdcm_LIBS} vtkFiltering)
+      target_link_libraries(${VTKGDCM_NAME}PythonD ${c}Python${DEXTENSION})
+    endforeach(c)
     if(TARGET vtkPythonCore)
-      TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}PythonD vtkPythonCore)
+      target_link_libraries(${VTKGDCM_NAME}PythonD vtkPythonCore)
     endif()
-    TARGET_LINK_LIBRARIES(${VTKGDCM_NAME}Python ${VTKGDCM_NAME}PythonD)
-SET_PROPERTY(TARGET ${VTKGDCM_NAME}PythonD PROPERTY LINK_INTERFACE_LIBRARIES "")
+    target_link_libraries(${VTKGDCM_NAME}Python ${VTKGDCM_NAME}PythonD)
+set_property(TARGET ${VTKGDCM_NAME}PythonD PROPERTY LINK_INTERFACE_LIBRARIES "")
     set_property(TARGET ${VTKGDCM_NAME}Python PROPERTY NO_SONAME 1)
     #set_property(TARGET ${VTKGDCM_NAME}PythonD PROPERTY NO_SONAME 1)
     # Python extension modules on Windows must have the extension ".pyd"
     # instead of ".dll" as of Python 2.5.  Older python versions do support
     # this suffix.
-    IF(WIN32 AND NOT CYGWIN)
-      SET_TARGET_PROPERTIES(${VTKGDCM_NAME}Python PROPERTIES SUFFIX ".pyd")
-    ENDIF(WIN32 AND NOT CYGWIN)
+    if(WIN32 AND NOT CYGWIN)
+      set_target_properties(${VTKGDCM_NAME}Python PROPERTIES SUFFIX ".pyd")
+    endif(WIN32 AND NOT CYGWIN)
 
-    ADD_CUSTOM_COMMAND(
+    add_custom_command(
       TARGET    ${VTKGDCM_NAME}Python
       POST_BUILD
       COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}
       DEPENDS   "${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py"
       COMMENT   "Copy vtkgdcm.py into ${LIBRARY_OUTPUT_PATH}"
     )
-    IF(NOT GDCM_INSTALL_NO_LIBRARIES)
-        INSTALL(TARGETS ${VTKGDCM_NAME}Python
+    if(NOT GDCM_INSTALL_NO_LIBRARIES)
+        install(TARGETS ${VTKGDCM_NAME}Python
       EXPORT ${GDCM_TARGETS_NAME}
           RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT                        VTKPythonModule
           LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT VTKPythonModule #${NAMELINK_SKIP}
           ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT VTKPythonModule
         )
-        INSTALL(TARGETS ${VTKGDCM_NAME}PythonD
+        install(TARGETS ${VTKGDCM_NAME}PythonD
       EXPORT ${GDCM_TARGETS_NAME}
           RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT VTKPythonModule
           LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKPythonModule #${NAMELINK_ONLY}
           ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKPythonModule
         )
       #  if(NAMELINK_ONLY)
-      #      INSTALL(TARGETS ${VTKGDCM_NAME}PythonD ${VTKGDCM_NAME}Python
+      #      install(TARGETS ${VTKGDCM_NAME}PythonD ${VTKGDCM_NAME}Python
       #        LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT VTKDevelopment ${NAMELINK_ONLY}
       #        )
       #  endif(NAMELINK_ONLY)
     # the python file is not a dev file, but part of the gdcm module...
-      INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py
+      install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py
         DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT VTKPythonModule
       )
-    ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
+    endif(NOT GDCM_INSTALL_NO_LIBRARIES)
 
-  ELSE(VTK_WRAP_PYTHON)
-    MESSAGE(STATUS "GDCM_WRAP_PYTHON canot be build without VTK_WRAP_PYTHON")
-  ENDIF(VTK_WRAP_PYTHON)
-ENDIF(GDCM_WRAP_PYTHON)
+  else(VTK_WRAP_PYTHON)
+    message(STATUS "GDCM_WRAP_PYTHON canot be build without VTK_WRAP_PYTHON")
+  endif(VTK_WRAP_PYTHON)
+endif(GDCM_WRAP_PYTHON)
 
-IF(BUILD_TESTING)
-  SUBDIRS(Testing)
-ENDIF(BUILD_TESTING)
+if(BUILD_TESTING)
+  subdirs(Testing)
+endif(BUILD_TESTING)
 
-IF(BUILD_APPLICATIONS)
-  SUBDIRS(Applications)
-ENDIF(BUILD_APPLICATIONS)
+if(BUILD_APPLICATIONS)
+  subdirs(Applications)
+endif(BUILD_APPLICATIONS)
 
-IF(BUILD_EXAMPLES)
-  SUBDIRS(Examples)
-ENDIF(BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
+  subdirs(Examples)
+endif(BUILD_EXAMPLES)
 
-IF(GDCM_USE_PARAVIEW)
+if(GDCM_USE_PARAVIEW)
   # http://www.cmake.org/Wiki/Plugin_HowTo#Adding_a_Reader
-  FIND_PACKAGE(ParaView REQUIRED)
-  INCLUDE(${PARAVIEW_USE_FILE})
+  find_package(ParaView REQUIRED)
+  include(${PARAVIEW_USE_FILE})
   ADD_PARAVIEW_PLUGIN(GDCMImageReader "1.0"
     SERVER_MANAGER_SOURCES vtkGDCMImageReader.cxx
     SERVER_MANAGER_XML GDCMImageReader.xml
     GUI_RESOURCE_FILES GDCMImageGUI.xml)
-  TARGET_LINK_LIBRARIES(GDCMImageReader ${VTKGDCM_NAME})
-  INSTALL(TARGETS GDCMImageReader
+  target_link_libraries(GDCMImageReader ${VTKGDCM_NAME})
+  install(TARGETS GDCMImageReader
     EXPORT ${GDCM_TARGETS_NAME}
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT ParaViewModule
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT ParaViewModule
     ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT ParaViewModule
     )
 
-ENDIF(GDCM_USE_PARAVIEW)
+endif(GDCM_USE_PARAVIEW)

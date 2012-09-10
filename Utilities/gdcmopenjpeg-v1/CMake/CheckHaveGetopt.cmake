@@ -1,15 +1,15 @@
 # Check if getopt is present:
-INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
-SET(DONT_HAVE_GETOPT 1)
-IF(UNIX) #I am pretty sure only *nix sys have this anyway
+include (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
+set(DONT_HAVE_GETOPT 1)
+if(UNIX) #I am pretty sure only *nix sys have this anyway
   CHECK_INCLUDE_FILE("getopt.h" CMAKE_HAVE_GETOPT_H)
   # Seems like we need the contrary:
-  IF(CMAKE_HAVE_GETOPT_H)
-    SET(DONT_HAVE_GETOPT 0)
-  ENDIF(CMAKE_HAVE_GETOPT_H)
-ENDIF(UNIX)
+  if(CMAKE_HAVE_GETOPT_H)
+    set(DONT_HAVE_GETOPT 0)
+  endif(CMAKE_HAVE_GETOPT_H)
+endif(UNIX)
 
-IF(DONT_HAVE_GETOPT)
-  ADD_DEFINITIONS(-DDONT_HAVE_GETOPT)
-ENDIF(DONT_HAVE_GETOPT)
+if(DONT_HAVE_GETOPT)
+  add_definitions(-DDONT_HAVE_GETOPT)
+endif(DONT_HAVE_GETOPT)
 

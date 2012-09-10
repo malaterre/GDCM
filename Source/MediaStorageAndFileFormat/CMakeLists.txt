@@ -1,6 +1,6 @@
 # Define the srcs for Media Storage And FileFormat
 # MSFF
-SET(MSFF_SRCS
+set(MSFF_SRCS
   gdcmAnonymizer.cxx
   gdcmIconImageFilter.cxx
   gdcmIconImageGenerator.cxx
@@ -99,16 +99,16 @@ endif()
 
 # Do the proper thing when building static...if only there was configured
 # headers or def files instead
-IF(NOT BUILD_SHARED_LIBS)
-  SET_SOURCE_FILES_PROPERTIES(gdcmJPEG2000Codec.cxx
+if(NOT BUILD_SHARED_LIBS)
+  set_source_files_properties(gdcmJPEG2000Codec.cxx
                               PROPERTIES
                               COMPILE_FLAGS -DOPJ_STATIC
                               )
-ENDIF(NOT BUILD_SHARED_LIBS)
+endif(NOT BUILD_SHARED_LIBS)
 
 
 # Add the include paths
-INCLUDE_DIRECTORIES(
+include_directories(
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
@@ -122,71 +122,71 @@ INCLUDE_DIRECTORIES(
   )
 
 # CharLS
-IF(GDCM_USE_JPEGLS)
-  #INCLUDE_DIRECTORIES("${GDCM_BINARY_DIR}/Utilities/gdcmcharls")
-ENDIF(GDCM_USE_JPEGLS)
+if(GDCM_USE_JPEGLS)
+  #include_directories("${GDCM_BINARY_DIR}/Utilities/gdcmcharls")
+endif(GDCM_USE_JPEGLS)
 
-IF(GDCM_USE_SYSTEM_CHARLS)
-  INCLUDE_DIRECTORIES(${CHARLS_INCLUDE_DIRS} )
-ELSE(GDCM_USE_SYSTEM_CHARLS)
-  INCLUDE_DIRECTORIES(
+if(GDCM_USE_SYSTEM_CHARLS)
+  include_directories(${CHARLS_INCLUDE_DIRS} )
+else(GDCM_USE_SYSTEM_CHARLS)
+  include_directories(
   "${GDCM_BINARY_DIR}/Utilities/gdcmcharls"
     )
-ENDIF(GDCM_USE_SYSTEM_CHARLS)
-IF(GDCM_USE_SYSTEM_OPENJPEG)
-  INCLUDE_DIRECTORIES(${OPENJPEG_INCLUDE_DIRS} )
-ELSE(GDCM_USE_SYSTEM_OPENJPEG)
-  INCLUDE_DIRECTORIES(
+endif(GDCM_USE_SYSTEM_CHARLS)
+if(GDCM_USE_SYSTEM_OPENJPEG)
+  include_directories(${OPENJPEG_INCLUDE_DIRS} )
+else(GDCM_USE_SYSTEM_OPENJPEG)
+  include_directories(
   "${GDCM_BINARY_DIR}/Utilities/gdcmopenjpeg"
     )
-ENDIF(GDCM_USE_SYSTEM_OPENJPEG)
-IF(GDCM_USE_SYSTEM_LJPEG)
-  #MESSAGE(${LJPEG_INCLUDE_DIRS} )
-  INCLUDE_DIRECTORIES(${LJPEG_INCLUDE_DIRS} )
-ENDIF(GDCM_USE_SYSTEM_LJPEG)
-IF(NOT GDCM_USE_SYSTEM_ZLIB)
-  INCLUDE_DIRECTORIES(
+endif(GDCM_USE_SYSTEM_OPENJPEG)
+if(GDCM_USE_SYSTEM_LJPEG)
+  #message(${LJPEG_INCLUDE_DIRS} )
+  include_directories(${LJPEG_INCLUDE_DIRS} )
+endif(GDCM_USE_SYSTEM_LJPEG)
+if(NOT GDCM_USE_SYSTEM_ZLIB)
+  include_directories(
     "${GDCM_BINARY_DIR}/Utilities/gdcmzlib"
   )
-ENDIF(NOT GDCM_USE_SYSTEM_ZLIB)
-IF(GDCM_USE_SYSTEM_UUID)
-  INCLUDE_DIRECTORIES(
+endif(NOT GDCM_USE_SYSTEM_ZLIB)
+if(GDCM_USE_SYSTEM_UUID)
+  include_directories(
     ${UUID_INCLUDE_DIR}
   )
-  SET(GDCMUUID ${UUID_LIBRARIES})
-ELSE(GDCM_USE_SYSTEM_UUID)
-  INCLUDE_DIRECTORIES(
+  set(GDCMUUID ${UUID_LIBRARIES})
+else(GDCM_USE_SYSTEM_UUID)
+  include_directories(
     "${GDCM_BINARY_DIR}/Utilities/gdcmuuid" # uuid_mangle.h
   )
-  SET(GDCMUUID gdcmuuid)
-ENDIF(GDCM_USE_SYSTEM_UUID)
+  set(GDCMUUID gdcmuuid)
+endif(GDCM_USE_SYSTEM_UUID)
 
-ADD_LIBRARY(gdcmMSFF ${MSFF_SRCS})
+add_library(gdcmMSFF ${MSFF_SRCS})
 
 # main libs:
-TARGET_LINK_LIBRARIES(gdcmMSFF gdcmIOD gdcmDSED gdcmDICT ${GDCM_LJPEG_LIBRARIES} ${GDCM_OPENJPEG_LIBRARIES})
-SET_TARGET_PROPERTIES(gdcmMSFF PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "gdcmDSED;gdcmDICT;gdcmIOD")
-IF(GDCM_USE_JPEGLS)
-  TARGET_LINK_LIBRARIES(gdcmMSFF ${GDCM_CHARLS_LIBRARIES})
-ENDIF(GDCM_USE_JPEGLS)
+target_link_libraries(gdcmMSFF gdcmIOD gdcmDSED gdcmDICT ${GDCM_LJPEG_LIBRARIES} ${GDCM_OPENJPEG_LIBRARIES})
+set_target_properties(gdcmMSFF PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "gdcmDSED;gdcmDICT;gdcmIOD")
+if(GDCM_USE_JPEGLS)
+  target_link_libraries(gdcmMSFF ${GDCM_CHARLS_LIBRARIES})
+endif(GDCM_USE_JPEGLS)
 
-IF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
+if(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
   # I am getting:
 # CMakeFiles/gdcmMSFF.dir/gdcmScanner.obj(.text$_ZN4gdcm6ReaderC1Ev[gdcm::Reader::Reader()]+0x3a):gdcmScanner.cxx: variable 'vtable for gdcm::Reader' can't be auto-imported. Please read the documentation for ld's --enable-auto-import for details.
 # CMakeFiles/gdcmMSFF.dir/gdcmImageReader.obj(.text$_ZN4gdcm6ReaderC2Ev[gdcm::Reader::Reader()]+0x3a):gdcmImageReader.cxx: variable 'vtable for gdcm::Reader' can't be auto-imported. Please read the documentation for ld's --enable-auto-import for details.
 # CMakeFiles/gdcmMSFF.dir/gdcmImageWriter.obj(.text$_ZN4gdcm6WriterC2Ev[gdcm::Writer::Writer()]+0x3a):gdcmImageWriter.cxx: variable 'vtable for gdcm::Writer' can't be auto-imported. Please read the documentation for ld's --enable-auto-import for details.
 
-  SET_TARGET_PROPERTIES(gdcmMSFF PROPERTIES LINK_FLAGS "-Wl,--enable-runtime-pseudo-reloc")
-ENDIF(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
-#IF(HAVE_UUIDCREATE)
-IF(WIN32)
+  set_target_properties(gdcmMSFF PROPERTIES LINK_FLAGS "-Wl,--enable-runtime-pseudo-reloc")
+endif(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
+#if(HAVE_UUIDCREATE)
+if(WIN32)
   # For UuidCreate
   # http://msdn.microsoft.com/en-us/library/aa379205(VS.85).aspx
-  TARGET_LINK_LIBRARIES(gdcmMSFF rpcrt4)
-#ENDIF(HAVE_UUIDCREATE)
-ELSE(WIN32)
-TARGET_LINK_LIBRARIES(gdcmMSFF ${GDCMUUID})
-ENDIF(WIN32)
+  target_link_libraries(gdcmMSFF rpcrt4)
+#endif(HAVE_UUIDCREATE)
+else(WIN32)
+target_link_libraries(gdcmMSFF ${GDCMUUID})
+endif(WIN32)
 
 # libs
 install_library(gdcmMSFF)

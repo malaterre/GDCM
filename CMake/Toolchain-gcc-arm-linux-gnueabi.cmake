@@ -23,14 +23,14 @@
 #
 
 # the name of the target operating system
-SET(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_NAME Linux)
 
 # which compilers to use for C and C++
-SET(CMAKE_C_COMPILER arm-linux-gnueabi-gcc-4.4)
-SET(CMAKE_CXX_COMPILER arm-linux-gnueabi-g++-4.4)
+set(CMAKE_C_COMPILER arm-linux-gnueabi-gcc-4.4)
+set(CMAKE_CXX_COMPILER arm-linux-gnueabi-g++-4.4)
 
 # here is the target environment located
-SET(CMAKE_FIND_ROOT_PATH   /usr/arm-linux-gnueabi)
+set(CMAKE_FIND_ROOT_PATH   /usr/arm-linux-gnueabi)
 
 # adjust the default behaviour of the FIND_XXX() commands:
 # search headers and libraries in the target environment, search

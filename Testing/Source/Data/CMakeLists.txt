@@ -3,48 +3,48 @@
 # We need to test the reading of all dicom images in the gdcmData directory
 # First parse this directory and extract all images
 
-SET(GDCM_DATA_IMAGE_FILENAMES_GLOB_EXPR
+set(GDCM_DATA_IMAGE_FILENAMES_GLOB_EXPR
   "${GDCM_DATA_ROOT}/*.acr"
   "${GDCM_DATA_ROOT}/*.nema"
   "${GDCM_DATA_ROOT}/*.dcm"
   "${GDCM_DATA_ROOT}/001*"
 )
 
-SET(GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR
+set(GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR
   # Those files do not have any extension, special regex:
   "${GDCM_DATA_ROOT}/dicomdir*"
 )
 
 # Case sensitive system:
-IF(UNIX)
-  SET(GDCM_DATA_IMAGE_FILENAMES_GLOB_EXPR
+if(UNIX)
+  set(GDCM_DATA_IMAGE_FILENAMES_GLOB_EXPR
     ${GDCM_DATA_IMAGE_FILENAMES_GLOB_EXPR}
     "${GDCM_DATA_ROOT}/*.DCM"
   )
-  SET(GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR
+  set(GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR
     ${GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR}
     "${GDCM_DATA_ROOT}/DICOMDIR*"
   )
-ENDIF(UNIX)
+endif(UNIX)
 
 # GLOB expression !
-FILE(GLOB GDCM_DATA_IMAGE_FILENAMES_GLOB
+file(GLOB GDCM_DATA_IMAGE_FILENAMES_GLOB
   ${GDCM_DATA_IMAGE_FILENAMES_GLOB_EXPR}
   )
 
 # Same for DICOMDIR:
-FILE(GLOB GDCM_DATA_DICOMDIR_FILENAMES_GLOB
+file(GLOB GDCM_DATA_DICOMDIR_FILENAMES_GLOB
   ${GDCM_DATA_DICOMDIR_FILENAMES_GLOB_EXPR}
   )
 
-SET(GDCM_DATA_FILENAMES_GLOB
+set(GDCM_DATA_FILENAMES_GLOB
   ${GDCM_DATA_IMAGE_FILENAMES_GLOB}
   ${GDCM_DATA_DICOMDIR_FILENAMES_GLOB}
 )
 
 # List of images that are technically difficult to read
 # Hopefully we will soon be able to read them
-SET(BLACK_LIST_READER
+set(BLACK_LIST_READER
 # grrrrrr do not handle swapping correctly (implicit dataset are such a pain)
   LIBIDO-16-ACR_NEMA-Volume.dcm
 # Papyrus:
@@ -64,8 +64,8 @@ SET(BLACK_LIST_READER
 # TestImageChangeTransferSyntax1
   MR-MONO2-12-angio-an1.acr
 )
-IF(NOT GDCM_USE_PVRG)
-  SET(BLACK_LIST_READER
+if(NOT GDCM_USE_PVRG)
+  set(BLACK_LIST_READER
     # The following should really fails according to JPEG spec, IJG is failing and even when forcing
     # decompression using IJG output is different from PVRG...
     # Apparently pvrg likes it this way...
@@ -73,9 +73,9 @@ IF(NOT GDCM_USE_PVRG)
     ${BLACK_LIST_READER}
     PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
   )
-ENDIF(NOT GDCM_USE_PVRG)
-IF(GDCM_WORDS_BIGENDIAN)
-  SET(BLACK_LIST_READER
+endif(NOT GDCM_USE_PVRG)
+if(GDCM_WORDS_BIGENDIAN)
+  set(BLACK_LIST_READER
     ${BLACK_LIST_READER}
     MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm
     MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm
@@ -83,10 +83,10 @@ IF(GDCM_WORDS_BIGENDIAN)
     SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm
     PICKER-16-MONO2-No_DicomV3_Preamble.dcm
   )
-ENDIF(GDCM_WORDS_BIGENDIAN)
+endif(GDCM_WORDS_BIGENDIAN)
 
-IF(NOT GDCM_SUPPORT_BROKEN_IMPLEMENTATION)
-  SET(BLACK_LIST_READER
+if(NOT GDCM_SUPPORT_BROKEN_IMPLEMENTATION)
+  set(BLACK_LIST_READER
     ${BLACK_LIST_READER}
     GE_GENESIS-16-MONO2-WrongLengthItem.dcm # can't read odd length
     PHILIPS_GDCM12xBug2.dcm # odd length
@@ -104,23 +104,23 @@ IF(NOT GDCM_SUPPORT_BROKEN_IMPLEMENTATION)
     NM_Kakadu44_SOTmarkerincons.dcm
     MARCONI_MxTWin-12-MONO2-JpegLossless-ZeroLengthSQ.dcm
     )
-ENDIF(NOT GDCM_SUPPORT_BROKEN_IMPLEMENTATION)
+endif(NOT GDCM_SUPPORT_BROKEN_IMPLEMENTATION)
 
-SET(GDCM_DATA_FILENAMES)
-SET(GDCM_BLACK_LIST_READER_DATA_FILENAMES)
-FOREACH(filename ${GDCM_DATA_FILENAMES_GLOB})
-  GET_FILENAME_COMPONENT(filename_name ${filename} NAME)
-  STRING(REGEX MATCH ${filename_name} bad_dicom ${BLACK_LIST_READER})
-  IF(NOT bad_dicom)
-    SET(GDCM_DATA_FILENAMES "${GDCM_DATA_FILENAMES}\n\"${filename}\",")
-  ELSE(NOT bad_dicom)
-    SET(GDCM_BLACK_LIST_READER_DATA_FILENAMES "${GDCM_BLACK_LIST_READER_DATA_FILENAMES}\n\"${filename}\",")
-  ENDIF(NOT bad_dicom)
-ENDFOREACH(filename)
+set(GDCM_DATA_FILENAMES)
+set(GDCM_BLACK_LIST_READER_DATA_FILENAMES)
+foreach(filename ${GDCM_DATA_FILENAMES_GLOB})
+  get_filename_component(filename_name ${filename} NAME)
+  string(REGEX MATCH ${filename_name} bad_dicom ${BLACK_LIST_READER})
+  if(NOT bad_dicom)
+    set(GDCM_DATA_FILENAMES "${GDCM_DATA_FILENAMES}\n\"${filename}\",")
+  else(NOT bad_dicom)
+    set(GDCM_BLACK_LIST_READER_DATA_FILENAMES "${GDCM_BLACK_LIST_READER_DATA_FILENAMES}\n\"${filename}\",")
+  endif(NOT bad_dicom)
+endforeach(filename)
 
 
 # Populate GDCM_DATA_FILENAMES:
-CONFIGURE_FILE(
+configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/gdcmDataFileNames.cxx.in"
   "${CMAKE_CURRENT_BINARY_DIR}/gdcmDataFileNames.cxx"
   )

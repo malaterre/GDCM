@@ -1,8 +1,8 @@
 # Makefile for the main JPWL OpenJPEG codecs: JPWL_ j2k_to_image and JPWL_image_to_j2k
 
-ADD_DEFINITIONS(-DUSE_JPWL)
+add_definitions(-DUSE_JPWL)
 
-SET(OPJ_SRCS
+set(OPJ_SRCS
 ../libopenjpeg/bio.c
 ../libopenjpeg/cio.c
 ../libopenjpeg/dwt.c
@@ -22,33 +22,33 @@ SET(OPJ_SRCS
 ../libopenjpeg/tcd.c
 ../libopenjpeg/tgt.c
 )
-SET(JPWL_SRCS crc.c jpwl.c jpwl_lib.c rs.c)
+set(JPWL_SRCS crc.c jpwl.c jpwl_lib.c rs.c)
 
-ADD_LIBRARY(openjpeg_JPWL ${JPWL_SRCS} ${OPJ_SRCS})
+add_library(openjpeg_JPWL ${JPWL_SRCS} ${OPJ_SRCS})
 
 # Do the proper thing when building static...if only there was configured
 # headers or def files instead
-#IF(NOT BUILD_SHARED_LIBS)
-#  ADD_DEFINITIONS(-DOPJ_STATIC)
-#ENDIF(NOT BUILD_SHARED_LIBS)
+#if(NOT BUILD_SHARED_LIBS)
+#  add_definitions(-DOPJ_STATIC)
+#endif(NOT BUILD_SHARED_LIBS)
 
-INCLUDE_DIRECTORIES(
+include_directories(
   ${OPENJPEG_SOURCE_DIR}/libopenjpeg
   )
 
-FIND_PACKAGE(TIFF REQUIRED)
+find_package(TIFF REQUIRED)
 
-ADD_EXECUTABLE(JPWL_j2k_to_image
+add_executable(JPWL_j2k_to_image
 ../codec/convert.c ../codec/j2k_to_image.c
 )
-TARGET_LINK_LIBRARIES(JPWL_j2k_to_image openjpeg_JPWL ${TIFF_LIBRARIES})
-IF(UNIX)
-  TARGET_LINK_LIBRARIES(JPWL_j2k_to_image m)
-ENDIF(UNIX)
+target_link_libraries(JPWL_j2k_to_image openjpeg_JPWL ${TIFF_LIBRARIES})
+if(UNIX)
+  target_link_libraries(JPWL_j2k_to_image m)
+endif(UNIX)
 
-ADD_EXECUTABLE(JPWL_image_to_j2k
+add_executable(JPWL_image_to_j2k
 ../codec/convert.c ../codec/image_to_j2k.c)
-TARGET_LINK_LIBRARIES(JPWL_image_to_j2k openjpeg_JPWL ${TIFF_LIBRARIES})
-IF(UNIX)
-  TARGET_LINK_LIBRARIES(JPWL_image_to_j2k m)
-ENDIF(UNIX)
+target_link_libraries(JPWL_image_to_j2k openjpeg_JPWL ${TIFF_LIBRARIES})
+if(UNIX)
+  target_link_libraries(JPWL_image_to_j2k m)
+endif(UNIX)

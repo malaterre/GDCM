@@ -13,15 +13,15 @@
 #
 
 # the name of the target operating system
-SET(CMAKE_SYSTEM_NAME Windows)
+set(CMAKE_SYSTEM_NAME Windows)
 
 # which compilers to use for C and C++
-SET(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc)
-SET(CMAKE_CXX_COMPILER x86_64-w64-mingw32-g++)
+set(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc)
+set(CMAKE_CXX_COMPILER x86_64-w64-mingw32-g++)
 set(CMAKE_RC_COMPILER x86_64-w64-mingw32-windres)
 
 # here is the target environment located
-SET(CMAKE_FIND_ROOT_PATH  /usr/x86_64-w64-mingw32)
+set(CMAKE_FIND_ROOT_PATH  /usr/x86_64-w64-mingw32)
 
 # adjust the default behaviour of the FIND_XXX() commands:
 # search headers and libraries in the target environment, search
@@ -30,8 +30,8 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
-#FIND_PACKAGE(WINE REQUIRED)
-FIND_PROGRAM(WINE_EXECUTABLE
+#find_package(WINE REQUIRED)
+find_program(WINE_EXECUTABLE
   NAMES wine
   )
 set(TARGET_SYSTEM_EMULATOR ${WINE_EXECUTABLE})

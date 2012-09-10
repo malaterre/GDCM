@@ -1,8 +1,8 @@
-FIND_PACKAGE(Doxygen REQUIRED)
+find_package(Doxygen REQUIRED)
 
 # The Doxyfile.dox is poorly defined and produce output
 # in the source dir
-ADD_CUSTOM_TARGET(doxygen
+add_custom_target(doxygen
 # By default doxygen target is added to the 'all' target. Project is small
 # thus running doxygen is not too time consuming
   ALL

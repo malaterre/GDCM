@@ -1,9 +1,9 @@
-SUBDIRS(Cxx)
+subdirs(Cxx)
 
-IF(GDCM_WRAP_PYTHON)
-  SUBDIRS(Python)
-ENDIF(GDCM_WRAP_PYTHON)
+if(GDCM_WRAP_PYTHON)
+  subdirs(Python)
+endif(GDCM_WRAP_PYTHON)
 
-IF(GDCM_WRAP_JAVA)
-  SUBDIRS(Java)
-ENDIF(GDCM_WRAP_JAVA)
+if(GDCM_WRAP_JAVA)
+  subdirs(Java)
+endif(GDCM_WRAP_JAVA)

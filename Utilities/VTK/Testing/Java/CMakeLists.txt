@@ -1,5 +1,5 @@
 # Define the tests for vtkgdcm-java
-SET(VTKGDCM_JAVA_TEST_SRCS
+set(VTKGDCM_JAVA_TEST_SRCS
   TestvtkGDCMImageReader
   )
 
@@ -18,8 +18,8 @@ endif()
 
 set(classfilesdep)
 
-FOREACH(example ${VTKGDCM_JAVA_TEST_SRCS})
-  ADD_CUSTOM_COMMAND(
+foreach(example ${VTKGDCM_JAVA_TEST_SRCS})
+  add_custom_command(
     OUTPUT ${EXECUTABLE_OUTPUT_PATH}/${example}.class
     COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -classpath "${classpath}"
     ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java -d ${EXECUTABLE_OUTPUT_PATH}
@@ -28,18 +28,18 @@ FOREACH(example ${VTKGDCM_JAVA_TEST_SRCS})
     COMMENT "javac ${example}.java"
     )
   list(APPEND classfilesdep ${EXECUTABLE_OUTPUT_PATH}/${example}.class)
-  SET_SOURCE_FILES_PROPERTIES(${EXECUTABLE_OUTPUT_PATH}/${example}.class PROPERTIES RUNTIMEPATH "${runtimepath}")
-  SET_SOURCE_FILES_PROPERTIES(${EXECUTABLE_OUTPUT_PATH}/${example}.class PROPERTIES CLASSPATH "${classpath}")
-  IF(GDCM_WRAP_JAVA)
+  set_source_files_properties(${EXECUTABLE_OUTPUT_PATH}/${example}.class PROPERTIES RUNTIMEPATH "${runtimepath}")
+  set_source_files_properties(${EXECUTABLE_OUTPUT_PATH}/${example}.class PROPERTIES CLASSPATH "${classpath}")
+  if(GDCM_WRAP_JAVA)
     ADD_JAVA_TEST(${example}Java ${EXECUTABLE_OUTPUT_PATH}/${example})
-  ENDIF(GDCM_WRAP_JAVA)
+  endif(GDCM_WRAP_JAVA)
 
-ENDFOREACH(example)
+endforeach(example)
 
 # 3. ok now add the target
-ADD_CUSTOM_TARGET(VTKGDCMJavaTests ALL
+add_custom_target(VTKGDCMJavaTests ALL
   DEPENDS ${classfilesdep}
   COMMENT "building gdcm java vtk tests"
 )
-ADD_DEPENDENCIES(VTKGDCMJavaTests VTKGDCMJavaJar
+add_dependencies(VTKGDCMJavaTests VTKGDCMJavaJar
   GDCMJavaJar)
