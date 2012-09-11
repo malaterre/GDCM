@@ -6,5 +6,7 @@ if(GDCM_WRAP_CSHARP)
 endif()
 
 if(GDCM_WRAP_JAVA)
-  subdirs(Java)
+  if(VTK_WRAP_JAVA)
+    subdirs(Java)
+  endif()
 endif()
