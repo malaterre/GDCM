@@ -313,7 +313,7 @@ Manual changes:
     <entry group="0014" element="3011" keyword="InternalDetectorFrameTime" vr="DS" vm="1" name="Internal Detector Frame Time"/>
     <entry group="0014" element="3012" keyword="NumberOfFramesIntegrated" vr="DS" vm="1" name="Number of Frames Integrated"/>
     <entry group="0014" element="3020" keyword="DetectorTemperatureSequence" vr="SQ" vm="1" name="Detector Temperature Sequence"/>
-    <entry group="0014" element="3022" keyword="SensorName" vr="DS" vm="1" name="Sensor Name"/>
+    <entry group="0014" element="3022" keyword="SensorName" vr="ST" vm="1" name="Sensor Name"/>
     <entry group="0014" element="3024" keyword="HorizontalOffsetOfSensor" vr="DS" vm="1" name="Horizontal Offset of Sensor"/>
     <entry group="0014" element="3026" keyword="VerticalOffsetOfSensor" vr="DS" vm="1" name="Vertical Offset of Sensor"/>
     <entry group="0014" element="3028" keyword="SensorTemperature" vr="DS" vm="1" name="Sensor Temperature"/>
@@ -1265,7 +1265,9 @@ Manual changes:
     <entry group="0022" element="0058" keyword="MydriaticAgentSequence" vr="SQ" vm="1" name="Mydriatic Agent Sequence"/>
     <entry group="0022" element="1007" keyword="OphthalmicAxialMeasurementsRightEyeSequence" vr="SQ" vm="1" name="Ophthalmic Axial Measurements Right Eye Sequence"/>
     <entry group="0022" element="1008" keyword="OphthalmicAxialMeasurementsLeftEyeSequence" vr="SQ" vm="1" name="Ophthalmic Axial Measurements Left Eye Sequence"/>
+    <entry group="0022" element="1009" keyword="OphthalmicAxialMeasurementsDeviceType" vr="CS" vm="1" name="Ophthalmic Axial Measurements Device Type"/>
     <entry group="0022" element="1010" keyword="OphthalmicAxialLengthMeasurementsType" vr="CS" vm="1" name="Ophthalmic Axial Length Measurements Type"/>
+    <entry group="0022" element="1012" keyword="OphthalmicAxialLengthSequence" vr="SQ" vm="1" name="Ophthalmic Axial Length Sequence"/>
     <entry group="0022" element="1019" keyword="OphthalmicAxialLength" vr="FL" vm="1" name="Ophthalmic Axial Length"/>
     <entry group="0022" element="1024" keyword="LensStatusCodeSequence" vr="SQ" vm="1" name="Lens Status Code Sequence"/>
     <entry group="0022" element="1025" keyword="VitreousStatusCodeSequence" vr="SQ" vm="1" name="Vitreous Status Code Sequence"/>
@@ -1276,7 +1278,7 @@ Manual changes:
     <entry group="0022" element="1037" keyword="TargetRefraction" vr="FL" vm="1" name="Target Refraction"/>
     <entry group="0022" element="1039" keyword="RefractiveProcedureOccurred" vr="CS" vm="1" name="Refractive Procedure Occurred"/>
     <entry group="0022" element="1040" keyword="RefractiveSurgeryTypeCodeSequence" vr="SQ" vm="1" name="Refractive Surgery Type Code Sequence"/>
-    <entry group="0022" element="1044" keyword="OphthalmicUltrasoundAxialMeasurementsTypeCodeSequence" vr="SQ" vm="1" name="Ophthalmic Ultrasound Axial Measurements Type Code Sequence"/>
+    <entry group="0022" element="1044" keyword="OphthalmicUltrasoundMethodCodeSequence" vr="SQ" vm="1" name="Ophthalmic Ultrasound Method Code Sequence"/>
     <entry group="0022" element="1050" keyword="OphthalmicAxialLengthMeasurementsSequence" vr="SQ" vm="1" name="Ophthalmic Axial Length Measurements Sequence"/>
     <entry group="0022" element="1053" keyword="IOLPower" vr="FL" vm="1" name="IOL Power"/>
     <entry group="0022" element="1054" keyword="PredictedRefractiveError" vr="FL" vm="1" name="Predicted Refractive Error"/>
@@ -1287,18 +1289,23 @@ Manual changes:
     <entry group="0022" element="1092" keyword="LensConstantSequence" vr="SQ" vm="1" name="Lens Constant Sequence"/>
     <entry group="0022" element="1093" keyword="IOLManufacturer" vr="LO" vm="1" name="IOL Manufacturer"/>
     <entry group="0022" element="1094" keyword="LensConstantDescription" vr="LO" vm="1" name="Lens Constant Description"/>
+    <entry group="0022" element="1095" keyword="ImplantName" vr="LO" vm="1" name="Implant Name"/>
     <entry group="0022" element="1096" keyword="KeratometryMeasurementTypeCodeSequence" vr="SQ" vm="1" name="Keratometry Measurement Type Code Sequence"/>
+    <entry group="0022" element="1097" keyword="ImplantPartNumber" vr="LO" vm="1" name="Implant Part Number"/>
     <entry group="0022" element="1100" keyword="ReferencedOphthalmicAxialMeasurementsSequence" vr="SQ" vm="1" name="Referenced Ophthalmic Axial Measurements Sequence"/>
     <entry group="0022" element="1101" keyword="OphthalmicAxialLengthMeasurementsSegmentNameCodeSequence" vr="SQ" vm="1" name="Ophthalmic Axial Length Measurements Segment Name Code Sequence"/>
     <entry group="0022" element="1103" keyword="RefractiveErrorBeforeRefractiveSurgeryCodeSequence" vr="SQ" vm="1" name="Refractive Error Before Refractive Surgery Code Sequence"/>
     <entry group="0022" element="1121" keyword="IOLPowerForExactEmmetropia" vr="FL" vm="1" name="IOL Power For Exact Emmetropia"/>
     <entry group="0022" element="1122" keyword="IOLPowerForExactTargetRefraction" vr="FL" vm="1" name="IOL Power For Exact Target Refraction"/>
     <entry group="0022" element="1125" keyword="AnteriorChamberDepthDefinitionCodeSequence" vr="SQ" vm="1" name="Anterior Chamber Depth Definition Code Sequence"/>
+    <entry group="0022" element="1127" keyword="LensThicknessSequence" vr="SQ" vm="1" name="Lens Thickness Sequence"/>
+    <entry group="0022" element="1128" keyword="AnteriorChamberDepthSequence" vr="SQ" vm="1" name="Anterior Chamber Depth Sequence"/>
     <entry group="0022" element="1130" keyword="LensThickness" vr="FL" vm="1" name="Lens Thickness"/>
     <entry group="0022" element="1131" keyword="AnteriorChamberDepth" vr="FL" vm="1" name="Anterior Chamber Depth"/>
     <entry group="0022" element="1132" keyword="SourceOfLensThicknessDataCodeSequence" vr="SQ" vm="1" name="Source of Lens Thickness Data Code Sequence"/>
     <entry group="0022" element="1133" keyword="SourceOfAnteriorChamberDepthDataCodeSequence" vr="SQ" vm="1" name="Source of Anterior Chamber Depth Data Code Sequence"/>
-    <entry group="0022" element="1135" keyword="SourceOfRefractiveErrorDataCodeSequence" vr="SQ" vm="1" name="Source of Refractive Error Data Code Sequence"/>
+    <entry group="0022" element="1134" keyword="SourceOfRefractiveMeasurementsSequence" vr="SQ" vm="1" name="Source of Refractive Measurements Sequence"/>
+    <entry group="0022" element="1135" keyword="SourceOfRefractiveMeasurementsCodeSequence" vr="SQ" vm="1" name="Source of Refractive Measurements Code Sequence"/>
     <entry group="0022" element="1140" keyword="OphthalmicAxialLengthMeasurementModified" vr="CS" vm="1" name="Ophthalmic Axial Length Measurement Modified"/>
     <entry group="0022" element="1150" keyword="OphthalmicAxialLengthDataSourceCodeSequence" vr="SQ" vm="1" name="Ophthalmic Axial Length Data Source Code Sequence"/>
     <entry group="0022" element="1153" keyword="OphthalmicAxialLengthAcquisitionMethodCodeSequence" vr="SQ" vm="1" name="Ophthalmic Axial Length Acquisition Method Code Sequence"/>
@@ -1480,6 +1487,7 @@ Manual changes:
     <entry group="0028" element="0301" keyword="BurnedInAnnotation" vr="CS" vm="1" name="Burned In Annotation"/>
     <entry group="0028" element="0302" keyword="RecognizableVisualFeatures" vr="CS" vm="1" name="Recognizable Visual Features"/>
     <entry group="0028" element="0303" keyword="LongitudinalTemporalInformationModified" vr="CS" vm="1" name="Longitudinal Temporal Information Modified"/>
+    <entry group="0028" element="0304" keyword="ReferencedColorPaletteInstanceUID" vr="UI" vm="1" name="Referenced Color Palette Instance UID"/>
     <entry group="0028" element="0400" keyword="TransformLabel" vr="LO" vm="1" retired="true" name="Transform Label"/>
     <entry group="0028" element="0401" keyword="TransformVersionNumber" vr="LO" vm="1" retired="true" name="Transform Version Number"/>
     <entry group="0028" element="0402" keyword="NumberOfTransformSteps" vr="US" vm="1" retired="true" name="Number of Transform Steps"/>
@@ -2102,8 +2110,8 @@ Manual changes:
     <entry group="0048" element="0202" keyword="BottomRightHandCornerOfLocalizerArea" vr="US" vm="2" name="Bottom Right Hand Corner of Localizer Area"/>
     <entry group="0048" element="0207" keyword="OpticalPathIdentificationSequence" vr="SQ" vm="1" name="Optical Path Identification Sequence"/>
     <entry group="0048" element="021a" keyword="PlanePositionSlideSequence" vr="SQ" vm="1" name="Plane Position (Slide) Sequence"/>
-    <entry group="0048" element="021e" keyword="RowPositionInTotalImagePixelMatrix" vr="SL" vm="1" name="Row Position In Total Image Pixel Matrix"/>
-    <entry group="0048" element="021f" keyword="ColumnPositionInTotalImagePixelMatrix" vr="SL" vm="1" name="Column Position In Total Image Pixel Matrix"/>
+    <entry group="0048" element="021e" keyword="ColumnPositionInTotalImagePixelMatrix" vr="SL" vm="1" name="Column Position In Total Image Pixel Matrix"/>
+    <entry group="0048" element="021f" keyword="RowPositionInTotalImagePixelMatrix" vr="SL" vm="1" name="Row Position In Total Image Pixel Matrix"/>
     <entry group="0048" element="0301" keyword="PixelOriginInterpretation" vr="CS" vm="1" name="Pixel Origin Interpretation"/>
     <entry group="0050" element="0004" keyword="CalibrationImage" vr="CS" vm="1" name="Calibration Image"/>
     <entry group="0050" element="0010" keyword="DeviceSequence" vr="SQ" vm="1" name="Device Sequence"/>
