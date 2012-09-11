@@ -574,6 +574,7 @@ void XMLPrinter::Print(std::ostream& os)
 void XMLPrinter::HandleBulkData(const char *uuid, const TransferSyntax & ts,
   const char *bulkdata, size_t bulklen)
 {
+  (void)ts;
   (void)uuid;
   (void)bulkdata;
   (void)bulklen;
