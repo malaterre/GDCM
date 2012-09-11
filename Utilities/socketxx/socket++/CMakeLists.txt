@@ -69,6 +69,9 @@ if(WIN32)
 #target_link_libraries(${SOCKETXX_LIBRARY_NAME} wsock32)
 target_link_libraries(${SOCKETXX_LIBRARY_NAME} ws2_32.lib)
 endif()
+if(CMAKE_SYSTEM MATCHES "SunOS.*")
+  target_link_libraries(${SOCKETXX_LIBRARY_NAME} socket)
+endif()
 
 #libsocketincludedir=$(includedir)/socket++
 #libsocketinclude_HEADERS = \
