@@ -34,7 +34,7 @@
 # In addition, the data dictionary entries from the following final text
 # supplements and correction items have been incorporated:
 # - Supplement 152.
-# - CP 1064, 1123, 1147, 1188.
+# - CP 1064, 1123, 1137, 1138, 1147, 1188, 1204.
 #
 # Each line represents an entry in the data dictionary.  Each line has 5 fields
 # (Tag, VR, Name, VM, Version).  Entries need not be in ascending tag order.
