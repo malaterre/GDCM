@@ -93,7 +93,7 @@ extern "C" int shutdown (int, int); // they have forgotten this
 // arpa/in.h does not provide a protype for the following
 //extern "C" char* inet_ntoa (in_addr ina);
 
-#if !(defined (__linux__) || defined(__FreeBSD__))
+#if !(defined (__linux__) || defined(__FreeBSD__) || defined(__sun__))
 //  extern "C" int gethostname (char* hostname, size_t len);
 // the above breaks on some old MacOSX system where prototype is:
 //  extern "C" int gethostname (char* hostname, int len);
