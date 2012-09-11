@@ -54,7 +54,7 @@
 // Do not include anything below that define. That should in no case change any forward decls in
 // system headers ...
 #if (defined(__APPLE__)&&(__GNUC__<3)) || (defined(WIN32)&&!defined(__CYGWIN__)) || \
- (!defined(__APPLE__) && !defined(WIN32) && !defined(_XOPEN_SOURCE_EXTENDED) && !defined(__FreeBSD__))
+ (!defined(__APPLE__) && !defined(WIN32) && !defined(__GNUC__) && !defined(_XOPEN_SOURCE_EXTENDED) && !defined(__FreeBSD__))
 #define socklen_t int
 #endif
 
