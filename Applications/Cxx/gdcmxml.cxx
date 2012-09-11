@@ -11,7 +11,9 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
+/*
+ * This is an implementation of Application Hosting: DICOM Native Model
+ */
 #include "gdcmFilename.h"
 #include "gdcmReader.h"
 #include "gdcmVersion.h"
@@ -173,6 +175,7 @@ void HandlePN(xmlTextReaderPtr reader,DataElement &de)
     assert(0 && "Invalid XML");
     
   int depth_curr = xmlTextReaderDepth(reader);
+  (void)depth_curr;
   int ret;
   std::string name;
   READ_NEXT;
@@ -301,6 +304,7 @@ void HandleSequence(SequenceOfItems *sqi,xmlTextReaderPtr reader,int depth);
 
 void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ )
 {    
+  (void)depth;
    int ret;  
    const char *name = (const char*)xmlTextReaderConstName(reader);
    //printf("%s\n",name);        
@@ -651,7 +655,7 @@ static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
   xmlTextReaderPtr reader;  
   FILE *in;
   char *buffer;
-  long numBytes;
+  size_t numBytes;
   in = fopen(file1.GetFileName(), "r");
   
   if(in == NULL)
@@ -691,7 +695,7 @@ int main (int argc, char *argv[])
   //int digit_optind = 0;
   gdcm::Filename file1;
   gdcm::Filename file2;  
-  int loadTransferSyntax = 0;
+//  int loadTransferSyntax = 0;
   int verbose = 0;
   int warning = 0;
   int debug = 0;

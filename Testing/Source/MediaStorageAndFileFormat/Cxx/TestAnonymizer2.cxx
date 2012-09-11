@@ -61,11 +61,7 @@ int TestAnonymize2(const char *subdir, const char *filename)
 
 // Encrypt
 {
-#ifdef WIN32
-  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::CAPI);
-#else
-  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
-#endif
+  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::GetFactoryInstance();
   if (cryptoFactory == NULL)
     {
     std::cerr << "Crypto library not available" << std::endl;
@@ -130,11 +126,7 @@ int TestAnonymize2(const char *subdir, const char *filename)
 }
 // Decrypt
 {
-#ifdef WIN32
-  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::CAPI);
-#else
-  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
-#endif
+  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::GetFactoryInstance();
   if (cryptoFactory == NULL)
     {
     std::cerr << "Crypto library not available" << std::endl;

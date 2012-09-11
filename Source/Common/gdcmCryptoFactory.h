@@ -20,13 +20,25 @@
 namespace gdcm
 {
 
+/**
+ * \brief Class to do handle the crypto factory
+ * \details GDCM needs to access in a platform independant way
+ * the user specified crypto engine. It can be:
+ * \li CAPI (windows only)
+ * \li OPENSSL (portable)
+ * \li OPENSSLP7 (portable)
+ * By default the factory will try:
+ * CAPI if on windows
+ * OPENSSL if possible
+ * OPENSSLP7 when older OpenSSL is used.
+ */
 class GDCM_EXPORT CryptoFactory
 {
 public:
-  enum CryptoLib {OPENSSL, CAPI, OPENSSLP7};
+  enum CryptoLib {DEFAULT = 0, OPENSSL = 1, CAPI = 2, OPENSSLP7 = 3};
 
   virtual CryptographicMessageSyntax* CreateCMSProvider() = 0;
-  static CryptoFactory* getFactoryInstance(CryptoLib id);
+  static CryptoFactory* GetFactoryInstance(CryptoLib id = DEFAULT);
 
 protected:
   CryptoFactory(CryptoLib id)
@@ -34,6 +46,7 @@ protected:
     AddLib(id, this);
   }
 
+private:
   static std::map<CryptoLib, CryptoFactory*>& getInstanceMap()
   {
     static std::map<CryptoLib, CryptoFactory*> libs;
@@ -44,14 +57,15 @@ protected:
   {
     if (getInstanceMap().insert(std::pair<CryptoLib, CryptoFactory*>(id, f)).second == false)
       {
-      gdcmErrorMacro( "Library already registered under id " << id );
+      gdcmErrorMacro( "Library already registered under id " << (int)id );
       }
   }
 
 protected:
   CryptoFactory(){}
-  ~CryptoFactory(){};
+  ~CryptoFactory(){}
 };
 
-}
-#endif //GDCMCRYPTOFACTORY_H
+} // end namespace gdcm
+
+#endif // GDCMCRYPTOFACTORY_H

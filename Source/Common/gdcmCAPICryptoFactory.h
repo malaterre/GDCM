@@ -11,7 +11,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef GDCMCAPICRYPTOFACTORY_H
 #define GDCMCAPICRYPTOFACTORY_H
 
@@ -31,4 +30,5 @@ private:
 };
 
 } // end namespace gdcm
+
 #endif //GDCMCAPICRYPTOFACTORY_H

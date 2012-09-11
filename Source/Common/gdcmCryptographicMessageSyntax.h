@@ -11,7 +11,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef GDCMCRYPTOGRAPHICMESSAGESYNTAX_H
 #define GDCMCRYPTOGRAPHICMESSAGESYNTAX_H
 
@@ -23,9 +22,7 @@ namespace gdcm
 class GDCM_EXPORT CryptographicMessageSyntax
 {
 public:
-  CryptographicMessageSyntax()
-  {
-  }
+  CryptographicMessageSyntax() {}
 
   virtual ~CryptographicMessageSyntax() {}
 
@@ -55,9 +52,8 @@ public:
 private:
   CryptographicMessageSyntax(const CryptographicMessageSyntax&);  // Not implemented.
   void operator=(const CryptographicMessageSyntax&);  // Not implemented.
-
 };
 
-}
+} // end namespace gdcm
 
 #endif //GDCMCRYPTOGRAPHICMESSAGESYNTAX_H

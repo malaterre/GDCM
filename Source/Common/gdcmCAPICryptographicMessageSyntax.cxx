@@ -11,9 +11,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #include "gdcmCAPICryptographicMessageSyntax.h"
-using namespace std;
 
 #include <stdio.h> // fseek
 
@@ -25,7 +23,8 @@ CAPICryptographicMessageSyntax::CAPICryptographicMessageSyntax() : hProv(0), hRs
   initialized = Initialize();
 }
 
-CAPICryptographicMessageSyntax::~CAPICryptographicMessageSyntax() {
+CAPICryptographicMessageSyntax::~CAPICryptographicMessageSyntax()
+{
   for (vector<PCCERT_CONTEXT>::iterator it = certifList.begin(); it != certifList.end(); ++it)
     {
     CertFreeCertificateContext(*it);
@@ -43,7 +42,8 @@ CAPICryptographicMessageSyntax::~CAPICryptographicMessageSyntax() {
     }
 }
 
-bool CAPICryptographicMessageSyntax::ParseCertificateFile( const char *filename ) {
+bool CAPICryptographicMessageSyntax::ParseCertificateFile( const char *filename )
+{
   bool ret = false;
   BYTE *certHexBuf = NULL, *certBin = NULL;
   DWORD certHexBufLen, certBinLen;
@@ -461,11 +461,11 @@ void CAPICryptographicMessageSyntax::ReverseBytes(BYTE* data, DWORD len)
 {
   BYTE temp;
   for (DWORD i = 0; i < len/2; i++)
-  {
+    {
     temp = data[len-i-1];
     data[len-i-1] = data[i];
     data[i] = temp;
-  }
+    }
 }
 
 bool CAPICryptographicMessageSyntax::LoadFile(const char * filename, BYTE* & buffer, DWORD & bufLen)
@@ -490,9 +490,9 @@ bool CAPICryptographicMessageSyntax::LoadFile(const char * filename, BYTE* & buf
   bufLen = sz;
 
   while (sz)
-  {
+    {
     sz -= fread(buffer + bufLen - sz, sizeof(BYTE), sz, f);
-  }
+    }
 
   return true;
 }

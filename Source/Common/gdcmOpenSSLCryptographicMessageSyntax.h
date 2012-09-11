@@ -11,7 +11,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef GDCMOPENSSLCRYPTOGRAPHICMESSAGESYNTAX_H
 #define GDCMOPENSSLCRYPTOGRAPHICMESSAGESYNTAX_H
 
@@ -20,6 +19,7 @@
 #include <openssl/cms.h>
 #endif
 #include <openssl/evp.h>
+
 namespace gdcm
 {
 
@@ -63,6 +63,7 @@ private:
   const EVP_CIPHER *CreateCipher( CryptographicMessageSyntax::CipherTypes ciphertype);
 
 };
+
 } // end namespace gdcm
-//-----------------------------------------------------------------------------
+
 #endif //GDCMOPENSSLCRYPTOGRAPHICMESSAGESYNTAX_H

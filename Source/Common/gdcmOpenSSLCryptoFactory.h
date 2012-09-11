@@ -11,7 +11,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #ifndef GDCMOPENSSLCRYPTOFACTORY_H
 #define GDCMOPENSSLCRYPTOFACTORY_H
 
@@ -43,6 +42,6 @@ private:
   OpenSSLCryptoFactory(){}
 };
 
-}
+} // end namespace gdcm
 
 #endif //GDCMOPENSSLCRYPTOFACTORY_H

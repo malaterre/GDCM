@@ -11,10 +11,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #include "gdcmOpenSSLCryptoFactory.h"
+
 #include <openssl/evp.h>
 #include <openssl/err.h>
+
 namespace gdcm
 {
 
@@ -29,4 +30,4 @@ void OpenSSLCryptoFactory::InitOpenSSL()
     }
 }
 
-}
+} // end namespace gdcm

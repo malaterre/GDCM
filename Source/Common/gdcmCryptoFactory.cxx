@@ -11,9 +11,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include <iostream>
-using namespace std;
-
 #include "gdcmCryptoFactory.h"
 
 #ifdef WIN32
@@ -28,7 +25,7 @@ using namespace std;
 namespace gdcm
 {
 
-CryptoFactory* CryptoFactory::getFactoryInstance(CryptoLib id)
+CryptoFactory* CryptoFactory::GetFactoryInstance(CryptoLib id)
 {
 #ifdef WIN32
   static CAPICryptoFactory capi(CryptoFactory::CAPI);
@@ -37,14 +34,31 @@ CryptoFactory* CryptoFactory::getFactoryInstance(CryptoLib id)
   static OpenSSLCryptoFactory ossl(CryptoFactory::OPENSSL);
   static OpenSSLP7CryptoFactory osslp7(CryptoFactory::OPENSSLP7);
 #endif
+
+  // If user specified DEFAULT:
+  if( id == DEFAULT )
+    {
+#ifdef GDCM_USE_SYSTEM_OPENSSL
+#ifdef GDCM_HAVE_CMS_RECIPIENT_PASSWORD
+    id = CryptoFactory::OPENSSL;
+#else
+    id = CryptoFactory::OPENSSLP7;
+#endif // GDCM_HAVE_CMS_RECIPIENT_PASSWORD
+#endif // GDCM_USE_SYSTEM_OPENSSL
+// We always prefer native API (by default):
+#ifdef WIN32
+    id = CryptoFactory::CAPI;
+#endif // WIN32
+    }
+
   std::map<CryptoLib, CryptoFactory*>::iterator it = getInstanceMap().find(id);
   if (it == getInstanceMap().end())
     {
-    //std::cout << "No crypto factory registered with id " << id << std::endl;
+    gdcmErrorMacro( "No crypto factory registered with id " << (int)id );
     return NULL;
     }
   assert(it->second);
   return it->second;
 }
 
-}
+} // end native gdcm

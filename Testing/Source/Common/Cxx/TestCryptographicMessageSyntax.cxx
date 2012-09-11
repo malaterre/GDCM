@@ -55,7 +55,7 @@ static std::map<gdcm::CryptographicMessageSyntax::CipherTypes, std::string> cip2
     cip2str_data + sizeof cip2str_data / sizeof cip2str_data[0]);
 
 const char * const tstr = "12345";
-const int tstr_l = strlen(tstr);
+const size_t tstr_l = strlen(tstr);
 #define BUFSZ 5000
 
 bool TestCMSProvider(gdcm::CryptographicMessageSyntax& cms, const char * provName)
@@ -103,8 +103,8 @@ bool TestCMSProvider(gdcm::CryptographicMessageSyntax& cms, const char * provNam
 
 bool TestCMSVector(gdcm::CryptographicMessageSyntax& cms, const char * provName)
 {
-  char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
-  size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
+  char decout[BUFSZ] = {0};
+  size_t decoutlen = BUFSZ;
   std::string encrypted_filename = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/encrypted_text" );
   const char * tv_plaintext = "1234567890abcdefghijklmnopqrstuvwxyz";
   size_t tv_plaintext_len = strlen(tv_plaintext);
@@ -229,7 +229,7 @@ int TestCryptographicMessageSyntax(int, char *[])
   bool bret = true;
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
+  gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::GetFactoryInstance(gdcm::CryptoFactory::OPENSSL);
   std::auto_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
   ocms->ParseKeyFile(keypath.c_str());
   ocms->ParseCertificateFile(certpath.c_str());
@@ -265,7 +265,7 @@ int TestPasswordBasedEncryption(int, char *[])
     gdcm::Filename::Join(directory, "/securedicomfileset/IMAGES/IMAGE1" );
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
-  gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::OPENSSL);
+  gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::GetFactoryInstance(gdcm::CryptoFactory::OPENSSL);
   std::auto_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
 
   ocms->SetPassword("password", strlen("password"));
