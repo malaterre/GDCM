@@ -122,6 +122,17 @@ void Fork::ForkProcess::infanticide_reason (pid_t pid, int status)
   if (pid <= 0)
     return;
 
+#ifdef SOCKETXX_HAVE_STRSIGNAL
+  if (WIFSTOPPED (status))
+    cerr << "process " << pid << " gets "
+      << strsignal(WSTOPSIG (status)) << endl;
+  else if (WIFEXITED (status))
+    cerr << "process " << pid << " exited with status "
+      << WEXITSTATUS (status) << endl;
+  else if (WIFSIGNALED (status))
+    cerr << "process " << pid << " got "
+      << strsignal(WTERMSIG (status)) << endl;
+#else
   if (WIFSTOPPED (status))
     cerr << "process " << pid << " gets "
       << SYS_SIGLIST [WSTOPSIG (status)] << endl;
@@ -131,6 +142,7 @@ void Fork::ForkProcess::infanticide_reason (pid_t pid, int status)
   else if (WIFSIGNALED (status))
     cerr << "process " << pid << " got "
       << SYS_SIGLIST [WTERMSIG (status)] << endl;
+#endif // SOCKETXX_HAVE_STRSIGNAL
 }
 
 void Fork::ForkProcess::reaper_nohang (int signo)
