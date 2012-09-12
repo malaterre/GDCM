@@ -57,7 +57,7 @@ gdcm::SequenceOfItems *sqi_names, std::string const & indent )
     gdcm::Element<VR::LO, VM::VM1> el2;
     el2.SetFromDataElement( name );
 //    std::cout << el1.GetValue() << " " << el2.GetValue() << std::endl;
-    names.insert( std::make_pair< UL, std::string > ( el1.GetValue(), el2.GetValue() ) );
+    names.insert( std::make_pair( el1.GetValue(), el2.GetValue() ) );
     }
 
   SequenceOfItems::SizeType s2 = sqi_values->GetNumberOfItems();
@@ -79,7 +79,7 @@ gdcm::SequenceOfItems *sqi_names, std::string const & indent )
     gdcm::Element<VR::FD, VM::VM1_2> el1;
     el1.SetFromDataElement( index2 );
 
-    UL copy = el1.GetValue();
+    UL copy = (UL)el1.GetValue();
 #if 1
     std::cout << indent;
     std::cout << "( " << names[ copy ];
@@ -246,8 +246,8 @@ bool print73( gdcm::DataSet const & ds10, gdcm::SequenceOfItems *sqi_dict, std::
   const gdcm::DataElement& seq_values73 = ds10.GetDataElement( tseq_values73 );
   gdcm::SmartPointer<gdcm::SequenceOfItems> sqi_values73 = seq_values73.GetValueAsSQ();
 
-  int ni3 = sqi_values73->GetNumberOfItems();
-  for( int i3 = 1; i3 <= ni3; ++i3 )
+  size_t ni3 = sqi_values73->GetNumberOfItems();
+  for( size_t i3 = 1; i3 <= ni3; ++i3 )
     {
     gdcm::Item &item_73 = sqi_values73->GetItem(i3);
     gdcm::DataSet &ds73 = item_73.GetNestedDataSet();
@@ -272,8 +272,8 @@ bool print83( gdcm::DataSet const & ds10, gdcm::SequenceOfItems *sqi_dict, std::
   const gdcm::DataElement& seq_values83 = ds10.GetDataElement( tseq_values83 );
   gdcm::SmartPointer<gdcm::SequenceOfItems> sqi_values83 = seq_values83.GetValueAsSQ();
 
-  int ni3 = sqi_values83->GetNumberOfItems();
-  for( int i3 = 1; i3 <= ni3; ++i3 )
+  size_t ni3 = sqi_values83->GetNumberOfItems();
+  for( size_t i3 = 1; i3 <= ni3; ++i3 )
     {
     gdcm::Item &item_83 = sqi_values83->GetItem(i3);
     gdcm::DataSet &ds83 = item_83.GetNestedDataSet();
@@ -290,6 +290,7 @@ bool print83( gdcm::DataSet const & ds10, gdcm::SequenceOfItems *sqi_dict, std::
 bool PrintNameValueMapping4( gdcm::PrivateTag const & privtag0, const gdcm::DataSet & subds, gdcm::PrivateTag const & privtag1, gdcm::PrivateTag const & privtag2,
 gdcm::SequenceOfItems *sqi_dict, std::string const & indent )
 {
+  (void)indent;
   if( !subds.FindDataElement( privtag0 ) )
     {
     assert( 0 );
@@ -298,9 +299,9 @@ gdcm::SequenceOfItems *sqi_dict, std::string const & indent )
   const gdcm::DataElement& seq_values10 = subds.GetDataElement( privtag0 );
   gdcm::SmartPointer<gdcm::SequenceOfItems> sqi_values10 = seq_values10.GetValueAsSQ();
 
-  int ni1 = sqi_values10->GetNumberOfItems();
+  size_t ni1 = sqi_values10->GetNumberOfItems();
 //  assert( ni1 == 1 );
-  for( int i1 = 1; i1 <= ni1; ++i1 )
+  for( size_t i1 = 1; i1 <= ni1; ++i1 )
     {
     gdcm::Item &item_10 = sqi_values10->GetItem(i1);
     gdcm::DataSet &ds10 = item_10.GetNestedDataSet();
@@ -323,13 +324,13 @@ gdcm::SequenceOfItems *sqi_dict, std::string const & indent )
     const gdcm::DataElement& seq_values20 = ds10.GetDataElement( tseq_values20 );
     gdcm::SmartPointer<gdcm::SequenceOfItems> sqi_values20 = seq_values20.GetValueAsSQ();
 
-    int ni2 = sqi_values20->GetNumberOfItems();
+    size_t ni2 = sqi_values20->GetNumberOfItems();
     //assert( ni == 1 );
-    for( int i2 = 1; i2 <= ni2; ++i2 )
+    for( size_t i2 = 1; i2 <= ni2; ++i2 )
       {
       gdcm::Item &item_20 = sqi_values20->GetItem(i2);
       gdcm::DataSet &ds20 = item_20.GetNestedDataSet();
-      int count = ds20.Size();
+      size_t count = ds20.Size(); (void)count;
       assert( ds20.Size() == 2 + 3 || ds20.Size() == 2 + 2 );
       // (7fe1,0010)
       // (7fe1,1024)
@@ -390,7 +391,7 @@ int main(int argc, char *argv[])
   el.SetFromDataElement( values8name );
   std::cout << el.GetValue() << std::endl;
 }
-  int count = subds.Size();
+  size_t count = subds.Size(); (void)count;
   assert( subds.Size() == 3 + 2 + 1 || subds.Size() == 3 + 2 + 2);
 
 //  (7fe1,0010) # 30,1 Private Creator

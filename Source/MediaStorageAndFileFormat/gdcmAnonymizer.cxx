@@ -854,8 +854,8 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
         anonymizedUID = uid.Generate();
         }
 
-        copy.SetByteValue( anonymizedUID.c_str(), anonymizedUID.size() );
-        ds.Replace( copy );
+      copy.SetByteValue( anonymizedUID.c_str(), (uint32_t)anonymizedUID.size() );
+      ds.Replace( copy );
       }
     else
       {
@@ -875,7 +875,7 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
         }
 
       std::string &v = dummyMapNonUIDTags[ tvk ];
-      copy.SetByteValue( v.c_str(), v.size() );
+      copy.SetByteValue( v.c_str(), (uint32_t)v.size() );
       }
       ds.Replace( copy );
     }
@@ -1073,8 +1073,13 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   // of the encrypted one ?
   if( !nds2.FindDataElement( Tag(0x8,0x18) ) )
     {
-    gdcmErrorMacro( "Could not find Instance UID" );
-    return false;
+    gdcm::MediaStorage ms;
+    ms.SetFromFile( *F );
+    if( ms != MediaStorage::MediaStorageDirectoryStorage )
+      {
+      gdcmErrorMacro( "Could not find Instance UID" );
+      return false;
+      }
     }
 }
 

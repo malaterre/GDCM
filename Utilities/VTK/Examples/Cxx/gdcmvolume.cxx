@@ -28,6 +28,7 @@
 // gdcmvolume gdcmData/GE_DLX-8-MONO2-Multiframe-Jpeg_Lossless.dcm
 int main(int argc, char *argv[])
 {
+  if( argc < 2 ) return 1;
   vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
   reader->SetFileName( argv[1] );
   reader->Update();

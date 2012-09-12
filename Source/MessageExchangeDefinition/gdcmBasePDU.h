@@ -46,9 +46,6 @@ namespace network
  *  1) so that the ULEvent can have the PDU stored in it, since the event takes PDUs and not
  *  other class structures (other class structures get converted into PDUs)
  *  2) to make reading PDUs in the event loop cleaner
- *
- *  but! leave Mathieu's original classes untouched at this point (except for inheriting from this class)
- *  because those work, at least with c-echo.
  */
 class BasePDU
 {

@@ -87,7 +87,7 @@ bool ImageChangePlanarConfiguration::Change()
   delete[] p;
 
   DataElement &de = Output->GetDataElement();
-  de.SetByteValue( copy, len );
+  de.SetByteValue( copy, (uint32_t)len );
   delete[] copy;
 
   Output->SetPlanarConfiguration( PlanarConfiguration );

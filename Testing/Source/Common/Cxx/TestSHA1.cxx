@@ -12,6 +12,7 @@
 
 =========================================================================*/
 #include "gdcmSHA1.h"
+#include "gdcmFilename.h"
 #include "gdcmTrace.h"
 #include "gdcmTesting.h"
 
@@ -28,11 +29,9 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "dac2ffa6ccf59f2d91e78f632e45b08d1537715c" , "ACUSON-24-YBR_FULL-RLE.dcm" },
 { "cf749c5323866c343255805cf781ae87e6bb598a" , "ALOKA_SSD-8-MONO2-RLE-SQ.dcm" },
 { "7202bfac6d4196aeb2655e879bc91e4dcf40a463" , "BugGDCM2_UndefItemWrongVL.dcm" },
-{ "3ecd2f99e3f24a662247d69640a8f8b13a2264c0" , "Changelog" },
 { "1d227106140c2a24dbe8c6becd4649761dd117a2" , "CR-MONO1-10-chest.dcm" },
 { "74e7de8b0f5903b8571294e2d8f960dc7329a0ca" , "CT_16b_signed-UsedBits13.dcm" },
 { "c0e08333984692bcef149c946e23bb46e01b9b7c" , "CT-MONO2-12-lomb-an2.acr" },
-{ "ff63a6aea71efc4b04dca44cff1f9982a08379eb" , "CT-MONO2-12-lomb-an2.acr.README.txt" },
 { "594ce3215ca94f640fd7502d614651cc755a9d7e" , "CT-MONO2-16-ankle.dcm" },
 { "ce0bd0c9635db3f04b4996648c1d41e10daffa77" , "CT-MONO2-16-brain.dcm" },
 { "f9ad8311fa69835c55314e740ca55ab71e038c17" , "CT-MONO2-16-chest.dcm" },
@@ -80,6 +79,8 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "37bf802b1918f36fcf7c6fb89b40ee1da1124419" , "D_CLUNIE_XA1_JPLL.dcm" },
 { "ff7b9c99731732b55bcff577037542689efe9c72" , "D_CLUNIE_XA1_JPLY.dcm" },
 { "f384b5f1ae912d97e7784558d5519dc74b853f10" , "D_CLUNIE_XA1_RLE.dcm" },
+{ "cc3641d1f25549a0ee06d2a5e87081cf6c407bf0" , "D_CLUNIE_CT1_JLSL.dcm" },
+{ "ac9f4592e6cfad438de5c928b9e01591006683d8" , "D_CLUNIE_CT1_JLSN.dcm" },
 { "cc72ee9f3e671321e231103eb562063078b67bf8" , "DCMTK_JPEGExt_12Bits.dcm" },
 { "fb9da9ae84e5da97c992398ac0222fffafa028f6" , "DermaColorLossLess.dcm" },
 { "6f53ebd046c0c39ad04b7aa3767ced2647b02c83" , "DICOMDIR" },
@@ -94,10 +95,8 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "861ff0760754f6ebb0056f52adcdcd60f0cd3bfa" , "DX_J2K_0Padding.dcm" },
 { "8275a7e217807273fb0027a64f46cba8656f699a" , "ELSCINT1_JP2vsJ2K.dcm" },
 { "399e80d60843e62b817322ba9e82278258f9a222" , "ELSCINT1_LOSSLESS_RICE.dcm" },
-{ "72b5f5c9f73e537abe228b3b2f2f9e1aade03308" , "ELSCINT1_LOSSLESS_RICE.txt" },
 { "3598e59bf8ff6cb5217473f9f23ad763638a27e0" , "ELSCINT1_PMSCT_RLE1.dcm" },
 { "3514c92127b0c78b63efce1fb6053e202da86d3f" , "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm" },
-{ "b38b6b9ae70b59ce0dee4cc61234178853e3dc99" , "ExplicitVRforPublicElementsImplicitVRforShadowElements.README.txt" },
 { "cc80ee94edf9b3d7fd4c1402b2c6ae99eb832685" , "fffc0000UN.dcm" },
 { "374bf25ac4279a7458d848b595b23ed50580400b" , "FUJI-10-MONO1-ACR_NEMA_2.dcm" },
 { "ada05095c6d64767af77eafeb2e6fc305f2ba2c8" , "gdcm-ACR-LibIDO.acr" },
@@ -106,12 +105,10 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "70da750cb898c6510ba079a1e71b4869faf66dd7" , "gdcm-JPEG-LossLess3a.dcm" },
 { "736c14572e7ee964d24b2b5c5b2a607ca50ebc05" , "gdcm-JPEG-LossLessThoravision.dcm" },
 { "765541a6e32671891fc0787e69c4917c7166a77a" , "gdcm-MR-PHILIPS-16-Multi-Seq.dcm" },
-{ "ec07b6730a2c9133d306716060dd11f888b6df61" , "gdcm-MR-PHILIPS-16-Multi-Seq.README.txt" },
 { "b7d171ebfcb288ec44647f3000515f3683dfef50" , "gdcm-MR-PHILIPS-16-NonSquarePixels.dcm" },
 { "6f1e68d6a8586862c31ac7d7a2d2c8d317865263" , "gdcm-MR-SIEMENS-16-2.acr" },
 { "a525344659d1767787c6929bb2b080286106e881" , "gdcm-US-ALOKA-16.dcm" },
 { "5b8c8d45b6c06f5d2fb90df6205606accfedfc6c" , "GE_CT_With_Private_compressed-icon.dcm" },
-{ "3bbb62e314ff5fd2d1019a0c12e00acc23d7d041" , "GE_CT_With_Private_compressed-icon.README.txt" },
 { "58c81390cbb3a033c0f1fe15760bd14d87ca8313" , "GE_DLX-8-MONO2-Multiframe.dcm" },
 { "53b514276db021a5a8e26cddd3f09c43dad49747" , "GE_DLX-8-MONO2-Multiframe-Jpeg_Lossless.dcm" },
 { "86ae2ce4b9676110db10ebc6aaba1d49bfa26537" , "GE_DLX-8-MONO2-PrivateSyntax.dcm" },
@@ -121,12 +118,9 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "a47f7d0d1d40c213666ccc67d3ce83464a5fa9b8" , "GE_MR_0025xx1bProtocolDataBlock.dcm" },
 { "36bcff2d268dbf8e92b296a9cd0894f5b4dcb5ed" , "GE_RHAPSODE-16-MONO2-JPEG-Fragments.dcm" },
 { "f84803d8879bc0a461f03c39ec896704796d8376" , "IM-0001-0066.dcm" },
-{ "5dcdc810281ee50fac823ade853b8090c8d121ed" , "ImageRecap.txt" },
-{ "ddd5aeaeaf3d21a1b0ad2529ce896f406a0214be" , "imagesWithOverlays.README.txt" },
 { "fb563954a0b3e8f521248cfac294233e85c517c9" , "ITK_GDCM124_MultiframeSecondaryCaptureInvalid.dcm" },
 { "5a21779c6db335b0f6a989c292b66e2d1939aaae" , "JDDICOM_Sample2.dcm" },
 { "9f2559b3e74c09e04c1ccca0424f6bbb3480fe9e" , "JDDICOM_Sample2-dcmdjpeg.dcm" },
-{ "683b879bb233bc4edda968cc73667fd61ca9cfb3" , "JDDICOM_Sample2-dcmdjpeg.txt" },
 { "9af362dd8ba13c358b869ebaf9c70dd2c34a9b49" , "JPEG_LossyYBR.dcm" },
 { "e99bd082c18b4f0a150737d5f1a18e00c6bb73d8" , "KODAK-12-MONO1-Odd_Terminated_Sequence.dcm" },
 { "12fc320b12b35822da90155a2b92586f8ff4adf0" , "KODAK_CompressedIcon.dcm" },
@@ -157,20 +151,13 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "c6376ebdfda8ca05bb3d2f2796b2f4ce4cf5417a" , "MR-MONO2-16-head.dcm" },
 { "e4b6f0ea147335d048ef1cf271f1f8ea9b3a947a" , "MR-MONO2-8-16x-heart.dcm" },
 { "482282eab5270a9b49da1fe52955029c90665318" , "MR_Philips-Intera_BreaksNOSHADOW.dcm" },
-{ "e0222c073ef01224e15c3368394c7c5b580ca90f" , "MR_Philips-Intera_BreaksNOSHADOW.README.txt" },
 { "0edaefb39107ede69cbfef9fa5d646734859560a" , "MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm" },
-{ "be9e3471e3b07c54f6e920b7e6a71806d624bc6d" , "MR_Philips_Intera_No_PrivateSequenceImplicitVR.README.txt" },
 { "002496c378b8d74cde8034c8e64ac06278aaac64" , "MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm" },
-{ "ac6663f04b63ecfd478d7f5b5f79aa24a4c41edc" , "MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.README.txt" },
 { "7b32e317ab15df08cbc22e5c71c19be0236c4a71" , "MR_Philips_Intera_PrivateSequenceImplicitVR.dcm" },
-{ "a8a526048493a9985a72b8ff15b6193914d01409" , "MR_Philips_Intera_PrivateSequenceImplicitVR.README.txt" },
 { "d201a0399638b90dab2d147e8505b12dc3f22abf" , "MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm" },
-{ "b4660da9dbc48a7ffeafafa5f159c94f27eebcf4" , "MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.README.txt" },
 { "f86689b7eacfa0c477168f6d95e5f554ba9db2f6" , "MR-SIEMENS-DICOM-WithOverlays.dcm" },
 { "4ca412d03202693ea4dbe5189681afb25341e7d7" , "MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm" },
-{ "1bccd70dab1299f5798a5ac1a46b143df852a8c8" , "MR-SIEMENS-DICOM-WithOverlays.README.txt" },
 { "ddc7ed9fc533413dec8795c35c0dc45485a64422" , "MR_SIEMENS_forceLoad29-1010_29-1020.dcm" },
-{ "e7e312b7fb801471e4122e6feff9ae1f2b04ac2c" , "MR_SIEMENS_forceLoad29-1010_29-1020.README.txt" },
 { "af658128f2acfb72b95892435a34d983194adb85" , "MR_Spectroscopy_SIEMENS_OF.dcm" },
 { "a28aa38246dbce06692f5a977ca320cf26bb9260" , "NM-MONO2-16-13x-heart.dcm" },
 { "5ca8093b12ff8c78875af95091a96965a94acb19" , "OT-MONO2-8-a7.dcm" },
@@ -185,7 +172,6 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "aef5bc2a2132e2c11a4f8fc5e1dd7655300d0c1f" , "PICKER-16-MONO2-No_DicomV3_Preamble.dcm" },
 { "0fc0e0168128517472e3a4a69808331aaffe4bb5" , "PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm" },
 { "38e925d7c30ef5b0cf829ea520e271482ea89c7d" , "RadBWLossLess.dcm" },
-{ "a67c96b097a57bd2ca8f9d48b6463b9cd41d76dc" , "README" },
 { "7a57d75599fd8521210835f6506dd77204f16883" , "rle16loo.dcm" },
 { "77d3e4e78f0452f4ebb0855fa367e19044014244" , "rle16sti.dcm" },
 { "3d9e8bf00e3509fc7210a8a67c3d15622c03b15e" , "SIEMENS-12-Jpeg_Process_2_4-Lossy-a.dcm" },
@@ -199,23 +185,19 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "8708d74b623b3317631a982b9c316c8521c1b220" , "SIEMENS_MAGNETOM-12-MONO2-FileSeq2.dcm" },
 { "461959350160a422e7806a9e8201146b29a3a21f" , "SIEMENS_MAGNETOM-12-MONO2-FileSeq3.dcm" },
 { "e5152fe2ada738f5b0c86af0858dc6d6b3ed9520" , "SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm" },
-{ "740de2290baab89863e955d26fe14018e678bc32" , "SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.txt" },
 { "bcba71eae5a0e3e43d836c410118e5992f6a6fb7" , "SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm" },
 { "38284e6f4591418be8a572aaa190a86b9487ed6f" , "SIEMENS_MAGNETOM-12-MONO2-VRUN.dcm" },
 { "61b1b8768cde82a51fa8f5238713d65f16aeff68" , "SIEMENS_MOSAIC_12BitsStored-16BitsJPEG.dcm" },
 { "a3646e926f9b8dd6a536b95ab8a86ee35f74f612" , "SIEMENS-MR-RGB-16Bits.dcm" },
 { "542213ababb9f3410be5516d28adece7ca9aa4ad" , "SIEMENS_SOMATOM-12-ACR_NEMA-ZeroLengthUs.acr" },
-{ "8fbf9322dcd25ae2601f161848ae8d8f248b9eec" , "SIEMENS_SOMATOM-12-ACR_NEMA-ZeroLengthUs.acr.README.txt" },
 { "6d08c8b6f34de509166fa4d1e456e12861ab86e7" , "SIEMENS_Sonata-12-MONO2-SQ.dcm" },
 { "4204cf122c096365f7fa14009a4dd62c49e9e5cf" , "SIEMENS_Sonata-16-MONO2-Value_Multiplicity.dcm" },
 { "cd2c42d837702aab1f85de4dc000962dda1fe2f7" , "SignedShortLosslessBug.dcm" },
 { "d6e3e55033bd06e8b3e67ef83168d7425cf63c2f" , "simpleImageWithIcon.dcm" },
 { "55d4b449f51012c6bcad025a99eea672ba880a60" , "test.acr" },
-{ "272091670be247ee77486604c58ca7a453b5d315" , "TestAllEntryVerifyReference.txt" },
 { "918939283378898524dfa449fd9c9bc12b6dd189" , "TG18-CH-2k-01.dcm" },
 { "d70be071b03866d8b561588588b9541ad4c370d7" , "THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm" },
 { "1f06affc50bfd1382efbf1960f5c601f79db841d" , "TheralysGDCM120Bug.dcm" },
-{ "ba5c013e9178ee8721e811ad45cf173056afa567" , "TheralysGDCM120Bug.README.txt" },
 { "16d9e8000e9b19dd3bdb36b3a829780aa43c8b74" , "TOSHIBA_MRT150-16-MONO2-ACR_NEMA_2.dcm" },
 { "f188be58d7378e0949b0ee21ef72906ec1c7e236" , "undefined_length_un_vr.dcm" },
 { "acf081a99759cef05711ec51d5da9e910396024d" , "US-GE-4AICL142.dcm" },
@@ -226,17 +208,37 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "b401f77c8c78a82422baad6f6d42dcc275b7f0e0" , "US-RGB-8-epicard.dcm" },
 { "f4368f3e10ebbd70fbe00c3d4b29d30df3adee85" , "US-RGB-8-esopecho.dcm" },
 { "750f15609a6f442c0517173138e404894849b374" , "XA-MONO2-8-12x-catheter.dcm" },
+{ "cdc423e6abfb6fd678a3e65675cd5ce42f304b0d"  , "PHILIPS_GDCM12xBug2.dcm" },
+{ "916938d82884fcb77a54dade49481e15049e50b6"  , "PHILIPS_GDCM12xBug.dcm" },
+{ "0f058542379c201e26ef233a4b116862283bc81e"  , "AMIInvalidPrivateDefinedLengthSQasUN.dcm" },
+{ "ec4a0d2ff24e9c2f3281b75c479914aff3215fb7"  , "OsirixFake16BitsStoredFakeSpacing.dcm" },
+{ "27277c296a9703f22b2ef033ec326dd22b4bacc9"  , "MR16BitsAllocated_8BitsStored.dcm" },
+{ "6260235b715af050f47494e098fcaa2ada3a11a5"  , "JPEGDefinedLengthSequenceOfFragments.dcm" },
+{ "b1977dfddff0d88742bc6f6368d56eb9d3325dd9"  , "IM-0001-0066.CommandTag00.dcm" },
+{ "f9d31313e26c335d26e4fd9126d88f1467425117"  , "UnexpectedSequenceDelimiterInFixedLengthSequence.dcm" },
+{ "ac491044a7c69d3a365f31f163db3a4bf1085afa"  , "GDCMJ2K_TextGBR.dcm" },
+{ "ed38be73d76c7a326012f86034c7472aa02d83ee"  , "NM_Kakadu44_SOTmarkerincons.dcm" },
+{ "c06aae794ed5690ae82237f4f153ca7795ddd5b7"  , "PhilipsInteraSeqTermInvLen.dcm" },
+{ "c14634b31dc52e4ed2b0c626aa61af4de207f6e4"  , "TOSHIBA_J2K_SIZ1_PixRep0.dcm" },
+{ "bf68f33e0922508d6075f0893298d339d817aa86"  , "TOSHIBA_J2K_OpenJPEGv2Regression.dcm" },
+{ "6d21ac7b5b4ad32b7d91750a70b574a732b679a7"  , "TOSHIBA_J2K_SIZ0_PixRep1.dcm" },
+{ "94cadb9e79e0d04f3c212cf6fa069b3cf3f09a76"  , "NM-PAL-16-PixRep1.dcm" },
+{ "156463350047cada3ec091396695d3f3ef660c9a"  , "MEDILABInvalidCP246_EVRLESQasUN.dcm" },
+
 { NULL, NULL}
 };
 
 int TestSHA1Func(const char* filename, const char *sha1ref, bool verbose = false)
 {
+  if( !filename || !sha1ref) return 1;
+
   if( verbose )
     std::cout << "TestRead: " << filename << std::endl;
   const char *dataroot = gdcm::Testing::GetDataRoot();
   std::string path = dataroot;
   path += "/";
   path += filename;
+  path = filename;
   char sha1[2*20+1] = {};
   bool b = gdcm::SHA1::ComputeFile( path.c_str(), sha1 );
   if( !b )
@@ -253,12 +255,33 @@ int TestSHA1Func(const char* filename, const char *sha1ref, bool verbose = false
   return 0;
 }
 
+static const char *GetSHA1Sum(const char *filename)
+{
+  typedef const char * const (*sha1pair)[2];
+  const char *sha1filename;
+  sha1pair sha1filenames = gdcmSHA1SumFiles;
+  int i = 0;
+  while( ( sha1filename = sha1filenames[i][1] ) )
+    {
+    gdcm::Filename fn( filename );
+    if( strcmp( sha1filename, fn.GetName() ) == 0 )
+      {
+      return sha1filenames[i][0];
+      }
+    ++i;
+    }
+  std::cerr << "Missing SHA1 for: " << filename << std::endl;
+  return 0;
+}
+
+
 int TestSHA1(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestSHA1Func(filename, "", true);
+    const char *sha1 = GetSHA1Sum( filename );
+    return TestSHA1Func(filename, sha1, true);
     }
 
   // else
@@ -266,11 +289,11 @@ int TestSHA1(int argc, char *argv[])
   gdcm::Trace::WarningOff();
   int r = 0, i = 0;
   const char *filename;
-  typedef const char * const (*sha1pair)[2];
-  sha1pair filenames = gdcmSHA1SumFiles;
-  while( (filename = filenames[i][1]) )
+  const char * const *filenames = gdcm::Testing::GetFileNames();
+  while( (filename = filenames[i]) )
     {
-    r += TestSHA1Func( filename, filenames[i][0] );
+    const char *sha1 = GetSHA1Sum( filename );
+    r += TestSHA1Func( filename, sha1 );
     ++i;
     }
 

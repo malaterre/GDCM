@@ -26,6 +26,8 @@ namespace network
 {
 
 class AsynchronousOperationsWindowSub;
+class RoleSelectionSub;
+class SOPClassExtendedNegociationSub;
 /**
  * \brief UserInformation
  * Table 9-16
@@ -57,6 +59,8 @@ private:
   //std::string /*UserInformation*/ Data; // ??
   ImplementationClassUIDSub ICUID;
   AsynchronousOperationsWindowSub *AOWS;
+  RoleSelectionSub *RSS;
+  SOPClassExtendedNegociationSub *SOPCENS;
   ImplementationVersionNameSub IVNS;
 };
 

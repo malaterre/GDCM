@@ -360,7 +360,7 @@ bool ImageChangeTransferSyntax::Change()
     // In memory decompression:
     gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
     gdcm::ByteValue *bv0 = new gdcm::ByteValue();
-    unsigned long len0 = Input->GetBufferLength();
+    uint32_t len0 = (uint32_t)Input->GetBufferLength();
     bv0->SetLength( len0 );
     bool b = Input->GetBuffer( (char*)bv0->GetPointer() );
     if( !b )
@@ -395,7 +395,7 @@ bool ImageChangeTransferSyntax::Change()
         {
         // same goes for icon
         gdcm::ByteValue *bv = new gdcm::ByteValue();
-        unsigned long len = pixmap->GetIconImage().GetBufferLength();
+        uint32_t len = (uint32_t)pixmap->GetIconImage().GetBufferLength();
         bv->SetLength( len );
         bool bb = pixmap->GetIconImage().GetBuffer( (char*)bv->GetPointer() );
         if( !bb )

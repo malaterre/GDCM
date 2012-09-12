@@ -67,8 +67,8 @@ public:
   const SDOElement &GetSDOElement(SizeType index) const {
   return InternalSDODataSet[index];
   }
-  const SDOElement &GetSDOElementByName(const char *name) const {
-  return InternalSDODataSet[0];
+  const SDOElement &GetSDOElementByName(const char *) const {
+    return InternalSDODataSet[0];
   }
   void LoadFromAttributes(std::string const &s1, std::string const &s2)
     {

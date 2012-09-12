@@ -1,30 +1,30 @@
 ### Build the configuration file for external projects using GDCM and cmake:
-CONFIGURE_FILE( GDCMConfig.cmake.in
+configure_file( GDCMConfig.cmake.in
   ${GDCM_BINARY_DIR}/GDCMConfig.cmake
   @ONLY
 )
-INSTALL( FILES ${GDCM_BINARY_DIR}/GDCMConfig.cmake
+install( FILES ${GDCM_BINARY_DIR}/GDCMConfig.cmake
   DESTINATION ${GDCM_INSTALL_PACKAGE_DIR}
 )
-CONFIGURE_FILE( GDCMConfigVersion.cmake.in
+configure_file( GDCMConfigVersion.cmake.in
   ${GDCM_BINARY_DIR}/GDCMConfigVersion.cmake
   @ONLY
 )
-INSTALL( FILES ${GDCM_BINARY_DIR}/GDCMConfigVersion.cmake
+install( FILES ${GDCM_BINARY_DIR}/GDCMConfigVersion.cmake
   DESTINATION ${GDCM_INSTALL_PACKAGE_DIR}
 )
-CONFIGURE_FILE( UseGDCM.cmake.in
+configure_file( UseGDCM.cmake.in
   ${GDCM_BINARY_DIR}/UseGDCM.cmake
   @ONLY
 )
-INSTALL( FILES ${GDCM_BINARY_DIR}/UseGDCM.cmake
+install( FILES ${GDCM_BINARY_DIR}/UseGDCM.cmake
   DESTINATION ${GDCM_INSTALL_PACKAGE_DIR}
 )
 
 # install all targets referenced as ${GDCM_TARGETS_NAME}
 if(GDCM_STANDALONE)
   install(EXPORT ${GDCM_TARGETS_NAME} DESTINATION ${GDCM_INSTALL_PACKAGE_DIR})
-endif(GDCM_STANDALONE)
+endif()
 
 # [Prevent viral CMake dep]
 # See the following ref, which explain this mess.
@@ -36,7 +36,7 @@ endif(GDCM_STANDALONE)
 #set(gdcmtarget_cmake
 #  "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/Export/${GDCM_INSTALL_PACKAGE_DIR}/${GDCM_TARGETS_NAME}.cmake")
 
-#CONFIGURE_FILE(
+#configure_file(
 # ${GDCM_BINARY_DIR}/CMakeCache.txt
 #  ${CMAKE_CURRENT_BINARY_DIR}/gdcmtarget_cmake.dep
 #COPYONLY
@@ -61,33 +61,33 @@ endif(GDCM_STANDALONE)
 #)
 
 
-#SET( targets )
+#set( targets )
 ##file(REMOVE ${gdcmtarget_cmake})
 #if(EXISTS ${gdcmtarget_cmake})
 #  #message( "reading: ${gdcmtarget_cmake}" )
 #  file(READ ${gdcmtarget_cmake} ENT)
-#  STRING(REGEX REPLACE "\r?\n" ";" ENT "${ENT}")
+#  string(REGEX REPLACE "\r?\n" ";" ENT "${ENT}")
 #  foreach(line ${ENT})
 #    string(REGEX MATCH "ADD_LIBRARY\\(.*SHARED IMPORTED\\)" m ${line})
 #    if( m )
 #      string(REGEX REPLACE "ADD_LIBRARY\\((.*) SHARED IMPORTED\\)" "\\1" out ${m})
 #      list(APPEND targets ${out})
 #    endif()
-#  endforeach(line)
+#  endforeach()
 #endif()
 #
-#SET( exports )
+#set( exports )
 #set(gdcmexport_cmake ${GDCM_BINARY_DIR}/GDCMExports.cmake)
 #if(EXISTS ${gdcmexport_cmake})
 #  file(READ ${gdcmexport_cmake} ENT)
-#  STRING(REGEX REPLACE "\r?\n" ";" ENT "${ENT}")
+#  string(REGEX REPLACE "\r?\n" ";" ENT "${ENT}")
 #  foreach(line ${ENT})
 #    string(REGEX MATCH "ADD_LIBRARY\\(.*SHARED IMPORTED\\)" m ${line})
 #    if( m )
 #      string(REGEX REPLACE "ADD_LIBRARY\\((.*) SHARED IMPORTED\\)" "\\1" out ${m})
 #      list(APPEND exports ${out})
 #    endif()
-#  endforeach(line)
+#  endforeach()
 #endif()
 
 #list(LENGTH targets targets_len)
@@ -108,5 +108,5 @@ file(WRITE ${GDCM_BINARY_DIR}/GDCMExports.cmake "")
 foreach(target ${targets})
   if(TARGET ${target})
     export(TARGETS ${target} FILE ${GDCM_BINARY_DIR}/GDCMExports.cmake APPEND)
-  endif(TARGET ${target})
-endforeach(target)
+  endif()
+endforeach()

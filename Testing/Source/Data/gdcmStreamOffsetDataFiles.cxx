@@ -96,7 +96,7 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "DermaColorLossLess.dcm",940 },
 { "ELSCINT1_JP2vsJ2K.dcm",1820 },
 { "ELSCINT1_PMSCT_RLE1.dcm",-1 },
-{ "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm",9538 },
+{ "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm",9546 },
 { "FUJI-10-MONO1-ACR_NEMA_2.dcm",862 },
 { "GE_CT_With_Private_compressed-icon.dcm",10810 },
 { "GE_DLX-8-MONO2-Multiframe-Jpeg_Lossless.dcm",14138 },
@@ -181,7 +181,7 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "TG18-CH-2k-01.dcm",2308 },
 { "THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm",1839 },
 { "TOSHIBA_MRT150-16-MONO2-ACR_NEMA_2.dcm",1130 },
-{ "TheralysGDCM120Bug.dcm",8442 },
+{ "TheralysGDCM120Bug.dcm",8450 },
 { "US-GE-4AICL142.dcm",14072 },
 { "US-IRAD-NoPreambleStartWith0003.dcm",3330 },
 { "US-IRAD-NoPreambleStartWith0005.dcm",2490 },
@@ -220,6 +220,8 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "TOSHIBA_J2K_SIZ1_PixRep0.dcm",  2362  },
 { "TOSHIBA_J2K_OpenJPEGv2Regression.dcm", 2362  },
 { "TOSHIBA_J2K_SIZ0_PixRep1.dcm", 2346  },
+{ "NM-PAL-16-PixRep1.dcm", 4444 },
+{ "MEDILABInvalidCP246_EVRLESQasUN.dcm", 19174 },
 
 
 /* Stopping condition */

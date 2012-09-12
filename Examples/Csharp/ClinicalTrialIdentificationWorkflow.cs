@@ -202,7 +202,8 @@ public class ClinicalTrialIdentificationWorkflow
 
     // Let's use the pre-shipped certificate of GDCM.
     string certpath = gdcm.Filename.Join(gdcm.Testing.GetSourceDirectory(), "/Testing/Source/Data/certificate.pem" );
-    gdcm.CryptographicMessageSyntax cms = new gdcm.CryptographicMessageSyntax();
+    gdcm.CryptoFactory fact = gdcm.CryptoFactory.GetFactoryInstance();
+    gdcm.CryptographicMessageSyntax cms = fact.CreateCMSProvider();
     if( !cms.ParseCertificateFile( certpath ) )
       {
       System.Console.WriteLine( "PEM Certificate : " + certpath + " could not be read. Sorry" );

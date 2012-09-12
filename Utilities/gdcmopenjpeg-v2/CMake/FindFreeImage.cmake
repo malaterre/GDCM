@@ -7,23 +7,23 @@
 # FREEIMAGE_LIBRARY
 #
 
-IF (WIN32)
-	FIND_PATH( FREEIMAGE_INCLUDE_PATH FreeImage.h
+if (WIN32)
+	find_path( FREEIMAGE_INCLUDE_PATH FreeImage.h
 		${OPENJPEG_SOURCE_DIR}/libs/FreeImage
 		DOC "The directory where FreeImage.h resides")
-	FIND_LIBRARY( FREEIMAGE_LIBRARY
+	find_library( FREEIMAGE_LIBRARY
 		NAMES FreeImage freeimage freeimage.s
 		PATHS
 		${OPENJPEG_SOURCE_DIR}/libs/FreeImage
 		DOC "The FreeImage library")
-ELSE (WIN32)
-	FIND_PATH( FREEIMAGE_INCLUDE_PATH FreeImage.h
+else ()
+	find_path( FREEIMAGE_INCLUDE_PATH FreeImage.h
 		/usr/include
 		/usr/local/include
 		/sw/include
 		/opt/local/include
 		DOC "The directory where FreeImage.h resides")
-	FIND_LIBRARY( FREEIMAGE_LIBRARY
+	find_library( FREEIMAGE_LIBRARY
 		NAMES FreeImage freeimage
 		PATHS
 		/usr/lib64
@@ -33,17 +33,17 @@ ELSE (WIN32)
 		/sw/lib
 		/opt/local/lib
 		DOC "The FreeImage library")
-ENDIF (WIN32)
+endif ()
 
-SET(FREEIMAGE_LIBRARIES ${FREEIMAGE_LIBRARY})
+set(FREEIMAGE_LIBRARIES ${FREEIMAGE_LIBRARY})
 
-IF (FREEIMAGE_INCLUDE_PATH AND FREEIMAGE_LIBRARY)
-	SET( FREEIMAGE_FOUND TRUE CACHE BOOL "Set to TRUE if GLEW is found, FALSE otherwise")
-ELSE (FREEIMAGE_INCLUDE_PATH AND FREEIMAGE_LIBRARY)
-	SET( FREEIMAGE_FOUND FALSE CACHE BOOL "Set to TRUE if GLEW is found, FALSE otherwise")
-ENDIF (FREEIMAGE_INCLUDE_PATH AND FREEIMAGE_LIBRARY)
+if (FREEIMAGE_INCLUDE_PATH AND FREEIMAGE_LIBRARY)
+	set( FREEIMAGE_FOUND TRUE CACHE BOOL "Set to TRUE if GLEW is found, FALSE otherwise")
+else ()
+	set( FREEIMAGE_FOUND FALSE CACHE BOOL "Set to TRUE if GLEW is found, FALSE otherwise")
+endif ()
 
-MARK_AS_ADVANCED(
+mark_as_advanced(
 	FREEIMAGE_FOUND
 	FREEIMAGE_LIBRARY
 	FREEIMAGE_LIBRARIES

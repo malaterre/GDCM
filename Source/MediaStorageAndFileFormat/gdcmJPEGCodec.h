@@ -39,6 +39,7 @@ class TransferSyntax;
  */
 class GDCM_EXPORT JPEGCodec : public ImageCodec
 {
+friend class ImageRegionReader;
 public:
   JPEGCodec();
   ~JPEGCodec();
@@ -64,7 +65,15 @@ public:
   bool GetLossless() const;
 
 protected:
-  bool Decode(std::istream &is, std::ostream &os);
+  bool DecodeExtent(
+    char *buffer,
+    unsigned int xmin, unsigned int xmax,
+    unsigned int ymin, unsigned int ymax,
+    unsigned int zmin, unsigned int zmax,
+    std::istream & is
+  );
+
+  bool DecodeByStreams(std::istream &is, std::ostream &os);
   bool IsValid(PhotometricInterpretation const &pi);
 
 protected:

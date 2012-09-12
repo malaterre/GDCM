@@ -81,8 +81,8 @@ double frap(double frac[2], double startx, double maxden = 10 )
   /* first try zero */
   //printf("%ld/%ld, error = %e\n", m[0][0], m[1][0],
   //  startx - ((double) m[0][0] / (double) m[1][0]));
-  frac[0] = m[0][0];
-  frac[1] = m[1][0];
+  frac[0] = (double)m[0][0];
+  frac[1] = (double)m[1][0];
   const double error = startx - ((double) m[0][0] / (double) m[1][0]);
 
   /* now try other possibility */

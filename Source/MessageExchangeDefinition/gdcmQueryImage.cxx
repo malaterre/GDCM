@@ -16,29 +16,33 @@
  *
  *=========================================================================*/
 /*
-filename: gdcmQueryImage.cxx
 contains: class to construct an image-based query for c-find and c-move
-name and date: 15 oct 2010 mmr
 
-//note that at the series and image levels, there is no distinction between the root query types.
-*/
+note that at the series and image levels, there is no distinction between the
+root query types.
+ */
 
 #include "gdcmQueryImage.h"
 
-namespace gdcm{
-std::vector<Tag> QueryImage::GetRequiredTags(const ERootType& inRootType) const{
+namespace gdcm
+{
+
+std::vector<Tag> QueryImage::GetRequiredTags(const ERootType& ) const
+{
   std::vector<Tag> theReturn;//see 3.4 C.6.1.1.5
   theReturn.push_back(Tag(0x0020, 0x0013));
   return theReturn;
 }
-std::vector<Tag> QueryImage::GetUniqueTags(const ERootType& inRootType) const{
+
+std::vector<Tag> QueryImage::GetUniqueTags(const ERootType& ) const
+{
   std::vector<Tag> theReturn;//see 3.4 C.6.1.1.5
   theReturn.push_back(Tag(0x0008, 0x0018));
-
   return theReturn;
-
 }
-std::vector<Tag> QueryImage::GetOptionalTags(const ERootType& inRootType) const{
+
+std::vector<Tag> QueryImage::GetOptionalTags(const ERootType& ) const
+{
   std::vector<Tag> theReturn;//see 3.4 C.6.1.1.5
   theReturn.push_back(Tag(0x0008, 0x0016));//SOP class UID
   //theReturn.push_back(Tag(0x0008, 0x3001));//alternate representation
@@ -50,9 +54,9 @@ std::vector<Tag> QueryImage::GetOptionalTags(const ERootType& inRootType) const{
   return theReturn;
 }
 
-
-DataElement QueryImage::GetQueryLevel() const{
-  std::string theValue = "IMAGE";
+DataElement QueryImage::GetQueryLevel() const
+{
+  const std::string theValue = "IMAGE";
   DataElement de;
   de.SetTag(Tag(0x0008,0x0052));
   de.SetByteValue(theValue.c_str(), (uint32_t)theValue.length());

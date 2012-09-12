@@ -93,8 +93,6 @@ const DataSet* inDataSet = &file.GetDataSet();
   const char *uid = msclass.GetByteValue()->GetPointer();
   assert( uid );
   std::string suid = std::string(uid, msclass.GetByteValue()->GetLength());
-  if( suid.size() % 2 )
-    suid.push_back( ' ' ); // no \0 !
 
   // self check
 //  const PresentationContextAC * pc = inConnection.GetPresentationContextACByID(prescontid);
@@ -175,8 +173,6 @@ const DataSet* inDataSet = &file.GetDataSet();
       const char *uid = bv->GetPointer();
       assert( uid );
       suid = std::string(uid, bv->GetLength() );
-      if( suid.size() % 2 )
-        suid.push_back( ' ' ); // no \0 !
       assert(suid.size() < std::numeric_limits<uint32_t>::max());
       }
     }
@@ -191,7 +187,7 @@ const DataSet* inDataSet = &file.GetDataSet();
 static uint32_t messageid = 1;
   {
   Attribute<0x0,0x110> at = { 0 };
-  at.SetValue( messageid++ );
+  at.SetValue( (unsigned short)messageid++ );
   assert( messageid < std::numeric_limits<uint32_t>::max());
   ds.Insert( at.GetAsDataElement() );
   }
@@ -309,7 +305,7 @@ std::vector<PresentationDataValue> CStoreRSP::ConstructPDV(const DataSet* inData
     {
     // Message ID Being Responded To
     Attribute<0x0,0x120> at = { 1 };
-    at.SetValue( theMessageID );
+    at.SetValue( (unsigned short)theMessageID );
     ds.Insert( at.GetAsDataElement() );
     }
     {

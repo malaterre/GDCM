@@ -39,14 +39,14 @@
 #
 
 # the name of the target operating system
-SET(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_NAME Linux)
 
 # which compilers to use for C and C++
-SET(CMAKE_C_COMPILER powerpc-linux-gnu-gcc)
-SET(CMAKE_CXX_COMPILER powerpc-linux-gnu-g++)
+set(CMAKE_C_COMPILER powerpc-linux-gnu-gcc)
+set(CMAKE_CXX_COMPILER powerpc-linux-gnu-g++)
 
 # here is the target environment located
-SET(CMAKE_FIND_ROOT_PATH   /usr/powerpc-linux-gnu )
+set(CMAKE_FIND_ROOT_PATH   /usr/powerpc-linux-gnu )
 
 # adjust the default behaviour of the FIND_XXX() commands:
 # search headers and libraries in the target environment, search

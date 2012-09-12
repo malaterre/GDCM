@@ -34,7 +34,7 @@ def TestDCMTKMD5( filename, verbose = False ):
   'gdcm-CR-DCMTK-16-NonSamplePerPix.dcm', # this is not an image
   'ELSCINT1_PMSCT_RLE1.dcm',
   'SignedShortLosslessBug.dcm',
-  #'JDDICOM_Sample2.dcm',
+  'JPEGDefinedLengthSequenceOfFragments.dcm', # dcmtk 3.6.0 gives garbage
   'GE_DLX-8-MONO2-PrivateSyntax.dcm',
   'PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm',
   #'DermaColorLossLess.dcm', # technically I could support this one...
@@ -42,7 +42,7 @@ def TestDCMTKMD5( filename, verbose = False ):
   'ALOKA_SSD-8-MONO2-RLE-SQ.dcm'] # this one is not supported by dcmtk 3.5.4
   for f in blacklist:
     if f in filename:
-      print "%s is on the black list, giving up"%filename
+      print("%s is on the black list, giving up"%filename)
       return 0
   #print filename
   #
@@ -86,7 +86,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     dcmdjpeg_exec = "dcmdjpeg +cn +px " + filename + " " + outputfilename
     ret = os.system( dcmdjpeg_exec )
     if ret:
-      print "dcmdjpeg failed to decompress file. giving up"
+      print("dcmdjpeg failed to decompress file. giving up")
       return 0
 
     gdcmraw_args = ' -i ' + outputfilename + ' -o ' + outputfilename + ".raw"
@@ -119,7 +119,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     #print md5
     retval  = 0
     if ref != md5:
-      print "md5 are different: %s should be: %s for file %s"%(md5,ref,filename)
+      print("md5 are different: %s should be: %s for file %s"%(md5,ref,filename))
       retval = 1
     #print outputfilename
     return retval
@@ -128,7 +128,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     dcmdrle_exec = "dcmdrle " + filename + " " + outputfilename
     ret = os.system( dcmdrle_exec )
     if ret:
-      print "failed with: ", dcmdrle_exec
+      print("failed with: ", dcmdrle_exec)
       return 1
 
     gdcmraw_args = ' -i ' + outputfilename + ' -o ' + outputfilename + ".raw"
@@ -140,7 +140,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     #print md5
     retval  = 0
     if ref != md5:
-      print "md5 are different: %s should be: %s for file %s"%(md5,ref,filename)
+      print("md5 are different: %s should be: %s for file %s"%(md5,ref,filename))
       retval = 1
     #print outputfilename
     return retval
@@ -156,19 +156,19 @@ def TestDCMTKMD5( filename, verbose = False ):
     #print gdcmraw
     ret = os.system( gdcmraw )
     if ret:
-      print "failed with: ", gdcmraw
+      print("failed with: ", gdcmraw)
       return 1
     md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" )
     ref = gdcm.Testing.GetMD5FromFile(filename)
     #print md5
     retval  = 0
     if ref != md5:
-      print "md5 are different: %s should be: %s for file %s"%(md5,ref,filename)
+      print("md5 are different: %s should be: %s for file %s"%(md5,ref,filename))
       retval = 1
     #print outputfilename
     return retval
   #else
-  print "Unhandled:",filename,"with ret=",ret
+  print("Unhandled:",filename,"with ret=",ret)
   return 1
 
 if __name__ == "__main__":

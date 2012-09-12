@@ -129,7 +129,7 @@ std::istream& Read(std::istream &is)
       }
     catch(Exception &ex)
       {
-      (void)ex;  //to avoid unreferenced variable warning on release
+      (void)ex;
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       // that's ok ! In all cases the whole file was read, because
       // Fragment::Read only fail on eof() reached 1.
@@ -161,8 +161,6 @@ std::istream& Read(std::istream &is)
         gdcmWarningMacro( "Reading failed at Tag:" << frag.GetTag() <<
           ". Use file at own risk." << ex.what() );
         }
-#else
-      (void)ex;
 #endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
       }
     }

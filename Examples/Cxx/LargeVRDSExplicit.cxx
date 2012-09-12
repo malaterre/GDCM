@@ -33,12 +33,12 @@
  * ./LargeVRDSExplicit gdcmDataExtra/gdcmNonImageData/RT/RTStruct.dcm out.dcm
  */
 
-bool interpolate(const double * pts, unsigned int npts, std::vector<double> &out )
+bool interpolate(const double * pts, size_t npts, std::vector<double> &out )
 {
   out.clear();
-  for(unsigned int i = 0; i < 2*npts; ++i )
+  for(size_t i = 0; i < 2*npts; ++i )
     {
-    const unsigned int j = i / 2;
+    const size_t j = i / 2;
     if( i % 2 )
       {
       if( j != npts - 1 )
@@ -148,8 +148,8 @@ int main(int argc, char *argv[])
   assert( out.size() % 3 == 0 );
 
   gdcm::Attribute<0x3006,0x0050> at_interpolate;
-  at_interpolate.SetNumberOfValues( out.size() / 3 );
-  at_interpolate.SetValues( &out[0], out.size() );
+  at_interpolate.SetNumberOfValues( (unsigned int)(out.size() / 3) );
+  at_interpolate.SetValues( &out[0], (uint32_t)out.size() );
 
   ncontourpoints.SetValue( at_interpolate.GetNumberOfValues() / 3 );
   nestedds2.Replace( at_interpolate.GetAsDataElement() );
@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
   const char *tsuid = gdcm::TransferSyntax::GetTSString( ts );
   // const char * is ok since padding is \0 anyway...
   gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
-  de.SetByteValue( tsuid, strlen(tsuid) );
+  de.SetByteValue( tsuid, (uint32_t)strlen(tsuid) );
   de.SetVR( gdcm::Attribute<0x0002, 0x0010>::GetVR() );
   fmi.Replace( de );
   fmi.Remove( gdcm::Tag(0x0002,0x0012) ); // will be regenerated

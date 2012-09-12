@@ -1,6 +1,6 @@
 # Always
-SUBDIRS(Cxx)
+subdirs(Cxx)
 
-IF(GDCM_WRAP_PYTHON)
-  SUBDIRS(Python)
-ENDIF(GDCM_WRAP_PYTHON)
+if(GDCM_WRAP_PYTHON)
+  subdirs(Python)
+endif()

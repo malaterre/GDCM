@@ -28,20 +28,22 @@
 # FIXME, path are hardcoded.
 # http://www.walkernews.net/2007/07/30/how-to-verify-dot-net-framework-version/
 
-FIND_PROGRAM(CSC_v1_EXECUTABLE csc
+find_program(CSC_v1_EXECUTABLE csc
  $ENV{windir}/Microsoft.NET/Framework/v1.1.4322/
 )
-FIND_PROGRAM(CSC_v2_EXECUTABLE csc
+find_program(CSC_v2_EXECUTABLE csc
  $ENV{windir}/Microsoft.NET/Framework/v2.0.50727/
 )
-FIND_PROGRAM(CSC_v3_EXECUTABLE csc
+find_program(CSC_v3_EXECUTABLE csc
  $ENV{windir}/Microsoft.NET/Framework/v3.5/
 )
 
-GET_FILENAME_COMPONENT(current_list_path ${CMAKE_CURRENT_LIST_FILE} PATH)
-SET(DotNETFrameworkSDK_USE_FILE ${current_list_path}/UseDotNETFrameworkSDK.cmake)
+# C:/Windows/Microsoft.NET/Framework/v4.0.30319
 
-MARK_AS_ADVANCED(
+get_filename_component(current_list_path ${CMAKE_CURRENT_LIST_FILE} PATH)
+set(DotNETFrameworkSDK_USE_FILE ${current_list_path}/UseDotNETFrameworkSDK.cmake)
+
+mark_as_advanced(
   CSC_v1_EXECUTABLE
   CSC_v2_EXECUTABLE
   CSC_v3_EXECUTABLE

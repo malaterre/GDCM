@@ -8,27 +8,27 @@
 
 # find md5sum
 
-SET(Md5sum_FOUND FALSE)
-FIND_PROGRAM(Md5sum_EXECUTABLE md5sum)
-MARK_AS_ADVANCED(Md5sum_EXECUTABLE)
+set(Md5sum_FOUND FALSE)
+find_program(Md5sum_EXECUTABLE md5sum)
+mark_as_advanced(Md5sum_EXECUTABLE)
 
-IF (Md5sum_EXECUTABLE)
-   SET(Md5sum_FOUND TRUE)
-ENDIF (Md5sum_EXECUTABLE)
+if (Md5sum_EXECUTABLE)
+   set(Md5sum_FOUND TRUE)
+endif ()
 
 # Compute the md5sums file by doing a recursion of directory: `DIRECTORY`
-MACRO(COMPUTE_MD5SUMS DIRECTORY OUTPUT_FILE)
+macro(COMPUTE_MD5SUMS DIRECTORY OUTPUT_FILE)
 
 # Super ugly and barely readable but you need that in order to
 # work around a deficiency in EXECUTE_PROCESS which does not have dependencie scanning
-FILE(WRITE
+file(WRITE
 ${CMAKE_BINARY_DIR}/md5sum.cmake
 "
-  FILE(GLOB_RECURSE MD5SUM_INPUT_FILES
+  file(GLOB_RECURSE MD5SUM_INPUT_FILES
     ${DIRECTORY}/*
   )
 
-  EXECUTE_PROCESS(
+  execute_process(
     COMMAND md5sum \${MD5SUM_INPUT_FILES}
     WORKING_DIRECTORY ${DIRECTORY}
     OUTPUT_VARIABLE md5sum_VAR
@@ -36,14 +36,14 @@ ${CMAKE_BINARY_DIR}/md5sum.cmake
     RESULT_VARIABLE md5sum_RES
   )
   # apparently md5sums start with: usr/...
-  STRING(REPLACE ${DIRECTORY}/
+  string(REPLACE ${DIRECTORY}/
                   \"\" md5sum_VAR_clean
                   \${md5sum_VAR})
-  FILE(WRITE ${CMAKE_BINARY_DIR}/md5sums \${md5sum_VAR_clean})
+  file(WRITE ${CMAKE_BINARY_DIR}/md5sums \${md5sum_VAR_clean})
 "
 )
 
-ADD_CUSTOM_COMMAND(
+add_custom_command(
   OUTPUT    ${OUTPUT_FILE}
   COMMAND   cmake
   ARGS      -P ${CMAKE_BINARY_DIR}/md5sum.cmake
@@ -52,17 +52,17 @@ ADD_CUSTOM_COMMAND(
   COMMENT   "Generating md5sums"
   )
 
-ENDMACRO(COMPUTE_MD5SUMS)
+endmacro()
 
 # Report the results.
-IF(NOT Md5sum_FOUND)
-  SET(Md5sum_DIR_MESSAGE
+if(NOT Md5sum_FOUND)
+  set(Md5sum_DIR_MESSAGE
     "Md5sum was not found. Make sure the entries Md5sum_* are set.")
-  IF(NOT Md5sum_FIND_QUIETLY)
-    MESSAGE(STATUS "${Md5sum_DIR_MESSAGE}")
-  ELSE(NOT Md5sum_FIND_QUIETLY)
-    IF(Md5sum_FIND_REQUIRED)
-      MESSAGE(FATAL_ERROR "${Md5sum_DIR_MESSAGE}")
-    ENDIF(Md5sum_FIND_REQUIRED)
-  ENDIF(NOT Md5sum_FIND_QUIETLY)
-ENDIF(NOT Md5sum_FOUND)
+  if(NOT Md5sum_FIND_QUIETLY)
+    message(STATUS "${Md5sum_DIR_MESSAGE}")
+  else()
+    if(Md5sum_FIND_REQUIRED)
+      message(FATAL_ERROR "${Md5sum_DIR_MESSAGE}")
+    endif()
+  endif()
+endif()

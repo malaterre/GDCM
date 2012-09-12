@@ -26,9 +26,8 @@ class Base64Internals;
  */
 class GDCM_EXPORT Base64
 {
-public :
-  Base64();
-  ~Base64();
+public:
+  Base64() {}
 
 /**
  *                 Call this function with dlen = 0 to obtain the
@@ -69,8 +68,6 @@ static int GetDecodeLength( const char *src, int  slen );
 static int Decode( char *dst, int dlen,
                    const char *src, int  slen );
 
-private:
-  Base64Internals *Internals;
 private:
   Base64(const Base64&);  // Not implemented.
   void operator=(const Base64&);  // Not implemented.

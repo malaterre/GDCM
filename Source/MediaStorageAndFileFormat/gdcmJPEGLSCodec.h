@@ -29,6 +29,7 @@ class JPEGLSInternals;
  */
 class GDCM_EXPORT JPEGLSCodec : public ImageCodec
 {
+friend class ImageRegionReader;
 public:
   JPEGLSCodec();
   ~JPEGLSCodec();
@@ -39,7 +40,7 @@ public:
   void SetBufferLength(unsigned long l) { BufferLength = l; }
 
   bool Decode(DataElement const &is, DataElement &os);
-  bool Decode(DataElement const &in, char* outBuffer, uint32_t inBufferLength,
+  bool Decode(DataElement const &in, char* outBuffer, size_t inBufferLength,
               uint32_t inXMin, uint32_t inXMax, uint32_t inYMin,
               uint32_t inYMax, uint32_t inZMin, uint32_t inZMax);
   bool Code(DataElement const &in, DataElement &out);
@@ -62,7 +63,17 @@ public:
   /// [0-3] generally
   void SetLossyError(int error);
 
+protected:
+  bool DecodeExtent(
+    char *buffer,
+    unsigned int xmin, unsigned int xmax,
+    unsigned int ymin, unsigned int ymax,
+    unsigned int zmin, unsigned int zmax,
+    std::istream & is
+  );
+
 private:
+  bool DecodeByStreamsCommon(char *buffer, size_t totalLen, std::vector<unsigned char> &rgbyteOut);
   unsigned long BufferLength;
   bool Lossless;
   int LossyError;

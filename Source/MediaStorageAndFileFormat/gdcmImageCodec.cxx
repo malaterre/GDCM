@@ -100,7 +100,7 @@ bool ImageCodec::DoByteSwap(std::istream &is, std::ostream &os)
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
@@ -135,7 +135,7 @@ bool ImageCodec::DoYBR(std::istream &is, std::ostream &os)
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
@@ -197,7 +197,7 @@ bool ImageCodec::DoPlanarConfiguration(std::istream &is, std::ostream &os)
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
@@ -236,7 +236,7 @@ bool ImageCodec::DoSimpleCopy(std::istream &is, std::ostream &os)
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
@@ -259,7 +259,7 @@ bool ImageCodec::DoPaddedCompositePixelCode(std::istream &is, std::ostream &os)
   std::streampos start = is.tellg();
   assert( 0 - start == 0 );
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(start, std::ios::beg);
@@ -270,7 +270,7 @@ bool ImageCodec::DoPaddedCompositePixelCode(std::istream &is, std::ostream &os)
   assert( !(buf_size % 2) );
   if( GetPixelFormat().GetBitsAllocated() == 16 )
     {
-    for(long i = 0; i < buf_size/2; ++i)
+    for(size_t i = 0; i < buf_size/2; ++i)
       {
 #ifdef GDCM_WORDS_BIGENDIAN
       os.write( dummy_buffer+i, 1 );
@@ -284,7 +284,7 @@ bool ImageCodec::DoPaddedCompositePixelCode(std::istream &is, std::ostream &os)
   else if( GetPixelFormat().GetBitsAllocated() == 32 )
     {
   assert( !(buf_size % 4) );
-    for(long i = 0; i < buf_size/4; ++i)
+    for(size_t i = 0; i < buf_size/4; ++i)
       {
 #ifdef GDCM_WORDS_BIGENDIAN
       os.write( dummy_buffer+i, 1 );
@@ -316,7 +316,7 @@ bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
       uint8_t c;
       while( is.read((char*)&c,1) )
         {
-        c = 255 - c;
+        c = (uint8_t)(255 - c);
         os.write((char*)&c, 1 );
         }
       }
@@ -327,7 +327,7 @@ bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
       uint16_t c;
       while( is.read((char*)&c,2) )
         {
-        c = smask16 - c;
+        c = (uint16_t)(smask16 - c);
         os.write((char*)&c, 2);
         }
       }
@@ -339,7 +339,7 @@ bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
       uint8_t c;
       while( is.read((char*)&c,1) )
         {
-        c = 255 - c;
+        c = (uint8_t)(255 - c);
         os.write((char*)&c, 1);
         }
       }
@@ -348,7 +348,7 @@ bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
       uint16_t mask = 1;
       for (int j=0; j<PF.GetBitsStored()-1; ++j)
         {
-        mask = (mask << 1) + 1; // will be 0x0fff when BitsStored = 12
+        mask = (uint16_t)((mask << 1) + 1); // will be 0x0fff when BitsStored = 12
         }
 
       uint16_t c;
@@ -365,7 +365,7 @@ bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
           c = mask;
           }
         assert( c <= mask );
-        c = mask - c;
+        c = (uint16_t)(mask - c);
         assert( c <= mask );
         os.write((char*)&c, 2);
         }
@@ -378,7 +378,7 @@ bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
 struct ApplyMask
 {
   uint16_t operator()(uint16_t c) const {
-    return (c >> (BitsStored - HighBit - 1)) & pmask;
+    return (uint16_t)((c >> (BitsStored - HighBit - 1)) & pmask);
   }
   unsigned short BitsStored;
   unsigned short HighBit;
@@ -393,25 +393,25 @@ bool ImageCodec::DoOverlayCleanup(std::istream &is, std::ostream &os)
     {
     // pmask : to mask the 'unused bits' (may contain overlays)
     uint16_t pmask = 0xffff;
-    pmask = pmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() );
+    pmask = (uint16_t)(pmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() ));
 
     if( PF.GetPixelRepresentation() )
       {
       // smask : to check the 'sign' when BitsStored != BitsAllocated
       uint16_t smask = 0x0001;
-      smask =
-        smask << ( 16 - (PF.GetBitsAllocated() - PF.GetBitsStored() + 1) );
+      smask = (uint16_t)(
+        smask << ( 16 - (PF.GetBitsAllocated() - PF.GetBitsStored() + 1) ));
       // nmask : to propagate sign bit on negative values
       int16_t nmask = (int16_t)0x8000;
-      nmask = nmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 );
+      nmask = (int16_t)(nmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 ));
 
       uint16_t c;
       while( is.read((char*)&c,2) )
         {
-        c = c >> (PF.GetBitsStored() - PF.GetHighBit() - 1);
+        c = (uint16_t)(c >> (PF.GetBitsStored() - PF.GetHighBit() - 1));
         if ( c & smask )
           {
-          c = c | nmask;
+          c = (uint16_t)(c | nmask);
           }
         else
           {
@@ -426,8 +426,8 @@ bool ImageCodec::DoOverlayCleanup(std::istream &is, std::ostream &os)
       uint16_t c;
       while( is.read((char*)&c,2) )
         {
-        c =
-          (c >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask;
+        c = (uint16_t)(
+          (c >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask);
         os.write((char*)&c, 2 );
         }
       //os.rdbuf( is.rdbuf() );
@@ -463,7 +463,7 @@ bool ImageCodec::Decode(DataElement const &, DataElement &)
   return true;
 }
 
-bool ImageCodec::Decode(std::istream &is, std::ostream &os)
+bool ImageCodec::DecodeByStreams(std::istream &is, std::ostream &os)
 {
   assert( PlanarConfiguration == 0 || PlanarConfiguration == 1);
   assert( PI != PhotometricInterpretation::UNKNOW );
@@ -580,6 +580,26 @@ bool ImageCodec::Decode(std::istream &is, std::ostream &os)
 bool ImageCodec::IsValid(PhotometricInterpretation const &)
 {
   return false;
+}
+
+void ImageCodec::SetDimensions(const unsigned int d[3])
+{
+  Dimensions[0] = d[0];
+  Dimensions[1] = d[1];
+  Dimensions[2] = d[2];
+}
+
+void ImageCodec::SetDimensions(const std::vector<unsigned int> & d)
+{
+  size_t theSize = d.size();
+  assert(theSize<= 3);
+  for (size_t i = 0; i < 3; i++)
+    {
+    if (i < theSize)
+      Dimensions[i] = d[i];
+    else
+      Dimensions[i] = 1;
+    }
 }
 
 } // end namespace gdcm

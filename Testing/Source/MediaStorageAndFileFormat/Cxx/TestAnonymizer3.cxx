@@ -24,7 +24,10 @@
 #include "gdcmFileDerivation.h"
 #include "gdcmSystem.h"
 
-int TestAnonymizer3(int argc, char *argv[])
+#include "gdcmCryptoFactory.h"
+#include <memory> // std::auto_ptr
+
+int TestAnonymizer3(int , char *[])
 {
   using namespace gdcm;
   gdcm::Global& g = gdcm::Global::GetInstance();
@@ -102,7 +105,14 @@ int TestAnonymizer3(int argc, char *argv[])
 
 // Encrypt
 {
-  gdcm::CryptographicMessageSyntax cms;
+  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::GetFactoryInstance();
+  if (cryptoFactory == NULL)
+    {
+    std::cerr << "Crypto library not available" << std::endl;
+    return 1;
+    }
+  std::auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
+  gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
   if( !cms.ParseCertificateFile( certpath.c_str() ) )
     {
     return 1;
@@ -242,11 +252,11 @@ int TestAnonymizer3(int argc, char *argv[])
 
 if( sopinstanceuid_str1 == sopinstanceuid_str2 )
 {
-return 1;
+  return 1;
 }
 if( sopinstanceuid_str1 != refsopinstanceuid_str2 )
 {
-return 1;
+  return 1;
 }
 }
 

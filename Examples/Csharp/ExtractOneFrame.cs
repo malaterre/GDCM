@@ -13,9 +13,13 @@
 =========================================================================*/
 
 /*
+ * This small code shows how to use the gdcm.StreamImageReader API
+ * to read a single (whole) frame at a time
+ * The API allow extracting a smaller extent of the frame of course.
+ * It will write out the extracted frame in /tmp/frame.raw
+ *
  * Usage:
- * $ export LD_LIBRARY_PATH=$HOME/Projects/gdcm/debug-gcc/bin
- * $ mono bin/DecompressImage.exe gdcmData/012345.002.050.dcm decompress.dcm
+ * $ bin/ExtractOneFrame.exe input.dcm
  */
 using System;
 using gdcm;
@@ -24,11 +28,11 @@ public class ExtractOneFrame
 {
   public static int Main(string[] args)
     {
-   // string file1 = args[0];
+    string filename = args[0];
 
     gdcm.StreamImageReader reader = new gdcm.StreamImageReader();
 
-    reader.SetFileName(@"/tmp/raw.dcm");
+    reader.SetFileName( filename );
 
     if (!reader.ReadImageInformation()) return 1;
     // Get file infos
@@ -36,17 +40,29 @@ public class ExtractOneFrame
 
     // get some info about image
     UIntArrayType extent = ImageHelper.GetDimensionsValue(f);
-    System.Console.WriteLine( extent[0] );
-    System.Console.WriteLine( extent[1] );
-    System.Console.WriteLine( extent[2] );
+    //System.Console.WriteLine( extent[0] );
+    uint dimx = extent[0];
+    //System.Console.WriteLine( extent[1] );
+    uint dimy = extent[1];
+    //System.Console.WriteLine( extent[2] );
+    uint dimz = extent[2];
+    PixelFormat pf = ImageHelper.GetPixelFormatValue (f);
+    int pixelsize = pf.GetPixelSize();
+    //System.Console.WriteLine( pixelsize );
 
     // buffer to get the pixels
-    byte[] buffer = new byte[512 * 512 * 1];
+    byte[] buffer = new byte[ dimx * dimy * pixelsize ];
 
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < dimz; i++)
       {
-      // Define that I want the image 0, full size (512x512 pixels)
-      reader.DefinePixelExtent(0, 512, 0, 512, (ushort)i, (ushort)(i+1));
+      // Define that I want the image 0, full size (dimx x dimy pixels)
+      reader.DefinePixelExtent(0, (ushort)dimx, 0, (ushort)dimy, (ushort)i, (ushort)(i+1));
+      uint buf_len = reader.DefineProperBufferLength(); // take into account pixel size
+      //System.Console.WriteLine( buf_len );
+      if( buf_len > buffer.Length )
+        {
+        throw new Exception("buffer is too small for target");
+        }
 
       if (reader.Read(buffer, (uint)buffer.Length))
         {

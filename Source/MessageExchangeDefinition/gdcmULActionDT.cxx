@@ -180,7 +180,7 @@ EStateID ULActionDT1::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
   //they can all be sent at once because of the structure in 3.8 7.6-- pdata
   //does not wait for a response.
   double Progress = 0;
-  const double progresstick = 1. / theDataPDUs.size();
+  const double progresstick = 1. / (double)theDataPDUs.size();
 
   for (itor = theDataPDUs.begin(); itor < theDataPDUs.end(); itor++) {
 
@@ -235,9 +235,9 @@ EStateID ULActionDT1::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
 
 //Send P-DATA indication primitive
 //for now, does nothing, stops the event loop
-EStateID ULActionDT2::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
-        bool& outWaitingForEvent, EEventID& outRaisedEvent){
-
+EStateID ULActionDT2::PerformAction(Subject *, ULEvent& , ULConnection& ,
+        bool& outWaitingForEvent, EEventID& outRaisedEvent)
+{
   outWaitingForEvent = false;
   outRaisedEvent = ePDATArequest;
   return eSta6TransferReady;

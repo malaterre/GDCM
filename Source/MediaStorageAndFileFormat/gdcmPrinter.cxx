@@ -446,8 +446,8 @@ void Printer::PrintDataSet(std::ostream& os, const DataSet<ImplicitDataElement> 
       el.Set( de.GetValue() ); \
       if( el.GetLength() ) { \
       os << "" << el.GetValue(); \
-      VL l = std::min( (long) el.GetLength(), (long) (MaxPrintLength / VR::GetLength(VR::type)) ); \
-      for(unsigned long i = 1; i < l; ++i) os << "\\" << el.GetValue(i); \
+      long l = std::min( (long) el.GetLength(), (long) (MaxPrintLength / VR::GetLength(VR::type)) ); \
+      for(long i = 1; i < l; ++i) os << "\\" << el.GetValue((unsigned int)i); \
       os << ""; } \
       else { if( de.IsEmpty() ) os << GDCM_TERMINAL_VT100_INVERSE << "(no value)" << GDCM_TERMINAL_VT100_NORMAL; \
                  else os << GDCM_TERMINAL_VT100_INVERSE << GDCM_TERMINAL_VT100_FOREGROUND_RED << "(VR=" << refvr << " is incompatible with length)" << GDCM_TERMINAL_VT100_NORMAL; } } \
@@ -926,8 +926,8 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
       const BasicOffsetTable & table = sqf->GetTable();
       //os << nextindent  << table.GetTag() << "\n";
       PrintDataElement(os,dicts,ds,table,out,nextindent);
-      unsigned int numfrag = sqf->GetNumberOfFragments();
-      for(unsigned int i = 0; i < numfrag; ++i)
+      size_t numfrag = sqf->GetNumberOfFragments();
+      for(size_t i = 0; i < numfrag; ++i)
         {
         const Fragment& frag = sqf->GetFragment(i);
         //os << nextindent<< frag << "\n";

@@ -53,7 +53,7 @@ AAbortPDU::AAbortPDU()
   Source = 0;
   Reason = 0;
 
-  ItemLength = Size() - 6;
+  ItemLength = (uint32_t)Size() - 6;
   assert( (ItemLength + 4 + 1 + 1) == Size() );
 }
 

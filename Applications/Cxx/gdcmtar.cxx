@@ -89,11 +89,11 @@ void PrintHelp()
  */
 
 namespace gdcm {
-  const Tag t0(0x0008,0x0016); // SOP Class UID
-  const Tag t1(0x0020,0x000d); // Study Instance UID
-  const Tag t2(0x0020,0x000e); // Series Instance UID
-  const Tag t3(0x0020,0x0052); // Frame of Reference UID
-  const Tag t4(0x0020,0x0037); // Image Orientation (Patient)
+  const Tag T0(0x0008,0x0016); // SOP Class UID
+  const Tag T1(0x0020,0x000d); // Study Instance UID
+  const Tag T2(0x0020,0x000e); // Series Instance UID
+  const Tag T3(0x0020,0x0052); // Frame of Reference UID
+  const Tag T4(0x0020,0x0037); // Image Orientation (Patient)
 
 class DiscriminateVolume
 {
@@ -123,7 +123,7 @@ private:
   return theReturn;
 }
 
-void ProcessAIOP(Scanner const & s, Directory::FilenamesType const & subset, const char *iopval)
+void ProcessAIOP(Scanner const & , Directory::FilenamesType const & subset, const char *iopval)
 {
   if( debuggdcmtar )
   std::cout << "IOP: " << iopval << std::endl;
@@ -158,7 +158,7 @@ void ProcessAFrameOfRef(Scanner const & s, Directory::FilenamesType const & subs
   // In this subset of files (belonging to same series), let's find those
   // belonging to the same Frame ref UID:
   Directory::FilenamesType files = GetAllFilenamesFromTagToValue(
-    s, subset, t3, frameuid);
+    s, subset, T3, frameuid);
 
   std::set< std::string > iopset;
 
@@ -167,7 +167,7 @@ void ProcessAFrameOfRef(Scanner const & s, Directory::FilenamesType const & subs
     file != files.end(); ++file)
     {
     //std::cout << *file << std::endl;
-    const char * value = s.GetValue(file->c_str(), gdcm::t4 );
+    const char * value = s.GetValue(file->c_str(), gdcm::T4 );
     assert( value );
     iopset.insert( value );
     }
@@ -201,7 +201,7 @@ void ProcessAFrameOfRef(Scanner const & s, Directory::FilenamesType const & subs
         Directory::FilenamesType::const_iterator file = files.begin();
         file != files.end(); ++file)
         {
-        std::string value = s.GetValue(file->c_str(), gdcm::t4 );
+        std::string value = s.GetValue(file->c_str(), gdcm::T4 );
         if( value != it->c_str() )
           {
           dc.SetFromString( value.c_str() );
@@ -223,7 +223,7 @@ void ProcessAFrameOfRef(Scanner const & s, Directory::FilenamesType const & subs
       {
       const char *iopvalue = it->c_str();
       Directory::FilenamesType iopfiles = GetAllFilenamesFromTagToValue(
-        s, files, t4, iopvalue );
+        s, files, T4, iopvalue );
       ProcessAIOP(s, iopfiles, iopvalue );
       }
     }
@@ -235,9 +235,9 @@ void ProcessASeries(Scanner const & s, const char * seriesuid)
   std::cout << "Series: " << seriesuid << std::endl;
   // let's find all files belonging to this series:
   Directory::FilenamesType seriesfiles = GetAllFilenamesFromTagToValue(
-    s, s.GetFilenames(), t2, seriesuid);
+    s, s.GetFilenames(), T2, seriesuid);
 
-  gdcm::Scanner::ValuesType vt3 = s.GetValues(t3);
+  gdcm::Scanner::ValuesType vt3 = s.GetValues(T3);
   for(
     gdcm::Scanner::ValuesType::const_iterator it = vt3.begin()
     ; it != vt3.end(); ++it )
@@ -250,7 +250,7 @@ void ProcessAStudy(Scanner const & s, const char * studyuid)
 {
   if( debuggdcmtar )
   std::cout << "Study: " << studyuid << std::endl;
-  gdcm::Scanner::ValuesType vt2 = s.GetValues(t2);
+  gdcm::Scanner::ValuesType vt2 = s.GetValues(T2);
   for(
     gdcm::Scanner::ValuesType::const_iterator it = vt2.begin()
     ; it != vt2.end(); ++it )
@@ -296,7 +296,7 @@ void Print( std::ostream & os )
 
 void ProcessIntoVolume( Scanner const & s )
 {
-  gdcm::Scanner::ValuesType vt1 = s.GetValues( gdcm::t1 );
+  gdcm::Scanner::ValuesType vt1 = s.GetValues( gdcm::T1 );
   for(
     gdcm::Scanner::ValuesType::const_iterator it = vt1.begin()
     ; it != vt1.end(); ++it )
@@ -320,7 +320,7 @@ bool ConcatenateImages(Image &im1, Image const &im2)
     const std::vector<char> & v2 = *bv2;
     v1.insert( v1.end(), v2.begin(), v2.end() );
 
-    de1.SetByteValue(&v1[0], v1.size());
+    de1.SetByteValue(&v1[0], (uint32_t)v1.size());
     }
   else if( de1.GetSequenceOfFragments() )
     {
@@ -346,11 +346,11 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
   d.Load( filename.c_str(), true ); // recursive !
 
   gdcm::Scanner s;
-  s.AddTag( gdcm::t0 );
-  s.AddTag( gdcm::t1 );
-  s.AddTag( gdcm::t2 );
-  s.AddTag( gdcm::t3 );
-  s.AddTag( gdcm::t4 );
+  s.AddTag( gdcm::T0 );
+  s.AddTag( gdcm::T1 );
+  s.AddTag( gdcm::T2 );
+  s.AddTag( gdcm::T3 );
+  s.AddTag( gdcm::T4 );
   bool b = s.Scan( d.GetFilenames() );
   if( !b )
     {
@@ -359,15 +359,17 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
     }
 
   // For now only accept MR Image Storage
-  gdcm::Scanner::ValuesType vt = s.GetValues(gdcm::t0);
+  gdcm::Scanner::ValuesType vt = s.GetValues(gdcm::T0);
   if( vt.size() != 1 ) return 1;
 
   const char *sop = vt.begin()->c_str();
+{
   gdcm::MediaStorage ms = gdcm::MediaStorage::GetMSType( sop );
   if( ms != gdcm::MediaStorage::MRImageStorage )
     {
     return 1;
     }
+}
 
   gdcm::DiscriminateVolume dv;
   dv.ProcessIntoVolume( s );
@@ -380,19 +382,20 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
     std::cerr << "Could not create dir: " << outfilename << std::endl;
     return 1;
     }
-  std::vector< gdcm::Directory::FilenamesType >::const_iterator it = sorted.begin();
-  for( ; it != sorted.end(); ++it )
+  for(
+    std::vector< gdcm::Directory::FilenamesType >::const_iterator it = sorted.begin();
+    it != sorted.end(); ++it )
     {
-    gdcm::ImageWriter im;
+    gdcm::ImageWriter im0;
 
     gdcm::Directory::FilenamesType const & files = *it;
     gdcm::Directory::FilenamesType::const_iterator file = files.begin();
 
     const char *reffile = file->c_str();
     // construct the target dir:
-    const char* studyuid = s.GetValue(reffile, gdcm::t1);
-    const char* seriesuid = s.GetValue(reffile, gdcm::t2);
-    const char* frameuid = s.GetValue(reffile, gdcm::t3);
+    const char* studyuid = s.GetValue(reffile, gdcm::T1);
+    const char* seriesuid = s.GetValue(reffile, gdcm::T2);
+    const char* frameuid = s.GetValue(reffile, gdcm::T3);
     std::string targetdir = outfilename;
     targetdir += '/';
     targetdir += studyuid;
@@ -421,23 +424,23 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
       assert( 0 );
       }
 
-    gdcm::ImageReader reader;
-    reader.SetFileName( reffile );
-    if( !reader.Read() )
+    gdcm::ImageReader reader0;
+    reader0.SetFileName( reffile );
+    if( !reader0.Read() )
       {
       assert( 0 );
       }
-    gdcm::Image &currentim = reader.GetImage();
+    gdcm::Image &currentim = reader0.GetImage();
     assert( currentim.GetNumberOfDimensions( ) == 2 );
     currentim.SetNumberOfDimensions( 3 );
     size_t count = 0;
 
     //gdcm::ImageWriter writer;
-    gdcm::Writer writer;
-    writer.SetFileName( fg.GetFilename( count ) );
-    writer.SetFile( reader.GetFile() );
-    writer.GetFile().GetHeader().Clear();
-    if( !writer.Write() )
+    gdcm::Writer writer0;
+    writer0.SetFileName( fg.GetFilename( count ) );
+    writer0.SetFile( reader0.GetFile() );
+    writer0.GetFile().GetHeader().Clear();
+    if( !writer0.Write() )
       {
       assert( 0 );
       }
@@ -470,21 +473,21 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
         }
       }
 
-    im.SetFileName( (targetname + "/new.dcm").c_str() );
+    im0.SetFileName( (targetname + "/new.dcm").c_str() );
     //  im.SetFile( reader.GetFile() );
 
-    gdcm::DataSet &ds = im.GetFile().GetDataSet();
+    gdcm::DataSet &ds = im0.GetFile().GetDataSet();
 
     gdcm::MediaStorage ms = gdcm::MediaStorage::EnhancedMRImageStorage;
 
     gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
     const char* msstr = gdcm::MediaStorage::GetMSString(ms);
-    de.SetByteValue( msstr, strlen(msstr) );
+    de.SetByteValue( msstr, (uint32_t)strlen(msstr) );
     de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
     ds.Insert( de );
 
-    im.SetImage( currentim );
-    if( !im.Write() )
+    im0.SetImage( currentim );
+    if( !im0.Write() )
       {
       std::cerr << "Could not write: " << std::endl;
       return 1;
@@ -997,7 +1000,7 @@ int main (int argc, char *argv[])
       //slice.Print( std::cout );
       gdcm::DataElement &pd = slice.GetDataElement();
       const char *sliceptr = bv->GetPointer() + i * slice_len;
-      pd.SetByteValue( sliceptr, slice_len);
+      pd.SetByteValue( sliceptr, (uint32_t)slice_len);
 
       if( !writer.Write() )
         {
@@ -1045,7 +1048,7 @@ int main (int argc, char *argv[])
     gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
     ms = gdcm::MediaStorage::MRImageStorage;
     const char* msstr = gdcm::MediaStorage::GetMSString(ms);
-    de.SetByteValue( msstr, strlen(msstr) );
+    de.SetByteValue( msstr, (uint32_t)strlen(msstr) );
     de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
     ds.Replace( de );
 
@@ -1151,7 +1154,7 @@ int main (int argc, char *argv[])
 //      gdcm::DataElement &pd = slice.GetDataElement();
       const char *sliceptr = bv->GetPointer() + i * slice_len;
       gdcm::DataElement newpixeldata( gdcm::Tag(0x7fe0,0x0010) );
-      newpixeldata.SetByteValue( sliceptr, slice_len); // slow !
+      newpixeldata.SetByteValue( sliceptr, (uint32_t)slice_len); // slow !
       ds.Replace( newpixeldata );
 
       if( !writer.Write() )

@@ -101,7 +101,7 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
   // The code could be a little tidier, all I am trying to do here is differenciate the
   // case where we have a series of 2D files and the case where we have a single multi-frames
   // files...
-  int maxfiles = self->GetFileNames()->GetNumberOfValues();
+  vtkIdType maxfiles = self->GetFileNames()->GetNumberOfValues();
   const unsigned long params_len = self->GetOutput()->GetNumberOfPoints() * self->GetOutput()->GetScalarSize() / maxfiles;
   for( int i = outExt[4]; i <= outExt[5] && i < maxfiles; ++i )
     {
@@ -134,7 +134,7 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
     unsigned long len = image.GetBufferLength();
     image.GetBuffer(pointer);
 
-    unsigned int numoverlays = image.GetNumberOfOverlays();
+    size_t numoverlays = image.GetNumberOfOverlays();
     if( numoverlays )
       {
       vtkImageData *vtkimage = self->GetOutput(OverlayPortNumber);
@@ -161,7 +161,7 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
         unsigned short *pout = out;
         for( ; pout != out + params_len / sizeof(unsigned short); ++pout )
           {
-          *pout = *pout + (short)shift;
+          *pout = (unsigned short)(*pout + (short)shift);
           }
         }
       else if ( shift == 0 && scale != (double)scale_int )
@@ -178,7 +178,8 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
         float *pout = out;
         for( ; pout != out + params_len / sizeof(float); ++pout )
           {
-          *pout = *pin * (float)scale; // scale is a double, but to be backward compatible we need the explicit cast
+          // scale is a double, but to be backward compatible we need the explicit cast
+          *pout = (float)((double)*pin * (float)scale);
           ++pin;
           }
         //assert( pin == in + len / sizeof(unsigned short) );

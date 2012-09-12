@@ -212,6 +212,8 @@ static const char * const vtkgdcmMD5MetaImages[][3] = {
 { "TOSHIBA_J2K_SIZ1_PixRep0.dcm","b7551911535d7ee21a336b700e4f0e4f", "d6347ed051d7b887bdaad1a91433c6ba" },
 { "TOSHIBA_J2K_OpenJPEGv2Regression.dcm","f417f1a4552aeb03137ed91a04345fa2", "94414d8b4300aa3d8cbe4475d34e8e54" },
 { "TOSHIBA_J2K_SIZ0_PixRep1.dcm","fcaab3ded5c41993b82d831c4251526e", "d6347ed051d7b887bdaad1a91433c6ba" },
+{ "NM-PAL-16-PixRep1.dcm","a04de15a87306cf77cd85ae5b720a0b2", "304f147752d46adfdcff71a30cd03d0a" },
+{ "MEDILABInvalidCP246_EVRLESQasUN.dcm","da13f42e41d36ef065af2cb5d770f70b", "d99ace99196e148522c8599803bacc28" },
 
 
 /* Stopping condition */

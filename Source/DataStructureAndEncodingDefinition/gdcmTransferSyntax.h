@@ -75,7 +75,6 @@ public:
     JPEGLSNearLossless,
     JPEG2000Lossless,
     JPEG2000,
-    JPIPReferenced,
     RLELossless,
     MPEG2MainProfile,
     ImplicitVRBigEndianACRNEMA,
@@ -83,6 +82,7 @@ public:
     WeirdPapryus,
 #endif
     CT_private_ELE,
+    JPIPReferenced,
     TS_END
   } TSType;
 

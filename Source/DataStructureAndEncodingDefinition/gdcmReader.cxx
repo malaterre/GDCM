@@ -343,10 +343,10 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
             }
           catch( std::exception &ex2 )
             {
-			(void)ex2;  //to avoid unreferenced variable warning on release
+            (void)ex2;  //to avoid unreferenced variable warning on release
             // Ok I get it now... there is absolutely no meta header, giving up
             //hasmetaheader = false;
-			gdcmErrorMacro(ex2.what());
+            gdcmErrorMacro(ex2.what());
             }
           }
         }
@@ -433,10 +433,10 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
           {
           std::streampos start = is.tellg();
           is.seekg( 0, std::ios::end);
-          std::streampos end = is.tellg();
-		  std::streamoff theOffset = end-start;
-		  assert (theOffset > 0 || theOffset < std::numeric_limits<uint32_t>::max());
-          VL l = (uint32_t)(theOffset);
+	  std::streampos end = is.tellg();
+	  std::streamoff theOffset = end-start;
+	  assert (theOffset > 0 || (uint32_t)theOffset < std::numeric_limits<uint32_t>::max());
+	  VL l = (uint32_t)(theOffset);
           is.seekg( start, std::ios::beg );
           //F->GetDataSet().ReadUpToTagWithLength<ImplicitDataElement,SwapperNoOp>(is, tag, l);
           caller.template ReadCommonWithLength<ImplicitDataElement,SwapperNoOp>(is,l);

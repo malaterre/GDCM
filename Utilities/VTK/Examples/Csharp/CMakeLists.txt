@@ -1,6 +1,6 @@
-SET(DEP)
-IF(GDCM_USE_ACTIVIZ)
-  SET(examples
+set(DEP)
+if(GDCM_USE_ACTIVIZ)
+  set(examples
     #HelloActiviz
     HelloActiviz2
     HelloActiviz3
@@ -9,51 +9,51 @@ IF(GDCM_USE_ACTIVIZ)
     RefCounting
     MetaImageMD5Activiz
     )
-  FOREACH(example ${examples})
+  foreach(example ${examples})
     file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs result)
-    ADD_CUSTOM_COMMAND(
+    add_custom_command(
       OUTPUT ${GDCM_EXECUTABLE_DIR}/${example}.exe
       COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${ACTIVIZ_KITWARE_VTK_LIBRARY}" "/r:${ACTIVIZ_KITWARE_MUMMY_RUNTIME_LIBRARY}" "/r:${GDCM_LIBRARY_DIR}/Kitware.VTK.GDCM.dll" "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${result}
       DEPENDS ${GDCM_LIBRARY_DIR}/Kitware.VTK.GDCM.dll
       ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
       COMMENT "Create ${example}.exe"
       )
-    SET(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
-  ENDFOREACH(example)
+    set(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
+  endforeach()
 
-  IF(BUILD_TESTING)
+  if(BUILD_TESTING)
     get_filename_component(runtimepath ${ACTIVIZ_KITWARE_VTK_LIBRARY} PATH)
-    IF(GDCM_DATA_ROOT)
-      SET_SOURCE_FILES_PROPERTIES(${GDCM_EXECUTABLE_DIR}/HelloActiviz5.exe PROPERTIES RUNTIMEPATH ${runtimepath})
+    if(GDCM_DATA_ROOT)
+      set_source_files_properties(${GDCM_EXECUTABLE_DIR}/HelloActiviz5.exe PROPERTIES RUNTIMEPATH ${runtimepath})
       ADD_CSHARP_TEST(TestHelloActiviz5CSharp ${GDCM_EXECUTABLE_DIR}/HelloActiviz5.exe)
-    ENDIF(GDCM_DATA_ROOT)
-    SET_SOURCE_FILES_PROPERTIES(${GDCM_EXECUTABLE_DIR}/RefCounting.exe PROPERTIES RUNTIMEPATH ${runtimepath})
+    endif()
+    set_source_files_properties(${GDCM_EXECUTABLE_DIR}/RefCounting.exe PROPERTIES RUNTIMEPATH ${runtimepath})
     ADD_CSHARP_TEST(TestRefCountingCSharp ${GDCM_EXECUTABLE_DIR}/RefCounting.exe)
-  ENDIF(BUILD_TESTING)
+  endif()
 
-ELSE(GDCM_USE_ACTIVIZ)
+else()
 
-  SET(CSHARP_EXAMPLES
+  set(CSHARP_EXAMPLES
     HelloVTKWorld
     HelloVTKWorld2
     )
 
-  FOREACH(example ${CSHARP_EXAMPLES})
+  foreach(example ${CSHARP_EXAMPLES})
     file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs result)
     # WORKING_DIRECTORY is set to the src dir because of a strange issue with CSC compiler on Win32 system:
     # http://groups.google.com/group/microsoft.public.dotnet.languages.csharp/browse_thread/thread/9d3ac7eb9f7f56be
-    ADD_CUSTOM_COMMAND(
+    add_custom_command(
       OUTPUT ${GDCM_EXECUTABLE_DIR}/${example}.exe
       COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${result}
       DEPENDS ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
       ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
       COMMENT "Create ${example}.exe"
       )
-    SET(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
-  ENDFOREACH(example)
-ENDIF(GDCM_USE_ACTIVIZ)
+    set(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
+  endforeach()
+endif()
 
-ADD_CUSTOM_TARGET(VTKGDCMExampleCSharp ALL
+add_custom_target(VTKGDCMExampleCSharp ALL
   DEPENDS ${DEP}
   COMMENT "building examples"
 )

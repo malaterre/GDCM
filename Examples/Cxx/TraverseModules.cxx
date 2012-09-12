@@ -54,7 +54,7 @@ int main(int , char *[])
       const IODs::IODName &name = it->first;
       const IOD &iod = it->second;
 
-      const unsigned int niods = iod.GetNumberOfIODs();
+      const size_t niods = iod.GetNumberOfIODs();
       // Iterate over each iod entry in order:
       for(unsigned int idx = 0; idx < niods; ++idx)
         {

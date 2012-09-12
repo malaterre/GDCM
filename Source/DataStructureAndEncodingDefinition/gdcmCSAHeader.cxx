@@ -955,8 +955,8 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
   InternalType = UNKNOWN; // reset
   gdcm::Tag t1(0x0029,0x0010);
   gdcm::Tag t2(0x0029,0x0020);
-  uint16_t v = (de.GetTag().GetElement() << 8);
-  uint16_t v2 = v >> 8;
+  uint16_t v = (uint16_t)(de.GetTag().GetElement() << 8);
+  uint16_t v2 = (uint16_t)(v >> 8);
   //if( de.GetTag().GetPrivateCreator() == t1 )
   if( v2 == t1.GetElement() )
     {
@@ -1056,7 +1056,7 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
     InternalType = SV10;
     }
   assert( InternalType != UNKNOWN );
-  gdcmDebugMacro( "Found Type: " << InternalType );
+  gdcmDebugMacro( "Found Type: " << (int)InternalType );
 
   uint32_t n;
   ss.read((char*)&n, sizeof(n));
@@ -1160,7 +1160,7 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
       }
     std::string str = os.str();
     if( !str.empty() )
-      csael.SetByteValue( &str[0], str.size());
+      csael.SetByteValue( &str[0], (uint32_t)str.size());
     //std::cout << std::endl;
     InternalCSADataSet.insert( csael );
     }

@@ -59,8 +59,6 @@ static const char *TSStrings[] = {
   "1.2.840.10008.1.2.4.90",
   // JPEG 2000
   "1.2.840.10008.1.2.4.91",
-  // JPIP Referenced
-  "1.2.840.10008.1.2.4.94",
   // RLE Lossless
   "1.2.840.10008.1.2.5",
   // MPEG2 Main Profile @ Main Level
@@ -72,6 +70,8 @@ static const char *TSStrings[] = {
   "1.2.840.10008.1.20",
 #endif
   "1.3.46.670589.33.1.4.1",
+  // JPIP Referenced
+  "1.2.840.10008.1.2.4.94",
   // Unknown
   "Unknown Transfer Syntax", // Pretty sure we never use this case...
   0 // Compilers have no obligation to finish by NULL, do it ourself
@@ -148,6 +148,7 @@ bool TransferSyntax::IsLossy() const
     TSField == JPEGFullProgressionProcess10_12 ||
     TSField == JPEGLSNearLossless ||
     TSField == JPEG2000 ||
+    TSField == JPIPReferenced ||
     TSField == MPEG2MainProfile
   )
     {
@@ -191,6 +192,7 @@ bool TransferSyntax::IsLossless() const
     TSField == JPEGFullProgressionProcess10_12 ||
     // TSField == JPEGLSNearLossless || -> can be lossy & lossless
     // TSField == JPEG2000 || -> can be lossy & lossless
+    // TSField == JPIPReferenced || -> can be lossy & lossless
     TSField == MPEG2MainProfile
   )
     {
@@ -270,6 +272,7 @@ bool TransferSyntax::IsEncapsulated() const
   case JPEGLSNearLossless:
   case JPEG2000Lossless:
   case JPEG2000:
+  case JPIPReferenced:
   case RLELossless:
   case MPEG2MainProfile:
   //case ImplicitVRBigEndianACRNEMA:

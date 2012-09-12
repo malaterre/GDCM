@@ -1,6 +1,6 @@
 # Define the tests for Common
 # Common
-SET(Common_TEST_SRCS
+set(Common_TEST_SRCS
   TestVersion
   TestCommand
   TestCryptographicMessageSyntax
@@ -20,45 +20,41 @@ SET(Common_TEST_SRCS
   TestTrace
   TestTypes
   TestUnpacker12Bits
+  TestBase64
   )
-IF(GDCM_USE_SYSTEM_OPENSSL)
-list(APPEND Common_TEST_SRCS
-  TestBase64 # we need the openssl implementation
-  )
-ENDIF(GDCM_USE_SYSTEM_OPENSSL)
 
-IF(GDCM_DATA_ROOT)
+if(GDCM_DATA_ROOT)
 list(APPEND Common_TEST_SRCS
   TestDirectory
   TestFilename
   TestMD5
   )
-IF(GDCM_USE_SYSTEM_OPENSSL)
+if(GDCM_USE_SYSTEM_OPENSSL)
   list(APPEND Common_TEST_SRCS TestSHA1)
-ENDIF(GDCM_USE_SYSTEM_OPENSSL)
-ENDIF(GDCM_DATA_ROOT)
+endif()
+endif()
 
 # Add the include paths
-INCLUDE_DIRECTORIES(
+include_directories(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   )
 
-CREATE_TEST_SOURCELIST(CommonTests gdcmCommonTests.cxx ${Common_TEST_SRCS}
+create_test_sourcelist(CommonTests gdcmCommonTests.cxx ${Common_TEST_SRCS}
   EXTRA_INCLUDE gdcmTestDriver.h
   )
-ADD_EXECUTABLE(gdcmCommonTests ${CommonTests})
-TARGET_LINK_LIBRARIES(gdcmCommonTests gdcmCommon)
+add_executable(gdcmCommonTests ${CommonTests})
+target_link_libraries(gdcmCommonTests gdcmCommon)
 
 #Don't understand why I need that ??
-SET(GDCM_Common_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmCommonTests")
+set(GDCM_Common_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmCommonTests")
 
 # Loop over files and create executables
-FOREACH(name ${Common_TEST_SRCS})
-IF(CMAKE_CROSSCOMPILING)
-  ADD_TEST(${name} ${TARGET_SYSTEM_EMULATOR} ${GDCM_Common_TESTS}${CMAKE_EXECUTABLE_SUFFIX} ${name})
-ELSE(CMAKE_CROSSCOMPILING)
-  ADD_TEST(${name} ${GDCM_Common_TESTS} ${name})
-ENDIF(CMAKE_CROSSCOMPILING)
-ENDFOREACH(name)
+foreach(name ${Common_TEST_SRCS})
+if(CMAKE_CROSSCOMPILING)
+  add_test(${name} ${TARGET_SYSTEM_EMULATOR} ${GDCM_Common_TESTS}${CMAKE_EXECUTABLE_SUFFIX} ${name})
+else()
+  add_test(${name} ${GDCM_Common_TESTS} ${name})
+endif()
+endforeach()

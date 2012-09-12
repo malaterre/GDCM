@@ -17,6 +17,7 @@
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
 #include "vtkLookupTable.h"
+#include "vtkLookupTable16.h"
 #include "vtkMath.h"
 #include "vtkMatrix4x4.h"
 #include "vtkMedicalImageProperties.h"
@@ -652,7 +653,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     pixeltype = outputpt;
     }
 
-  pixeltype.SetSamplesPerPixel( data->GetNumberOfScalarComponents() );
+  pixeltype.SetSamplesPerPixel( (unsigned short)data->GetNumberOfScalarComponents() );
   image.SetPhotometricInterpretation( pi );
   image.SetPixelFormat( pixeltype );
   image.SetPlanarConfiguration( 0 ); // VTK default
@@ -664,7 +665,10 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     vtkLookupTable * vtklut = data->GetPointData()->GetScalars()->GetLookupTable();
     //vtkLookupTable * vtklut = this->LookupTable;
     assert( vtklut );
+    //const char *name = vtklut->GetClassName ();
+    vtkLookupTable16 * vtklut16 = vtkLookupTable16::SafeDownCast( vtklut );
     //assert( vtklut->GetNumberOfTableValues() == 256 );
+    //vtkIdType vtknumcolors = vtklut->GetNumberOfTableValues();
     unsigned int lutlen = 256;
     assert( pixeltype.GetBitsAllocated() == 8 || pixeltype.GetBitsAllocated() == 16 );
     if( pixeltype.GetBitsAllocated() == 8 )
@@ -678,10 +682,15 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
       }
     gdcm::SmartPointer<gdcm::LookupTable> lut = new gdcm::LookupTable;
     lut->Allocate( pixeltype.GetBitsAllocated() );
-    lut->InitializeLUT( gdcm::LookupTable::RED,   lutlen, 0, 16 );
-    lut->InitializeLUT( gdcm::LookupTable::GREEN, lutlen, 0, 16 );
-    lut->InitializeLUT( gdcm::LookupTable::BLUE,  lutlen, 0, 16 );
-    if( !lut->WriteBufferAsRGBA( vtklut->WritePointer(0,4) ) )
+    lut->InitializeLUT( gdcm::LookupTable::RED, (unsigned short)lutlen, 0, 16 );
+    lut->InitializeLUT( gdcm::LookupTable::GREEN, (unsigned short)lutlen, 0, 16 );
+    lut->InitializeLUT( gdcm::LookupTable::BLUE, (unsigned short)lutlen, 0, 16 );
+    bool b;
+    if( vtklut16 )
+      b = lut->WriteBufferAsRGBA( vtklut16->WritePointer(0,4) );
+    else
+      b = lut->WriteBufferAsRGBA( vtklut->WritePointer(0,4) );
+    if( !b )
       {
       vtkWarningMacro( "Could not get values from LUT" );
       return 0;
@@ -716,7 +725,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
-  bv->SetLength( len ); // allocate !
+  bv->SetLength( (uint32_t)len ); // allocate !
 
 //  std::ofstream of( "/tmp/bla.raw" );
 //  of.write( (char*)data->GetScalarPointer(), len);
@@ -1080,7 +1089,8 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     {
     gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
     const char* msstr = gdcm::MediaStorage::GetMSString(ms);
-    de.SetByteValue( msstr, strlen(msstr) );
+    assert( msstr );
+    de.SetByteValue( msstr, (uint32_t)strlen(msstr) );
     de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
     ds.Insert( de );
     }
@@ -1182,7 +1192,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   assert( studyuid ); // programmer error
     {
     gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) ); // Study
-    de.SetByteValue( studyuid, strlen(studyuid) );
+    de.SetByteValue( studyuid, (uint32_t)strlen(studyuid) );
     de.SetVR( gdcm::Attribute<0x0020, 0x000d>::GetVR() );
     ds.Insert( de );
     }
@@ -1190,7 +1200,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   assert( seriesuid ); // programmer error
     {
     gdcm::DataElement de( gdcm::Tag(0x0020,0x000e) ); // Series
-    de.SetByteValue( seriesuid, strlen(seriesuid) );
+    de.SetByteValue( seriesuid, (uint32_t)strlen(seriesuid) );
     de.SetVR( gdcm::Attribute<0x0020, 0x000e>::GetVR() );
     ds.Insert( de );
     }

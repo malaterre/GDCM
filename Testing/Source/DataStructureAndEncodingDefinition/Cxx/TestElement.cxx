@@ -21,7 +21,7 @@ namespace gdcm
 
 int TestFL()
 {
-  Element<VR::FL, VM::VM1> a = {{ TPI }};
+  Element<VR::FL, VM::VM1> a = {{ (float)TPI }};
   a.Print( std::cout );
   std::cout << std::endl;
 
@@ -42,7 +42,7 @@ int TestFL()
 {
   DataSet ds;
   Element<VR::FL,VM::VM1> el;
-  el.SetValue(1.2);
+  el.SetValue(1.2f);
 
   DataElement de = el.GetAsDataElement();
   de.SetTag( Tag(0x0048,0x0201) );

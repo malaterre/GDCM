@@ -93,7 +93,7 @@ static const char *GetLowerLevelDirectoryRecord(const char *input)
 }
 
 
-DICOMDIRGenerator::MyPair DICOMDIRGenerator::GetReferenceValueForDirectoryType(unsigned int itemidx)
+DICOMDIRGenerator::MyPair DICOMDIRGenerator::GetReferenceValueForDirectoryType(size_t itemidx)
 {
   /*
    * PS 3.11 - 2008 / D.3.3 Directory Information in DICOMDIR
@@ -253,7 +253,7 @@ bool DICOMDIRGenerator::ImageBelongToSameSeries(const char *sopuid1, const char 
   return b;
 }
 
-unsigned int DICOMDIRGenerator::FindLowerLevelDirectoryRecord( unsigned int item1, const char *directorytype )
+size_t DICOMDIRGenerator::FindLowerLevelDirectoryRecord( size_t item1, const char *directorytype )
 {
 //  return FindNextDirectoryRecord( item1, GetLowerLevelDirectoryRecord( directorytype ) );
   const char *lowerdirectorytype = GetLowerLevelDirectoryRecord( directorytype );
@@ -274,7 +274,8 @@ unsigned int DICOMDIRGenerator::FindLowerLevelDirectoryRecord( unsigned int item
       // Need to make sure belong to same parent record:
       MyPair refval1 = GetReferenceValueForDirectoryType(item1);
       MyPair refval2 = GetReferenceValueForDirectoryType(i);
-      bool b = ImageBelongToSeries(refval2.first.c_str(), refval1.first.c_str(), refval2.second, refval1.second);
+      bool b = ImageBelongToSeries(refval2.first.c_str(),
+        refval1.first.c_str(), refval2.second, refval1.second);
       if( b ) return i;
       }
     //assert( strncmp( lowerdirectorytype, directoryrecordtype.GetValue(), strlen( lowerdirectorytype ) ) != 0 );
@@ -291,7 +292,7 @@ unsigned int DICOMDIRGenerator::FindLowerLevelDirectoryRecord( unsigned int item
  *
  * TODO: Need to make sure that Series belong to the same Study...
  */
-unsigned int DICOMDIRGenerator::FindNextDirectoryRecord( unsigned int item1, const char *directorytype )
+size_t DICOMDIRGenerator::FindNextDirectoryRecord( size_t item1, const char *directorytype )
 {
   if( !directorytype ) return 0;
   const SequenceOfItems *sqi = GetDirectoryRecordSequence();
@@ -356,8 +357,11 @@ void SingleDataElementInserter(gdcm::DataSet &ds, gdcm::Scanner const & scanner)
 {
   Attribute<Group,Element> patientsname;
   gdcm::Scanner::ValuesType patientsnames = scanner.GetValues( patientsname.GetTag() );
-  unsigned int npatient = patientsnames.size();
+#ifndef NDEBUG
+  const unsigned int npatient = patientsnames.size();
   assert( npatient == 1 );
+#endif
+
   gdcm::Scanner::ValuesType::const_iterator it = patientsnames.begin();
   patientsname.SetValue( it->c_str() );
   ds.Insert( patientsname.GetAsDataElement() );

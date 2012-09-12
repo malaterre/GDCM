@@ -26,7 +26,7 @@ namespace gdcm
 namespace network
 {
 
-/*
+/**
  * \brief CFindRQ
  * this file defines the messages for the cfind action
  */
@@ -37,14 +37,22 @@ public:
     const BaseRootQuery* inRootQuery);
 };
 
+/**
+ * \brief CFindRSP
+ * this file defines the messages for the cfind action
+ */
 class CFindRSP : public BaseCompositeMessage {
 public:
-  std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
+  std::vector<PresentationDataValue> ConstructPDVByDataSet(const DataSet* inDataSet);
 };
 
+/**
+ * \brief CFindCancelRQ
+ * this file defines the messages for the cfind action
+ */
   class CFindCancelRQ : public BaseCompositeMessage {
   public:
-    std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet);
+    std::vector<PresentationDataValue> ConstructPDVByDataSet(const DataSet* inDataSet);
   };
 }
 }

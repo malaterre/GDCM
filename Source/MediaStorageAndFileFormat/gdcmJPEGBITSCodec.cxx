@@ -122,7 +122,7 @@ fill_input_buffer (j_decompress_ptr cinfo)
     }
   if( (end - pos) < INPUT_BUF_SIZE )
     {
-    src->infile->read( (char*)src->buffer, (end - pos) );
+    src->infile->read( (char*)src->buffer, (size_t)(end - pos) );
     }
   else
     {
@@ -414,10 +414,10 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       {
       assert( 0 );
       }
-    this->PF.SetPixelRepresentation( prep );
-    this->PF.SetBitsStored( precision );
+    this->PF.SetPixelRepresentation( (uint16_t)prep );
+    this->PF.SetBitsStored( (uint16_t)precision );
     assert( (precision - 1) >= 0 );
-    this->PF.SetHighBit( precision - 1 );
+    this->PF.SetHighBit( (uint16_t)(precision - 1) );
 
   this->PlanarConfiguration = 0;
     // Let's check the color space:
@@ -695,7 +695,7 @@ UINT16 Y_density
 /*
  * Note: see dcmdjpeg +cn option to avoid the YBR => RGB loss
  */
-bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
+bool JPEGBITSCodec::DecodeByStreams(std::istream &is, std::ostream &os)
 {
   /* This struct contains the JPEG decompression parameters and pointers to
    * working space (which is allocated as needed by the JPEG library).
@@ -710,7 +710,7 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
   /* More stuff */
   //FILE * infile;    /* source file */
   JSAMPARRAY buffer;    /* Output row buffer */
-  int row_stride;    /* physical row width in output buffer */
+  size_t row_stride;    /* physical row width in output buffer */
 
   if( Internals->StateSuspension == 0 )
     {
@@ -795,7 +795,7 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
         {
         gdcmWarningMacro( "Wrong PhotometricInterpretation. DICOM says: " <<
           GetPhotometricInterpretation() << " but JPEG says: "
-          << cinfo.jpeg_color_space );
+          << (int)cinfo.jpeg_color_space );
         //Internals->SetPhotometricInterpretation( PhotometricInterpretation::MONOCHROME2 );
         this->PI = PhotometricInterpretation::MONOCHROME2;
         }
@@ -819,7 +819,7 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
         // LEADTOOLS_FLOWERS-24-RGB-JpegLossy.dcm (lossy)
         gdcmWarningMacro( "Wrong PhotometricInterpretation. DICOM says: " <<
           GetPhotometricInterpretation() << " but JPEG says: "
-          << cinfo.jpeg_color_space );
+          << (int)cinfo.jpeg_color_space );
         // Here it gets nasty since apparently when this occurs lossless means
         // we should not do any color conversion, but we *might* be breaking
         // correct DICOM file.
@@ -888,7 +888,7 @@ bool JPEGBITSCodec::Decode(std::istream &is, std::ostream &os)
     row_stride *= sizeof(JSAMPLE);
     /* Make a one-row-high sample array that will go away when done with image */
     buffer = (*cinfo.mem->alloc_sarray)
-      ((j_common_ptr) &cinfo, JPOOL_IMAGE, row_stride, 1);
+      ((j_common_ptr) &cinfo, JPOOL_IMAGE, (JDIMENSION)row_stride, 1);
 
     /* Save the buffer in case of suspension to be able to reuse it later: */
     Internals->SampBuffer = buffer;
@@ -1154,7 +1154,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
   //FILE * outfile;    /* target file */
   std::ostream * outfile = &os;
   JSAMPROW row_pointer[1];  /* pointer to JSAMPLE row[s] */
-  int row_stride;    /* physical row width in image buffer */
+  size_t row_stride;    /* physical row width in image buffer */
 
   /* Step 1: allocate and initialize JPEG compression object */
 
@@ -1302,7 +1302,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
       JSAMPLE* red   = image_buffer + cinfo.next_scanline * row_stride / 3;
       JSAMPLE* green = image_buffer + cinfo.next_scanline * row_stride / 3 + offset;
       JSAMPLE* blue  = image_buffer + cinfo.next_scanline * row_stride / 3 + offset * 2;
-      for(int i = 0; i < row_stride / 3; ++i )
+      for(size_t i = 0; i < row_stride / 3; ++i )
         {
         *ptempbuffer++ = *red++;
         *ptempbuffer++ = *green++;

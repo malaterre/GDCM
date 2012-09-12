@@ -33,22 +33,6 @@
 namespace gdcm{
   class QueryFactory;
 
-/**
- * \brief BaseRootQuery
- * contains: a baseclass which will produce a dataset for c-find and c-move with patient/study root
- * name and date: 18 oct 2010 mmr
- *
- * This class contains the functionality used in patient c-find and c-move queries.
- * PatientRootQuery and StudyRootQuery derive from this class.
- *
- * Namely:
- * 1) list all tags associated with a particular query type
- * 2) produce a query dataset via tag association
- *
- * Eventually, it can be used to validate a particular dataset type.
- *
- * The dataset held by this object (or, really, one of its derivates) should be passed to a c-find or c-move query.
- */
   enum EQueryLevel
     {
     ePatient,
@@ -62,6 +46,21 @@ namespace gdcm{
     eMove
     };
 
+/**
+ * \brief BaseRootQuery
+ * contains: a baseclass which will produce a dataset for c-find and c-move with patient/study root
+ *
+ * This class contains the functionality used in patient c-find and c-move queries.
+ * PatientRootQuery and StudyRootQuery derive from this class.
+ *
+ * Namely:
+ * 1) list all tags associated with a particular query type
+ * 2) produce a query dataset via tag association
+ *
+ * Eventually, it can be used to validate a particular dataset type.
+ *
+ * The dataset held by this object (or, really, one of its derivates) should be passed to a c-find or c-move query.
+ */
   class GDCM_EXPORT BaseRootQuery : public Object
   {
     //these four classes contain the required, unique, and optional tags from the standard.

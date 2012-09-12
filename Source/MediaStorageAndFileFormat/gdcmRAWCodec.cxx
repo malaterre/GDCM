@@ -107,7 +107,7 @@ bool RAWCodec::DecodeBytes(const char* inBytes, size_t inBufferLength,
   std::stringstream is;
   is.write(inBytes, inBufferLength);
   std::stringstream os;
-  bool r = Decode(is, os);
+  bool r = DecodeByStreams(is, os);
   assert( r );
   if(!r) return false;
 
@@ -120,7 +120,7 @@ bool RAWCodec::DecodeBytes(const char* inBytes, size_t inBufferLength,
     {
     size_t len = str.size() * 16 / 12;
     char * copy = new char[len];
-    bool b = Unpacker12Bits::Unpack(copy, &str[0], str.size() );
+    bool b = Unpacker12Bits::Unpack(copy, &str[0], str.size() ); (void)b;
     assert( b );
     assert (len == inOutBufferLength);
     assert(inOutBufferLength == len);
@@ -162,7 +162,7 @@ bool RAWCodec::Decode(DataElement const &in, DataElement &out)
   std::stringstream is;
   is.write(bv->GetPointer(), bv->GetLength());
   std::stringstream os;
-  bool r = Decode(is, os);
+  bool r = DecodeByStreams(is, os);
   if(!r) return false;
   assert( r );
 
@@ -194,9 +194,9 @@ bool RAWCodec::Decode(DataElement const &in, DataElement &out)
   return r;
 }
 
-bool RAWCodec::Decode(std::istream &is, std::ostream &os)
+bool RAWCodec::DecodeByStreams(std::istream &is, std::ostream &os)
 {
-  bool r = ImageCodec::Decode(is, os);
+  bool r = ImageCodec::DecodeByStreams(is, os);
   return r;
 }
 

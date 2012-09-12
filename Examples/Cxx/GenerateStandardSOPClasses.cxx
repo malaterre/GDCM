@@ -20,9 +20,8 @@
 #include "gdcmMediaStorage.h"
 #include "gdcmSOPClassUIDToIOD.h"
 
-int main(int argc, char *argv[])
+int main(int , char *[])
 {
-
   using gdcm::MediaStorage;
   gdcm::Global& g = gdcm::Global::GetInstance();
   if( !g.LoadResourcesFiles() )

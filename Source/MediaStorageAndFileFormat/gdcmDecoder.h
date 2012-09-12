@@ -35,9 +35,9 @@ public:
   virtual bool CanDecode(TransferSyntax const &) const = 0;
 
   /// Decode
-  virtual bool Decode(DataElement const &is_, DataElement &os) { (void)is_;(void)os;return false; }
+  virtual bool Decode(DataElement const &, DataElement &) { return false; }
 protected:
-  virtual bool Decode(std::istream &is_, std::ostream &os) { (void)is_; (void)os;return false; }
+  virtual bool DecodeByStreams(std::istream &, std::ostream &) { return false; }
 };
 
 } // end namespace gdcm

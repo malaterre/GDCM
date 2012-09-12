@@ -16,11 +16,16 @@
 #include "gdcmFilename.h"
 #include "gdcmTesting.h"
 #include "gdcmCryptographicMessageSyntax.h"
+
+#include "gdcmCryptoFactory.h"
+
 #include "gdcmSmartPointer.h"
 #include "gdcmReader.h"
 #include "gdcmWriter.h"
 #include "gdcmGlobal.h"
 #include "gdcmSystem.h"
+
+#include <memory> // std::auto_ptr
 
 namespace gdcm
 {
@@ -56,7 +61,15 @@ int TestAnonymize2(const char *subdir, const char *filename)
 
 // Encrypt
 {
-  gdcm::CryptographicMessageSyntax cms;
+  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::GetFactoryInstance();
+  if (cryptoFactory == NULL)
+    {
+    std::cerr << "Crypto library not available" << std::endl;
+    return 1;
+    }
+  std::auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
+  gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
+
   if( !cms.ParseCertificateFile( certpath.c_str() ) )
     {
     std::cerr << "Could not parse cert: " << certpath << std::endl;
@@ -90,9 +103,11 @@ int TestAnonymize2(const char *subdir, const char *filename)
   ano->SetFile( reader.GetFile() );
   if( !ano->BasicApplicationLevelConfidentialityProfile() )
     {
-    std::cerr << "BasicApplicationLevelConfidentialityProfile fails for: " << filename << std::endl;
     if( ms != gdcm::MediaStorage::MS_END )
+      {
+      std::cerr << "BasicApplicationLevelConfidentialityProfile fails for: " << filename << std::endl;
       return 1;
+      }
     }
 
   gdcm::Writer writer;
@@ -111,7 +126,14 @@ int TestAnonymize2(const char *subdir, const char *filename)
 }
 // Decrypt
 {
-  gdcm::CryptographicMessageSyntax cms;
+  gdcm::CryptoFactory* cryptoFactory = gdcm::CryptoFactory::GetFactoryInstance();
+  if (cryptoFactory == NULL)
+    {
+    std::cerr << "Crypto library not available" << std::endl;
+    return 1;
+    }
+  std::auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
+  gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
   if( !cms.ParseKeyFile( keypath.c_str() ) )
     {
     std::cerr << "Could not parse key: " << keypath << std::endl;
@@ -131,19 +153,19 @@ int TestAnonymize2(const char *subdir, const char *filename)
     return 1;
     }
 
+  ano->SetFile( reader.GetFile() );
+  if( !ano->BasicApplicationLevelConfidentialityProfile(false) )
+    {
+    std::cerr << "BasicApplicationLevelConfidentialityProfile (false) fails for: " << outfilename << std::endl;
+    return 1;
+    }
+
   const DataSet &ds = reader.GetFile().GetDataSet();
   bool hasinstanceuid = true;
   if( !ds.FindDataElement( Tag(0x0008,0x0018) )
     || ds.GetDataElement( Tag(0x0008,0x0018) ).IsEmpty() )
     {
     hasinstanceuid = false;
-    }
-
-  ano->SetFile( reader.GetFile() );
-  if( !ano->BasicApplicationLevelConfidentialityProfile(false) )
-    {
-    std::cerr << "BasicApplicationLevelConfidentialityProfile (false) fails for: " << outfilename << std::endl;
-    return 1;
     }
 
   // TODO Need to compare filename to decrypted one.

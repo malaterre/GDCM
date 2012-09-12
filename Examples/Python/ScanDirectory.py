@@ -15,6 +15,13 @@
 import gdcm
 import sys,os
 
+class ProgressWatcher(gdcm.SimpleSubjectWatcher):
+  def ShowProgress(self, sender, event):
+    pe = gdcm.ProgressEvent.Cast(event)
+    print pe.GetProgress()
+  def EndFilter(self):
+    print "Yay ! I am done"
+
 if __name__ == "__main__":
   directory = sys.argv[1]
 
@@ -34,7 +41,10 @@ if __name__ == "__main__":
   gdcm.Trace.WarningOff()
 
   # instanciate Scanner:
-  s = gdcm.Scanner();
+  sp = gdcm.Scanner.New();
+  s = sp.__ref__()
+  w = ProgressWatcher(s, 'Watcher')
+
   s.AddTag( t1 );
   s.AddTag( t2 );
   b = s.Scan( filenames );

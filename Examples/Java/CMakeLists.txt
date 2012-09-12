@@ -1,6 +1,6 @@
-FIND_PACKAGE(Java REQUIRED) # javac, jar
-FIND_PACKAGE(JNI REQUIRED)
-INCLUDE_DIRECTORIES(
+find_package(Java REQUIRED) # javac, jar
+find_package(JNI REQUIRED)
+include_directories(
   #${JNI_INCLUDE_PATH}
   ${JAVA_INCLUDE_PATH}
   ${JAVA_INCLUDE_PATH2}
@@ -14,8 +14,8 @@ set(examples
   ScanDirectory
   ReadFiles
   )
-FOREACH(example ${examples})
-  ADD_CUSTOM_COMMAND(
+foreach(example ${examples})
+  add_custom_command(
     OUTPUT ${EXECUTABLE_OUTPUT_PATH}/${example}.class
     COMMAND ${Java_JAVAC_EXECUTABLE} ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java -d ${EXECUTABLE_OUTPUT_PATH} -classpath ${LIBRARY_OUTPUT_PATH}/gdcm.jar
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -23,19 +23,19 @@ FOREACH(example ${examples})
     COMMENT "javac ${example}.java"
     )
   list(APPEND classfilesdep ${EXECUTABLE_OUTPUT_PATH}/${example}.class)
-ENDFOREACH(example)
+endforeach()
 
 # 3. ok now add the target
-ADD_CUSTOM_TARGET(GDCMJavaExample ALL
+add_custom_target(GDCMJavaExample ALL
   DEPENDS ${classfilesdep}
   COMMENT "building gdcm java example"
 )
 # make sure gdcm.jar is built
-ADD_DEPENDENCIES(GDCMJavaExample GDCMJavaJar)
+add_dependencies(GDCMJavaExample GDCMJavaJar)
 
-IF(BUILD_TESTING)
-  IF(GDCM_DATA_ROOT)
-    SET_SOURCE_FILES_PROPERTIES(${EXECUTABLE_OUTPUT_PATH}/HelloSimple.class PROPERTIES CLASSPATH "${EXECUTABLE_OUTPUT_PATH}/gdcm.jar")
+if(BUILD_TESTING)
+  if(GDCM_DATA_ROOT)
+    set_source_files_properties(${EXECUTABLE_OUTPUT_PATH}/HelloSimple.class PROPERTIES CLASSPATH "${EXECUTABLE_OUTPUT_PATH}/gdcm.jar")
     ADD_JAVA_TEST(TestHelloSimpleJava ${EXECUTABLE_OUTPUT_PATH}/HelloSimple ${GDCM_DATA_ROOT}/012345.002.050.dcm)
-  ENDIF(GDCM_DATA_ROOT)
-ENDIF(BUILD_TESTING)
+  endif()
+endif()

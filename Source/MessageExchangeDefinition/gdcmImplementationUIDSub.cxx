@@ -23,7 +23,7 @@ const uint8_t ImplementationUIDSub::Reserved2 = 0x00;
 ImplementationUIDSub::ImplementationUIDSub()
 {
   ImplementationClassUID = "FOO";
-  ItemLength = ImplementationClassUID.size();
+  ItemLength = (uint16_t)ImplementationClassUID.size();
 }
 
 const std::ostream &ImplementationUIDSub::Write(std::ostream &os) const

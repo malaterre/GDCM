@@ -101,7 +101,7 @@ class MY_API sockerr : public std::exception
         {
             text.text = theoperation;
         }
-        sockerr (const sockerr &O)
+        sockerr (const sockerr &O): std::exception(O)
         {
             err = O.err;
             text = O.text;
@@ -179,7 +179,7 @@ class MY_API sockbuf: public streambuf
             msg_peek            = MSG_PEEK,
             msg_dontroute    = MSG_DONTROUTE
 
-#if !(defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__bsdi__) || defined(__APPLE__))
+#if !(defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__bsdi__) || defined(__APPLE__))
             ,msg_maxiovlen    = MSG_MAXIOVLEN
 #endif
         };

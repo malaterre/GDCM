@@ -47,12 +47,14 @@ public:
     assert( RessourcePaths.empty() );
     const char filename2[] = GDCM_CMAKE_INSTALL_PREFIX "/" GDCM_INSTALL_DATA_DIR "/XML/";
     RessourcePaths.push_back( filename2 );
+    const char filename3[] = GDCM_CMAKE_INSTALL_PREFIX " " GDCM_API_VERSION "/" GDCM_INSTALL_DATA_DIR "/XML/";
+    RessourcePaths.push_back( filename3 );
     const char *curprocfn = System::GetCurrentProcessFileName();
     if( curprocfn )
       {
       Filename fn( curprocfn );
       std::string str = fn.GetPath();
-      str += "/../" GDCM_INSTALL_DATA_DIR;
+      str += "/../" GDCM_INSTALL_DATA_DIR "/XML/";
       RessourcePaths.push_back( str );
       }
     const char *respath = System::GetCurrentResourcesDirectory();

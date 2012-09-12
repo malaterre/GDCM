@@ -25,7 +25,6 @@
 
 namespace gdcm
 {
-
 //-----------------------------------------------------------------------------
 template <typename TSwap>
 std::istream &ExplicitDataElement::Read(std::istream &is)
@@ -92,7 +91,7 @@ std::istream &ExplicitDataElement::ReadPreValue(std::istream &is)
     ValueField->SetLength( (int32_t)(e - s) );
     ValueLengthField = ValueField->GetLength();
     bool failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
-    (void)failed;
+    gdcmAssertAlwaysMacro( !failed );
     return is;
     //throw Exception( "Unhandled" );
     }
@@ -311,7 +310,7 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is)
       failed = !ValueIO<ExplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField);
       break;
     default:
-    failed = true;
+      failed = true;
       assert(0);
       }
     }
@@ -399,8 +398,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       }
     return os;
     }
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  bool vr16bitsimpossible = (VRField & VR::VL16) && (ValueLengthField > VL::GetVL16Max());
+  bool vr16bitsimpossible = (VRField & VR::VL16) && (ValueLengthField > (uint32_t)VL::GetVL16Max());
   if( VRField == VR::INVALID || vr16bitsimpossible )
     {
     VR un = VR::UN;
@@ -416,8 +414,8 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       ValueLengthField.Write<TSwap>(os);
     }
   else
-#endif
     {
+    assert( VRField.IsVRFile() && VRField != VR::INVALID );
     if( !VRField.Write(os) )
       {
       assert( 0 && "Should not happen" );

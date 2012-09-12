@@ -44,7 +44,7 @@ int TestDICOMDIRGenerator1(int argc, char *argv[])
   filenames.push_back( file3 );
   filenames.push_back( file2 );
   filenames.push_back( file0 );
-  unsigned int nfiles = filenames.size();
+  size_t nfiles = filenames.size();
 
   gdcm::FilenameGenerator fg;
   const char pattern[] = "FILE%03d";

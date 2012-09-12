@@ -109,7 +109,7 @@ BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
     {
     DataElement de( it->first );
     const std::string &s = it->second;
-    de.SetByteValue ( s.c_str(), s.size() );
+    de.SetByteValue ( s.c_str(), (uint32_t)s.size() );
     ds.Insert( de );
     }
   return CompositeNetworkFunctions::ConstructQuery( inRootType,
@@ -258,7 +258,7 @@ public:
     {
     const ProgressEvent &pe = dynamic_cast<const ProgressEvent&>(evt);
     (void)caller;
-    progress = refprogress + (1. / nfiles ) * pe.GetProgress();
+    progress = refprogress + (1. / (double)nfiles ) * pe.GetProgress();
 //    std::cout << "Progress: " << progress << " " << pe.GetProgress() << std::endl;
     }
   virtual void ShowDataSet(Subject *, const Event &) {}

@@ -268,27 +268,23 @@ bool FileDerivation::AddDerivationDescription()
     ds.Replace( at1.GetAsDataElement() );
     }
 
+// ADD_DERIV: should we append the derivation after any existing one ?
+// For compat reason: always override the existing one
+//#define ADD_DERIV
   const Tag sisq(0x8,0x9215);
   SmartPointer<SequenceOfItems> sqi;
   sqi = new SequenceOfItems;
-  DataElement de( sisq );
-  de.SetVR( VR::SQ );
-  de.SetValue( *sqi );
-  de.SetVLToUndefined();
-  ds.Insert( de );
-  //sqi = (SequenceOfItems*)ds.GetDataElement( sisq ).GetSequenceOfItems();
-  sqi = ds.GetDataElement( sisq ).GetValueAsSQ();
+#ifdef ADD_DERIV
+  if( ds.FindDataElement( sisq ) )
+    sqi = ds.GetDataElement( sisq ).GetValueAsSQ();
+#endif
   sqi->SetLengthToUndefined();
 
-  if( !sqi->GetNumberOfItems() )
-    {
-    Item item;
-    item.SetVLToUndefined();
-    sqi->AddItem( item );
-    }
+  Item item;
+  item.SetVLToUndefined();
 
-  Item &item1 = sqi->GetItem(1);
-  DataSet &subds3 = item1.GetNestedDataSet();
+  //Item &item1 = sqi->GetItem(1);
+  DataSet &subds3 = item.GetNestedDataSet();
 
   unsigned int codevalue = this->Internals->DerivationCodeSequenceCodeValue;
   const CodeDefinition *cd = GetCodeDefinition( codevalue, ImageDerivation );
@@ -309,6 +305,14 @@ bool FileDerivation::AddDerivationDescription()
   Attribute<0x0008,0x0104> at3;
   at3.SetValue( cd->CodeMeaning );
   subds3.Replace( at3.GetAsDataElement() );
+
+  sqi->AddItem( item );
+
+  DataElement de( sisq );
+  de.SetVR( VR::SQ );
+  de.SetValue( *sqi );
+  de.SetVLToUndefined();
+  ds.Replace( de );
 
   return true;
 }

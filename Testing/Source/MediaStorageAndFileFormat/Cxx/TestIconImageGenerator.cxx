@@ -205,8 +205,10 @@ static const char * const iconimagearray[][2] = {
  {"365049df79c7491d14476c21083283ee" , "LEADTOOLS_FLOWERS-8-MONO2-Uncompressed.dcm" },
  {"cee47e57f6b1aaace74bb813e33a74eb" , "00191113.dcm" },
  {"07b6f4e2fba920d28e2f29dbb037b640" , "TOSHIBA_J2K_SIZ1_PixRep0.dcm" },
- {"93f60acbb450c62992a1db09a6c19c05" , "TOSHIBA_J2K_OpenJPEGv2Regression.dcm" },
- {"fa02ad71bdf3e6970e18fc9a9df03a2d" , "TOSHIBA_J2K_SIZ0_PixRep1.dcm" },
+ {"206713a8ff161546d664d1285f99f90b" , "TOSHIBA_J2K_OpenJPEGv2Regression.dcm" },
+ {"dc70ae52689ebf8f5003320e1c7f216b" , "TOSHIBA_J2K_SIZ0_PixRep1.dcm" },
+ {"3475cb96e0308cb84502be1c1531b588" , "NM-PAL-16-PixRep1.dcm" },
+ {"bcac830aae8652a88f4c4aa6d9e7e116" , "MEDILABInvalidCP246_EVRLESQasUN.dcm" },
 
  // sentinel
  { 0, 0 }

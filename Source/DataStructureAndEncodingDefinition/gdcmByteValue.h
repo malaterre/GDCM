@@ -208,6 +208,10 @@ public:
     return true;
     }
 
+  /**To Print Values in Native DICOM format **/
+  void PrintPNXML(std::ostream &os) const;
+  void PrintASCIIXML(std::ostream &os) const;
+  void PrintHexXML(std::ostream &os) const;
 protected:
   void Print(std::ostream &os) const {
   // This is perfectly valid to have a Length = 0 , so we cannot check
@@ -231,7 +235,10 @@ protected:
     os << "(no value available)";
     }
   }
-
+/*
+//Introduce check for invalid XML characters
+friend std::ostream& operator<<(std::ostream &os,const char c);
+*/
 
 private:
   std::vector<char> Internal;

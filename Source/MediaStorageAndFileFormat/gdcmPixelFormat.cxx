@@ -111,7 +111,7 @@ void PixelFormat::SetScalarType(ScalarType st)
     break;
     }
   BitsStored = BitsAllocated;
-  HighBit = BitsStored - 1;
+  HighBit = (uint16_t)(BitsStored - 1);
 }
 
 PixelFormat::ScalarType PixelFormat::GetScalarType() const
@@ -141,9 +141,9 @@ PixelFormat::ScalarType PixelFormat::GetScalarType() const
     type = PixelFormat::UINT32; // why not ?
     break;
   case 24:
-    gdcmWarningMacro( "This is illegal in DICOM, assuming a RGB image" );
+    gdcmDebugMacro( "This is illegal in DICOM, assuming a RGB image" );
     type = PixelFormat::UINT8;
-    assert(0);
+    //assert(0);
     break;
   default:
     gdcmErrorMacro( "I have never seen this before BitsAllocated "
@@ -193,7 +193,7 @@ const char *PixelFormat::GetScalarTypeAsString() const
 
 uint8_t PixelFormat::GetPixelSize() const
 {
-  uint8_t pixelsize = BitsAllocated / 8;
+  uint8_t pixelsize = (uint8_t)(BitsAllocated / 8);
   if( BitsAllocated == 12 )
     {
     pixelsize = 2; // fake a short value

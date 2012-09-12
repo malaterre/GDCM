@@ -1,6 +1,6 @@
 # Define the tests for Data Dictionary
 # DICT
-SET(DICT_TEST_SRCS
+set(DICT_TEST_SRCS
   TestDictEntry
   TestDict
   TestGlobal
@@ -12,7 +12,7 @@ SET(DICT_TEST_SRCS
   )
 
 # Add the include paths
-INCLUDE_DIRECTORIES(
+include_directories(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
@@ -20,16 +20,16 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   )
 
-CREATE_TEST_SOURCELIST(DICTTests gdcmDICTTests.cxx ${DICT_TEST_SRCS}
+create_test_sourcelist(DICTTests gdcmDICTTests.cxx ${DICT_TEST_SRCS}
   EXTRA_INCLUDE gdcmTestDriver.h
   )
-ADD_EXECUTABLE(gdcmDICTTests ${DICTTests})
-TARGET_LINK_LIBRARIES(gdcmDICTTests gdcmDICT gdcmMSFF)
+add_executable(gdcmDICTTests ${DICTTests})
+target_link_libraries(gdcmDICTTests gdcmDICT gdcmMSFF)
 
 #Don't understand why I need that ??
-SET(GDCM_DICT_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmDICTTests")
+set(GDCM_DICT_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmDICTTests")
 
 # Loop over files and create executables
-FOREACH(name ${DICT_TEST_SRCS})
-  ADD_TEST(${name} ${GDCM_DICT_TESTS} ${name})
-ENDFOREACH(name)
+foreach(name ${DICT_TEST_SRCS})
+  add_test(${name} ${GDCM_DICT_TESTS} ${name})
+endforeach()

@@ -92,7 +92,8 @@ public class BasicAnonymizer
       }
 
     string certpath = gdcm.Filename.Join(gdcm.Testing.GetSourceDirectory(), "/Testing/Source/Data/certificate.pem" );
-    gdcm.CryptographicMessageSyntax cms = new gdcm.CryptographicMessageSyntax();
+    gdcm.CryptoFactory fact = gdcm.CryptoFactory.GetFactoryInstance();
+    gdcm.CryptographicMessageSyntax cms = fact.CreateCMSProvider();
     if( !cms.ParseCertificateFile( certpath ) )
       {
       return 1;

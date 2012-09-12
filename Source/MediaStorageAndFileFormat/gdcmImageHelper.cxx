@@ -240,7 +240,7 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     meanspacing += current;
     prev = distances[i];
     }
-  meanspacing /= (nitems - 1);
+  meanspacing /= (double)(nitems - 1);
 
   //zspacing = distances[1] - distances[0];
   zspacing = meanspacing;
@@ -746,6 +746,30 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
         theReturn[2] = at.GetValue();
         }
       }
+    // ACR-NEMA legacy
+      {
+      Attribute<0x0028,0x0005> at = { 0 };
+      if( ds.FindDataElement( at.GetTag() ) )
+        {
+        const DataElement &de = ds.GetDataElement( at.GetTag() );
+        // SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm picks VR::SS instead...
+        if( de.GetVR().Compatible( at.GetVR() ) || de.GetVR() == VR::INVALID )
+          {
+          at.SetFromDataSet( ds );
+          int imagedimensions = at.GetValue();
+          if( imagedimensions == 3 )
+            {
+            Attribute<0x0028,0x0012> at2 = { 0 };
+            at2.SetFromDataSet( ds );
+            theReturn[2] = at2.GetValue();
+            }
+          }
+        else
+          {
+          gdcmWarningMacro( "Sorry cant read attribute (wrong VR): " << at.GetTag() );
+          }
+        }
+      }
     }
 
   return theReturn;
@@ -774,10 +798,10 @@ void ImageHelper::SetDimensionsValue(File& f, const Image & img)
   else
     {
     Attribute<0x0028,0x0010> rows;
-    rows.SetValue( dims[1] );
+    rows.SetValue( (uint16_t)dims[1] );
     ds.Replace( rows.GetAsDataElement() );
     Attribute<0x0028,0x0011> columns;
-    columns.SetValue( dims[0] );
+    columns.SetValue( (uint16_t)dims[0] );
     ds.Replace( columns.GetAsDataElement() );
     if( dims[2] > 1 )
       {
@@ -864,6 +888,7 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   // (0028,0030) DS [ 0.8593750000\0.8593750000]             #  26, 2 PixelSpacing
   switch(ms)
     {
+  case MediaStorage::EnhancedUSVolumeStorage:
   // Enhanced stuff are handled elsewere... look carefully :)
   //case MediaStorage::EnhancedMRImageStorage:
   //case MediaStorage::EnhancedCTImageStorage:
@@ -948,6 +973,7 @@ Tag ImageHelper::GetZSpacingTagFromMediaStorage(MediaStorage const &ms)
 
   switch(ms)
     {
+  case MediaStorage::EnhancedUSVolumeStorage:
   case MediaStorage::MRImageStorage:
   case MediaStorage::NuclearMedicineImageStorage: // gdcmData/Nm.dcm
   case MediaStorage::GeneralElectricMagneticResonanceImageStorage:
@@ -1085,8 +1111,18 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
         el.Read( ss );
         assert( el.GetLength() == 2 );
-        for(unsigned long i = 0; i < el.GetLength(); ++i)
-          sp.push_back( el.GetValue(i) );
+        for(unsigned int i = 0; i < el.GetLength(); ++i)
+          {
+          if( el.GetValue(i) )
+            {
+            sp.push_back( el.GetValue(i) );
+            }
+          else
+            {
+            gdcmWarningMacro( "Cant have a spacing of 0" );
+            sp.push_back( 1.0 );
+            }
+          }
         std::swap( sp[0], sp[1]);
         assert( sp.size() == (unsigned int)entry.GetVM() );
         }
@@ -1101,7 +1137,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         ss.str( s );
         el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
         el.Read( ss );
-        for(unsigned long i = 0; i < el.GetLength(); ++i)
+        for(unsigned int i = 0; i < el.GetLength(); ++i)
           sp.push_back( el.GetValue(i) );
         assert( sp.size() == (unsigned int)entry.GetVM() );
         }
@@ -1150,7 +1186,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
             ss.str( s );
             el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
             el.Read( ss );
-            for(unsigned long i = 0; i < el.GetLength(); ++i)
+            for(unsigned int i = 0; i < el.GetLength(); ++i)
               {
               const double value = el.GetValue(i);
               sp.push_back( value );
@@ -1203,8 +1239,15 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
           }
         else
           {
-          assert( at2.GetValue() == 0. );
-          sp.push_back( 1.0 );
+          if( at2.GetValue() != 0. )
+            {
+            gdcmErrorMacro( "Number of Frame should be equal to 0" );
+            sp.push_back( 0.0 );
+            }
+          else
+            {
+            sp.push_back( 1.0 );
+            }
           }
         }
       else
@@ -1222,8 +1265,8 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
   assert( sp.size() == 3 );
   assert( sp[0] != 0. );
   assert( sp[1] != 0. );
-  if( ms != MediaStorage::MRImageStorage )
-    assert( sp[2] != 0. );
+  //if( ms != MediaStorage::MRImageStorage )
+  //  assert( sp[2] != 0. );
   return sp;
 }
 
@@ -1362,7 +1405,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
           assert( entry.GetVM() == VM::VM2 );
           for( unsigned int i = 0; i < entry.GetVM().GetLength(); ++i)
             {
-            el.SetValue( spacing[i], i );
+            el.SetValue( (int)spacing[i], i );
             }
           //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
           std::stringstream os;
@@ -1850,9 +1893,9 @@ bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<doubl
     spacing[2] += z;
     }
   size_t n = imageposition.size() / 3;
-  spacing[0] /= n;
-  spacing[1] /= n;
-  spacing[2] /= n;
+  spacing[0] /= (double)n;
+  spacing[1] /= (double)n;
+  spacing[2] /= (double)n;
 
   return true;
 }
@@ -2026,7 +2069,7 @@ SmartPointer<LookupTable> ImageHelper::GetLUT(File const& f){
     // (0028,1101) US 0\0\16
     // (0028,1102) US 0\0\16
     // (0028,1103) US 0\0\16
-    const Tag tdescriptor(0x0028, (0x1101 + i));
+    const Tag tdescriptor(0x0028, (uint16_t)(0x1101 + i));
     //const Tag tdescriptor(0x0028, 0x3002);
     Element<VR::US,VM::VM3> el_us3 = {{ 0, 0, 0}};
     // Now pass the byte array to a DICOMizer:
@@ -2037,14 +2080,14 @@ SmartPointer<LookupTable> ImageHelper::GetLUT(File const& f){
     // (0028,1201) OW
     // (0028,1202) OW
     // (0028,1203) OW
-    const Tag tlut(0x0028, (0x1201 + i));
+    const Tag tlut(0x0028, (uint16_t)(0x1201 + i));
     //const Tag tlut(0x0028, 0x3006);
 
     // Segmented LUT
     // (0028,1221) OW
     // (0028,1222) OW
     // (0028,1223) OW
-    const Tag seglut(0x0028, (0x1221 + i));
+    const Tag seglut(0x0028, (uint16_t)(0x1221 + i));
     if( ds.FindDataElement( tlut ) )
       {
       const ByteValue *lut_raw = ds.GetDataElement( tlut ).GetByteValue();

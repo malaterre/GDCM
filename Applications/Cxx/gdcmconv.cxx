@@ -186,7 +186,7 @@ void PrintHelp()
 }
 
 template <typename T>
-unsigned int readvector(std::vector<T> &v, const char *str)
+size_t readvector(std::vector<T> &v, const char *str)
 {
   if( !str ) return 0;
   std::istringstream os( str );
@@ -407,7 +407,7 @@ static bool derives( File & file, const Pixmap& compressed_image )
   const DataElement & pixeldata = compressed_image.GetDataElement();
   size_t len = pixeldata.GetSequenceOfFragments()->ComputeByteLength();
   size_t reflen = compressed_image.GetBufferLength();
-  double ratio = (double)reflen / len;
+  double ratio = (double)reflen / (double)len;
   Attribute<0x0028,0x2110> at1;
   at1.SetValue( "01" );
   ds.Replace( at1.GetAsDataElement() );
@@ -616,7 +616,7 @@ int main (int argc, char *argv[])
           else if( option_index == 44 ) /* tile */
             {
             assert( strcmp(s, "tile") == 0 );
-            unsigned int n = readvector(tilesize, optarg);
+            size_t n = readvector(tilesize, optarg);
             assert( n == 2 );
             }
           else if( option_index == 45 ) /* number of resolution */
@@ -959,7 +959,7 @@ int main (int argc, char *argv[])
     const char *tsuid = gdcm::TransferSyntax::GetTSString( ts );
     // const char * is ok since padding is \0 anyway...
     gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
-    de.SetByteValue( tsuid, strlen(tsuid) );
+    de.SetByteValue( tsuid, (uint32_t)strlen(tsuid) );
     de.SetVR( gdcm::Attribute<0x0002, 0x0010>::GetVR() );
     fmi.Clear();
     fmi.Replace( de );
@@ -1207,6 +1207,7 @@ int main (int argc, char *argv[])
         }
       const gdcm::TransferSyntax &ts = image.GetTransferSyntax();
 #ifdef GDCM_WORDS_BIGENDIAN
+	(void)ts;
       change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian );
 #else
       if( ts.IsExplicit() )

@@ -117,8 +117,8 @@ namespace gdcm
             assert( item == itemPMSStart );
             ss.seekg(-4,std::ios::cur);
             sqi->Read<ExplicitDataElement,SwapperDoOp>( ss );
-			(void)ex;  //to avoid unreferenced variable warning on release
-			gdcmErrorMacro(ex.what());
+            gdcmWarningMacro(ex.what());
+            (void)ex;  //to avoid unreferenced variable warning on release
             }
           return sqi;
           }
@@ -136,24 +136,38 @@ namespace gdcm
             ss.str( s );
             sqi->Read<ImplicitDataElement,SwapperNoOp>( ss );
             }
-          catch ( Exception & )
+          catch ( Exception &ex0 )
             {
             // Some people like to skew things up and write invalid SQ in VR:UN field
             // if conversion fails, simply keep the binary VR:UN stuff as-is
-            // eg. AMIInvalidPrivateDefinedLengthSQasUN.dcm";
+            // eg. AMIInvalidPrivateDefinedLengthSQasUN.dcm
             //const char *s = e.what();
             // s -> gdcm::ImplicitDataElement -> Impossible (more)
-            std::stringstream ss;
-            ss.str(s);
             try
               {
+              std::stringstream ss;
+              ss.str(s);
               sqi->Read<ExplicitDataElement,SwapperDoOp>( ss );
+              gdcmWarningMacro(ex0.what()); (void)ex0;
               }
-            catch ( Exception & )
+            catch ( Exception &ex1 )
               {
-              gdcmErrorMacro( "Could not read SQ. Giving up" );
-              throw "Could not decode this SQ";
-              return NULL;
+              // Let's try again this time but without the byte swapping option:
+              // eg. MEDILABInvalidCP246_EVRLESQasUN.dcm
+              try
+                {
+                std::stringstream ss;
+                ss.str(s);
+                sqi->Read<ExplicitDataElement,SwapperNoOp>( ss );
+                gdcmWarningMacro(ex1.what()); (void)ex1;
+                }
+              catch ( Exception &ex2 )
+                {
+                gdcmErrorMacro( "Could not read SQ. Giving up" );
+                gdcmErrorMacro(ex2.what()); (void)ex2;
+                throw "Could not decode this SQ";
+                return NULL;
+                }
               }
             }
           return sqi;

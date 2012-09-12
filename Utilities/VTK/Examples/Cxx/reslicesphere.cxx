@@ -511,7 +511,7 @@ public:
 
         // Set the initial slice to be at the center of the sphere.
         // Divide by the spacing because this will be undone in SetSlice.
-        SetSlice(initialPosition / spacing[0]);
+        SetSlice( (int)(initialPosition / spacing[0]));
     }
 
     vtkRenderWindowInteractor* GetInteractor()
@@ -555,6 +555,9 @@ protected:
 
 void KeyCallback::Execute(vtkObject* caller, unsigned long eventId, void *calldata)
 {
+  (void)caller;
+  (void)eventId;
+  (void)calldata;
     std::string sym=_reslice->GetInteractor()->GetKeySym();
 
     if (!sym.compare("Up"))

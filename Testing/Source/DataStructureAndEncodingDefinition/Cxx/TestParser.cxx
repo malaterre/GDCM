@@ -52,7 +52,7 @@ int TestParser(int argc, char *argv[])
     return 1;
     }
   std::string filename = argv[1];
-  std::ifstream is( filename.c_str() );
+  std::ifstream is( filename.c_str(), std::ios::binary );
   std::cout << "---------------------------Parsing file :[" << filename << "]"
             << std::endl;
   char buf[BUFSIZ];

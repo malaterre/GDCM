@@ -20,16 +20,16 @@
 #
 
 # the name of the target operating system
-SET(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_NAME Linux)
 
 # which compilers to use for C and C++
-SET(CMAKE_C_COMPILER gcc)
-SET(CMAKE_C_FLAGS -m32)
-SET(CMAKE_CXX_COMPILER g++)
-SET(CMAKE_CXX_FLAGS -m32)
+set(CMAKE_C_COMPILER gcc)
+set(CMAKE_C_FLAGS -m32)
+set(CMAKE_CXX_COMPILER g++)
+set(CMAKE_CXX_FLAGS -m32)
 
 # here is the target environment located
-SET(CMAKE_FIND_ROOT_PATH   /usr/i486-linux-gnu )
+set(CMAKE_FIND_ROOT_PATH   /usr/i486-linux-gnu )
 
 # adjust the default behaviour of the FIND_XXX() commands:
 # search headers and libraries in the target environment, search

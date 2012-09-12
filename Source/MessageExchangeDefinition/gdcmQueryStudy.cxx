@@ -48,7 +48,7 @@ std::vector<Tag> QueryStudy::GetRequiredTags(const ERootType& inRootType) const{
   }
   return theReturn;
 }
-std::vector<Tag> QueryStudy::GetUniqueTags(const ERootType& inRootType) const{
+std::vector<Tag> QueryStudy::GetUniqueTags(const ERootType& ) const{
   std::vector<Tag> theReturn;//see 3.4 C.6.2.1.2
   theReturn.push_back(Tag(0x0020, 0x000D));
   return theReturn;

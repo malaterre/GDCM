@@ -99,6 +99,7 @@
 #include "gdcmIPPSorter.h"
 #include "gdcmSpectroscopy.h"
 #include "gdcmPrinter.h"
+#include "gdcmXMLPrinter.h"
 #include "gdcmDumper.h"
 #include "gdcmOrientation.h"
 #include "gdcmFiducials.h"
@@ -171,11 +172,19 @@
 #include "gdcmFileDerivation.h"
 
 #include "gdcmQueryBase.h"
+#include "gdcmQueryFactory.h"
 #include "gdcmBaseRootQuery.h"
 #include "gdcmPresentationContext.h"
 #include "gdcmPresentationContextGenerator.h"
 #include "gdcmCompositeNetworkFunctions.h"
 #include "gdcmServiceClassUser.h"
+
+#include "gdcmStreamImageReader.h"
+#include "gdcmStreamImageWriter.h"
+
+#include "gdcmRegion.h"
+#include "gdcmBoxRegion.h"
+#include "gdcmImageRegionReader.h"
 
 using namespace gdcm;
 %}
@@ -276,6 +285,8 @@ EXTEND_CLASS_PRINT(gdcm::VM)
 %template (FilenamesType) std::vector<std::string>;
 %include "gdcmDirectory.h"
 EXTEND_CLASS_PRINT(gdcm::Directory)
+//%clear FilenameType;
+%clear FilenamesType;
 %include "gdcmObject.h"
 %include "gdcmValue.h"
 EXTEND_CLASS_PRINT(gdcm::Value)
@@ -311,6 +322,7 @@ EXTEND_CLASS_PRINT(gdcm::ByteValue)
 EXTEND_CLASS_PRINT(gdcm::DataElement)
 %include "gdcmItem.h"
 EXTEND_CLASS_PRINT(gdcm::Item)
+%template() std::vector< gdcm::Item >;
 %include "gdcmSequenceOfItems.h"
 EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %rename (PythonDataSet) SWIGDataSet;
@@ -440,13 +452,25 @@ EXTEND_CLASS_PRINT(gdcm::DictEntry)
 %include "gdcmCSAHeaderDictEntry.h"
 EXTEND_CLASS_PRINT(gdcm::CSAHeaderDictEntry)
 
+%template(DictEntryTagPairType) std::pair< gdcm::DictEntry, gdcm::Tag>;
 %include "gdcmDict.h"
 EXTEND_CLASS_PRINT(gdcm::Dict)
+%extend gdcm::Dict
+{
+  std::pair<gdcm::DictEntry,gdcm::Tag> GetDictEntryByKeyword(const char *keyword) const {
+    std::pair<gdcm::DictEntry,gdcm::Tag> ret;
+    ret.first = self->GetDictEntryByKeyword(keyword, ret.second);
+    return ret;
+  }
+}
+%ignore gdcm::Dict::GetDictEntryByKeyword(const char *keyword, Tag & tag) const;
 %include "gdcmCSAHeaderDict.h"
 EXTEND_CLASS_PRINT(gdcm::CSAHeaderDictEntry)
 %include "gdcmDicts.h"
 EXTEND_CLASS_PRINT(gdcm::Dicts)
 
+%template (TagSetType) std::set<gdcm::Tag>;
+%ignore gdcm::Reader::SetStream;
 %exception ReadFooBar {
    try {
       $action
@@ -580,6 +604,8 @@ EXTEND_CLASS_PRINT(gdcm::IPPSorter)
 //EXTEND_CLASS_PRINT(gdcm::Spectroscopy)
 %include "gdcmPrinter.h"
 //EXTEND_CLASS_PRINT(gdcm::Printer)
+%include "gdcmXMLPrinter.h"
+//EXTEND_CLASS_PRINT(gdcm::XMLPrinter)
 %include "gdcmDumper.h"
 //EXTEND_CLASS_PRINT(gdcm::Dumper)
 
@@ -720,10 +746,25 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %template(PresentationContextArrayType) std::vector< gdcm::PresentationContext >;
 %template(KeyValuePairType) std::pair< gdcm::Tag, std::string>;
 %template(KeyValuePairArrayType) std::vector< std::pair< gdcm::Tag, std::string> >;
+%template(TagArrayType) std::vector< gdcm::Tag >;
 %include "gdcmQueryBase.h"
 %include "gdcmBaseRootQuery.h"
+%include "gdcmQueryFactory.h"
+%template(CharSetArrayType) std::vector< gdcm::ECharSet >;
+%include "gdcmCompositeNetworkFunctions.h"
 %include "gdcmPresentationContext.h"
 //EXTEND_CLASS_PRINT(gdcm::PresentationContext)
 %include "gdcmPresentationContextGenerator.h"
-%include "gdcmCompositeNetworkFunctions.h"
+typedef int64_t time_t; // FIXME
 %include "gdcmServiceClassUser.h"
+%apply char[] { char* inReadBuffer }
+%include "gdcmStreamImageReader.h"
+%clear char* inReadBuffer;
+%include "gdcmStreamImageWriter.h"
+%include "gdcmRegion.h"
+EXTEND_CLASS_PRINT(gdcm::Region)
+%include "gdcmBoxRegion.h"
+EXTEND_CLASS_PRINT(gdcm::BoxRegion)
+%apply char[] { char* inreadbuffer }
+%include "gdcmImageRegionReader.h"
+%clear char* inreadbuffer;

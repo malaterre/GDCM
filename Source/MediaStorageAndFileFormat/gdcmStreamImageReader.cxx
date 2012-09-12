@@ -64,8 +64,8 @@ void StreamImageReader::SetStream(std::istream& inStream)
 std::vector<unsigned int> StreamImageReader::GetDimensionsValueForResolution( unsigned int res )
 {
   std::vector<unsigned int> extent(3);
-  File file_t = mReader.GetFile();
-  DataSet ds_t = file_t.GetDataSet();
+  File &file_t = mReader.GetFile();
+  DataSet &ds_t = file_t.GetDataSet();
 
   if ( ds_t.FindDataElement( Tag(0x0048,0x0200) ) )
   {

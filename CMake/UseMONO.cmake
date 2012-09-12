@@ -25,21 +25,21 @@
 #
 # Create Swig module
 #
-MACRO(MONO_ADD_MODULE name)
-  SET(swig_dot_i_sources)
-  FOREACH(it ${ARGN})
-    SET(swig_dot_i_sources ${swig_dot_i_sources} "${it}")
-  ENDFOREACH(it)
+macro(MONO_ADD_MODULE name)
+  set(swig_dot_i_sources)
+  foreach(it ${ARGN})
+    set(swig_dot_i_sources ${swig_dot_i_sources} "${it}")
+  endforeach()
 
-ENDMACRO(MONO_ADD_MODULE)
+endmacro()
 
 #
 # Like TARGET_LINK_LIBRARIES but for swig modules
 #
-MACRO(MONO_LINK_LIBRARIES name)
-  IF(MONO_MODULE_${name}_REAL_NAME)
-    TARGET_LINK_LIBRARIES(${MONO_MODULE_${name}_REAL_NAME} ${ARGN})
-  ELSE(MONO_MODULE_${name}_REAL_NAME)
-    MESSAGE(SEND_ERROR "Cannot find Swig library \"${name}\".")
-  ENDIF(MONO_MODULE_${name}_REAL_NAME)
-ENDMACRO(MONO_LINK_LIBRARIES name)
+macro(MONO_LINK_LIBRARIES name)
+  if(MONO_MODULE_${name}_REAL_NAME)
+    target_link_libraries(${MONO_MODULE_${name}_REAL_NAME} ${ARGN})
+  else()
+    message(SEND_ERROR "Cannot find Swig library \"${name}\".")
+  endif()
+endmacro()

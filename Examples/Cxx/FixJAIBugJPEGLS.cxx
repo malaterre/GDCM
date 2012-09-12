@@ -17,8 +17,7 @@
 
 #include <fstream>
 
-#include "gdcmcharls/stdafx.h"
-#include "gdcmcharls/interface.h"
+#include "gdcm_charls.h"
 
 /*
  * This small example should show how one can handle the famous JAI-JPEGLS bug
@@ -97,7 +96,11 @@ int main(int argc, char *argv[])
       totalLen--;
       }
 
+#ifdef GDCM_USE_SYSTEM_CHARLS
+    JlsParameters metadata;
+#else
     JlsParamaters metadata;
+#endif
     if (JpegLsReadHeader(buffer, totalLen, &metadata) != OK)
       {
       std::cerr << "Cant parse jpegls" << std::endl;
@@ -184,9 +187,13 @@ int main(int argc, char *argv[])
 #endif
 
     const char *pbyteCompressed = &vbuffer[0];
-    unsigned int cbyteCompressed = vbuffer.size(); // updated legnth
+    size_t cbyteCompressed = vbuffer.size(); // updated legnth
 
-    JlsParamaters params = {0};
+#ifdef GDCM_USE_SYSTEM_CHARLS
+    JlsParameters params;
+#else
+    JlsParamaters params;
+#endif
     JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
     std::vector<BYTE> rgbyteOut;
@@ -194,8 +201,13 @@ int main(int argc, char *argv[])
     rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7)
         / 8) * params.components);
 
+#ifdef GDCM_USE_SYSTEM_CHARLS
+    JLS_ERROR result =
+      JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params );
+#else
     JLS_ERROR result =
       JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed );
+#endif
     if (result != OK)
       {
       std::cerr << "Could not patch JAI-JPEGLS" << std::endl;
@@ -206,7 +218,7 @@ int main(int argc, char *argv[])
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   pixeldata.SetVR( gdcm::VR::OW );
-  pixeldata.SetByteValue( (char*)&rgbyteOutall[0], rgbyteOutall.size() );
+  pixeldata.SetByteValue( (char*)&rgbyteOutall[0], (uint32_t)rgbyteOutall.size() );
 
 
   // Add the pixel data element

@@ -352,7 +352,7 @@ bool Overlay::GrabOverlayFromPixelData(DataSet const &ds)
       }
     unsigned char * overlay = (unsigned char*)&Internal->Data[0];
     int c = 0;
-    uint16_t pmask = 1 << Internal->BitPosition;
+    uint16_t pmask = (uint16_t)(1 << Internal->BitPosition);
     assert( length / 2 == ovlength * 8 );
     while( p != end )
       {
@@ -361,7 +361,7 @@ bool Overlay::GrabOverlayFromPixelData(DataSet const &ds)
       // 128 -> 0x80
       if( val )
         {
-        overlay[ c / 8 ] |= (0x1 << c%8);
+        overlay[ c / 8 ] |= (unsigned char)(0x1 << c%8);
         }
       else
         {

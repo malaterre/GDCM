@@ -26,9 +26,9 @@ module = modules.GetModule( "C.8.3.1" )
 
 mentry = module.GetModuleEntryInMacros( macros, gdcm.Tag(0x0018,0x0087) )
 #print dir(mentry)
-print mentry
+print(mentry)
 mentry = module.GetModuleEntryInMacros( macros, gdcm.Tag(0x0018,0x1080) )
-print mentry
+print(mentry)
 
 # Test succeed ?
 sys.exit(0)

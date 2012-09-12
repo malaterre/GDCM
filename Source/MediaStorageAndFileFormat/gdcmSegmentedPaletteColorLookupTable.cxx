@@ -195,7 +195,7 @@ void SegmentedPaletteColorLookupTable::SetLUT(LookupTableType type, const unsign
     // FIXME: inplace byteswapping (BAD!)
     SwapperNoOp::SwapArray((uint16_t*)segment_values,length/2);
     ExpandPalette(segment_values, length, palette);
-    LookupTable::SetLUT(type, (unsigned char*)&palette[0], palette.size() * 2);
+    LookupTable::SetLUT(type, (unsigned char*)&palette[0], (unsigned int)(palette.size() * 2));
     }
 }
 

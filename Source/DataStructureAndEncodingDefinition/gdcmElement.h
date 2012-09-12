@@ -246,8 +246,8 @@ template < typename Float >
 std::string to_string ( Float data ) {
   std::stringstream in;
   // in.imbue(std::locale::classic()); // This is not required AFAIK
-  unsigned long const digits =
-    static_cast< unsigned long >(
+  int const digits =
+    static_cast< int >(
     - std::log( std::numeric_limits<Float>::epsilon() )
     / std::log( 10.0 ) );
   if ( in << std::dec << std::setprecision(/*2+*/digits) << data ) {
@@ -485,7 +485,7 @@ public:
     return Internal[idx];
   }
   typename VRToType<TVR>::Type &GetValue(unsigned int idx = 0) {
-    assert( idx < Length );
+    //assert( idx < Length );
     return Internal[idx];
   }
   typename VRToType<TVR>::Type operator[] (unsigned int idx) const {

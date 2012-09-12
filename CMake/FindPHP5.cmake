@@ -13,7 +13,7 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-SET(PHP5_POSSIBLE_INCLUDE_PATHS
+set(PHP5_POSSIBLE_INCLUDE_PATHS
   /usr/include/php5
   /usr/local/include/php5
   /usr/include/php
@@ -21,27 +21,27 @@ SET(PHP5_POSSIBLE_INCLUDE_PATHS
   /usr/local/apache/php
   )
 
-SET(PHP5_POSSIBLE_LIB_PATHS
+set(PHP5_POSSIBLE_LIB_PATHS
   /usr/lib
   )
 
-FIND_PATH(PHP5_FOUND_INCLUDE_PATH main/php.h
+find_path(PHP5_FOUND_INCLUDE_PATH main/php.h
   ${PHP5_POSSIBLE_INCLUDE_PATHS})
 
-IF(PHP5_FOUND_INCLUDE_PATH)
-  SET(php5_paths "${PHP5_POSSIBLE_INCLUDE_PATHS}")
-  FOREACH(php5_path Zend main TSRM)
-    SET(php5_paths ${php5_paths} "${PHP5_FOUND_INCLUDE_PATH}/${php5_path}")
-  ENDFOREACH(php5_path Zend main TSRM)
-  SET(PHP5_INCLUDE_PATH "${php5_paths}" INTERNAL "PHP5 include paths")
-ENDIF(PHP5_FOUND_INCLUDE_PATH)
+if(PHP5_FOUND_INCLUDE_PATH)
+  set(php5_paths "${PHP5_POSSIBLE_INCLUDE_PATHS}")
+  foreach(php5_path Zend main TSRM)
+    set(php5_paths ${php5_paths} "${PHP5_FOUND_INCLUDE_PATH}/${php5_path}")
+  endforeach()
+  set(PHP5_INCLUDE_PATH "${php5_paths}" INTERNAL "PHP5 include paths")
+endif()
 
-FIND_PROGRAM(PHP5_EXECUTABLE NAMES php5 php )
+find_program(PHP5_EXECUTABLE NAMES php5 php )
 
-MARK_AS_ADVANCED(
+mark_as_advanced(
   PHP5_EXECUTABLE
   PHP5_FOUND_INCLUDE_PATH
   )
 
-INCLUDE(FindPackageHandleStandardArgs)
+include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(PHP5 DEFAULT_MSG PHP5_EXECUTABLE PHP5_INCLUDE_PATH)

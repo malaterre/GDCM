@@ -48,7 +48,7 @@ int TestvtkGDCMImageRead4(const char *filename, bool verbose)
     gdcm::Directory d;
     d.Load( filename );
     l = d.GetFilenames();
-    const unsigned int nfiles = l.size();
+    const size_t nfiles = l.size();
     vtkStringArray *sarray = vtkStringArray::New();
     for(unsigned int i = 0; i < nfiles; ++i)
       {

@@ -1,5 +1,5 @@
 # MEXD Testing
-SET(MEXD_TEST_SRCS
+set(MEXD_TEST_SRCS
   TestPresentationContextRQ
   TestQueryFactory
   TestULConnectionManager
@@ -9,15 +9,15 @@ SET(MEXD_TEST_SRCS
   TestEcho
   TestFind
   )
-IF(GDCM_DATA_ROOT)
-  SET(MEXD_TEST_SRCS
+if(GDCM_DATA_ROOT)
+  set(MEXD_TEST_SRCS
     ${MEXD_TEST_SRCS}
     TestSCUFunctions
     )
-ENDIF(GDCM_DATA_ROOT)
+endif()
 
 # Add the include paths
-INCLUDE_DIRECTORIES(
+include_directories(
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Testing/Source/Data"
@@ -28,30 +28,30 @@ INCLUDE_DIRECTORIES(
   "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
   )
 
-CREATE_TEST_SOURCELIST(MEXDTests gdcmMEXDTests.cxx ${MEXD_TEST_SRCS}
+create_test_sourcelist(MEXDTests gdcmMEXDTests.cxx ${MEXD_TEST_SRCS}
   EXTRA_INCLUDE gdcmTestDriver.h
   )
-ADD_EXECUTABLE(gdcmMEXDTests ${MEXDTests})
-TARGET_LINK_LIBRARIES(gdcmMEXDTests gdcmMEXD gdcmMSFF gdcmDSED gdcmDICT gdcmCommon)
+add_executable(gdcmMEXDTests ${MEXDTests})
+target_link_libraries(gdcmMEXDTests gdcmMEXD gdcmMSFF gdcmDSED gdcmDICT gdcmCommon)
 
 #Don't understand why I need that ??
-SET(GDCM_MEXD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMEXDTests")
+set(GDCM_MEXD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMEXDTests")
 
 # Loop over files and create executables
-FOREACH(name ${MEXD_TEST_SRCS})
-  IF(${name} STREQUAL "TestSCUFunctions"
+foreach(name ${MEXD_TEST_SRCS})
+  if(${name} STREQUAL "TestSCUFunctions"
       OR ${name} STREQUAL "TestServiceClassUser"
       OR ${name} STREQUAL "TestServiceClassUser2"
       )
-    IF(GDCM_DICOM_SERVER_AETITLE)
-      ADD_TEST(${name} ${GDCM_MEXD_TESTS} ${name} ${GDCM_DICOM_CLIENT_AETITLE}
+    if(GDCM_DICOM_SERVER_AETITLE)
+      add_test(${name} ${GDCM_MEXD_TESTS} ${name} ${GDCM_DICOM_CLIENT_AETITLE}
         ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PORT}
         ${GDCM_DICOM_CLIENT_PORT} ${GDCM_DICOM_SERVER_PEER})
-    ENDIF(GDCM_DICOM_SERVER_AETITLE)
-  ELSE()
-    ADD_TEST(${name} ${GDCM_MEXD_TESTS} ${name})
-  ENDIF()
-ENDFOREACH(name)
+    endif()
+  else()
+    add_test(${name} ${GDCM_MEXD_TESTS} ${name})
+  endif()
+endforeach()
 
 set(DCMQRSCP_HOSTNAME gotlib)
 set(DCMQRSCP_PORT 5677)

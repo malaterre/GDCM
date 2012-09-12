@@ -55,6 +55,9 @@ file-out  DICOM output filename
   -L --jpegls                         Compress image in jpeg-ls.
   -R --rle                            Compress image in rle (lossless only).
   -F --force                          Force decompression/merging before recompression/splitting.
+     --generate-icon                  Generate icon.
+     --icon-minmax %d,%d              Min/Max value for icon.
+     --icon-auto-minmax               Automatically commpute best Min/Max values for icon.
      --compress-icon                  Decide whether icon follows main TransferSyntax or remains uncompressed.
      --planar-configuration [01]      Change planar configuration.
   -Y --lossy                          Use the lossy (if possible) compressor.
@@ -245,6 +248,17 @@ $ gdcmconv --rle uncompressed.dcm compressed.dcm
 
 There is no such thing as lossy RLE compression.
 
+\subsection split_encapsulated Split encapsulated DICOM:
+
+To split an encapsulated stream into smaller chunk (1024 bytes each):
+
+\verbatim
+$ gdcmconv --split 1024 rle.dcm rle_1024.dcm
+\endverbatim
+
+If an odd number of bytes is passed it will be rounded down to the next even
+number (eg. 1025 -> 1024) since DICOM only allow even number for Value Length.
+
 \subsection force Forcing (re)compression
 
 Sometime it is necessary to use the --force option. By default when user
@@ -265,7 +279,7 @@ $ gdcmconv --raw compressed.dcm uncompressed.dcm
 \subsection compress_icon Compressing an uncompressed Icon
 
 By default when compressing a DICOM Image file, gdcmconv will not compress the
-icon.  A user option needs to be turned on to explicitely force the compression
+icon.  A user option needs to be turned on to explicitly force the compression
 of the Icon Image Sequence Pixel Data
 
 For example, by default we will not compress the Icon Image Sequence Pixel Data
@@ -275,7 +289,7 @@ attribute:
 $ gdcmconv --jpeg gdcmData/simpleImageWithIcon.dcm uncompressed_icon.dcm
 \endverbatim
 
-In the following example we will explicitely compress the Icon Image Sequence
+In the following example we will explicitly compress the Icon Image Sequence
 Pixel Data attibute. In that case the same Transfer Syntax is being used for
 both the main Pixel Data and the Pixel Data from the Icon Image Sequence:
 
@@ -304,7 +318,7 @@ $ gdcmconv --raw --generate-icon --icon-minmax 0,192 gdcmData/012345.002.050.dcm
 
 \subsection planar_configuration Changing the planar Configuration
 
-Often RLE files are compressed using a different Planar Comnfiguration (RRR ...
+Often RLE files are compressed using a different Planar Configuration (RRR ...
 GGG... BBB...) instead of the usual triplet (RGB ... RGB ... RGB ). So upon
 decompression the Planar Configuration is 1. This is perfectly legal in DICOM,
 however this is unconventional, and thus it may be a good idea to also change
@@ -373,7 +387,7 @@ $ vbindiff input.dcm output.dcm
 
 \section see_also SEE ALSO
 
-<b>gdcmdump</b>(1), <b>gdcmraw</b>(1), <b>gdcminfo</b>(1)
+<b>gdcmdump</b>(1), <b>gdcmraw</b>(1), <b>gdcminfo</b>(1), <b>gdcmdiff</b>(1)
 
 \section copyright COPYRIGHT
 

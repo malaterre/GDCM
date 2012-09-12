@@ -50,7 +50,7 @@ int TestTagPath(int argc, char *argv[])
   for(unsigned i = 0; i < n; ++i)
     {
     list[i].SetGroup( 0x1234 );
-    list[i].SetElement( i );
+    list[i].SetElement( (uint16_t)i );
     }
 
   if( !tp.ConstructFromTagList( list, n ) )

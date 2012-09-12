@@ -1,9 +1,10 @@
-#ADD_EXECUTABLE(ManipulateFile ManipulateFile.cs)
-#TARGET_LINK_LIBRARIES(ManipulateFile gdcm-sharp)
+#add_executable(ManipulateFile ManipulateFile.cs)
+#target_link_libraries(ManipulateFile gdcm-sharp)
 
-SET(CSHARP_EXAMPLES
+set(CSHARP_EXAMPLES
   SimplePrintPatientName
   ExtractOneFrame
+  ExtractImageRegion
   ManipulateFile
   RescaleImage
   ExtractEncapsulatedFile
@@ -20,52 +21,53 @@ SET(CSHARP_EXAMPLES
   ReformatFile
   CompressLossyJPEG
   SendFileSCU
+  MpegVideoInfo
   )
 
-IF(BUILD_TESTING)
-  SET(CSHARP_EXAMPLES
+if(BUILD_TESTING)
+  set(CSHARP_EXAMPLES
     ${CSHARP_EXAMPLES}
     BasicAnonymizer
     ClinicalTrialIdentificationWorkflow
     )
-ENDIF(BUILD_TESTING)
+endif()
 
-SET(DEP)
+set(DEP)
 # http://www.cmake.org/Wiki/CMake_FAQ#How_can_I_add_a_dependency_to_a_source_file_which_is_generated_in_a_subdirectory.3F
 # Tell CMake the source won't be available until build time.
-SET_SOURCE_FILES_PROPERTIES(${GDCM_LIBRARY_DIR}/gdcm-sharp.dll PROPERTIES GENERATED 1)
+set_source_files_properties(${GDCM_LIBRARY_DIR}/gdcm-sharp.dll PROPERTIES GENERATED 1)
 # Make sure the source is generated before the executable builds.
-FOREACH(example ${CSHARP_EXAMPLES})
+foreach(example ${CSHARP_EXAMPLES})
   file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs result)
 # WORKING_DIRECTORY is set to the src dir because of a strange issue with CSC compiler on Win32 system:
 # http://groups.google.com/group/microsoft.public.dotnet.languages.csharp/browse_thread/thread/9d3ac7eb9f7f56be
-  ADD_CUSTOM_COMMAND(
+  add_custom_command(
     OUTPUT ${GDCM_EXECUTABLE_DIR}/${example}.exe
     #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${result}
+    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "${CSC_PLATFORM_FLAG}" "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${result}
     #WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DEPENDS #${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
             ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
     COMMENT "Create ${example}.exe"
   )
-  ADD_CUSTOM_TARGET(gdcm_sharp_${example} DEPENDS ${GDCM_EXECUTABLE_DIR}/${example}.exe)
-  ADD_DEPENDENCIES(gdcm_sharp_${example} GDCMCSharp)
+  add_custom_target(gdcm_sharp_${example} DEPENDS ${GDCM_EXECUTABLE_DIR}/${example}.exe)
+  add_dependencies(gdcm_sharp_${example} GDCMCSharp)
 
-  SET(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
-ENDFOREACH(example)
+  set(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
+endforeach()
 
-ADD_CUSTOM_TARGET(GDCMExampleCSharp ALL
+add_custom_target(GDCMExampleCSharp ALL
   DEPENDS ${DEP}
   COMMENT "building examples"
 )
-ADD_DEPENDENCIES(GDCMExampleCSharp  GDCMCSharp)
+add_dependencies(GDCMExampleCSharp  GDCMCSharp)
 
-IF(BUILD_TESTING)
-IF(GDCM_DATA_ROOT)
+if(BUILD_TESTING)
+if(GDCM_DATA_ROOT)
   ADD_CSHARP_TEST(TestSimplePrintCSharp ${GDCM_EXECUTABLE_DIR}/SimplePrint.exe ${GDCM_DATA_ROOT}/012345.002.050.dcm)
 # TODO:
-#IF(BUILD_EXAMPLES)
+#if(BUILD_EXAMPLES)
 #  ADD_CSHARP_TEST(HelloWorldCSharp ${GDCM_EXECUTABLE_DIR}/HelloWorld.exe ${GDCM_DATA_ROOT}/012345.002.050.dcm)
-#ENDIF(BUILD_EXAMPLES)
-ENDIF(GDCM_DATA_ROOT)
-ENDIF(BUILD_TESTING)
+#endif()
+endif()
+endif()

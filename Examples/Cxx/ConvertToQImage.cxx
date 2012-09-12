@@ -48,7 +48,7 @@ bool ConvertToFormat_RGB888(gdcm::Image const & gimage, char *buffer, QImage* &i
       }
     unsigned char *ubuffer = (unsigned char*)buffer;
     // QImage::Format_RGB888	13	The image is stored using a 24-bit RGB format (8-8-8).
-    imageQt = new QImage(ubuffer, dimX, dimY, QImage::Format_RGB888);
+    imageQt = new QImage((unsigned char *)ubuffer, dimX, dimY, 3*dimX, QImage::Format_RGB888);
     }
   else if( gimage.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME2 )
     {
@@ -57,7 +57,7 @@ bool ConvertToFormat_RGB888(gdcm::Image const & gimage, char *buffer, QImage* &i
       // We need to copy each individual 8bits into R / G and B:
       unsigned char *ubuffer = new unsigned char[dimX*dimY*3];
       unsigned char *pubuffer = ubuffer;
-      for(int i = 0; i < dimX*dimY; i++)
+      for(unsigned int i = 0; i < dimX*dimY; i++)
         {
         *pubuffer++ = *buffer;
         *pubuffer++ = *buffer;
@@ -72,15 +72,16 @@ bool ConvertToFormat_RGB888(gdcm::Image const & gimage, char *buffer, QImage* &i
       short *buffer16 = (short*)buffer;
       unsigned char *ubuffer = new unsigned char[dimX*dimY*3];
       unsigned char *pubuffer = ubuffer;
-      for(int i = 0; i < dimX*dimY; i++)
+      for(unsigned int i = 0; i < dimX*dimY; i++)
         {
         // Scalar Range of gdcmData/012345.002.050.dcm is [0,192], we could simply do:
         // *pubuffer++ = *buffer16;
         // *pubuffer++ = *buffer16;
         // *pubuffer++ = *buffer16;
-        *pubuffer++ = *buffer16 / 256;
-        *pubuffer++ = *buffer16 / 256;
-        *pubuffer++ = *buffer16 / 256;
+        // instead do it right:
+        *pubuffer++ = (unsigned char)std::min(255, (32768 + *buffer16) / 255);
+        *pubuffer++ = (unsigned char)std::min(255, (32768 + *buffer16) / 255);
+        *pubuffer++ = (unsigned char)std::min(255, (32768 + *buffer16) / 255);
         buffer16++;
         }
 

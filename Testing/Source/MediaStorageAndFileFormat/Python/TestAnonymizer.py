@@ -39,7 +39,7 @@ def TestAnonymizer(filename, verbose = False):
 
   # Let's check if our anonymization worked:
   if verbose:
-    print ano.GetFile().GetDataSet()
+    print(ano.GetFile().GetDataSet())
 
   # So at that point r.GetFile() was modified, let's simply passed it to the Writer:
   # First find a place where to write it out:
@@ -59,7 +59,7 @@ def TestAnonymizer(filename, verbose = False):
   if( not sucess ): return 1
 
   if verbose:
-    print "Success to write: %s"%outfilename
+    print("Success to write: %s"%outfilename)
 
   return sucess
 

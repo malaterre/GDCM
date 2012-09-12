@@ -1,16 +1,20 @@
 # python
-IF(GDCM_WRAP_PYTHON)
-  SUBDIRS(Python)
-ENDIF(GDCM_WRAP_PYTHON)
+if(GDCM_WRAP_PYTHON)
+  subdirs(Python)
+endif()
 # java
-IF(GDCM_WRAP_JAVA)
-  SUBDIRS(Java)
-ENDIF(GDCM_WRAP_JAVA)
+if(GDCM_WRAP_JAVA)
+  subdirs(Java)
+endif()
 # php
-IF(GDCM_WRAP_PHP)
-  SUBDIRS(PHP)
-ENDIF(GDCM_WRAP_PHP)
+if(GDCM_WRAP_PHP)
+  subdirs(PHP)
+endif()
+# perl
+if(GDCM_WRAP_PERL)
+  subdirs(Perl)
+endif()
 # C#
-IF(GDCM_WRAP_CSHARP)
-#  SUBDIRS(Csharp)
-ENDIF(GDCM_WRAP_CSHARP)
+if(GDCM_WRAP_CSHARP)
+#  subdirs(Csharp)
+endif()

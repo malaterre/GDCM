@@ -1,3 +1,3 @@
-PROJECT(TOOLS)
+project(TOOLS)
 
-ADD_EXECUTABLE(upsidedown upsidedown.c)
+add_executable(upsidedown upsidedown.c)

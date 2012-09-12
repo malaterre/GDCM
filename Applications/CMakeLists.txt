@@ -1,1 +1,1 @@
-SUBDIRS(Cxx)
+subdirs(Cxx)

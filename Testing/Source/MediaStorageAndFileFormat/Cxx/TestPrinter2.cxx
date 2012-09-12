@@ -24,7 +24,7 @@
  length which means this is a Implicit VR Little Endian
  encoded SQ in an Explicit VR Little Endian DataSet
 */
-int TestPrinter2(int argc, char *argv[])
+int TestPrinter2(int , char *[])
 {
   const char *directory = gdcm::Testing::GetDataRoot();
   std::string filename = std::string(directory) + "/undefined_length_un_vr.dcm";

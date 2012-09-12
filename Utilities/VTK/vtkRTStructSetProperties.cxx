@@ -57,6 +57,8 @@ class vtkRTStructSetPropertiesInternals
 public:
   void Print(ostream &os, vtkIndent indent)
     {
+    (void)os;
+    (void)indent;
     }
   void DeepCopy(vtkRTStructSetPropertiesInternals *p)
     {

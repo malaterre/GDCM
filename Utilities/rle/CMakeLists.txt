@@ -1,16 +1,16 @@
-PROJECT(RLE)
+project(RLE)
 
-ADD_LIBRARY(rle rle.c rlelib.c)
-#SET_TARGET_PROPERTIES(rle PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+add_library(rle rle.c rlelib.c)
+#set_target_properties(rle PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 
-ADD_EXECUTABLE(example example.c)
-TARGET_LINK_LIBRARIES(example rle)
-INSTALL(TARGETS rle example
+add_executable(example example.c)
+target_link_libraries(example rle)
+install(TARGETS rle example
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib/static
   ${CPACK_NAMELINK_TYPE}
   )
 
-ADD_EXECUTABLE(rledump rledump.c)
-TARGET_LINK_LIBRARIES(rledump rle)
+add_executable(rledump rledump.c)
+target_link_libraries(rledump rle)

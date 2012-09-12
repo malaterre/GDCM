@@ -120,6 +120,9 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
     case MediaStorage::EncapsulatedPDFStorage:
       iodname = "Encapsulated PDF IOD Modules";
       break;
+    case MediaStorage::EncapsulatedCDAStorage:
+      iodname = "Encapsulated CDA IOD Modules";
+      break;
     case MediaStorage::VLPhotographicImageStorage:
       iodname = "VL Photographic Image IOD Modules";
       break;
@@ -219,6 +222,9 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
     case MediaStorage::RTIonBeamsTreatmentRecordStorage:
       iodname = "RT Ion Beams Treatment Record IOD Modules";
       break;
+    case MediaStorage::RTTreatmentSummaryRecordStorage:
+      iodname = "RT Treatment Summary Record IOD Modules";
+      break;
     case MediaStorage::CSANonImageStorage:
       iodname = "Siemens Non-image IOD Modules";
       break;
@@ -261,7 +267,7 @@ Type Defs::GetTypeFromTag(const File& file, const Tag& tag) const
   const IOD &iod = iods.GetIOD( iodname );
   const Macros &macros = GetMacros();
 
-  unsigned int niods = iod.GetNumberOfIODs();
+  IOD::SizeType niods = iod.GetNumberOfIODs();
   // Iterate over each iod entry in order:
   for(unsigned int idx = 0; idx < niods; ++idx)
     {
@@ -297,7 +303,7 @@ bool Defs::Verify(const File& file) const
 
   //std::cout << iod << std::endl;
   //std::cout << iod.GetIODEntry(14) << std::endl;
-  unsigned int niods = iod.GetNumberOfIODs();
+  IOD::SizeType niods = iod.GetNumberOfIODs();
   bool v = true;
   // Iterate over each iod entry in order:
   for(unsigned int idx = 0; idx < niods; ++idx)
@@ -332,7 +338,7 @@ bool Defs::Verify(const DataSet& ds) const
 
   //std::cout << iod << std::endl;
   //std::cout << iod.GetIODEntry(14) << std::endl;
-  unsigned int niods = iod.GetNumberOfIODs();
+  IOD::SizeType niods = iod.GetNumberOfIODs();
   bool v = true;
   // Iterate over each iod entry in order:
   for(unsigned int idx = 0; idx < niods; ++idx)

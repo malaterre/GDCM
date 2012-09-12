@@ -11,10 +11,10 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-FIND_PROGRAM(WINE_EXECUTABLE
+find_program(WINE_EXECUTABLE
   NAMES wine
   )
 
-MARK_AS_ADVANCED(
+mark_as_advanced(
   WINE_EXECUTABLE
   )

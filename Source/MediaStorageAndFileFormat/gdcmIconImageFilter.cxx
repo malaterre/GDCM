@@ -129,7 +129,7 @@ void IconImageFilter::ExtractIconImages()
           // (0028,1101) US 0\0\16
           // (0028,1102) US 0\0\16
           // (0028,1103) US 0\0\16
-          const Tag tdescriptor(0x0028, (0x1101 + i));
+          const Tag tdescriptor(0x0028, (uint16_t)(0x1101 + i));
           //const Tag tdescriptor(0x0028, 0x3002);
           Element<VR::US,VM::VM3> el_us3;
           // Now pass the byte array to a DICOMizer:
@@ -140,14 +140,14 @@ void IconImageFilter::ExtractIconImages()
           // (0028,1201) OW
           // (0028,1202) OW
           // (0028,1203) OW
-          const Tag tlut(0x0028, (0x1201 + i));
+          const Tag tlut(0x0028, (uint16_t)(0x1201 + i));
           //const Tag tlut(0x0028, 0x3006);
 
           // Segmented LUT
           // (0028,1221) OW
           // (0028,1222) OW
           // (0028,1223) OW
-          const Tag seglut(0x0028, (0x1221 + i));
+          const Tag seglut(0x0028, (uint16_t)(0x1221 + i));
           if( ds.FindDataElement( tlut ) )
             {
             const ByteValue *lut_raw = ds.GetDataElement( tlut ).GetByteValue();
@@ -522,7 +522,7 @@ void IconImageFilter::ExtractVeproIconImages()
     assert( dims[0] * dims[1] == len - sizeof(data) - offset );
 
     DataElement pd;
-    pd.SetByteValue( raw + offset, len - sizeof(data) - offset);
+    pd.SetByteValue( raw + offset, (uint32_t)(len - sizeof(data) - offset) );
 
     SmartPointer< IconImage > si1 = new IconImage;
     IconImage &pixeldata = *si1;
@@ -549,7 +549,8 @@ bool IconImageFilter::Extract()
 
 unsigned int IconImageFilter::GetNumberOfIconImages() const
 {
-  return Internals->icons.size();
+  // what is icons are in undefined length sequence ?
+  return (unsigned int)Internals->icons.size();
 }
 
 IconImage& IconImageFilter::GetIconImage( unsigned int i ) const

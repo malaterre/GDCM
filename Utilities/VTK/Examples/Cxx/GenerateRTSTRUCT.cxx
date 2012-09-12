@@ -32,6 +32,8 @@
 #include "vtkProperty2D.h"
 #include "vtkImageData.h"
 
+#include <algorithm> //for std::find
+
 #include "gdcmDirectoryHelper.h"
 
 using namespace gdcm;
@@ -86,6 +88,8 @@ int main(int argc, char *argv[])
   Directory::FilenamesType theRTSeries =
     DirectoryHelper::GetRTStructSeriesUIDs(theDirName);
 
+  gdcm::Directory theDir;
+  theDir.Load(argv[1]);
 
   if (theRTSeries.empty())
     {
@@ -93,10 +97,15 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-  for (int q = 0; q < theRTSeries.size(); q++)
+  for (size_t q = 0; q < theRTSeries.size(); q++)
     {
     Directory::FilenamesType theRTNames =
       DirectoryHelper::GetFilenamesFromSeriesUIDs(theDirName, theRTSeries[q]);
+
+    if (theRTNames.empty()){
+      std::cerr << "Unable to load RT Series " << theRTSeries[q] << ", continuing. " << std::endl;
+      continue;
+    }
 
     vtkGDCMPolyDataReader * reader = vtkGDCMPolyDataReader::New();
     reader->SetFileName( theRTNames[0].c_str() );
@@ -107,7 +116,17 @@ int main(int argc, char *argv[])
     vtkGDCMPolyDataWriter * writer = vtkGDCMPolyDataWriter::New();
     int numMasks = reader->GetNumberOfOutputPorts() + 1;//add a blank one in
     writer->SetNumberOfInputPorts( numMasks );
-    writer->SetFileName( std::string(theDirName + "/" + "GDCMTestRTStruct." +  theRTSeries[q] + ".dcm").c_str());
+    std::string thePotentialName = theDirName + "/" + "GDCMTestRTStruct." +  theRTSeries[q] + ".dcm";
+    gdcm::Directory::FilenamesType theFileNames = theDir.GetFilenames();
+    //keep renaming the output until we get something that doesn't overwrite what was there already
+    int count = 0;
+    while (std::find(theFileNames.begin(), theFileNames.end(), thePotentialName) != theFileNames.end())
+      {
+        char buff[255];
+        sprintf(buff,"%d",count);
+        thePotentialName = theDirName + "/" + "GDCMTestRTStruct." + buff + "." + theRTSeries[q] + ".dcm";
+      }
+    writer->SetFileName( thePotentialName.c_str());
     writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
     //this line is cheating, we won't have the same stuff, and may not have a struct
     //to start with.

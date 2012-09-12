@@ -156,9 +156,9 @@ UID).
 
 This functionality is not described in the DICOM standard. Users are advised
 that improper use of that mode is not recommended, meaning that important tag
-can be empty/remove/replace resulting in illegal/invalid DICOM file.  Only use
-when you know what you are doing. If you delete a Type 1 attribute, chance is
-that your DICOM file will be not accepted in most DICOM third party viewer.
+can be emptied/removed/replaced resulting in illegal/invalid DICOM file.  Only
+use when you know what you are doing. If you delete a Type 1 attribute, chance
+is that your DICOM file will be not accepted in most DICOM third party viewer.
 Unfortunately this is often this mode that is implemented in popular DICOM
 Viewer, always prefer what the DICOM standard describes, and avoid the dumb
 mode.
@@ -185,9 +185,9 @@ changed (see <b>diff</b>(1) for example).
 
 \subsubsection irreversible_anon Irreversible Anonymization
 
-In some very case, one would want to anonymize using the PS 3.15 mode so as to
-take benefit of the automatic conversion of all content that could contain
-Patient related information.
+In some very rare cases, one would want to anonymize using the PS 3.15 mode so
+as to take benefit of the automatic conversion of all content that could
+contain Patient related information.
 
 In the end all Patient related information has been removed and has been
 secretely stored in the 0400,0500 DICOM attribute. However to make sure that
@@ -209,6 +209,16 @@ information:
 \verbatim
 $ gdcmanon --dumb --remove 400,500 --remove 12,62 --remove 12,63 anonymized_reversible.dcm anonymized_irreversible.dcm
 \endverbatim
+
+\remark
+As mentionned in DICOM Sup 142, this anonymization is prefered over
+de-identification since:
+
+It is not required that the Encrypted Attributes Data Set be created; indeed,
+there may be circumstances where the Dataset is expected to be archived long
+enough that any contemporary encryption technology may be inadequate to provide
+long term protection against unauthorized recovery of identification
+\endremark
 
 \section openssl OpenSSL
 
@@ -268,7 +278,7 @@ implement it).
 
 \section see_also SEE ALSO
 
-<b>gdcmconv</b>(1), <b>gdcmdump</b>(1), <b>gdcminfo</b>(1), <b>openssl</b>(1)
+<b>gdcmconv</b>(1), <b>gdcmdump</b>(1), <b>gdcminfo</b>(1), <b>openssl</b>(1), <b>dumpasn1</b>(1)
 
 \section copyright COPYRIGHT
 

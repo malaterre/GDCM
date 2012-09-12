@@ -16,11 +16,13 @@
  * Implementation of E.1.1 De-identify & E.1.2 Re-identify
  */
 
+#include <memory>
+
 #include "gdcmReader.h"
 #include "gdcmWriter.h"
 #include "gdcmVersion.h"
 #include "gdcmSystem.h"
-#include "gdcmCryptographicMessageSyntax.h"
+#include "gdcmCryptoFactory.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmGlobal.h"
@@ -28,6 +30,7 @@
 #include "gdcmDirectory.h"
 
 #include <getopt.h>
+
 
 static void PrintVersion()
 {
@@ -221,16 +224,21 @@ static void PrintHelp()
   std::cout << "     --resources-path         Resources path." << std::endl;
   std::cout << "  -k --key                    Path to RSA Private Key." << std::endl;
   std::cout << "  -c --certificate            Path to Certificate." << std::endl;
+  std::cout << "  -p --password               Encryption passphrase." << std::endl;
+  std::cout << "Crypto Library Options:" << std::endl;
+  std::cout << "  --crypto=" << std::endl;
+  std::cout << "           openssl            OpenSSL (default on non-Windows systems)." << std::endl;
+  std::cout << "           capi               Microsoft CryptoAPI (default on Windows systems)." << std::endl;
+  std::cout << "           openssl-p7         Old OpenSSL implementation." << std::endl;
   std::cout << "Encryption Algorithm Options:" << std::endl;
-  std::cout << "     --des                    DES." << std::endl;
   std::cout << "     --des3                   Triple DES." << std::endl;
   std::cout << "     --aes128                 AES 128." << std::endl;
   std::cout << "     --aes192                 AES 192." << std::endl;
   std::cout << "     --aes256                 AES 256 (default)." << std::endl;
   std::cout << "Dumb mode options:" << std::endl;
-  std::cout << "     --empty   %d,%d           DICOM tag(s) to empty" << std::endl;
-  std::cout << "     --remove  %d,%d           DICOM tag(s) to remove" << std::endl;
-  std::cout << "     --replace %d,%d=%s        DICOM tag(s) to replace" << std::endl;
+  std::cout << "     --empty   %d,%d          DICOM tag(s) to empty" << std::endl;
+  std::cout << "     --remove  %d,%d          DICOM tag(s) to remove" << std::endl;
+  std::cout << "     --replace %d,%d=%s       DICOM tag(s) to replace" << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose                more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning                print warning info." << std::endl;
@@ -246,11 +254,7 @@ static void PrintHelp()
 static gdcm::CryptographicMessageSyntax::CipherTypes GetFromString( const char * str )
 {
   gdcm::CryptographicMessageSyntax::CipherTypes ciphertype;
-  if( strcmp( str, "des" ) == 0 )
-    {
-    ciphertype = gdcm::CryptographicMessageSyntax::DES_CIPHER;
-    }
-  else if( strcmp( str, "des3" ) == 0 )
+  if( strcmp( str, "des3" ) == 0 )
     {
     ciphertype = gdcm::CryptographicMessageSyntax::DES3_CIPHER;
     }
@@ -287,15 +291,13 @@ int main(int argc, char *argv[])
   std::string xmlpath;
   std::string rsa_path;
   std::string cert_path;
+  std::string password;
   int resourcespath = 0;
   int dumb_mode = 0;
-  int des = 0;
   int des3 = 0;
   int aes128 = 0;
   int aes192 = 0;
   int aes256 = 0;
-  int rsapath = 0;
-  int certpath = 0;
   int rootuid = 0;
   int verbose = 0;
   int warning = 0;
@@ -308,46 +310,52 @@ int main(int argc, char *argv[])
   int empty_tag = 0;
   int remove_tag = 0;
   int replace_tag = 0;
+  int crypto_api = 0;
   std::vector<gdcm::Tag> empty_tags;
   std::vector<gdcm::Tag> remove_tags;
   std::vector< std::pair<gdcm::Tag, std::string> > replace_tags_value;
   gdcm::Tag tag;
+  gdcm::CryptoFactory::CryptoLib crypto_lib;
+  crypto_lib = gdcm::CryptoFactory::DEFAULT;
 
   while (1) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
-        {"input", 1, 0, 0},                 // i
-        {"output", 1, 0, 0},                // o
-        {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
-        {"resources-path", 1, &resourcespath, 1},
-        {"de-identify", 0, &deidentify, 1},
-        {"re-identify", 0, &reidentify, 1},
-        {"key", 1, &rsapath, 1},
-        {"certificate", 1, &certpath, 1}, // 7
-        {"des", 0, &des, 1},
-        {"des3", 0, &des3, 1},
-        {"aes128", 0, &aes128, 1},
-        {"aes192", 0, &aes192, 1},
-        {"aes256", 0, &aes256, 1},
-        {"recursive", 0, &recursive, 1},
-        {"dumb", 0, &dumb_mode, 1},
-        {"empty", 1, &empty_tag, 1}, // 15
-        {"remove", 1, &remove_tag, 1},
-        {"replace", 1, &replace_tag, 1},
-        {"continue", 0, &continuemode, 1},
+        {"input", required_argument, NULL, 'i'},                 // i
+        {"output", required_argument, NULL, 'o'},                // o
+        {"root-uid", required_argument, &rootuid, 1}, // specific Root (not GDCM)
+        {"resources-path", required_argument, &resourcespath, 1},
+        {"de-identify", no_argument, NULL, 'e'},
+        {"re-identify", no_argument, NULL, 'd'},
+        {"key", required_argument, NULL, 'k'},
+        {"certificate", required_argument, NULL, 'c'}, // 7
+        {"password", required_argument, NULL, 'p'},
 
-        {"verbose", 0, &verbose, 1},
-        {"warning", 0, &warning, 1},
-        {"debug", 0, &debug, 1},
-        {"error", 0, &error, 1},
-        {"help", 0, &help, 1},
-        {"version", 0, &version, 1},
+        {"des3", no_argument, &des3, 1},
+        {"aes128", no_argument, &aes128, 1},
+        {"aes192", no_argument, &aes192, 1},
+        {"aes256", no_argument, &aes256, 1},
+
+        {"recursive", no_argument, NULL, 'r'},
+        {"dumb", no_argument, &dumb_mode, 1},
+        {"empty", required_argument, &empty_tag, 1}, // 15
+        {"remove", required_argument, &remove_tag, 1},
+        {"replace", required_argument, &replace_tag, 1},
+        {"continue", no_argument, &continuemode, 1},
+        {"crypto", required_argument, &crypto_api, 1}, //19
+
+        {"verbose", no_argument, NULL, 'V'},
+        {"warning", no_argument, NULL, 'W'},
+        {"debug", no_argument, NULL, 'D'},
+        {"error", no_argument, NULL, 'E'},
+        {"help", no_argument, NULL, 'h'},
+        {"version", no_argument, NULL, 'v'},
 
         {0, 0, 0, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:rdek:c:VWDEhv",
+    c = getopt_long (argc, argv, "i:o:rdek:c:p:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -362,19 +370,19 @@ int main(int argc, char *argv[])
         //printf ("option %s", s);
         if (optarg)
           {
-          if( option_index == 0 ) /* input */
-            {
-            assert( strcmp(s, "input") == 0 );
-            assert( filename.empty() );
-            filename = optarg;
-            }
-          else if( option_index == 1 ) /* input */
-            {
-            assert( strcmp(s, "output") == 0 );
-            assert( outfilename.empty() );
-            outfilename = optarg;
-            }
-          else if( option_index == 2 ) /* root-uid */
+          //if( option_index == 0 ) /* input */
+          //  {
+          //  assert( strcmp(s, "input") == 0 );
+          //  assert( filename.empty() );
+          //  filename = optarg;
+          //  }
+          //else if( option_index == 1 ) /* output */
+          //  {
+          //  assert( strcmp(s, "output") == 0 );
+          //  assert( outfilename.empty() );
+          //  outfilename = optarg;
+          //  }
+          /*else*/ if( option_index == 2 ) /* root-uid */
             {
             assert( strcmp(s, "root-uid") == 0 );
             assert( root.empty() );
@@ -386,18 +394,18 @@ int main(int argc, char *argv[])
             assert( xmlpath.empty() );
             xmlpath = optarg;
             }
-          else if( option_index == 6 ) /* key */
-            {
-            assert( strcmp(s, "key") == 0 );
-            assert( rsa_path.empty() );
-            rsa_path = optarg;
-            }
-          else if( option_index == 7 ) /* certificate */
-            {
-            assert( strcmp(s, "certificate") == 0 );
-            assert( cert_path.empty() );
-            cert_path = optarg;
-            }
+          //else if( option_index == 6 ) /* key */
+          //  {
+          //  assert( strcmp(s, "key") == 0 );
+          //  assert( rsa_path.empty() );
+          //  rsa_path = optarg;
+          //  }
+          //else if( option_index == 7 ) /* certificate */
+          //  {
+          //  assert( strcmp(s, "certificate") == 0 );
+          //  assert( cert_path.empty() );
+          //  cert_path = optarg;
+          //  }
           else if( option_index == 15 ) /* empty */
             {
             assert( strcmp(s, "empty") == 0 );
@@ -443,6 +451,21 @@ int main(int argc, char *argv[])
             std::getline(ss, str); // do not skip whitespace
             replace_tags_value.push_back( std::make_pair(tag, str) );
             }
+          else if( option_index == 19 ) /* crypto */
+            {
+            assert( strcmp(s, "crypto") == 0 );
+            if (strcmp(optarg, "openssl") == 0)
+              crypto_lib = gdcm::CryptoFactory::OPENSSL;
+            else if (strcmp(optarg, "capi") == 0)
+              crypto_lib = gdcm::CryptoFactory::CAPI;
+            else if (strcmp(optarg, "openssl-p7") == 0)
+              crypto_lib = gdcm::CryptoFactory::OPENSSLP7;
+            else
+              {
+              std::cerr << "Cryptography library id not recognized: " << optarg << std::endl;
+              return 1;
+              }
+            }
           //printf (" with arg %s", optarg);
           }
         //printf ("\n");
@@ -471,6 +494,11 @@ int main(int argc, char *argv[])
     case 'c': // certificate
       assert( cert_path.empty() );
       cert_path = optarg;
+      break;
+
+    case 'p': // password
+      assert( password.empty() );
+      password = optarg;
       break;
 
     case 'e': // encrypt
@@ -576,28 +604,29 @@ int main(int argc, char *argv[])
     std::cerr << "One option please" << std::endl;
     return 1;
     }
+
+  gdcm::CryptoFactory* crypto_factory = NULL;
   if( deidentify || reidentify )
     {
-#ifndef GDCM_USE_SYSTEM_OPENSSL
-    std::cerr << "OpenSSL was not configured." << std::endl;
-    return 1;
-#endif
+    crypto_factory = gdcm::CryptoFactory::GetFactoryInstance();
+    if (!crypto_factory)
+      {
+      std::cerr << "Requested cryptoraphic library not configured." << std::endl;
+      return 1;
+      }
     }
 
   // by default AES 256
-  gdcm::CryptographicMessageSyntax::CipherTypes ciphertype;
+  gdcm::CryptographicMessageSyntax::CipherTypes ciphertype =
+    gdcm::CryptographicMessageSyntax::AES256_CIPHER;
   if( !dumb_mode )
     {
-    if( !des && !des3 && !aes128 && !aes192 && !aes256 )
+    if( !des3 && !aes128 && !aes192 && !aes256 )
       {
       aes256 = 1;
       }
 
-    if( des )
-      {
-      ciphertype = GetFromString( "des" );
-      }
-    else if( des3 )
+    if( des3 )
       {
       ciphertype = GetFromString( "des3" );
       }
@@ -744,11 +773,17 @@ int main(int argc, char *argv[])
     }
 
   // Get private key/certificate
-  gdcm::CryptographicMessageSyntax cms;
+  std::auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(crypto_factory->CreateCMSProvider());
+  gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
   if( !dumb_mode )
     {
     if( !GetRSAKeys(cms, rsa_path.c_str(), cert_path.c_str() ) )
       {
+      return 1;
+      }
+    if (!password.empty() && !cms.SetPassword(password.c_str(), password.length()) )
+      {
+      std::cerr << "Could not set the password " << std::endl;
       return 1;
       }
     cms.SetCipherType( ciphertype );

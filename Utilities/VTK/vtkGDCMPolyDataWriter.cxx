@@ -116,6 +116,7 @@ void vtkGDCMPolyDataWriter::WriteData()
 void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
 {
   DataSet& ds = file.GetDataSet();
+{
   const Tag sisq(0x3006,0x0039);
   DataElement de( sisq );
   de.SetVR( VR::SQ );
@@ -124,6 +125,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
   de.SetValue( *sqi1 );
   de.SetVLToUndefined();
   ds.Insert( de );
+}
 
   UIDGenerator uid;
 
@@ -505,19 +507,19 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
       cellpoints.push_back( v[1] );
       cellpoints.push_back( v[2 ]);
     }
-    Item item;
-    item.SetVLToUndefined();
-    DataSet &subds = item.GetNestedDataSet();
+    Item item0;
+    item0.SetVLToUndefined();
+    DataSet &subds0 = item0.GetNestedDataSet();
     Attribute<0x3006,0x0050> at;
-    at.SetValues( &cellpoints[0], cellpoints.size(), false );
-    subds.Insert( at.GetAsDataElement() );
+    at.SetValues( &cellpoints[0], (unsigned int)cellpoints.size(), false );
+    subds0.Insert( at.GetAsDataElement() );
 
     Attribute<0x3006,0x0046> numcontpoints;
-    numcontpoints.SetValue( npts );
-    subds.Insert( numcontpoints.GetAsDataElement() );
+    numcontpoints.SetValue( (int)npts );
+    subds0.Insert( numcontpoints.GetAsDataElement() );
     Attribute<0x3006,0x0042> contgeotype;
     contgeotype.SetValue( "CLOSED_PLANAR " );
-    subds.Insert( contgeotype.GetAsDataElement() );
+    subds0.Insert( contgeotype.GetAsDataElement() );
 
     SmartPointer<SequenceOfItems> thesqi = new SequenceOfItems;
     {
@@ -540,10 +542,10 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     contimsq.SetVR( VR::SQ );
     contimsq.SetValue( *thesqi );
     contimsq.SetVLToUndefined();
-    subds.Insert( contimsq );
+    subds0.Insert( contimsq );
 
 
-    sqi->AddItem( item );
+    sqi->AddItem( item0 );
   }
   DataSet& ds = file.GetDataSet();
 {
@@ -567,17 +569,17 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     {
     double tuple[3];
     darray->GetTupleValue( 0, tuple );
-    intcolor[0] = tuple[0] * 255.;
-    intcolor[1] = tuple[1] * 255.;
-    intcolor[2] = tuple[2] * 255.;
+    intcolor[0] = (int32_t)(tuple[0] * 255.);
+    intcolor[1] = (int32_t)(tuple[1] * 255.);
+    intcolor[2] = (int32_t)(tuple[2] * 255.);
     }
   if( farray )
     {
     float ftuple[3];
     farray->GetTupleValue( 0, ftuple );
-    intcolor[0] = ftuple[0] * 255.;
-    intcolor[1] = ftuple[1] * 255.;
-    intcolor[2] = ftuple[2] * 255.;
+    intcolor[0] = (int32_t)(ftuple[0] * 255.);
+    intcolor[1] = (int32_t)(ftuple[1] * 255.);
+    intcolor[2] = (int32_t)(ftuple[2] * 255.);
     }
   roidispcolor.SetValues( intcolor, 3 );
   subds.Insert( roidispcolor.GetAsDataElement() );
@@ -693,7 +695,7 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
   for (unsigned long i = 0; i < theCTDataSets.size(); i++)
     {
     theRTStruct->AddReferencedFrameOfReference(theSOPClassID.c_str(),
-      DirectoryHelper::RetrieveSOPInstanceUIDFromIndex(i,theCTDataSets).c_str());
+      DirectoryHelper::RetrieveSOPInstanceUIDFromIndex((int)i,theCTDataSets).c_str());
     }
 
   //now, we have go to through each vtkPolyData, assign the ROI names per polydata, and then also assign the
@@ -738,7 +740,7 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
       theCells = polys;
       }
     double v[3];
-    int theNumCells = theCells->GetNumberOfCells();
+    vtkIdType theNumCells = theCells->GetNumberOfCells();
     gdcmDebugMacro("The number of cells:" << theNumCells);
     if (theNumCells == 0) continue;// no observation of blank organs
 

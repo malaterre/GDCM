@@ -55,7 +55,7 @@ int TestWrite2(const char *subdir, const char* filename, bool recursing)
 
     const char *tsuid = gdcm::TransferSyntax::GetTSString( ts2 );
     gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
-    de.SetByteValue( tsuid, strlen(tsuid) );
+    de.SetByteValue( tsuid, (uint32_t)strlen(tsuid) );
     de.SetVR( VR::UI ); //gdcm::Attribute<0x0002, 0x0010>::GetVR() );
     fmi.Replace( de );
 
@@ -69,7 +69,7 @@ int TestWrite2(const char *subdir, const char* filename, bool recursing)
 
   const char str[] = "1.2.3.4.5.6.8.9.0";
   DataElement xde;
-  xde.SetByteValue(str,strlen(str));
+  xde.SetByteValue(str, (uint32_t)strlen(str));
   xde.SetVR( VR::UI );
   xde.SetTag( Tag(0x0008,0x0018) );
   reader.GetFile().GetDataSet().Insert( xde );

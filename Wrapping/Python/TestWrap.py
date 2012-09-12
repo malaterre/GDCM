@@ -74,6 +74,18 @@ blacklist = (
 "JPEG12Codec"
 "JPEG16Codec"
 "JPEG2000Codec"
+# segment
+"Segment"
+"SegmentHelper"
+"SegmentReader"
+"SegmentWriter"
+#mesh
+"MeshPrimitive"
+# surface
+"Surface"
+"SurfaceHelper"
+"SurfaceReader"
+"SurfaceWriter"
 # For now remove the codec part:
 "ImageCodec"
 "DeltaEncodingCodec"
@@ -86,6 +98,7 @@ blacklist = (
 "KAKADUCodec"
 "JPEGLSCodec"
 "PNMCodec"
+"PGXCodec"
 "PDFCodec"
 "Decoder"
 "Coder"
@@ -154,6 +167,8 @@ blacklist = (
 "ULWritingCallback"
 "CompositeMessageFactory"
 "CommandDataSet"
+"RoleSelectionSub"
+"SOPClassExtendedNegociationSub"
 "FindPatientRootQuery"
 )
 
@@ -166,10 +181,10 @@ def processonedir(dirname):
     #print file[4:-2]
     gdcmclass = file[4:-2]
     if gdcmclass in gdcmclasses:
-      print "ok:", gdcmclass
+      print("ok:", gdcmclass)
     else:
       if not gdcmclass in blacklist:
-        print "not wrapped:",gdcmclass
+        print("not wrapped:",gdcmclass)
         subtotal += 1
   return subtotal
 
@@ -184,8 +199,8 @@ if __name__ == "__main__":
     #print os.stat(pathname)
     mode = os.stat(pathname)[stat.ST_MODE]
     if stat.S_ISDIR(mode):
-      print "processing directory:", pathname
+      print("processing directory:", pathname)
       total += processonedir(pathname)
 
-  print "number of class not wrap:%d"%total
+  print("number of class not wrap:%d"%total)
   sys.exit(total)

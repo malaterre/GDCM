@@ -1,12 +1,12 @@
 # Makefile for the MJ2 codecs of the OpenJPEG library: frames_to_mj2, mj2_to_frames, extract_j2k_from_mj2 and wrap_j2k_in_mj2
 
-SET(common_SRCS "")
-IF(DONT_HAVE_GETOPT)
-  SET(common_SRCS ${OPENJPEG_SOURCE_DIR}/common/getopt.c)
-ENDIF(DONT_HAVE_GETOPT)
+set(common_SRCS "")
+if(DONT_HAVE_GETOPT)
+  set(common_SRCS ${OPENJPEG_SOURCE_DIR}/common/getopt.c)
+endif()
 
 # While mj2 executables do not use the API correctly, we do not link with the library but rather compile the sources files.
-SET(OPJ_SRCS
+set(OPJ_SRCS
 ${OPENJPEG_SOURCE_DIR}/libopenjpeg/bio.c
 ${OPENJPEG_SOURCE_DIR}/libopenjpeg/cio.c
 ${OPENJPEG_SOURCE_DIR}/libopenjpeg/dwt.c
@@ -27,61 +27,61 @@ ${OPENJPEG_SOURCE_DIR}/libopenjpeg/tcd.c
 ${OPENJPEG_SOURCE_DIR}/libopenjpeg/tgt.c
 )
 
-SET(MJ2_SRCS mj2.c mj2_convert.c)
+set(MJ2_SRCS mj2.c mj2_convert.c)
 
-IF(WIN32)
-  ADD_DEFINITIONS(-DOPJ_STATIC)
-ENDIF(WIN32)
+if(WIN32)
+  add_definitions(-DOPJ_STATIC)
+endif()
 
 # Headers file are located here:
-INCLUDE_DIRECTORIES(
+include_directories(
   ${OPENJPEG_SOURCE_DIR}/libopenjpeg
   ${OPENJPEG_SOURCE_DIR}/common
   ${LCMS_INCLUDE_DIR}
   )
 
-ADD_EXECUTABLE(frames_to_mj2
+add_executable(frames_to_mj2
   frames_to_mj2.c
   ${common_SRCS}
   ${OPJ_SRCS}
   ${MJ2_SRCS}
   )
-TARGET_LINK_LIBRARIES(frames_to_mj2 ${LCMS_LIB})
-IF(UNIX)
-  TARGET_LINK_LIBRARIES(frames_to_mj2 m)
-ENDIF(UNIX)
+target_link_libraries(frames_to_mj2 ${LCMS_LIB})
+if(UNIX)
+  target_link_libraries(frames_to_mj2 m)
+endif()
 
-ADD_EXECUTABLE(mj2_to_frames
+add_executable(mj2_to_frames
     mj2_to_frames.c
     ${common_SRCS}
     ${OPJ_SRCS}
     ${MJ2_SRCS}
     ${OPENJPEG_SOURCE_DIR}/common/color.c
     )
-TARGET_LINK_LIBRARIES(mj2_to_frames ${LCMS_LIB})
-IF(UNIX)
-  TARGET_LINK_LIBRARIES(mj2_to_frames m)
-ENDIF(UNIX)
+target_link_libraries(mj2_to_frames ${LCMS_LIB})
+if(UNIX)
+  target_link_libraries(mj2_to_frames m)
+endif()
 
-ADD_EXECUTABLE(extract_j2k_from_mj2
+add_executable(extract_j2k_from_mj2
     extract_j2k_from_mj2.c
     ${OPJ_SRCS}
     ${MJ2_SRCS}
     )
-TARGET_LINK_LIBRARIES(extract_j2k_from_mj2 ${LCMS_LIB})
-IF(UNIX)
-  TARGET_LINK_LIBRARIES(extract_j2k_from_mj2 m)
-ENDIF(UNIX)
+target_link_libraries(extract_j2k_from_mj2 ${LCMS_LIB})
+if(UNIX)
+  target_link_libraries(extract_j2k_from_mj2 m)
+endif()
 
-ADD_EXECUTABLE(wrap_j2k_in_mj2
+add_executable(wrap_j2k_in_mj2
     wrap_j2k_in_mj2.c
     ${OPJ_SRCS}
     ${MJ2_SRCS}
     )
-TARGET_LINK_LIBRARIES(wrap_j2k_in_mj2 ${LCMS_LIB})
-IF(UNIX)
-  TARGET_LINK_LIBRARIES(wrap_j2k_in_mj2 m)
-ENDIF(UNIX)
+target_link_libraries(wrap_j2k_in_mj2 ${LCMS_LIB})
+if(UNIX)
+  target_link_libraries(wrap_j2k_in_mj2 m)
+endif()
 
-INSTALL(TARGETS frames_to_mj2 mj2_to_frames extract_j2k_from_mj2 wrap_j2k_in_mj2
+install(TARGETS frames_to_mj2 mj2_to_frames extract_j2k_from_mj2 wrap_j2k_in_mj2
 	DESTINATION bin)

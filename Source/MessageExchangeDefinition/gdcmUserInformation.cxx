@@ -14,6 +14,8 @@
 #include "gdcmUserInformation.h"
 #include "gdcmSwapper.h"
 #include "gdcmAsynchronousOperationsWindowSub.h"
+#include "gdcmRoleSelectionSub.h"
+#include "gdcmSOPClassExtendedNegociationSub.h"
 
 namespace gdcm
 {
@@ -26,11 +28,13 @@ const uint8_t UserInformation::Reserved2 = 0x00;
 UserInformation::UserInformation()
 {
   AOWS = NULL;
+  RSS = NULL;
+  SOPCENS = NULL;
   size_t t0 = MLS.Size();
   size_t t1 = ICUID.Size();
   size_t t2 = 0; //AOWS.Size();
   size_t t3 = IVNS.Size();
-  ItemLength = t0 + t1 + t2 + t3;
+  ItemLength = (uint16_t)(t0 + t1 + t2 + t3);
   assert( (size_t)ItemLength + 4 == Size() );
 }
 
@@ -46,9 +50,6 @@ std::istream &UserInformation::Read(std::istream &is)
   SwapperDoOp::SwapArray(&itemlength,1);
   ItemLength = itemlength;
 
-//  MLS.Read(is);
-//  ICUID.Read(is);
-//  IVNS.Read(is);
   uint8_t itemtype2 = 0x0;
   size_t curlen = 0;
   while( curlen < ItemLength )
@@ -70,9 +71,21 @@ std::istream &UserInformation::Read(std::istream &is)
       AOWS->Read( is );
       curlen += AOWS->Size();
       break;
+    case 0x54: // RoleSelectionSub
+      assert( !RSS );
+      RSS = new RoleSelectionSub;
+      RSS->Read( is );
+      curlen += RSS->Size();
+      break;
     case 0x55: // ImplementationVersionNameSub
       IVNS.Read( is );
       curlen += IVNS.Size();
+      break;
+    case 0x56: // SOPClassExtendedNegociationSub
+      assert( !SOPCENS );
+      SOPCENS = new SOPClassExtendedNegociationSub;
+      SOPCENS->Read( is );
+      curlen += SOPCENS->Size();
       break;
     default:
       gdcmErrorMacro( "Unknown ItemType: " << std::hex << (int) itemtype2 );
@@ -102,7 +115,15 @@ const std::ostream &UserInformation::Write(std::ostream &os) const
     {
     AOWS->Write(os);
     }
+  if( RSS )
+    {
+    RSS->Write(os);
+    }
   IVNS.Write(os);
+  if( SOPCENS )
+    {
+    SOPCENS->Write(os);
+    }
 
   assert( (size_t)ItemLength + 4 == Size() );
 
@@ -119,7 +140,11 @@ size_t UserInformation::Size() const
   ret += ICUID.Size();
   if( AOWS )
     ret += AOWS->Size();
+  if( RSS )
+    ret += RSS->Size();
   ret += IVNS.Size();
+  if( SOPCENS )
+    ret += SOPCENS->Size();
 
   return ret;
 }

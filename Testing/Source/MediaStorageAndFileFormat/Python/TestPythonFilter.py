@@ -32,7 +32,7 @@ def TestPythonFilter(filename, verbose = False):
   sf.SetFile(file) # extremely important
   while(not pds.IsAtEnd() ):
     t = str(pds.GetCurrent().GetTag())
-    print t
+    print(t)
     res = sf.ToPyObject( pds.GetCurrent().GetTag() )
     dic2[t] = res[1]
     dic1[res[0]] = res[1]
@@ -40,9 +40,9 @@ def TestPythonFilter(filename, verbose = False):
   #print dic1
   #print dic2
   try:
-    print "Pixel Representation=",dic2[ '(0028,0103)' ]
+    print("Pixel Representation=",dic2[ '(0028,0103)' ])
   except KeyError:
-    print "Tag not found in dataset"
+    print("Tag not found in dataset")
   return 0
 
 if __name__ == "__main__":

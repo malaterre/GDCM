@@ -17,7 +17,7 @@
  *=========================================================================*/
 #include "gdcmULConnectionManager.h"
 
-int TestULConnectionManager(int argc, char *argv[])
+int TestULConnectionManager(int , char *[])
 {
   gdcm::network::ULConnectionManager o;
   return 0;

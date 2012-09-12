@@ -121,7 +121,7 @@ basic_zip_streambuf<charT, traits>::overflow(int_type c)
     int w = static_cast<int>(this->pptr() - this->pbase());
     if (c != EOF)
     {
-        *this->pptr() = c;
+        *this->pptr() = (char)c;
         ++w;
     }
     if (zip_to_stream(this->pbase(), w))
@@ -631,14 +631,14 @@ basic_zip_ostream<charT,traits>& basic_zip_ostream<charT, traits>::add_footer(vo
     unsigned long crc = this->get_crc();
     for(int n=0;n<4;++n)
     {
-        this->get_ostream().put((int)(crc & 0xff));
+        this->get_ostream().put((char)(crc & 0xff));
         crc >>= 8;
     }
 
     unsigned long length = this->get_in_size();
     for(int m=0;m<4;++m)
     {
-        this->get_ostream().put((int)(length & 0xff));
+        this->get_ostream().put((char)(length & 0xff));
         length >>= 8;
     }
 

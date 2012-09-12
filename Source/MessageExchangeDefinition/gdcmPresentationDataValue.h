@@ -50,7 +50,6 @@ public:
   uint8_t GetPresentationContextID() const { return PresentationContextID; }
   void SetPresentationContextID(uint8_t id) {
     assert( id );
-    assert( id % 2 == 1 );
     PresentationContextID = id;
   }
   uint8_t GetMessageHeader() const {

@@ -15,6 +15,9 @@
 #include "gdcmTransferSyntax.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmDataElement.h"
+#include "gdcmSwapper.h"
+
+#include <numeric>
 
 // CharLS includes
 #include "gdcm_charls.h"
@@ -46,16 +49,16 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   return false;
 #else
   is.seekg( 0, std::ios::end);
-  std::streampos buf_size = is.tellg();
+  size_t buf_size = (size_t)is.tellg();
   //assert(buf_size < INT_MAX);
   char *dummy_buffer = new char[(unsigned int)buf_size];
   is.seekg(0, std::ios::beg);
   is.read( dummy_buffer, buf_size);
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-  JlsParameters metadata;
+  JlsParameters metadata = {};
 #else
-  JlsParamaters metadata;
+  JlsParamaters metadata = {};
 #endif
   //assert(buf_size < INT_MAX);
   if (JpegLsReadHeader(dummy_buffer, (unsigned int)buf_size, &metadata) != OK)
@@ -81,7 +84,7 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     {
     assert(0);
     }
-  this->PF.SetBitsStored( metadata.bitspersample );
+  this->PF.SetBitsStored( (uint16_t)metadata.bitspersample );
   assert( this->PF.IsValid() );
 //  switch( metadata.bitspersample )
 //    {
@@ -147,25 +150,12 @@ bool JPEGLSCodec::CanCode(TransferSyntax const &ts) const
 #endif
 }
 
-bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
+bool JPEGLSCodec::DecodeByStreamsCommon(char *buffer, size_t totalLen, std::vector<unsigned char> &rgbyteOut)
 {
-#ifndef GDCM_USE_JPEGLS
-  return false;
-#else
-  if( NumberOfDimensions == 2 )
-    {
-    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-    assert( sf );
-    std::stringstream is;
-    unsigned long totalLen = sf->ComputeByteLength();
-    char *buffer = new char[totalLen];
-    sf->GetBuffer(buffer, totalLen);
-    //is.write(buffer, totalLen);
-
 #ifdef GDCM_USE_SYSTEM_CHARLS
-    JlsParameters metadata;
+    JlsParameters metadata = {};
 #else
-    JlsParamaters metadata;
+    JlsParamaters metadata = {};
 #endif
     if (JpegLsReadHeader(buffer, totalLen, &metadata) != OK)
       {
@@ -176,7 +166,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     LossyFlag = metadata.allowedlossyerror!= 0;
 
     const BYTE* pbyteCompressed = (const BYTE*)buffer;
-    int cbyteCompressed = totalLen;
+    size_t cbyteCompressed = totalLen;
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
     JlsParameters params = {};
@@ -188,7 +178,6 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     std::vector<BYTE> rgbyteCompressed;
     rgbyteCompressed.resize(params.height *params.width* 4);
 
-    std::vector<BYTE> rgbyteOut;
     rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
@@ -196,15 +185,36 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 #else
     JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed);
 #endif
-    delete[] buffer;
 
     if (result != OK)
       {
       return false;
       }
+
+  return true;
+}
+
+bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
+{
+#ifndef GDCM_USE_JPEGLS
+  return false;
+#else
+  if( NumberOfDimensions == 2 )
+    {
+    const SequenceOfFragments *sf = in.GetSequenceOfFragments();
+    assert( sf );
+    unsigned long totalLen = sf->ComputeByteLength();
+    char *buffer = new char[totalLen];
+    sf->GetBuffer(buffer, totalLen);
+
+    std::vector<BYTE> rgbyteOut;
+    bool b = DecodeByStreamsCommon(buffer, totalLen, rgbyteOut);
+    if( !b ) return false;
+    delete[] buffer;
+
     out = in;
 
-    out.SetByteValue( (char*)&rgbyteOut[0], rgbyteOut.size() );
+    out.SetByteValue( (char*)&rgbyteOut[0], (uint32_t)rgbyteOut.size() );
     return true;
     }
   else if( NumberOfDimensions == 3 )
@@ -233,9 +243,9 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       assert( totalLen > 0 && pbyteCompressed[totalLen-1] == 0xd9 );
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
-      JlsParameters metadata;
+      JlsParameters metadata = {};
 #else
-      JlsParamaters metadata;
+      JlsParamaters metadata = {};
 #endif
       if (JpegLsReadHeader(mybuffer, totalLen, &metadata) != OK)
         {
@@ -245,7 +255,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       // allowedlossyerror == 0 => Lossless
       LossyFlag = metadata.allowedlossyerror!= 0;
 
-      int cbyteCompressed = totalLen;
+      size_t cbyteCompressed = totalLen;
 
 #ifdef GDCM_USE_SYSTEM_CHARLS
       JlsParameters params = {};
@@ -279,7 +289,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       }
     std::string str = os.str();
     assert( str.size() );
-    out.SetByteValue( &str[0], str.size() );
+    out.SetByteValue( &str[0], (uint32_t)str.size() );
 
     return true;
     }
@@ -370,9 +380,9 @@ sample dit not suffer from that.
     params.width = image_width;
 
     if (sample_pixel == 4)
-{
+      {
       params.ilv = ILV_LINE;
-}
+      }
     else if (sample_pixel == 3)
       {
       params.ilv = ILV_LINE;
@@ -387,14 +397,14 @@ sample dit not suffer from that.
     JLS_ERROR error = JpegLsEncode(&rgbyteCompressed[0], rgbyteCompressed.size(), &cbyteCompressed, inputdata, inputlength, &params);
     if( error != OK )
       {
-      gdcmErrorMacro( "Error compressing: " << error );
+      gdcmErrorMacro( "Error compressing: " << (int)error );
       return false;
       }
 
     assert( cbyteCompressed < rgbyteCompressed.size() );
 
     Fragment frag;
-    frag.SetByteValue( (char*)&rgbyteCompressed[0], cbyteCompressed );
+    frag.SetByteValue( (char*)&rgbyteCompressed[0], (uint32_t)cbyteCompressed );
     sq->AddFragment( frag );
     }
 
@@ -411,11 +421,130 @@ void JPEGLSCodec::SetLossyError(int error)
   LossyError = error;
 }
 
-bool JPEGLSCodec::Decode(DataElement const &, char* , uint32_t ,
+bool JPEGLSCodec::Decode(DataElement const &, char* , size_t,
               uint32_t , uint32_t , uint32_t ,
               uint32_t , uint32_t , uint32_t )
 {
  return false;
+}
+
+bool JPEGLSCodec::DecodeExtent(
+    char *buffer,
+    unsigned int xmin, unsigned int xmax,
+    unsigned int ymin, unsigned int ymax,
+    unsigned int zmin, unsigned int zmax,
+    std::istream & is
+  )
+{
+  BasicOffsetTable bot;
+  bot.Read<SwapperNoOp>( is );
+
+  const unsigned int * dimensions = this->GetDimensions();
+  const PixelFormat & pf = this->GetPixelFormat();
+  assert( pf.GetBitsAllocated() % 8 == 0 );
+  assert( pf != PixelFormat::SINGLEBIT );
+  assert( pf != PixelFormat::UINT12 && pf != PixelFormat::INT12 );
+
+  if( NumberOfDimensions == 2 )
+    {
+    char *dummy_buffer = NULL;
+    std::vector<char> vdummybuffer;
+    size_t buf_size = 0;
+
+    const Tag seqDelItem(0xfffe,0xe0dd);
+    gdcm::Fragment frag;
+    while( frag.ReadPreValue<SwapperNoOp>(is) && frag.GetTag() != seqDelItem )
+      {
+      size_t fraglen = frag.GetVL();
+      size_t oldlen = vdummybuffer.size();
+      // update
+      buf_size = fraglen + oldlen;
+      vdummybuffer.resize( buf_size );
+      dummy_buffer = &vdummybuffer[0];
+      // read J2K
+      is.read( &vdummybuffer[oldlen], fraglen );
+      }
+    assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
+    assert( zmin == zmax );
+    assert( zmin == 0 );
+
+    std::vector <unsigned char> outv;
+    bool b = DecodeByStreamsCommon(dummy_buffer, buf_size, outv);
+    if( !b ) return false;
+
+    unsigned char *raw = &outv[0];
+    const unsigned int rowsize = xmax - xmin + 1;
+    const unsigned int colsize = ymax - ymin + 1;
+    const unsigned int bytesPerPixel = pf.GetPixelSize();
+
+    const unsigned char *tmpBuffer1 = raw;
+    unsigned int z = 0;
+    for (unsigned int y = ymin; y <= ymax; ++y)
+      {
+      size_t theOffset = 0 + (z*dimensions[1]*dimensions[0] + y*dimensions[0] + xmin)*bytesPerPixel;
+      tmpBuffer1 = raw + theOffset;
+      memcpy(&(buffer[((z-zmin)*rowsize*colsize +
+            (y-ymin)*rowsize)*bytesPerPixel]),
+        tmpBuffer1, rowsize*bytesPerPixel);
+      }
+    }
+  else if ( NumberOfDimensions == 3 )
+    {
+    const Tag seqDelItem(0xfffe,0xe0dd);
+    gdcm::Fragment frag;
+    std::streamoff thestart = is.tellg();
+    unsigned int numfrags = 0;
+    std::vector< size_t > offsets;
+    while( frag.ReadPreValue<SwapperNoOp>(is) && frag.GetTag() != seqDelItem )
+      {
+      //std::streamoff relstart = is.tellg();
+      //assert( relstart - thestart == 8 );
+      std::streamoff off = frag.GetVL();
+      offsets.push_back( off );
+      is.seekg( off, std::ios::cur );
+      ++numfrags;
+      }
+    assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
+    assert( numfrags == offsets.size() );
+    if( numfrags != Dimensions[2] )
+      {
+      gdcmErrorMacro( "Not handled" );
+      return false;
+      }
+
+    for( unsigned int z = zmin; z <= zmax; ++z )
+      {
+      size_t curoffset = std::accumulate( offsets.begin(), offsets.begin() + z, 0 );
+      is.seekg( thestart + curoffset + 8 * z, std::ios::beg );
+      is.seekg( 8, std::ios::cur );
+
+      const size_t buf_size = offsets[z];
+      char *dummy_buffer = new char[ buf_size ];
+      is.read( dummy_buffer, buf_size );
+
+      std::vector <unsigned char> outv;
+      bool b = DecodeByStreamsCommon(dummy_buffer, buf_size, outv);
+      delete[] dummy_buffer;
+
+      if( !b ) return false;
+
+      unsigned char *raw = &outv[0];
+      const unsigned int rowsize = xmax - xmin + 1;
+      const unsigned int colsize = ymax - ymin + 1;
+      const unsigned int bytesPerPixel = pf.GetPixelSize();
+
+      const unsigned char *tmpBuffer1 = raw;
+      for (unsigned int y = ymin; y <= ymax; ++y)
+        {
+        size_t theOffset = 0 + (0*dimensions[1]*dimensions[0] + y*dimensions[0] + xmin)*bytesPerPixel;
+        tmpBuffer1 = raw + theOffset;
+        memcpy(&(buffer[((z-zmin)*rowsize*colsize +
+              (y-ymin)*rowsize)*bytesPerPixel]),
+          tmpBuffer1, rowsize*bytesPerPixel);
+        }
+      }
+    }
+  return true;
 }
 
 } // end namespace gdcm

@@ -1,0 +1,68 @@
+/*!
+
+\page gdcmxml provides a tool to convert a DICOM file(DataSet) into a XML infoset (according to the Native DICOM Model) and vice-versa.
+
+\section synopsis SYNOPSIS
+
+\verbatim
+gdcmxml [options] Filename1{.xml or .dcm] Filename2[.dcm or .xml]
+\endverbatim
+
+\section description DESCRIPTION
+
+The \b gdcmxml command line program converts a DICOM file into an XML file or vice-versa. 
+For those familiar with DCMTK, this provides binary capabilities(i.e. functionality of both
+dcm2xml and xml2dcm).
+The XML infoset which is from the DICOM file gdcmXMLPrintet Class in Source/MediaStorageAndFileFormat.
+This is in strict compliance with the Native DICOM Model as given in Supp 118. 
+
+\section parameters PARAMETERS
+
+\verbatim
+Filename1        DICOM or XML input filename ( cannot be absent)
+Filename2        output filename ( can be absent)
+\endverbatim
+
+\section options OPTIONS
+
+\subsection options options
+\verbatim
+
+Options for Dicom to XML:
+  -B --loadBulkData   Loads bulk data into a binary file named "UUID"(by default UUID are written).
+Options for XML to Dicom:
+  -B --loadBulkData   Loads bulk data from a binary file named as the "UUID" in XML file(by default UUID are written).
+  -T --TransferSyntax Loads transfer syntax from file (default is LittleEndianImplicit)
+  
+\endverbatim
+
+\subsection general_options general options
+\verbatim
+  -h   --help
+         print this help text and exit
+
+  -v   --version
+         print version information and exit
+
+  -V   --verbose
+         verbose mode (warning+error).
+
+  -W   --warning
+         warning mode, print warning information
+
+  -E   --error
+         error mode, print error information
+
+  -D   --debug
+         debug mode, print debug information
+\endverbatim
+
+\section see_also SEE ALSO
+
+<b>gdcmdump</b>(1), <b>gdcmraw</b>(1), <b>gdcmanon</b>(1)
+
+\section copyright COPYRIGHT
+
+Copyright (c) 2006-2011 Mathieu Malaterre
+
+*/

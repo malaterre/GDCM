@@ -139,7 +139,7 @@ void printbinary(std::istream &is, PDFElement const & pdfel )
   uint32_t dummy = pdfel.getdummy();
   assert( dummy == 0 );
   uint32_t offset = pdfel.getoffset();
-  uint32_t pos = offset + is.tellg() - 4;
+  uint32_t pos = (uint32_t)(offset + is.tellg() - 4);
   printvalue(is, type, numels, pos);
 }
 

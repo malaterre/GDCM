@@ -69,7 +69,7 @@ generate the DICOMDIR file. Namely two steps:
 \li Convert all DICOM file into the Explicit VR Little Endian Uncompressed (1.2.840.10008.1.2.1)
 
 Step 1. can be solved in a numerous way. Eg. on UNIX environment this could
-either be solved using the mkisofs command line tool. filename should not
+either be solved using the mkisofs command line tool. Filenames should not
 contains any extension since the VR CS does not allow for the '.' character.
 Only upper case, digit 0-9, the space ' ' and the underscore '_' character are
 valid in VR CS, with a maximum of 8 bytes. Another simple tool that can be
@@ -83,7 +83,7 @@ Step 2. can simply be achieved using the gdcmconv command line tool:
 
 \section see_also SEE ALSO
 
-<b>gdcmconv</b>(1), <b>gdcmanon</b>(1), <b>rename</b>(1)
+<b>gdcmconv</b>(1), <b>gdcmanon</b>(1), <b>rename</b>(1), <b>mkisofs</b>(1)
 
 \section copyright COPYRIGHT
 

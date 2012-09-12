@@ -281,7 +281,7 @@ void vtkClampHelper1(T* iptr, unsigned char *optr,
     }
   else
     {
-    ushort_val = (unsigned char) ((*iptr + shift)*scale);
+    ushort_val = (unsigned char) (((double)*iptr + shift)*scale);
     }
   *optr = (unsigned char)((*optr * ushort_val) >> 8);
 }
@@ -304,7 +304,7 @@ void vtkClampHelper2(T* iptr, unsigned char *optr,
     }
   else
     {
-    result_val = (unsigned char) ((*iptr + shift)*scale);
+    result_val = (unsigned char) (((double)*iptr + shift)*scale);
     }
   *optr = result_val;
 }
@@ -371,7 +371,7 @@ void vtkImageMapToWindowLevelColors2Execute(
         {
         if (!(count%target))
           {
-          self->UpdateProgress(count/(50.0*target));
+          self->UpdateProgress((double)count/(50.0*(double)target));
           }
         count++;
         }

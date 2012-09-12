@@ -46,6 +46,7 @@
 #include "gdcmOrientation.h"
 #include "gdcmTrace.h"
 #include "gdcmImageChangePlanarConfiguration.h"
+#include "gdcmDirectoryHelper.h"
 
 #include <sstream>
 
@@ -337,25 +338,7 @@ int vtkGDCMImageReader::ProcessRequest(vtkInformation* request,
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
 
-//----------------------------------------------------------------------------
-inline std::string GetStringValueFromTag(const gdcm::Tag& t, const gdcm::DataSet& ds)
-{
-  std::string buffer;
 
-  if( ds.FindDataElement( t ) )
-    {
-    const gdcm::DataElement& de = ds.GetDataElement( t );
-    const gdcm::ByteValue *bv = de.GetByteValue();
-    if( bv ) // Can be Type 2
-      {
-      buffer = std::string( bv->GetPointer(), bv->GetLength() );
-      // Will be padded with at least one \0
-      }
-    }
-
-  // Since return is a const char* the very first \0 will be considered
-  return buffer.c_str(); // Yes, I mean .c_str()
-}
 
 //----------------------------------------------------------------------------
 void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &reader)
@@ -365,71 +348,71 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
 
   // $ grep "vtkSetString\|DICOM" vtkMedicalImageProperties.h
   // For ex: DICOM (0010,0010) = DOE,JOHN
-  this->MedicalImageProperties->SetPatientName( GetStringValueFromTag( gdcm::Tag(0x0010,0x0010), ds).c_str() );
+  this->MedicalImageProperties->SetPatientName( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0010), ds).c_str() );
   // For ex: DICOM (0010,0020) = 1933197
-  this->MedicalImageProperties->SetPatientID( GetStringValueFromTag( gdcm::Tag(0x0010,0x0020), ds).c_str() );
+  this->MedicalImageProperties->SetPatientID( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0020), ds).c_str() );
   // For ex: DICOM (0010,1010) = 031Y
-  this->MedicalImageProperties->SetPatientAge( GetStringValueFromTag( gdcm::Tag(0x0010,0x1010), ds).c_str() );
+  this->MedicalImageProperties->SetPatientAge( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x1010), ds).c_str() );
   // For ex: DICOM (0010,0040) = M
-  this->MedicalImageProperties->SetPatientSex( GetStringValueFromTag( gdcm::Tag(0x0010,0x0040), ds).c_str() );
+  this->MedicalImageProperties->SetPatientSex( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0040), ds).c_str() );
   // For ex: DICOM (0010,0030) = 19680427
-  this->MedicalImageProperties->SetPatientBirthDate( GetStringValueFromTag( gdcm::Tag(0x0010,0x0030), ds).c_str() );
+  this->MedicalImageProperties->SetPatientBirthDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0030), ds).c_str() );
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0020) = 20030617
-  this->MedicalImageProperties->SetStudyDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0020), ds).c_str() );
+  this->MedicalImageProperties->SetStudyDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0020), ds).c_str() );
 #endif
   // For ex: DICOM (0008,0022) = 20030617
-  this->MedicalImageProperties->SetAcquisitionDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0022), ds).c_str() );
+  this->MedicalImageProperties->SetAcquisitionDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0022), ds).c_str() );
 #if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
-  this->MedicalImageProperties->SetStudyTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0030), ds).c_str() );
+  this->MedicalImageProperties->SetStudyTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0030), ds).c_str() );
 #endif
   // For ex: DICOM (0008,0032) = 162552.0705 or 230012, or 0012
-  this->MedicalImageProperties->SetAcquisitionTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0032), ds).c_str() );
+  this->MedicalImageProperties->SetAcquisitionTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0032), ds).c_str() );
   // For ex: DICOM (0008,0023) = 20030617
-  this->MedicalImageProperties->SetImageDate( GetStringValueFromTag( gdcm::Tag(0x0008,0x0023), ds).c_str() );
+  this->MedicalImageProperties->SetImageDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0023), ds).c_str() );
   // For ex: DICOM (0008,0033) = 162552.0705 or 230012, or 0012
-  this->MedicalImageProperties->SetImageTime( GetStringValueFromTag( gdcm::Tag(0x0008,0x0033), ds).c_str() );
+  this->MedicalImageProperties->SetImageTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0033), ds).c_str() );
   // For ex: DICOM (0020,0013) = 1
-  this->MedicalImageProperties->SetImageNumber( GetStringValueFromTag( gdcm::Tag(0x0020,0x0013), ds).c_str() );
+  this->MedicalImageProperties->SetImageNumber( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0020,0x0013), ds).c_str() );
   // For ex: DICOM (0020,0011) = 902
-  this->MedicalImageProperties->SetSeriesNumber( GetStringValueFromTag( gdcm::Tag(0x0020,0x0011), ds).c_str() );
+  this->MedicalImageProperties->SetSeriesNumber( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0020,0x0011), ds).c_str() );
   // For ex: DICOM (0008,103e) = SCOUT
-  this->MedicalImageProperties->SetSeriesDescription( GetStringValueFromTag( gdcm::Tag(0x0008,0x103e), ds).c_str() );
+  this->MedicalImageProperties->SetSeriesDescription( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x103e), ds).c_str() );
   // For ex: DICOM (0020,0010) = 37481
-  this->MedicalImageProperties->SetStudyID( GetStringValueFromTag( gdcm::Tag(0x0020,0x0010), ds).c_str() );
+  this->MedicalImageProperties->SetStudyID( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0020,0x0010), ds).c_str() );
   // For ex: DICOM (0008,1030) = BRAIN/C-SP/FACIAL
-  this->MedicalImageProperties->SetStudyDescription( GetStringValueFromTag( gdcm::Tag(0x0008,0x1030), ds).c_str() );
+  this->MedicalImageProperties->SetStudyDescription( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x1030), ds).c_str() );
   // For ex: DICOM (0008,0060)= CT
-  this->MedicalImageProperties->SetModality( GetStringValueFromTag( gdcm::Tag(0x0008,0x0060), ds).c_str() );
+  this->MedicalImageProperties->SetModality( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0060), ds).c_str() );
   // For ex: DICOM (0008,0070) = Siemens
-  this->MedicalImageProperties->SetManufacturer( GetStringValueFromTag( gdcm::Tag(0x0008,0x0070), ds).c_str() );
+  this->MedicalImageProperties->SetManufacturer( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0070), ds).c_str() );
   // For ex: DICOM (0008,1090) = LightSpeed QX/i
-  this->MedicalImageProperties->SetManufacturerModelName( GetStringValueFromTag( gdcm::Tag(0x0008,0x1090), ds).c_str() );
+  this->MedicalImageProperties->SetManufacturerModelName( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x1090), ds).c_str() );
   // For ex: DICOM (0008,1010) = LSPD_OC8
-  this->MedicalImageProperties->SetStationName( GetStringValueFromTag( gdcm::Tag(0x0008,0x1010), ds).c_str() );
+  this->MedicalImageProperties->SetStationName( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x1010), ds).c_str() );
   // For ex: DICOM (0008,0080) = FooCity Medical Center
-  this->MedicalImageProperties->SetInstitutionName( GetStringValueFromTag( gdcm::Tag(0x0008,0x0080), ds).c_str() );
+  this->MedicalImageProperties->SetInstitutionName( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0080), ds).c_str() );
   // For ex: DICOM (0018,1210) = Bone
-  this->MedicalImageProperties->SetConvolutionKernel( GetStringValueFromTag( gdcm::Tag(0x0018,0x1210), ds).c_str() );
+  this->MedicalImageProperties->SetConvolutionKernel( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1210), ds).c_str() );
   // For ex: DICOM (0018,0050) = 0.273438
-  this->MedicalImageProperties->SetSliceThickness( GetStringValueFromTag( gdcm::Tag(0x0018,0x0050), ds).c_str() );
+  this->MedicalImageProperties->SetSliceThickness( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0050), ds).c_str() );
   // For ex: DICOM (0018,0060) = 120
-  this->MedicalImageProperties->SetKVP( GetStringValueFromTag( gdcm::Tag(0x0018,0x0060), ds).c_str() );
+  this->MedicalImageProperties->SetKVP( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0060), ds).c_str() );
   // For ex: DICOM (0018,1120) = 15
-  this->MedicalImageProperties->SetGantryTilt( GetStringValueFromTag( gdcm::Tag(0x0018,0x1120), ds).c_str() );
+  this->MedicalImageProperties->SetGantryTilt( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1120), ds).c_str() );
   // For ex: DICOM (0018,0081) = 105
-  this->MedicalImageProperties->SetEchoTime( GetStringValueFromTag( gdcm::Tag(0x0018,0x0081), ds).c_str() );
+  this->MedicalImageProperties->SetEchoTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0081), ds).c_str() );
   // For ex: DICOM (0018,0091) = 35
-  this->MedicalImageProperties->SetEchoTrainLength( GetStringValueFromTag( gdcm::Tag(0x0018,0x0091), ds).c_str() );
+  this->MedicalImageProperties->SetEchoTrainLength( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0091), ds).c_str() );
   // For ex: DICOM (0018,0080) = 2040
-  this->MedicalImageProperties->SetRepetitionTime( GetStringValueFromTag( gdcm::Tag(0x0018,0x0080), ds).c_str() );
+  this->MedicalImageProperties->SetRepetitionTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x0080), ds).c_str() );
   // For ex: DICOM (0018,1150) = 5
-  this->MedicalImageProperties->SetExposureTime( GetStringValueFromTag( gdcm::Tag(0x0018,0x1150), ds).c_str() );
+  this->MedicalImageProperties->SetExposureTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1150), ds).c_str() );
   // For ex: DICOM (0018,1151) = 400
-  this->MedicalImageProperties->SetXRayTubeCurrent( GetStringValueFromTag( gdcm::Tag(0x0018,0x1151), ds).c_str() );
+  this->MedicalImageProperties->SetXRayTubeCurrent( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1151), ds).c_str() );
   // For ex: DICOM (0018,1152) = 114
-  this->MedicalImageProperties->SetExposure( GetStringValueFromTag( gdcm::Tag(0x0018,0x1152), ds).c_str() );
+  this->MedicalImageProperties->SetExposure( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0018,0x1152), ds).c_str() );
 
   // virtual void AddWindowLevelPreset(double w, double l);
   // (0028,1050) DS [   498\  498]                           #  12, 2 WindowCenter
@@ -451,7 +434,7 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
       ss1.str( swc );
       gdcm::VR vr = gdcm::VR::DS;
       unsigned int vrsize = vr.GetSizeof();
-      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swc.c_str(), swc.size());
+      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swc.c_str(), (unsigned int)swc.size());
       elwc.SetLength( count * vrsize );
       elwc.Read( ss1 );
       std::stringstream ss2;
@@ -480,7 +463,7 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
       std::stringstream ss;
       ss.str( "" );
       std::string swe = std::string( bvwe->GetPointer(), bvwe->GetLength() );
-      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), swe.size()); (void)count;
+      unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(swe.c_str(), (unsigned int)swe.size()); (void)count;
       // I found a case with only one W/L but two comments: WINDOW1\WINDOW2
       // SIEMENS-IncompletePixelData.dcm
       // oh wait but what if we have the countrary...
@@ -908,8 +891,8 @@ int vtkGDCMImageReader::RequestInformationCompat()
     this->DataScalarType = VTK_BIT;
     break;
   default:
-    vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype.GetScalarType()
-      << " with " << outputpt  );
+    vtkErrorMacro( "Do not support this Pixel Type: " << (int)pixeltype.GetScalarType()
+      << " with " << (int)outputpt  );
     return 0;
     }
   this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();
@@ -946,14 +929,14 @@ int vtkGDCMImageReader::RequestInformationCompat()
       this->IconDataScalarType = VTK_UNSIGNED_SHORT;
       break;
     default:
-      vtkErrorMacro( "Do not support this Icon Pixel Type: " << iconpixelformat.GetScalarType() );
+      vtkErrorMacro( "Do not support this Icon Pixel Type: " << (int)iconpixelformat.GetScalarType() );
       return 0;
       }
     this->IconNumberOfScalarComponents = iconpixelformat.GetSamplesPerPixel();
     }
 
   // Overlay!
-  unsigned int numoverlays = image.GetNumberOfOverlays();
+  size_t numoverlays = image.GetNumberOfOverlays();
   if( this->LoadOverlays && numoverlays )
     {
     // Do overlay specific stuff...
@@ -964,7 +947,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
       assert( (unsigned int)ov.GetRows() == image.GetRows() );
       assert( (unsigned int)ov.GetColumns() == image.GetColumns() );
       }
-    this->NumberOfOverlays = numoverlays;
+    this->NumberOfOverlays = (int)numoverlays;
     }
 
 //  return this->Superclass::RequestInformation(
@@ -1187,7 +1170,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     }
 
   // Do the Curve:
-  unsigned int numcurves = image.GetNumberOfCurves();
+  size_t numcurves = image.GetNumberOfCurves();
   if( numcurves )
     {
     const gdcm::Curve& curve = image.GetCurve();
@@ -1214,7 +1197,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   // Do the Overlay:
   if( this->LoadOverlays )
     {
-    unsigned int numoverlays = image.GetNumberOfOverlays();
+    size_t numoverlays = image.GetNumberOfOverlays();
     long overlayoutsize = (dext[1] - dext[0] + 1);
     //this->NumberOfOverlays = numoverlays;
     //if( numoverlays )
@@ -1299,8 +1282,8 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     vtkWindowLevelLookupTable *vtklut = vtkWindowLevelLookupTable::New();
     // Technically we could also use the first of the Window Width / Window Center
     // oh well, if they are missing let's just compute something:
-    int64_t min = pixeltype.GetMin();
-    int64_t max = pixeltype.GetMax();
+    const double min = (double)pixeltype.GetMin();
+    const double max = (double)pixeltype.GetMax();
     vtklut->SetWindow( max - min );
     vtklut->SetLevel( 0.5 * (max + min) );
     //vtklut->SetWindow(1024); // WindowWidth

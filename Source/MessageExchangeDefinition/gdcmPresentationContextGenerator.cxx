@@ -142,7 +142,7 @@ bool PresentationContextGenerator::AddPresentationContext( const char *as, const
   pc.SetAbstractSyntax( as );
   SizeType idn = 2*n + 1;
   assert( idn <= std::numeric_limits<uint8_t>::max() );
-  pc.SetPresentationContextID( idn );
+  pc.SetPresentationContextID( (uint8_t)idn );
   pc.AddTransferSyntax( ts );
 
   PresentationContextArrayType::const_iterator it =

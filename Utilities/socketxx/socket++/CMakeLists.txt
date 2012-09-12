@@ -1,50 +1,50 @@
 # common
-SET(VERSION "1.12.12")
-SET(PACKAGE "socket++")
+set(VERSION "1.12.12")
+set(PACKAGE "socket++")
 
 # specific
-IF(WIN32)
-ELSE(WIN32)
+if(WIN32)
+else()
   # FIXME this should be try_compile:
-  SET(EXTERN_C_BEGIN)
-  SET(SYS_SIGLIST sys_siglist)
-  SET(SIGHND_ARGTYPE int)
-  SET(SYS_ERRLIST sys_errlist)
-  SET(SYS_ERRLIST_DECLARED 1)
-  SET(_S_LIBGXX 0)
-  SET(HAVE_DLFCN_H 1)
-  SET(HAVE_FORK 1)
-  SET(HAVE_MEMORY_H 1)
-  SET(HAVE_SELECT 1)
-  SET(HAVE_SSTREAM 1)
-  SET(HAVE_STDINT_H 1)
-  SET(HAVE_STDLIB_H 1)
-  SET(HAVE_STRING 1)
-  SET(HAVE_STRINGS_H 1)
-  SET(HAVE_STRING_H 1)
-  SET(HAVE_SYS_STAT_H 1)
-  SET(HAVE_SYS_TYPES_H 1)
-  SET(HAVE_SYS_WAIT_H 1)
-  SET(HAVE_UNISTD_H 1)
-  SET(HAVE_VFORK 1)
-  SET(HAVE_VFORK_H 0)
-  SET(HAVE_WORKING_FORK 1)
-  SET(HAVE_WORKING_VFORK 1)
-  SET(RETSIGTYPE void)
-  SET(STDC_HEADERS 1)
-ENDIF(WIN32)
+  set(EXTERN_C_BEGIN)
+  set(SYS_SIGLIST sys_siglist)
+  set(SIGHND_ARGTYPE int)
+  set(SYS_ERRLIST sys_errlist)
+  set(SYS_ERRLIST_DECLARED 1)
+  set(_S_LIBGXX 0)
+  set(HAVE_DLFCN_H 1)
+  set(HAVE_FORK 1)
+  set(HAVE_MEMORY_H 1)
+  set(HAVE_SELECT 1)
+  set(HAVE_SSTREAM 1)
+  set(HAVE_STDINT_H 1)
+  set(HAVE_STDLIB_H 1)
+  set(HAVE_STRING 1)
+  set(HAVE_STRINGS_H 1)
+  set(HAVE_STRING_H 1)
+  set(HAVE_SYS_STAT_H 1)
+  set(HAVE_SYS_TYPES_H 1)
+  set(HAVE_SYS_WAIT_H 1)
+  set(HAVE_UNISTD_H 1)
+  set(HAVE_VFORK 1)
+  set(HAVE_VFORK_H 0)
+  set(HAVE_WORKING_FORK 1)
+  set(HAVE_WORKING_VFORK 1)
+  set(RETSIGTYPE void)
+  set(STDC_HEADERS 1)
+endif()
 
-CONFIGURE_FILE(
+configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/config.h
   )
 
-INCLUDE_DIRECTORIES(
+include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}
 	${CMAKE_CURRENT_BINARY_DIR}
 	)
 
-SET(libsocket___la_SOURCES
+set(libsocket___la_SOURCES
   sockstream.cpp sockstream.h
   sockinet.cpp sockinet.h
   #pipestream.cpp pipestream.h
@@ -56,19 +56,22 @@ SET(libsocket___la_SOURCES
   #sig.cpp sig.h
   )
 
-IF(UNIX)
-  SET(libsocket___la_SOURCES
+if(UNIX)
+  set(libsocket___la_SOURCES
     ${libsocket___la_SOURCES}
     #sockunix.cpp sockunix.h
     )
-ENDIF(UNIX)
+endif()
 
-ADD_LIBRARY(${SOCKETXX_LIBRARY_NAME} ${libsocket___la_SOURCES})
-SET_TARGET_PROPERTIES(${SOCKETXX_LIBRARY_NAME} PROPERTIES ${SOCKETXX_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
+add_library(${SOCKETXX_LIBRARY_NAME} ${libsocket___la_SOURCES})
+set_target_properties(${SOCKETXX_LIBRARY_NAME} PROPERTIES ${SOCKETXX_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 if(WIN32)
 #target_link_libraries(${SOCKETXX_LIBRARY_NAME} wsock32)
 target_link_libraries(${SOCKETXX_LIBRARY_NAME} ws2_32.lib)
-endif(WIN32)
+endif()
+if(CMAKE_SYSTEM MATCHES "SunOS.*")
+  target_link_libraries(${SOCKETXX_LIBRARY_NAME} socket nsl)
+endif()
 
 #libsocketincludedir=$(includedir)/socket++
 #libsocketinclude_HEADERS = \
@@ -86,9 +89,9 @@ endif(WIN32)
 #libsocket___la_LIBADD =
 
 # Install library
-IF(NOT SOCKETXX_INSTALL_NO_LIBRARIES)
+if(NOT SOCKETXX_INSTALL_NO_LIBRARIES)
   # Runtime
-  INSTALL(TARGETS ${SOCKETXX_LIBRARY_NAME}
+  install(TARGETS ${SOCKETXX_LIBRARY_NAME}
     EXPORT ${GDCM_TARGETS_NAME}
     RUNTIME DESTINATION ${SOCKETXX_INSTALL_BIN_DIR} COMPONENT Applications
     LIBRARY DESTINATION ${SOCKETXX_INSTALL_LIB_DIR} COMPONENT Libraries ${NAMELINK_SKIP}
@@ -96,17 +99,17 @@ IF(NOT SOCKETXX_INSTALL_NO_LIBRARIES)
   )
   #Development
   if(NAMELINK_ONLY)
-    INSTALL(TARGETS ${SOCKETXX_LIBRARY_NAME}
+    install(TARGETS ${SOCKETXX_LIBRARY_NAME}
     EXPORT ${GDCM_TARGETS_NAME}
       LIBRARY DESTINATION ${SOCKETXX_INSTALL_LIB_DIR} COMPONENT Development ${NAMELINK_ONLY}
     )
-  endif(NAMELINK_ONLY)
-ENDIF(NOT SOCKETXX_INSTALL_NO_LIBRARIES)
+  endif()
+endif()
 
-IF(NOT SOCKETXX_INSTALL_NO_DEVELOPMENT)
-  FILE(GLOB header_files "*.h")
-  INSTALL(FILES ${header_files}
+if(NOT SOCKETXX_INSTALL_NO_DEVELOPMENT)
+  file(GLOB header_files "*.h")
+  install(FILES ${header_files}
     DESTINATION ${SOCKETXX_INSTALL_INCLUDE_DIR} COMPONENT Headers
   )
-ENDIF(NOT SOCKETXX_INSTALL_NO_DEVELOPMENT)
+endif()
 
