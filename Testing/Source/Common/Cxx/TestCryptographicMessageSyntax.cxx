@@ -238,7 +238,7 @@ int TestCryptographicMessageSyntax(int, char *[])
 #endif
 
 #ifdef WIN32
-  gdcm::CryptoFactory* capi = gdcm::CryptoFactory::getFactoryInstance(gdcm::CryptoFactory::CAPI);
+  gdcm::CryptoFactory* capi = gdcm::CryptoFactory::GetFactoryInstance(gdcm::CryptoFactory::CAPI);
   std::auto_ptr<gdcm::CryptographicMessageSyntax> ccms(capi->CreateCMSProvider());
   ccms->ParseCertificateFile(certpath.c_str());
   ccms->ParseKeyFile(keypath.c_str());
