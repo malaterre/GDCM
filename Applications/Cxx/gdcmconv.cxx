@@ -1113,7 +1113,7 @@ int main (int argc, char *argv[])
         {
         iig.SetPixelMinMax( iconmin, iconmax );
         }
-      iig.AutoPixelMinMax( iconautominmax );
+      iig.AutoPixelMinMax( iconautominmax ? true : false );
       bool b = iig.Generate();
       if( !b ) return 1;
       const gdcm::IconImage &icon = iig.GetIconImage();
