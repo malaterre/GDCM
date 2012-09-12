@@ -176,9 +176,9 @@ int TestVM(int, char *[])
   //std::cout << vm << std::endl;
 
 {
-  gdcm::VM vm1_ = gdcm::VM::VM8;
-  gdcm::VM vm2_ = gdcm::VM::VM1_n;
-  if ( !vm2_.Compatible( vm1_ ) )
+  gdcm::VM vm1 = gdcm::VM::VM8;
+  gdcm::VM vm2 = gdcm::VM::VM1_n;
+  if ( !vm2.Compatible( vm1 ) )
     {
     return 1;
     }

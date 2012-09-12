@@ -54,6 +54,10 @@ public :
   static void ErrorOff();
   static bool GetErrorFlag();
 
+  /// \deprecated DO NOT USE
+  GDCM_LEGACY(static bool GetDebugToFile ())
+  GDCM_LEGACY(static std::ofstream &GetDebugFile ())
+
 protected:
 private:
 };

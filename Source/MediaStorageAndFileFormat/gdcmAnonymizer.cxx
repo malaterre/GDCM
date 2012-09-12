@@ -1007,8 +1007,8 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   const ByteValue *bv = EncryptedContent.GetByteValue();
 
   size_t encrypted_len = bv->GetLength();
-  char *orig = new char[ encrypted_len ];
-  char *buf = new char[ encrypted_len ];
+  char *orig = new char[ bv->GetLength() ];
+  char *buf = new char[ bv->GetLength() ];
   memcpy(orig, bv->GetPointer(), encrypted_len );
 
   size_t encrypted_len2 = encrypted_len;

@@ -78,10 +78,6 @@ bool checkbl( const char *filename )
     // syntax to 'Big Endian Explicit'
     "SignedShortLosslessBug.dcm",
     "MR-MONO2-12-shoulder.dcm",
-    // difficult for now:
-    "SIEMENS_SOMATOM-12-ACR_NEMA-ZeroLengthUs.acr",
-    "MR-MONO2-12-an2.acr",
-    "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm",
     NULL
   };
   for( const char **bl = blacklist; *bl; ++bl )
@@ -102,8 +98,6 @@ int TestSCUFunctions(int argc, char *argv[])
     std::cerr << argv[0] << " aetitle call portno moveReturnPort remote" << std::endl;
     return 1;
     }
-  gdcm::Trace::DebugOff();
-  gdcm::Trace::WarningOff();
   std::string aetitle = argv[1]; // the ae title of this computer
   std::string call = argv[2]; // the ae title of the server
   uint16_t portno = (uint16_t)atoi(argv[3]); // the port of the server
@@ -136,10 +130,8 @@ int TestSCUFunctions(int argc, char *argv[])
   // - no SOP Class UID
   // - no SOP Instance UID
   gdcm::Scanner sc;
-  gdcm::Tag tts(0x0002,0x0010);
   gdcm::Tag sopclass(0x8,0x16);
   gdcm::Tag sopinstance(0x8,0x18);
-  sc.AddTag( tts );
   sc.AddTag( sopclass );
   sc.AddTag( sopinstance );
   if( !sc.Scan( theFilenames ) )
@@ -147,10 +139,6 @@ int TestSCUFunctions(int argc, char *argv[])
     return 1;
     }
 
-  std::vector< gdcm::UIComp > validuids;
-  validuids.push_back( "1.2.840.10008.1.2" );
-  validuids.push_back( "1.2.840.10008.1.2.1" );
-  //validuids.push_back( "1.2.840.10008.1.2.2" );
   // remove any file without SOP Instance UID
   for(
     gdcm::Directory::FilenamesType::iterator it = theFilenames.begin();
@@ -159,20 +147,11 @@ int TestSCUFunctions(int argc, char *argv[])
     const char *file = it->c_str();
     const char* v1 = sc.GetValue(file, sopclass );
     const char* v2 = sc.GetValue(file, sopinstance );
-    const char* v3 = sc.GetValue(file, tts );
-    gdcm::UIComp v3uid;
-    if ( v3 ) v3uid = v3;
-    std::vector< gdcm::UIComp >::const_iterator it2 = std::find( validuids.begin(),
-      validuids.end(), v3uid );
     if( !v1 || !v2 || !*v1 || !*v2 ) it = theFilenames.erase( it );
     else if( checkbl( file ) ) it = theFilenames.erase( it );
-    else if( v3 && it2 == validuids.end() )
-      {
-      //std::cerr << "erase: " << *it << " [" << v3uid << "]" << std::endl;
-      it = theFilenames.erase( it );
-      }
     else ++it;
     }
+
 
   //store the datasets remotely
   didItWork = gdcm::CompositeNetworkFunctions::CStore(remote.c_str(), portno, theFilenames,
@@ -212,13 +191,9 @@ int TestSCUFunctions(int argc, char *argv[])
       if (theBufferLen < 2) continue;
       char* theBuf = new char[theBufferLen];
       bv->GetBuffer(theBuf, theBufferLen);
-      gdcm::UIComp theSearchStringRaw(theBuf, theBufferLen/2);
+      std::string theSearchString(theBuf, theBuf + theBufferLen/2);
       delete [] theBuf;
-      // HACK:
-      std::string theSearchString = theSearchStringRaw.Trim();
-      std::replace( theSearchString.begin(), theSearchString.end(), ' ', '?');
       theSearchString += "*";
-      std::cerr << "search for: [" << theSearchString << "]" << std::endl;
       if (theSearchString.size() %2 == 1)
         {
         theSearchString += " "; //to make sure everything is double spaced
@@ -238,7 +213,6 @@ int TestSCUFunctions(int argc, char *argv[])
     std::vector<gdcm::DataSet> theDataSets;
     bool b = gdcm::CompositeNetworkFunctions::CFind(remote.c_str(), portno, theQuery, theDataSets, aetitle.c_str(), call.c_str());
 
-    //std::cout << theQuery->GetQueryDataSet() << std::endl;
     delete theQuery;
     if( !b )
       {
@@ -269,15 +243,9 @@ int TestSCUFunctions(int argc, char *argv[])
         keys.push_back(std::make_pair(theIDTag, theSearchString));
 
         gdcm::DataElement de2 = ds.GetDataElement(theIDTag);
-        de2.SetVR( gdcm::VR::INVALID );
-        de.SetVR(  gdcm::VR::INVALID );
         if (!(de == de2))
           {
           std::cerr << "Sent dataset does not match returned dataset ID. " << std::endl;
-          std::cerr << de << std::endl;
-          std::cerr << " vs " << std::endl;
-          std::cerr << de2 << std::endl;
-          std::cerr << "File: " << *fitor << std::endl;
           return 1;
           }
         break;

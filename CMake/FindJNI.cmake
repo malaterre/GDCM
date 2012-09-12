@@ -14,7 +14,6 @@ string(TOLOWER ${JavaProp_OS_NAME} include_os_name) # Linux -> linux
 set(JAVA_JNI_MD_INCLUDE_DIRECTORIES
   ${JAVA_INCLUDE_PATH}/${include_os_name}
   ${JAVA_INCLUDE_PATH}/win32 # win32
-  ${JAVA_INCLUDE_PATH}/linux # kFreeBSD
   )
 find_path(JAVA_INCLUDE_PATH2 jni_md.h
   ${JAVA_JNI_MD_INCLUDE_DIRECTORIES}

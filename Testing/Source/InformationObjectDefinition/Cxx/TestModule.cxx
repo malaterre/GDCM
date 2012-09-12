@@ -13,7 +13,7 @@
 =========================================================================*/
 #include "gdcmModule.h"
 
-int TestModule(int , char *[])
+int TestModule(int argc, char *argv[])
 {
   gdcm::Module module;
 

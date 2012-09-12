@@ -69,18 +69,6 @@ public:
   void SetZSpacingTolerance(double tol) { ZTolerance = tol; }
   double GetZSpacingTolerance() const { return ZTolerance; }
 
-  /// Sometimes IOP along a series is slightly changing for example:
-  /// "0.999081\\0.0426953\\0.00369272\\-0.0419025\\0.955059\\0.293439",
-  /// "0.999081\\0.0426953\\0.00369275\\-0.0419025\\0.955059\\0.293439",
-  /// "0.999081\\0.0426952\\0.00369272\\-0.0419025\\0.955059\\0.293439",
-  /// We need an API to define the tolerance which is allowed. Internally
-  /// the cross vector of each direction cosines is computed. The tolerance
-  /// then define the the distance in between 1. to the dot product of those
-  /// cross vectors. In a perfect world this dot product is of course 1.0 which
-  /// imply a DirectionCosines tolerance of exactly 0.0 (default).
-  void SetDirectionCosinesTolerance(double tol) { DirCosTolerance = tol; }
-  double GetDirectionCosinesTolerance() const { return DirCosTolerance; }
-
   /// Read-only function to provide access to the computed value for the Z-Spacing
   /// The ComputeZSpacing must have been set to true before execution of
   /// sort algorithm. Call this function *after* calling Sort();
@@ -93,7 +81,6 @@ protected:
   bool ComputeZSpacing;
   double ZSpacing;
   double ZTolerance;
-  double DirCosTolerance;
 
 private:
   bool ComputeSpacing(std::vector<std::string> const & filenames);

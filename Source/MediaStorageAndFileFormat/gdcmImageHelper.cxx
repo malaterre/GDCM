@@ -805,7 +805,7 @@ void ImageHelper::SetDimensionsValue(File& f, const Image & img)
     ds.Replace( columns.GetAsDataElement() );
     if( dims[2] > 1 )
       {
-      Attribute<0x0028,0x0008> numframes = { 0 };
+      Attribute<0x0028,0x0008> numframes;
       ds.Replace( numframes.GetAsDataElement() );
       }
     }
@@ -1438,31 +1438,27 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
         assert( vr == VR::DS );
         assert( de.GetTag() == Tag(0x3004,0x000c) );
         Attribute<0x28,0x8> numberoframes;
-        // Make we are multiframes:
-        if( ds.FindDataElement( numberoframes.GetTag() ) )
-          {
-          const DataElement& de1 = ds.GetDataElement( numberoframes.GetTag() );
-          numberoframes.SetFromDataElement( de1 );
+        const DataElement& de1 = ds.GetDataElement( numberoframes.GetTag() );
+        numberoframes.SetFromDataElement( de1 );
 
-          Element<VR::DS,VM::VM2_n> el;
-          el.SetLength( numberoframes.GetValue() * vr.GetSizeof() );
-          assert( entry.GetVM() == VM::VM2_n );
-          double spacing_start = 0;
-          assert( 0 < numberoframes.GetValue() );
-          for( int i = 0; i < numberoframes.GetValue(); ++i)
-            {
-            el.SetValue( spacing_start, i );
-            spacing_start += spacing[2];
-            }
-          //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
-          std::stringstream os;
-          el.Write( os );
-          de.SetVR( VR::DS );
-          if( os.str().size() % 2 ) os << " ";
-          VL::Type osStrSize = (VL::Type)os.str().size();
-          de.SetByteValue( os.str().c_str(), osStrSize );
-          ds.Replace( de );
-          }
+            Element<VR::DS,VM::VM2_n> el;
+            el.SetLength( numberoframes.GetValue() * vr.GetSizeof() );
+            assert( entry.GetVM() == VM::VM2_n );
+            double spacing_start = 0;
+            assert( 0 < numberoframes.GetValue() );
+            for( int i = 0; i < numberoframes.GetValue(); ++i)
+              {
+              el.SetValue( spacing_start, i );
+              spacing_start += spacing[2];
+              }
+            //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
+            std::stringstream os;
+            el.Write( os );
+            de.SetVR( VR::DS );
+            VL::Type osStrSize = (VL::Type)os.str().size();
+            de.SetByteValue( os.str().c_str(), osStrSize );
+            ds.Replace( de );
+
         }
       else
         {
@@ -1762,7 +1758,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
    && ms != MediaStorage::EnhancedCTImageStorage
    && ms != MediaStorage::SegmentationStorage )
     {
-    if( img.GetIntercept() != 0. || img.GetSlope() != 1. )
+    if( img.GetIntercept(0) != 0. || img.GetSlope(0) != 1. )
       {
       throw "Impossible"; // Please report
       }
@@ -1829,10 +1825,10 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     DataSet &subds2 = item2.GetNestedDataSet();
 
     Attribute<0x0028,0x1052> at1;
-    at1.SetValue( img.GetIntercept() );
+    at1.SetValue( img.GetIntercept(0) );
     subds2.Insert( at1.GetAsDataElement() );
     Attribute<0x0028,0x1053> at2;
-    at2.SetValue( img.GetSlope() );
+    at2.SetValue( img.GetSlope(0) );
     subds2.Insert( at2.GetAsDataElement() );
 
     return;
@@ -1841,7 +1837,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
   if( ms == MediaStorage::RTDoseStorage )
     {
     Attribute<0x3004,0x00e> at2;
-    at2.SetValue( img.GetSlope() );
+    at2.SetValue( img.GetSlope(0) );
     ds.Replace( at2.GetAsDataElement() );
 
     return;
@@ -1849,16 +1845,16 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
   // Question: should I always insert them ?
   // Answer: not always, let's discard MR if (1,0):
-  if( ms == MediaStorage::MRImageStorage && img.GetIntercept() == 0. && img.GetSlope() == 1. )
+  if( ms == MediaStorage::MRImageStorage && img.GetIntercept(0) == 0. && img.GetSlope(0) == 1. )
     {
     }
   else
     {
     Attribute<0x0028,0x1052> at1;
-    at1.SetValue( img.GetIntercept() );
+    at1.SetValue( img.GetIntercept(0) );
     ds.Replace( at1.GetAsDataElement() );
     Attribute<0x0028,0x1053> at2;
-    at2.SetValue( img.GetSlope() );
+    at2.SetValue( img.GetSlope(0) );
     ds.Replace( at2.GetAsDataElement() );
 
     Attribute<0x0028,0x1054> at3; // Rescale Type

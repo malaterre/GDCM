@@ -22,8 +22,9 @@ namespace gdcm
 /*
  * we are only testing that we can convert an implicit dataset to explicit all the time...
  */
-int TestWrite2(const char *subdir, const char* filename, bool )
+int TestWrite2(const char *subdir, const char* filename, bool recursing)
 {
+  (void)recursing;
   Reader reader;
   reader.SetFileName( filename );
   if ( !reader.Read() )

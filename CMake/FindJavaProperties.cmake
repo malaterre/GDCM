@@ -57,7 +57,7 @@ if(${current_list_path}/GetSystemProperty.java IS_NEWER_THAN ${CMAKE_BINARY_DIR}
   #message("${current_list_path}/GetSystemProperty.java")
   #message("${CMAKE_CURRENT_BINARY_DIR}/GetSystemProperty.class")
   execute_process(
-    COMMAND ${Java_JAVAC_EXECUTABLE} -source 1.5
+    COMMAND ${Java_JAVAC_EXECUTABLE}
     ${current_list_path}/GetSystemProperty.java -d ${CMAKE_BINARY_DIR}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )

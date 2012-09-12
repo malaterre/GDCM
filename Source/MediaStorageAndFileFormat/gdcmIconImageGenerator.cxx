@@ -743,7 +743,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
           *ybr_out = (unsigned char)G; ++ybr_out;
           *ybr_out = (unsigned char)B; ++ybr_out;
           }
-        assert( ybra + 2 * ybrl == ybr_end ); (void)ybr_end;
+        assert( ybra + 2 * ybrl == ybr_end );
         assert( ybrb + 1 * ybrl == ybr_end );
         assert( ybrc + 0 * ybrl == ybr_end );
         }
@@ -775,7 +775,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
           *rgb_out = b; ++rgb_out;
           *rgb_out = c; ++rgb_out;
           }
-        assert( rgba + 2 * rgbl == rgb_end ); (void)rgb_end;
+        assert( rgba + 2 * rgbl == rgb_end );
         assert( rgbb + 1 * rgbl == rgb_end );
         assert( rgbc + 0 * rgbl == rgb_end );
         }

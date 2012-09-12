@@ -1,234 +1,8 @@
 
 // File: index.xml
 
-// File: classgdcm_1_1network_1_1AAbortPDU.xml
-%feature("docstring") gdcm::network::AAbortPDU "
-
-AAbortPDU Table 9-26 A-ABORT PDU FIELDS.
-
-C++ includes: gdcmAAbortPDU.h ";
-
-%feature("docstring")  gdcm::network::AAbortPDU::AAbortPDU "gdcm::network::AAbortPDU::AAbortPDU() ";
-
-%feature("docstring")  gdcm::network::AAbortPDU::IsLastFragment "bool
-gdcm::network::AAbortPDU::IsLastFragment() const ";
-
-%feature("docstring")  gdcm::network::AAbortPDU::Print "void
-gdcm::network::AAbortPDU::Print(std::ostream &os) const ";
-
-%feature("docstring")  gdcm::network::AAbortPDU::Read "std::istream&
-gdcm::network::AAbortPDU::Read(std::istream &is) ";
-
-%feature("docstring")  gdcm::network::AAbortPDU::Size "size_t
-gdcm::network::AAbortPDU::Size() const ";
-
-%feature("docstring")  gdcm::network::AAbortPDU::Write "const
-std::ostream& gdcm::network::AAbortPDU::Write(std::ostream &os) const
-";
-
-
-// File: classgdcm_1_1network_1_1AAssociateACPDU.xml
-%feature("docstring") gdcm::network::AAssociateACPDU "
-
-AAssociateACPDU Table 9-17 ASSOCIATE-AC PDU fields.
-
-C++ includes: gdcmAAssociateACPDU.h ";
-
-%feature("docstring")  gdcm::network::AAssociateACPDU::AAssociateACPDU
-"gdcm::network::AAssociateACPDU::AAssociateACPDU() ";
-
-%feature("docstring")
-gdcm::network::AAssociateACPDU::AddPresentationContextAC "void
-gdcm::network::AAssociateACPDU::AddPresentationContextAC(PresentationContextAC
-const &pcac) ";
-
-%feature("docstring")
-gdcm::network::AAssociateACPDU::GetNumberOfPresentationContextAC "SizeType
-gdcm::network::AAssociateACPDU::GetNumberOfPresentationContextAC()
-const ";
-
-%feature("docstring")
-gdcm::network::AAssociateACPDU::GetPresentationContextAC "const
-PresentationContextAC&
-gdcm::network::AAssociateACPDU::GetPresentationContextAC(SizeType i)
-";
-
-%feature("docstring")
-gdcm::network::AAssociateACPDU::GetUserInformation "const
-UserInformation& gdcm::network::AAssociateACPDU::GetUserInformation()
-const ";
-
-%feature("docstring")  gdcm::network::AAssociateACPDU::InitFromRQ "void gdcm::network::AAssociateACPDU::InitFromRQ(AAssociateRQPDU const
-&rqpdu) ";
-
-%feature("docstring")  gdcm::network::AAssociateACPDU::IsLastFragment
-"bool gdcm::network::AAssociateACPDU::IsLastFragment() const ";
-
-%feature("docstring")  gdcm::network::AAssociateACPDU::Print "void
-gdcm::network::AAssociateACPDU::Print(std::ostream &os) const ";
-
-%feature("docstring")  gdcm::network::AAssociateACPDU::Read "std::istream& gdcm::network::AAssociateACPDU::Read(std::istream &is)
-";
-
-%feature("docstring")  gdcm::network::AAssociateACPDU::Size "SizeType
-gdcm::network::AAssociateACPDU::Size() const ";
-
-%feature("docstring")  gdcm::network::AAssociateACPDU::Write "const
-std::ostream& gdcm::network::AAssociateACPDU::Write(std::ostream &os)
-const ";
-
-
-// File: classgdcm_1_1network_1_1AAssociateRJPDU.xml
-%feature("docstring") gdcm::network::AAssociateRJPDU "
-
-AAssociateRJPDU Table 9-21 ASSOCIATE-RJ PDU FIELDS.
-
-C++ includes: gdcmAAssociateRJPDU.h ";
-
-%feature("docstring")  gdcm::network::AAssociateRJPDU::AAssociateRJPDU
-"gdcm::network::AAssociateRJPDU::AAssociateRJPDU() ";
-
-%feature("docstring")  gdcm::network::AAssociateRJPDU::IsLastFragment
-"bool gdcm::network::AAssociateRJPDU::IsLastFragment() const ";
-
-%feature("docstring")  gdcm::network::AAssociateRJPDU::Print "void
-gdcm::network::AAssociateRJPDU::Print(std::ostream &os) const ";
-
-%feature("docstring")  gdcm::network::AAssociateRJPDU::Read "std::istream& gdcm::network::AAssociateRJPDU::Read(std::istream &is)
-";
-
-%feature("docstring")  gdcm::network::AAssociateRJPDU::Size "size_t
-gdcm::network::AAssociateRJPDU::Size() const ";
-
-%feature("docstring")  gdcm::network::AAssociateRJPDU::Write "const
-std::ostream& gdcm::network::AAssociateRJPDU::Write(std::ostream &os)
-const ";
-
-
-// File: classgdcm_1_1network_1_1AAssociateRQPDU.xml
-%feature("docstring") gdcm::network::AAssociateRQPDU "
-
-AAssociateRQPDU Table 9-11 ASSOCIATE-RQ PDU fields.
-
-C++ includes: gdcmAAssociateRQPDU.h ";
-
-%feature("docstring")  gdcm::network::AAssociateRQPDU::AAssociateRQPDU
-"gdcm::network::AAssociateRQPDU::AAssociateRQPDU() ";
-
-%feature("docstring")  gdcm::network::AAssociateRQPDU::AAssociateRQPDU
-"gdcm::network::AAssociateRQPDU::AAssociateRQPDU(const
-AAssociateRQPDU &) ";
-
-%feature("docstring")
-gdcm::network::AAssociateRQPDU::AddPresentationContext "void
-gdcm::network::AAssociateRQPDU::AddPresentationContext(PresentationContextRQ
-const &pc) ";
-
-%feature("docstring")
-gdcm::network::AAssociateRQPDU::GetCalledAETitle "std::string
-gdcm::network::AAssociateRQPDU::GetCalledAETitle() const ";
-
-%feature("docstring")
-gdcm::network::AAssociateRQPDU::GetCallingAETitle "std::string
-gdcm::network::AAssociateRQPDU::GetCallingAETitle() const ";
-
-%feature("docstring")
-gdcm::network::AAssociateRQPDU::GetNumberOfPresentationContext "SizeType
-gdcm::network::AAssociateRQPDU::GetNumberOfPresentationContext() const
-";
-
-%feature("docstring")
-gdcm::network::AAssociateRQPDU::GetPresentationContext "PresentationContextRQ const&
-gdcm::network::AAssociateRQPDU::GetPresentationContext(SizeType i)
-const ";
-
-%feature("docstring")
-gdcm::network::AAssociateRQPDU::GetPresentationContextByAbstractSyntax
-"const PresentationContextRQ*
-gdcm::network::AAssociateRQPDU::GetPresentationContextByAbstractSyntax(AbstractSyntax
-const &as) const ";
-
-%feature("docstring")
-gdcm::network::AAssociateRQPDU::GetPresentationContextByID "const
-PresentationContextRQ*
-gdcm::network::AAssociateRQPDU::GetPresentationContextByID(uint8_t i)
-const ";
-
-%feature("docstring")
-gdcm::network::AAssociateRQPDU::GetPresentationContexts "PresentationContextArrayType const&
-gdcm::network::AAssociateRQPDU::GetPresentationContexts() ";
-
-%feature("docstring")  gdcm::network::AAssociateRQPDU::IsLastFragment
-"bool gdcm::network::AAssociateRQPDU::IsLastFragment() const ";
-
-%feature("docstring")  gdcm::network::AAssociateRQPDU::Print "void
-gdcm::network::AAssociateRQPDU::Print(std::ostream &os) const
-
-This function will initialize an AAssociateACPDU from the fields in
-the AAssociateRQPDU structure ";
-
-%feature("docstring")  gdcm::network::AAssociateRQPDU::Read "std::istream& gdcm::network::AAssociateRQPDU::Read(std::istream &is)
-";
-
-%feature("docstring")
-gdcm::network::AAssociateRQPDU::SetCalledAETitle "void
-gdcm::network::AAssociateRQPDU::SetCalledAETitle(const char
-calledaetitle[16])
-
-Set the Called AE Title. ";
-
-%feature("docstring")
-gdcm::network::AAssociateRQPDU::SetCallingAETitle "void
-gdcm::network::AAssociateRQPDU::SetCallingAETitle(const char
-callingaetitle[16])
-
-Set the Calling AE Title. ";
-
-%feature("docstring")  gdcm::network::AAssociateRQPDU::Size "size_t
-gdcm::network::AAssociateRQPDU::Size() const ";
-
-%feature("docstring")  gdcm::network::AAssociateRQPDU::Write "const
-std::ostream& gdcm::network::AAssociateRQPDU::Write(std::ostream &os)
-const ";
-
-
 // File: classgdcm_1_1AbortEvent.xml
 %feature("docstring") gdcm::AbortEvent "C++ includes: gdcmEvent.h ";
-
-
-// File: classgdcm_1_1network_1_1AbstractSyntax.xml
-%feature("docstring") gdcm::network::AbstractSyntax "
-
-AbstractSyntax Table 9-14 ABSTRACT SYNTAX SUB-ITEM FIELDS.
-
-C++ includes: gdcmAbstractSyntax.h ";
-
-%feature("docstring")  gdcm::network::AbstractSyntax::AbstractSyntax "gdcm::network::AbstractSyntax::AbstractSyntax() ";
-
-%feature("docstring")  gdcm::network::AbstractSyntax::GetAsDataElement
-"DataElement gdcm::network::AbstractSyntax::GetAsDataElement() const
-";
-
-%feature("docstring")  gdcm::network::AbstractSyntax::GetName "const
-char* gdcm::network::AbstractSyntax::GetName() const ";
-
-%feature("docstring")  gdcm::network::AbstractSyntax::Print "void
-gdcm::network::AbstractSyntax::Print(std::ostream &os) const ";
-
-%feature("docstring")  gdcm::network::AbstractSyntax::Read "std::istream& gdcm::network::AbstractSyntax::Read(std::istream &is) ";
-
-%feature("docstring")  gdcm::network::AbstractSyntax::SetName "void
-gdcm::network::AbstractSyntax::SetName(const char *name) ";
-
-%feature("docstring")  gdcm::network::AbstractSyntax::SetNameFromUID "void gdcm::network::AbstractSyntax::SetNameFromUID(UIDs::TSName
-tsname) ";
-
-%feature("docstring")  gdcm::network::AbstractSyntax::Size "size_t
-gdcm::network::AbstractSyntax::Size() const ";
-
-%feature("docstring")  gdcm::network::AbstractSyntax::Write "const
-std::ostream& gdcm::network::AbstractSyntax::Write(std::ostream &os)
-const ";
 
 
 // File: classstd_1_1allocator.xml
@@ -308,15 +82,15 @@ request is O(log(n)) operation. So 'm' user interaction is O(m*log(n))
 which is < O(n) complexity.
 
 2. smart mode this mode implements the Basic Application Level
-Confidentiality Profile (DICOM PS 3.15-2008) In this case, it is
+Confidentiality Profile (DICOM PS 3.15-2008) In this case it is
 extremely important to use the same gdcm::Anonymizer class when
 anonymizing a FileSet. Once the gdcm::Anonymizer is destroyed its
 memory of known (already processed) UIDs will be lost. which will make
 the anonymizer behaves incorrectly for attributes such as Series UID
-Study UID where user want some consistency. When attribute is Type 1 /
+Study UID where user want some consistancy. When attribute is Type 1 /
 Type 1C, a dummy generator will take in the existing value and produce
 a dummy value (a sha1 representation). sha1 algorithm is considered to
-be cryptographically strong (compared to md5sum) so that we meet the
+be cryptograpgically strong (compared to md5sum) so that we meet the
 following two conditions: Produce the same dummy value for the same
 input value
 
@@ -416,34 +190,6 @@ Set/Get File. ";
 %feature("docstring") gdcm::AnyEvent "C++ includes: gdcmEvent.h ";
 
 
-// File: classgdcm_1_1network_1_1ApplicationContext.xml
-%feature("docstring") gdcm::network::ApplicationContext "
-
-ApplicationContext Table 9-12 APPLICATION CONTEXT ITEM FIELDS  Looks
-like Application Context can only be 64 bytes at max (see Figure 9-1 /
-PS 3.8 - 2009 ).
-
-C++ includes: gdcmApplicationContext.h ";
-
-%feature("docstring")
-gdcm::network::ApplicationContext::ApplicationContext "gdcm::network::ApplicationContext::ApplicationContext() ";
-
-%feature("docstring")  gdcm::network::ApplicationContext::GetName "const char* gdcm::network::ApplicationContext::GetName() const ";
-
-%feature("docstring")  gdcm::network::ApplicationContext::Print "void
-gdcm::network::ApplicationContext::Print(std::ostream &os) const ";
-
-%feature("docstring")  gdcm::network::ApplicationContext::Read "std::istream& gdcm::network::ApplicationContext::Read(std::istream
-&is) ";
-
-%feature("docstring")  gdcm::network::ApplicationContext::SetName "void gdcm::network::ApplicationContext::SetName(const char *name) ";
-
-%feature("docstring")  gdcm::network::ApplicationContext::Size "size_t gdcm::network::ApplicationContext::Size() const ";
-
-%feature("docstring")  gdcm::network::ApplicationContext::Write "const std::ostream&
-gdcm::network::ApplicationContext::Write(std::ostream &os) const ";
-
-
 // File: classgdcm_1_1ApplicationEntity.xml
 %feature("docstring") gdcm::ApplicationEntity "
 
@@ -474,94 +220,6 @@ gdcm::ApplicationEntity::SetBlob(const std::vector< char > &v) ";
 gdcm::ApplicationEntity::Squeeze() ";
 
 
-// File: classgdcm_1_1network_1_1AReleaseRPPDU.xml
-%feature("docstring") gdcm::network::AReleaseRPPDU "
-
-AReleaseRPPDU Table 9-25 A-RELEASE-RP PDU fields.
-
-C++ includes: gdcmAReleaseRPPDU.h ";
-
-%feature("docstring")  gdcm::network::AReleaseRPPDU::AReleaseRPPDU "gdcm::network::AReleaseRPPDU::AReleaseRPPDU() ";
-
-%feature("docstring")  gdcm::network::AReleaseRPPDU::IsLastFragment "bool gdcm::network::AReleaseRPPDU::IsLastFragment() const ";
-
-%feature("docstring")  gdcm::network::AReleaseRPPDU::Print "void
-gdcm::network::AReleaseRPPDU::Print(std::ostream &os) const ";
-
-%feature("docstring")  gdcm::network::AReleaseRPPDU::Read "std::istream& gdcm::network::AReleaseRPPDU::Read(std::istream &is) ";
-
-%feature("docstring")  gdcm::network::AReleaseRPPDU::Size "size_t
-gdcm::network::AReleaseRPPDU::Size() const ";
-
-%feature("docstring")  gdcm::network::AReleaseRPPDU::Write "const
-std::ostream& gdcm::network::AReleaseRPPDU::Write(std::ostream &os)
-const ";
-
-
-// File: classgdcm_1_1network_1_1AReleaseRQPDU.xml
-%feature("docstring") gdcm::network::AReleaseRQPDU "
-
-AReleaseRQPDU Table 9-24 A-RELEASE-RQ PDU FIELDS.
-
-C++ includes: gdcmAReleaseRQPDU.h ";
-
-%feature("docstring")  gdcm::network::AReleaseRQPDU::AReleaseRQPDU "gdcm::network::AReleaseRQPDU::AReleaseRQPDU() ";
-
-%feature("docstring")  gdcm::network::AReleaseRQPDU::IsLastFragment "bool gdcm::network::AReleaseRQPDU::IsLastFragment() const ";
-
-%feature("docstring")  gdcm::network::AReleaseRQPDU::Print "void
-gdcm::network::AReleaseRQPDU::Print(std::ostream &os) const ";
-
-%feature("docstring")  gdcm::network::AReleaseRQPDU::Read "std::istream& gdcm::network::AReleaseRQPDU::Read(std::istream &is) ";
-
-%feature("docstring")  gdcm::network::AReleaseRQPDU::Size "size_t
-gdcm::network::AReleaseRQPDU::Size() const ";
-
-%feature("docstring")  gdcm::network::AReleaseRQPDU::Write "const
-std::ostream& gdcm::network::AReleaseRQPDU::Write(std::ostream &os)
-const ";
-
-
-// File: classgdcm_1_1network_1_1ARTIMTimer.xml
-%feature("docstring") gdcm::network::ARTIMTimer "
-
-ARTIMTimer This file contains the code for the ARTIM timer.
-
-Basically, the ARTIM timer will just get the wall time when it's
-started, and then can be queried for the current time, and then can be
-stopped (ie, the start time reset).
-
-Because we're trying to do this without threading, we should be able
-to 'start' the ARTIM timer by this mechanism, and then when waiting
-for a particular response, tight loop that with sleep calls and
-determinations of when the ARTIM timer has reached its peak. As such,
-this isn't a strict 'timer' in the traditional sense of the word, but
-more of a time keeper.
-
-There can be only one ARTIM timer per connection.
-
-C++ includes: gdcmARTIMTimer.h ";
-
-%feature("docstring")  gdcm::network::ARTIMTimer::ARTIMTimer "gdcm::network::ARTIMTimer::ARTIMTimer() ";
-
-%feature("docstring")  gdcm::network::ARTIMTimer::GetElapsedTime "double gdcm::network::ARTIMTimer::GetElapsedTime() const ";
-
-%feature("docstring")  gdcm::network::ARTIMTimer::GetHasExpired "bool
-gdcm::network::ARTIMTimer::GetHasExpired() const ";
-
-%feature("docstring")  gdcm::network::ARTIMTimer::GetTimeout "double
-gdcm::network::ARTIMTimer::GetTimeout() const ";
-
-%feature("docstring")  gdcm::network::ARTIMTimer::SetTimeout "void
-gdcm::network::ARTIMTimer::SetTimeout(double inTimeout) ";
-
-%feature("docstring")  gdcm::network::ARTIMTimer::Start "void
-gdcm::network::ARTIMTimer::Start() ";
-
-%feature("docstring")  gdcm::network::ARTIMTimer::Stop "void
-gdcm::network::ARTIMTimer::Stop() ";
-
-
 // File: classgdcm_1_1ASN1.xml
 %feature("docstring") gdcm::ASN1 "
 
@@ -572,35 +230,6 @@ C++ includes: gdcmASN1.h ";
 %feature("docstring")  gdcm::ASN1::ASN1 "gdcm::ASN1::ASN1() ";
 
 %feature("docstring")  gdcm::ASN1::~ASN1 "gdcm::ASN1::~ASN1() ";
-
-
-// File: classgdcm_1_1network_1_1AsynchronousOperationsWindowSub.xml
-%feature("docstring") gdcm::network::AsynchronousOperationsWindowSub "
-
-AsynchronousOperationsWindowSub PS 3.7 Table D.3-7 ASYNCHRONOUS
-OPERATIONS WINDOW SUB-ITEM FIELDS (A-ASSOCIATE- RQ).
-
-C++ includes: gdcmAsynchronousOperationsWindowSub.h ";
-
-%feature("docstring")
-gdcm::network::AsynchronousOperationsWindowSub::AsynchronousOperationsWindowSub
-"gdcm::network::AsynchronousOperationsWindowSub::AsynchronousOperationsWindowSub()
-";
-
-%feature("docstring")
-gdcm::network::AsynchronousOperationsWindowSub::Read "std::istream&
-gdcm::network::AsynchronousOperationsWindowSub::Read(std::istream &is)
-";
-
-%feature("docstring")
-gdcm::network::AsynchronousOperationsWindowSub::Size "size_t
-gdcm::network::AsynchronousOperationsWindowSub::Size() const ";
-
-%feature("docstring")
-gdcm::network::AsynchronousOperationsWindowSub::Write "const
-std::ostream&
-gdcm::network::AsynchronousOperationsWindowSub::Write(std::ostream
-&os) const ";
 
 
 // File: classgdcm_1_1Attribute.xml
@@ -675,79 +304,6 @@ unsigned int idx=0) ";
 %feature("docstring")  gdcm::Attribute::SetValues "void
 gdcm::Attribute< Group, Element, TVR, TVM >::SetValues(const ArrayType
 *array, unsigned int numel=VMType) ";
-
-
-// File: classgdcm_1_1Attribute_3_01Group_00_01Element_00_01TVR_00_01VM_1_1VM1_01_4.xml
-%feature("docstring") gdcm::Attribute< Group, Element, TVR, VM::VM1 >
-" C++ includes: gdcmAttribute.h ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GDCM_STATIC_ASSERT " gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GDCM_STATIC_ASSERT(VMToLength< VM::VM1 >::Length==1) ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GDCM_STATIC_ASSERT " gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GDCM_STATIC_ASSERT(((VR::VRType) TVR &(VR::VRType)(TagToType<
-Group, Element >::VRType))) ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GDCM_STATIC_ASSERT " gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GDCM_STATIC_ASSERT(((((VR::VRType) TVR &VR::VR_VM1)&&((VM::VMType)
-VM::VM1==VM::VM1))||!((VR::VRType) TVR &VR::VR_VM1))) ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GDCM_STATIC_ASSERT " gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GDCM_STATIC_ASSERT(((VM::VMType) VM::VM1 &(VM::VMType)(TagToType<
-Group, Element >::VMType))) ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GetAsDataElement " DataElement gdcm::Attribute< Group, Element,
-TVR, VM::VM1 >::GetAsDataElement() const ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GetNumberOfValues " unsigned int gdcm::Attribute< Group, Element,
-TVR, VM::VM1 >::GetNumberOfValues() const ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GetValue " ArrayType& gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GetValue() ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GetValue " ArrayType const& gdcm::Attribute< Group, Element, TVR,
-VM::VM1 >::GetValue() const ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GetValues " const ArrayType* gdcm::Attribute< Group, Element, TVR,
-VM::VM1 >::GetValues() const ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::Print " void gdcm::Attribute< Group, Element, TVR, VM::VM1
->::Print(std::ostream &os) const ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::Set " void gdcm::Attribute< Group, Element, TVR, VM::VM1
->::Set(DataSet const &ds) ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::SetFromDataElement " void gdcm::Attribute< Group, Element, TVR,
-VM::VM1 >::SetFromDataElement(DataElement const &de) ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::SetFromDataSet " void gdcm::Attribute< Group, Element, TVR, VM::VM1
->::SetFromDataSet(DataSet const &ds) ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::SetValue " void gdcm::Attribute< Group, Element, TVR, VM::VM1
->::SetValue(ArrayType v) ";
-
-
-// File: classgdcm_1_1Attribute_3_01Group_00_01Element_00_01TVR_00_01VM_1_1VM1__3_01_4.xml
-%feature("docstring") gdcm::Attribute< Group, Element, TVR, VM::VM1_3
-> " C++ includes: gdcmAttribute.h ";
-
-%feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1_3
->::GetVM " VM gdcm::Attribute< Group, Element, TVR, VM::VM1_3
->::GetVM() const ";
 
 
 // File: classgdcm_1_1Attribute_3_01Group_00_01Element_00_01TVR_00_01VM_1_1VM1__8_01_4.xml
@@ -927,155 +483,6 @@ C++ includes: gdcmBase64.h ";
 ";
 
 
-// File: classgdcm_1_1network_1_1BaseCompositeMessage.xml
-%feature("docstring") gdcm::network::BaseCompositeMessage "
-
-BaseCompositeMessage The Composite events described in section
-3.7-2009 of the DICOM standard all use their own messages. These
-messages are constructed using Presentation Data Values, from section
-3.8-2009 of the standard, and then fill in appropriate values in their
-datasets.
-
-So, for the five composites: C-ECHO
-
-C-FIND
-
-C-MOVE
-
-C-GET
-
-C-STORE there are a series of messages. However, all of these messages
-are obtained as part of a PDataPDU, and all have to be placed there.
-Therefore, since they all have shared functionality and construction
-tropes, that will be put into a base class. Further, the base class
-will be then returned by the factory class, gdcmCompositePDUFactory.
-This is an abstract class. It cannot be instantiated on its own.
-
-C++ includes: gdcmBaseCompositeMessage.h ";
-
-%feature("docstring")
-gdcm::network::BaseCompositeMessage::ConstructPDV "virtual
-std::vector<PresentationDataValue>
-gdcm::network::BaseCompositeMessage::ConstructPDV(const ULConnection
-&inConnection, const BaseRootQuery *inRootQuery)=0 ";
-
-
-// File: classgdcm_1_1network_1_1BasePDU.xml
-%feature("docstring") gdcm::network::BasePDU "
-
-BasePDU base class for PDUs.
-
-all PDUs start with the first ten bytes as specified: 01 PDU type 02
-reserved 3-6 PDU Length (unsigned) 7-10 variable
-
-on some, 7-10 are split (7-8 as protocol version in Associate-RQ, for
-instance, while associate-rj splits those four bytes differently).
-
-Also common to all the PDUs is their ability to read and write to a
-stream.
-
-So, let's just get them all bunched together into one (abstract)
-class, shall we?
-
-Why? 1) so that the ULEvent can have the PDU stored in it, since the
-event takes PDUs and not other class structures (other class
-structures get converted into PDUs) 2) to make reading PDUs in the
-event loop cleaner
-
-but! leave Mathieu's original classes untouched at this point (except
-for inheriting from this class) because those work, at least with
-c-echo.
-
-C++ includes: gdcmBasePDU.h ";
-
-%feature("docstring")  gdcm::network::BasePDU::~BasePDU "virtual
-gdcm::network::BasePDU::~BasePDU() ";
-
-%feature("docstring")  gdcm::network::BasePDU::IsLastFragment "virtual bool gdcm::network::BasePDU::IsLastFragment() const =0 ";
-
-%feature("docstring")  gdcm::network::BasePDU::Print "virtual void
-gdcm::network::BasePDU::Print(std::ostream &os) const =0 ";
-
-%feature("docstring")  gdcm::network::BasePDU::Read "virtual
-std::istream& gdcm::network::BasePDU::Read(std::istream &is)=0 ";
-
-%feature("docstring")  gdcm::network::BasePDU::Size "virtual size_t
-gdcm::network::BasePDU::Size() const =0 ";
-
-%feature("docstring")  gdcm::network::BasePDU::Write "virtual const
-std::ostream& gdcm::network::BasePDU::Write(std::ostream &os) const =0
-";
-
-
-// File: classgdcm_1_1BaseRootQuery.xml
-%feature("docstring") gdcm::BaseRootQuery "C++ includes:
-gdcmBaseRootQuery.h ";
-
-%feature("docstring")  gdcm::BaseRootQuery::~BaseRootQuery "virtual
-gdcm::BaseRootQuery::~BaseRootQuery() ";
-
-%feature("docstring")  gdcm::BaseRootQuery::AddQueryDataSet "void
-gdcm::BaseRootQuery::AddQueryDataSet(const DataSet &ds) ";
-
-%feature("docstring")  gdcm::BaseRootQuery::GetAbstractSyntaxUID "virtual UIDs::TSName gdcm::BaseRootQuery::GetAbstractSyntaxUID() const
-=0 ";
-
-%feature("docstring")  gdcm::BaseRootQuery::GetQueryDataSet "DataSet
-const& gdcm::BaseRootQuery::GetQueryDataSet() const
-
-Set/Get the internal representation of the query as a DataSet. ";
-
-%feature("docstring")  gdcm::BaseRootQuery::GetQueryDataSet "DataSet&
-gdcm::BaseRootQuery::GetQueryDataSet() ";
-
-%feature("docstring")  gdcm::BaseRootQuery::GetTagListByLevel "virtual std::vector<Tag> gdcm::BaseRootQuery::GetTagListByLevel(const
-EQueryLevel &inQueryLevel)=0
-
-this function will return all tags at a given query level, so that
-they maybe selected for searching. The boolean forFind is true if the
-query is a find query, or false for a move query. ";
-
-%feature("docstring")  gdcm::BaseRootQuery::InitializeDataSet "virtual void gdcm::BaseRootQuery::InitializeDataSet(const EQueryLevel
-&inQueryLevel)=0
-
-this function sets tag 8,52 to the appropriate value based on query
-level also fills in the right unique tags, as per the standard's
-requirements should allow for connection with dcmtk ";
-
-%feature("docstring")  gdcm::BaseRootQuery::SetSearchParameter "void
-gdcm::BaseRootQuery::SetSearchParameter(const std::string &inKeyword,
-const std::string &inValue) ";
-
-%feature("docstring")  gdcm::BaseRootQuery::SetSearchParameter "void
-gdcm::BaseRootQuery::SetSearchParameter(const Tag &inTag, const
-std::string &inValue) ";
-
-%feature("docstring")  gdcm::BaseRootQuery::ValidateQuery "virtual
-bool gdcm::BaseRootQuery::ValidateQuery(bool inStrict=true) const =0
-
-have to be able to ensure that 0x8,0x52 is set (which will be true if
-InitializeDataSet is called...) that the level is appropriate (ie, not
-setting PATIENT for a study query that the tags in the query match the
-right level (either required, unique, optional) by default, this
-function checks to see if the query is for finding, which is more
-permissive than for moving. For moving, only the unique tags are
-allowed. 10 Jan 2011: adding in the 'strict' mode. according to the
-standard (at least, how I've read it), only tags for a particular
-level should be allowed in a particular query (ie, just series level
-tags in a series level query). However, it seems that dcm4chee doesn't
-share that interpretation. So, if 'inStrict' is false, then tags from
-the current level and all higher levels are now considered valid. So,
-if you're doing a non-strict series-level query, tags from the patient
-and study level can be passed along as well. ";
-
-%feature("docstring")  gdcm::BaseRootQuery::WriteHelpFile "virtual
-const std::ostream& gdcm::BaseRootQuery::WriteHelpFile(std::ostream
-&os) ";
-
-%feature("docstring")  gdcm::BaseRootQuery::WriteQuery "virtual bool
-gdcm::BaseRootQuery::WriteQuery(const std::string &inFileName) ";
-
-
 // File: classstd_1_1basic__fstream.xml
 %feature("docstring") std::basic_fstream "
 
@@ -1140,43 +547,6 @@ STL class. ";
 %feature("docstring") std::basic_stringstream "
 
 STL class. ";
-
-
-// File: structgdcm_1_1SegmentHelper_1_1BasicCodedEntry.xml
-%feature("docstring") gdcm::SegmentHelper::BasicCodedEntry "
-
-This structure defines a basic coded entry with all of its attributes.
-
-See:  PS 3.3 section 8.8.
-
-C++ includes: gdcmSegmentHelper.h ";
-
-%feature("docstring")
-gdcm::SegmentHelper::BasicCodedEntry::BasicCodedEntry "gdcm::SegmentHelper::BasicCodedEntry::BasicCodedEntry()
-
-Constructor. ";
-
-%feature("docstring")
-gdcm::SegmentHelper::BasicCodedEntry::BasicCodedEntry "gdcm::SegmentHelper::BasicCodedEntry::BasicCodedEntry(const char
-*a_CV, const char *a_CSD, const char *a_CM)
-
-constructor which defines type 1 attributes. ";
-
-%feature("docstring")
-gdcm::SegmentHelper::BasicCodedEntry::BasicCodedEntry "gdcm::SegmentHelper::BasicCodedEntry::BasicCodedEntry(const char
-*a_CV, const char *a_CSD, const char *a_CSV, const char *a_CM)
-
-constructor which defines attributes. ";
-
-%feature("docstring")  gdcm::SegmentHelper::BasicCodedEntry::IsEmpty "bool gdcm::SegmentHelper::BasicCodedEntry::IsEmpty(const bool
-checkOptionalAttributes=false) const
-
-Check if each attibutes of the basic coded entry is defined.
-
-Parameters:
------------
-
-checkOptionalAttributes:  Check also type 1C attributes. ";
 
 
 // File: classgdcm_1_1BasicOffsetTable.xml
@@ -1350,31 +720,6 @@ gdcm::Bitmap::SetTransferSyntax(TransferSyntax const &ts)
 Transfer syntax. ";
 
 
-// File: classgdcm_1_1BitmapToBitmapFilter.xml
-%feature("docstring") gdcm::BitmapToBitmapFilter "
-
-BitmapToBitmapFilter class Super class for all filter taking an image
-and producing an output image.
-
-C++ includes: gdcmBitmapToBitmapFilter.h ";
-
-%feature("docstring")
-gdcm::BitmapToBitmapFilter::BitmapToBitmapFilter "gdcm::BitmapToBitmapFilter::BitmapToBitmapFilter() ";
-
-%feature("docstring")
-gdcm::BitmapToBitmapFilter::~BitmapToBitmapFilter "gdcm::BitmapToBitmapFilter::~BitmapToBitmapFilter() ";
-
-%feature("docstring")  gdcm::BitmapToBitmapFilter::GetOutput "const
-Bitmap& gdcm::BitmapToBitmapFilter::GetOutput() const
-
-Get Output image. ";
-
-%feature("docstring")  gdcm::BitmapToBitmapFilter::SetInput "void
-gdcm::BitmapToBitmapFilter::SetInput(const Bitmap &image)
-
-Set input image. ";
-
-
 // File: classstd_1_1bitset.xml
 %feature("docstring") std::bitset "
 
@@ -1444,9 +789,7 @@ C++ includes: gdcmByteValue.h ";
 
 %feature("docstring")  gdcm::ByteValue::ByteValue "gdcm::ByteValue::ByteValue(const char *array=0, VL const &vl=0) ";
 
-%feature("docstring")  gdcm::ByteValue::ByteValue "gdcm::ByteValue::ByteValue(std::vector< char > &v)
-
-WARNING:  casting to uint32_t ";
+%feature("docstring")  gdcm::ByteValue::ByteValue "gdcm::ByteValue::ByteValue(std::vector< char > &v) ";
 
 %feature("docstring")  gdcm::ByteValue::~ByteValue "gdcm::ByteValue::~ByteValue() ";
 
@@ -1503,92 +846,6 @@ gdcm::ByteValue::Write(std::ostream &os) const ";
 
 %feature("docstring")  gdcm::ByteValue::WriteBuffer "bool
 gdcm::ByteValue::WriteBuffer(std::ostream &os) const ";
-
-
-// File: classgdcm_1_1network_1_1CEchoRQ.xml
-%feature("docstring") gdcm::network::CEchoRQ "
-
-CEchoRQ this file defines the messages for the cecho action.
-
-C++ includes: gdcmCEchoMessages.h ";
-
-%feature("docstring")  gdcm::network::CEchoRQ::ConstructPDV "std::vector<PresentationDataValue>
-gdcm::network::CEchoRQ::ConstructPDV(const ULConnection &inConnection,
-const BaseRootQuery *inRootQuery) ";
-
-
-// File: classgdcm_1_1network_1_1CEchoRSP.xml
-%feature("docstring") gdcm::network::CEchoRSP "C++ includes:
-gdcmCEchoMessages.h ";
-
-%feature("docstring")  gdcm::network::CEchoRSP::ConstructPDV "std::vector<PresentationDataValue>
-gdcm::network::CEchoRSP::ConstructPDV(const DataSet *inDataSet) ";
-
-
-// File: classgdcm_1_1network_1_1CFind.xml
-%feature("docstring") gdcm::network::CFind "
-
-PS 3.4 - 2009 Table B.2-1 C-STORE STATUS
-
-C++ includes: gdcmDIMSE.h ";
-
-
-// File: classgdcm_1_1network_1_1CFindCancelRQ.xml
-%feature("docstring") gdcm::network::CFindCancelRQ "C++ includes:
-gdcmCFindMessages.h ";
-
-%feature("docstring")  gdcm::network::CFindCancelRQ::ConstructPDV "std::vector<PresentationDataValue>
-gdcm::network::CFindCancelRQ::ConstructPDV(const DataSet *inDataSet)
-";
-
-
-// File: classgdcm_1_1network_1_1CFindRQ.xml
-%feature("docstring") gdcm::network::CFindRQ "C++ includes:
-gdcmCFindMessages.h ";
-
-%feature("docstring")  gdcm::network::CFindRQ::ConstructPDV "std::vector<PresentationDataValue>
-gdcm::network::CFindRQ::ConstructPDV(const ULConnection &inConnection,
-const BaseRootQuery *inRootQuery) ";
-
-
-// File: classgdcm_1_1network_1_1CFindRSP.xml
-%feature("docstring") gdcm::network::CFindRSP "C++ includes:
-gdcmCFindMessages.h ";
-
-%feature("docstring")  gdcm::network::CFindRSP::ConstructPDV "std::vector<PresentationDataValue>
-gdcm::network::CFindRSP::ConstructPDV(const DataSet *inDataSet) ";
-
-
-// File: classgdcm_1_1network_1_1CMoveCancelRq.xml
-%feature("docstring") gdcm::network::CMoveCancelRq "C++ includes:
-gdcmCMoveMessages.h ";
-
-%feature("docstring")  gdcm::network::CMoveCancelRq::ConstructPDV "std::vector<PresentationDataValue>
-gdcm::network::CMoveCancelRq::ConstructPDV(const DataSet *inDataSet)
-";
-
-
-// File: classgdcm_1_1network_1_1CMoveRQ.xml
-%feature("docstring") gdcm::network::CMoveRQ "
-
-CMoveRQ this file defines the messages for the cmove action.
-
-C++ includes: gdcmCMoveMessages.h ";
-
-%feature("docstring")  gdcm::network::CMoveRQ::ConstructPDV "std::vector<PresentationDataValue>
-gdcm::network::CMoveRQ::ConstructPDV(const ULConnection &inConnection,
-const BaseRootQuery *inRootQuery) ";
-
-
-// File: classgdcm_1_1network_1_1CMoveRSP.xml
-%feature("docstring") gdcm::network::CMoveRSP "
-
-CMoveRSP this file defines the messages for the cmove action.
-
-C++ includes: gdcmCMoveMessages.h ";
-
-%feature("docstring")  gdcm::network::CMoveRSP::ConstructPDV "std::vector<PresentationDataValue>
-gdcm::network::CMoveRSP::ConstructPDV(const DataSet *inDataSet) ";
 
 
 // File: classgdcm_1_1Codec.xml
@@ -1663,10 +920,20 @@ gdcm::CodeString::IsValid() const
 
 Check if CodeString obj is correct.. ";
 
+%feature("docstring")  gdcm::CodeString::size "size_type
+gdcm::CodeString::size() const
+
+Deprecated Return the size of the string ";
+
 %feature("docstring")  gdcm::CodeString::Size "size_type
 gdcm::CodeString::Size() const
 
 Return the size of the string. ";
+
+%feature("docstring")  gdcm::CodeString::Trim "std::string
+gdcm::CodeString::Trim() const
+
+Deprecated Remove extra leading and ending spaces. ";
 
 
 // File: classgdcm_1_1Command.xml
@@ -1691,86 +958,10 @@ This variant is expected to be used when requests comes from a const
 Object ";
 
 
-// File: classgdcm_1_1CommandDataSet.xml
-%feature("docstring") gdcm::CommandDataSet "
-
-Class to represent a Command DataSet.
-
-See:   DataSet
-
-C++ includes: gdcmCommandDataSet.h ";
-
-%feature("docstring")  gdcm::CommandDataSet::CommandDataSet "gdcm::CommandDataSet::CommandDataSet() ";
-
-%feature("docstring")  gdcm::CommandDataSet::~CommandDataSet "gdcm::CommandDataSet::~CommandDataSet() ";
-
-%feature("docstring")  gdcm::CommandDataSet::Insert "void
-gdcm::CommandDataSet::Insert(const DataElement &de)
-
-Insert a DataElement in the DataSet. WARNING:  : Tag need to be >= 0x8
-to be considered valid data element ";
-
-%feature("docstring")  gdcm::CommandDataSet::Read "std::istream&
-gdcm::CommandDataSet::Read(std::istream &is)
-
-Read. ";
-
-%feature("docstring")  gdcm::CommandDataSet::Replace "void
-gdcm::CommandDataSet::Replace(const DataElement &de)
-
-Replace a dataelement with another one. ";
-
-%feature("docstring")  gdcm::CommandDataSet::Write "std::ostream&
-gdcm::CommandDataSet::Write(std::ostream &os) const
-
-Write. ";
-
-
 // File: classstd_1_1complex.xml
 %feature("docstring") std::complex "
 
 STL class. ";
-
-
-// File: classgdcm_1_1network_1_1CompositeMessageFactory.xml
-%feature("docstring") gdcm::network::CompositeMessageFactory "
-
-CompositeMessageFactory This class constructs PDataPDUs, but that have
-been specifically constructed for the composite DICOM services
-(C-Echo, C-Find, C-Get, C-Move, and C-Store). It will also handle
-parsing the incoming data to determine which of the CompositePDUs the
-incoming data is, and so therefore allowing the scu to determine what
-to do with incoming data (if acting as a storescp server, for
-instance).
-
-C++ includes: gdcmCompositeMessageFactory.h ";
-
-
-// File: classgdcm_1_1CompositeNetworkFunctions.xml
-%feature("docstring") gdcm::CompositeNetworkFunctions "
-
-Composite Network Functions These functions provide a generic API to
-the DICOM functions implemented in GDCM. Advanced users can use this
-code as a template for building their own versions of these functions
-(for instance, to provide progress bars or some other way of handling
-returned query information), but for most users, these functions
-should be sufficient to interface with a PACS to a local machine. Note
-that these functions are not contained within a static class or some
-other class-style interface, because multiple connections can be
-instantiated in the same program. The DICOM standard is much more
-function oriented rather than class oriented in this instance, so the
-design of this API reflects that functional approach. These functions
-implements the following SCU operations:
-
-C-ECHO SCU
-
-C-FIND SCU
-
-C-STORE SCU
-
-C-MOVE SCU (+internal C-STORE SCP)
-
-C++ includes: gdcmCompositeNetworkFunctions.h ";
 
 
 // File: classstd_1_1basic__string_1_1const__iterator.xml
@@ -1821,14 +1012,14 @@ STL iterator class. ";
 STL iterator class. ";
 
 
-// File: classstd_1_1multiset_1_1const__iterator.xml
-%feature("docstring") std::multiset::const_iterator "
+// File: classstd_1_1vector_1_1const__iterator.xml
+%feature("docstring") std::vector::const_iterator "
 
 STL iterator class. ";
 
 
-// File: classstd_1_1vector_1_1const__iterator.xml
-%feature("docstring") std::vector::const_iterator "
+// File: classstd_1_1multiset_1_1const__iterator.xml
+%feature("docstring") std::multiset::const_iterator "
 
 STL iterator class. ";
 
@@ -1918,12 +1109,6 @@ gdcm::CP246ExplicitDataElement::GetLength() const ";
 
 %feature("docstring")  gdcm::CP246ExplicitDataElement::Read "std::istream& gdcm::CP246ExplicitDataElement::Read(std::istream &is)
 ";
-
-%feature("docstring")  gdcm::CP246ExplicitDataElement::ReadPreValue "std::istream&
-gdcm::CP246ExplicitDataElement::ReadPreValue(std::istream &is) ";
-
-%feature("docstring")  gdcm::CP246ExplicitDataElement::ReadValue "std::istream& gdcm::CP246ExplicitDataElement::ReadValue(std::istream
-&is) ";
 
 %feature("docstring")  gdcm::CP246ExplicitDataElement::ReadWithLength
 "std::istream&
@@ -2221,27 +1406,6 @@ gdcm::CSAHeaderDictEntry::SetVR(const VR &vr) ";
 gdcmCSAHeaderDict.h ";
 
 
-// File: classgdcm_1_1network_1_1CStoreRQ.xml
-%feature("docstring") gdcm::network::CStoreRQ "
-
-CStoreRQ this file defines the messages for the cecho action.
-
-C++ includes: gdcmCStoreMessages.h ";
-
-%feature("docstring")  gdcm::network::CStoreRQ::ConstructPDV "std::vector<PresentationDataValue>
-gdcm::network::CStoreRQ::ConstructPDV(const ULConnection
-&inConnection, const File &file) ";
-
-
-// File: classgdcm_1_1network_1_1CStoreRSP.xml
-%feature("docstring") gdcm::network::CStoreRSP "C++ includes:
-gdcmCStoreMessages.h ";
-
-%feature("docstring")  gdcm::network::CStoreRSP::ConstructPDV "std::vector<PresentationDataValue>
-gdcm::network::CStoreRSP::ConstructPDV(const DataSet *inDataSet, const
-BasePDU *inPC) ";
-
-
 // File: classgdcm_1_1Curve.xml
 %feature("docstring") gdcm::Curve "
 
@@ -2294,18 +1458,8 @@ gdcm::Curve::IsEmpty() const ";
 %feature("docstring")  gdcm::Curve::Print "void
 gdcm::Curve::Print(std::ostream &) const ";
 
-%feature("docstring")  gdcm::Curve::SetCoordinateStartValue "void
-gdcm::Curve::SetCoordinateStartValue(unsigned short v) ";
-
-%feature("docstring")  gdcm::Curve::SetCoordinateStepValue "void
-gdcm::Curve::SetCoordinateStepValue(unsigned short v) ";
-
 %feature("docstring")  gdcm::Curve::SetCurve "void
 gdcm::Curve::SetCurve(const char *array, unsigned int length) ";
-
-%feature("docstring")  gdcm::Curve::SetCurveDataDescriptor "void
-gdcm::Curve::SetCurveDataDescriptor(const uint16_t *values, size_t
-num) ";
 
 %feature("docstring")  gdcm::Curve::SetCurveDescription "void
 gdcm::Curve::SetCurveDescription(const char *curvedescription) ";
@@ -2375,6 +1529,9 @@ ByteValue* gdcm::DataElement::GetByteValue() const
 Return the Value of DataElement as a ByteValue (if possible) WARNING:
 : You need to check for NULL return value ";
 
+%feature("docstring")  gdcm::DataElement::GetByteValue "ByteValue*
+gdcm::DataElement::GetByteValue() ";
+
 %feature("docstring")  gdcm::DataElement::GetLength "VL
 gdcm::DataElement::GetLength() const ";
 
@@ -2383,6 +1540,8 @@ const
 
 Return the Value of DataElement as a Sequence Of Fragments (if
 possible) WARNING:  : You need to check for NULL return value ";
+
+%feature("docstring")  gdcm::DataElement::GetSequenceOfItems "SequenceOfItems* gdcm::DataElement::GetSequenceOfItems() ";
 
 %feature("docstring")  gdcm::DataElement::GetSequenceOfItems "const
 SequenceOfItems* gdcm::DataElement::GetSequenceOfItems() const
@@ -2397,8 +1556,6 @@ GetValueAsSQ. In which case the code internally trigger an assert to
 warn developper. When in doubt do not use this function and prefer
 GetValueAsSQ() Deprecated Replaced by DataElement::GetValueAsSQ() as
 of GDCM 2.2. ";
-
-%feature("docstring")  gdcm::DataElement::GetSequenceOfItems "SequenceOfItems* gdcm::DataElement::GetSequenceOfItems() ";
 
 %feature("docstring")  gdcm::DataElement::GetTag "const Tag&
 gdcm::DataElement::GetTag() const
@@ -2457,14 +1614,6 @@ gdcm::DataElement::Read(std::istream &is) ";
 gdcm::DataElement::ReadOrSkip(std::istream &is, std::set< Tag > const
 &skiptags) ";
 
-%feature("docstring")  gdcm::DataElement::ReadPreValue "std::istream&
-gdcm::DataElement::ReadPreValue(std::istream &is, std::set< Tag >
-const &skiptags) ";
-
-%feature("docstring")  gdcm::DataElement::ReadValue "std::istream&
-gdcm::DataElement::ReadValue(std::istream &is, std::set< Tag > const
-&skiptags) ";
-
 %feature("docstring")  gdcm::DataElement::ReadWithLength "std::istream& gdcm::DataElement::ReadWithLength(std::istream &is, VL
 &length) ";
 
@@ -2507,44 +1656,6 @@ gdcm::DataElement::Write(std::ostream &os) const ";
 // File: classgdcm_1_1DataElementException.xml
 %feature("docstring") gdcm::DataElementException "C++ includes:
 gdcmDataSet.h ";
-
-
-// File: classgdcm_1_1DataEvent.xml
-%feature("docstring") gdcm::DataEvent "
-
-DataEvent.
-
-C++ includes: gdcmDataEvent.h ";
-
-%feature("docstring")  gdcm::DataEvent::DataEvent "gdcm::DataEvent::DataEvent(const char *bytes=0, size_t len=0) ";
-
-%feature("docstring")  gdcm::DataEvent::DataEvent "gdcm::DataEvent::DataEvent(const Self &s) ";
-
-%feature("docstring")  gdcm::DataEvent::~DataEvent "virtual
-gdcm::DataEvent::~DataEvent() ";
-
-%feature("docstring")  gdcm::DataEvent::CheckEvent "virtual bool
-gdcm::DataEvent::CheckEvent(const ::gdcm::Event *e) const ";
-
-%feature("docstring")  gdcm::DataEvent::GetData "const char*
-gdcm::DataEvent::GetData() const ";
-
-%feature("docstring")  gdcm::DataEvent::GetDataLength "size_t
-gdcm::DataEvent::GetDataLength() const ";
-
-%feature("docstring")  gdcm::DataEvent::GetEventName "virtual const
-char* gdcm::DataEvent::GetEventName() const
-
-Return the StringName associated with the event. ";
-
-%feature("docstring")  gdcm::DataEvent::MakeObject "virtual
-::gdcm::Event* gdcm::DataEvent::MakeObject() const
-
-Create an Event of this type This method work as a Factory for
-creating events of each particular type. ";
-
-%feature("docstring")  gdcm::DataEvent::SetData "void
-gdcm::DataEvent::SetData(const char *bytes, size_t len) ";
 
 
 // File: classgdcm_1_1DataSet.xml
@@ -2678,46 +1789,11 @@ gdcm::DataSet::ReplaceEmpty(const DataElement &de)
 
 Only replace a DICOM attribute when it is missing or empty. ";
 
-%feature("docstring")  gdcm::DataSet::Size "SizeType
+%feature("docstring")  gdcm::DataSet::Size "unsigned int
 gdcm::DataSet::Size() const ";
 
 %feature("docstring")  gdcm::DataSet::Write "std::ostream const&
 gdcm::DataSet::Write(std::ostream &os) const ";
-
-
-// File: classgdcm_1_1DataSetEvent.xml
-%feature("docstring") gdcm::DataSetEvent "
-
-DataSetEvent Special type of event triggered during the DataSet
-store/move process.
-
-See:
-
-C++ includes: gdcmDataSetEvent.h ";
-
-%feature("docstring")  gdcm::DataSetEvent::DataSetEvent "gdcm::DataSetEvent::DataSetEvent(DataSet const *ds=NULL) ";
-
-%feature("docstring")  gdcm::DataSetEvent::DataSetEvent "gdcm::DataSetEvent::DataSetEvent(const Self &s) ";
-
-%feature("docstring")  gdcm::DataSetEvent::~DataSetEvent "virtual
-gdcm::DataSetEvent::~DataSetEvent() ";
-
-%feature("docstring")  gdcm::DataSetEvent::CheckEvent "virtual bool
-gdcm::DataSetEvent::CheckEvent(const ::gdcm::Event *e) const ";
-
-%feature("docstring")  gdcm::DataSetEvent::GetDataSet "DataSet const&
-gdcm::DataSetEvent::GetDataSet() const ";
-
-%feature("docstring")  gdcm::DataSetEvent::GetEventName "virtual
-const char* gdcm::DataSetEvent::GetEventName() const
-
-Return the StringName associated with the event. ";
-
-%feature("docstring")  gdcm::DataSetEvent::MakeObject "virtual
-::gdcm::Event* gdcm::DataSetEvent::MakeObject() const
-
-Create an Event of this type This method work as a Factory for
-creating events of each particular type. ";
 
 
 // File: classgdcm_1_1DataSetHelper.xml
@@ -2953,14 +2029,6 @@ gdcm::Dict::End() const ";
 %feature("docstring")  gdcm::Dict::GetDictEntry "const DictEntry&
 gdcm::Dict::GetDictEntry(const Tag &tag) const ";
 
-%feature("docstring")  gdcm::Dict::GetDictEntryByKeyword "const
-DictEntry& gdcm::Dict::GetDictEntryByKeyword(const char *keyword, Tag
-&tag) const
-
-Lookup DictEntry by keyword. Even if DICOM standard defines keyword as
-being unique. The lookup table is built on Tag. Therefore looking up a
-DictEntry by Keyword is more inefficient than looking up by Tag. ";
-
 %feature("docstring")  gdcm::Dict::GetDictEntryByName "const
 DictEntry& gdcm::Dict::GetDictEntryByName(const char *name, Tag &tag)
 const
@@ -2969,11 +2037,6 @@ Inefficient way of looking up tag by name. Technically DICOM does not
 garantee uniqueness (and Curve / Overlay are there to prove it). But
 most of the time name is in fact uniq and can be uniquely link to a
 tag ";
-
-%feature("docstring")  gdcm::Dict::GetKeywordFromTag "const char*
-gdcm::Dict::GetKeywordFromTag(Tag const &tag) const
-
-Function to return the Keyword from a Tag. ";
 
 %feature("docstring")  gdcm::Dict::IsEmpty "bool
 gdcm::Dict::IsEmpty() const ";
@@ -3113,9 +2176,7 @@ C++ includes: gdcmDictPrinter.h ";
 %feature("docstring")  gdcm::DictPrinter::~DictPrinter "gdcm::DictPrinter::~DictPrinter() ";
 
 %feature("docstring")  gdcm::DictPrinter::Print "void
-gdcm::DictPrinter::Print(std::ostream &os)
-
-Print. ";
+gdcm::DictPrinter::Print(std::ostream &os) ";
 
 
 // File: classgdcm_1_1Dicts.xml
@@ -3145,9 +2206,6 @@ works for both public and private dicts: owner is null for public dict
 WARNING:  owner need to be set to appropriate owner for call to work.
 see ";
 
-%feature("docstring")  gdcm::Dicts::GetPrivateDict "PrivateDict&
-gdcm::Dicts::GetPrivateDict() ";
-
 %feature("docstring")  gdcm::Dicts::GetPrivateDict "const
 PrivateDict& gdcm::Dicts::GetPrivateDict() const ";
 
@@ -3156,16 +2214,6 @@ gdcm::Dicts::GetPublicDict() const ";
 
 %feature("docstring")  gdcm::Dicts::IsEmpty "bool
 gdcm::Dicts::IsEmpty() const ";
-
-
-// File: classgdcm_1_1network_1_1DIMSE.xml
-%feature("docstring") gdcm::network::DIMSE "
-
-DIMSE PS 3.7 - 2009 Annex E Command Dictionary (Normative) E.1
-REGISTRY OF DICOM COMMAND ELEMENTS Table E.1-1 COMMAND FIELDS (PART
-1).
-
-C++ includes: gdcmDIMSE.h ";
 
 
 // File: classgdcm_1_1DirectionCosines.xml
@@ -3273,11 +2321,6 @@ gdcm::Directory::Print(std::ostream &os=std::cout) const
 Print. ";
 
 
-// File: classgdcm_1_1DirectoryHelper.xml
-%feature("docstring") gdcm::DirectoryHelper "C++ includes:
-gdcmDirectoryHelper.h ";
-
-
 // File: classstd_1_1domain__error.xml
 %feature("docstring") std::domain_error "
 
@@ -3320,9 +2363,6 @@ TODO
 
 C++ includes: gdcmElement.h ";
 
-%feature("docstring")  gdcm::Element::GetAsDataElement "DataElement
-gdcm::Element< TVR, TVM >::GetAsDataElement() const ";
-
 %feature("docstring")  gdcm::Element::GetLength "unsigned long
 gdcm::Element< TVR, TVM >::GetLength() const ";
 
@@ -3355,14 +2395,6 @@ idx=0) ";
 
 %feature("docstring")  gdcm::Element::Write "void gdcm::Element< TVR,
 TVM >::Write(std::ostream &_os) const ";
-
-
-// File: classgdcm_1_1Element_3_01TVR_00_01VM_1_1VM1__2_01_4.xml
-%feature("docstring") gdcm::Element< TVR, VM::VM1_2 > " C++ includes:
-gdcmElement.h ";
-
-%feature("docstring")  gdcm::Element< TVR, VM::VM1_2 >::SetLength "
-void gdcm::Element< TVR, VM::VM1_2 >::SetLength(int len) ";
 
 
 // File: classgdcm_1_1Element_3_01TVR_00_01VM_1_1VM1__n_01_4.xml
@@ -3405,10 +2437,6 @@ gdcm::Element< TVR, VM::VM1_n >::Set(Value const &v) ";
 %feature("docstring")  gdcm::Element< TVR, VM::VM1_n >::SetArray "
 void gdcm::Element< TVR, VM::VM1_n >::SetArray(const Type *array,
 unsigned long len, bool save=false) ";
-
-%feature("docstring")  gdcm::Element< TVR, VM::VM1_n
->::SetFromDataElement " void gdcm::Element< TVR, VM::VM1_n
->::SetFromDataElement(DataElement const &de) ";
 
 %feature("docstring")  gdcm::Element< TVR, VM::VM1_n >::SetLength "
 void gdcm::Element< TVR, VM::VM1_n >::SetLength(unsigned long len) ";
@@ -3573,6 +2601,12 @@ Print Event information. This method can be overridden by specific
 Event subtypes. The default is to print out the type of the event. ";
 
 
+// File: classstd_1_1exception.xml
+%feature("docstring") std::exception "
+
+STL class. ";
+
+
 // File: classgdcm_1_1Exception.xml
 %feature("docstring") gdcm::Exception "
 
@@ -3604,12 +2638,6 @@ Return the Description. ";
 gdcm::Exception::what() const  throw () what implementation ";
 
 
-// File: classstd_1_1exception.xml
-%feature("docstring") std::exception "
-
-STL class. ";
-
-
 // File: classgdcm_1_1ExitEvent.xml
 %feature("docstring") gdcm::ExitEvent "C++ includes: gdcmEvent.h ";
 
@@ -3628,12 +2656,6 @@ gdcm::ExplicitDataElement::GetLength() const ";
 
 %feature("docstring")  gdcm::ExplicitDataElement::Read "std::istream&
 gdcm::ExplicitDataElement::Read(std::istream &is) ";
-
-%feature("docstring")  gdcm::ExplicitDataElement::ReadPreValue "std::istream& gdcm::ExplicitDataElement::ReadPreValue(std::istream
-&is) ";
-
-%feature("docstring")  gdcm::ExplicitDataElement::ReadValue "std::istream& gdcm::ExplicitDataElement::ReadValue(std::istream &is)
-";
 
 %feature("docstring")  gdcm::ExplicitDataElement::ReadWithLength "std::istream& gdcm::ExplicitDataElement::ReadWithLength(std::istream
 &is, VL &length) ";
@@ -3659,13 +2681,6 @@ C++ includes: gdcmExplicitImplicitDataElement.h ";
 
 %feature("docstring")  gdcm::ExplicitImplicitDataElement::Read "std::istream& gdcm::ExplicitImplicitDataElement::Read(std::istream
 &is) ";
-
-%feature("docstring")  gdcm::ExplicitImplicitDataElement::ReadPreValue
-"std::istream&
-gdcm::ExplicitImplicitDataElement::ReadPreValue(std::istream &is) ";
-
-%feature("docstring")  gdcm::ExplicitImplicitDataElement::ReadValue "std::istream&
-gdcm::ExplicitImplicitDataElement::ReadValue(std::istream &is) ";
 
 %feature("docstring")
 gdcm::ExplicitImplicitDataElement::ReadWithLength "std::istream&
@@ -4115,91 +3130,6 @@ C++ includes: gdcmSerieHelper.h ";
 %feature("docstring")  gdcm::FileWithName::FileWithName "gdcm::FileWithName::FileWithName(File &f) ";
 
 
-// File: classgdcm_1_1FindPatientRootQuery.xml
-%feature("docstring") gdcm::FindPatientRootQuery "
-
-PatientRootQuery contains: the class which will produce a dataset for
-c-find with patient root.
-
-C++ includes: gdcmFindPatientRootQuery.h ";
-
-%feature("docstring")
-gdcm::FindPatientRootQuery::FindPatientRootQuery "gdcm::FindPatientRootQuery::FindPatientRootQuery() ";
-
-%feature("docstring")
-gdcm::FindPatientRootQuery::GetAbstractSyntaxUID "UIDs::TSName
-gdcm::FindPatientRootQuery::GetAbstractSyntaxUID() const ";
-
-%feature("docstring")  gdcm::FindPatientRootQuery::GetTagListByLevel "std::vector<Tag> gdcm::FindPatientRootQuery::GetTagListByLevel(const
-EQueryLevel &inQueryLevel)
-
-this function will return all tags at a given query level, so that
-they maybe selected for searching. The boolean forFind is true if the
-query is a find query, or false for a move query. ";
-
-%feature("docstring")  gdcm::FindPatientRootQuery::InitializeDataSet "void gdcm::FindPatientRootQuery::InitializeDataSet(const EQueryLevel
-&inQueryLevel)
-
-this function sets tag 8,52 to the appropriate value based on query
-level also fills in the right unique tags, as per the standard's
-requirements should allow for connection with dcmtk ";
-
-%feature("docstring")  gdcm::FindPatientRootQuery::ValidateQuery "bool gdcm::FindPatientRootQuery::ValidateQuery(bool inStrict=true)
-const
-
-have to be able to ensure that 0x8,0x52 is set (which will be true if
-InitializeDataSet is called...) that the level is appropriate (ie, not
-setting PATIENT for a study query that the tags in the query match the
-right level (either required, unique, optional) by default, this
-function checks to see if the query is for finding, which is more
-permissive than for moving. For moving, only the unique tags are
-allowed. 10 Jan 2011: adding in the 'strict' mode. according to the
-standard (at least, how I've read it), only tags for a particular
-level should be allowed in a particular query (ie, just series level
-tags in a series level query). However, it seems that dcm4chee doesn't
-share that interpretation. So, if 'inStrict' is false, then tags from
-the current level and all higher levels are now considered valid. So,
-if you're doing a non-strict series-level query, tags from the patient
-and study level can be passed along as well. ";
-
-
-// File: classgdcm_1_1FindStudyRootQuery.xml
-%feature("docstring") gdcm::FindStudyRootQuery "
-
-FindStudyRootQuery contains: the class which will produce a dataset
-for C-FIND with study root.
-
-C++ includes: gdcmFindStudyRootQuery.h ";
-
-%feature("docstring")  gdcm::FindStudyRootQuery::FindStudyRootQuery "gdcm::FindStudyRootQuery::FindStudyRootQuery() ";
-
-%feature("docstring")  gdcm::FindStudyRootQuery::GetAbstractSyntaxUID
-"UIDs::TSName gdcm::FindStudyRootQuery::GetAbstractSyntaxUID() const
-";
-
-%feature("docstring")  gdcm::FindStudyRootQuery::GetTagListByLevel "std::vector<Tag> gdcm::FindStudyRootQuery::GetTagListByLevel(const
-EQueryLevel &inQueryLevel)
-
-this function will return all tags at a given query level, so that
-they maybe selected for searching. The boolean forFind is true if the
-query is a find query, or false for a move query. ";
-
-%feature("docstring")  gdcm::FindStudyRootQuery::InitializeDataSet "void gdcm::FindStudyRootQuery::InitializeDataSet(const EQueryLevel
-&inQueryLevel)
-
-this function sets tag 8,52 to the appropriate value based on query
-level also fills in the right unique tags, as per the standard's
-requirements should allow for connection with dcmtk ";
-
-%feature("docstring")  gdcm::FindStudyRootQuery::ValidateQuery "bool
-gdcm::FindStudyRootQuery::ValidateQuery(bool inStrict=true) const
-
-have to be able to ensure that (0008,0052) is set that the level is
-appropriate (ie, not setting PATIENT for a study query that the tags
-in the query match the right level (either required, unique, optional)
-";
-
-
 // File: classgdcm_1_1Fragment.xml
 %feature("docstring") gdcm::Fragment "
 
@@ -4214,9 +3144,6 @@ gdcm::Fragment::GetLength() const ";
 
 %feature("docstring")  gdcm::Fragment::Read "std::istream&
 gdcm::Fragment::Read(std::istream &is) ";
-
-%feature("docstring")  gdcm::Fragment::ReadValue "std::istream&
-gdcm::Fragment::ReadValue(std::istream &is) ";
 
 %feature("docstring")  gdcm::Fragment::Write "std::ostream&
 gdcm::Fragment::Write(std::ostream &os) const ";
@@ -4440,9 +3367,6 @@ gdcm::Global::GetDefs() const
 retrieve the default/internal (Part 3) You need to explicitely call
 LoadResourcesFiles before ";
 
-%feature("docstring")  gdcm::Global::GetDicts "Dicts&
-gdcm::Global::GetDicts() ";
-
 %feature("docstring")  gdcm::Global::GetDicts "Dicts const&
 gdcm::Global::GetDicts() const
 
@@ -4484,148 +3408,8 @@ const& gdcm::GroupDict::GetAbbreviation(uint16_t num) const ";
 %feature("docstring")  gdcm::GroupDict::GetName "std::string const&
 gdcm::GroupDict::GetName(uint16_t num) const ";
 
-%feature("docstring")  gdcm::GroupDict::Size "size_t
+%feature("docstring")  gdcm::GroupDict::Size "unsigned long
 gdcm::GroupDict::Size() const ";
-
-
-// File: classgdcm_1_1IconImageFilter.xml
-%feature("docstring") gdcm::IconImageFilter "
-
-IconImageFilter This filter will extract icons from a gdcm::File This
-filter will loop over all known sequence (public and private) that may
-contains an IconImage and retrieve them. The filter will fails with a
-value of false if no icon can be found Since it handle both public and
-private icon type, one should not assume the icon is in uncompress
-form, some private vendor store private icon in JPEG8/JPEG12.
-
-Implementation details: This filter supports the following Icons:
-(0088,0200) Icon Image Sequence
-
-(0009,10,GEIIS) GE IIS Thumbnail Sequence
-
-(6003,10,GEMS_Ultrasound_ImageGroup_001) GEMS Image Thumbnail Sequence
-
-(0055,30,VEPRO VIF 3.0 DATA) Icon Data
-
-(0055,30,VEPRO VIM 5.0 DATA) ICONDATA2
-
-WARNING:  the icon stored in those private attribute do not conform to
-definition of Icon Image Sequence (do not simply copy/paste). For
-example some private icon can be expressed as 12bits pixel, while the
-DICOM standard only allow 8bits icons.
-
-See:   ImageReader
-
-C++ includes: gdcmIconImageFilter.h ";
-
-%feature("docstring")  gdcm::IconImageFilter::IconImageFilter "gdcm::IconImageFilter::IconImageFilter() ";
-
-%feature("docstring")  gdcm::IconImageFilter::~IconImageFilter "gdcm::IconImageFilter::~IconImageFilter() ";
-
-%feature("docstring")  gdcm::IconImageFilter::Extract "bool
-gdcm::IconImageFilter::Extract()
-
-Extract all Icon found in File. ";
-
-%feature("docstring")  gdcm::IconImageFilter::GetFile "File&
-gdcm::IconImageFilter::GetFile() ";
-
-%feature("docstring")  gdcm::IconImageFilter::GetFile "const File&
-gdcm::IconImageFilter::GetFile() const ";
-
-%feature("docstring")  gdcm::IconImageFilter::GetIconImage "IconImage& gdcm::IconImageFilter::GetIconImage(unsigned int i) const
-";
-
-%feature("docstring")  gdcm::IconImageFilter::GetNumberOfIconImages "unsigned int gdcm::IconImageFilter::GetNumberOfIconImages() const
-
-Retrieve extract IconImage (need to call Extract first). ";
-
-%feature("docstring")  gdcm::IconImageFilter::SetFile "void
-gdcm::IconImageFilter::SetFile(const File &f)
-
-Set/Get File. ";
-
-
-// File: classgdcm_1_1IconImageGenerator.xml
-%feature("docstring") gdcm::IconImageGenerator "
-
-IconImageGenerator This filter will generate a valid Icon from the
-Pixel Data element (an instance of gdcm::Pixmap). To generate a valid
-Icon, one is only allowed the following Photometric Interpretation:
-MONOCHROME1
-
-MONOCHROME2
-
-PALETTE_COLOR.
-
-The Pixel Bits Allocated is restricted to 8bits, therefore 16 bits
-image needs to be rescaled. By default the filter will use the full
-scalar range of 16bits image to rescale to unsigned 8bits. This may
-not be ideal for some situation, in which case the API SetPixelMinMax
-can be used to overwrite the default min,max interval used.
-
-See:   ImageReader
-
-C++ includes: gdcmIconImageGenerator.h ";
-
-%feature("docstring")  gdcm::IconImageGenerator::IconImageGenerator "gdcm::IconImageGenerator::IconImageGenerator() ";
-
-%feature("docstring")  gdcm::IconImageGenerator::~IconImageGenerator "gdcm::IconImageGenerator::~IconImageGenerator() ";
-
-%feature("docstring")  gdcm::IconImageGenerator::AutoPixelMinMax "void gdcm::IconImageGenerator::AutoPixelMinMax(bool b)
-
-Instead of explicitely specifying the min/max value for the rescale
-operation, let the internal mechanism compute the min/max of icon and
-rescale to best appropriate. ";
-
-%feature("docstring")
-gdcm::IconImageGenerator::ConvertRGBToPaletteColor "void
-gdcm::IconImageGenerator::ConvertRGBToPaletteColor(bool b)
-
-Converting from RGB to PALETTE_COLOR can be a slow operation. However
-DICOM standard requires that color icon be described as palette. Set
-this boolean to false only if you understand the consequences.  true,
-false generates invalid Icon Image Sequence ";
-
-%feature("docstring")  gdcm::IconImageGenerator::Generate "bool
-gdcm::IconImageGenerator::Generate()
-
-Generate Icon. ";
-
-%feature("docstring")  gdcm::IconImageGenerator::GetIconImage "const
-IconImage& gdcm::IconImageGenerator::GetIconImage() const
-
-Retrieve generated Icon. ";
-
-%feature("docstring")  gdcm::IconImageGenerator::GetPixmap "const
-Pixmap& gdcm::IconImageGenerator::GetPixmap() const ";
-
-%feature("docstring")  gdcm::IconImageGenerator::GetPixmap "Pixmap&
-gdcm::IconImageGenerator::GetPixmap() ";
-
-%feature("docstring")  gdcm::IconImageGenerator::SetOutputDimensions "void gdcm::IconImageGenerator::SetOutputDimensions(const unsigned int
-dims[2])
-
-Set Target dimension of output Icon. ";
-
-%feature("docstring")  gdcm::IconImageGenerator::SetOutsideValuePixel
-"void gdcm::IconImageGenerator::SetOutsideValuePixel(double v)
-
-Set a pixel value that should be discarded. This happen typically for
-CT image, where a pixel has been used to pad outside the image (see
-Pixel Padding Value). Requires AutoPixelMinMax(true) ";
-
-%feature("docstring")  gdcm::IconImageGenerator::SetPixelMinMax "void
-gdcm::IconImageGenerator::SetPixelMinMax(double min, double max)
-
-Override default min/max to compute best rescale for 16bits -> 8bits
-downscale. Typically those value can be read from the
-SmallestImagePixelValue LargestImagePixelValue DICOM attribute. ";
-
-%feature("docstring")  gdcm::IconImageGenerator::SetPixmap "void
-gdcm::IconImageGenerator::SetPixmap(const Pixmap &p)
-
-Set/Get File. ";
 
 
 // File: classstd_1_1ifstream.xml
@@ -4709,19 +3493,24 @@ aribtrary 1 value when the spacing was not specified (ex. 2D image).
 WARNING: when the spacing is not specifier, a default value of 1 will
 be returned ";
 
+%feature("docstring")  gdcm::Image::GetSwapCode "SwapCode
+gdcm::Image::GetSwapCode() const
+
+DEPRECATED DO NOT USE. ";
+
 %feature("docstring")  gdcm::Image::Print "void
 gdcm::Image::Print(std::ostream &os) const
 
 print ";
 
 %feature("docstring")  gdcm::Image::SetDirectionCosines "void
-gdcm::Image::SetDirectionCosines(const float *dircos) ";
+gdcm::Image::SetDirectionCosines(unsigned int idx, double dircos) ";
 
 %feature("docstring")  gdcm::Image::SetDirectionCosines "void
 gdcm::Image::SetDirectionCosines(const double *dircos) ";
 
 %feature("docstring")  gdcm::Image::SetDirectionCosines "void
-gdcm::Image::SetDirectionCosines(unsigned int idx, double dircos) ";
+gdcm::Image::SetDirectionCosines(const float *dircos) ";
 
 %feature("docstring")  gdcm::Image::SetIntercept "void
 gdcm::Image::SetIntercept(double intercept)
@@ -4729,13 +3518,13 @@ gdcm::Image::SetIntercept(double intercept)
 intercept ";
 
 %feature("docstring")  gdcm::Image::SetOrigin "void
-gdcm::Image::SetOrigin(const double *ori) ";
-
-%feature("docstring")  gdcm::Image::SetOrigin "void
 gdcm::Image::SetOrigin(const float *ori) ";
 
 %feature("docstring")  gdcm::Image::SetOrigin "void
 gdcm::Image::SetOrigin(unsigned int idx, double ori) ";
+
+%feature("docstring")  gdcm::Image::SetOrigin "void
+gdcm::Image::SetOrigin(const double *ori) ";
 
 %feature("docstring")  gdcm::Image::SetSlope "void
 gdcm::Image::SetSlope(double slope)
@@ -4743,10 +3532,13 @@ gdcm::Image::SetSlope(double slope)
 slope ";
 
 %feature("docstring")  gdcm::Image::SetSpacing "void
-gdcm::Image::SetSpacing(const double *spacing) ";
+gdcm::Image::SetSpacing(unsigned int idx, double spacing) ";
 
 %feature("docstring")  gdcm::Image::SetSpacing "void
-gdcm::Image::SetSpacing(unsigned int idx, double spacing) ";
+gdcm::Image::SetSpacing(const double *spacing) ";
+
+%feature("docstring")  gdcm::Image::SetSwapCode "void
+gdcm::Image::SetSwapCode(SwapCode sc) ";
 
 
 // File: classgdcm_1_1ImageApplyLookupTable.xml
@@ -4960,20 +3752,16 @@ gdcm::ImageCodec::GetNeedByteSwap() const ";
 "const PhotometricInterpretation&
 gdcm::ImageCodec::GetPhotometricInterpretation() const ";
 
-%feature("docstring")  gdcm::ImageCodec::GetPixelFormat "const
-PixelFormat& gdcm::ImageCodec::GetPixelFormat() const ";
-
 %feature("docstring")  gdcm::ImageCodec::GetPixelFormat "PixelFormat&
 gdcm::ImageCodec::GetPixelFormat() ";
+
+%feature("docstring")  gdcm::ImageCodec::GetPixelFormat "const
+PixelFormat& gdcm::ImageCodec::GetPixelFormat() const ";
 
 %feature("docstring")  gdcm::ImageCodec::GetPlanarConfiguration "unsigned int gdcm::ImageCodec::GetPlanarConfiguration() const ";
 
 %feature("docstring")  gdcm::ImageCodec::IsLossy "bool
 gdcm::ImageCodec::IsLossy() const ";
-
-%feature("docstring")  gdcm::ImageCodec::SetDimensions "void
-gdcm::ImageCodec::SetDimensions(const std::vector< unsigned int > &d)
-";
 
 %feature("docstring")  gdcm::ImageCodec::SetDimensions "void
 gdcm::ImageCodec::SetDimensions(const unsigned int *d) ";
@@ -5104,8 +3892,7 @@ C++ includes: gdcmImageReader.h ";
 
 %feature("docstring")  gdcm::ImageReader::ImageReader "gdcm::ImageReader::ImageReader() ";
 
-%feature("docstring")  gdcm::ImageReader::~ImageReader "virtual
-gdcm::ImageReader::~ImageReader() ";
+%feature("docstring")  gdcm::ImageReader::~ImageReader "gdcm::ImageReader::~ImageReader() ";
 
 %feature("docstring")  gdcm::ImageReader::GetImage "const Image&
 gdcm::ImageReader::GetImage() const
@@ -5115,7 +3902,7 @@ Return the read image. ";
 %feature("docstring")  gdcm::ImageReader::GetImage "Image&
 gdcm::ImageReader::GetImage() ";
 
-%feature("docstring")  gdcm::ImageReader::Read "virtual bool
+%feature("docstring")  gdcm::ImageReader::Read "bool
 gdcm::ImageReader::Read()
 
 Read the DICOM image. There are two reason for failure: 1. The input
@@ -5170,74 +3957,6 @@ gdcm::ImageWriter::Write()
 Write. ";
 
 
-// File: classgdcm_1_1network_1_1ImplementationClassUIDSub.xml
-%feature("docstring") gdcm::network::ImplementationClassUIDSub "
-
-ImplementationClassUIDSub PS 3.7 Table D.3-1 IMPLEMENTATION CLASS UID
-SUB-ITEM FIELDS (A-ASSOCIATE-RQ).
-
-C++ includes: gdcmImplementationClassUIDSub.h ";
-
-%feature("docstring")
-gdcm::network::ImplementationClassUIDSub::ImplementationClassUIDSub "gdcm::network::ImplementationClassUIDSub::ImplementationClassUIDSub()
-";
-
-%feature("docstring")  gdcm::network::ImplementationClassUIDSub::Read
-"std::istream&
-gdcm::network::ImplementationClassUIDSub::Read(std::istream &is) ";
-
-%feature("docstring")  gdcm::network::ImplementationClassUIDSub::Size
-"size_t gdcm::network::ImplementationClassUIDSub::Size() const ";
-
-%feature("docstring")  gdcm::network::ImplementationClassUIDSub::Write
-"const std::ostream&
-gdcm::network::ImplementationClassUIDSub::Write(std::ostream &os)
-const ";
-
-
-// File: classgdcm_1_1network_1_1ImplementationUIDSub.xml
-%feature("docstring") gdcm::network::ImplementationUIDSub "
-
-ImplementationUIDSub Table D.3-2 IMPLEMENTATION UID SUB-ITEM FIELDS (A
--ASSOCIATE-AC).
-
-C++ includes: gdcmImplementationUIDSub.h ";
-
-%feature("docstring")
-gdcm::network::ImplementationUIDSub::ImplementationUIDSub "gdcm::network::ImplementationUIDSub::ImplementationUIDSub() ";
-
-%feature("docstring")  gdcm::network::ImplementationUIDSub::Write "const std::ostream&
-gdcm::network::ImplementationUIDSub::Write(std::ostream &os) const ";
-
-
-// File: classgdcm_1_1network_1_1ImplementationVersionNameSub.xml
-%feature("docstring") gdcm::network::ImplementationVersionNameSub "
-
-ImplementationVersionNameSub Table D.3-3 IMPLEMENTATION VERSION NAME
-SUB-ITEM FIELDS (A-ASSOCIATE-RQ).
-
-C++ includes: gdcmImplementationVersionNameSub.h ";
-
-%feature("docstring")
-gdcm::network::ImplementationVersionNameSub::ImplementationVersionNameSub
-"gdcm::network::ImplementationVersionNameSub::ImplementationVersionNameSub()
-";
-
-%feature("docstring")
-gdcm::network::ImplementationVersionNameSub::Read "std::istream&
-gdcm::network::ImplementationVersionNameSub::Read(std::istream &is) ";
-
-%feature("docstring")
-gdcm::network::ImplementationVersionNameSub::Size "size_t
-gdcm::network::ImplementationVersionNameSub::Size() const ";
-
-%feature("docstring")
-gdcm::network::ImplementationVersionNameSub::Write "const
-std::ostream&
-gdcm::network::ImplementationVersionNameSub::Write(std::ostream &os)
-const ";
-
-
 // File: classgdcm_1_1ImplicitDataElement.xml
 %feature("docstring") gdcm::ImplicitDataElement "
 
@@ -5252,12 +3971,6 @@ gdcm::ImplicitDataElement::GetLength() const ";
 
 %feature("docstring")  gdcm::ImplicitDataElement::Read "std::istream&
 gdcm::ImplicitDataElement::Read(std::istream &is) ";
-
-%feature("docstring")  gdcm::ImplicitDataElement::ReadPreValue "std::istream& gdcm::ImplicitDataElement::ReadPreValue(std::istream
-&is) ";
-
-%feature("docstring")  gdcm::ImplicitDataElement::ReadValue "std::istream& gdcm::ImplicitDataElement::ReadValue(std::istream &is)
-";
 
 %feature("docstring")  gdcm::ImplicitDataElement::ReadWithLength "std::istream& gdcm::ImplicitDataElement::ReadWithLength(std::istream
 &is, VL &length) ";
@@ -5297,9 +4010,9 @@ gdcm::IOD::AddIODEntry(const IODEntry &iode) ";
 %feature("docstring")  gdcm::IOD::Clear "void gdcm::IOD::Clear() ";
 
 %feature("docstring")  gdcm::IOD::GetIODEntry "const IODEntry&
-gdcm::IOD::GetIODEntry(SizeType idx) const ";
+gdcm::IOD::GetIODEntry(unsigned int idx) const ";
 
-%feature("docstring")  gdcm::IOD::GetNumberOfIODs "SizeType
+%feature("docstring")  gdcm::IOD::GetNumberOfIODs "unsigned int
 gdcm::IOD::GetNumberOfIODs() const ";
 
 %feature("docstring")  gdcm::IOD::GetTypeFromTag "Type
@@ -5439,8 +4152,6 @@ C++ includes: gdcmIPPSorter.h ";
 
 %feature("docstring")  gdcm::IPPSorter::~IPPSorter "gdcm::IPPSorter::~IPPSorter() ";
 
-%feature("docstring")  gdcm::IPPSorter::GetDirectionCosinesTolerance "double gdcm::IPPSorter::GetDirectionCosinesTolerance() const ";
-
 %feature("docstring")  gdcm::IPPSorter::GetZSpacing "double
 gdcm::IPPSorter::GetZSpacing() const
 
@@ -5465,18 +4176,6 @@ the Image Position ( Patient) Potential reason for failure: 1. ALL
 slices are taken into account, if one slice if missing then ZSpacing
 will be set to 0 since the spacing will not be found to be regular
 along the Series ";
-
-%feature("docstring")  gdcm::IPPSorter::SetDirectionCosinesTolerance "void gdcm::IPPSorter::SetDirectionCosinesTolerance(double tol)
-
-Sometimes IOP along a series is slightly changing for example:
-\"0.999081\\\\\\\\0.0426953\\\\\\\\0.00369272\\\\\\\\-0.0419025\\\\\\\\0.955059\\\\\\\\0.293439\",
-\"0.999081\\\\\\\\0.0426953\\\\\\\\0.00369275\\\\\\\\-0.0419025\\\\\\\\0.955059\\\\\\\\0.293439\",
-\"0.999081\\\\\\\\0.0426952\\\\\\\\0.00369272\\\\\\\\-0.0419025\\\\\\\\0.955059\\\\\\\\0.293439\",
-We need an API to define the tolerance which is allowed. Internally
-the cross vector of each direction cosines is computed. The tolerance
-then define the the distance in between 1. to the dot product of those
-cross vectors. In a perfect world this dot product is of course 1.0
-which imply a DirectionCosines tolerance of exactly 0.0 (default). ";
 
 %feature("docstring")  gdcm::IPPSorter::SetZSpacingTolerance "void
 gdcm::IPPSorter::SetZSpacingTolerance(double tol)
@@ -5584,6 +4283,12 @@ STL iterator class. ";
 STL iterator class. ";
 
 
+// File: classstd_1_1multiset_1_1iterator.xml
+%feature("docstring") std::multiset::iterator "
+
+STL iterator class. ";
+
+
 // File: classstd_1_1deque_1_1iterator.xml
 %feature("docstring") std::deque::iterator "
 
@@ -5602,20 +4307,14 @@ STL iterator class. ";
 STL iterator class. ";
 
 
-// File: classstd_1_1multimap_1_1iterator.xml
-%feature("docstring") std::multimap::iterator "
-
-STL iterator class. ";
-
-
 // File: classstd_1_1set_1_1iterator.xml
 %feature("docstring") std::set::iterator "
 
 STL iterator class. ";
 
 
-// File: classstd_1_1multiset_1_1iterator.xml
-%feature("docstring") std::multiset::iterator "
+// File: classstd_1_1multimap_1_1iterator.xml
+%feature("docstring") std::multimap::iterator "
 
 STL iterator class. ";
 
@@ -5854,11 +4553,6 @@ it). ";
 
 %feature("docstring")  gdcm::JPEGLSCodec::Code "bool
 gdcm::JPEGLSCodec::Code(DataElement const &in, DataElement &out) ";
-
-%feature("docstring")  gdcm::JPEGLSCodec::Decode "bool
-gdcm::JPEGLSCodec::Decode(DataElement const &in, char *outBuffer,
-uint32_t inBufferLength, uint32_t inXMin, uint32_t inXMax, uint32_t
-inYMin, uint32_t inYMax, uint32_t inZMin, uint32_t inZMax) ";
 
 %feature("docstring")  gdcm::JPEGLSCodec::Decode "bool
 gdcm::JPEGLSCodec::Decode(DataElement const &is, DataElement &os)
@@ -6143,41 +4837,6 @@ gdcm::Macros::IsEmpty() const ";
 STL class. ";
 
 
-// File: classgdcm_1_1network_1_1MaximumLengthSub.xml
-%feature("docstring") gdcm::network::MaximumLengthSub "
-
-MaximumLengthSub Annex D Table D.1-1 MAXIMUM LENGTH SUB-ITEM FIELDS (A
--ASSOCIATE-RQ).
-
-or
-
-Table D.1-2 Maximum length sub-item fields (A-ASSOCIATE-AC)
-
-C++ includes: gdcmMaximumLengthSub.h ";
-
-%feature("docstring")
-gdcm::network::MaximumLengthSub::MaximumLengthSub "gdcm::network::MaximumLengthSub::MaximumLengthSub() ";
-
-%feature("docstring")
-gdcm::network::MaximumLengthSub::GetMaximumLength "uint32_t
-gdcm::network::MaximumLengthSub::GetMaximumLength() const ";
-
-%feature("docstring")  gdcm::network::MaximumLengthSub::Read "std::istream& gdcm::network::MaximumLengthSub::Read(std::istream &is)
-";
-
-%feature("docstring")
-gdcm::network::MaximumLengthSub::SetMaximumLength "void
-gdcm::network::MaximumLengthSub::SetMaximumLength(uint32_t
-maximumlength) ";
-
-%feature("docstring")  gdcm::network::MaximumLengthSub::Size "size_t
-gdcm::network::MaximumLengthSub::Size() const ";
-
-%feature("docstring")  gdcm::network::MaximumLengthSub::Write "const
-std::ostream& gdcm::network::MaximumLengthSub::Write(std::ostream &os)
-const ";
-
-
 // File: classgdcm_1_1MD5.xml
 %feature("docstring") gdcm::MD5 "
 
@@ -6214,8 +4873,6 @@ C++ includes: gdcmMediaStorage.h ";
 
 %feature("docstring")  gdcm::MediaStorage::GetModality "const char*
 gdcm::MediaStorage::GetModality() const ";
-
-%feature("docstring")  gdcm::MediaStorage::GetModalityDimension "unsigned int gdcm::MediaStorage::GetModalityDimension() const ";
 
 %feature("docstring")  gdcm::MediaStorage::GetString "const char*
 gdcm::MediaStorage::GetString() const
@@ -6281,62 +4938,6 @@ function along with the object that it will be invoked on. ";
 %feature("docstring")  gdcm::MemberCommand::SetCallbackFunction "void
 gdcm::MemberCommand< T >::SetCallbackFunction(T *object,
 TConstMemberFunctionPointer memberFunction) ";
-
-
-// File: classgdcm_1_1MeshPrimitive.xml
-%feature("docstring") gdcm::MeshPrimitive "
-
-This class defines surface mesh primitives. It is designed from
-surface mesh primitives macro.
-
-See:  PS 3.3 C.27.4
-
-C++ includes: gdcmMeshPrimitive.h ";
-
-%feature("docstring")  gdcm::MeshPrimitive::MeshPrimitive "gdcm::MeshPrimitive::MeshPrimitive() ";
-
-%feature("docstring")  gdcm::MeshPrimitive::~MeshPrimitive "virtual
-gdcm::MeshPrimitive::~MeshPrimitive() ";
-
-%feature("docstring")  gdcm::MeshPrimitive::AddPrimitiveData "void
-gdcm::MeshPrimitive::AddPrimitiveData(DataElement const &de) ";
-
-%feature("docstring")  gdcm::MeshPrimitive::GetNumberOfPrimitivesData
-"unsigned int gdcm::MeshPrimitive::GetNumberOfPrimitivesData() const
-";
-
-%feature("docstring")  gdcm::MeshPrimitive::GetPrimitiveData "DataElement& gdcm::MeshPrimitive::GetPrimitiveData() ";
-
-%feature("docstring")  gdcm::MeshPrimitive::GetPrimitiveData "const
-DataElement& gdcm::MeshPrimitive::GetPrimitiveData() const ";
-
-%feature("docstring")  gdcm::MeshPrimitive::GetPrimitiveData "const
-DataElement& gdcm::MeshPrimitive::GetPrimitiveData(const unsigned int
-idx) const ";
-
-%feature("docstring")  gdcm::MeshPrimitive::GetPrimitiveData "DataElement& gdcm::MeshPrimitive::GetPrimitiveData(const unsigned int
-idx) ";
-
-%feature("docstring")  gdcm::MeshPrimitive::GetPrimitivesData "const
-PrimitivesData& gdcm::MeshPrimitive::GetPrimitivesData() const ";
-
-%feature("docstring")  gdcm::MeshPrimitive::GetPrimitivesData "PrimitivesData& gdcm::MeshPrimitive::GetPrimitivesData() ";
-
-%feature("docstring")  gdcm::MeshPrimitive::GetPrimitiveType "MPType
-gdcm::MeshPrimitive::GetPrimitiveType() const ";
-
-%feature("docstring")  gdcm::MeshPrimitive::SetPrimitiveData "void
-gdcm::MeshPrimitive::SetPrimitiveData(const unsigned int idx,
-DataElement const &de) ";
-
-%feature("docstring")  gdcm::MeshPrimitive::SetPrimitiveData "void
-gdcm::MeshPrimitive::SetPrimitiveData(DataElement const &de) ";
-
-%feature("docstring")  gdcm::MeshPrimitive::SetPrimitivesData "void
-gdcm::MeshPrimitive::SetPrimitivesData(PrimitivesData const &DEs) ";
-
-%feature("docstring")  gdcm::MeshPrimitive::SetPrimitiveType "void
-gdcm::MeshPrimitive::SetPrimitiveType(const MPType type) ";
 
 
 // File: classgdcm_1_1ModifiedEvent.xml
@@ -6455,101 +5056,6 @@ gdcm::Modules::GetModule(const char *name) const ";
 gdcm::Modules::IsEmpty() const ";
 
 
-// File: classgdcm_1_1MovePatientRootQuery.xml
-%feature("docstring") gdcm::MovePatientRootQuery "
-
-MovePatientRootQuery contains: the class which will produce a dataset
-for c-move with patient root.
-
-C++ includes: gdcmMovePatientRootQuery.h ";
-
-%feature("docstring")
-gdcm::MovePatientRootQuery::MovePatientRootQuery "gdcm::MovePatientRootQuery::MovePatientRootQuery() ";
-
-%feature("docstring")
-gdcm::MovePatientRootQuery::GetAbstractSyntaxUID "UIDs::TSName
-gdcm::MovePatientRootQuery::GetAbstractSyntaxUID() const ";
-
-%feature("docstring")  gdcm::MovePatientRootQuery::GetTagListByLevel "std::vector<Tag> gdcm::MovePatientRootQuery::GetTagListByLevel(const
-EQueryLevel &inQueryLevel)
-
-this function will return all tags at a given query level, so that
-they maybe selected for searching. The boolean forFind is true if the
-query is a find query, or false for a move query. ";
-
-%feature("docstring")  gdcm::MovePatientRootQuery::InitializeDataSet "void gdcm::MovePatientRootQuery::InitializeDataSet(const EQueryLevel
-&inQueryLevel)
-
-this function sets tag 8,52 to the appropriate value based on query
-level also fills in the right unique tags, as per the standard's
-requirements should allow for connection with dcmtk ";
-
-%feature("docstring")  gdcm::MovePatientRootQuery::ValidateQuery "bool gdcm::MovePatientRootQuery::ValidateQuery(bool inStrict=true)
-const
-
-have to be able to ensure that 0x8,0x52 is set (which will be true if
-InitializeDataSet is called...) that the level is appropriate (ie, not
-setting PATIENT for a study query that the tags in the query match the
-right level (either required, unique, optional) by default, this
-function checks to see if the query is for finding, which is more
-permissive than for moving. For moving, only the unique tags are
-allowed. 10 Jan 2011: adding in the 'strict' mode. according to the
-standard (at least, how I've read it), only tags for a particular
-level should be allowed in a particular query (ie, just series level
-tags in a series level query). However, it seems that dcm4chee doesn't
-share that interpretation. So, if 'inStrict' is false, then tags from
-the current level and all higher levels are now considered valid. So,
-if you're doing a non-strict series-level query, tags from the patient
-and study level can be passed along as well. ";
-
-
-// File: classgdcm_1_1MoveStudyRootQuery.xml
-%feature("docstring") gdcm::MoveStudyRootQuery "
-
-MoveStudyRootQuery contains: the class which will produce a dataset
-for C-MOVE with study root.
-
-C++ includes: gdcmMoveStudyRootQuery.h ";
-
-%feature("docstring")  gdcm::MoveStudyRootQuery::MoveStudyRootQuery "gdcm::MoveStudyRootQuery::MoveStudyRootQuery() ";
-
-%feature("docstring")  gdcm::MoveStudyRootQuery::GetAbstractSyntaxUID
-"UIDs::TSName gdcm::MoveStudyRootQuery::GetAbstractSyntaxUID() const
-";
-
-%feature("docstring")  gdcm::MoveStudyRootQuery::GetTagListByLevel "std::vector<Tag> gdcm::MoveStudyRootQuery::GetTagListByLevel(const
-EQueryLevel &inQueryLevel)
-
-this function will return all tags at a given query level, so that
-they maybe selected for searching. The boolean forFind is true if the
-query is a find query, or false for a move query. ";
-
-%feature("docstring")  gdcm::MoveStudyRootQuery::InitializeDataSet "void gdcm::MoveStudyRootQuery::InitializeDataSet(const EQueryLevel
-&inQueryLevel)
-
-this function sets tag 8,52 to the appropriate value based on query
-level also fills in the right unique tags, as per the standard's
-requirements should allow for connection with dcmtk ";
-
-%feature("docstring")  gdcm::MoveStudyRootQuery::ValidateQuery "bool
-gdcm::MoveStudyRootQuery::ValidateQuery(bool inStrict=true) const
-
-have to be able to ensure that 0x8,0x52 is set (which will be true if
-InitializeDataSet is called...) that the level is appropriate (ie, not
-setting PATIENT for a study query that the tags in the query match the
-right level (either required, unique, optional) by default, this
-function checks to see if the query is for finding, which is more
-permissive than for moving. For moving, only the unique tags are
-allowed. 10 Jan 2011: adding in the 'strict' mode. according to the
-standard (at least, how I've read it), only tags for a particular
-level should be allowed in a particular query (ie, just series level
-tags in a series level query). However, it seems that dcm4chee doesn't
-share that interpretation. So, if 'inStrict' is false, then tags from
-the current level and all higher levels are now considered valid. So,
-if you're doing a non-strict series-level query, tags from the patient
-and study level can be passed along as well. ";
-
-
 // File: classstd_1_1multimap.xml
 %feature("docstring") std::multimap "
 
@@ -6580,14 +5086,14 @@ C++ includes: gdcmNestedModuleEntries.h ";
 %feature("docstring")  gdcm::NestedModuleEntries::AddModuleEntry "void gdcm::NestedModuleEntries::AddModuleEntry(const ModuleEntry &me)
 ";
 
-%feature("docstring")  gdcm::NestedModuleEntries::GetModuleEntry "ModuleEntry& gdcm::NestedModuleEntries::GetModuleEntry(SizeType idx)
-";
+%feature("docstring")  gdcm::NestedModuleEntries::GetModuleEntry "ModuleEntry& gdcm::NestedModuleEntries::GetModuleEntry(unsigned int
+idx) ";
 
-%feature("docstring")  gdcm::NestedModuleEntries::GetModuleEntry "const ModuleEntry& gdcm::NestedModuleEntries::GetModuleEntry(SizeType
-idx) const ";
+%feature("docstring")  gdcm::NestedModuleEntries::GetModuleEntry "const ModuleEntry& gdcm::NestedModuleEntries::GetModuleEntry(unsigned
+int idx) const ";
 
 %feature("docstring")
-gdcm::NestedModuleEntries::GetNumberOfModuleEntries "SizeType
+gdcm::NestedModuleEntries::GetNumberOfModuleEntries "unsigned int
 gdcm::NestedModuleEntries::GetNumberOfModuleEntries() ";
 
 
@@ -6629,13 +5135,6 @@ gdcm::Object::Print(std::ostream &) const ";
 %feature("docstring") std::ofstream "
 
 STL class. ";
-
-
-// File: structgdcm_1_1OneShotReadBuf.xml
-%feature("docstring") gdcm::OneShotReadBuf "C++ includes:
-gdcmStreamImageReader.h ";
-
-%feature("docstring")  gdcm::OneShotReadBuf::OneShotReadBuf "gdcm::OneShotReadBuf::OneShotReadBuf(void *s, std::size_t n) ";
 
 
 // File: classgdcm_1_1Orientation.xml
@@ -6902,46 +5401,6 @@ C++ includes: gdcmPatient.h ";
 %feature("docstring")  gdcm::Patient::Patient "gdcm::Patient::Patient() ";
 
 
-// File: classgdcm_1_1network_1_1PDataTFPDU.xml
-%feature("docstring") gdcm::network::PDataTFPDU "
-
-PDataTFPDU Table 9-22 P-DATA-TF PDU FIELDS.
-
-C++ includes: gdcmPDataTFPDU.h ";
-
-%feature("docstring")  gdcm::network::PDataTFPDU::PDataTFPDU "gdcm::network::PDataTFPDU::PDataTFPDU() ";
-
-%feature("docstring")
-gdcm::network::PDataTFPDU::AddPresentationDataValue "void
-gdcm::network::PDataTFPDU::AddPresentationDataValue(PresentationDataValue
-const &pdv) ";
-
-%feature("docstring")
-gdcm::network::PDataTFPDU::GetNumberOfPresentationDataValues "SizeType
-gdcm::network::PDataTFPDU::GetNumberOfPresentationDataValues() const
-";
-
-%feature("docstring")
-gdcm::network::PDataTFPDU::GetPresentationDataValue "PresentationDataValue const&
-gdcm::network::PDataTFPDU::GetPresentationDataValue(SizeType i) const
-";
-
-%feature("docstring")  gdcm::network::PDataTFPDU::IsLastFragment "bool gdcm::network::PDataTFPDU::IsLastFragment() const ";
-
-%feature("docstring")  gdcm::network::PDataTFPDU::Print "void
-gdcm::network::PDataTFPDU::Print(std::ostream &os) const ";
-
-%feature("docstring")  gdcm::network::PDataTFPDU::Read "std::istream&
-gdcm::network::PDataTFPDU::Read(std::istream &is) ";
-
-%feature("docstring")  gdcm::network::PDataTFPDU::Size "size_t
-gdcm::network::PDataTFPDU::Size() const ";
-
-%feature("docstring")  gdcm::network::PDataTFPDU::Write "const
-std::ostream& gdcm::network::PDataTFPDU::Write(std::ostream &os) const
-";
-
-
 // File: classgdcm_1_1PDBElement.xml
 %feature("docstring") gdcm::PDBElement "
 
@@ -7041,16 +5500,6 @@ gdcm::PDFCodec::Decode(DataElement const &is, DataElement &os)
 Decode. ";
 
 
-// File: classgdcm_1_1network_1_1PDUFactory.xml
-%feature("docstring") gdcm::network::PDUFactory "
-
-PDUFactory basically, given an initial byte, construct the appropriate
-PDU. This way, the event loop doesn't have to know about all the
-different PDU types.
-
-C++ includes: gdcmPDUFactory.h ";
-
-
 // File: classgdcm_1_1PersonName.xml
 %feature("docstring") gdcm::PersonName "
 
@@ -7097,8 +5546,6 @@ return the value for Sample Per Pixel associated with a particular
 Photometric Interpretation ";
 
 %feature("docstring")  gdcm::PhotometricInterpretation::GetString "const char* gdcm::PhotometricInterpretation::GetString() const ";
-
-%feature("docstring")  gdcm::PhotometricInterpretation::GetType "PIType gdcm::PhotometricInterpretation::GetType() const ";
 
 %feature("docstring")  gdcm::PhotometricInterpretation::IsLossless "bool gdcm::PhotometricInterpretation::IsLossless() const ";
 
@@ -7252,42 +5699,36 @@ Curve: group 50xx. ";
 %feature("docstring")  gdcm::Pixmap::GetCurve "const Curve&
 gdcm::Pixmap::GetCurve(unsigned int i=0) const ";
 
-%feature("docstring")  gdcm::Pixmap::GetIconImage "IconImage&
-gdcm::Pixmap::GetIconImage() ";
-
 %feature("docstring")  gdcm::Pixmap::GetIconImage "const IconImage&
 gdcm::Pixmap::GetIconImage() const
 
 Set/Get Icon Image. ";
 
-%feature("docstring")  gdcm::Pixmap::GetNumberOfCurves "size_t
+%feature("docstring")  gdcm::Pixmap::GetIconImage "IconImage&
+gdcm::Pixmap::GetIconImage() ";
+
+%feature("docstring")  gdcm::Pixmap::GetNumberOfCurves "unsigned int
 gdcm::Pixmap::GetNumberOfCurves() const ";
 
-%feature("docstring")  gdcm::Pixmap::GetNumberOfOverlays "size_t
-gdcm::Pixmap::GetNumberOfOverlays() const ";
+%feature("docstring")  gdcm::Pixmap::GetNumberOfOverlays "unsigned
+int gdcm::Pixmap::GetNumberOfOverlays() const ";
 
 %feature("docstring")  gdcm::Pixmap::GetOverlay "Overlay&
-gdcm::Pixmap::GetOverlay(size_t i=0)
+gdcm::Pixmap::GetOverlay(unsigned int i=0)
 
 Overlay: group 60xx. ";
 
 %feature("docstring")  gdcm::Pixmap::GetOverlay "const Overlay&
-gdcm::Pixmap::GetOverlay(size_t i=0) const ";
+gdcm::Pixmap::GetOverlay(unsigned int i=0) const ";
 
 %feature("docstring")  gdcm::Pixmap::Print "void
 gdcm::Pixmap::Print(std::ostream &) const ";
 
-%feature("docstring")  gdcm::Pixmap::RemoveOverlay "void
-gdcm::Pixmap::RemoveOverlay(size_t i) ";
-
-%feature("docstring")  gdcm::Pixmap::SetIconImage "void
-gdcm::Pixmap::SetIconImage(IconImage const &ii) ";
-
 %feature("docstring")  gdcm::Pixmap::SetNumberOfCurves "void
-gdcm::Pixmap::SetNumberOfCurves(size_t n) ";
+gdcm::Pixmap::SetNumberOfCurves(unsigned int n) ";
 
 %feature("docstring")  gdcm::Pixmap::SetNumberOfOverlays "void
-gdcm::Pixmap::SetNumberOfOverlays(size_t n) ";
+gdcm::Pixmap::SetNumberOfOverlays(unsigned int n) ";
 
 
 // File: classgdcm_1_1PixmapReader.xml
@@ -7301,26 +5742,23 @@ overlay when found as they impact the rendering or the image  See PS
 3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES for the list of
 attribute that belong to what gdcm calls a 'Pixmap'
 
-WARNING:  the API ReadUpToTag and ReadSelectedTag
-
 See:   Pixmap
 
 C++ includes: gdcmPixmapReader.h ";
 
 %feature("docstring")  gdcm::PixmapReader::PixmapReader "gdcm::PixmapReader::PixmapReader() ";
 
-%feature("docstring")  gdcm::PixmapReader::~PixmapReader "virtual
-gdcm::PixmapReader::~PixmapReader() ";
+%feature("docstring")  gdcm::PixmapReader::~PixmapReader "gdcm::PixmapReader::~PixmapReader() ";
 
 %feature("docstring")  gdcm::PixmapReader::GetPixmap "const Pixmap&
 gdcm::PixmapReader::GetPixmap() const
 
-Return the read image (need to call Read() first). ";
+Return the read image. ";
 
 %feature("docstring")  gdcm::PixmapReader::GetPixmap "Pixmap&
 gdcm::PixmapReader::GetPixmap() ";
 
-%feature("docstring")  gdcm::PixmapReader::Read "virtual bool
+%feature("docstring")  gdcm::PixmapReader::Read "bool
 gdcm::PixmapReader::Read()
 
 Read the DICOM image. There are two reason for failure: 1. The input
@@ -7342,13 +5780,15 @@ gdcm::PixmapToPixmapFilter::PixmapToPixmapFilter "gdcm::PixmapToPixmapFilter::Pi
 %feature("docstring")
 gdcm::PixmapToPixmapFilter::~PixmapToPixmapFilter "gdcm::PixmapToPixmapFilter::~PixmapToPixmapFilter() ";
 
-%feature("docstring")  gdcm::PixmapToPixmapFilter::GetInput "Pixmap&
-gdcm::PixmapToPixmapFilter::GetInput() ";
-
 %feature("docstring")  gdcm::PixmapToPixmapFilter::GetOutput "const
 Pixmap& gdcm::PixmapToPixmapFilter::GetOutput() const
 
 Get Output image. ";
+
+%feature("docstring")  gdcm::PixmapToPixmapFilter::SetInput "void
+gdcm::PixmapToPixmapFilter::SetInput(const Pixmap &image)
+
+Set input image. ";
 
 
 // File: classgdcm_1_1PixmapWriter.xml
@@ -7479,327 +5919,6 @@ gdcm::Preamble::Valid() ";
 gdcm::Preamble::Write(std::ostream &os) const ";
 
 
-// File: classgdcm_1_1PresentationContext.xml
-%feature("docstring") gdcm::PresentationContext "
-
-PresentationContext.
-
-See:  PresentationContextAC PresentationContextRQ
-
-C++ includes: gdcmPresentationContext.h ";
-
-%feature("docstring")  gdcm::PresentationContext::PresentationContext
-"gdcm::PresentationContext::PresentationContext() ";
-
-%feature("docstring")  gdcm::PresentationContext::PresentationContext
-"gdcm::PresentationContext::PresentationContext(UIDs::TSName asname,
-UIDs::TSName
-tsname=UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM)
-
-Initialize Presentation Context with AbstractSyntax set to asname and
-with a single TransferSyntax set to tsname (dfault to Implicit VR
-LittleEndian when not specified ). ";
-
-%feature("docstring")  gdcm::PresentationContext::AddTransferSyntax "void gdcm::PresentationContext::AddTransferSyntax(const char *tsstr)
-";
-
-%feature("docstring")  gdcm::PresentationContext::GetAbstractSyntax "const char* gdcm::PresentationContext::GetAbstractSyntax() const ";
-
-%feature("docstring")
-gdcm::PresentationContext::GetNumberOfTransferSyntaxes "SizeType
-gdcm::PresentationContext::GetNumberOfTransferSyntaxes() const ";
-
-%feature("docstring")
-gdcm::PresentationContext::GetPresentationContextID "uint8_t
-gdcm::PresentationContext::GetPresentationContextID() const ";
-
-%feature("docstring")  gdcm::PresentationContext::GetTransferSyntax "const char* gdcm::PresentationContext::GetTransferSyntax(SizeType i)
-const ";
-
-%feature("docstring")  gdcm::PresentationContext::Print "void
-gdcm::PresentationContext::Print(std::ostream &os) const ";
-
-%feature("docstring")  gdcm::PresentationContext::SetAbstractSyntax "void gdcm::PresentationContext::SetAbstractSyntax(const char *as) ";
-
-%feature("docstring")
-gdcm::PresentationContext::SetPresentationContextID "void
-gdcm::PresentationContext::SetPresentationContextID(uint8_t id) ";
-
-
-// File: classgdcm_1_1network_1_1PresentationContextAC.xml
-%feature("docstring") gdcm::network::PresentationContextAC "
-
-PresentationContextAC Table 9-18 PRESENTATION CONTEXT ITEM FIELDS.
-
-See:   PresentationContext
-
-C++ includes: gdcmPresentationContextAC.h ";
-
-%feature("docstring")
-gdcm::network::PresentationContextAC::PresentationContextAC "gdcm::network::PresentationContextAC::PresentationContextAC() ";
-
-%feature("docstring")
-gdcm::network::PresentationContextAC::GetPresentationContextID "uint8_t
-gdcm::network::PresentationContextAC::GetPresentationContextID() const
-";
-
-%feature("docstring")
-gdcm::network::PresentationContextAC::GetTransferSyntax "TransferSyntaxSub const&
-gdcm::network::PresentationContextAC::GetTransferSyntax() const ";
-
-%feature("docstring")  gdcm::network::PresentationContextAC::Print "void gdcm::network::PresentationContextAC::Print(std::ostream &os)
-const ";
-
-%feature("docstring")  gdcm::network::PresentationContextAC::Read "std::istream& gdcm::network::PresentationContextAC::Read(std::istream
-&is) ";
-
-%feature("docstring")
-gdcm::network::PresentationContextAC::SetPresentationContextID "void
-gdcm::network::PresentationContextAC::SetPresentationContextID(uint8_t
-id) ";
-
-%feature("docstring")
-gdcm::network::PresentationContextAC::SetTransferSyntax "void
-gdcm::network::PresentationContextAC::SetTransferSyntax(TransferSyntaxSub
-const &ts) ";
-
-%feature("docstring")  gdcm::network::PresentationContextAC::Size "size_t gdcm::network::PresentationContextAC::Size() const ";
-
-%feature("docstring")  gdcm::network::PresentationContextAC::Write "const std::ostream&
-gdcm::network::PresentationContextAC::Write(std::ostream &os) const ";
-
-
-// File: classgdcm_1_1PresentationContextGenerator.xml
-%feature("docstring") gdcm::PresentationContextGenerator "
-
-PresentationContextGenerator This class is responsible for generating
-the proper PresentationContext that will be used in subsequent
-operation during a DICOM Query/Retrieve association. The step of the
-association is very sensible as special care need to be taken to
-explicitly define what instance are going to be send and how they are
-encoded.
-
-For example a PresentationContext will express that negotiation
-requires that CT Image Storage are send using JPEG Lossless, while US
-Image Storage are sent using RLE Transfer Syntax.
-
-Two very different API are exposed one which will always default to
-little endian transfer syntax see GenerateFromUID() This API is used
-for C-ECHO, C-FIND and C-MOVE (SCU). Another API:
-GenerateFromFilenames() is used for C-STORE (SCU) as it will loop over
-all filenames argument to detect the actual encoding. and therefore
-find the proper encoding to be used.
-
-Two modes are available. The default mode
-(SetMergeModeToAbstractSyntax) append PresentationContext (one
-AbstractSyntax and one TransferSyntax), as long a they are different.
-Eg MR Image Storage/JPEG2000 and MR Image Storage/JPEGLossless would
-be considered different. the other mode SetMergeModeToTransferSyntax
-merge any new TransferSyntax to the already existing
-PresentationContext in order to re-use the same AbstractSyntax.
-
-See:   PresentationContext
-
-C++ includes: gdcmPresentationContextGenerator.h ";
-
-%feature("docstring")
-gdcm::PresentationContextGenerator::PresentationContextGenerator "gdcm::PresentationContextGenerator::PresentationContextGenerator() ";
-
-%feature("docstring")
-gdcm::PresentationContextGenerator::GenerateFromFilenames "bool
-gdcm::PresentationContextGenerator::GenerateFromFilenames(const
-Directory::FilenamesType &files)
-
-Generate the PresentationContext array from a File-Set. File specified
-needs to be valid DICOM files. Used for C-STORE operations ";
-
-%feature("docstring")
-gdcm::PresentationContextGenerator::GenerateFromUID "bool
-gdcm::PresentationContextGenerator::GenerateFromUID(UIDs::TSName
-asname)
-
-Generate the PresentationContext array from a UID (eg.
-VerificationSOPClass). ";
-
-%feature("docstring")
-gdcm::PresentationContextGenerator::GetPresentationContexts "PresentationContextArrayType const&
-gdcm::PresentationContextGenerator::GetPresentationContexts() ";
-
-%feature("docstring")
-gdcm::PresentationContextGenerator::SetDefaultTransferSyntax "void
-gdcm::PresentationContextGenerator::SetDefaultTransferSyntax(const
-TransferSyntax &ts)
-
-Not implemented for now. GDCM internally uses Implicit Little Endian.
-";
-
-%feature("docstring")
-gdcm::PresentationContextGenerator::SetMergeModeToAbstractSyntax "void
-gdcm::PresentationContextGenerator::SetMergeModeToAbstractSyntax() ";
-
-%feature("docstring")
-gdcm::PresentationContextGenerator::SetMergeModeToTransferSyntax "void
-gdcm::PresentationContextGenerator::SetMergeModeToTransferSyntax() ";
-
-
-// File: classgdcm_1_1network_1_1PresentationContextRQ.xml
-%feature("docstring") gdcm::network::PresentationContextRQ "
-
-PresentationContextRQ Table 9-13 PRESENTATION CONTEXT ITEM FIELDS.
-
-See:   PresentationContextAC
-
-C++ includes: gdcmPresentationContextRQ.h ";
-
-%feature("docstring")
-gdcm::network::PresentationContextRQ::PresentationContextRQ "gdcm::network::PresentationContextRQ::PresentationContextRQ() ";
-
-%feature("docstring")
-gdcm::network::PresentationContextRQ::PresentationContextRQ "gdcm::network::PresentationContextRQ::PresentationContextRQ(UIDs::TSName
-asname, UIDs::TSName
-tsname=UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM)
-
-Initialize Presentation Context with AbstractSyntax set to asname and
-with a single TransferSyntax set to tsname (dfault to Implicit VR
-LittleEndian when not specified ). ";
-
-%feature("docstring")
-gdcm::network::PresentationContextRQ::PresentationContextRQ "gdcm::network::PresentationContextRQ::PresentationContextRQ(const
-PresentationContext &pc) ";
-
-%feature("docstring")
-gdcm::network::PresentationContextRQ::AddTransferSyntax "void
-gdcm::network::PresentationContextRQ::AddTransferSyntax(TransferSyntaxSub
-const &ts) ";
-
-%feature("docstring")
-gdcm::network::PresentationContextRQ::GetAbstractSyntax "AbstractSyntax&
-gdcm::network::PresentationContextRQ::GetAbstractSyntax() ";
-
-%feature("docstring")
-gdcm::network::PresentationContextRQ::GetAbstractSyntax "AbstractSyntax const&
-gdcm::network::PresentationContextRQ::GetAbstractSyntax() const ";
-
-%feature("docstring")
-gdcm::network::PresentationContextRQ::GetNumberOfTransferSyntaxes "SizeType
-gdcm::network::PresentationContextRQ::GetNumberOfTransferSyntaxes()
-const ";
-
-%feature("docstring")
-gdcm::network::PresentationContextRQ::GetPresentationContextID "uint8_t
-gdcm::network::PresentationContextRQ::GetPresentationContextID() const
-";
-
-%feature("docstring")
-gdcm::network::PresentationContextRQ::GetTransferSyntax "TransferSyntaxSub const&
-gdcm::network::PresentationContextRQ::GetTransferSyntax(SizeType i)
-const ";
-
-%feature("docstring")
-gdcm::network::PresentationContextRQ::GetTransferSyntax "TransferSyntaxSub&
-gdcm::network::PresentationContextRQ::GetTransferSyntax(SizeType i) ";
-
-%feature("docstring")
-gdcm::network::PresentationContextRQ::GetTransferSyntaxes "std::vector<TransferSyntaxSub> const&
-gdcm::network::PresentationContextRQ::GetTransferSyntaxes() const ";
-
-%feature("docstring")  gdcm::network::PresentationContextRQ::Print "void gdcm::network::PresentationContextRQ::Print(std::ostream &os)
-const ";
-
-%feature("docstring")  gdcm::network::PresentationContextRQ::Read "std::istream& gdcm::network::PresentationContextRQ::Read(std::istream
-&is) ";
-
-%feature("docstring")
-gdcm::network::PresentationContextRQ::SetAbstractSyntax "void
-gdcm::network::PresentationContextRQ::SetAbstractSyntax(AbstractSyntax
-const &as) ";
-
-%feature("docstring")
-gdcm::network::PresentationContextRQ::SetPresentationContextID "void
-gdcm::network::PresentationContextRQ::SetPresentationContextID(uint8_t
-id) ";
-
-%feature("docstring")  gdcm::network::PresentationContextRQ::Size "size_t gdcm::network::PresentationContextRQ::Size() const ";
-
-%feature("docstring")  gdcm::network::PresentationContextRQ::Write "const std::ostream&
-gdcm::network::PresentationContextRQ::Write(std::ostream &os) const ";
-
-
-// File: classgdcm_1_1network_1_1PresentationDataValue.xml
-%feature("docstring") gdcm::network::PresentationDataValue "
-
-PresentationDataValue Table 9-23 PRESENTATION-DATA-VALUE ITEM FIELDS.
-
-C++ includes: gdcmPresentationDataValue.h ";
-
-%feature("docstring")
-gdcm::network::PresentationDataValue::PresentationDataValue "gdcm::network::PresentationDataValue::PresentationDataValue() ";
-
-%feature("docstring")  gdcm::network::PresentationDataValue::GetBlob "const std::string& gdcm::network::PresentationDataValue::GetBlob()
-const ";
-
-%feature("docstring")
-gdcm::network::PresentationDataValue::GetIsCommand "bool
-gdcm::network::PresentationDataValue::GetIsCommand() const ";
-
-%feature("docstring")
-gdcm::network::PresentationDataValue::GetIsLastFragment "bool
-gdcm::network::PresentationDataValue::GetIsLastFragment() const ";
-
-%feature("docstring")
-gdcm::network::PresentationDataValue::GetMessageHeader "uint8_t
-gdcm::network::PresentationDataValue::GetMessageHeader() const ";
-
-%feature("docstring")
-gdcm::network::PresentationDataValue::GetPresentationContextID "uint8_t
-gdcm::network::PresentationDataValue::GetPresentationContextID() const
-";
-
-%feature("docstring")  gdcm::network::PresentationDataValue::Print "void gdcm::network::PresentationDataValue::Print(std::ostream &os)
-const ";
-
-%feature("docstring")  gdcm::network::PresentationDataValue::Read "std::istream& gdcm::network::PresentationDataValue::Read(std::istream
-&is) ";
-
-%feature("docstring")  gdcm::network::PresentationDataValue::ReadInto
-"std::istream&
-gdcm::network::PresentationDataValue::ReadInto(std::istream &is,
-std::ostream &os) ";
-
-%feature("docstring")  gdcm::network::PresentationDataValue::SetBlob "void gdcm::network::PresentationDataValue::SetBlob(const std::string
-&partialblob) ";
-
-%feature("docstring")
-gdcm::network::PresentationDataValue::SetCommand "void
-gdcm::network::PresentationDataValue::SetCommand(bool inCommand) ";
-
-%feature("docstring")
-gdcm::network::PresentationDataValue::SetDataSet "void
-gdcm::network::PresentationDataValue::SetDataSet(const DataSet &ds)
-
-Set DataSet. Write DataSet in implicit. WARNING:  size of dataset
-should be below maxpdusize ";
-
-%feature("docstring")
-gdcm::network::PresentationDataValue::SetLastFragment "void
-gdcm::network::PresentationDataValue::SetLastFragment(bool inLast) ";
-
-%feature("docstring")
-gdcm::network::PresentationDataValue::SetMessageHeader "void
-gdcm::network::PresentationDataValue::SetMessageHeader(uint8_t
-messageheader) ";
-
-%feature("docstring")
-gdcm::network::PresentationDataValue::SetPresentationContextID "void
-gdcm::network::PresentationDataValue::SetPresentationContextID(uint8_t
-id) ";
-
-%feature("docstring")  gdcm::network::PresentationDataValue::Size "size_t gdcm::network::PresentationDataValue::Size() const ";
-
-%feature("docstring")  gdcm::network::PresentationDataValue::Write "const std::ostream&
-gdcm::network::PresentationDataValue::Write(std::ostream &os) const ";
-
-
 // File: classgdcm_1_1Printer.xml
 %feature("docstring") gdcm::Printer "
 
@@ -7812,35 +5931,19 @@ C++ includes: gdcmPrinter.h ";
 %feature("docstring")  gdcm::Printer::~Printer "gdcm::Printer::~Printer() ";
 
 %feature("docstring")  gdcm::Printer::GetPrintStyle "PrintStyles
-gdcm::Printer::GetPrintStyle() const
-
-Get PrintStyle value. ";
+gdcm::Printer::GetPrintStyle() const ";
 
 %feature("docstring")  gdcm::Printer::Print "void
-gdcm::Printer::Print(std::ostream &os)
-
-Print. ";
-
-%feature("docstring")  gdcm::Printer::PrintDataSet "void
-gdcm::Printer::PrintDataSet(const DataSet &ds, std::ostream &os, const
-std::string &s=\"\")
-
-Print an individual dataset. ";
+gdcm::Printer::Print(std::ostream &os) ";
 
 %feature("docstring")  gdcm::Printer::SetColor "void
-gdcm::Printer::SetColor(bool c)
-
-Set color mode or not. ";
+gdcm::Printer::SetColor(bool c) ";
 
 %feature("docstring")  gdcm::Printer::SetFile "void
-gdcm::Printer::SetFile(File const &f)
-
-Set file. ";
+gdcm::Printer::SetFile(File const &f) ";
 
 %feature("docstring")  gdcm::Printer::SetStyle "void
-gdcm::Printer::SetStyle(PrintStyles ps)
-
-Set PrintStyle value. ";
+gdcm::Printer::SetStyle(PrintStyles ps) ";
 
 
 // File: classstd_1_1priority__queue.xml
@@ -7864,9 +5967,6 @@ C++ includes: gdcmDict.h ";
 gdcm::PrivateDict::AddDictEntry(const PrivateTag &tag, const DictEntry
 &de) ";
 
-%feature("docstring")  gdcm::PrivateDict::FindDictEntry "bool
-gdcm::PrivateDict::FindDictEntry(const PrivateTag &tag) const ";
-
 %feature("docstring")  gdcm::PrivateDict::GetDictEntry "const
 DictEntry& gdcm::PrivateDict::GetDictEntry(const PrivateTag &tag)
 const ";
@@ -7876,12 +5976,6 @@ gdcm::PrivateDict::IsEmpty() const ";
 
 %feature("docstring")  gdcm::PrivateDict::PrintXML "void
 gdcm::PrivateDict::PrintXML() const ";
-
-%feature("docstring")  gdcm::PrivateDict::RemoveDictEntry "bool
-gdcm::PrivateDict::RemoveDictEntry(const PrivateTag &tag)
-
-Remove entry 'tag'. Return true on success (element was found and
-remove). return false if element was not found. ";
 
 
 // File: classgdcm_1_1PrivateTag.xml
@@ -8021,177 +6115,6 @@ gdcm::PythonFilter::ToPyObject(const Tag &t) const ";
 gdcm::PythonFilter::UseDictAlways(bool use) ";
 
 
-// File: classgdcm_1_1QueryBase.xml
-%feature("docstring") gdcm::QueryBase "
-
-QueryBase contains: the base class for constructing a query dataset
-for a C-FIND and a C-MOVE.
-
-There are four levels of C-FIND and C-MOVE query:  Patient
-
-Study
-
-Series
-
-Image  Each one has its own required and optional tags. This class
-provides an interface for getting those tags. This is an interface
-class.
-
-See 3.4 C 6.1 and 3.4 C 6.2 for the patient and study root query
-types. These sections define the tags allowed by a particular query.
-The caller must pass in which root type they want, patient or study. A
-third root type, Modality Worklist Query, isn't yet supported.
-
-This class (or rather it's derived classes) will be held in the
-RootQuery types. These query types actually make the dataset, and will
-use this dataset to list the required, unique, and optional tags for
-each type of query. This design is somewhat overly complicated, but is
-kept so that if we ever wanted to try to guess the query type from the
-given tags, we could do so.
-
-C++ includes: gdcmQueryBase.h ";
-
-%feature("docstring")  gdcm::QueryBase::~QueryBase "virtual
-gdcm::QueryBase::~QueryBase() ";
-
-%feature("docstring")  gdcm::QueryBase::GetAllTags "virtual
-std::vector<Tag> gdcm::QueryBase::GetAllTags(const ERootType
-&inRootType) const
-
-In order to validate a query dataset, just check for the presence of a
-tag, not it's requirement level in the spec ";
-
-%feature("docstring")  gdcm::QueryBase::GetName "virtual std::string
-gdcm::QueryBase::GetName() const =0 ";
-
-%feature("docstring")  gdcm::QueryBase::GetOptionalTags "virtual
-std::vector<Tag> gdcm::QueryBase::GetOptionalTags(const ERootType
-&inRootType) const =0 ";
-
-%feature("docstring")  gdcm::QueryBase::GetQueryLevel "virtual
-DataElement gdcm::QueryBase::GetQueryLevel() const =0 ";
-
-%feature("docstring")  gdcm::QueryBase::GetRequiredTags "virtual
-std::vector<Tag> gdcm::QueryBase::GetRequiredTags(const ERootType
-&inRootType) const =0 ";
-
-%feature("docstring")  gdcm::QueryBase::GetUniqueTags "virtual
-std::vector<Tag> gdcm::QueryBase::GetUniqueTags(const ERootType
-&inRootType) const =0 ";
-
-
-// File: classgdcm_1_1QueryFactory.xml
-%feature("docstring") gdcm::QueryFactory "
-
-QueryFactory.h.
-
-contains: a class to produce a query based off of user-entered
-information  Essentially, this class is used to construct a query
-based off of user input (typically from the command line; if in code
-directly, the query itself could just be instantiated)
-
-In theory, could also be used as the interface to validate incoming
-datasets as belonging to a particular query style
-
-C++ includes: gdcmQueryFactory.h ";
-
-
-// File: classgdcm_1_1QueryImage.xml
-%feature("docstring") gdcm::QueryImage "
-
-QueryImage contains: class to construct an image-based query for
-C-FIND and C-MOVE.
-
-C++ includes: gdcmQueryImage.h ";
-
-%feature("docstring")  gdcm::QueryImage::GetName "std::string
-gdcm::QueryImage::GetName() const ";
-
-%feature("docstring")  gdcm::QueryImage::GetOptionalTags "std::vector<Tag> gdcm::QueryImage::GetOptionalTags(const ERootType
-&inRootType) const ";
-
-%feature("docstring")  gdcm::QueryImage::GetQueryLevel "DataElement
-gdcm::QueryImage::GetQueryLevel() const ";
-
-%feature("docstring")  gdcm::QueryImage::GetRequiredTags "std::vector<Tag> gdcm::QueryImage::GetRequiredTags(const ERootType
-&inRootType) const ";
-
-%feature("docstring")  gdcm::QueryImage::GetUniqueTags "std::vector<Tag> gdcm::QueryImage::GetUniqueTags(const ERootType
-&inRootType) const ";
-
-
-// File: classgdcm_1_1QueryPatient.xml
-%feature("docstring") gdcm::QueryPatient "
-
-QueryPatient contains: class to construct a patient-based query for
-c-find and c-move.
-
-C++ includes: gdcmQueryPatient.h ";
-
-%feature("docstring")  gdcm::QueryPatient::GetName "std::string
-gdcm::QueryPatient::GetName() const ";
-
-%feature("docstring")  gdcm::QueryPatient::GetOptionalTags "std::vector<Tag> gdcm::QueryPatient::GetOptionalTags(const ERootType
-&inRootType) const ";
-
-%feature("docstring")  gdcm::QueryPatient::GetQueryLevel "DataElement
-gdcm::QueryPatient::GetQueryLevel() const ";
-
-%feature("docstring")  gdcm::QueryPatient::GetRequiredTags "std::vector<Tag> gdcm::QueryPatient::GetRequiredTags(const ERootType
-&inRootType) const ";
-
-%feature("docstring")  gdcm::QueryPatient::GetUniqueTags "std::vector<Tag> gdcm::QueryPatient::GetUniqueTags(const ERootType
-&inRootType) const ";
-
-
-// File: classgdcm_1_1QuerySeries.xml
-%feature("docstring") gdcm::QuerySeries "
-
-QuerySeries contains: class to construct a series-based query for
-c-find and c-move.
-
-C++ includes: gdcmQuerySeries.h ";
-
-%feature("docstring")  gdcm::QuerySeries::GetName "std::string
-gdcm::QuerySeries::GetName() const ";
-
-%feature("docstring")  gdcm::QuerySeries::GetOptionalTags "std::vector<Tag> gdcm::QuerySeries::GetOptionalTags(const ERootType
-&inRootType) const ";
-
-%feature("docstring")  gdcm::QuerySeries::GetQueryLevel "DataElement
-gdcm::QuerySeries::GetQueryLevel() const ";
-
-%feature("docstring")  gdcm::QuerySeries::GetRequiredTags "std::vector<Tag> gdcm::QuerySeries::GetRequiredTags(const ERootType
-&inRootType) const ";
-
-%feature("docstring")  gdcm::QuerySeries::GetUniqueTags "std::vector<Tag> gdcm::QuerySeries::GetUniqueTags(const ERootType
-&inRootType) const ";
-
-
-// File: classgdcm_1_1QueryStudy.xml
-%feature("docstring") gdcm::QueryStudy "
-
-QueryStudy.h contains: class to construct a study-based query for
-C-FIND and C-MOVE.
-
-C++ includes: gdcmQueryStudy.h ";
-
-%feature("docstring")  gdcm::QueryStudy::GetName "std::string
-gdcm::QueryStudy::GetName() const ";
-
-%feature("docstring")  gdcm::QueryStudy::GetOptionalTags "std::vector<Tag> gdcm::QueryStudy::GetOptionalTags(const ERootType
-&inRootType) const ";
-
-%feature("docstring")  gdcm::QueryStudy::GetQueryLevel "DataElement
-gdcm::QueryStudy::GetQueryLevel() const ";
-
-%feature("docstring")  gdcm::QueryStudy::GetRequiredTags "std::vector<Tag> gdcm::QueryStudy::GetRequiredTags(const ERootType
-&inRootType) const ";
-
-%feature("docstring")  gdcm::QueryStudy::GetUniqueTags "std::vector<Tag> gdcm::QueryStudy::GetUniqueTags(const ERootType
-&inRootType) const ";
-
-
 // File: classstd_1_1queue.xml
 %feature("docstring") std::queue "
 
@@ -8231,13 +6154,6 @@ gdcm::RAWCodec::Code(DataElement const &in, DataElement &out) ";
 gdcm::RAWCodec::Decode(DataElement const &is, DataElement &os)
 
 Decode. ";
-
-%feature("docstring")  gdcm::RAWCodec::DecodeBytes "bool
-gdcm::RAWCodec::DecodeBytes(const char *inBytes, size_t
-inBufferLength, char *outBytes, size_t inOutBufferLength)
-
-Used by the ImageStreamReader-- converts a read in buffer into one
-with the proper encodings. ";
 
 %feature("docstring")  gdcm::RAWCodec::GetHeaderInfo "bool
 gdcm::RAWCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts) ";
@@ -8281,12 +6197,6 @@ C++ includes: gdcmReader.h ";
 %feature("docstring")  gdcm::Reader::~Reader "virtual
 gdcm::Reader::~Reader() ";
 
-%feature("docstring")  gdcm::Reader::CanRead "bool
-gdcm::Reader::CanRead() const
-
-Test whether this is a DICOM file WARNING:  need to call either
-SetFileName or SetStream first ";
-
 %feature("docstring")  gdcm::Reader::GetFile "const File&
 gdcm::Reader::GetFile() const
 
@@ -8309,16 +6219,9 @@ Will only read the specified selected tags. ";
 
 %feature("docstring")  gdcm::Reader::ReadUpToTag "bool
 gdcm::Reader::ReadUpToTag(const Tag &tag, std::set< Tag > const
-&skiptags=std::set< Tag >())
+&skiptags)
 
-Will read only up to Tag
-
-Parameters:
------------
-
-tag:  and skipping any tag specified in
-
-skiptags:  ";
+Will read only up to Tag 'tag'. ";
 
 %feature("docstring")  gdcm::Reader::SetFile "void
 gdcm::Reader::SetFile(File &file)
@@ -8326,7 +6229,7 @@ gdcm::Reader::SetFile(File &file)
 Set/Get File. ";
 
 %feature("docstring")  gdcm::Reader::SetFileName "void
-gdcm::Reader::SetFileName(const char *filename_native)
+gdcm::Reader::SetFileName(const char *filename)
 
 Set the filename to open. This will create a std::ifstream internally
 See SetStream if you are dealing with different std::istream object ";
@@ -8340,7 +6243,7 @@ Set the open-ed stream directly. ";
 // File: classgdcm_1_1Rescaler.xml
 %feature("docstring") gdcm::Rescaler "
 
-Rescale class This class is meant to apply the linear transform of
+Rescale class This class is meant to apply the linear tranform of
 Stored Pixel Value to Real World Value. This is mostly found in CT or
 PET dataset, where the value are stored using one type, but need to be
 converted to another scale using a linear transform. There are
@@ -8348,13 +6251,12 @@ basically two cases: In CT: the linear transform is generally integer
 based. E.g. the Stored Pixel Type is unsigned short 12bits, but to get
 Hounsfield unit, one need to apply the linear transform: \\\\[ RWV =
 1. * SV - 1024 \\\\] So the best scalar to store the Real World Value
-will be 16 bits signed type.
-
-In PET: the linear transform is generally floating point based. Since
-the dynamic range can be quite high, the Rescale Slope / Rescale
-Intercept can be changing throughout the Series. So it is important to
-read all linear transform and deduce the best Pixel Type only at the
-end (when all the images to be read have been parsed).
+will be 16 bits signed type. In PET: the linear transform is generally
+floating point based. Since the dynamic range can be quite high, the
+Rescale Slope / Rescale Intercept can be changing thoughout the
+Series. So it is important to read all linear transform and deduce the
+best Pixel Type only at the end (when all the images to be read have
+been parsed).
 
 WARNING:  Internally any time a floating point value is found either
 in the Rescale Slope or the Rescale Intercept it is assumed that the
@@ -8386,12 +6288,6 @@ transformation ";
 
 Compute the Pixel Format of the output data Used for inverse
 transformation ";
-
-%feature("docstring")  gdcm::Rescaler::GetIntercept "double
-gdcm::Rescaler::GetIntercept() const ";
-
-%feature("docstring")  gdcm::Rescaler::GetSlope "double
-gdcm::Rescaler::GetSlope() const ";
 
 %feature("docstring")  gdcm::Rescaler::InverseRescale "bool
 gdcm::Rescaler::InverseRescale(char *out, const char *in, size_t n)
@@ -8438,14 +6334,8 @@ gdcm::Rescaler::SetUseTargetPixelType(bool b)
 Override default behavior of Rescale. ";
 
 
-// File: classstd_1_1list_1_1reverse__iterator.xml
-%feature("docstring") std::list::reverse_iterator "
-
-STL iterator class. ";
-
-
-// File: classstd_1_1deque_1_1reverse__iterator.xml
-%feature("docstring") std::deque::reverse_iterator "
+// File: classstd_1_1multimap_1_1reverse__iterator.xml
+%feature("docstring") std::multimap::reverse_iterator "
 
 STL iterator class. ";
 
@@ -8456,20 +6346,20 @@ STL iterator class. ";
 STL iterator class. ";
 
 
+// File: classstd_1_1string_1_1reverse__iterator.xml
+%feature("docstring") std::string::reverse_iterator "
+
+STL iterator class. ";
+
+
 // File: classstd_1_1wstring_1_1reverse__iterator.xml
 %feature("docstring") std::wstring::reverse_iterator "
 
 STL iterator class. ";
 
 
-// File: classstd_1_1multiset_1_1reverse__iterator.xml
-%feature("docstring") std::multiset::reverse_iterator "
-
-STL iterator class. ";
-
-
-// File: classstd_1_1set_1_1reverse__iterator.xml
-%feature("docstring") std::set::reverse_iterator "
+// File: classstd_1_1deque_1_1reverse__iterator.xml
+%feature("docstring") std::deque::reverse_iterator "
 
 STL iterator class. ";
 
@@ -8480,20 +6370,26 @@ STL iterator class. ";
 STL iterator class. ";
 
 
-// File: classstd_1_1string_1_1reverse__iterator.xml
-%feature("docstring") std::string::reverse_iterator "
+// File: classstd_1_1set_1_1reverse__iterator.xml
+%feature("docstring") std::set::reverse_iterator "
+
+STL iterator class. ";
+
+
+// File: classstd_1_1multiset_1_1reverse__iterator.xml
+%feature("docstring") std::multiset::reverse_iterator "
+
+STL iterator class. ";
+
+
+// File: classstd_1_1list_1_1reverse__iterator.xml
+%feature("docstring") std::list::reverse_iterator "
 
 STL iterator class. ";
 
 
 // File: classstd_1_1map_1_1reverse__iterator.xml
 %feature("docstring") std::map::reverse_iterator "
-
-STL iterator class. ";
-
-
-// File: classstd_1_1multimap_1_1reverse__iterator.xml
-%feature("docstring") std::multimap::reverse_iterator "
 
 STL iterator class. ";
 
@@ -8612,13 +6508,6 @@ gdcm::Scanner::ClearTags() ";
 %feature("docstring")  gdcm::Scanner::End "ConstIterator
 gdcm::Scanner::End() const ";
 
-%feature("docstring")  gdcm::Scanner::GetAllFilenamesFromTagToValue "Directory::FilenamesType
-gdcm::Scanner::GetAllFilenamesFromTagToValue(Tag const &t, const char
-*valueref) const
-
-Will loop over all files and return a vector of std::strings of
-filenames where value match the reference value 'valueref' ";
-
 %feature("docstring")  gdcm::Scanner::GetFilenameFromTagToValue "const char* gdcm::Scanner::GetFilenameFromTagToValue(Tag const &t,
 const char *valueref) const
 
@@ -8649,13 +6538,6 @@ gdcm::Scanner::GetMappings() const
 Mappings are the mapping from a particular tag to the map, mapping
 filename to value: ";
 
-%feature("docstring")  gdcm::Scanner::GetOrderedValues "Directory::FilenamesType gdcm::Scanner::GetOrderedValues(Tag const &t)
-const
-
-Get all the values found (in a vector) associated with Tag 't' This
-function is identical to GetValues, but is accessible from the wrapped
-layer (python, C#, java) ";
-
 %feature("docstring")  gdcm::Scanner::GetValue "const char*
 gdcm::Scanner::GetValue(const char *filename, Tag const &t) const
 
@@ -8665,16 +6547,16 @@ should be done, prefer the GetMapping function, and then reuse the
 TagToValue hash table. WARNING:   Tag 't' should have been added via
 AddTag() prior to the Scan() call ! ";
 
-%feature("docstring")  gdcm::Scanner::GetValues "ValuesType const&
-gdcm::Scanner::GetValues() const
-
-Get all the values found (in lexicographic order). ";
-
 %feature("docstring")  gdcm::Scanner::GetValues "ValuesType
 gdcm::Scanner::GetValues(Tag const &t) const
 
 Get all the values found (in lexicographic order) associated with Tag
 't'. ";
+
+%feature("docstring")  gdcm::Scanner::GetValues "ValuesType const&
+gdcm::Scanner::GetValues() const
+
+Get all the values found (in lexicographic order). ";
 
 %feature("docstring")  gdcm::Scanner::IsKey "bool
 gdcm::Scanner::IsKey(const char *filename) const
@@ -8692,100 +6574,6 @@ Print result. ";
 gdcm::Scanner::Scan(Directory::FilenamesType const &filenames)
 
 Start the scan ! ";
-
-
-// File: classgdcm_1_1Segment.xml
-%feature("docstring") gdcm::Segment "
-
-This class defines a segment. It mainly contains attributes of group
-0x0062. In addition, it can be associated with surface.
-
-See:  PS 3.3 C.8.20.2 and C.8.23
-
-C++ includes: gdcmSegment.h ";
-
-%feature("docstring")  gdcm::Segment::Segment "gdcm::Segment::Segment() ";
-
-%feature("docstring")  gdcm::Segment::~Segment "virtual
-gdcm::Segment::~Segment() ";
-
-%feature("docstring")  gdcm::Segment::AddSurface "void
-gdcm::Segment::AddSurface(SmartPointer< Surface > surface) ";
-
-%feature("docstring")  gdcm::Segment::GetAnatomicRegion "SegmentHelper::BasicCodedEntry const&
-gdcm::Segment::GetAnatomicRegion() const ";
-
-%feature("docstring")  gdcm::Segment::GetAnatomicRegion "SegmentHelper::BasicCodedEntry& gdcm::Segment::GetAnatomicRegion() ";
-
-%feature("docstring")  gdcm::Segment::GetPropertyCategory "SegmentHelper::BasicCodedEntry& gdcm::Segment::GetPropertyCategory()
-";
-
-%feature("docstring")  gdcm::Segment::GetPropertyCategory "SegmentHelper::BasicCodedEntry const&
-gdcm::Segment::GetPropertyCategory() const ";
-
-%feature("docstring")  gdcm::Segment::GetPropertyType "SegmentHelper::BasicCodedEntry& gdcm::Segment::GetPropertyType() ";
-
-%feature("docstring")  gdcm::Segment::GetPropertyType "SegmentHelper::BasicCodedEntry const& gdcm::Segment::GetPropertyType()
-const ";
-
-%feature("docstring")  gdcm::Segment::GetSegmentAlgorithmName "const
-char* gdcm::Segment::GetSegmentAlgorithmName() const ";
-
-%feature("docstring")  gdcm::Segment::GetSegmentAlgorithmType "ALGOType gdcm::Segment::GetSegmentAlgorithmType() const ";
-
-%feature("docstring")  gdcm::Segment::GetSegmentDescription "const
-char* gdcm::Segment::GetSegmentDescription() const ";
-
-%feature("docstring")  gdcm::Segment::GetSegmentLabel "const char*
-gdcm::Segment::GetSegmentLabel() const ";
-
-%feature("docstring")  gdcm::Segment::GetSegmentNumber "unsigned
-short gdcm::Segment::GetSegmentNumber() const ";
-
-%feature("docstring")  gdcm::Segment::GetSurface "SmartPointer<
-Surface > gdcm::Segment::GetSurface(const unsigned int idx=0) const ";
-
-%feature("docstring")  gdcm::Segment::GetSurfaceCount "unsigned long
-gdcm::Segment::GetSurfaceCount() ";
-
-%feature("docstring")  gdcm::Segment::GetSurfaces "SurfaceVector&
-gdcm::Segment::GetSurfaces() ";
-
-%feature("docstring")  gdcm::Segment::GetSurfaces "SurfaceVector
-const& gdcm::Segment::GetSurfaces() const ";
-
-%feature("docstring")  gdcm::Segment::SetAnatomicRegion "void
-gdcm::Segment::SetAnatomicRegion(SegmentHelper::BasicCodedEntry const
-&BSE) ";
-
-%feature("docstring")  gdcm::Segment::SetPropertyCategory "void
-gdcm::Segment::SetPropertyCategory(SegmentHelper::BasicCodedEntry
-const &BSE) ";
-
-%feature("docstring")  gdcm::Segment::SetPropertyType "void
-gdcm::Segment::SetPropertyType(SegmentHelper::BasicCodedEntry const
-&BSE) ";
-
-%feature("docstring")  gdcm::Segment::SetSegmentAlgorithmName "void
-gdcm::Segment::SetSegmentAlgorithmName(const char *name) ";
-
-%feature("docstring")  gdcm::Segment::SetSegmentAlgorithmType "void
-gdcm::Segment::SetSegmentAlgorithmType(ALGOType type) ";
-
-%feature("docstring")  gdcm::Segment::SetSegmentAlgorithmType "void
-gdcm::Segment::SetSegmentAlgorithmType(const char *typeStr) ";
-
-%feature("docstring")  gdcm::Segment::SetSegmentDescription "void
-gdcm::Segment::SetSegmentDescription(const char *description) ";
-
-%feature("docstring")  gdcm::Segment::SetSegmentLabel "void
-gdcm::Segment::SetSegmentLabel(const char *label) ";
-
-%feature("docstring")  gdcm::Segment::SetSegmentNumber "void
-gdcm::Segment::SetSegmentNumber(const unsigned short num) ";
-
-%feature("docstring")  gdcm::Segment::SetSurfaceCount "void
-gdcm::Segment::SetSurfaceCount(const unsigned long nb) ";
 
 
 // File: classgdcm_1_1SegmentedPaletteColorLookupTable.xml
@@ -8815,73 +6603,6 @@ type, const unsigned char *array, unsigned int length)
 Initialize a SegmentedPaletteColorLookupTable. ";
 
 
-// File: classgdcm_1_1SegmentReader.xml
-%feature("docstring") gdcm::SegmentReader "
-
-This class defines a segment reader. It reads attributes of group
-0x0062.
-
-See:  PS 3.3 C.8.20.2 and C.8.23
-
-C++ includes: gdcmSegmentReader.h ";
-
-%feature("docstring")  gdcm::SegmentReader::SegmentReader "gdcm::SegmentReader::SegmentReader() ";
-
-%feature("docstring")  gdcm::SegmentReader::~SegmentReader "virtual
-gdcm::SegmentReader::~SegmentReader() ";
-
-%feature("docstring")  gdcm::SegmentReader::GetSegments "const
-SegmentVector gdcm::SegmentReader::GetSegments() const ";
-
-%feature("docstring")  gdcm::SegmentReader::GetSegments "SegmentVector gdcm::SegmentReader::GetSegments() ";
-
-%feature("docstring")  gdcm::SegmentReader::Read "virtual bool
-gdcm::SegmentReader::Read()
-
-Read. ";
-
-
-// File: classgdcm_1_1SegmentWriter.xml
-%feature("docstring") gdcm::SegmentWriter "
-
-This class defines a segment writer. It writes attributes of group
-0x0062.
-
-See:  PS 3.3 C.8.20.2 and C.8.23
-
-C++ includes: gdcmSegmentWriter.h ";
-
-%feature("docstring")  gdcm::SegmentWriter::SegmentWriter "gdcm::SegmentWriter::SegmentWriter() ";
-
-%feature("docstring")  gdcm::SegmentWriter::~SegmentWriter "virtual
-gdcm::SegmentWriter::~SegmentWriter() ";
-
-%feature("docstring")  gdcm::SegmentWriter::AddSegment "void
-gdcm::SegmentWriter::AddSegment(SmartPointer< Segment > segment) ";
-
-%feature("docstring")  gdcm::SegmentWriter::GetNumberOfSegments "unsigned int gdcm::SegmentWriter::GetNumberOfSegments() const ";
-
-%feature("docstring")  gdcm::SegmentWriter::GetSegment "SmartPointer<
-Segment > gdcm::SegmentWriter::GetSegment(const unsigned int idx=0)
-const ";
-
-%feature("docstring")  gdcm::SegmentWriter::GetSegments "SegmentVector& gdcm::SegmentWriter::GetSegments() ";
-
-%feature("docstring")  gdcm::SegmentWriter::GetSegments "const
-SegmentVector& gdcm::SegmentWriter::GetSegments() const ";
-
-%feature("docstring")  gdcm::SegmentWriter::SetNumberOfSegments "void
-gdcm::SegmentWriter::SetNumberOfSegments(const unsigned int size) ";
-
-%feature("docstring")  gdcm::SegmentWriter::SetSegments "void
-gdcm::SegmentWriter::SetSegments(SegmentVector &segments) ";
-
-%feature("docstring")  gdcm::SegmentWriter::Write "bool
-gdcm::SegmentWriter::Write()
-
-Write. ";
-
-
 // File: classgdcm_1_1SequenceOfFragments.xml
 %feature("docstring") gdcm::SequenceOfFragments "
 
@@ -8902,26 +6623,13 @@ gdcm::SequenceOfFragments::AddFragment(Fragment const &item)
 
 Appends a Fragment to the already added ones. ";
 
-%feature("docstring")  gdcm::SequenceOfFragments::Begin "Iterator
-gdcm::SequenceOfFragments::Begin() ";
-
-%feature("docstring")  gdcm::SequenceOfFragments::Begin "ConstIterator gdcm::SequenceOfFragments::Begin() const ";
-
 %feature("docstring")  gdcm::SequenceOfFragments::Clear "void
-gdcm::SequenceOfFragments::Clear()
-
-Clear. ";
+gdcm::SequenceOfFragments::Clear() ";
 
 %feature("docstring")  gdcm::SequenceOfFragments::ComputeByteLength "unsigned long gdcm::SequenceOfFragments::ComputeByteLength() const ";
 
 %feature("docstring")  gdcm::SequenceOfFragments::ComputeLength "VL
 gdcm::SequenceOfFragments::ComputeLength() const ";
-
-%feature("docstring")  gdcm::SequenceOfFragments::End "ConstIterator
-gdcm::SequenceOfFragments::End() const ";
-
-%feature("docstring")  gdcm::SequenceOfFragments::End "Iterator
-gdcm::SequenceOfFragments::End() ";
 
 %feature("docstring")  gdcm::SequenceOfFragments::GetBuffer "bool
 gdcm::SequenceOfFragments::GetBuffer(char *buffer, unsigned long
@@ -8932,8 +6640,8 @@ gdcm::SequenceOfFragments::GetFragBuffer(unsigned int fragNb, char
 *buffer, unsigned long &length) const ";
 
 %feature("docstring")  gdcm::SequenceOfFragments::GetFragment "const
-Fragment& gdcm::SequenceOfFragments::GetFragment(SizeType num) const
-";
+Fragment& gdcm::SequenceOfFragments::GetFragment(unsigned int num)
+const ";
 
 %feature("docstring")  gdcm::SequenceOfFragments::GetLength "VL
 gdcm::SequenceOfFragments::GetLength() const
@@ -8941,7 +6649,8 @@ gdcm::SequenceOfFragments::GetLength() const
 Returns the SQ length, as read from disk. ";
 
 %feature("docstring")  gdcm::SequenceOfFragments::GetNumberOfFragments
-"SizeType gdcm::SequenceOfFragments::GetNumberOfFragments() const ";
+"unsigned int gdcm::SequenceOfFragments::GetNumberOfFragments() const
+";
 
 %feature("docstring")  gdcm::SequenceOfFragments::GetTable "const
 BasicOffsetTable& gdcm::SequenceOfFragments::GetTable() const ";
@@ -9013,17 +6722,17 @@ gdcm::SequenceOfItems::End() ";
 gdcm::SequenceOfItems::FindDataElement(const Tag &t) const ";
 
 %feature("docstring")  gdcm::SequenceOfItems::GetItem "Item&
-gdcm::SequenceOfItems::GetItem(SizeType position) ";
+gdcm::SequenceOfItems::GetItem(unsigned int position) ";
 
 %feature("docstring")  gdcm::SequenceOfItems::GetItem "const Item&
-gdcm::SequenceOfItems::GetItem(SizeType position) const ";
+gdcm::SequenceOfItems::GetItem(unsigned int position) const ";
 
 %feature("docstring")  gdcm::SequenceOfItems::GetLength "VL
 gdcm::SequenceOfItems::GetLength() const
 
 Returns the SQ length, as read from disk. ";
 
-%feature("docstring")  gdcm::SequenceOfItems::GetNumberOfItems "SizeType gdcm::SequenceOfItems::GetNumberOfItems() const ";
+%feature("docstring")  gdcm::SequenceOfItems::GetNumberOfItems "unsigned int gdcm::SequenceOfItems::GetNumberOfItems() const ";
 
 %feature("docstring")  gdcm::SequenceOfItems::IsUndefinedLength "bool
 gdcm::SequenceOfItems::IsUndefinedLength() const
@@ -9041,12 +6750,10 @@ gdcm::SequenceOfItems::SetLength(VL length)
 
 Sets the actual SQ length. ";
 
-%feature("docstring")  gdcm::SequenceOfItems::SetLengthToUndefined "void gdcm::SequenceOfItems::SetLengthToUndefined()
-
-Properly set the Sequence of Item to be undefined length. ";
+%feature("docstring")  gdcm::SequenceOfItems::SetLengthToUndefined "void gdcm::SequenceOfItems::SetLengthToUndefined() ";
 
 %feature("docstring")  gdcm::SequenceOfItems::SetNumberOfItems "void
-gdcm::SequenceOfItems::SetNumberOfItems(SizeType n) ";
+gdcm::SequenceOfItems::SetNumberOfItems(unsigned int n) ";
 
 %feature("docstring")  gdcm::SequenceOfItems::Write "std::ostream
 const& gdcm::SequenceOfItems::Write(std::ostream &os) const ";
@@ -9115,130 +6822,6 @@ C++ includes: gdcmSeries.h ";
 
 %feature("docstring")  gdcm::Series::Series "gdcm::Series::Series()
 ";
-
-
-// File: classgdcm_1_1ServiceClassUser.xml
-%feature("docstring") gdcm::ServiceClassUser "
-
-ServiceClassUser.
-
-C++ includes: gdcmServiceClassUser.h ";
-
-%feature("docstring")  gdcm::ServiceClassUser::ServiceClassUser "gdcm::ServiceClassUser::ServiceClassUser()
-
-Construct a SCU with default: hostname = localhost
-
-port = 104 ";
-
-%feature("docstring")  gdcm::ServiceClassUser::~ServiceClassUser "gdcm::ServiceClassUser::~ServiceClassUser() ";
-
-%feature("docstring")  gdcm::ServiceClassUser::GetAETitle "const
-char* gdcm::ServiceClassUser::GetAETitle() const ";
-
-%feature("docstring")  gdcm::ServiceClassUser::GetCalledAETitle "const char* gdcm::ServiceClassUser::GetCalledAETitle() const ";
-
-%feature("docstring")  gdcm::ServiceClassUser::GetTimeout "time_t
-gdcm::ServiceClassUser::GetTimeout() const ";
-
-%feature("docstring")  gdcm::ServiceClassUser::InitializeConnection "bool gdcm::ServiceClassUser::InitializeConnection()
-
-Will try to connect This will setup the actual timeout used during the
-whole connection time. Need to call SetTimeout first ";
-
-%feature("docstring")  gdcm::ServiceClassUser::SendEcho "bool
-gdcm::ServiceClassUser::SendEcho()
-
-C-ECHO. ";
-
-%feature("docstring")  gdcm::ServiceClassUser::SendFind "bool
-gdcm::ServiceClassUser::SendFind(const BaseRootQuery *query,
-std::vector< DataSet > &retDatasets)
-
-C-FIND a query, return result are in retDatasets. ";
-
-%feature("docstring")  gdcm::ServiceClassUser::SendMove "bool
-gdcm::ServiceClassUser::SendMove(const BaseRootQuery *query,
-std::vector< File > &retFile)
-
-Execute a C-MOVE, based on query, returned Files are stored in vector.
-";
-
-%feature("docstring")  gdcm::ServiceClassUser::SendMove "bool
-gdcm::ServiceClassUser::SendMove(const BaseRootQuery *query, const
-char *outputdir)
-
-Execute a C-MOVE, based on query, return files are written in
-outputdir. ";
-
-%feature("docstring")  gdcm::ServiceClassUser::SendMove "bool
-gdcm::ServiceClassUser::SendMove(const BaseRootQuery *query,
-std::vector< DataSet > &retDatasets)
-
-Execute a C-MOVE, based on query, returned dataset are Implicit. ";
-
-%feature("docstring")  gdcm::ServiceClassUser::SendStore "bool
-gdcm::ServiceClassUser::SendStore(const char *filename)
-
-Execute a C-STORE on file on disk, named filename. ";
-
-%feature("docstring")  gdcm::ServiceClassUser::SendStore "bool
-gdcm::ServiceClassUser::SendStore(File const &file)
-
-Execute a C-STORE on a File, the transfer syntax used for the query is
-based on the file. ";
-
-%feature("docstring")  gdcm::ServiceClassUser::SendStore "bool
-gdcm::ServiceClassUser::SendStore(DataSet const &ds)
-
-Execute a C-STORE on a DataSet, the transfer syntax used will be
-Implicit. ";
-
-%feature("docstring")  gdcm::ServiceClassUser::SetAETitle "void
-gdcm::ServiceClassUser::SetAETitle(const char *aetitle)
-
-set calling ae title ";
-
-%feature("docstring")  gdcm::ServiceClassUser::SetCalledAETitle "void
-gdcm::ServiceClassUser::SetCalledAETitle(const char *aetitle)
-
-set called ae title ";
-
-%feature("docstring")  gdcm::ServiceClassUser::SetHostname "void
-gdcm::ServiceClassUser::SetHostname(const char *hostname)
-
-Set the name of the called hostname (hostname or IP address). ";
-
-%feature("docstring")  gdcm::ServiceClassUser::SetPort "void
-gdcm::ServiceClassUser::SetPort(uint16_t port)
-
-Set port of remote host (called application). ";
-
-%feature("docstring")  gdcm::ServiceClassUser::SetPortSCP "void
-gdcm::ServiceClassUser::SetPortSCP(uint16_t portscp)
-
-Set the port for any incoming C-STORE-SCP operation (typically in a
-return of C-MOVE). ";
-
-%feature("docstring")  gdcm::ServiceClassUser::SetPresentationContexts
-"void gdcm::ServiceClassUser::SetPresentationContexts(std::vector<
-PresentationContext > const &pcs)
-
-Set the Presentation Context used for the Association. ";
-
-%feature("docstring")  gdcm::ServiceClassUser::SetTimeout "void
-gdcm::ServiceClassUser::SetTimeout(time_t t)
-
-set/get Timeout ";
-
-%feature("docstring")  gdcm::ServiceClassUser::StartAssociation "bool
-gdcm::ServiceClassUser::StartAssociation()
-
-Start the association. Need to call SetPresentationContexts before. ";
-
-%feature("docstring")  gdcm::ServiceClassUser::StopAssociation "bool
-gdcm::ServiceClassUser::StopAssociation()
-
-Stop the running association. ";
 
 
 // File: classstd_1_1set.xml
@@ -9476,8 +7059,7 @@ C++ includes: gdcmSpectroscopy.h ";
 %feature("docstring") gdcm::SplitMosaicFilter "
 
 SplitMosaicFilter class Class to reshuffle bytes for a SIEMENS Mosaic
-image Siemens CSA Image Header CSA:= Common Siemens Architecture,
-sometimes also known as Common syngo Architecture.
+image.
 
 C++ includes: gdcmSplitMosaicFilter.h ";
 
@@ -9485,24 +7067,17 @@ C++ includes: gdcmSplitMosaicFilter.h ";
 
 %feature("docstring")  gdcm::SplitMosaicFilter::~SplitMosaicFilter "gdcm::SplitMosaicFilter::~SplitMosaicFilter() ";
 
-%feature("docstring")
-gdcm::SplitMosaicFilter::ComputeMOSAICDimensions "bool
-gdcm::SplitMosaicFilter::ComputeMOSAICDimensions(unsigned int dims[3])
-
-Compute the new dimensions according to private information stored in
-the MOSAIC header. ";
+%feature("docstring")  gdcm::SplitMosaicFilter::GetFile "const File&
+gdcm::SplitMosaicFilter::GetFile() const ";
 
 %feature("docstring")  gdcm::SplitMosaicFilter::GetFile "File&
 gdcm::SplitMosaicFilter::GetFile() ";
 
-%feature("docstring")  gdcm::SplitMosaicFilter::GetFile "const File&
-gdcm::SplitMosaicFilter::GetFile() const ";
+%feature("docstring")  gdcm::SplitMosaicFilter::GetImage "const
+Image& gdcm::SplitMosaicFilter::GetImage() const ";
 
 %feature("docstring")  gdcm::SplitMosaicFilter::GetImage "Image&
 gdcm::SplitMosaicFilter::GetImage() ";
-
-%feature("docstring")  gdcm::SplitMosaicFilter::GetImage "const
-Image& gdcm::SplitMosaicFilter::GetImage() const ";
 
 %feature("docstring")  gdcm::SplitMosaicFilter::SetFile "void
 gdcm::SplitMosaicFilter::SetFile(const File &f) ";
@@ -9536,187 +7111,10 @@ gdcmStaticAssert.h ";
 includes: gdcmStaticAssert.h ";
 
 
-// File: classgdcm_1_1StreamImageReader.xml
-%feature("docstring") gdcm::StreamImageReader "
+// File: classstd_1_1string.xml
+%feature("docstring") std::string "
 
-StreamImageReader.
-
-its role is to convert the DICOM DataSet into a gdcm::Image
-representation via an ITK streaming (ie, multithreaded) interface
-Image is different from Pixmap has it has a position and a direction
-in Space. Currently, this class is threadsafe in that it can read a
-single extent in a single thread. Multiple versions can be used for
-multiple extents/threads.
-
-See:   Image
-
-C++ includes: gdcmStreamImageReader.h ";
-
-%feature("docstring")  gdcm::StreamImageReader::StreamImageReader "gdcm::StreamImageReader::StreamImageReader() ";
-
-%feature("docstring")  gdcm::StreamImageReader::~StreamImageReader "gdcm::StreamImageReader::~StreamImageReader() ";
-
-%feature("docstring")  gdcm::StreamImageReader::CanReadImage "bool
-gdcm::StreamImageReader::CanReadImage() const
-
-Only RAW images are currently readable by the stream reader. As more
-streaming codecs are added, then this function will be updated to
-reflect those changes. Calling this function prior to reading will
-ensure that only streamable files are streamed. Make sure to call
-ReadImageInformation prior to calling this function. ";
-
-%feature("docstring")  gdcm::StreamImageReader::DefinePixelExtent "void gdcm::StreamImageReader::DefinePixelExtent(uint16_t inXMin,
-uint16_t inXMax, uint16_t inYMin, uint16_t inYMax, uint16_t inZMin=0,
-uint16_t inZMax=1)
-
-Defines an image extent for the Read function. DICOM states that an
-image can have no more than 2^16 pixels per edge (as of 2009) In this
-case, the pixel extents ignore the direction cosines entirely, and
-assumes that the origin of the image is at location 0,0 (regardless of
-the definition in space per the tags). So, if the first 100 pixels of
-the first row are to be read in, this function should be called with
-DefinePixelExtent(0, 100, 0, 1), regardless of pixel size or
-orientation. 15 nov 2010: added z dimension, defaults to being 1 plane
-large ";
-
-%feature("docstring")
-gdcm::StreamImageReader::DefineProperBufferLength "uint32_t
-gdcm::StreamImageReader::DefineProperBufferLength() const
-
-Paying attention to the pixel format and so forth, define the proper
-buffer length for the user. The return amount is in bytes. Call this
-function to determine the size of the char* buffer that will need to
-be passed in to ReadImageSubregion(). If the return is 0, then that
-means that the pixel extent was not defined prior ";
-
-%feature("docstring")
-gdcm::StreamImageReader::GetDimensionsValueForResolution "std::vector<unsigned int>
-gdcm::StreamImageReader::GetDimensionsValueForResolution(unsigned int)
-";
-
-%feature("docstring")  gdcm::StreamImageReader::GetFile "File const&
-gdcm::StreamImageReader::GetFile() const
-
-Returns the dataset read by ReadImageInformation Couple this with the
-ImageHelper to get statistics about the image, like pixel extent, to
-be able to initialize buffers for reading ";
-
-%feature("docstring")  gdcm::StreamImageReader::Read "bool
-gdcm::StreamImageReader::Read(void *inReadBuffer, const std::size_t
-&inBufferLength)
-
-Read the DICOM image. There are three reasons for failure: 1. The
-extent is not set 2. the conversion from void* to std::ostream
-(internally) fails 3. the given buffer isn't large enough to
-accomodate the desired pixel extent. This method has been implemented
-to look similar to the metaimageio in itk MUST have an extent defined,
-or else Read will return false. If no particular extent is required,
-use ImageReader instead. ";
-
-%feature("docstring")  gdcm::StreamImageReader::ReadImageInformation "virtual bool gdcm::StreamImageReader::ReadImageInformation()
-
-Set the spacing and dimension information for the set filename.
-returns false if the file is not initialized or not an image, with the
-pixel 0x7fe0, 0x0010 tag. ";
-
-%feature("docstring")  gdcm::StreamImageReader::SetFileName "void
-gdcm::StreamImageReader::SetFileName(const char *inFileName)
-
-One of either SetFileName or SetStream must be called prior to any
-other functions. These initialize an internal Reader class to be able
-to get non-pixel image information. ";
-
-%feature("docstring")  gdcm::StreamImageReader::SetStream "void
-gdcm::StreamImageReader::SetStream(std::istream &inStream) ";
-
-
-// File: classgdcm_1_1StreamImageWriter.xml
-%feature("docstring") gdcm::StreamImageWriter "
-
-StreamImageReader.
-
-its role is to convert the DICOM DataSet into a gdcm::Image
-representation via an ITK streaming (ie, multithreaded) interface
-Image is different from Pixmap has it has a position and a direction
-in Space. Currently, this class is threadsafe in that it can read a
-single extent in a single thread. Multiple versions can be used for
-multiple extents/threads.
-
-See:   Image
-
-C++ includes: gdcmStreamImageWriter.h ";
-
-%feature("docstring")  gdcm::StreamImageWriter::StreamImageWriter "gdcm::StreamImageWriter::StreamImageWriter() ";
-
-%feature("docstring")  gdcm::StreamImageWriter::~StreamImageWriter "gdcm::StreamImageWriter::~StreamImageWriter() ";
-
-%feature("docstring")  gdcm::StreamImageWriter::CanWriteFile "bool
-gdcm::StreamImageWriter::CanWriteFile() const
-
-This function determines if a file can even be written using the
-streaming writer unlike the reader, can be called before
-WriteImageInformation, but must be called after SetFile. ";
-
-%feature("docstring")  gdcm::StreamImageWriter::DefinePixelExtent "void gdcm::StreamImageWriter::DefinePixelExtent(uint16_t inXMin,
-uint16_t inXMax, uint16_t inYMin, uint16_t inYMax, uint16_t inZMin=0,
-uint16_t inZMax=1)
-
-Defines an image extent for the Read function. DICOM states that an
-image can have no more than 2^16 pixels per edge (as of 2009) In this
-case, the pixel extents ignore the direction cosines entirely, and
-assumes that the origin of the image is at location 0,0 (regardless of
-the definition in space per the tags). So, if the first 100 pixels of
-the first row are to be read in, this function should be called with
-DefinePixelExtent(0, 100, 0, 1), regardless of pixel size or
-orientation. 15 nov 2010: added z dimension, defaults to being 1 plane
-large ";
-
-%feature("docstring")
-gdcm::StreamImageWriter::DefineProperBufferLength "uint32_t
-gdcm::StreamImageWriter::DefineProperBufferLength()
-
-Paying attention to the pixel format and so forth, define the proper
-buffer length for the user. The return amount is in bytes. If the
-return is 0, then that means that the pixel extent was not defined
-prior this return is for RAW inputs which are then encoded by the
-writer, but are used to ensure that the writer gets the proper buffer
-size ";
-
-%feature("docstring")  gdcm::StreamImageWriter::SetFile "void
-gdcm::StreamImageWriter::SetFile(const File &inFile)
-
-Set the image information to be written to disk that is everything but
-the pixel information: (7fe0,0010) PixelData ";
-
-%feature("docstring")  gdcm::StreamImageWriter::SetFileName "void
-gdcm::StreamImageWriter::SetFileName(const char *inFileName)
-
-One of either SetFileName or SetStream must be called prior to any
-other functions. These initialize an internal Reader class to be able
-to get non-pixel image information. ";
-
-%feature("docstring")  gdcm::StreamImageWriter::SetStream "void
-gdcm::StreamImageWriter::SetStream(std::ostream &inStream) ";
-
-%feature("docstring")  gdcm::StreamImageWriter::Write "bool
-gdcm::StreamImageWriter::Write(void *inWriteBuffer, const std::size_t
-&inBufferLength)
-
-Read the DICOM image. There are three reasons for failure: 1. The
-extent is not set 2. the conversion from void* to std::ostream
-(internally) fails 3. the given buffer isn't large enough to
-accomodate the desired pixel extent. This method has been implemented
-to look similar to the metaimageio in itk MUST have an extent defined,
-or else Read will return false. If no particular extent is required,
-use ImageReader instead. ";
-
-%feature("docstring")  gdcm::StreamImageWriter::WriteImageInformation
-"virtual bool gdcm::StreamImageWriter::WriteImageInformation()
-
-Write the header information to disk, and a bunch of zeros for the
-actual pixel information Of course, if we're doing a non-compressed
-format, that works but if it's compressed, we have to force the
-ordering of chunks that are written. ";
+STL class. ";
 
 
 // File: classgdcm_1_1String.xml
@@ -9762,12 +7160,6 @@ could not create a gdcm::String object with an odd number of bytes...
 TDelimiter, TMaxLength, TPadChar >::Truncate() const ";
 
 
-// File: classstd_1_1string.xml
-%feature("docstring") std::string "
-
-STL class. ";
-
-
 // File: classgdcm_1_1StringFilter.xml
 %feature("docstring") gdcm::StringFilter "
 
@@ -9782,14 +7174,6 @@ C++ includes: gdcmStringFilter.h ";
 
 %feature("docstring")  gdcm::StringFilter::~StringFilter "gdcm::StringFilter::~StringFilter() ";
 
-%feature("docstring")  gdcm::StringFilter::ExecuteQuery "bool
-gdcm::StringFilter::ExecuteQuery(std::string const &query, std::string
-&value) const
-
-Execute the XPATH query to find a value (as string) return false when
-attribute is not found (or an error in the XPATH query) You need to
-make sure that your XPATH query is syntatically correct ";
-
 %feature("docstring")  gdcm::StringFilter::FromString "std::string
 gdcm::StringFilter::FromString(const Tag &t, const char *value, size_t
 len) ";
@@ -9800,11 +7184,11 @@ const &vl)
 
 DEPRECATED: NEVER USE IT. ";
 
-%feature("docstring")  gdcm::StringFilter::GetFile "File&
-gdcm::StringFilter::GetFile() ";
-
 %feature("docstring")  gdcm::StringFilter::GetFile "const File&
 gdcm::StringFilter::GetFile() const ";
+
+%feature("docstring")  gdcm::StringFilter::GetFile "File&
+gdcm::StringFilter::GetFile() ";
 
 %feature("docstring")  gdcm::StringFilter::SetDicts "void
 gdcm::StringFilter::SetDicts(const Dicts &dicts)
@@ -9912,283 +7296,6 @@ gdcm::Subject::RemoveObserver(unsigned long tag)
 Remove the observer with this tag value. ";
 
 
-// File: classgdcm_1_1Surface.xml
-%feature("docstring") gdcm::Surface "
-
-This class defines a SURFACE IE. This members are taken from required
-surface mesh module attributes.
-
-See:  PS 3.3 A.1.2.18 , A.57 and C.27
-
-C++ includes: gdcmSurface.h ";
-
-%feature("docstring")  gdcm::Surface::Surface "gdcm::Surface::Surface() ";
-
-%feature("docstring")  gdcm::Surface::~Surface "virtual
-gdcm::Surface::~Surface() ";
-
-%feature("docstring")  gdcm::Surface::GetAlgorithmFamily "SegmentHelper::BasicCodedEntry& gdcm::Surface::GetAlgorithmFamily() ";
-
-%feature("docstring")  gdcm::Surface::GetAlgorithmFamily "SegmentHelper::BasicCodedEntry const&
-gdcm::Surface::GetAlgorithmFamily() const ";
-
-%feature("docstring")  gdcm::Surface::GetAlgorithmName "const char*
-gdcm::Surface::GetAlgorithmName() const ";
-
-%feature("docstring")  gdcm::Surface::GetAlgorithmVersion "const
-char* gdcm::Surface::GetAlgorithmVersion() const ";
-
-%feature("docstring")  gdcm::Surface::GetAxisOfRotation "const float*
-gdcm::Surface::GetAxisOfRotation() const
-
-Pointer is null if undefined ";
-
-%feature("docstring")  gdcm::Surface::GetCenterOfRotation "const
-float* gdcm::Surface::GetCenterOfRotation() const
-
-Pointer is null if undefined ";
-
-%feature("docstring")  gdcm::Surface::GetFiniteVolume "STATES
-gdcm::Surface::GetFiniteVolume() const ";
-
-%feature("docstring")  gdcm::Surface::GetManifold "STATES
-gdcm::Surface::GetManifold() const ";
-
-%feature("docstring")  gdcm::Surface::GetMaximumPointDistance "float
-gdcm::Surface::GetMaximumPointDistance() const ";
-
-%feature("docstring")  gdcm::Surface::GetMeanPointDistance "float
-gdcm::Surface::GetMeanPointDistance() const ";
-
-%feature("docstring")  gdcm::Surface::GetMeshPrimitive "MeshPrimitive
-const& gdcm::Surface::GetMeshPrimitive() const ";
-
-%feature("docstring")  gdcm::Surface::GetMeshPrimitive "MeshPrimitive& gdcm::Surface::GetMeshPrimitive() ";
-
-%feature("docstring")  gdcm::Surface::GetNumberOfSurfacePoints "unsigned long gdcm::Surface::GetNumberOfSurfacePoints() const ";
-
-%feature("docstring")  gdcm::Surface::GetNumberOfVectors "unsigned
-long gdcm::Surface::GetNumberOfVectors() const ";
-
-%feature("docstring")  gdcm::Surface::GetPointCoordinatesData "DataElement& gdcm::Surface::GetPointCoordinatesData() ";
-
-%feature("docstring")  gdcm::Surface::GetPointCoordinatesData "const
-DataElement& gdcm::Surface::GetPointCoordinatesData() const ";
-
-%feature("docstring")  gdcm::Surface::GetPointPositionAccuracy "const
-float* gdcm::Surface::GetPointPositionAccuracy() const
-
-Pointer is null if undefined ";
-
-%feature("docstring")  gdcm::Surface::GetPointsBoundingBoxCoordinates
-"const float* gdcm::Surface::GetPointsBoundingBoxCoordinates() const
-
-Pointer is null if undefined ";
-
-%feature("docstring")  gdcm::Surface::GetProcessingAlgorithm "SegmentHelper::BasicCodedEntry const&
-gdcm::Surface::GetProcessingAlgorithm() const ";
-
-%feature("docstring")  gdcm::Surface::GetProcessingAlgorithm "SegmentHelper::BasicCodedEntry&
-gdcm::Surface::GetProcessingAlgorithm() ";
-
-%feature("docstring")  gdcm::Surface::GetRecommendedDisplayCIELabValue
-"const unsigned short*
-gdcm::Surface::GetRecommendedDisplayCIELabValue() const ";
-
-%feature("docstring")  gdcm::Surface::GetRecommendedDisplayCIELabValue
-"unsigned short gdcm::Surface::GetRecommendedDisplayCIELabValue(const
-unsigned int idx) const ";
-
-%feature("docstring")
-gdcm::Surface::GetRecommendedDisplayGrayscaleValue "unsigned short
-gdcm::Surface::GetRecommendedDisplayGrayscaleValue() const ";
-
-%feature("docstring")
-gdcm::Surface::GetRecommendedPresentationOpacity "float
-gdcm::Surface::GetRecommendedPresentationOpacity() const ";
-
-%feature("docstring")  gdcm::Surface::GetRecommendedPresentationType "VIEWType gdcm::Surface::GetRecommendedPresentationType() const ";
-
-%feature("docstring")  gdcm::Surface::GetSurfaceComments "const char*
-gdcm::Surface::GetSurfaceComments() const ";
-
-%feature("docstring")  gdcm::Surface::GetSurfaceNumber "unsigned long
-gdcm::Surface::GetSurfaceNumber() const ";
-
-%feature("docstring")  gdcm::Surface::GetSurfaceProcessing "bool
-gdcm::Surface::GetSurfaceProcessing() const ";
-
-%feature("docstring")  gdcm::Surface::GetSurfaceProcessingDescription
-"const char* gdcm::Surface::GetSurfaceProcessingDescription() const
-";
-
-%feature("docstring")  gdcm::Surface::GetSurfaceProcessingRatio "float gdcm::Surface::GetSurfaceProcessingRatio() const ";
-
-%feature("docstring")  gdcm::Surface::GetVectorAccuracy "const float*
-gdcm::Surface::GetVectorAccuracy() const ";
-
-%feature("docstring")  gdcm::Surface::GetVectorCoordinateData "const
-DataElement& gdcm::Surface::GetVectorCoordinateData() const ";
-
-%feature("docstring")  gdcm::Surface::GetVectorCoordinateData "DataElement& gdcm::Surface::GetVectorCoordinateData() ";
-
-%feature("docstring")  gdcm::Surface::GetVectorDimensionality "unsigned short gdcm::Surface::GetVectorDimensionality() const ";
-
-%feature("docstring")  gdcm::Surface::SetAlgorithmFamily "void
-gdcm::Surface::SetAlgorithmFamily(SegmentHelper::BasicCodedEntry const
-&BSE) ";
-
-%feature("docstring")  gdcm::Surface::SetAlgorithmName "void
-gdcm::Surface::SetAlgorithmName(const char *str) ";
-
-%feature("docstring")  gdcm::Surface::SetAlgorithmVersion "void
-gdcm::Surface::SetAlgorithmVersion(const char *str) ";
-
-%feature("docstring")  gdcm::Surface::SetAxisOfRotation "void
-gdcm::Surface::SetAxisOfRotation(const float *axis) ";
-
-%feature("docstring")  gdcm::Surface::SetCenterOfRotation "void
-gdcm::Surface::SetCenterOfRotation(const float *center) ";
-
-%feature("docstring")  gdcm::Surface::SetFiniteVolume "void
-gdcm::Surface::SetFiniteVolume(STATES state) ";
-
-%feature("docstring")  gdcm::Surface::SetManifold "void
-gdcm::Surface::SetManifold(STATES state) ";
-
-%feature("docstring")  gdcm::Surface::SetMaximumPointDistance "void
-gdcm::Surface::SetMaximumPointDistance(float maximum) ";
-
-%feature("docstring")  gdcm::Surface::SetMeanPointDistance "void
-gdcm::Surface::SetMeanPointDistance(float average) ";
-
-%feature("docstring")  gdcm::Surface::SetMeshPrimitive "void
-gdcm::Surface::SetMeshPrimitive(MeshPrimitive &mp) ";
-
-%feature("docstring")  gdcm::Surface::SetNumberOfSurfacePoints "void
-gdcm::Surface::SetNumberOfSurfacePoints(const unsigned long nb) ";
-
-%feature("docstring")  gdcm::Surface::SetNumberOfVectors "void
-gdcm::Surface::SetNumberOfVectors(const unsigned long nb) ";
-
-%feature("docstring")  gdcm::Surface::SetPointCoordinatesData "void
-gdcm::Surface::SetPointCoordinatesData(DataElement const &de) ";
-
-%feature("docstring")  gdcm::Surface::SetPointPositionAccuracy "void
-gdcm::Surface::SetPointPositionAccuracy(const float *accuracies) ";
-
-%feature("docstring")  gdcm::Surface::SetPointsBoundingBoxCoordinates
-"void gdcm::Surface::SetPointsBoundingBoxCoordinates(const float
-*coordinates) ";
-
-%feature("docstring")  gdcm::Surface::SetProcessingAlgorithm "void
-gdcm::Surface::SetProcessingAlgorithm(SegmentHelper::BasicCodedEntry
-const &BSE) ";
-
-%feature("docstring")  gdcm::Surface::SetRecommendedDisplayCIELabValue
-"void gdcm::Surface::SetRecommendedDisplayCIELabValue(const
-std::vector< unsigned short > &vl) ";
-
-%feature("docstring")  gdcm::Surface::SetRecommendedDisplayCIELabValue
-"void gdcm::Surface::SetRecommendedDisplayCIELabValue(const unsigned
-short vl, const unsigned int idx=0) ";
-
-%feature("docstring")  gdcm::Surface::SetRecommendedDisplayCIELabValue
-"void gdcm::Surface::SetRecommendedDisplayCIELabValue(const unsigned
-short vl[3]) ";
-
-%feature("docstring")
-gdcm::Surface::SetRecommendedDisplayGrayscaleValue "void
-gdcm::Surface::SetRecommendedDisplayGrayscaleValue(const unsigned
-short vl) ";
-
-%feature("docstring")
-gdcm::Surface::SetRecommendedPresentationOpacity "void
-gdcm::Surface::SetRecommendedPresentationOpacity(const float opacity)
-";
-
-%feature("docstring")  gdcm::Surface::SetRecommendedPresentationType "void gdcm::Surface::SetRecommendedPresentationType(VIEWType type) ";
-
-%feature("docstring")  gdcm::Surface::SetSurfaceComments "void
-gdcm::Surface::SetSurfaceComments(const char *comment) ";
-
-%feature("docstring")  gdcm::Surface::SetSurfaceNumber "void
-gdcm::Surface::SetSurfaceNumber(const unsigned long nb) ";
-
-%feature("docstring")  gdcm::Surface::SetSurfaceProcessing "void
-gdcm::Surface::SetSurfaceProcessing(bool b) ";
-
-%feature("docstring")  gdcm::Surface::SetSurfaceProcessingDescription
-"void gdcm::Surface::SetSurfaceProcessingDescription(const char
-*description) ";
-
-%feature("docstring")  gdcm::Surface::SetSurfaceProcessingRatio "void
-gdcm::Surface::SetSurfaceProcessingRatio(const float ratio) ";
-
-%feature("docstring")  gdcm::Surface::SetVectorAccuracy "void
-gdcm::Surface::SetVectorAccuracy(const float *accuracy) ";
-
-%feature("docstring")  gdcm::Surface::SetVectorCoordinateData "void
-gdcm::Surface::SetVectorCoordinateData(DataElement const &de) ";
-
-%feature("docstring")  gdcm::Surface::SetVectorDimensionality "void
-gdcm::Surface::SetVectorDimensionality(const unsigned short dim) ";
-
-
-// File: classgdcm_1_1SurfaceHelper.xml
-%feature("docstring") gdcm::SurfaceHelper "C++ includes:
-gdcmSurfaceHelper.h ";
-
-
-// File: classgdcm_1_1SurfaceReader.xml
-%feature("docstring") gdcm::SurfaceReader "
-
-This class defines a SURFACE IE reader. It reads surface mesh module
-attributes.
-
-See:  PS 3.3 A.1.2.18 , A.57 and C.27
-
-C++ includes: gdcmSurfaceReader.h ";
-
-%feature("docstring")  gdcm::SurfaceReader::SurfaceReader "gdcm::SurfaceReader::SurfaceReader() ";
-
-%feature("docstring")  gdcm::SurfaceReader::~SurfaceReader "virtual
-gdcm::SurfaceReader::~SurfaceReader() ";
-
-%feature("docstring")  gdcm::SurfaceReader::GetNumberOfSurfaces "unsigned long gdcm::SurfaceReader::GetNumberOfSurfaces() const ";
-
-%feature("docstring")  gdcm::SurfaceReader::Read "virtual bool
-gdcm::SurfaceReader::Read()
-
-Read. ";
-
-
-// File: classgdcm_1_1SurfaceWriter.xml
-%feature("docstring") gdcm::SurfaceWriter "
-
-This class defines a SURFACE IE writer. It writes surface mesh module
-attributes.
-
-See:  PS 3.3 A.1.2.18 , A.57 and C.27
-
-C++ includes: gdcmSurfaceWriter.h ";
-
-%feature("docstring")  gdcm::SurfaceWriter::SurfaceWriter "gdcm::SurfaceWriter::SurfaceWriter() ";
-
-%feature("docstring")  gdcm::SurfaceWriter::~SurfaceWriter "virtual
-gdcm::SurfaceWriter::~SurfaceWriter() ";
-
-%feature("docstring")  gdcm::SurfaceWriter::GetNumberOfSurfaces "unsigned long gdcm::SurfaceWriter::GetNumberOfSurfaces() ";
-
-%feature("docstring")  gdcm::SurfaceWriter::SetNumberOfSurfaces "void
-gdcm::SurfaceWriter::SetNumberOfSurfaces(const unsigned long nb) ";
-
-%feature("docstring")  gdcm::SurfaceWriter::Write "bool
-gdcm::SurfaceWriter::Write()
-
-Write. ";
-
-
 // File: classgdcm_1_1SwapCode.xml
 %feature("docstring") gdcm::SwapCode "
 
@@ -10214,7 +7321,7 @@ C++ includes: gdcmSwapCode.h ";
 
 Class to do system operation.
 
-OS independent functionalities
+OS independant functionalities
 
 C++ includes: gdcmSystem.h ";
 
@@ -10314,11 +7421,6 @@ gdcm::TableReader::SetFilename(const char *filename) ";
 %feature("docstring")  gdcm::TableReader::StartElement "virtual void
 gdcm::TableReader::StartElement(const char *name, const char **atts)
 ";
-
-
-// File: classgdcm_1_1network_1_1TableRow.xml
-%feature("docstring") gdcm::network::TableRow "C++ includes:
-gdcmULTransitionTable.h ";
 
 
 // File: classgdcm_1_1Tag.xml
@@ -10530,9 +7632,7 @@ Print. ";
 
 Trace.
 
-Debug / Warning and Error are encapsulated in this class by default
-the Trace class will redirect any debug/warning/error to std::cerr.
-Unless SetStream was specified with another (open) stream.
+Debug / Warning and Error are encapsulated in this class
 
 C++ includes: gdcmTrace.h ";
 
@@ -10563,11 +7663,6 @@ C++ includes: gdcmTransferSyntax.h ";
 %feature("docstring")  gdcm::TransferSyntax::TransferSyntax "gdcm::TransferSyntax::TransferSyntax(TSType
 type=ImplicitVRLittleEndian) ";
 
-%feature("docstring")  gdcm::TransferSyntax::CanStoreLossy "bool
-gdcm::TransferSyntax::CanStoreLossy() const
-
-return if TransFer Syntax Allow storing of Lossy Pixel Data ";
-
 %feature("docstring")  gdcm::TransferSyntax::GetNegociatedType "NegociatedType gdcm::TransferSyntax::GetNegociatedType() const ";
 
 %feature("docstring")  gdcm::TransferSyntax::GetString "const char*
@@ -10593,66 +7688,18 @@ gdcm::TransferSyntax::IsExplicit() const ";
 gdcm::TransferSyntax::IsImplicit() const ";
 
 %feature("docstring")  gdcm::TransferSyntax::IsLossless "bool
-gdcm::TransferSyntax::IsLossless() const
-
-Return if the transfer syntax algorithm is a lossless algorithm ";
+gdcm::TransferSyntax::IsLossless() const ";
 
 %feature("docstring")  gdcm::TransferSyntax::IsLossy "bool
 gdcm::TransferSyntax::IsLossy() const
 
-Return if the transfer syntax algorithm is a lossy algorithm ";
+Return whether the Transfer Syntax contains a lossy or lossless
+Encapsulated stream WARNING:  IsLossy is NOT !IsLossless since JPEG
+2000 Transfer Syntax is dual the stream can be either lossy or
+lossless compressed. ";
 
 %feature("docstring")  gdcm::TransferSyntax::IsValid "bool
 gdcm::TransferSyntax::IsValid() const ";
-
-
-// File: classgdcm_1_1network_1_1TransferSyntaxSub.xml
-%feature("docstring") gdcm::network::TransferSyntaxSub "
-
-TransferSyntaxSub Table 9-15 TRANSFER SYNTAX SUB-ITEM FIELDS.
-
-TODO what is the goal of :
-
-Table 9-19 TRANSFER SYNTAX SUB-ITEM FIELDS
-
-C++ includes: gdcmTransferSyntaxSub.h ";
-
-%feature("docstring")
-gdcm::network::TransferSyntaxSub::TransferSyntaxSub "gdcm::network::TransferSyntaxSub::TransferSyntaxSub() ";
-
-%feature("docstring")  gdcm::network::TransferSyntaxSub::GetName "const char* gdcm::network::TransferSyntaxSub::GetName() const ";
-
-%feature("docstring")  gdcm::network::TransferSyntaxSub::Print "void
-gdcm::network::TransferSyntaxSub::Print(std::ostream &os) const ";
-
-%feature("docstring")  gdcm::network::TransferSyntaxSub::Read "std::istream& gdcm::network::TransferSyntaxSub::Read(std::istream &is)
-";
-
-%feature("docstring")  gdcm::network::TransferSyntaxSub::SetName "void gdcm::network::TransferSyntaxSub::SetName(const char *name) ";
-
-%feature("docstring")
-gdcm::network::TransferSyntaxSub::SetNameFromUID "void
-gdcm::network::TransferSyntaxSub::SetNameFromUID(UIDs::TSName tsname)
-";
-
-%feature("docstring")  gdcm::network::TransferSyntaxSub::Size "size_t
-gdcm::network::TransferSyntaxSub::Size() const ";
-
-%feature("docstring")  gdcm::network::TransferSyntaxSub::Write "const
-std::ostream& gdcm::network::TransferSyntaxSub::Write(std::ostream
-&os) const ";
-
-
-// File: structgdcm_1_1network_1_1Transition.xml
-%feature("docstring") gdcm::network::Transition "C++ includes:
-gdcmULTransitionTable.h ";
-
-%feature("docstring")  gdcm::network::Transition::Transition "gdcm::network::Transition::Transition() ";
-
-%feature("docstring")  gdcm::network::Transition::Transition "gdcm::network::Transition::Transition(int inEndState, ULAction
-*inAction) ";
-
-%feature("docstring")  gdcm::network::Transition::~Transition "gdcm::network::Transition::~Transition() ";
 
 
 // File: classgdcm_1_1Type.xml
@@ -10728,707 +7775,6 @@ Initialize object from a string (a uid number) return false on error,
 and internal state is set to 0 ";
 
 
-// File: classgdcm_1_1network_1_1ULAction.xml
-%feature("docstring") gdcm::network::ULAction "
-
-ULAction A ULConnection in a given ULState can perform certain
-ULActions. This base class provides the interface for running those
-ULActions on a given ULConnection.
-
-Essentially, the ULConnectionManager will take this object, determined
-from the current ULState of the ULConnection, and pass the
-ULConnection object to the ULAction. The ULAction will then invoke
-whatever necessary commands are required by a given action.
-
-The result of a ULAction is a ULEvent (ie, what happened as a result
-of the action).
-
-This ULEvent is passed to the ULState, so that the transition to the
-next state can occur.
-
-Actions are associated with Payloads-- be thos filestreams, AETitles
-to establish connections, whatever. The actual parameters that the
-user will pass via an action will come through a Payload object, which
-should, in itself, be some gdcm-based object (but not all objects can
-be payloads; sending a single dataelement as a payload isn't
-meaningful). As such, each action has its own particular payload.
-
-For the sake of keeping files together, both the particular payload
-class and the action class will be defined in the same header file.
-Payloads should JUST be data (or streams), NO METHODS.
-
-Some actions perform changes that should raise events on the local
-system, and some actions perform changes that will require waiting for
-events from the remote system.
-
-Therefore, this base action has been modified so that those events are
-set by each action. When the event loop runs an action, it will then
-test to see if a local event was raised by the action, and if so,
-perform the appropriate subsequent action. If the action requires
-waiting for a response from the remote system, then the event loop
-will sit there (presumably with the ARTIM timer running) and wait for
-a response from the remote system. Once a response is obtained, then
-the the rest of the state transitions can happen.
-
-C++ includes: gdcmULAction.h ";
-
-%feature("docstring")  gdcm::network::ULAction::ULAction "gdcm::network::ULAction::ULAction() ";
-
-%feature("docstring")  gdcm::network::ULAction::~ULAction "virtual
-gdcm::network::ULAction::~ULAction() ";
-
-%feature("docstring")  gdcm::network::ULAction::PerformAction "virtual EStateID gdcm::network::ULAction::PerformAction(Subject *s,
-ULEvent &inEvent, ULConnection &inConnection, bool
-&outWaitingForEvent, EEventID &outRaisedEvent)=0 ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAA1.xml
-%feature("docstring") gdcm::network::ULActionAA1 "C++ includes:
-gdcmULActionAA.h ";
-
-%feature("docstring")  gdcm::network::ULActionAA1::PerformAction "EStateID gdcm::network::ULActionAA1::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAA2.xml
-%feature("docstring") gdcm::network::ULActionAA2 "C++ includes:
-gdcmULActionAA.h ";
-
-%feature("docstring")  gdcm::network::ULActionAA2::PerformAction "EStateID gdcm::network::ULActionAA2::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAA3.xml
-%feature("docstring") gdcm::network::ULActionAA3 "C++ includes:
-gdcmULActionAA.h ";
-
-%feature("docstring")  gdcm::network::ULActionAA3::PerformAction "EStateID gdcm::network::ULActionAA3::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAA4.xml
-%feature("docstring") gdcm::network::ULActionAA4 "C++ includes:
-gdcmULActionAA.h ";
-
-%feature("docstring")  gdcm::network::ULActionAA4::PerformAction "EStateID gdcm::network::ULActionAA4::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAA5.xml
-%feature("docstring") gdcm::network::ULActionAA5 "C++ includes:
-gdcmULActionAA.h ";
-
-%feature("docstring")  gdcm::network::ULActionAA5::PerformAction "EStateID gdcm::network::ULActionAA5::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAA6.xml
-%feature("docstring") gdcm::network::ULActionAA6 "C++ includes:
-gdcmULActionAA.h ";
-
-%feature("docstring")  gdcm::network::ULActionAA6::PerformAction "EStateID gdcm::network::ULActionAA6::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAA7.xml
-%feature("docstring") gdcm::network::ULActionAA7 "C++ includes:
-gdcmULActionAA.h ";
-
-%feature("docstring")  gdcm::network::ULActionAA7::PerformAction "EStateID gdcm::network::ULActionAA7::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAA8.xml
-%feature("docstring") gdcm::network::ULActionAA8 "C++ includes:
-gdcmULActionAA.h ";
-
-%feature("docstring")  gdcm::network::ULActionAA8::PerformAction "EStateID gdcm::network::ULActionAA8::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAE1.xml
-%feature("docstring") gdcm::network::ULActionAE1 "C++ includes:
-gdcmULActionAE.h ";
-
-%feature("docstring")  gdcm::network::ULActionAE1::PerformAction "EStateID gdcm::network::ULActionAE1::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAE2.xml
-%feature("docstring") gdcm::network::ULActionAE2 "C++ includes:
-gdcmULActionAE.h ";
-
-%feature("docstring")  gdcm::network::ULActionAE2::PerformAction "EStateID gdcm::network::ULActionAE2::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAE3.xml
-%feature("docstring") gdcm::network::ULActionAE3 "C++ includes:
-gdcmULActionAE.h ";
-
-%feature("docstring")  gdcm::network::ULActionAE3::PerformAction "EStateID gdcm::network::ULActionAE3::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAE4.xml
-%feature("docstring") gdcm::network::ULActionAE4 "C++ includes:
-gdcmULActionAE.h ";
-
-%feature("docstring")  gdcm::network::ULActionAE4::PerformAction "EStateID gdcm::network::ULActionAE4::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAE5.xml
-%feature("docstring") gdcm::network::ULActionAE5 "C++ includes:
-gdcmULActionAE.h ";
-
-%feature("docstring")  gdcm::network::ULActionAE5::PerformAction "EStateID gdcm::network::ULActionAE5::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAE6.xml
-%feature("docstring") gdcm::network::ULActionAE6 "C++ includes:
-gdcmULActionAE.h ";
-
-%feature("docstring")  gdcm::network::ULActionAE6::PerformAction "EStateID gdcm::network::ULActionAE6::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAE7.xml
-%feature("docstring") gdcm::network::ULActionAE7 "C++ includes:
-gdcmULActionAE.h ";
-
-%feature("docstring")  gdcm::network::ULActionAE7::PerformAction "EStateID gdcm::network::ULActionAE7::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAE8.xml
-%feature("docstring") gdcm::network::ULActionAE8 "C++ includes:
-gdcmULActionAE.h ";
-
-%feature("docstring")  gdcm::network::ULActionAE8::PerformAction "EStateID gdcm::network::ULActionAE8::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAR1.xml
-%feature("docstring") gdcm::network::ULActionAR1 "C++ includes:
-gdcmULActionAR.h ";
-
-%feature("docstring")  gdcm::network::ULActionAR1::PerformAction "EStateID gdcm::network::ULActionAR1::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAR10.xml
-%feature("docstring") gdcm::network::ULActionAR10 "C++ includes:
-gdcmULActionAR.h ";
-
-%feature("docstring")  gdcm::network::ULActionAR10::PerformAction "EStateID gdcm::network::ULActionAR10::PerformAction(Subject *s,
-ULEvent &inEvent, ULConnection &inConnection, bool
-&outWaitingForEvent, EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAR2.xml
-%feature("docstring") gdcm::network::ULActionAR2 "C++ includes:
-gdcmULActionAR.h ";
-
-%feature("docstring")  gdcm::network::ULActionAR2::PerformAction "EStateID gdcm::network::ULActionAR2::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAR3.xml
-%feature("docstring") gdcm::network::ULActionAR3 "C++ includes:
-gdcmULActionAR.h ";
-
-%feature("docstring")  gdcm::network::ULActionAR3::PerformAction "EStateID gdcm::network::ULActionAR3::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAR4.xml
-%feature("docstring") gdcm::network::ULActionAR4 "C++ includes:
-gdcmULActionAR.h ";
-
-%feature("docstring")  gdcm::network::ULActionAR4::PerformAction "EStateID gdcm::network::ULActionAR4::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAR5.xml
-%feature("docstring") gdcm::network::ULActionAR5 "C++ includes:
-gdcmULActionAR.h ";
-
-%feature("docstring")  gdcm::network::ULActionAR5::PerformAction "EStateID gdcm::network::ULActionAR5::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAR6.xml
-%feature("docstring") gdcm::network::ULActionAR6 "C++ includes:
-gdcmULActionAR.h ";
-
-%feature("docstring")  gdcm::network::ULActionAR6::PerformAction "EStateID gdcm::network::ULActionAR6::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAR7.xml
-%feature("docstring") gdcm::network::ULActionAR7 "C++ includes:
-gdcmULActionAR.h ";
-
-%feature("docstring")  gdcm::network::ULActionAR7::PerformAction "EStateID gdcm::network::ULActionAR7::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAR8.xml
-%feature("docstring") gdcm::network::ULActionAR8 "C++ includes:
-gdcmULActionAR.h ";
-
-%feature("docstring")  gdcm::network::ULActionAR8::PerformAction "EStateID gdcm::network::ULActionAR8::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionAR9.xml
-%feature("docstring") gdcm::network::ULActionAR9 "C++ includes:
-gdcmULActionAR.h ";
-
-%feature("docstring")  gdcm::network::ULActionAR9::PerformAction "EStateID gdcm::network::ULActionAR9::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionDT1.xml
-%feature("docstring") gdcm::network::ULActionDT1 "C++ includes:
-gdcmULActionDT.h ";
-
-%feature("docstring")  gdcm::network::ULActionDT1::PerformAction "EStateID gdcm::network::ULActionDT1::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULActionDT2.xml
-%feature("docstring") gdcm::network::ULActionDT2 "C++ includes:
-gdcmULActionDT.h ";
-
-%feature("docstring")  gdcm::network::ULActionDT2::PerformAction "EStateID gdcm::network::ULActionDT2::PerformAction(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) ";
-
-
-// File: classgdcm_1_1network_1_1ULBasicCallback.xml
-%feature("docstring") gdcm::network::ULBasicCallback "
-
-This is the most basic of callbacks for how the ULConnectionManager
-handles incoming datasets. DataSets are just concatenated to the
-mDataSets vector, and the result can be pulled out of the vector by
-later code. Alternatives to this method include progress updates,
-saving to disk, etc. This class is NOT THREAD SAFE. Access the dataset
-vector after the entire set of datasets has been returned by the
-ULConnectionManager.
-
-C++ includes: gdcmULBasicCallback.h ";
-
-%feature("docstring")  gdcm::network::ULBasicCallback::ULBasicCallback
-"gdcm::network::ULBasicCallback::ULBasicCallback() ";
-
-%feature("docstring")
-gdcm::network::ULBasicCallback::~ULBasicCallback "virtual
-gdcm::network::ULBasicCallback::~ULBasicCallback() ";
-
-%feature("docstring")  gdcm::network::ULBasicCallback::GetDataSets "std::vector<DataSet> const&
-gdcm::network::ULBasicCallback::GetDataSets() const ";
-
-%feature("docstring")  gdcm::network::ULBasicCallback::HandleDataSet "virtual void gdcm::network::ULBasicCallback::HandleDataSet(const
-DataSet &inDataSet) ";
-
-
-// File: classgdcm_1_1network_1_1ULConnection.xml
-%feature("docstring") gdcm::network::ULConnection "
-
-ULConnection This is the class that contains the socket to another
-machine, and passes data through itself, as well as maintaining a
-sense of state.
-
-The ULConnectionManager tells the ULConnection what data can actually
-be sent.
-
-This class is done this way so that it can be eventually be replaced
-with a ULSecureConnection, if such a protocol is warranted, so that
-all data that passes through can be managed through a secure
-connection. For now, this class provides a simple pass-through
-mechanism to the socket itself.
-
-So, for instance, a gdcm object will be passes to this object, and it
-will then get passed along the connection, if that connection is in
-the proper state to do so.
-
-For right now, this class is not directly intended to be inherited
-from, but the potential for future ULSecureConnection warrants the
-addition, rather than having everything be managed from within the
-ULConnectionManager (or this class) without a wrapper.
-
-C++ includes: gdcmULConnection.h ";
-
-%feature("docstring")  gdcm::network::ULConnection::ULConnection "gdcm::network::ULConnection::ULConnection(const ULConnectionInfo
-&inUserInformation) ";
-
-%feature("docstring")  gdcm::network::ULConnection::~ULConnection "virtual gdcm::network::ULConnection::~ULConnection() ";
-
-%feature("docstring")
-gdcm::network::ULConnection::AddAcceptedPresentationContext "void
-gdcm::network::ULConnection::AddAcceptedPresentationContext(const
-PresentationContextAC &inPC) ";
-
-%feature("docstring")  gdcm::network::ULConnection::FindContext "PresentationContextRQ gdcm::network::ULConnection::FindContext(const
-DataElement &de) const ";
-
-%feature("docstring")
-gdcm::network::ULConnection::GetAcceptedPresentationContexts "std::vector<PresentationContextAC> const&
-gdcm::network::ULConnection::GetAcceptedPresentationContexts() const
-";
-
-%feature("docstring")
-gdcm::network::ULConnection::GetAcceptedPresentationContexts "std::vector<PresentationContextAC>&
-gdcm::network::ULConnection::GetAcceptedPresentationContexts() ";
-
-%feature("docstring")  gdcm::network::ULConnection::GetConnectionInfo
-"const ULConnectionInfo&
-gdcm::network::ULConnection::GetConnectionInfo() const ";
-
-%feature("docstring")  gdcm::network::ULConnection::GetMaxPDUSize "uint32_t gdcm::network::ULConnection::GetMaxPDUSize() const ";
-
-%feature("docstring")
-gdcm::network::ULConnection::GetPresentationContextACByID "const
-PresentationContextAC*
-gdcm::network::ULConnection::GetPresentationContextACByID(uint8_t id)
-const ";
-
-%feature("docstring")
-gdcm::network::ULConnection::GetPresentationContextIDFromPresentationContext
-"uint8_t
-gdcm::network::ULConnection::GetPresentationContextIDFromPresentationContext(PresentationContextRQ
-const &pc) const
-
-return 0 upon error ";
-
-%feature("docstring")
-gdcm::network::ULConnection::GetPresentationContextRQByID "const
-PresentationContextRQ*
-gdcm::network::ULConnection::GetPresentationContextRQByID(uint8_t id)
-const ";
-
-%feature("docstring")
-gdcm::network::ULConnection::GetPresentationContexts "std::vector<PresentationContextRQ> const&
-gdcm::network::ULConnection::GetPresentationContexts() const ";
-
-%feature("docstring")  gdcm::network::ULConnection::GetProtocol "std::iostream* gdcm::network::ULConnection::GetProtocol() ";
-
-%feature("docstring")  gdcm::network::ULConnection::GetState "EStateID gdcm::network::ULConnection::GetState() const ";
-
-%feature("docstring")  gdcm::network::ULConnection::GetTimer "ARTIMTimer& gdcm::network::ULConnection::GetTimer() ";
-
-%feature("docstring")
-gdcm::network::ULConnection::InitializeConnection "bool
-gdcm::network::ULConnection::InitializeConnection()
-
-used to establish scu connections ";
-
-%feature("docstring")
-gdcm::network::ULConnection::InitializeIncomingConnection "bool
-gdcm::network::ULConnection::InitializeIncomingConnection()
-
-used to establish scp connections ";
-
-%feature("docstring")  gdcm::network::ULConnection::SetMaxPDUSize "void gdcm::network::ULConnection::SetMaxPDUSize(uint32_t inSize) ";
-
-%feature("docstring")
-gdcm::network::ULConnection::SetPresentationContexts "void
-gdcm::network::ULConnection::SetPresentationContexts(const
-std::vector< PresentationContextRQ > &inContexts) ";
-
-%feature("docstring")
-gdcm::network::ULConnection::SetPresentationContexts "void
-gdcm::network::ULConnection::SetPresentationContexts(const
-std::vector< PresentationContext > &inContexts) ";
-
-%feature("docstring")  gdcm::network::ULConnection::SetState "void
-gdcm::network::ULConnection::SetState(const EStateID &inState) ";
-
-%feature("docstring")  gdcm::network::ULConnection::StopProtocol "void gdcm::network::ULConnection::StopProtocol() ";
-
-
-// File: classgdcm_1_1network_1_1ULConnectionCallback.xml
-%feature("docstring") gdcm::network::ULConnectionCallback "
-
-When a dataset comes back from a query/move/etc, the result can either
-be stored entirely in memory, or could be stored on disk. This class
-provides a mechanism to indicate what the ULConnectionManager should
-do with datasets that are produced through query results. The
-ULConnectionManager will call the HandleDataSet function during the
-course of receiving datasets. Particular implementations should fill
-in what that function does, including updating progress, etc. NOTE:
-since cmove requires that multiple event loops be employed, the
-callback function MUST set mHandledDataSet to true. otherwise, the
-cmove event loop handler will not know data was received, and proceed
-to end the loop prematurely.
-
-C++ includes: gdcmULConnectionCallback.h ";
-
-%feature("docstring")
-gdcm::network::ULConnectionCallback::ULConnectionCallback "gdcm::network::ULConnectionCallback::ULConnectionCallback() ";
-
-%feature("docstring")
-gdcm::network::ULConnectionCallback::~ULConnectionCallback "gdcm::network::ULConnectionCallback::~ULConnectionCallback() ";
-
-%feature("docstring")
-gdcm::network::ULConnectionCallback::DataSetHandles "bool
-gdcm::network::ULConnectionCallback::DataSetHandles() const ";
-
-%feature("docstring")
-gdcm::network::ULConnectionCallback::HandleDataSet "virtual void
-gdcm::network::ULConnectionCallback::HandleDataSet(const DataSet
-&inDataSet)=0 ";
-
-%feature("docstring")
-gdcm::network::ULConnectionCallback::ResetHandledDataSet "void
-gdcm::network::ULConnectionCallback::ResetHandledDataSet() ";
-
-
-// File: classgdcm_1_1network_1_1ULConnectionInfo.xml
-%feature("docstring") gdcm::network::ULConnectionInfo "
-
-ULConnectionInfo this class contains all the information about a
-particular connection as established by the user. That is, it's: User
-Information Calling AE Title Called AE Title IP address/computer name
-IP Port A connection must be established with this information, that's
-subsequently placed into various primitives for actual communication.
-
-C++ includes: gdcmULConnectionInfo.h ";
-
-%feature("docstring")
-gdcm::network::ULConnectionInfo::ULConnectionInfo "gdcm::network::ULConnectionInfo::ULConnectionInfo() ";
-
-%feature("docstring")
-gdcm::network::ULConnectionInfo::GetCalledAETitle "const char*
-gdcm::network::ULConnectionInfo::GetCalledAETitle() const ";
-
-%feature("docstring")
-gdcm::network::ULConnectionInfo::GetCalledComputerName "std::string
-gdcm::network::ULConnectionInfo::GetCalledComputerName() const ";
-
-%feature("docstring")
-gdcm::network::ULConnectionInfo::GetCalledIPAddress "unsigned long
-gdcm::network::ULConnectionInfo::GetCalledIPAddress() const ";
-
-%feature("docstring")
-gdcm::network::ULConnectionInfo::GetCalledIPPort "int
-gdcm::network::ULConnectionInfo::GetCalledIPPort() const ";
-
-%feature("docstring")
-gdcm::network::ULConnectionInfo::GetCallingAETitle "const char*
-gdcm::network::ULConnectionInfo::GetCallingAETitle() const ";
-
-%feature("docstring")
-gdcm::network::ULConnectionInfo::GetMaxPDULength "unsigned long
-gdcm::network::ULConnectionInfo::GetMaxPDULength() const ";
-
-%feature("docstring")
-gdcm::network::ULConnectionInfo::GetUserInformation "UserInformation
-gdcm::network::ULConnectionInfo::GetUserInformation() const ";
-
-%feature("docstring")  gdcm::network::ULConnectionInfo::Initialize "bool gdcm::network::ULConnectionInfo::Initialize(UserInformation
-inUserInformation, const char inCalledAETitle[16], const char
-inCallingAETitle[16], unsigned long inCalledIPAddress, int
-inCalledIPPort, std::string inCalledComputerName) ";
-
-%feature("docstring")
-gdcm::network::ULConnectionInfo::SetMaxPDULength "void
-gdcm::network::ULConnectionInfo::SetMaxPDULength(unsigned long
-inMaxPDULength) ";
-
-
-// File: classgdcm_1_1network_1_1ULConnectionManager.xml
-%feature("docstring") gdcm::network::ULConnectionManager "
-
-ULConnectionManager The ULConnectionManager performs actions on the
-ULConnection given inputs from the user and from the state of what's
-going on around the connection (ie, timeouts of the ARTIM timer,
-responses from the peer across the connection, etc).
-
-Its inputs are ULEvents, and it performs ULActions.
-
-C++ includes: gdcmULConnectionManager.h ";
-
-%feature("docstring")
-gdcm::network::ULConnectionManager::ULConnectionManager "gdcm::network::ULConnectionManager::ULConnectionManager() ";
-
-%feature("docstring")
-gdcm::network::ULConnectionManager::~ULConnectionManager "gdcm::network::ULConnectionManager::~ULConnectionManager() ";
-
-%feature("docstring")
-gdcm::network::ULConnectionManager::BreakConnection "bool
-gdcm::network::ULConnectionManager::BreakConnection(const double
-&inTimeout) ";
-
-%feature("docstring")
-gdcm::network::ULConnectionManager::BreakConnectionNow "void
-gdcm::network::ULConnectionManager::BreakConnectionNow() ";
-
-%feature("docstring")
-gdcm::network::ULConnectionManager::EstablishConnection "bool
-gdcm::network::ULConnectionManager::EstablishConnection(const
-std::string &inAETitle, const std::string &inConnectAETitle, const
-std::string &inComputerName, long inIPAddress, uint16_t inConnectPort,
-double inTimeout, std::vector< PresentationContext > const &pcVector)
-
-returns true if a connection of the given AETitle (ie, 'this' program)
-is able to connect to the given AETitle and Port in a certain amount
-of time providing the connection type will establish the proper
-exchange syntax with a server; if a different functionality is
-required, a different connection should be established. returns false
-if the connection type is 'move'-- have to give a return port for move
-to work as specified. ";
-
-%feature("docstring")
-gdcm::network::ULConnectionManager::EstablishConnectionMove "bool
-gdcm::network::ULConnectionManager::EstablishConnectionMove(const
-std::string &inAETitle, const std::string &inConnectAETitle, const
-std::string &inComputerName, long inIPAddress, uint16_t inConnectPort,
-double inTimeout, uint16_t inReturnPort, std::vector<
-PresentationContext > const &pcVector)
-
-returns true for above reasons, but contains the special 'move' port
-";
-
-%feature("docstring")  gdcm::network::ULConnectionManager::SendEcho "std::vector<PresentationDataValue>
-gdcm::network::ULConnectionManager::SendEcho() ";
-
-%feature("docstring")  gdcm::network::ULConnectionManager::SendFind "std::vector<DataSet>
-gdcm::network::ULConnectionManager::SendFind(const BaseRootQuery
-*inRootQuery) ";
-
-%feature("docstring")  gdcm::network::ULConnectionManager::SendFind "void gdcm::network::ULConnectionManager::SendFind(const BaseRootQuery
-*inRootQuery, ULConnectionCallback *inCallback) ";
-
-%feature("docstring")  gdcm::network::ULConnectionManager::SendMove "void gdcm::network::ULConnectionManager::SendMove(const BaseRootQuery
-*inRootQuery, ULConnectionCallback *inCallback) ";
-
-%feature("docstring")  gdcm::network::ULConnectionManager::SendMove "std::vector<DataSet>
-gdcm::network::ULConnectionManager::SendMove(const BaseRootQuery
-*inRootQuery) ";
-
-%feature("docstring")  gdcm::network::ULConnectionManager::SendStore "std::vector<DataSet>
-gdcm::network::ULConnectionManager::SendStore(const File &file) ";
-
-%feature("docstring")  gdcm::network::ULConnectionManager::SendStore "void gdcm::network::ULConnectionManager::SendStore(const File &file,
-ULConnectionCallback *inCallback)
-
-callback based API ";
-
-
-// File: classgdcm_1_1network_1_1ULEvent.xml
-%feature("docstring") gdcm::network::ULEvent "
-
-ULEvent base class for network events.
-
-An event consists of the event ID and the data associated with that
-event.
-
-Note that once a PDU is created, it is now the responsibility of the
-associated event to destroy it!
-
-C++ includes: gdcmULEvent.h ";
-
-%feature("docstring")  gdcm::network::ULEvent::ULEvent "gdcm::network::ULEvent::ULEvent(const EEventID &inEventID,
-std::vector< BasePDU * > inBasePDU) ";
-
-%feature("docstring")  gdcm::network::ULEvent::ULEvent "gdcm::network::ULEvent::ULEvent(const EEventID &inEventID, BasePDU
-*inBasePDU) ";
-
-%feature("docstring")  gdcm::network::ULEvent::~ULEvent "gdcm::network::ULEvent::~ULEvent() ";
-
-%feature("docstring")  gdcm::network::ULEvent::GetEvent "EEventID
-gdcm::network::ULEvent::GetEvent() const ";
-
-%feature("docstring")  gdcm::network::ULEvent::GetPDUs "std::vector<BasePDU*> gdcm::network::ULEvent::GetPDUs() const ";
-
-%feature("docstring")  gdcm::network::ULEvent::SetEvent "void
-gdcm::network::ULEvent::SetEvent(const EEventID &inEvent) ";
-
-%feature("docstring")  gdcm::network::ULEvent::SetPDU "void
-gdcm::network::ULEvent::SetPDU(std::vector< BasePDU * > inPDU) ";
-
-
-// File: classgdcm_1_1network_1_1ULTransitionTable.xml
-%feature("docstring") gdcm::network::ULTransitionTable "
-
-ULTransitionTable The transition table of all the ULEvents, new
-ULActions, and ULStates.
-
-Based roughly on the solutions in player2.cpp in the boost examples
-and this so question:http://stackoverflow.com/questions/1647631/c
--state-machine-design
-
-The transition table is constructed of TableRows. Each row is based on
-an event, and an event handler in the TransitionTable object takes a
-given event, and then finds the given row.
-
-Then, given the current state of the connection, determines the
-appropriate action to take and then the state to transition to next.
-
-C++ includes: gdcmULTransitionTable.h ";
-
-%feature("docstring")
-gdcm::network::ULTransitionTable::ULTransitionTable "gdcm::network::ULTransitionTable::ULTransitionTable() ";
-
-%feature("docstring")  gdcm::network::ULTransitionTable::HandleEvent "void gdcm::network::ULTransitionTable::HandleEvent(Subject *s, ULEvent
-&inEvent, ULConnection &inConnection, bool &outWaitingForEvent,
-EEventID &outRaisedEvent) const ";
-
-%feature("docstring")  gdcm::network::ULTransitionTable::PrintTable "void gdcm::network::ULTransitionTable::PrintTable() const ";
-
-
-// File: classgdcm_1_1network_1_1ULWritingCallback.xml
-%feature("docstring") gdcm::network::ULWritingCallback "C++ includes:
-gdcmULWritingCallback.h ";
-
-%feature("docstring")
-gdcm::network::ULWritingCallback::ULWritingCallback "gdcm::network::ULWritingCallback::ULWritingCallback() ";
-
-%feature("docstring")
-gdcm::network::ULWritingCallback::~ULWritingCallback "virtual
-gdcm::network::ULWritingCallback::~ULWritingCallback() ";
-
-%feature("docstring")  gdcm::network::ULWritingCallback::HandleDataSet
-"virtual void gdcm::network::ULWritingCallback::HandleDataSet(const
-DataSet &inDataSet) ";
-
-%feature("docstring")  gdcm::network::ULWritingCallback::SetDirectory
-"void gdcm::network::ULWritingCallback::SetDirectory(const
-std::string &inDirectoryName)
-
-provide the directory into which all files are written. ";
-
-
 // File: classstd_1_1underflow__error.xml
 %feature("docstring") std::underflow_error "
 
@@ -11448,12 +7794,6 @@ C++ includes: gdcmUNExplicitDataElement.h ";
 gdcm::UNExplicitDataElement::GetLength() const ";
 
 %feature("docstring")  gdcm::UNExplicitDataElement::Read "std::istream& gdcm::UNExplicitDataElement::Read(std::istream &is) ";
-
-%feature("docstring")  gdcm::UNExplicitDataElement::ReadPreValue "std::istream& gdcm::UNExplicitDataElement::ReadPreValue(std::istream
-&is) ";
-
-%feature("docstring")  gdcm::UNExplicitDataElement::ReadValue "std::istream& gdcm::UNExplicitDataElement::ReadValue(std::istream &is)
-";
 
 %feature("docstring")  gdcm::UNExplicitDataElement::ReadWithLength "std::istream& gdcm::UNExplicitDataElement::ReadWithLength(std::istream
 &is, VL &length) ";
@@ -11477,14 +7817,6 @@ C++ includes: gdcmUNExplicitImplicitDataElement.h ";
 
 %feature("docstring")  gdcm::UNExplicitImplicitDataElement::Read "std::istream& gdcm::UNExplicitImplicitDataElement::Read(std::istream
 &is) ";
-
-%feature("docstring")
-gdcm::UNExplicitImplicitDataElement::ReadPreValue "std::istream&
-gdcm::UNExplicitImplicitDataElement::ReadPreValue(std::istream &is) ";
-
-%feature("docstring")  gdcm::UNExplicitImplicitDataElement::ReadValue
-"std::istream&
-gdcm::UNExplicitImplicitDataElement::ReadValue(std::istream &is) ";
 
 
 // File: classgdcm_1_1Unpacker12Bits.xml
@@ -11545,43 +7877,6 @@ C++ includes: gdcmUsage.h ";
 
 // File: classgdcm_1_1UserEvent.xml
 %feature("docstring") gdcm::UserEvent "C++ includes: gdcmEvent.h ";
-
-
-// File: classgdcm_1_1network_1_1UserInformation.xml
-%feature("docstring") gdcm::network::UserInformation "
-
-UserInformation Table 9-16 USER INFORMATION ITEM FIELDS.
-
-TODO what is the goal of :
-
-Table 9-20 USER INFORMATION ITEM FIELDS
-
-C++ includes: gdcmUserInformation.h ";
-
-%feature("docstring")  gdcm::network::UserInformation::UserInformation
-"gdcm::network::UserInformation::UserInformation() ";
-
-%feature("docstring")
-gdcm::network::UserInformation::GetMaximumLengthSub "MaximumLengthSub&
-gdcm::network::UserInformation::GetMaximumLengthSub() ";
-
-%feature("docstring")
-gdcm::network::UserInformation::GetMaximumLengthSub "const
-MaximumLengthSub&
-gdcm::network::UserInformation::GetMaximumLengthSub() const ";
-
-%feature("docstring")  gdcm::network::UserInformation::Print "void
-gdcm::network::UserInformation::Print(std::ostream &os) const ";
-
-%feature("docstring")  gdcm::network::UserInformation::Read "std::istream& gdcm::network::UserInformation::Read(std::istream &is)
-";
-
-%feature("docstring")  gdcm::network::UserInformation::Size "size_t
-gdcm::network::UserInformation::Size() const ";
-
-%feature("docstring")  gdcm::network::UserInformation::Write "const
-std::ostream& gdcm::network::UserInformation::Write(std::ostream &os)
-const ";
 
 
 // File: classstd_1_1valarray.xml
@@ -11790,12 +8085,6 @@ C++ includes: gdcmVR16ExplicitDataElement.h ";
 gdcm::VR16ExplicitDataElement::GetLength() const ";
 
 %feature("docstring")  gdcm::VR16ExplicitDataElement::Read "std::istream& gdcm::VR16ExplicitDataElement::Read(std::istream &is) ";
-
-%feature("docstring")  gdcm::VR16ExplicitDataElement::ReadPreValue "std::istream& gdcm::VR16ExplicitDataElement::ReadPreValue(std::istream
-&is) ";
-
-%feature("docstring")  gdcm::VR16ExplicitDataElement::ReadValue "std::istream& gdcm::VR16ExplicitDataElement::ReadValue(std::istream
-&is) ";
 
 %feature("docstring")  gdcm::VR16ExplicitDataElement::ReadWithLength "std::istream&
 gdcm::VR16ExplicitDataElement::ReadWithLength(std::istream &is, VL
@@ -12012,43 +8301,12 @@ vtkGDCMPolyDataReader::PrintSelf(ostream &os, vtkIndent indent) ";
 %feature("docstring")  vtkGDCMPolyDataReader::vtkGetObjectMacro "vtkGDCMPolyDataReader::vtkGetObjectMacro(MedicalImageProperties,
 vtkMedicalImageProperties) ";
 
-%feature("docstring")  vtkGDCMPolyDataReader::vtkGetObjectMacro "vtkGDCMPolyDataReader::vtkGetObjectMacro(RTStructSetProperties,
-vtkRTStructSetProperties) ";
-
 %feature("docstring")  vtkGDCMPolyDataReader::vtkGetStringMacro "vtkGDCMPolyDataReader::vtkGetStringMacro(FileName) ";
 
 %feature("docstring")  vtkGDCMPolyDataReader::vtkSetStringMacro "vtkGDCMPolyDataReader::vtkSetStringMacro(FileName) ";
 
 %feature("docstring")  vtkGDCMPolyDataReader::vtkTypeRevisionMacro "vtkGDCMPolyDataReader::vtkTypeRevisionMacro(vtkGDCMPolyDataReader,
 vtkPolyDataAlgorithm) ";
-
-
-// File: classvtkGDCMPolyDataWriter.xml
-%feature("docstring") vtkGDCMPolyDataWriter "C++ includes:
-vtkGDCMPolyDataWriter.h ";
-
-%feature("docstring")  vtkGDCMPolyDataWriter::InitializeRTStructSet "void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString
-inDirectory, vtkStdString inStructLabel, vtkStdString inStructName,
-vtkStringArray *inROINames, vtkStringArray *inROIAlgorithmName,
-vtkStringArray *inROIType) ";
-
-%feature("docstring")  vtkGDCMPolyDataWriter::PrintSelf "virtual void
-vtkGDCMPolyDataWriter::PrintSelf(ostream &os, vtkIndent indent) ";
-
-%feature("docstring")
-vtkGDCMPolyDataWriter::SetMedicalImageProperties "virtual void
-vtkGDCMPolyDataWriter::SetMedicalImageProperties(vtkMedicalImageProperties
-*pd) ";
-
-%feature("docstring")  vtkGDCMPolyDataWriter::SetNumberOfInputPorts "void vtkGDCMPolyDataWriter::SetNumberOfInputPorts(int n) ";
-
-%feature("docstring")  vtkGDCMPolyDataWriter::SetRTStructSetProperties
-"virtual void
-vtkGDCMPolyDataWriter::SetRTStructSetProperties(vtkRTStructSetProperties
-*pd) ";
-
-%feature("docstring")  vtkGDCMPolyDataWriter::vtkTypeRevisionMacro "vtkGDCMPolyDataWriter::vtkTypeRevisionMacro(vtkGDCMPolyDataWriter,
-vtkPolyDataWriter) ";
 
 
 // File: classvtkGDCMTesting.xml
@@ -12443,453 +8701,6 @@ vtkLookupTable) ";
 ";
 
 
-// File: classvtkMedicalImageProperties.xml
-%feature("docstring") vtkMedicalImageProperties "C++ includes:
-vtkMedicalImageProperties.h ";
-
-%feature("docstring")  vtkMedicalImageProperties::AddUserDefinedValue
-"void vtkMedicalImageProperties::AddUserDefinedValue(const char
-*name, const char *value) ";
-
-%feature("docstring")  vtkMedicalImageProperties::AddWindowLevelPreset
-"virtual void vtkMedicalImageProperties::AddWindowLevelPreset(double
-w, double l) ";
-
-%feature("docstring")  vtkMedicalImageProperties::Clear "virtual void
-vtkMedicalImageProperties::Clear() ";
-
-%feature("docstring")  vtkMedicalImageProperties::DeepCopy "virtual
-void vtkMedicalImageProperties::DeepCopy(vtkMedicalImageProperties *p)
-";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetAcquisitionDateDay "int
-vtkMedicalImageProperties::GetAcquisitionDateDay() ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetAcquisitionDateMonth "int
-vtkMedicalImageProperties::GetAcquisitionDateMonth() ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetAcquisitionDateYear "int
-vtkMedicalImageProperties::GetAcquisitionDateYear() ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetGantryTiltAsDouble "virtual double
-vtkMedicalImageProperties::GetGantryTiltAsDouble() ";
-
-%feature("docstring")  vtkMedicalImageProperties::GetImageDateDay "int vtkMedicalImageProperties::GetImageDateDay() ";
-
-%feature("docstring")  vtkMedicalImageProperties::GetImageDateMonth "int vtkMedicalImageProperties::GetImageDateMonth() ";
-
-%feature("docstring")  vtkMedicalImageProperties::GetImageDateYear "int vtkMedicalImageProperties::GetImageDateYear() ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetInstanceUIDFromSliceID "const char*
-vtkMedicalImageProperties::GetInstanceUIDFromSliceID(int volumeidx,
-int sliceid) ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetNthWindowLevelPreset "virtual int
-vtkMedicalImageProperties::GetNthWindowLevelPreset(int idx, double *w,
-double *l) ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetNthWindowLevelPreset "virtual double*
-vtkMedicalImageProperties::GetNthWindowLevelPreset(int idx) ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetNthWindowLevelPresetComment "virtual
-const char*
-vtkMedicalImageProperties::GetNthWindowLevelPresetComment(int idx) ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetNumberOfUserDefinedValues "unsigned int
-vtkMedicalImageProperties::GetNumberOfUserDefinedValues() ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetNumberOfWindowLevelPresets "virtual int
-vtkMedicalImageProperties::GetNumberOfWindowLevelPresets() ";
-
-%feature("docstring")  vtkMedicalImageProperties::GetOrientationType "int vtkMedicalImageProperties::GetOrientationType(int volumeidx) ";
-
-%feature("docstring")  vtkMedicalImageProperties::GetPatientAgeDay "int vtkMedicalImageProperties::GetPatientAgeDay() ";
-
-%feature("docstring")  vtkMedicalImageProperties::GetPatientAgeMonth "int vtkMedicalImageProperties::GetPatientAgeMonth() ";
-
-%feature("docstring")  vtkMedicalImageProperties::GetPatientAgeWeek "int vtkMedicalImageProperties::GetPatientAgeWeek() ";
-
-%feature("docstring")  vtkMedicalImageProperties::GetPatientAgeYear "int vtkMedicalImageProperties::GetPatientAgeYear() ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetPatientBirthDateDay "int
-vtkMedicalImageProperties::GetPatientBirthDateDay() ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetPatientBirthDateMonth "int
-vtkMedicalImageProperties::GetPatientBirthDateMonth() ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetPatientBirthDateYear "int
-vtkMedicalImageProperties::GetPatientBirthDateYear() ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetSliceIDFromInstanceUID "int
-vtkMedicalImageProperties::GetSliceIDFromInstanceUID(int &volumeidx,
-const char *uid) ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetSliceThicknessAsDouble "virtual double
-vtkMedicalImageProperties::GetSliceThicknessAsDouble() ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetUserDefinedNameByIndex "const char*
-vtkMedicalImageProperties::GetUserDefinedNameByIndex(unsigned int idx)
-";
-
-%feature("docstring")  vtkMedicalImageProperties::GetUserDefinedValue
-"const char* vtkMedicalImageProperties::GetUserDefinedValue(const
-char *name) ";
-
-%feature("docstring")
-vtkMedicalImageProperties::GetUserDefinedValueByIndex "const char*
-vtkMedicalImageProperties::GetUserDefinedValueByIndex(unsigned int
-idx) ";
-
-%feature("docstring")  vtkMedicalImageProperties::HasWindowLevelPreset
-"virtual int vtkMedicalImageProperties::HasWindowLevelPreset(double
-w, double l) ";
-
-%feature("docstring")  vtkMedicalImageProperties::PrintSelf "void
-vtkMedicalImageProperties::PrintSelf(ostream &os, vtkIndent indent) ";
-
-%feature("docstring")
-vtkMedicalImageProperties::RemoveAllWindowLevelPresets "virtual void
-vtkMedicalImageProperties::RemoveAllWindowLevelPresets() ";
-
-%feature("docstring")
-vtkMedicalImageProperties::RemoveWindowLevelPreset "virtual void
-vtkMedicalImageProperties::RemoveWindowLevelPreset(double w, double l)
-";
-
-%feature("docstring")
-vtkMedicalImageProperties::SetInstanceUIDFromSliceID "void
-vtkMedicalImageProperties::SetInstanceUIDFromSliceID(int volumeidx,
-int sliceid, const char *uid) ";
-
-%feature("docstring")
-vtkMedicalImageProperties::SetNthWindowLevelPresetComment "virtual
-void vtkMedicalImageProperties::SetNthWindowLevelPresetComment(int
-idx, const char *comment) ";
-
-%feature("docstring")  vtkMedicalImageProperties::SetOrientationType "void vtkMedicalImageProperties::SetOrientationType(int volumeidx, int
-orientation) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(SeriesNumber) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(AcquisitionTime) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(SliceThickness) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(ImageDate) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(KVP) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(GantryTilt) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(PatientBirthDate) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(EchoTime) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(StudyID) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(EchoTrainLength) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(RepetitionTime) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(PatientAge) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(ImageTime) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(XRayTubeCurrent) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(ImageNumber) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(SeriesDescription) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(ExposureTime) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(PatientName) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(Modality) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(StudyDate) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(AcquisitionDate) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(Manufacturer) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(StudyDescription) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(ManufacturerModelName) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(Exposure) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(StudyTime) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(StationName) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(InstitutionName) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(PatientID) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(ConvolutionKernel) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkGetStringMacro "vtkMedicalImageProperties::vtkGetStringMacro(PatientSex) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(GantryTilt) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(EchoTime) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(PatientSex) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(StudyTime) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(XRayTubeCurrent) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(ImageTime) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(RepetitionTime) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(SeriesDescription) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(AcquisitionDate) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(StudyDate) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(Modality) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(PatientID) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(Manufacturer) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(PatientBirthDate) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(KVP) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(InstitutionName) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(AcquisitionTime) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(StudyID) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(Exposure) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(StationName) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(SeriesNumber) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(ImageDate) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(PatientAge) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(ExposureTime) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(ManufacturerModelName) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(ConvolutionKernel) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(SliceThickness) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(PatientName) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(EchoTrainLength) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(ImageNumber) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkSetStringMacro "vtkMedicalImageProperties::vtkSetStringMacro(StudyDescription) ";
-
-%feature("docstring")  vtkMedicalImageProperties::vtkTypeRevisionMacro
-"vtkMedicalImageProperties::vtkTypeRevisionMacro(vtkMedicalImageProperties,
-vtkObject) ";
-
-
-// File: classvtkRTStructSetProperties.xml
-%feature("docstring") vtkRTStructSetProperties "C++ includes:
-vtkRTStructSetProperties.h ";
-
-%feature("docstring")
-vtkRTStructSetProperties::AddContourReferencedFrameOfReference "void
-vtkRTStructSetProperties::AddContourReferencedFrameOfReference(vtkIdType
-pdnum, const char *classuid, const char *instanceuid) ";
-
-%feature("docstring")
-vtkRTStructSetProperties::AddReferencedFrameOfReference "void
-vtkRTStructSetProperties::AddReferencedFrameOfReference(const char
-*classuid, const char *instanceuid) ";
-
-%feature("docstring")  vtkRTStructSetProperties::AddStructureSetROI "void vtkRTStructSetProperties::AddStructureSetROI(int roinumber, const
-char *refframerefuid, const char *roiname, const char
-*ROIGenerationAlgorithm) ";
-
-%feature("docstring")
-vtkRTStructSetProperties::AddStructureSetROIObservation "void
-vtkRTStructSetProperties::AddStructureSetROIObservation(int refnumber,
-int observationnumber, const char *rtroiinterpretedtype, const char
-*roiinterpreter) ";
-
-%feature("docstring")  vtkRTStructSetProperties::Clear "virtual void
-vtkRTStructSetProperties::Clear() ";
-
-%feature("docstring")  vtkRTStructSetProperties::DeepCopy "virtual
-void vtkRTStructSetProperties::DeepCopy(vtkRTStructSetProperties *p)
-";
-
-%feature("docstring")
-vtkRTStructSetProperties::GetContourReferencedFrameOfReferenceClassUID
-"const char*
-vtkRTStructSetProperties::GetContourReferencedFrameOfReferenceClassUID(vtkIdType
-pdnum, vtkIdType id) ";
-
-%feature("docstring")
-vtkRTStructSetProperties::GetContourReferencedFrameOfReferenceInstanceUID
-"const char*
-vtkRTStructSetProperties::GetContourReferencedFrameOfReferenceInstanceUID(vtkIdType
-pdnum, vtkIdType id) ";
-
-%feature("docstring")
-vtkRTStructSetProperties::GetNumberOfContourReferencedFrameOfReferences
-"vtkIdType
-vtkRTStructSetProperties::GetNumberOfContourReferencedFrameOfReferences()
-";
-
-%feature("docstring")
-vtkRTStructSetProperties::GetNumberOfContourReferencedFrameOfReferences
-"vtkIdType
-vtkRTStructSetProperties::GetNumberOfContourReferencedFrameOfReferences(vtkIdType
-pdnum) ";
-
-%feature("docstring")
-vtkRTStructSetProperties::GetNumberOfReferencedFrameOfReferences "vtkIdType
-vtkRTStructSetProperties::GetNumberOfReferencedFrameOfReferences() ";
-
-%feature("docstring")
-vtkRTStructSetProperties::GetNumberOfStructureSetROIs "vtkIdType
-vtkRTStructSetProperties::GetNumberOfStructureSetROIs() ";
-
-%feature("docstring")
-vtkRTStructSetProperties::GetReferencedFrameOfReferenceClassUID "const char*
-vtkRTStructSetProperties::GetReferencedFrameOfReferenceClassUID(vtkIdType
-id) ";
-
-%feature("docstring")
-vtkRTStructSetProperties::GetReferencedFrameOfReferenceInstanceUID "const char*
-vtkRTStructSetProperties::GetReferencedFrameOfReferenceInstanceUID(vtkIdType
-id) ";
-
-%feature("docstring")
-vtkRTStructSetProperties::GetStructureSetObservationNumber "int
-vtkRTStructSetProperties::GetStructureSetObservationNumber(vtkIdType
-id) ";
-
-%feature("docstring")
-vtkRTStructSetProperties::GetStructureSetROIGenerationAlgorithm "const char*
-vtkRTStructSetProperties::GetStructureSetROIGenerationAlgorithm(vtkIdType)
-";
-
-%feature("docstring")
-vtkRTStructSetProperties::GetStructureSetROIName "const char*
-vtkRTStructSetProperties::GetStructureSetROIName(vtkIdType) ";
-
-%feature("docstring")
-vtkRTStructSetProperties::GetStructureSetROINumber "int
-vtkRTStructSetProperties::GetStructureSetROINumber(vtkIdType id) ";
-
-%feature("docstring")
-vtkRTStructSetProperties::GetStructureSetROIRefFrameRefUID "const
-char*
-vtkRTStructSetProperties::GetStructureSetROIRefFrameRefUID(vtkIdType)
-";
-
-%feature("docstring")
-vtkRTStructSetProperties::GetStructureSetRTROIInterpretedType "const
-char*
-vtkRTStructSetProperties::GetStructureSetRTROIInterpretedType(vtkIdType
-id) ";
-
-%feature("docstring")  vtkRTStructSetProperties::PrintSelf "void
-vtkRTStructSetProperties::PrintSelf(ostream &os, vtkIndent indent) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkGetStringMacro "vtkRTStructSetProperties::vtkGetStringMacro(ReferenceFrameOfReferenceUID)
-";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkGetStringMacro "vtkRTStructSetProperties::vtkGetStringMacro(StructureSetDate) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkGetStringMacro "vtkRTStructSetProperties::vtkGetStringMacro(StructureSetTime) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkGetStringMacro "vtkRTStructSetProperties::vtkGetStringMacro(ReferenceSeriesInstanceUID)
-";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkGetStringMacro "vtkRTStructSetProperties::vtkGetStringMacro(StructureSetLabel) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkGetStringMacro "vtkRTStructSetProperties::vtkGetStringMacro(StudyInstanceUID) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkGetStringMacro "vtkRTStructSetProperties::vtkGetStringMacro(SeriesInstanceUID) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkGetStringMacro "vtkRTStructSetProperties::vtkGetStringMacro(SOPInstanceUID) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkGetStringMacro "vtkRTStructSetProperties::vtkGetStringMacro(StructureSetName) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkSetStringMacro "vtkRTStructSetProperties::vtkSetStringMacro(StructureSetName) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkSetStringMacro "vtkRTStructSetProperties::vtkSetStringMacro(ReferenceFrameOfReferenceUID)
-";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkSetStringMacro "vtkRTStructSetProperties::vtkSetStringMacro(StructureSetDate) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkSetStringMacro "vtkRTStructSetProperties::vtkSetStringMacro(StructureSetLabel) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkSetStringMacro "vtkRTStructSetProperties::vtkSetStringMacro(SeriesInstanceUID) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkSetStringMacro "vtkRTStructSetProperties::vtkSetStringMacro(StudyInstanceUID) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkSetStringMacro "vtkRTStructSetProperties::vtkSetStringMacro(ReferenceSeriesInstanceUID)
-";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkSetStringMacro "vtkRTStructSetProperties::vtkSetStringMacro(SOPInstanceUID) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkSetStringMacro "vtkRTStructSetProperties::vtkSetStringMacro(StructureSetTime) ";
-
-%feature("docstring")  vtkRTStructSetProperties::vtkTypeRevisionMacro
-"vtkRTStructSetProperties::vtkTypeRevisionMacro(vtkRTStructSetProperties,
-vtkObject) ";
-
-
-// File: classvtkStringArray.xml
-%feature("docstring") vtkStringArray "C++ includes: vtkStringArray.h
-";
-
-%feature("docstring")  vtkStringArray::GetNumberOfValues "int
-vtkStringArray::GetNumberOfValues() ";
-
-%feature("docstring")  vtkStringArray::GetSize "vtkIdType
-vtkStringArray::GetSize() ";
-
-%feature("docstring")  vtkStringArray::GetValue "const char*
-vtkStringArray::GetValue(unsigned int i) ";
-
-%feature("docstring")  vtkStringArray::InsertNextValue "vtkIdType
-vtkStringArray::InsertNextValue(std::string const &f) ";
-
-%feature("docstring")  vtkStringArray::InsertNextValue "vtkIdType
-vtkStringArray::InsertNextValue(const char *f) ";
-
-%feature("docstring")  vtkStringArray::PrintSelf "virtual void
-vtkStringArray::PrintSelf(ostream &os, vtkIndent indent) ";
-
-%feature("docstring")  vtkStringArray::vtkTypeRevisionMacro "vtkStringArray::vtkTypeRevisionMacro(vtkStringArray, vtkObject) ";
-
-
 // File: classgdcm_1_1Waveform.xml
 %feature("docstring") gdcm::Waveform "
 
@@ -12970,7 +8781,7 @@ Alphabetical order for elements (garanteed by design of internals)
 32bits VR will be rewritten with 00
 
 WARNING:   gdcm::Writer cannot write a DataSet if no SOP Instance UID
-(0008,0018) is found, unless a DICOMDIR is being written out
+(0008,0018) is found
 
 See:   Reader DataSet File
 
@@ -13000,7 +8811,7 @@ gdcm::Writer::SetFile(const File &f)
 Set/Get the DICOM file ( DataSet + Header). ";
 
 %feature("docstring")  gdcm::Writer::SetFileName "void
-gdcm::Writer::SetFileName(const char *filename_native)
+gdcm::Writer::SetFileName(const char *filename)
 
 Set the filename of DICOM file to write: ";
 
@@ -13085,24 +8896,13 @@ gdcm::XMLPrivateDictReader::StartElement(const char *name, const char
 
 
 // File: namespacegdcm.xml
-%feature("docstring")  gdcm::network::backslash "ignore_char const
+%feature("docstring")  gdcm::terminal::backslash "ignore_char const
 gdcm::backslash('\\\\\\\\') ";
 
-%feature("docstring")  gdcm::network::GetVRFromTag "VR::VRType
-gdcm::GetVRFromTag(Tag const &tag) ";
-
-%feature("docstring")  gdcm::network::to_string "std::string
+%feature("docstring")  gdcm::terminal::to_string "std::string
 gdcm::to_string(Float data) ";
 
-%feature("docstring")  gdcm::network::TYPETOENCODING "gdcm::TYPETOENCODING(SQ, VRBINARY, unsigned char) TYPETOENCODING(UN ";
-
-
-// File: namespacegdcm_1_1network.xml
-%feature("docstring")  gdcm::network::GetStateIndex "int
-gdcm::network::GetStateIndex(EStateID inState) ";
-
-
-// File: namespacegdcm_1_1SegmentHelper.xml
+%feature("docstring")  gdcm::terminal::TYPETOENCODING "gdcm::TYPETOENCODING(SQ, VRBINARY, unsigned char) TYPETOENCODING(UN ";
 
 
 // File: namespacegdcm_1_1terminal.xml
@@ -13125,25 +8925,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: namespacestd.xml
 
 
-// File: gdcm2pnm_8man.xml
-
-
 // File: gdcm2vtk_8man.xml
-
-
-// File: gdcmAAbortPDU_8h.xml
-
-
-// File: gdcmAAssociateACPDU_8h.xml
-
-
-// File: gdcmAAssociateRJPDU_8h.xml
-
-
-// File: gdcmAAssociateRQPDU_8h.xml
-
-
-// File: gdcmAbstractSyntax_8h.xml
 
 
 // File: gdcmanon_8man.xml
@@ -13155,25 +8937,10 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmAnonymizer_8h.xml
 
 
-// File: gdcmApplicationContext_8h.xml
-
-
 // File: gdcmApplicationEntity_8h.xml
 
 
-// File: gdcmAReleaseRPPDU_8h.xml
-
-
-// File: gdcmAReleaseRQPDU_8h.xml
-
-
-// File: gdcmARTIMTimer_8h.xml
-
-
 // File: gdcmASN1_8h.xml
-
-
-// File: gdcmAsynchronousOperationsWindowSub_8h.xml
 
 
 // File: gdcmAttribute_8h.xml
@@ -13185,22 +8952,10 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmBase64_8h.xml
 
 
-// File: gdcmBaseCompositeMessage_8h.xml
-
-
-// File: gdcmBasePDU_8h.xml
-
-
-// File: gdcmBaseRootQuery_8h.xml
-
-
 // File: gdcmBasicOffsetTable_8h.xml
 
 
 // File: gdcmBitmap_8h.xml
-
-
-// File: gdcmBitmapToBitmapFilter_8h.xml
 
 
 // File: gdcmByteBuffer_8h.xml
@@ -13215,15 +8970,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmByteValue_8h.xml
 
 
-// File: gdcmCEchoMessages_8h.xml
-
-
-// File: gdcmCFindMessages_8h.xml
-
-
-// File: gdcmCMoveMessages_8h.xml
-
-
 // File: gdcmCodec_8h.xml
 
 
@@ -13234,15 +8980,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmCommand_8h.xml
-
-
-// File: gdcmCommandDataSet_8h.xml
-
-
-// File: gdcmCompositeMessageFactory_8h.xml
-
-
-// File: gdcmCompositeNetworkFunctions_8h.xml
 
 
 // File: gdcmConstCharWrapper_8h.xml
@@ -13269,22 +9006,13 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmCSAHeaderDictEntry_8h.xml
 
 
-// File: gdcmCStoreMessages_8h.xml
-
-
 // File: gdcmCurve_8h.xml
 
 
 // File: gdcmDataElement_8h.xml
 
 
-// File: gdcmDataEvent_8h.xml
-
-
 // File: gdcmDataSet_8h.xml
-
-
-// File: gdcmDataSetEvent_8h.xml
 
 
 // File: gdcmDataSetHelper_8h.xml
@@ -13326,19 +9054,10 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmDicts_8h.xml
 
 
-// File: gdcmdiff_8man.xml
-
-
-// File: gdcmDIMSE_8h.xml
-
-
 // File: gdcmDirectionCosines_8h.xml
 
 
 // File: gdcmDirectory_8h.xml
-
-
-// File: gdcmDirectoryHelper_8h.xml
 
 
 // File: gdcmDummyValueGenerator_8h.xml
@@ -13395,12 +9114,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmFileSet_8h.xml
 
 
-// File: gdcmFindPatientRootQuery_8h.xml
-
-
-// File: gdcmFindStudyRootQuery_8h.xml
-
-
 // File: gdcmFragment_8h.xml
 
 
@@ -13414,12 +9127,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmIconImage_8h.xml
-
-
-// File: gdcmIconImageFilter_8h.xml
-
-
-// File: gdcmIconImageGenerator_8h.xml
 
 
 // File: gdcmImage_8h.xml
@@ -13459,15 +9166,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmimg_8man.xml
-
-
-// File: gdcmImplementationClassUIDSub_8h.xml
-
-
-// File: gdcmImplementationUIDSub_8h.xml
-
-
-// File: gdcmImplementationVersionNameSub_8h.xml
 
 
 // File: gdcmImplicitDataElement_8h.xml
@@ -13530,16 +9228,10 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmMacros_8h.xml
 
 
-// File: gdcmMaximumLengthSub_8h.xml
-
-
 // File: gdcmMD5_8h.xml
 
 
 // File: gdcmMediaStorage_8h.xml
-
-
-// File: gdcmMeshPrimitive_8h.xml
 
 
 // File: gdcmModule_8h.xml
@@ -13551,19 +9243,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmModules_8h.xml
 
 
-// File: gdcmMovePatientRootQuery_8h.xml
-
-
-// File: gdcmMoveStudyRootQuery_8h.xml
-
-
 // File: gdcmNestedModuleEntries_8h.xml
-
-
-// File: gdcmNetworkEvents_8h.xml
-
-
-// File: gdcmNetworkStateID_8h.xml
 
 
 // File: gdcmObject_8h.xml
@@ -13584,9 +9264,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmPatient_8h.xml
 
 
-// File: gdcmPDataTFPDU_8h.xml
-
-
 // File: gdcmPDBElement_8h.xml
 
 
@@ -13597,9 +9274,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmPDFCodec_8h.xml
-
-
-// File: gdcmPDUFactory_8h.xml
 
 
 // File: gdcmPersonName_8h.xml
@@ -13629,21 +9303,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmPreamble_8h.xml
 
 
-// File: gdcmPresentationContext_8h.xml
-
-
-// File: gdcmPresentationContextAC_8h.xml
-
-
-// File: gdcmPresentationContextGenerator_8h.xml
-
-
-// File: gdcmPresentationContextRQ_8h.xml
-
-
-// File: gdcmPresentationDataValue_8h.xml
-
-
 // File: gdcmPrinter_8h.xml
 
 
@@ -13657,24 +9316,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmPythonFilter_8h.xml
-
-
-// File: gdcmQueryBase_8h.xml
-
-
-// File: gdcmQueryFactory_8h.xml
-
-
-// File: gdcmQueryImage_8h.xml
-
-
-// File: gdcmQueryPatient_8h.xml
-
-
-// File: gdcmQuerySeries_8h.xml
-
-
-// File: gdcmQueryStudy_8h.xml
 
 
 // File: gdcmraw_8man.xml
@@ -13698,22 +9339,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmscanner_8man.xml
 
 
-// File: gdcmscu_8man.xml
-
-
-// File: gdcmSegment_8h.xml
-
-
 // File: gdcmSegmentedPaletteColorLookupTable_8h.xml
-
-
-// File: gdcmSegmentHelper_8h.xml
-
-
-// File: gdcmSegmentReader_8h.xml
-
-
-// File: gdcmSegmentWriter_8h.xml
 
 
 // File: gdcmSequenceOfFragments_8h.xml
@@ -13726,9 +9352,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmSeries_8h.xml
-
-
-// File: gdcmServiceClassUser_8h.xml
 
 
 // File: gdcmSHA1_8h.xml
@@ -13758,12 +9381,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmStaticAssert_8h.xml
 
 
-// File: gdcmStreamImageReader_8h.xml
-
-
-// File: gdcmStreamImageWriter_8h.xml
-
-
 // File: gdcmString_8h.xml
 
 
@@ -13774,18 +9391,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmSubject_8h.xml
-
-
-// File: gdcmSurface_8h.xml
-
-
-// File: gdcmSurfaceHelper_8h.xml
-
-
-// File: gdcmSurfaceReader_8h.xml
-
-
-// File: gdcmSurfaceWriter_8h.xml
 
 
 // File: gdcmSwapCode_8h.xml
@@ -13812,9 +9417,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmTagPath_8h.xml
 
 
-// File: gdcmTagToVR_8h.xml
-
-
 // File: gdcmtar_8man.xml
 
 
@@ -13833,9 +9435,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmTransferSyntax_8h.xml
 
 
-// File: gdcmTransferSyntaxSub_8h.xml
-
-
 // File: gdcmType_8h.xml
 
 
@@ -13848,45 +9447,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmUIDs_8h.xml
 
 
-// File: gdcmULAction_8h.xml
-
-
-// File: gdcmULActionAA_8h.xml
-
-
-// File: gdcmULActionAE_8h.xml
-
-
-// File: gdcmULActionAR_8h.xml
-
-
-// File: gdcmULActionDT_8h.xml
-
-
-// File: gdcmULBasicCallback_8h.xml
-
-
-// File: gdcmULConnection_8h.xml
-
-
-// File: gdcmULConnectionCallback_8h.xml
-
-
-// File: gdcmULConnectionInfo_8h.xml
-
-
-// File: gdcmULConnectionManager_8h.xml
-
-
-// File: gdcmULEvent_8h.xml
-
-
-// File: gdcmULTransitionTable_8h.xml
-
-
-// File: gdcmULWritingCallback_8h.xml
-
-
 // File: gdcmUNExplicitDataElement_8h.xml
 
 
@@ -13897,9 +9457,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmUsage_8h.xml
-
-
-// File: gdcmUserInformation_8h.xml
 
 
 // File: gdcmValidate_8h.xml
@@ -13965,9 +9522,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: vtkGDCMPolyDataReader_8h.xml
 
 
-// File: vtkGDCMPolyDataWriter_8h.xml
-
-
 // File: vtkGDCMTesting_8h.xml
 
 
@@ -13998,18 +9552,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: vtkLookupTable16_8h.xml
 
 
-// File: vtkMedicalImageProperties_8h.xml
-
-
-// File: vtkRTStructSetProperties_8h.xml
-
-
-// File: vtkStringArray_8h.xml
-
-
-// File: gdcm2pnm.xml
-
-
 // File: gdcm2vtk.xml
 
 
@@ -14017,9 +9559,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmconv.xml
-
-
-// File: gdcmdiff.xml
 
 
 // File: gdcmdump.xml
@@ -14043,9 +9582,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmscanner.xml
 
 
-// File: gdcmscu.xml
-
-
 // File: gdcmtar.xml
 
 
@@ -14061,55 +9597,46 @@ gdcm::terminal::setmode(Mode m) ";
 // File: bug.xml
 
 
-// File: dir_48be02fb937e08881437e02515417ab2.xml
+// File: dir_5cb42f8ecb4a00abddedc26a4aa0aa26.xml
 
 
-// File: dir_dbdfee04788ce02e68d05e06d5e6d98f.xml
+// File: dir_b1166fc660b9f5afbca2a75ed2af498a.xml
 
 
-// File: dir_422e8974cbd0b7203ed9c70ede735192.xml
+// File: dir_5bc6acc2f989bd183116df2e4b94ed7c.xml
 
 
-// File: dir_c6d5fb39fe2b866b6e5dadf85df51238.xml
+// File: dir_54043b59b2e33d13ce57ff5cc7c4084a.xml
 
 
-// File: dir_fc2dbd93ff698b14d78f486017ee822b.xml
+// File: dir_22221c53f31d8fe358e2e2229b225c9d.xml
 
 
-// File: dir_63e84970519399936bea68aa0151439e.xml
+// File: dir_cc1e3a5158a1b2bf5faba320fab6f60b.xml
 
 
-// File: dir_0431c37f6ecce87c9097eea9c3c5fdfe.xml
+// File: dir_2c522f94397d68d2fdc28d4b78640a5b.xml
 
 
-// File: dir_5282977b6aae5155552110b2344d5c70.xml
+// File: dir_19a2c0ba7618ca47366c86078c63a8d1.xml
 
 
-// File: dir_a3a231e2bd7f702d85036607d7d87964.xml
+// File: dir_ab3c4e4c0629e9da90a30fa920105710.xml
 
 
-// File: dir_bfc3201f3b82d7ccf14c524caa3c389b.xml
+// File: dir_82ae5a6392207129b7b46d93bb4c3b0a.xml
 
 
-// File: dir_9a6580727919559370fc2250dcaca6b8.xml
+// File: dir_eff80342f96999f3663e5df54ef453eb.xml
 
 
-// File: dir_087222ad62d2f517f4e0198672951648.xml
+// File: dir_b166ced8ce373c311ac398017178a8ea.xml
 
 
-// File: dir_2a74275ceded0a5f3b0fb2e9bd792825.xml
+// File: dir_c5c1448257b8d1529253867efc5f7aa2.xml
 
 
-// File: dir_acafdc7d686494cf0735517ddc7a7669.xml
-
-
-// File: dir_e65a7ea8baa79a2a64d4691b8c38fa73.xml
-
-
-// File: dir_d2ab22b73e3ee89be3a207288d7a9056.xml
-
-
-// File: AWTMedical3_8java-example.xml
+// File: dir_fc3f67e3cd4f8fe33e4dbb441cbcc429.xml
 
 
 // File: BasicAnonymizer_8cs-example.xml
@@ -14142,9 +9669,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: ConvertMPL_8py-example.xml
 
 
-// File: ConvertMultiFrameToSingleFrame_8cxx-example.xml
-
-
 // File: ConvertNumpy_8py-example.xml
 
 
@@ -14166,16 +9690,10 @@ gdcm::terminal::setmode(Mode m) ";
 // File: CreateCMYKImage_8cxx-example.xml
 
 
-// File: CreateJPIPDataSet_8cxx-example.xml
-
-
 // File: CreateRAWStorage_8py-example.xml
 
 
 // File: csa2img_8cxx-example.xml
-
-
-// File: CStoreQtProgress_8cxx-example.xml
 
 
 // File: DecompressImage_8cs-example.xml
@@ -14196,25 +9714,13 @@ gdcm::terminal::setmode(Mode m) ";
 // File: DiffFile_8cxx-example.xml
 
 
-// File: DiscriminateVolume_8cxx-example.xml
-
-
 // File: DumbAnonymizer_8py-example.xml
-
-
-// File: DumpADAC_8cxx-example.xml
-
-
-// File: DumpGEMSMovieGroup_8cxx-example.xml
 
 
 // File: DumpToSQLITE3_8cxx-example.xml
 
 
 // File: DuplicatePCDE_8cxx-example.xml
-
-
-// File: ELSCINT1WaveToText_8cxx-example.xml
 
 
 // File: EncapsulateFileInRawData_8cxx-example.xml
@@ -14226,25 +9732,10 @@ gdcm::terminal::setmode(Mode m) ";
 // File: ExtractEncryptedContent_8cxx-example.xml
 
 
-// File: ExtractIconFromFile_8cxx-example.xml
-
-
-// File: Extracting_All_Resolution_8cxx-example.xml
-
-
-// File: Fake_Image_Using_Stream_Image_Writer_8cxx-example.xml
-
-
-// File: FindAllPatientName_8py-example.xml
-
-
 // File: FixBrokenJ2K_8cxx-example.xml
 
 
 // File: FixCommaBug_8py-example.xml
-
-
-// File: FixJAIBugJPEGLS_8cxx-example.xml
 
 
 // File: gdcmorthoplanes_8cxx-example.xml
@@ -14274,9 +9765,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: GenerateDICOMDIR_8cs-example.xml
 
 
-// File: GenerateRTSTRUCT_8cxx-example.xml
-
-
 // File: GenerateStandardSOPClasses_8cxx-example.xml
 
 
@@ -14284,9 +9772,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: GenFakeImage_8cxx-example.xml
-
-
-// File: GenLongSeqs_8cxx-example.xml
 
 
 // File: GenSeqs_8cxx-example.xml
@@ -14302,9 +9787,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: GetSequenceUltrasound_8cxx-example.xml
-
-
-// File: GetSubSequenceData_8cxx-example.xml
 
 
 // File: headsq2dcm_8py-example.xml
@@ -14346,9 +9828,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: HelloWorld_8py-example.xml
 
 
-// File: iU22tomultisc_8cxx-example.xml
-
-
 // File: LargeVRDSExplicit_8cxx-example.xml
 
 
@@ -14370,18 +9849,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: MergeTwoFiles_8cxx-example.xml
 
 
-// File: MetaImageMD5Activiz_8cs-example.xml
-
-
-// File: MIPViewer_8java-example.xml
-
-
-// File: MPRViewer_8java-example.xml
-
-
-// File: MPRViewer2_8java-example.xml
-
-
 // File: MrProtocol_8cxx-example.xml
 
 
@@ -14389,9 +9856,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: NewSequence_8py-example.xml
-
-
-// File: offscreenimage_8cxx-example.xml
 
 
 // File: PatchFile_8cxx-example.xml
@@ -14403,9 +9867,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: PlaySound_8py-example.xml
 
 
-// File: pmsct_rgb1_8cxx-example.xml
-
-
 // File: PrivateDict_8py-example.xml
 
 
@@ -14415,28 +9876,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: ReadAndDumpDICOMDIR_8cxx-example.xml
 
 
-// File: ReadAndDumpDICOMDIR_8py-example.xml
-
-
-// File: ReadAndPrintAttributes_8cxx-example.xml
-
-
 // File: ReadExplicitLengthSQIVR_8cxx-example.xml
-
-
-// File: ReadFiles_8java-example.xml
-
-
-// File: ReadGEMSSDO_8cxx-example.xml
-
-
-// File: ReadMultiTimesException_8cxx-example.xml
-
-
-// File: ReadSeriesIntoVTK_8java-example.xml
-
-
-// File: ReadUTF8QtDir_8cxx-example.xml
 
 
 // File: RefCounting_8cs-example.xml
@@ -14460,19 +9900,10 @@ gdcm::terminal::setmode(Mode m) ";
 // File: rle2img_8cxx-example.xml
 
 
-// File: rtstructapp_8cxx-example.xml
-
-
 // File: ScanDirectory_8cs-example.xml
 
 
-// File: ScanDirectory_8java-example.xml
-
-
 // File: ScanDirectory_8py-example.xml
-
-
-// File: SendFileSCU_8cs-example.xml
 
 
 // File: SimplePrint_8cs-example.xml
@@ -14494,9 +9925,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: StandardizeFiles_8cs-example.xml
-
-
-// File: StreamImageReaderTest_8cxx-example.xml
 
 
 // File: TestByteSwap_8cxx-example.xml

@@ -321,7 +321,7 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   if (!theStreamWriter.WriteImageInformation()){
       std::cerr << "unable to write image information" << std::endl;
       return 1; //the CanWrite function should prevent getting here, else,
-      //that's a test failure
+      //that's a test failure∫
     }
 
  }

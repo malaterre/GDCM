@@ -220,7 +220,7 @@ bool ImageWriter::Write()
     }
   else
     {
-    assert( pixeldata.GetIntercept() == 0 && pixeldata.GetSlope() == 1 );
+    assert( pixeldata.GetIntercept(0) == 0 && pixeldata.GetSlope(0) == 1 );
     }
 
 //      Attribute<0x0028, 0x0006> planarconfiguration;

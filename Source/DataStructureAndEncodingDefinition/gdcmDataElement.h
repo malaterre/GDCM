@@ -132,6 +132,7 @@ public:
     const ByteValue *bv = dynamic_cast<const ByteValue*>(ValueField.GetPointer());
     return bv; // Will return NULL if not ByteValue
   }
+  //GDCM_LEGACY(ByteValue* GetByteValue())
 
   /// Return the Value of DataElement as a Sequence Of Items (if possible)
   /// \warning: You need to check for NULL return value

@@ -60,7 +60,7 @@ int TestIPPSorter(int argc, char *argv[])
   bool b = s.Sort( filenames );
   if( !b )
     {
-    std::cerr << "Failed to sort: " << directory << std::endl;
+    std::cerr << "Failed to sort:" << directory << std::endl;
     return 1;
     }
 

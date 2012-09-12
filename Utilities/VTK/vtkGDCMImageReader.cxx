@@ -242,9 +242,7 @@ void vtkGDCMImageReader::ExecuteInformation()
     case 0:
       output->SetWholeExtent(this->DataExtent);
       output->SetSpacing(this->DataSpacing);
-#ifdef GDCMV2_0_COMPATIBILITY
       output->SetOrigin(this->DataOrigin);
-#endif
 
       output->SetScalarType(this->DataScalarType);
       output->SetNumberOfScalarComponents(this->NumberOfScalarComponents);
@@ -548,9 +546,7 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
       outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->DataExtent, 6);
       //outInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), this->DataExtent, 6);
       outInfo->Set(vtkDataObject::SPACING(), this->DataSpacing, 3);
-#ifdef GDCMV2_0_COMPATIBILITY
       outInfo->Set(vtkDataObject::ORIGIN(), this->DataOrigin, 3);
-#endif
       vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
       break;
     // Icon Image
@@ -589,8 +585,8 @@ ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
     {
     const gdcm::Image &image = imageref;
     const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
-    double shift = image.GetIntercept();
-    double scale = image.GetSlope();
+    double shift = image.GetIntercept(0);
+    double scale = image.GetSlope(0);
 
     gdcm::Rescaler r;
     r.SetIntercept( shift );
@@ -614,8 +610,8 @@ ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
         }
       const gdcm::Image &image = reader.GetImage();
       const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
-      double shift = image.GetIntercept();
-      double scale = image.GetSlope();
+      double shift = image.GetIntercept(0);
+      double scale = image.GetSlope(0);
 
       gdcm::PixelFormat::ScalarType outputpt2 = pixeltype;
       gdcm::Rescaler r;
@@ -788,7 +784,6 @@ int vtkGDCMImageReader::RequestInformationCompat()
 #endif
     }
   // Apply transform:
-#ifdef GDCMV2_0_COMPATIBILITY
   if( dircos && origin )
     {
     if( this->FileLowerLeft )
@@ -814,11 +809,10 @@ int vtkGDCMImageReader::RequestInformationCompat()
       }
     }
   // Need to set the rest to 0 ???
-#endif
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
-  this->Shift = image.GetIntercept();
-  this->Scale = image.GetSlope();
+  this->Shift = image.GetIntercept(0);
+  this->Scale = image.GetSlope(0);
 
   //gdcm::PixelFormat::ScalarType outputpt = pixeltype;
   gdcm::PixelFormat::ScalarType outputpt =
@@ -950,7 +944,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     for( unsigned int ovidx = 0; ovidx < numoverlays; ++ovidx )
       {
       const gdcm::Overlay& ov = image.GetOverlay(ovidx);
-      assert( (unsigned int)ov.GetRows() == image.GetRows() ); (void)ov;
+      assert( (unsigned int)ov.GetRows() == image.GetRows() );
       assert( (unsigned int)ov.GetColumns() == image.GetColumns() );
       }
     this->NumberOfOverlays = (int)numoverlays;
@@ -1005,7 +999,7 @@ void InPlaceYFlipImage(vtkImageData* data)
   for(int j = dext[4]; j <= dext[5]; ++j)
     {
     char *start = pointer;
-    assert( start == ref + j * outsize * (dext[3] - dext[2] + 1) ); (void)ref;
+    assert( start == ref + j * outsize * (dext[3] - dext[2] + 1) );
     // Swap two-lines at a time
     // when Rows is odd number (359) then dext[3] == 178
     // so we should avoid copying the line right in the center of the image
@@ -1068,8 +1062,8 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   unsigned long overlaylen = 0;
   //image.GetBuffer(pointer);
   // HACK: Make sure that Shift/Scale are the one from the file:
-  this->Shift = image.GetIntercept();
-  this->Scale = image.GetSlope();
+  this->Shift = image.GetIntercept(0);
+  this->Scale = image.GetSlope(0);
 
   if( (this->Scale != 1.0 || this->Shift != 0.0) || this->ForceRescale )
   {

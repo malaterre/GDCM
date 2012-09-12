@@ -68,6 +68,7 @@ gdcm::DataElement CreateFakeElement(gdcm::Tag const &tag, bool toremove)
     {
     de.SetVR( vr );
     }
+  using gdcm::VR;
   const char str[] = "BasicApplicationLevelConfidentialityProfileAttributes";
   const char safe[] = "This is safe to keep";
   if( de.GetVR() != VR::SQ )
