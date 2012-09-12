@@ -25,7 +25,7 @@ CAPICryptoFactory::CAPICryptoFactory(CryptoLib id) : CryptoFactory(id)
 CryptographicMessageSyntax* CAPICryptoFactory::CreateCMSProvider()
 {
   CAPICryptographicMessageSyntax* capicms = new CAPICryptographicMessageSyntax();
-  if (!capicms->getInitialized())
+  if (!capicms->GetInitialized())
     {
     delete capicms;
     return NULL;
