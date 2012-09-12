@@ -3,8 +3,13 @@
 #define EXTERN_C_BEGIN @EXTERN_C_BEGIN@
 #define EXTERN_C_END @EXTERN_C_END@
 
+/* Define whether or not system has strsignal */
+#cmakedefine SOCKETXX_HAVE_STRSIGNAL
+
+#ifndef SOCKETXX_HAVE_STRSIGNAL
 /* Define either as _sys_siglist or sys_siglist */
 #define SYS_SIGLIST @SYS_SIGLIST@
+#endif
 
 /* Define the argument type for signal handler function */
 #define SIGHND_ARGTYPE @SIGHND_ARGTYPE@

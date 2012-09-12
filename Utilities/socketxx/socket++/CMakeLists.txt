@@ -2,6 +2,10 @@
 SET(VERSION "1.12.12")
 SET(PACKAGE "socket++")
 
+#set(CMAKE_REQUIRED_INCLUDES "string.h")
+include(CheckFunctionExists)
+CHECK_FUNCTION_EXISTS(strsignal SOCKETXX_HAVE_STRSIGNAL)
+
 # specific
 IF(WIN32)
 ELSE(WIN32)
@@ -66,24 +70,11 @@ ENDIF(UNIX)
 ADD_LIBRARY(${SOCKETXX_LIBRARY_NAME} ${libsocket___la_SOURCES})
 SET_TARGET_PROPERTIES(${SOCKETXX_LIBRARY_NAME} PROPERTIES ${SOCKETXX_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 if(WIN32)
-#target_link_libraries(${SOCKETXX_LIBRARY_NAME} wsock32)
-target_link_libraries(${SOCKETXX_LIBRARY_NAME} ws2_32.lib)
-endif(WIN32)
-
-#libsocketincludedir=$(includedir)/socket++
-#libsocketinclude_HEADERS = \
-#	sockstream.h \
-#	sockinet.h \
-#	sockunix.h\
-#	pipestream.h \
-#	fork.h \
-#	protocol.h \
-#	echo.h \
-#	smtp.h \
-#	ftp.h \
-#	sig.h
-#libsocket___la_LDFLAGS = -version-info @LIBSOCKET_SO_VERSION@
-#libsocket___la_LIBADD =
+  target_link_libraries(${SOCKETXX_LIBRARY_NAME} ws2_32.lib)
+endif()
+if(CMAKE_SYSTEM MATCHES "SunOS.*")
+  target_link_libraries(${SOCKETXX_LIBRARY_NAME} socket nsl)
+endif()
 
 # Install library
 IF(NOT SOCKETXX_INSTALL_NO_LIBRARIES)
