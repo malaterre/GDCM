@@ -25,7 +25,7 @@ CAPICryptographicMessageSyntax::CAPICryptographicMessageSyntax() : hProv(0), hRs
 
 CAPICryptographicMessageSyntax::~CAPICryptographicMessageSyntax()
 {
-  for (vector<PCCERT_CONTEXT>::iterator it = certifList.begin(); it != certifList.end(); ++it)
+  for (std::vector<PCCERT_CONTEXT>::iterator it = certifList.begin(); it != certifList.end(); ++it)
     {
     CertFreeCertificateContext(*it);
     /*if (! CertFreeCertificateContext(*it))
@@ -146,7 +146,7 @@ CryptographicMessageSyntax::CipherTypes CAPICryptographicMessageSyntax::GetCiphe
 bool CAPICryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const 
 {
   CRYPT_ALGORITHM_IDENTIFIER EncryptAlgorithm = {0};
-  EncryptAlgorithm.pszObjId = getCipherObjId();
+  EncryptAlgorithm.pszObjId = GetCipherObjId();
   
   CRYPT_ENCRYPT_MESSAGE_PARA EncryptParams = {0};
   EncryptParams.cbSize = sizeof(EncryptParams);
@@ -297,7 +297,7 @@ bool CAPICryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const
   keyBlob.header.bType = PLAINTEXTKEYBLOB;
   keyBlob.header.bVersion = CUR_BLOB_VERSION;
   keyBlob.header.reserved = 0;
-  keyBlob.header.aiKeyAlg = getAlgIdByObjId(cekAlg->pszObjId);
+  keyBlob.header.aiKeyAlg = GetAlgIdByObjId(cekAlg->pszObjId);
   keyBlob.cbKeySize = cekLen;
   assert(cekLen <= 32);
   memcpy(keyBlob.rgbKeyData, cek, cekLen);
@@ -361,7 +361,7 @@ err:
   return ret;
 }
 
-ALG_ID CAPICryptographicMessageSyntax::getAlgIdByObjId(const char * pszObjId)
+ALG_ID CAPICryptographicMessageSyntax::GetAlgIdByObjId(const char * pszObjId)
 {
   // HACK: fix compilation on mingw64:
   // See: http://sourceforge.net/tracker/?func=detail&aid=3561209&group_id=202880&atid=983354
@@ -390,7 +390,7 @@ ALG_ID CAPICryptographicMessageSyntax::getAlgIdByObjId(const char * pszObjId)
   return 0;
 }
 
-LPSTR CAPICryptographicMessageSyntax::getCipherObjId() const
+LPSTR CAPICryptographicMessageSyntax::GetCipherObjId() const
 {
   if (cipherType == AES128_CIPHER)
     {
