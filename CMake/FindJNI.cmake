@@ -15,6 +15,7 @@ set(JAVA_JNI_MD_INCLUDE_DIRECTORIES
   ${JAVA_INCLUDE_PATH}/${include_os_name}
   ${JAVA_INCLUDE_PATH}/win32 # win32
   ${JAVA_INCLUDE_PATH}/linux # kFreeBSD
+  ${JAVA_INCLUDE_PATH}/solaris # SunOS
   )
 find_path(JAVA_INCLUDE_PATH2 jni_md.h
   ${JAVA_JNI_MD_INCLUDE_DIRECTORIES}
