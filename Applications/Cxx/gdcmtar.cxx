@@ -342,6 +342,12 @@ bool ConcatenateImages(Image &im1, Image const &im2)
 
 int MakeImageEnhanced( std::string const & filename, std::string const &outfilename )
 {
+  if( !gdcm::System::FileIsDirectory(filename.c_str()) )
+    {
+    std::cerr << "Input needs to be directory" << std::endl;
+    return 1;
+    }
+
   gdcm::Directory d;
   d.Load( filename.c_str(), true ); // recursive !
 
