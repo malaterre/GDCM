@@ -42,6 +42,13 @@ CAPICryptographicMessageSyntax::~CAPICryptographicMessageSyntax()
     }
 }
 
+// http://stackoverflow.com/questions/11709500/capi-does-not-support-password-based-encryption-pbe-encryption
+bool CAPICryptographicMessageSyntax::SetPassword(const char * , size_t )
+{
+  gdcmWarningMacro( "CAPI does not support Password Based Encryption." );
+  return false;
+}
+
 bool CAPICryptographicMessageSyntax::ParseCertificateFile( const char *filename )
 {
   bool ret = false;
@@ -87,7 +94,7 @@ bool CAPICryptographicMessageSyntax::ParseKeyFile( const char *filename ) {
   bool ret = false;
   BYTE *keyHexBuffer = NULL, *keyBinBuffer = NULL, *keyBlob = NULL;
   DWORD keyHexBufferLen, keyBinBufferLen, keyBlobLen;
-  HCRYPTKEY hKey = NULL;
+  HCRYPTKEY hKey = 0;
   
   if (!LoadFile(filename, keyHexBuffer, keyHexBufferLen))
     goto err;
@@ -116,7 +123,7 @@ bool CAPICryptographicMessageSyntax::ParseKeyFile( const char *filename ) {
     goto err;
     }
 
-  if (!CryptImportKey(hProv, keyBlob, keyBlobLen, NULL, 0, &hKey))
+  if (!CryptImportKey(hProv, keyBlob, keyBlobLen, 0, 0, &hKey))
     {
     gdcmErrorMacro( "CryptImportKey failed with error 0x" << std::hex << GetLastError() );
     goto err;
@@ -146,7 +153,13 @@ CryptographicMessageSyntax::CipherTypes CAPICryptographicMessageSyntax::GetCiphe
 bool CAPICryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const 
 {
   CRYPT_ALGORITHM_IDENTIFIER EncryptAlgorithm = {0};
-  EncryptAlgorithm.pszObjId = GetCipherObjId();
+  const char *objid = GetCipherObjId();
+  if( !objid )
+    {
+    gdcmErrorMacro( "Could not GetCipherObjId" );
+    return false;
+    }
+  EncryptAlgorithm.pszObjId = (char*)objid;
   
   CRYPT_ENCRYPT_MESSAGE_PARA EncryptParams = {0};
   EncryptParams.cbSize = sizeof(EncryptParams);
@@ -185,7 +198,7 @@ bool CAPICryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const
     BLOBHEADER header;
     DWORD cbKeySize;
     BYTE rgbKeyData[32]; //the maximum is 256 bit for aes
-  } keyBlob = {0};
+  } keyBlob = {{0}};
 
   if (hRsaPrivK == 0)
     {
@@ -193,7 +206,7 @@ bool CAPICryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const
     return false;
     } 
 
-  if (! (hMsg = CryptMsgOpenToDecode(CRYPT_ASN_ENCODING | X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, NULL, CMSG_ENVELOPED_DATA_PKCS_1_5_VERSION, NULL, NULL, NULL)) )
+  if (! (hMsg = CryptMsgOpenToDecode(CRYPT_ASN_ENCODING | X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 0, CMSG_ENVELOPED_DATA_PKCS_1_5_VERSION, 0, NULL, NULL)) )
     {
     gdcmErrorMacro( "MsgOpenToDecode failed with error 0x" << std::hex << GetLastError() );
     goto err;
@@ -258,7 +271,7 @@ bool CAPICryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const
       goto err;
       }
 
-    DWORD rsaPadding = NULL;
+    DWORD rsaPadding = 0;
     if (strcmp(recipientInfo->pKeyTrans->KeyEncryptionAlgorithm.pszObjId, szOID_RSAES_OAEP) == 0)
       {
       rsaPadding = CRYPT_OAEP;
@@ -269,7 +282,8 @@ bool CAPICryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const
     cek = recipientInfo->pKeyTrans->EncryptedKey.pbData;
     ReverseBytes(cek, cekLen);
 
-    if (foundRecipient = CryptDecrypt(hRsaPrivK, NULL, TRUE, rsaPadding, cek, &cekLen))
+    if ( (foundRecipient =
+      CryptDecrypt(hRsaPrivK, 0, TRUE, rsaPadding, cek, &cekLen)) )
       break;
     } // end loop recipients
   
@@ -302,7 +316,7 @@ bool CAPICryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const
   assert(cekLen <= 32);
   memcpy(keyBlob.rgbKeyData, cek, cekLen);
 
-  if (!CryptImportKey(hProv, (BYTE*)&keyBlob, sizeof(keyBlob), NULL, NULL, &hCEK))
+  if (!CryptImportKey(hProv, (BYTE*)&keyBlob, sizeof(keyBlob), 0, 0, &hCEK))
     {
     gdcmErrorMacro( "CryptImportKey failed with error 0x" << std::hex << GetLastError() );
     goto err;
@@ -336,7 +350,7 @@ bool CAPICryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const
     goto err;
     }
 
-  if (! CryptDecrypt(hCEK, NULL, TRUE, NULL, bareContent, &bareContentLen))
+  if (! CryptDecrypt(hCEK, 0, TRUE, 0, bareContent, &bareContentLen))
     {
     gdcmErrorMacro( "CryptDecrypt failed with error 0x" << std::hex << GetLastError() );
     goto err;
@@ -390,28 +404,24 @@ ALG_ID CAPICryptographicMessageSyntax::GetAlgIdByObjId(const char * pszObjId)
   return 0;
 }
 
-LPSTR CAPICryptographicMessageSyntax::GetCipherObjId() const
+const char *CAPICryptographicMessageSyntax::GetCipherObjId() const
 {
-  if (cipherType == AES128_CIPHER)
+  switch( cipherType )
     {
+  case AES128_CIPHER:
     return szOID_NIST_AES128_CBC;
-    }
-  else if (cipherType == AES192_CIPHER)
-    {
+  case AES192_CIPHER:
     return szOID_NIST_AES192_CBC;
-    }
-  else if (cipherType == AES256_CIPHER)
-    {
+  case AES256_CIPHER:
     return szOID_NIST_AES256_CBC;
-    }
-  else if (cipherType == DES3_CIPHER)
-    {
+  case DES3_CIPHER:
     return szOID_RSA_DES_EDE3_CBC;
     }
   return 0;
 }
 
-bool CAPICryptographicMessageSyntax::Initialize() {
+bool CAPICryptographicMessageSyntax::Initialize()
+{
   DWORD dwResult;
   if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) //CRYPT_VERIFYCONTEXT aes decr in cryptmsgcontrol not working
     {
@@ -425,30 +435,30 @@ bool CAPICryptographicMessageSyntax::Initialize() {
         return false;
         }
       }
-  else if (dwResult == NTE_KEYSET_NOT_DEF)
-    {
+    else if (dwResult == NTE_KEYSET_NOT_DEF)
+      {
       //Probably WinXP
       gdcmWarningMacro( "Certificate based encryption is supported on Windows XP only using 3DES." );
       if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV_XP /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) //CRYPT_VERIFYCONTEXT aes decr in cryptmsgcontrol not working
-      {
-      dwResult = GetLastError();
-      if (dwResult == NTE_BAD_KEYSET)
         {
-        if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV_XP /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_NEWKEYSET | CRYPT_VERIFYCONTEXT))
+        dwResult = GetLastError();
+        if (dwResult == NTE_BAD_KEYSET)
+          {
+          if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV_XP /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_NEWKEYSET | CRYPT_VERIFYCONTEXT))
+            {
+            dwResult = GetLastError();
+            gdcmErrorMacro( "CryptAcquireContext() failed: " << std::hex << dwResult );
+            return false;
+            }
+          }
+        else
           {
           dwResult = GetLastError();
-          gdcmErrorMacro( "CryptAcquireContext() failed: " << std::hex << dwResult );
           return false;
           }
         }
-      else 
-        {
-        dwResult = GetLastError();
-        return false;
-        }
       }
-    }
-    else 
+    else
       {
       dwResult = GetLastError();
       return false;
@@ -470,6 +480,7 @@ void CAPICryptographicMessageSyntax::ReverseBytes(BYTE* data, DWORD len)
 
 bool CAPICryptographicMessageSyntax::LoadFile(const char * filename, BYTE* & buffer, DWORD & bufLen)
 {
+  assert( !buffer );
   FILE * f = fopen(filename, "rb");
   if (f == NULL)
     {

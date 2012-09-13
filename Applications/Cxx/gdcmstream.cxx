@@ -242,6 +242,7 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
   opj_jp2_t* jp2 = NULL;
   jp2 = (opj_jp2_t*)dinfo->jp2_handle;
   //int reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
+  (void)jp2;
   //std:: cout << reversible;
   int Dimensions[2];
 {

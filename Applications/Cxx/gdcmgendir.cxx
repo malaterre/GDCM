@@ -327,6 +327,7 @@ int main(int argc, char *argv[])
     {
     // should be all set !
     }
+  (void)nfiles;
 
   gen.SetFilenames( filenames );
   gen.SetDescriptor( descriptor_str.c_str() );

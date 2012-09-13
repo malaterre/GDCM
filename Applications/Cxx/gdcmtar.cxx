@@ -1082,7 +1082,9 @@ int main (int argc, char *argv[])
     double normal[3];
     dc.Cross( normal );
     const double *origin = image.GetOrigin();
+    (void)origin;
     double zspacing = image.GetSpacing(2);
+    (void)zspacing;
 
     // Remove SharedFunctionalGroupsSequence
     gdcm::SmartPointer<gdcm::SequenceOfItems> sfgs =
@@ -1128,6 +1130,7 @@ int main (int argc, char *argv[])
 
     for(unsigned int i = 0; i < dims[2]; ++i)
       {
+#if 0
       double new_origin[3];
       for (int j = 0; j < 3; j++)
         {
@@ -1135,6 +1138,7 @@ int main (int argc, char *argv[])
         // z-axis
         new_origin[j] = origin[j] + normal[j] * i * zspacing;
         }
+#endif
 
       const char *outfilenamei = fg.GetFilename(i);
       //gdcm::ImageWriter writer;
