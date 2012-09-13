@@ -133,6 +133,13 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
           {
           if( de.GetVR() == VR::SQ )
             {
+            if( vl == 0 && value && *value == 0 )
+              {
+              DataElement de2( t );
+              de2.SetVR( VR::SQ );
+              ds.Replace( de2 );
+              return true;
+              }
             gdcmDebugMacro( "Cannot replace a VR:SQ" );
             return false;
             }
