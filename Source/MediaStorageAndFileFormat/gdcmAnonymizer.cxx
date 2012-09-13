@@ -490,6 +490,11 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
   static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
   static const Tag *end = start + numDeIds;
+  if( !CMS )
+    {
+    gdcmErrorMacro( "Need a certificate" );
+    return false;
+    }
 
   CryptographicMessageSyntax &p7 = *CMS;
   //p7.SetCertificate( this->x509 );
@@ -963,6 +968,11 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
 
 bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
 {
+  if( !CMS )
+    {
+    gdcmErrorMacro( "Need a certificate" );
+    return false;
+    }
   // 1. The application shall decrypt, using its recipient key, one instance of
   // the Encrypted Content (0400,0520) Attribute within the Encrypted
   // Attributes Sequence (0400,0500) and decode the resulting block of bytes
