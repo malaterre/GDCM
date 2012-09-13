@@ -141,9 +141,9 @@ bool TestCMSCompatibility(gdcm::CryptographicMessageSyntax& cms1, const char * p
 {
   const std::string encrypted_vector = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/encrypted_text" );
 
+  bool ret = true;
   for (int i = 0; i < 4; i++)
     {
-    bool ret = true;
     char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
     size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
     cms1.SetCipherType(ciphers[i]);
@@ -219,7 +219,7 @@ bool TestCMSCompatibility(gdcm::CryptographicMessageSyntax& cms1, const char * p
       break;
       }
     }*/
-  return true;
+  return ret;
 }
 
 int TestCryptographicMessageSyntax(int, char *[])
