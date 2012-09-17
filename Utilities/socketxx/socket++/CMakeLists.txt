@@ -6,6 +6,10 @@ set(PACKAGE "socket++")
 include(CheckFunctionExists)
 CHECK_FUNCTION_EXISTS(strsignal SOCKETXX_HAVE_STRSIGNAL)
 
+#set(CMAKE_REQUIRED_INCLUDES "string.h")
+include(CheckFunctionExists)
+CHECK_FUNCTION_EXISTS(strsignal SOCKETXX_HAVE_STRSIGNAL)
+
 # specific
 if(WIN32)
 else()
