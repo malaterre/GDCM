@@ -75,7 +75,6 @@
 #include "gdcmReader.h"
 #include "gdcmPixmapReader.h"
 #include "gdcmImageReader.h"
-#include "gdcmImageRegionReader.h"
 #include "gdcmWriter.h"
 #include "gdcmPixmapWriter.h"
 #include "gdcmImageWriter.h"
@@ -172,11 +171,19 @@
 #include "gdcmFileDerivation.h"
 
 #include "gdcmQueryBase.h"
+#include "gdcmQueryFactory.h"
 #include "gdcmBaseRootQuery.h"
 #include "gdcmPresentationContext.h"
 #include "gdcmPresentationContextGenerator.h"
 #include "gdcmCompositeNetworkFunctions.h"
 #include "gdcmServiceClassUser.h"
+
+#include "gdcmStreamImageReader.h"
+#include "gdcmStreamImageWriter.h"
+
+#include "gdcmRegion.h"
+#include "gdcmBoxRegion.h"
+#include "gdcmImageRegionReader.h"
 
 using namespace gdcm;
 %}
@@ -277,6 +284,8 @@ EXTEND_CLASS_PRINT(gdcm::VM)
 %template (FilenamesType) std::vector<std::string>;
 %include "gdcmDirectory.h"
 EXTEND_CLASS_PRINT(gdcm::Directory)
+//%clear FilenameType;
+%clear FilenamesType;
 %include "gdcmObject.h"
 %include "gdcmValue.h"
 EXTEND_CLASS_PRINT(gdcm::Value)
@@ -459,6 +468,8 @@ EXTEND_CLASS_PRINT(gdcm::CSAHeaderDictEntry)
 %include "gdcmDicts.h"
 EXTEND_CLASS_PRINT(gdcm::Dicts)
 
+%template (TagSetType) std::set<gdcm::Tag>;
+%ignore gdcm::Reader::SetStream;
 %exception ReadFooBar {
    try {
       $action
@@ -476,8 +487,6 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 //EXTEND_CLASS_PRINT(gdcm::PixmapReader)
 %include "gdcmImageReader.h"
 //EXTEND_CLASS_PRINT(gdcm::ImageReader)
-%include "gdcmImageRegionReader.h"
-//EXTEND_CLASS_PRINT(gdcm::ImageRegionReader)
 %include "gdcmWriter.h"
 //EXTEND_CLASS_PRINT(gdcm::Writer)
 %include "gdcmPixmapWriter.h"
@@ -734,10 +743,25 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %template(PresentationContextArrayType) std::vector< gdcm::PresentationContext >;
 %template(KeyValuePairType) std::pair< gdcm::Tag, std::string>;
 %template(KeyValuePairArrayType) std::vector< std::pair< gdcm::Tag, std::string> >;
+%template(TagArrayType) std::vector< gdcm::Tag >;
 %include "gdcmQueryBase.h"
 %include "gdcmBaseRootQuery.h"
+%include "gdcmQueryFactory.h"
+%template(CharSetArrayType) std::vector< gdcm::ECharSet >;
+%include "gdcmCompositeNetworkFunctions.h"
 %include "gdcmPresentationContext.h"
 //EXTEND_CLASS_PRINT(gdcm::PresentationContext)
 %include "gdcmPresentationContextGenerator.h"
-%include "gdcmCompositeNetworkFunctions.h"
+typedef int64_t time_t; // FIXME
 %include "gdcmServiceClassUser.h"
+%apply char[] { char* inReadBuffer }
+%include "gdcmStreamImageReader.h"
+%clear char* inReadBuffer;
+%include "gdcmStreamImageWriter.h"
+%include "gdcmRegion.h"
+EXTEND_CLASS_PRINT(gdcm::Region)
+%include "gdcmBoxRegion.h"
+EXTEND_CLASS_PRINT(gdcm::BoxRegion)
+%apply char[] { char* inreadbuffer }
+%include "gdcmImageRegionReader.h"
+%clear char* inreadbuffer;
