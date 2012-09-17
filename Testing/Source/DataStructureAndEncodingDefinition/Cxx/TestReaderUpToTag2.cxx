@@ -19,7 +19,7 @@
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
 
-static int TestReadUpToTag(const char* filename, bool verbose = false)
+static int TestReadUpToTag2(const char* filename, bool verbose = false)
 {
   if( verbose )
   std::cout << "TestRead: " << filename << std::endl;
@@ -27,28 +27,41 @@ static int TestReadUpToTag(const char* filename, bool verbose = false)
   std::ifstream is( filename, std::ios::binary );
   gdcm::Reader reader;
   reader.SetStream( is );
-  // Let's read up to Pixel Data el...
+  // Let's read up to end
+  gdcm::Tag maxDataSetTag(0xffff,0xffff);
   gdcm::Tag pixeldata (0x7fe0,0x0010);
   std::set<gdcm::Tag> skiptags;
-  // ... but do not read it (to skip mem allocation)
+  // ... but do not read Pixel Data attribute (to skip mem allocation)
   skiptags.insert( pixeldata );
-  if ( !reader.ReadUpToTag( pixeldata, skiptags) )
+  if ( !reader.ReadUpToTag( maxDataSetTag, skiptags) )
     {
     std::cerr << "TestReadError: Failed to read: " << filename << std::endl;
     return 1;
     }
   std::streamoff outStreamOffset = is.tellg();
+  bool iseof = is.eof();
 
   //commenting out for warning avoidance
   //const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
-  //const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+  const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+  if( ds.FindDataElement( pixeldata ) )
+    {
+    std::cerr << "Found Pixel Data for: " << filename << std::endl;
+    return 1;
+    }
+
+  if( !iseof )
+    {
+    std::cerr << "Lost in out of space: " << outStreamOffset << std::endl;
+    return 1;
+    }
 
   if(verbose)
     std::cout << "{ \"" << filename << "\"," << outStreamOffset << " }," << std::endl;
-  std::streamoff refoffset = gdcm::Testing::GetStreamOffsetFromFile(filename);
+  const std::streamoff refoffset = -1;
   if( refoffset != outStreamOffset )
     {
-    std::cerr << filename << ": " << outStreamOffset << " should be " << refoffset << std::endl;
+    std::cerr << filename << ": " << outStreamOffset << " " << iseof << " should be " << refoffset << std::endl;
     return 1;
     }
   is.close();
@@ -56,7 +69,7 @@ static int TestReadUpToTag(const char* filename, bool verbose = false)
   return 0;
 }
 
-static int TestReadUpToTagExtra()
+static int TestReadUpToTag2Extra()
 {
   const char *extradataroot = gdcm::Testing::GetDataExtraRoot();
   if( !extradataroot )
@@ -79,18 +92,18 @@ static int TestReadUpToTagExtra()
     it != fns.end(); ++it )
     {
     const char *filename = it->c_str();
-    r += TestReadUpToTag( filename );
+    r += TestReadUpToTag2( filename );
     }
 
   return r;
 }
 
-int TestReaderUpToTag(int argc, char *argv[])
+int TestReaderUpToTag2(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestReadUpToTag(filename, true);
+    return TestReadUpToTag2(filename, true);
     }
 
   // else
@@ -102,12 +115,12 @@ int TestReaderUpToTag(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestReadUpToTag( filename );
+    r += TestReadUpToTag2( filename );
     ++i;
     }
 
   // puposely discard gdcmDataExtra test, this is just an 'extra' test...
-  int b2 = TestReadUpToTagExtra(); (void)b2;
+  int b2 = TestReadUpToTag2Extra(); (void)b2;
 
   return r;
 }

@@ -13,6 +13,7 @@ SET(DSED_TEST_SRCS
   TestPreamble
   TestReader
   TestReaderUpToTag
+  TestReaderUpToTag2
   TestReaderSelectedTags
   TestReaderCanRead
   TestWriter
