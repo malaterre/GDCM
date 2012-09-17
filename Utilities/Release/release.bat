@@ -28,9 +28,9 @@ SET LIB=C:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib;%LIB%
 SET INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v6.0A\Include;%INCLUDE%
 
 @rem GDCM deps:
-SET PATH=%PATH%;C:\Program Files\Git\bin
-SET PATH=%PATH%;C:\Program Files\Swig\swigwin-2.0.7
-SET PATH=%PATH%;C:\Program Files\Java\jdk1.6.0_25\bin
+SET PATH=%PATH%;%ProgramFiles(x86)%\Git\bin
+SET PATH=%PATH%;%ProgramFiles(x86)%\Swig\swigwin-2.0.8
+SET PATH=%PATH%;%ProgramFiles(x86)%\Java\jdk1.6.0_34\bin
 
 @rem needed to get RC.EXE:
 SET PATH=C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin;%PATH%
