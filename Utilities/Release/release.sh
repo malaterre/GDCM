@@ -19,7 +19,7 @@ echo ""
 
 major=2
 minor=2
-patch=0
+patch=1
 version="$major.$minor.$patch"
 version2="$major-$minor-$patch"
 
@@ -113,7 +113,7 @@ cpack -G TBZ2 --config CPackSourceConfig.cmake
 check_exit_value $? "cpack did not return properly" || exit 1
 
 # Let's start doing the VTK documentation then:
-cmake -DGDCM_VTK_DOCUMENTATION:BOOL=ON -DGDCM_USE_VTK:BOOL=ON -DGDCM_VTK_JAVA_JAR:PATH=/usr/share/java/vtk.jar .
+cmake -DGDCM_VTK_DOCUMENTATION:BOOL=ON -DGDCM_USE_VTK:BOOL=ON -DVTK_DIR:PATH=/home/mathieu/Kitware/vtk-5.10-gcc .
 check_exit_value $? "cmake did not return properly" || exit 1
 #make -j4
 make rebuild_cache
