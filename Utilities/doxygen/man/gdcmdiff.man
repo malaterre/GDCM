@@ -10,7 +10,7 @@ gdcmdiff [options] file1 file2
 
 \section description DESCRIPTION
 
-The \b gdcmdiff command line program takes as input two DICOM file: file1 and
+The \b gdcmdiff command line program takes as input two DICOM files: file1 and
 file2.
 
 \section parameters PARAMETERS
@@ -18,7 +18,7 @@ file2.
 \verbatim
 file1   DICOM input filename
 
-file2  DICOM output filename
+file2   DICOM output filename
 \endverbatim
 
 \section options OPTIONS
@@ -51,7 +51,8 @@ file2  DICOM output filename
 \endverbatim
 
 \section simple_usage Simple usage
-\b gdcmdiff is a great tool to diff DICOM files. Usage is simply:
+\b gdcmdiff is a great tool to produce a diff in between two DICOM files. Usage
+is simply:
 
 \verbatim
 $ gdcmdiff input1.dcm input2.dcm
@@ -64,5 +65,4 @@ $ gdcmdiff input1.dcm input2.dcm
 \section copyright COPYRIGHT
 
 Copyright (c) 2006-2011 Mathieu Malaterre
-
 */

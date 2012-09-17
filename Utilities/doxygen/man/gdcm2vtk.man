@@ -18,7 +18,7 @@ a DICOM file.
 \verbatim
 file-in   input filename (DICOM or VTK supported)
 
-file-out  DICOM output filename
+file-out  output filename (DICOM or VTK supported)
 \endverbatim
 
 \section options OPTIONS
@@ -97,7 +97,7 @@ Special care was taken for the following file format:
    2. BMP: The file can be saved with a Lookup Table (see --palette-color)
    3. GE Signa: vtkMedicalImageProperties is passed to the output
    4. MINC: Direction Cosines is passed to the output
-   5. TIFF: vtkTIFFReader is currently in bad shape in VTK (different behavior in VTK 5.2 and CVS). Only use it, if you know what you are doing.
+   5. TIFF: vtkTIFFReader is currently in bad shape in VTK (different behavior in VTK 5.2 and git/master). Only use it, if you know what you are doing.
 \endverbatim
 
 \subsection convert_meta CONVERT MetaImage (mhd, mha)
@@ -154,7 +154,7 @@ $ gdcm2vtk --modality US --imageformat 7 output.mhd output.dcm
 
 The above section shows how to convert a DICOM using the Photometric Interpretation of YBR_FULL
 (or even YBR_FULL_422 is lossy) into another file format: MetaImage (mhd). Since this
-file format does not handle color space, we have to explicitely set it using the --imageformat
+file format does not handle color space, we have to explicitly set it using the --imageformat
 command line option.
 The --modality command line option is required in this case since the default Secondary Capture
 Image Storage Class family does not allow for YBR Photometric Interpretation.

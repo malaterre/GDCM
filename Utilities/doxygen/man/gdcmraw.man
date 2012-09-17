@@ -10,7 +10,8 @@ gdcmraw [options] file-in file-out
 
 \section description DESCRIPTION
 
-The \b gdcmraw tool is mostly used for development purpose. It is used to extract a specific binary field from a DICOM DataSet.
+The \b gdcmraw tool is mostly used for development purpose. It is used to
+extract a specific binary field from a DICOM DataSet.
 
 \section parameters PARAMETERS
 
@@ -189,9 +190,11 @@ This will output 4 files:
 
 \section footnote  Footnote about JPEG files
 
-It is a common misunderstanding to interchange 'JPEG 8bits lossy' with simply JPEG file. The JPEG specification is much broader than simply the common lossy 8bits file (as found on internet).
+It is a common misunderstanding to interchange 'JPEG 8bits lossy' with simply
+JPEG file. The JPEG specification is much broader than simply the common lossy
+8bits file (as found on internet).
 
-You can have
+You can have:
 
 \li JPEG Lossy 8bits
 \li JPEG Lossy 12bits

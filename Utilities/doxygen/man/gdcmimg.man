@@ -7,6 +7,11 @@ This tool does not understand Transfer Syntax conversion. It will encapsulate
 the raw data as-is. This has some impact in some cases, see special warnings
 below.
 
+It is important to note that gdcmimg can only encapsulate proper input file,
+for instance JPG and or JP2 are accepted since an associated DICOM Transfer
+Syntax can be found. However input such as TIFF and/or PNG are not, since DICOM
+does not support those. See instead a tool such as gdcm2vtk.
+
 \section synopsis SYNOPSIS
 
 \verbatim
@@ -22,9 +27,9 @@ The \b gdcmimg command line tool can be used in two fashions:
 \section parameters PARAMETERS
 
 \verbatim
-file-in   input filename
+file-in   input filename (non-DICOM)
 
-file-out  output filename
+file-out  DICOM output filename
 \endverbatim
 
 \section options OPTIONS
@@ -109,6 +114,7 @@ For file format such as RLE or RAW, user is expected to fill in information
 required to find the dimension and type of input data as there is no other way
 to find this information. For all other file format, the properties are derived
 from the file format itself.
+
 PNM file are supposed to be big endian (important for depth > 8)
 
 \section usage Typical usage
@@ -121,7 +127,7 @@ $ gdcmimg --fill 0 --region 0,100,0,100 -i input.dcm -o output_black.dcm
 \endverbatim
 
 Warning: if the Pixel Data is compressed, the image is first decompressed so
-that pixel can be set to 0, but it is not recompressed.
+that pixel can be set to 0, but it is not re-compressed.
 
 \subsection convert_raw Convert RAW to DICOM
 
@@ -133,7 +139,7 @@ $ gdcmimg --size 512,512 --depth 16 -i input.raw -o output.dcm
 
 the image will be a Secondary Capture.
 
-When the input is 3 component, one need to specify explicitely the Samples Per
+When the input is 3 component, one need to specify explicitly the Samples Per
 Pixel:
 
 \verbatim
@@ -154,7 +160,7 @@ for instance, if you would like to skip the first 108 bytes, simply do:
 $ dd skip=108 bs=1 if=input.raw of=output.raw
 \endverbatim
 
-.raw and .rawl extension are equivalent. You need to explicitely specify the
+.raw and .rawl extension are equivalent. You need to explicitly specify the
 endianess manually:
 
 \verbatim
@@ -263,7 +269,7 @@ $ gdcmconv --raw input_jpeg.dcm output_raw.dcm
 
 \section see_also SEE ALSO
 
-<b>gdcmdump</b>(1), <b>gdcmdump</b>(1), <b>gdcmraw</b>(1), <b>convert</b>(1), <b>dd</b>(1)
+<b>gdcmdump</b>(1), <b>gdcm2vtk</b>(1), <b>gdcmraw</b>(1), <b>convert</b>(1), <b>dd</b>(1)
 
 \section copyright COPYRIGHT
 

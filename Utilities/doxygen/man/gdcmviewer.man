@@ -15,8 +15,8 @@ The class that use gdcm to make a layer to VTK. \b gdcmviewer is basically only
 just a wrapper around VTK/GDCM.
 
 This tool is meant for testing integration of GDCM in VTK. You should see it as
-a demo tool. It does compile with VTK ranging from 4.2 to 5.8, but only with
-VTK 5.2 (or above) can only play with the widgets (as described below).
+a demo tool. It does compile with VTK ranging from 4.2 to 5.10, but only with
+VTK 5.2 (or above) can play with the widgets (as described below).
 
 \section parameters PARAMETERS
 
