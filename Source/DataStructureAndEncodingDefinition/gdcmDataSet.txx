@@ -80,7 +80,8 @@ namespace gdcm
         {
         /// FIXME we could just seek
         if( de.GetTag() != t )
-          de.template ReadValue<TDE,TSwap>(is, skiptags);
+			is.seekg( is.tellg() + std::streampos( de.GetVL() ) );
+          //de.template ReadValue<TDE,TSwap>(is, skiptags);
         //is.seekg( de.GetVL() );
         }
       // tag was found, we can exit the loop:
