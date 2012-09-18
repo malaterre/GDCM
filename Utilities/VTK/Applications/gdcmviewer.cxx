@@ -19,6 +19,7 @@
 #include "vtkGDCMImageReader.h"
 
 #include "vtkVersion.h"
+#include "vtkErrorCode.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkXMLImageDataWriter.h"
 #include "vtkInteractorStyleImage.h"
@@ -348,6 +349,13 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 
   //reader->FileLowerLeftOn();
   reader->Update();
+  if( reader->GetErrorCode() )
+    {
+    std::cerr << "There was an error: " << vtkErrorCode::
+      GetStringFromErrorCode(reader->GetErrorCode()) << std::endl;
+    return;
+    }
+
   //reader->Print( cout );
   if( verbose )
     reader->GetOutput()->Print( cout );
