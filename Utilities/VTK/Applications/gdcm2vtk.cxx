@@ -19,6 +19,7 @@
 
 #include "vtkVersion.h"
 #include "vtkErrorCode.h"
+#include "vtkStringArray.h"
 //#include "vtkImageCast.h" // DEBUG
 #include "vtkImageReader2Factory.h"
 #include "vtkImageReader2.h"
@@ -56,6 +57,7 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmSystem.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmDirectory.h"
 
 #include <getopt.h>
 
@@ -338,13 +340,60 @@ int main(int argc, char *argv[])
     gdcm::Trace::SetError( verbose);
     }
 
-  if( filenames.size() != 2 )
+  if( filenames.empty() )
     {
     PrintHelp();
     return 1;
     }
-  const char *filename = filenames[0].c_str();
-  const char *outfilename = filenames[1].c_str();
+
+  int recursive = 0;
+  const char *outfilename = NULL;
+  vtkStringArray *names = vtkStringArray::New();
+    {
+    // Is it a single directory ? If so loop over all files contained in it:
+    //const char *filename = argv[1];
+    if( filenames.size() == 2 && gdcm::System::FileIsDirectory( filenames[0].c_str() ) )
+      {
+      if( verbose )
+        std::cout << "Loading directory: " << filenames[0] << std::endl;
+      gdcm::Directory d;
+      d.Load(filenames[0].c_str(), recursive);
+      gdcm::Directory::FilenamesType const &files = d.GetFilenames();
+      for( gdcm::Directory::FilenamesType::const_iterator it = files.begin(); it != files.end(); ++it )
+        {
+        names->InsertNextValue( it->c_str() );
+        }
+      outfilename = filenames[1].c_str();
+      }
+    else // list of files passed directly on the cmd line:
+      // discard non-existing or directory
+      {
+      for(std::vector<std::string>::const_iterator it = filenames.begin(); it != filenames.end() - 1; ++it)
+        {
+        const std::string & filename = *it;
+        if( gdcm::System::FileExists( filename.c_str() ) )
+          {
+          if( gdcm::System::FileIsDirectory( filename.c_str() ) )
+            {
+            if(verbose)
+              std::cerr << "Discarding directory: " << filename << std::endl;
+            }
+          else
+            {
+            names->InsertNextValue( filename.c_str() );
+            }
+          }
+        else
+          {
+          if(verbose)
+            std::cerr << "Discarding non existing file: " << filename << std::endl;
+          }
+        }
+      outfilename = filenames[ filenames.size() - 1 ].c_str();
+      }
+    }
+
+  const char *filename = names->GetValue( 0 ).c_str();
 
   gdcm::ImageHelper::SetForceRescaleInterceptSlope(forcerescale);
   gdcm::ImageHelper::SetForcePixelSpacing(forcespacing);
@@ -404,7 +453,7 @@ int main(int argc, char *argv[])
   if( imgreader )
     {
     imgreader->SetFileLowerLeft( lowerleft );
-    imgreader->SetFileName(filename);
+    imgreader->SetFileNames(names);
     imgreader->Update();
     if( imgreader->GetErrorCode() )
       {
