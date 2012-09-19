@@ -38,14 +38,46 @@ int main(int argc, char *argv[])
 
   std::ifstream is( filename, std::ios::binary );
 
-  gdcm::Tag t(0x0018,0x1701);
-  //gdcm::Tag t(0x0028,0x0002);
+  gdcm::Tag t1(0x0018,0x0022);
+  gdcm::Tag t2(0x0028,0x0002);
   //gdcm::Tag t(0x0025,0x100a);
+  const gdcm::Tag &t = t2;
   std::set<gdcm::Tag> removeme;
-  removeme.insert( t );
+  removeme.insert( t1 );
 
   gdcm::Reader reader;
   reader.SetStream( is );
+  if( !reader.ReadSelectedTags( removeme ) )
+    {
+    // not DICOM ?
+    return 1;
+    }
+  std::streampos pos0 = is.tellg();
+
+  const File & f = reader.GetFile();
+  const DataSet &ds = f.GetDataSet();
+
+#if 0
+  if( ds.FindDataElement( t1 ) )
+    {
+    const DataElement &de = ds.GetDataElement( t1 );
+    // skip value:
+    if( de.GetVL().IsUndefined() )
+      {
+      // TODO
+      assert( 0 );
+      }
+    else
+      {
+      is.seekg( de.GetVL(), std::ios::cur );
+      }
+    }
+#endif
+  removeme.clear();
+  removeme.insert( t2 );
+
+  std::streampos pos1 = is.tellg();
+
   if( !reader.ReadSelectedTags( removeme ) )
     {
     // not DICOM ?
@@ -55,9 +87,6 @@ int main(int argc, char *argv[])
   is.close();
 
   // Step 2. Copy & skip proper portion
-  const File & f = reader.GetFile();
-  const DataSet &ds = f.GetDataSet();
-
   std::ofstream of( outfilename, std::ios::binary );
   std::ifstream is2( filename, std::ios::binary );
   if( ds.FindDataElement( t ) )
