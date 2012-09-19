@@ -14,6 +14,7 @@ set(DSED_TEST_SRCS
   TestReader
   TestReader4
   TestReaderUpToTag
+  TestReaderUpToTag2
   TestReaderSelectedTags
   TestReaderCanRead
   TestWriter
