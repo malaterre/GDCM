@@ -40,7 +40,11 @@
 */
 
 #if defined(OPJ_STATIC) || !defined(_WIN32)
+#if __GNUC__ >= 4
+#define OPJ_API    __attribute__ ((visibility ("default")))
+#else
 #define OPJ_API
+#endif
 #define OPJ_CALLCONV
 #else
 #define OPJ_CALLCONV __stdcall

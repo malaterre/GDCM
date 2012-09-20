@@ -21,6 +21,10 @@
 #pragma warning (disable:4512)
 #endif
 
+#else
+#if __GNUC__ >= 4
+#define CHARLS_IMEXPORT __attribute__ ((visibility ("default")))
+#endif
 #endif
 
 // Typedef used by Charls for the default integral type.
