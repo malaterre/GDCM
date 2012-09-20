@@ -45,7 +45,11 @@
     #define UUID_EXPORT __declspec( dllimport )
   #endif
 #else
+#if __GNUC__ >= 4
+#define UUID_EXPORT    __attribute__ ((visibility ("default")))
+#else
   #define UUID_EXPORT
+#endif
 #endif /*defined(WIN32)*/
 
 
