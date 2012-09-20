@@ -14,7 +14,7 @@ sed -e "s/HOSTNAME/${HOSTNAME}/g" ./dcmqrscp.cfg.in > /tmp/dcmqrscp.cfg
 dcmqrscp --allow-shutdown -v -d -c /tmp/dcmqrscp.cfg 5678 &
 
 #ctest -S zorglub-gcc4-64-makefiles.cmake -V -O zorglub-gcc4-64-makefiles.log
-ctest -S zorglub-gcc43-64-makefiles.cmake -V -O zorglub-gcc43-64-makefiles.log
+ctest -S zorglub-gcc44-64-makefiles.cmake -V -O zorglub-gcc44-64-makefiles.log
 ctest -S zorglub-gcc-64-makefiles-dcmqrscp.cmake -V -O zorglub-gcc-64-makefiles-dcmqrscp.log
 ctest -S zorglub-gcc-64-makefiles.cmake -V -O zorglub-gcc-64-makefiles.log
 ctest -S zorglub-gcc-64-makefiles-release.cmake -V -O zorglub-gcc-64-makefiles-release.log

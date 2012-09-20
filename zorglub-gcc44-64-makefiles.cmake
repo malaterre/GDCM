@@ -12,12 +12,12 @@ set(dashboard_binary_name "gdcm-gcc43-nightly")
 set(dashboard_do_memcheck FALSE)
 set(dashboard_do_coverage FALSE)
 
-SET(ENV{CC} "gcc-4.3")
-SET(ENV{CXX} "g++-4.3")
+SET(ENV{CC} "gcc-4.4")
+SET(ENV{CXX} "g++-4.4")
 #SET(ENV{GDCM_DATA_ROOT} "$ENV{HOME}/Creatis/gdcmData")
 #SET(CTEST_GDCM_PIXEL_SPACING_DATA_ROOT "$ENV{HOME}/Dashboards/Theralys/pixelspacingtestimages")
-SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wextra -Wshadow -Wunused -Wno-system-headers -Wno-deprecated -Woverloaded-virtual -Wwrite-strings -Wsign-promo -Wabi -D_GLIBCXX_DEBUG")
-SET(ENV{CFLAGS}   "-g -O0 -Wall -W -Wextra -pedantic -Wno-long-long")
+SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wextra -Wshadow -Wunused -Wno-system-headers -Wno-deprecated -Woverloaded-virtual -Wwrite-strings -Wsign-promo -Wabi -D_GLIBCXX_DEBUG -fvisibility=hidden")
+SET(ENV{CFLAGS}   "-g -O0 -Wall -W -Wextra -pedantic -Wno-long-long -fvisibility=hidden")
 
 macro(dashboard_hook_init)
   set( dashboard_cache "
