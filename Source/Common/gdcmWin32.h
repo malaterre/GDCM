@@ -19,6 +19,7 @@
 #error you need to include gdcmTypes.h instead
 #endif
 //-----------------------------------------------------------------------------
+// http://gcc.gnu.org/wiki/Visibility
 #if defined(WIN32) && defined(GDCM_BUILD_SHARED_LIBS)
   #if (defined(gdcmCommon_EXPORTS) || defined(gdcmDICT_EXPORTS) || defined(gdcmDSED_EXPORTS) || defined(gdcmIOD_EXPORTS) || defined(gdcmMSFF_EXPORTS) || defined(gdcmMEXD_EXPORTS)|| defined(_gdcmswig_EXPORTS)) || defined(vtkgdcm_EXPORTS)
     #define GDCM_EXPORT __declspec( dllexport )
@@ -26,7 +27,12 @@
     #define GDCM_EXPORT __declspec( dllimport )
   #endif
 #else
-  #define GDCM_EXPORT
+  #if __GNUC__ >= 4
+    #define GDCM_EXPORT __attribute__ ((visibility ("default")))
+    #define GDCM_LOCAL  __attribute__ ((visibility ("hidden")))
+  #else
+    #define GDCM_EXPORT
+  #endif
 #endif
 
 // In VTK 4.2 vtkWrapPython does not like anything other than VTK_*EXPORT
