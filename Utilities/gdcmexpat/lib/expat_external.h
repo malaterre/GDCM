@@ -65,7 +65,10 @@
 #define XMLIMPORT __declspec(dllimport)
 #endif
 #endif
-
+#else
+#if __GNUC__ >= 4
+#define XMLIMPORT __attribute__ ((visibility ("default")))
+#endif
 #endif
 #endif  /* not defined XML_STATIC */
 
