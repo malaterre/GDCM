@@ -35,10 +35,11 @@ namespace gdcm{
 
   enum EQueryLevel
     {
-    ePatient,
-    eStudy,
-    eSeries,
-    eImageOrFrame
+    ePatient = 0,
+    eStudy = 1,
+    eSeries = 2,
+    eImage = 3,
+    eImageOrFrame = 3
     };
   enum EQueryType
     {
