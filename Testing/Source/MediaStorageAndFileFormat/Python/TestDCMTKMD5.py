@@ -75,7 +75,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     #print "empty, problem with:", filename
     return 0
   elif type(ret) != type(''):
-    print "problem of type with:", filename
+    print("problem of type with:", filename)
     return 0
   #print ret
   #print ret.__class__
@@ -98,7 +98,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     #print md5
     retval  = 0
     if ref != md5:
-      print "md5 are different: %s should be: %s for file %s"%(md5,ref,filename)
+      print("md5 are different: %s should be: %s for file %s"%(md5,ref,filename))
       retval = 1
     #print outputfilename
     return retval
@@ -107,7 +107,7 @@ def TestDCMTKMD5( filename, verbose = False ):
     dcmdjpls_exec = "dcmdjpls " + filename + " " + outputfilename
     ret = os.system( dcmdjpls_exec )
     if ret:
-      print "failed with: ", dcmdjpls_exec
+      print("failed with: ", dcmdjpls_exec)
       return 1
 
     gdcmraw_args = ' -i ' + outputfilename + ' -o ' + outputfilename + ".raw"
