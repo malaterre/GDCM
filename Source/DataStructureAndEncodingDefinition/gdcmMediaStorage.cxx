@@ -128,6 +128,8 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.77.1.6", // VLWholeSlideMicroscopyImageStorage
   "1.2.840.10008.5.1.4.1.1.481.7", // RTTreatmentSummaryRecordStorage
   "1.2.840.10008.5.1.4.1.1.6.2", // EnhancedUSVolumeStorage
+  "1.2.840.10008.5.1.4.1.1.88.67", // XRayRadiationDoseSR
+  "1.2.840.10008.5.1.4.1.1.77.1.1", // VLEndoscopicImageStorage
   0
 };
 
@@ -194,6 +196,7 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == DetachedStudyManagementSOPClass
     || ms == EncapsulatedPDFStorage
     || ms == EncapsulatedCDAStorage
+    || ms == XRayRadiationDoseSR
     || ms == KeyObjectSelectionDocument
     || ms == HangingProtocolStorage
     || ms == MRSpectroscopyStorage
@@ -296,6 +299,8 @@ static const MSModalityType MSModalityTypes[] = {
   {"SM", 2, 0},// VLWholeSlideMicroscopyImageStorage
   {"RTRECORD", 2, 0},//RTTreatmentSummaryRecordStorage
   {"US",3, 0}, // EnhancedUSVolumeStorage
+  {"  ", 2, 0},// XRayRadiationDoseSR
+  {"ES", 2, 0},// VLEndoscopicImageStorage
 
   {NULL, 0, 0} //MS_END
 };
