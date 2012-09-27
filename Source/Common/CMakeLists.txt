@@ -145,10 +145,15 @@ endif()
 
 if(GDCM_USE_SYSTEM_OPENSSL)
 set(Common_SRCS ${Common_SRCS}
-  gdcmOpenSSLCryptoFactory.cxx
-  gdcmOpenSSLCryptographicMessageSyntax.cxx
   gdcmOpenSSLP7CryptoFactory.cxx
   gdcmOpenSSLP7CryptographicMessageSyntax.cxx
+)
+endif()
+
+if(GDCM_USE_SYSTEM_OPENSSL AND GDCM_HAVE_CMS_RECIPIENT_PASSWORD)
+set(Common_SRCS ${Common_SRCS}
+  gdcmOpenSSLCryptoFactory.cxx
+  gdcmOpenSSLCryptographicMessageSyntax.cxx
 )
 endif()
 

@@ -15,6 +15,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <memory>
+#include <vector>
 
 #include "gdcmFilename.h"
 #include "gdcmTesting.h"
@@ -227,14 +228,33 @@ int TestCryptographicMessageSyntax(int, char *[])
   std::string certpath = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/certificate.pem" );
   std::string keypath = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/privatekey.pem" );
   bool bret = true;
+  //typedef std::tuple<std::string, gdcm::CryptographicMessageSyntax&> StringCMSPairType;
+  std::vector<gdcm::CryptographicMessageSyntax*> availableCMS;
+  std::vector<std::string> availableCMSName;
+
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
+  gdcm::CryptoFactory* osslp7 = gdcm::CryptoFactory::GetFactoryInstance(gdcm::CryptoFactory::OPENSSLP7);
+  std::auto_ptr<gdcm::CryptographicMessageSyntax> ocmsp7(osslp7->CreateCMSProvider());
+  ocmsp7->ParseKeyFile(keypath.c_str());
+  ocmsp7->ParseCertificateFile(certpath.c_str());
+  bret = TestCMSProvider(*ocmsp7, "OpenSSL PKCS7") && bret;
+  bret = TestCMSVector(*ocmsp7, "OpenSSL PKCS7") && bret;
+  availableCMS.push_back(ocmsp7.get());
+  availableCMSName.push_back("OpenSSL PKCS7");
+#endif
+
+#ifdef GDCM_USE_SYSTEM_OPENSSL
+#ifdef GDCM_HAVE_CMS_RECIPIENT_PASSWORD
   gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::GetFactoryInstance(gdcm::CryptoFactory::OPENSSL);
   std::auto_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
   ocms->ParseKeyFile(keypath.c_str());
   ocms->ParseCertificateFile(certpath.c_str());
-  bret = TestCMSProvider(*ocms, "OpenSSL") && bret;
-  bret = TestCMSVector(*ocms, "OpenSSL") && bret;
+  bret = TestCMSProvider(*ocms, "OpenSSL CMS") && bret;
+  bret = TestCMSVector(*ocms, "OpenSSL CMS") && bret;
+  availableCMS.push_back(ocms.get());
+  availableCMSName.push_back("OpenSSL CMS");
+#endif
 #endif
 
 #ifdef WIN32
@@ -244,14 +264,13 @@ int TestCryptographicMessageSyntax(int, char *[])
   ccms->ParseKeyFile(keypath.c_str());
   bret = TestCMSProvider(*ccms, "CAPI") && bret;
   bret = TestCMSVector(*ccms, "CAPI") && bret;
+  availableCMS.push_back(ccms.get());
+  availableCMSName.push_back("CAPI");
 #endif
-  
-#ifdef WIN32
-#ifdef GDCM_USE_SYSTEM_OPENSSL
-  bret = TestCMSCompatibility(*ocms, "OpenSSL", *ccms, "CAPI") && bret;
-  bret = TestCMSCompatibility(*ccms, "CAPI", *ocms, "OpenSSL") && bret;
-#endif
-#endif
+
+  for (int i = 0; i < availableCMS.size(); ++i)
+    for (int j = i+1; j < availableCMS.size(); ++j)
+      bret = TestCMSCompatibility(*availableCMS[i], availableCMSName[i].c_str(), *availableCMS[j], availableCMSName[j].c_str()) && bret;
 
   return (bret ? 0 : 1);
 }
