@@ -21,11 +21,11 @@ int TestPrivateTag(int , char * [])
     std::cerr << pt << std::endl;
     return 1;
     }
-//  if( pt.GetOwner() != std::string("SIEMENS CSA HEADER") )
-//    {
-//    std::cerr << "[" << pt.GetOwner() << "]" << std::endl;
-//    return 1;
-//    }
+  if( pt.GetOwner() != std::string("SIEMENS CSA HEADER") )
+    {
+    std::cerr << "[" << pt.GetOwner() << "]" << std::endl;
+    return 1;
+    }
 
   const char str[] = "0029,1019,SIEMENS CSA HEADER";
 
@@ -41,6 +41,53 @@ int TestPrivateTag(int , char * [])
     std::cerr << "[" << pt.GetOwner() << "]" << std::endl;
     return 1;
     }
+
+  const gdcm::PrivateTag pt1(0x1,0x2,"BLA");
+  const char str0[] = {};
+  const char str1[] = "1,2,BLA";
+  const char str2[] = "1,65536,BLU";
+  const char str3[] = "65536,2,BLU";
+  const char str4[] = "65536,2";
+  if( pt.ReadFromCommaSeparatedString( NULL ) )
+    {
+    return 1;
+    }
+  if( pt.ReadFromCommaSeparatedString( str0 ) )
+    {
+    return 1;
+    }
+  if( !pt.ReadFromCommaSeparatedString( str1 ) )
+    {
+    return 1;
+    }
+  if( pt != pt1 )
+    {
+    return 1;
+    }
+  if( pt.ReadFromCommaSeparatedString( str2 ) )
+    {
+    return 1;
+    }
+  if( pt.ReadFromCommaSeparatedString( str3 ) )
+    {
+    return 1;
+    }
+  if( pt.ReadFromCommaSeparatedString( str4 ) )
+    {
+    return 1;
+    }
+
+  gdcm::PrivateTag null(0x0,0x0,0);
+  if( null.GetOwner() == 0 )
+    {
+    return 1;
+    }
+
+  const gdcm::PrivateTag nospaces(0x12,0x34,"Philips MR Imaging DD 001");
+  gdcm::PrivateTag spaces(0x12,0x34," Philips MR Imaging DD 001 ");
+  if( nospaces != spaces ) return 1;
+  spaces.SetOwner("    Philips MR Imaging DD 001    ");
+  if( nospaces != spaces ) return 1;
 
   return 0;
 }
