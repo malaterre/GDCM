@@ -26,6 +26,7 @@
 #include "vtkImageData.h"
 #include "vtkTIFFWriter.h"
 #include "vtkPNGWriter.h"
+#include "vtkPNMWriter.h"
 #include "vtkBMPWriter.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkMetaImageReader.h"
@@ -510,6 +511,24 @@ int main(int argc, char *argv[])
     else if(  gdcm::System::StrCaseCmp(outputextension,".bmp") == 0 )
       {
       vtkBMPWriter * writer = vtkBMPWriter::New();
+      writer->SetFileName( outfilename );
+      writer->SetInput( imgdata );
+      writer->Write();
+#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+      if( writer->GetErrorCode() )
+        {
+        std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
+        retcode = 1;
+        }
+#endif
+      writer->Delete();
+      goto cleanup;
+      }
+    else if(  gdcm::System::StrCaseCmp(outputextension,".pgm") == 0
+      || gdcm::System::StrCaseCmp(outputextension,".pnm") == 0
+      || gdcm::System::StrCaseCmp(outputextension,".ppm") == 0 )
+      {
+      vtkPNMWriter * writer = vtkPNMWriter::New();
       writer->SetFileName( outfilename );
       writer->SetInput( imgdata );
       writer->Write();
