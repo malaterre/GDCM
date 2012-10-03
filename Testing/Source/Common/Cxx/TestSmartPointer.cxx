@@ -111,7 +111,10 @@ int TestSmartPointer(int, char *[])
   for(int i = 0; i < 5; ++i)
     {
     SmartPointer<Foo> f = TestReturn(i);
-    f->foo();
+    if( f )
+      {
+      f->foo();
+      }
     }
 
   return 0;
