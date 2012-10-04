@@ -139,8 +139,12 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
       {
       vtkImageData *vtkimage = self->GetOutput(OverlayPortNumber);
       const gdcm::Overlay& ov = image.GetOverlay();
-      unsigned char * overlaypointer = static_cast<unsigned char*>(vtkimage->GetScalarPointer());
-      ov.GetUnpackBuffer(overlaypointer);
+      const size_t overlaylen = (outExt[1]-outExt[0])*(outExt[3]-outExt[2]);
+      char * overlaypointer = static_cast<char*>(vtkimage->GetScalarPointer());
+      if( !ov.GetUnpackBuffer(overlaypointer, overlaylen) )
+        {
+        vtkGenericWarningMacro( "Problem in GetUnpackBuffer" );
+        }
       }
 
     const double shift = image.GetIntercept();

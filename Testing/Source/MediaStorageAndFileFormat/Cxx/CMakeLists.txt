@@ -62,6 +62,7 @@ SET(MSFF_TEST_SRCS
   TestPhotometricInterpretation
   TestLookupTable
   TestOverlay
+  TestOverlay3
   TestCurve
   TestCurve2
   TestPixelFormat
