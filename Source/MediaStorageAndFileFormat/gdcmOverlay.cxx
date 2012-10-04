@@ -65,7 +65,7 @@ public:
   unsigned short BitsAllocated;  // (6000,0100) US 1                                        #   2, 1 OverlayBitsAllocated
   unsigned short BitPosition;    // (6000,0102) US 0                                        #   2, 1 OverlayBitPosition
   //std::vector<bool> Data;
-  std::vector<char> Data;
+  std::vector<char> Data; // hold the Overlay data, but not the trailing DICOM padding (\0)
   void Print(std::ostream &os) const {
     os << "Group           0x" <<  std::hex << Group << std::dec << std::endl;
     os << "Rows            " <<  Rows << std::endl;
@@ -304,14 +304,17 @@ unsigned short Overlay::GetRows() const { return Internal->Rows; }
 void Overlay::SetColumns(unsigned short columns) { Internal->Columns = columns; }
 unsigned short Overlay::GetColumns() const { return Internal->Columns; }
 void Overlay::SetNumberOfFrames(unsigned int numberofframes) { Internal->NumberOfFrames = numberofframes; }
-void Overlay::SetDescription(const char* description) { Internal->Description = description; }
+void Overlay::SetDescription(const char* description) { if( description ) Internal->Description = description; }
 const char *Overlay::GetDescription() const { return Internal->Description.c_str(); }
-void Overlay::SetType(const char* type) { Internal->Type = type; }
+void Overlay::SetType(const char* type) { if( type ) Internal->Type = type; }
 const char *Overlay::GetType() const { return Internal->Type.c_str(); }
-void Overlay::SetOrigin(const signed short *origin)
+void Overlay::SetOrigin(const signed short origin[2])
 {
-  Internal->Origin[0] = origin[0];
-  Internal->Origin[1] = origin[1];
+  if( origin )
+    {
+    Internal->Origin[0] = origin[0];
+    Internal->Origin[1] = origin[1];
+    }
 }
 const signed short * Overlay::GetOrigin() const
 {
@@ -352,11 +355,10 @@ inline unsigned int compute_bit_and_dicom_padding(unsigned short rows, unsigned 
   return word_padding + word_padding%2; // Cannot have odd length
 }
 
-void Overlay::SetOverlay(const char *array, unsigned int length)
+void Overlay::SetOverlay(const char *array, size_t length)
 {
-  if( !array || length == 0 ) return;
-  //char * p = (char*)&Internal->Data[0];
-  unsigned int computed_length = (Internal->Rows * Internal->Columns + 7) / 8;
+  if( !array || !length ) return;
+  const size_t computed_length = (Internal->Rows * Internal->Columns + 7) / 8;
   Internal->Data.resize( computed_length ); // filled with 0 if length < computed_length
   if( length < computed_length )
     {
@@ -365,11 +367,8 @@ void Overlay::SetOverlay(const char *array, unsigned int length)
     }
   else
     {
-    if( length > computed_length )
-      {
-      gdcmWarningMacro( "Too much data found in Overlay. Discarding extra data: " << (length - computed_length) << " bytes." );
-      }
     // do not try to copy more than allocated:
+    // technically we may be missing the trailing DICOM padding (\0), but we have all the data needed anyway:
     std::copy(array, array+computed_length, Internal->Data.begin());
     }
   /* warning need to take into account padding to the next word (8bits) */
@@ -384,6 +383,7 @@ const ByteValue &Overlay::GetOverlayData() const
   return bv;
 }
 
+#if !defined(GDCM_LEGACY_REMOVE)
 void Overlay::Decode(std::istream &is, std::ostream &os)
 {
   unsigned char packedbytes;
@@ -409,7 +409,7 @@ void Overlay::Decode(std::istream &is, std::ostream &os)
 
 bool Overlay::GetBuffer(char *buffer) const
 {
-  size_t length = Internal->Data.size();
+  const size_t length = Internal->Data.size();
   std::copy(buffer, buffer+length, Internal->Data.begin());
   return true;
 }
@@ -439,15 +439,57 @@ bool Overlay::GetUnpackBuffer(unsigned char *buffer) const
     }
   return true;
 }
+#endif
+
+size_t Overlay::GetUnpackBufferLength() const
+{
+  const size_t unpacklen = Internal->Rows * Internal->Columns;
+  return unpacklen;
+}
+
+bool Overlay::GetUnpackBuffer(char *buffer, size_t len) const
+{
+  const size_t unpacklen = GetUnpackBufferLength();
+  if( len < unpacklen ) return false;
+  unsigned char *unpackedbytes = (unsigned char*)buffer;
+  const unsigned char *begin = unpackedbytes;
+  for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
+    {
+    assert( unpackedbytes <= begin + len ); // We never store more than actually required
+    // const unsigned char &packedbytes = *it;
+    // weird bug with gcc 3.3 (prerelease on SuSE) apparently:
+    unsigned char packedbytes = static_cast<unsigned char>(*it);
+    unsigned char mask = 1;
+    for (unsigned int i = 0; i < 8 && unpackedbytes < begin + len; ++i)
+      {
+      if ( (packedbytes & mask) == 0)
+        {
+        *unpackedbytes = 0;
+        }
+      else
+        {
+        *unpackedbytes = 255;
+        }
+      ++unpackedbytes;
+      mask <<= 1;
+      }
+    }
+  assert(unpackedbytes <= begin + len);
+  return true;
+}
 
 void Overlay::Decompress(std::ostream &os) const
 {
+  const size_t unpacklen = GetUnpackBufferLength();
   unsigned char unpackedbytes[8];
+  std::vector<char>::const_iterator beg = Internal->Data.begin();
+  size_t curlen = 0;
   for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
     {
     unsigned char packedbytes = *it;
     unsigned char mask = 1;
-    for (unsigned int i = 0; i < 8; ++i)
+    unsigned int i = 0;
+    for (; i < 8 && curlen < unpacklen; ++i)
       {
       if ( (packedbytes & mask) == 0)
         {
@@ -458,8 +500,9 @@ void Overlay::Decompress(std::ostream &os) const
         unpackedbytes[i] = 255;
         }
       mask <<= 1;
+      ++curlen;
       }
-    os.write(reinterpret_cast<char*>(unpackedbytes), 8);
+    os.write(reinterpret_cast<char*>(unpackedbytes), i);
     }
 }
 

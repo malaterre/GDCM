@@ -908,6 +908,8 @@ int main(int argc, char *argv[])
 
 cleanup:
   if( imgreader ) imgreader->Delete();
+  names->Delete();
+  xmlreader->Delete();
   datareader->Delete();
   gdcmreader->Delete();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0

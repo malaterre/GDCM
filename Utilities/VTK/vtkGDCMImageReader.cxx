@@ -1242,12 +1242,15 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
       chararray->Delete();
 
       assert( vtkimage->GetScalarType() == VTK_UNSIGNED_CHAR );
-      unsigned char * overlaypointer = static_cast<unsigned char*>(vtkimage->GetScalarPointer());
+      char * overlaypointer = static_cast<char*>(vtkimage->GetScalarPointer());
       assert( overlaypointer );
       //assert( image->GetPointData()->GetScalars() != 0 );
 
       //memset(overlaypointer,0,overlaylen); // FIXME: can be optimized
-      ov1.GetUnpackBuffer( overlaypointer );
+      if( !ov1.GetUnpackBuffer( overlaypointer, overlaylen ) )
+        {
+        vtkErrorMacro( "Problem in GetUnpackBuffer" );
+        }
       }
     if( numoverlays ) assert( (unsigned long)overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
     }
