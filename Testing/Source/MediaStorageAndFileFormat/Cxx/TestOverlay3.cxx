@@ -35,6 +35,8 @@ static const ovel overlay3array[] = {
     {"349d1f9510f64467ecf73eeea46c9c6e", "45909476", 0 },
     {"6a5f8038cc8cf753bf74422164adc24c", "45909517", 0 },
     {"1a3bf73e42b0f6dc282a9be59c054027", "OverlayDICOMDataSet.dcm", 0 },
+// gdcmConformanceTests
+    {"040560796c1a53ffce0d2f7e90c9dc26", "CT_OSIRIX_OddOverlay.dcm", 0 },
   // random
 //    {"f7e43de189a1bc08044c13aefac73fed", "1.dcm", 0 },
 //    {"e7859c818f26202fb63a2b205ff16297", "1.dcm", 1 },
