@@ -454,6 +454,9 @@ int main(int argc, char *argv[])
   if( imgreader )
     {
     imgreader->SetFileLowerLeft( lowerleft );
+    if( names->GetNumberOfValues() == 1 )
+    imgreader->SetFileName(names->GetValue(0) );
+    else
     imgreader->SetFileNames(names);
     imgreader->Update();
     if( imgreader->GetErrorCode() )
