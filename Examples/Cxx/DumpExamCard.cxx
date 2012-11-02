@@ -218,6 +218,20 @@ struct param
 
 bool ProcessNested( gdcm::DataSet & ds )
 {
+  /*
+  TODO:
+   Looks like the real length of the blob is stored here:
+(2005,1132) SQ                                                    # u/l,1 ?
+  (fffe,e000) na (Item with undefined length)
+    (2005,0011) LO [Philips MR Imaging DD 002 ]                   # 26,1 Private Creator
+    (2005,1143) SL 3103                                           # 4,1 ?
+
+Whosit ?
+(2005,1132) SQ                                                    # u/l,1 ?
+  (fffe,e000) na (Item with undefined length)
+    (2005,0011) LO [Philips MR Imaging DD 002 ]                   # 26,1 Private Creator
+    (2005,1147) CS [Y ]                                           # 2,1 ?
+  */
   bool ret = false;
 
   //  (2005,1137) PN (LO) [PDF_CONTROL_GEN_PARS]                    # 20,1 ?
