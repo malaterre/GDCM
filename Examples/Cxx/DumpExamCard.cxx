@@ -36,6 +36,7 @@
 #include "gdcmReader.h"
 #include "gdcmDataSet.h"
 #include "gdcmPrivateTag.h"
+#include "gdcmBase64.h"
 
 #include <iomanip>
 
@@ -290,9 +291,6 @@ Wotsit ?
   const gdcm::PrivateTag pt1(0x2005,0x39,"Philips MR Imaging DD 002");
   if( !ds.FindDataElement( pt1 ) ) return false;
   const gdcm::DataElement &de1 = ds.GetDataElement( pt1 );
-  if( de1.IsEmpty() ) return false;
-  const gdcm::ByteValue * bv1 = de1.GetByteValue();
-  std::string s1( bv1->GetPointer() , bv1->GetLength() );
 
   const gdcm::PrivateTag pt(0x2005,0x44,"Philips MR Imaging DD 002");
   if( !ds.FindDataElement( pt ) ) return false;
@@ -300,145 +298,195 @@ Wotsit ?
   if( de.IsEmpty() ) return false;
   const gdcm::ByteValue * bv = de.GetByteValue();
 
-  if( s1 == "IEEE_PDF" )
+  if( s0 == "ExamCardBlob" )
     {
-    //  std::cout << "Len= " << bv->GetLength() << std::endl;
-#if 0
-    std::string fn = gdcm::LOComp::Trim( s.c_str() ); // remove trailing space
+    assert( de1.IsEmpty() );
+
+    std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
+    fn += ".xml";
     std::ofstream out( fn.c_str() );
-    out.write( bv->GetPointer(), bv->GetLength() );
+
+    // remove trailing \0
+    size_t len = strlen( bv->GetPointer() );
+    out.write( bv->GetPointer() , len );
     out.close();
-#endif
 
-    std::istringstream is;
-    std::string dup( bv->GetPointer(), bv->GetLength() );
-    is.str( dup );
+    // Extract binary64 thingy (this is a ugly hack, better use an XML parser)
+    std::string dup( bv->GetPointer(), len );
+    std::string::size_type pos1 = dup.find( "<ExamCardBlob>" );
+    std::string::size_type pos2 = dup.find( "</ExamCardBlob>" );
 
-    header h;
-    h.read( is );
+    std::string b64( bv->GetPointer() + pos1 + 14, pos2 - (pos1 + 14) );
+
+    // ulgy hack to remove \r\n from input base64:
+    std::string::iterator r_pos = std::remove(b64.begin(), b64.end(), '\r');
+    b64.erase(r_pos, b64.end());
+    std::string::iterator n_pos = std::remove(b64.begin(), b64.end(), '\n');
+    b64.erase(n_pos, b64.end());
 #if 0
-    std::cout << s0.c_str() << std::endl;
-    h.print( std::cout );
+    std::ofstream out2( "debug" );
+    out2.write( b64.c_str(), b64.size() );
+    out2.close();
 #endif
 
-    assert( is.tellg() == 0x20 );
-    is.seekg( 0x20 );
+    int dlen = gdcm::Base64::GetDecodeLength(b64.c_str(), b64.size() );
 
-    std::vector< param > params;
-    param p;
-    for( uint32_t i = 0; i < h.getnparams(); ++i )
-      {
-      p.read( is );
-      //p.print( std::cout );
-      params.push_back( p );
-      }
+    std::string decoded;
+    decoded.resize( dlen );
+    gdcm::Base64::Decode( &decoded[0], decoded.size(), b64.c_str(), b64.size() );
 
-    std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
-    assert( isvalidpdfstring( fn.c_str() ) );
-    fn += ".csv";
-    //fn += ".xml";
-    std::ofstream csv( fn.c_str() );
-
-    // let's do some bookeeping:
-    uint32_t nfloats = 0;
-    uint32_t nints = 0;
-    uint32_t nstrings = 0;
-    for( std::vector<param>::const_iterator it = params.begin();
-      it != params.end(); ++it )
-      {
-      param_type type = it->gettype();
-      switch( type )
-        {
-      case param_float:
-        nfloats += it->getdim();
-        break;
-      case param_integer:
-        nints += it->getdim();
-        break;
-      case param_string:
-        nstrings += it->getdim();
-        break;
-      default:
-        ;
-        }
-      }
-#if 0
-    std::cout << "Stats:" << std::endl;
-    std::cout << "nfloats:" << nfloats << std::endl;
-    std::cout << "nints:" << nints << std::endl;
-    std::cout << "nstrings:" << nstrings << std::endl;
-#endif
-    assert( h.getnints() >= nints );
-    assert( h.getnfloats() >= nfloats );
-    assert( h.getnstrings() >= nstrings);
-
-    for( uint32_t i = 0; i < h.getnparams(); ++i )
-      {
-      params[i].printcsv( csv, is );
-      //params[i].printxml( csv, is );
-      }
-    csv.close();
-    ret = true;
-    }
-  else if( s1 == "ASCII " )
-    {
-#if 0
-    std::cerr << "ASCII is not handled" << std::endl;
-    std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
-    fn += ".asc";
-    std::ofstream out( fn.c_str() );
-    out.write( bv->GetPointer() , bv->GetLength() );
-    out.close();
-#endif
-    std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
-    fn += ".sin";
-    std::ofstream sin( fn.c_str() );
-
-    const char *beg = bv->GetPointer();
-    const char *end = beg + bv->GetLength();
-    assert( *beg == 0 );
-    const char *p = beg + 1; // skip first \0
-    size_t prev = 0;
-    for( ; p != end; ++p )
-      {
-      if( *p == 0 )
-        {
-        const char *s = beg + prev + 1;
-        if( *s )
-          {
-          sin << s << std::endl;
-          }
-        else
-          {
-          sin << std::endl;
-          }
-        prev = p - beg;
-        }
-      }
-    sin.close();
+    std::ofstream f64( "soap.xml" );
+    f64.write( decoded.c_str(), decoded.size() );
+    f64.close();
 
     ret = true;
     }
-  else if( s1 == "BINARY" )
+  else
     {
-    std::cerr << "BINARY is not handled" << std::endl;
-    std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
-    fn += ".bin";
-    std::ofstream out( fn.c_str() );
-    //out.write( bv->GetPointer() + 512, bv->GetLength() - 512);
-    out.write( bv->GetPointer() , bv->GetLength() );
-    out.close();
+    if( de1.IsEmpty() ) return false;
+    const gdcm::ByteValue * bv1 = de1.GetByteValue();
+    std::string s1( bv1->GetPointer() , bv1->GetLength() );
 
-#if 0
-    int array[ 128 ];
-    memcpy( array, bv->GetPointer(), 512 );
-    for( int i = 0; i < 14; ++i )
+    if( s1 == "IEEE_PDF" )
       {
-      std::cout << array[i] << std::endl;
-      }
+      //  std::cout << "Len= " << bv->GetLength() << std::endl;
+#if 0
+      std::string fn = gdcm::LOComp::Trim( s.c_str() ); // remove trailing space
+      std::ofstream out( fn.c_str() );
+      out.write( bv->GetPointer(), bv->GetLength() );
+      out.close();
 #endif
 
-    ret = true;
+      std::istringstream is;
+      std::string dup( bv->GetPointer(), bv->GetLength() );
+      is.str( dup );
+
+      header h;
+      h.read( is );
+#if 0
+      std::cout << s0.c_str() << std::endl;
+      h.print( std::cout );
+#endif
+
+      assert( is.tellg() == 0x20 );
+      is.seekg( 0x20 );
+
+      std::vector< param > params;
+      param p;
+      for( uint32_t i = 0; i < h.getnparams(); ++i )
+        {
+        p.read( is );
+        //p.print( std::cout );
+        params.push_back( p );
+        }
+
+      std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
+      assert( isvalidpdfstring( fn.c_str() ) );
+      fn += ".csv";
+      //fn += ".xml";
+      std::ofstream csv( fn.c_str() );
+
+      // let's do some bookeeping:
+      uint32_t nfloats = 0;
+      uint32_t nints = 0;
+      uint32_t nstrings = 0;
+      for( std::vector<param>::const_iterator it = params.begin();
+        it != params.end(); ++it )
+        {
+        param_type type = it->gettype();
+        switch( type )
+          {
+        case param_float:
+          nfloats += it->getdim();
+          break;
+        case param_integer:
+          nints += it->getdim();
+          break;
+        case param_string:
+          nstrings += it->getdim();
+          break;
+        default:
+          ;
+          }
+        }
+#if 0
+      std::cout << "Stats:" << std::endl;
+      std::cout << "nfloats:" << nfloats << std::endl;
+      std::cout << "nints:" << nints << std::endl;
+      std::cout << "nstrings:" << nstrings << std::endl;
+#endif
+      assert( h.getnints() >= nints );
+      assert( h.getnfloats() >= nfloats );
+      assert( h.getnstrings() >= nstrings);
+
+      for( uint32_t i = 0; i < h.getnparams(); ++i )
+        {
+        params[i].printcsv( csv, is );
+        //params[i].printxml( csv, is );
+        }
+      csv.close();
+      ret = true;
+      }
+    else if( s1 == "ASCII " )
+      {
+#if 0
+      std::cerr << "ASCII is not handled" << std::endl;
+      std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
+      fn += ".asc";
+      std::ofstream out( fn.c_str() );
+      out.write( bv->GetPointer() , bv->GetLength() );
+      out.close();
+#endif
+      std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
+      fn += ".sin";
+      std::ofstream sin( fn.c_str() );
+
+      const char *beg = bv->GetPointer();
+      const char *end = beg + bv->GetLength();
+      assert( *beg == 0 );
+      const char *p = beg + 1; // skip first \0
+      size_t prev = 0;
+      for( ; p != end; ++p )
+        {
+        if( *p == 0 )
+          {
+          const char *s = beg + prev + 1;
+          if( *s )
+            {
+            sin << s << std::endl;
+            }
+          else
+            {
+            sin << std::endl;
+            }
+          prev = p - beg;
+          }
+        }
+      sin.close();
+
+      ret = true;
+      }
+    else if( s1 == "BINARY" )
+      {
+      std::cerr << "BINARY is not handled" << std::endl;
+      std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
+      fn += ".bin";
+      std::ofstream out( fn.c_str() );
+      //out.write( bv->GetPointer() + 512, bv->GetLength() - 512);
+      out.write( bv->GetPointer() , bv->GetLength() );
+      out.close();
+
+#if 0
+      int array[ 128 ];
+      memcpy( array, bv->GetPointer(), 512 );
+      for( int i = 0; i < 14; ++i )
+        {
+        std::cout << array[i] << std::endl;
+        }
+#endif
+
+      ret = true;
+      }
     }
   // else -> ret == false
   assert( ret );
