@@ -150,7 +150,7 @@ struct param
     offset += cur;
     }
 
-  void print( std::ostream & os )
+  void print( std::ostream & os ) const
     {
     os << name << ",";
     os << (int)boolean << ",";
@@ -159,12 +159,8 @@ struct param
     os << v4 << ",";
     os << offset << std::endl;
     }
-  void print2( std::ostream & os, std::istream & is )
+  void printvalue( std::ostream & os, std::istream & is ) const
     {
-    os << std::setw(32) << std::left << name << ",";
-    os << std::setw(7) << std::right << gettypenamefromtype(type) << ",";
-    os << std::setw(4) << dim << ",";
-    os << " ";
     is.seekg( offset );
     switch( type )
       {
@@ -212,6 +208,29 @@ struct param
         }
       break;
       }
+
+    }
+  void printxml( std::ostream & os, std::istream & is ) const
+    {
+    // <Attribute Name="CGEN_force_par_mode" Type="enum">0</Attribute>
+    os << "  <Attribute";
+    os << " Name=\"" << name << "\"";
+    os << " Type=\"" << gettypenamefromtype(type) << "\"";
+    if( dim != 1 )
+      {
+      os << " ArraySize=\"" << dim << "\"";
+      }
+    os << ">";
+    printvalue( os, is );
+    os << "</Attribute>\n";
+    }
+  void printcsv( std::ostream & os, std::istream & is ) const
+    {
+    os << std::setw(32) << std::left << name << ",";
+    os << std::setw(7) << std::right << gettypenamefromtype(type) << ",";
+    os << std::setw(4) << dim << ",";
+    os << " ";
+    printvalue( os, is );
     os << ",\n";
     }
 };
@@ -290,6 +309,7 @@ Whosit ?
       }
     std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
     fn += ".csv";
+    //fn += ".xml";
     std::ofstream csv( fn.c_str() );
 
     // let's do some bookeeping:
@@ -327,7 +347,8 @@ Whosit ?
 
     for( uint32_t i = 0; i < h.getnparams(); ++i )
       {
-      params[i].print2( csv, is );
+      params[i].printcsv( csv, is );
+      //params[i].printxml( csv, is );
       }
     csv.close();
     ret = true;
