@@ -34,11 +34,13 @@ if(EXISTS ${SELF_DIR}/GDCMTargets.cmake)
   include(${SELF_DIR}/GDCMTargets.cmake)
   get_filename_component(GDCM_INCLUDE_ROOT "${SELF_DIR}/../../@GDCM_INSTALL_INCLUDE_DIR@" ABSOLUTE)
   set(GDCM_INCLUDE_DIRS ${GDCM_INCLUDE_ROOT})
-
+  get_filename_component(GDCM_LIB_ROOT "${SELF_DIR}/../../@GDCM_INSTALL_LIB_DIR@" ABSOLUTE)
+  set(GDCM_LIBRARY_DIRS ${GDCM_LIB_ROOT})
 else(EXISTS ${SELF_DIR}/GDCMTargets.cmake)
   if(EXISTS ${SELF_DIR}/GDCMExports.cmake)
     # This is a build tree
     SET( GDCM_INCLUDE_DIRS @GDCM_INCLUDE_PATH@)
+    set(GDCM_LIBRARY_DIRS @GDCM_LIBRARY_DIR@)
 
     include(${SELF_DIR}/GDCMExports.cmake)
 
@@ -48,8 +50,6 @@ else(EXISTS ${SELF_DIR}/GDCMTargets.cmake)
 endif(EXISTS ${SELF_DIR}/GDCMTargets.cmake)
 
 set(GDCM_USE_FILE ${SELF_DIR}/UseGDCM.cmake)
-
-SET(GDCM_LIBRARY_DIRS @GDCM_LIBRARY_DIR@)
 
 # Backward compatible part:
 SET(GDCM_FOUND       TRUE)
