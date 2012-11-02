@@ -39,6 +39,31 @@
 
 #include <iomanip>
 
+static bool compfn(const char *s1, const char *s2)
+{
+  return strcmp(s1,s2) < 0 ? true : false;
+}
+
+static const char *PDFStrings[] = { // Keep me ordered please
+  "PDF_CONTROL_GEN_PARS",
+  "PDF_CONTROL_PREP_PARS",
+  "PDF_CONTROL_RECON_PARS",
+  "PDF_CONTROL_SCAN_PARS",
+  "PDF_EXAM_PARS",
+  "PDF_HARDWARE_PARS",
+  "PDF_PREP_PARS",
+  "PDF_SPT_PARS",
+};
+
+static bool isvalidpdfstring( const char *pdfstring )
+{
+  assert( pdfstring );
+  static const size_t n = sizeof( PDFStrings ) / sizeof( *PDFStrings );
+  static const char **begin = PDFStrings;
+  static const char **end = begin + n;
+  return std::binary_search(begin, end, pdfstring, compfn);
+}
+
 typedef enum
 {
   param_float = 0,
@@ -235,7 +260,7 @@ struct param
     }
 };
 
-bool ProcessNested( gdcm::DataSet & ds )
+static bool ProcessNested( gdcm::DataSet & ds )
 {
   /*
   TODO:
@@ -245,7 +270,7 @@ bool ProcessNested( gdcm::DataSet & ds )
     (2005,0011) LO [Philips MR Imaging DD 002 ]                   # 26,1 Private Creator
     (2005,1143) SL 3103                                           # 4,1 ?
 
-Whosit ?
+Wotsit ?
 (2005,1132) SQ                                                    # u/l,1 ?
   (fffe,e000) na (Item with undefined length)
     (2005,0011) LO [Philips MR Imaging DD 002 ]                   # 26,1 Private Creator
@@ -307,7 +332,9 @@ Whosit ?
       //p.print( std::cout );
       params.push_back( p );
       }
+
     std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
+    assert( isvalidpdfstring( fn.c_str() ) );
     fn += ".csv";
     //fn += ".xml";
     std::ofstream csv( fn.c_str() );
