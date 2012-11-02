@@ -260,7 +260,7 @@ Whosit ?
     {
     //  std::cout << "Len= " << bv->GetLength() << std::endl;
 #if 0
-    std::string fn = gdcm::LOComp::Trim( s.c_str() ); // remove trailing slash
+    std::string fn = gdcm::LOComp::Trim( s.c_str() ); // remove trailing space
     std::ofstream out( fn.c_str() );
     out.write( bv->GetPointer(), bv->GetLength() );
     out.close();
@@ -288,7 +288,7 @@ Whosit ?
       //p.print( std::cout );
       params.push_back( p );
       }
-    std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing slash
+    std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
     fn += ".csv";
     std::ofstream csv( fn.c_str() );
 
@@ -332,19 +332,68 @@ Whosit ?
     csv.close();
     ret = true;
     }
+  else if( s1 == "ASCII " )
+    {
+#if 0
+    std::cerr << "ASCII is not handled" << std::endl;
+    std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
+    fn += ".asc";
+    std::ofstream out( fn.c_str() );
+    out.write( bv->GetPointer() , bv->GetLength() );
+    out.close();
+#endif
+    std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
+    fn += ".sin";
+    std::ofstream sin( fn.c_str() );
+
+    const char *beg = bv->GetPointer();
+    const char *end = beg + bv->GetLength();
+    assert( *beg == 0 );
+    const char *p = beg + 1; // skip first \0
+    size_t prev = 0;
+    for( ; p != end; ++p )
+      {
+      if( *p == 0 )
+        {
+        const char *s = beg + prev + 1;
+        if( *s )
+          {
+          sin << s << std::endl;
+          }
+        else
+          {
+          sin << std::endl;
+          }
+        prev = p - beg;
+        }
+      }
+    sin.close();
+
+    ret = true;
+    }
   else if( s1 == "BINARY" )
     {
     std::cerr << "BINARY is not handled" << std::endl;
-    std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing slash
+    std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
     fn += ".bin";
     std::ofstream out( fn.c_str() );
     //out.write( bv->GetPointer() + 512, bv->GetLength() - 512);
     out.write( bv->GetPointer() , bv->GetLength() );
     out.close();
 
+#if 0
+    int array[ 128 ];
+    memcpy( array, bv->GetPointer(), 512 );
+    for( int i = 0; i < 14; ++i )
+      {
+      std::cout << array[i] << std::endl;
+      }
+#endif
+
     ret = true;
     }
   // else -> ret == false
+  assert( ret );
 
   return ret;
 }
