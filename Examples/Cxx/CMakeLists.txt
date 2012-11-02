@@ -28,6 +28,7 @@ endif()
 set(EXAMPLES_SRCS
   RemoveInPlace
   DumpGEMSMovieGroup
+  DumpExamCard
   ExtractIconFromFile
   CreateJPIPDataSet
   DumpADAC
