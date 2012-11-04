@@ -368,7 +368,7 @@ Wotsit ?
       h.print( std::cout );
 #endif
 
-      assert( is.tellg() == 0x20 );
+      assert( is.tellg() == std::streampos(0x20) );
       is.seekg( 0x20 );
 
       std::vector< param > params;
