@@ -1300,6 +1300,10 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     if( comp->prec != comp2->prec ) invalid = true;
     if( comp->sgnd != comp1->sgnd ) invalid = true;
     if( comp->sgnd != comp2->sgnd ) invalid = true;
+    if( comp->h != comp1->h ) invalid = true;
+    if( comp->h != comp2->h ) invalid = true;
+    if( comp->w != comp1->w ) invalid = true;
+    if( comp->w != comp2->w ) invalid = true;
     if( invalid )
       {
       gdcmErrorMacro( "Invalid test failed" );
