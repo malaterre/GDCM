@@ -69,13 +69,13 @@
 #include <getopt.h>
 #include <string.h>
 
-bool readsize(const char *str, unsigned int * size)
+static unsigned int readsize(const char *str, unsigned int * size)
 {
-  int n = sscanf( str, "%i,%i", size, size+1);
-  return n == 2;
+  int n = sscanf( str, "%i,%i,%i", size, size+1, size+2);
+  return n == EOF ? 0 : (unsigned int)n;
 }
 
-bool readgeometry(const char *geometry, unsigned int * region)
+static bool readgeometry(const char *geometry, unsigned int * region)
 {
   int n = sscanf( geometry, "%i,%i,%i,%i,%i,%i", region, region+1, region+2, region+3, region+4, region+5);
   if( n != 6 ) return false;
@@ -83,7 +83,7 @@ bool readgeometry(const char *geometry, unsigned int * region)
 }
 
 template <typename T>
-void FillRegionWithColor(T *p, const unsigned int *dims, const unsigned int * region, unsigned int color, unsigned int nsamples)
+static void FillRegionWithColor(T *p, const unsigned int *dims, const unsigned int * region, unsigned int color, unsigned int nsamples)
 {
     unsigned int xmin = region[0];
     unsigned int xmax = region[1];
@@ -107,14 +107,14 @@ void FillRegionWithColor(T *p, const unsigned int *dims, const unsigned int * re
       }
 }
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmimg: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmimg [OPTION]... FILE..." << std::endl;
@@ -154,7 +154,7 @@ void PrintHelp()
  */
 }
 
-bool AddContentDateTime(gdcm::DataSet &ds, const char *filename )
+static bool AddContentDateTime(gdcm::DataSet &ds, const char *filename )
 {
   time_t studydatetime = gdcm::System::FileTime( filename );
   char date[22];
@@ -179,7 +179,7 @@ bool AddContentDateTime(gdcm::DataSet &ds, const char *filename )
   return true;
 }
 // Set Study Date/Time to the file time:
-bool AddStudyDateTime(gdcm::DataSet &ds, const char *filename )
+static bool AddStudyDateTime(gdcm::DataSet &ds, const char *filename )
 {
   // StudyDate
   char date[22];
@@ -206,7 +206,7 @@ bool AddStudyDateTime(gdcm::DataSet &ds, const char *filename )
 }
 
 
-bool AddUIDs(int sopclassuid, std::string const & sopclass, std::string const & study_uid, std::string const & series_uid, gdcm::PixmapWriter& writer)
+static bool AddUIDs(int sopclassuid, std::string const & sopclass, std::string const & study_uid, std::string const & series_uid, gdcm::PixmapWriter& writer)
 {
   gdcm::DataSet & ds = writer.GetFile().GetDataSet();
   gdcm::MediaStorage ms = gdcm::MediaStorage::MS_END;
@@ -268,7 +268,7 @@ bool AddUIDs(int sopclassuid, std::string const & sopclass, std::string const & 
   return true;
 }
 
-bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFragments *sq , gdcm::ImageCodec & jpeg, const char *filename )
+static bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFragments *sq , gdcm::ImageCodec & jpeg, const char *filename )
 {
   /*
    * FIXME: when JPEG contains JFIF marker, we should only read them
@@ -323,12 +323,12 @@ bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFragments *
   return true;
 }
 
-bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Directory::FilenamesType const & filenames )
+static bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Directory::FilenamesType const & filenames, unsigned int ndim = 2 )
 {
   std::vector<std::string>::const_iterator it = filenames.begin();
   bool b = true;
   gdcm::Pixmap &image = writer.GetPixmap();
-  image.SetNumberOfDimensions( 2 );
+  image.SetNumberOfDimensions( ndim );
   if( filenames.size() > 1 )
     {
     image.SetNumberOfDimensions( 3 );
@@ -348,7 +348,7 @@ bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Direc
 }
 
 
-bool GetPixelFormat( gdcm::PixelFormat & pf, int depth, int bpp, int sign, int pixelsign, int spp = 0, int pixelspp = 1 )
+static bool GetPixelFormat( gdcm::PixelFormat & pf, int depth, int bpp, int sign, int pixelsign, int spp = 0, int pixelspp = 1 )
 {
   if( depth )
     {
@@ -401,7 +401,8 @@ int main (int argc, char *argv[])
   int spp = 0;
   int studyuid = 0;
   int seriesuid = 0;
-  unsigned int size[2] = {};
+  unsigned int size[3] = {0,0,0};
+  unsigned int ndimension = 2;
   int depth = 0;
   int endian = 0;
   int bpp = 0;
@@ -484,7 +485,7 @@ int main (int argc, char *argv[])
           else if( option_index == 3 ) /* size */
             {
             assert( strcmp(s, "size") == 0 );
-            readsize(optarg, size);
+            ndimension = readsize(optarg, size);
             }
           else if( option_index == 4 ) /* region */
             {
@@ -555,7 +556,7 @@ int main (int argc, char *argv[])
       break;
 
     case 's': // size
-      readsize(optarg, size);
+      ndimension = readsize(optarg, size);
       break;
 
     case 'T':
@@ -762,6 +763,10 @@ int main (int argc, char *argv[])
       unsigned int dims[3] = {};
       dims[0] = size[0];
       dims[1] = size[1];
+      if( ndimension == 3 )
+        {
+        dims[2] = size[2];
+        }
       raw.SetDimensions( dims );
       gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
       gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
@@ -795,7 +800,7 @@ int main (int argc, char *argv[])
           }
         }
 
-      if( !Populate( writer, raw, filenames ) ) return 1;
+      if( !Populate( writer, raw, filenames, ndimension ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );
