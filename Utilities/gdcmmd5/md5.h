@@ -31,7 +31,11 @@
     #define MD5_EXPORT __declspec( dllimport )
   #endif
 #else
-  #define MD5_EXPORT
+  #if __GNUC__ >= 4
+    #define MD5_EXPORT __attribute__ ((visibility ("default")))
+  #else
+    #define MD5_EXPORT
+  #endif
 #endif /*defined(WIN32)*/
 
 /* $Id: md5.h,v 1.4 2002/04/13 19:20:28 lpd Exp $ */
