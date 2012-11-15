@@ -246,7 +246,11 @@
 #endif
 
 #ifndef ZEXTERN
-#  define ZEXTERN extern
+#  if __GNUC__ >= 4
+#    define ZEXTERN __attribute__ ((visibility ("default")))
+#  else
+#    define ZEXTERN extern
+#  endif
 #endif
 #ifndef ZEXPORT
 #  define ZEXPORT
