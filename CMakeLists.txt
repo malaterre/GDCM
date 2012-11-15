@@ -472,6 +472,17 @@ IF(APPLE)
   FIND_LIBRARY(COREFOUNDATION_LIBRARY CoreFoundation )
 ENDIF(APPLE)
 
+#-----------------------------------------------------------------------------
+# Allow user to set a postfix symbol to a target library name (eg. 'd')
+IF(WIN32)
+  SET(GDCM_DEBUG_POSTFIX "" CACHE STRING "Globally append a debug postfix symbols on all libraries")
+  if(GDCM_DEBUG_POSTFIX)
+    set(CMAKE_DEBUG_POSTFIX "${GDCM_DEBUG_POSTFIX}")
+  endif(GDCM_DEBUG_POSTFIX)
+  MARK_AS_ADVANCED(GDCM_DEBUG_POSTFIX)
+ENDIF(WIN32)
+#-----------------------------------------------------------------------------
+
 # Need to subdirs in Source/Common before Wrapping
 # to have gdcmConfigure.h around
 SUBDIRS(Utilities)
@@ -561,15 +572,6 @@ IF(BUILD_APPLICATIONS)
   SUBDIRS(Applications)
 ENDIF(BUILD_APPLICATIONS)
 #-----------------------------------------------------------------------------
-# Allow user to set a postfix symbol to a target library name (eg. 'd')
-IF(WIN32)
-  SET(GDCM_DEBUG_POSTFIX "" CACHE STRING "Globally append a debug postfix symbols on all libraries")
-  if(GDCM_DEBUG_POSTFIX)
-    set(CMAKE_DEBUG_POSTFIX "${GDCM_DEBUG_POSTFIX}")
-  endif(GDCM_DEBUG_POSTFIX)
-  MARK_AS_ADVANCED(GDCM_DEBUG_POSTFIX)
-ENDIF(WIN32)
-
 if(GDCM_USE_VTK)
 if(WIN32)
 include(CMake/InstallRequiredVTKLibraries.cmake)
