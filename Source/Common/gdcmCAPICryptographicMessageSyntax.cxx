@@ -423,12 +423,12 @@ const char *CAPICryptographicMessageSyntax::GetCipherObjId() const
 bool CAPICryptographicMessageSyntax::Initialize()
 {
   DWORD dwResult;
-  if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) //CRYPT_VERIFYCONTEXT aes decr in cryptmsgcontrol not working
+  if (!CryptAcquireContextA(&hProv, NULL, MS_ENH_RSA_AES_PROV, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) //CRYPT_VERIFYCONTEXT aes decr in cryptmsgcontrol not working
     {
     dwResult = GetLastError();
     if (dwResult == NTE_BAD_KEYSET)
       {
-      if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV, PROV_RSA_AES, CRYPT_NEWKEYSET | CRYPT_VERIFYCONTEXT))
+      if (!CryptAcquireContextA(&hProv, NULL, MS_ENH_RSA_AES_PROV, PROV_RSA_AES, CRYPT_NEWKEYSET | CRYPT_VERIFYCONTEXT))
         {
         dwResult = GetLastError();
         gdcmErrorMacro(  "CryptAcquireContext() failed:" << std::hex << dwResult);
@@ -439,12 +439,12 @@ bool CAPICryptographicMessageSyntax::Initialize()
       {
       //Probably WinXP
       gdcmWarningMacro( "Certificate based encryption is supported on Windows XP only using 3DES." );
-      if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV_XP /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) //CRYPT_VERIFYCONTEXT aes decr in cryptmsgcontrol not working
+      if (!CryptAcquireContextA(&hProv, NULL, MS_ENH_RSA_AES_PROV_A" (Prototype)" /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) //CRYPT_VERIFYCONTEXT aes decr in cryptmsgcontrol not working
         {
         dwResult = GetLastError();
         if (dwResult == NTE_BAD_KEYSET)
           {
-          if (!CryptAcquireContext(&hProv, NULL, MS_ENH_RSA_AES_PROV_XP /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_NEWKEYSET | CRYPT_VERIFYCONTEXT))
+          if (!CryptAcquireContextA(&hProv, NULL, MS_ENH_RSA_AES_PROV_A" (Prototype)" /*"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"*/, PROV_RSA_AES, CRYPT_NEWKEYSET | CRYPT_VERIFYCONTEXT))
             {
             dwResult = GetLastError();
             gdcmErrorMacro( "CryptAcquireContext() failed: " << std::hex << dwResult );

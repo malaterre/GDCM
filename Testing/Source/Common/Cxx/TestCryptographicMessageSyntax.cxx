@@ -76,26 +76,26 @@ bool TestCMSProvider(gdcm::CryptographicMessageSyntax& cms, const char * provNam
       {
       std::cerr << provName << " using " << cip2str[ciphers[i]] << ": encryption failed" << std::endl;
       ret = false;
-      break;
+      continue;
       }
     bool decryptSuccess = cms.Decrypt(decout, decoutlen, encout, encoutlen);
     if (!decryptSuccess)
       {
       std::cerr << provName << " using " << cip2str[ciphers[i]] << ": decryption failed" << std::endl;
       ret = false;
-      break;
+      continue;
       }
     if (decoutlen != tstr_l)
       {
       std::cerr << provName << " using " << cip2str[ciphers[i]] << ": decryted length different from original (" << decoutlen << " != " << tstr_l << ")" << std::endl;
       ret = false;
-      break;
+      continue;
       }
     if (memcmp(tstr, decout, tstr_l) != 0)
       {
       std::cerr << provName << " using " << cip2str[ciphers[i]] << ": decryted data different from original" << std::endl;
       ret = false;
-      break;
+      continue;
       }
     }
   
