@@ -293,6 +293,7 @@ namespace gdcm
 {"1.2.840.10008.5.1.4.1.1.77.1.6","VL Whole Slide Microscopy Image Storage"},
 {"1.2.840.10008.5.1.4.1.1.6.2", "Enhanced US Volume Storage" },
 {"1.2.840.10008.5.1.4.1.1.66.5","Surface Segmentation Storage"}, // Sup 132
+{"1.2.840.10008.5.1.4.1.1.13.1.3","Breast Tomosynthesis Image Storage"},
 //{"1.2.840.10008.1.4.1.1","Talairach Brain Atlas Frame of Reference"},
 //{"1.2.840.10008.1.4.1.2","SPM2 T1 Frame of Reference"},
 //{"1.2.840.10008.1.4.1.3","SPM2 T2 Frame of Reference"},
