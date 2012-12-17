@@ -44,7 +44,7 @@ copy config.win32 %TMPDIR%\gdcm-build\CMakeCache.txt
 c:
 cd %TMPDIR%
 @rem git is itselft a batch:
-call git clone --branch release git://gdcm.git.sourceforge.net/gitroot/gdcm/gdcm > git.log 2>&1
+call git clone --branch release git://git.code.sf.net/p/gdcm/gdcm > git.log 2>&1
 cd gdcm
 call git checkout "v%version%"
 cd ..

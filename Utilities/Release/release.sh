@@ -43,7 +43,7 @@ else
 fi
 
 echo "Checking out gdcm"
-git clone --branch release git://gdcm.git.sourceforge.net/gitroot/gdcm/gdcm $basedir/gdcm
+git clone --branch release git://git.code.sf.net/p/gdcm/gdcm $basedir/gdcm
 check_exit_value $? "git did not return properly" || exit 1
 
 # Get the specific tag
