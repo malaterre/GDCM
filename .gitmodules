@@ -1,3 +1,3 @@
 [submodule "Testing/Data"]
 	path = Testing/Data
-	url = git://gdcm.git.sourceforge.net/gitroot/gdcm/gdcmData
+	url = git://git.code.sf.net/p/gdcm/gdcmData
