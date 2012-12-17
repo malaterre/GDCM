@@ -118,7 +118,7 @@ endif()
 
 # Select Git source to use.
 if(NOT DEFINED dashboard_git_url)
-set(dashboard_git_url "git://gdcm.git.sourceforge.net/gitroot/gdcm/gdcm")
+set(dashboard_git_url "git://git.code.sf.net/p/gdcm/gdcm")
 endif()
 if(NOT DEFINED dashboard_git_branch)
   if("${dashboard_model}" STREQUAL "Nightly")
