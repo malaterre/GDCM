@@ -10,7 +10,7 @@
 mkdir -p ~/Dashboards/GDCMScripts
 cd ~/Dashboards/GDCMScripts
 git init
-git remote add -t dashboard origin git://gdcm.git.sourceforge.net/gitroot/gdcm/gdcm
+git remote add -t dashboard origin git://git.code.sf.net/p/gdcm/gdcm
 git pull origin
 
 ctest -S generic_linux.cmake -V
