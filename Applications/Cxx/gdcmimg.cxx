@@ -746,10 +746,11 @@ int main (int argc, char *argv[])
   //if( !inputextension || !outputextension ) return 1;
   if( inputextension )
     {
-    if(  gdcm::System::StrCaseCmp(inputextension,".raw") == 0
-      || gdcm::System::StrCaseCmp(inputextension,".rawl") == 0 // kakadu convention for raw little endian
-      || gdcm::System::StrCaseCmp(inputextension,".gray") == 0
-      || gdcm::System::StrCaseCmp(inputextension,".rgb") == 0 )
+    if(  gdcm::System::StrCaseCmp(inputextension,".raw") == 0   // watch out that .raw for kakadu means big-endian
+      || gdcm::System::StrCaseCmp(inputextension,".rawl") == 0  // kakadu convention for raw little endian
+      || gdcm::System::StrCaseCmp(inputextension,".gray") == 0  // imagemagick convention
+      || gdcm::System::StrCaseCmp(inputextension,".bin") == 0   // openjp3d convention for raw little endian
+      || gdcm::System::StrCaseCmp(inputextension,".rgb") == 0 ) // imagemagick convention
       {
       if( !size[0] || !size[1] )
         {
