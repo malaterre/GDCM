@@ -12,7 +12,7 @@ set(dashboard_binary_name "gdcm-nightly")
 set(dashboard_do_memcheck FALSE)
 set(dashboard_do_coverage FALSE)
 
-SET(ENV{GDCM_DATA_ROOT} "$ENV{HOME}/Creatis/gdcmData")
+#SET(ENV{GDCM_DATA_ROOT} "$ENV{HOME}/Creatis/gdcmData")
 SET(CTEST_GDCM_PIXEL_SPACING_DATA_ROOT "$ENV{HOME}/Dashboards/Theralys/pixelspacingtestimages")
 SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wshadow -Wunused -Wno-system-headers -Wno-deprecated -Woverloaded-virtual -Wwrite-strings ")
 SET(ENV{CFLAGS}   "-g -O0 -Wall -W -pedantic -Wno-long-long")
