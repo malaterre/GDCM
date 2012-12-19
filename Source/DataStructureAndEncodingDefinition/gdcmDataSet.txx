@@ -125,6 +125,16 @@ namespace gdcm
         const Tag& tag = dataElem.GetTag();
         if ( inputStream.fail() || maxTag < tag )
           {
+          if( inputStream.good() )
+            {
+            const int l = dataElem.GetVR().GetLength();
+            inputStream.seekg( - 4 - 2 * l, std::ios::cur );
+            }
+          else
+            {
+            inputStream.clear();
+            inputStream.seekg( 0, std::ios::end );
+            }
           // Failed to read the tag, or the read tag exceeds the maximum.
           // As we assume ascending tag ordering, we can exit the loop.
           break;
@@ -181,6 +191,16 @@ namespace gdcm
           const Tag tag = dataElem.GetTag();
           if ( inputStream.fail() || maxTag < tag )
             {
+            if( inputStream.good() )
+              {
+              const int l = dataElem.GetVR().GetLength();
+              inputStream.seekg( - 4 - 2 * l, std::ios::cur );
+              }
+            else
+              {
+              inputStream.clear();
+              inputStream.seekg( 0, std::ios::end );
+              }
             // Failed to read the tag, or the read tag exceeds the maximum.
             // As we assume ascending tag ordering, we can exit the loop.
             break;

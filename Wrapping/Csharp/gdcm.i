@@ -139,6 +139,7 @@ public class";
 #include "gdcmSubject.h"
 #include "gdcmCommand.h"
 #include "gdcmAnonymizer.h"
+#include "gdcmFileAnonymizer.h"
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
 #include "gdcmUIDs.h"
@@ -592,7 +593,7 @@ EXTEND_CLASS_PRINT(gdcm::Scanner)
 //%feature("unref") Anonymizer "coucou $this->Delete();"
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus%5Fnn34
 %include "gdcmAnonymizer.h"
-
+%include "gdcmFileAnonymizer.h"
 
 //EXTEND_CLASS_PRINT(gdcm::Anonymizer)
 //%extend gdcm::Anonymizer

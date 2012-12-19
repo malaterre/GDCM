@@ -2,6 +2,9 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestAnonymizer
+  TestFileAnonymizer1
+  TestFileAnonymizer2
+  TestFileAnonymizer3
   TestIconImageFilter
   TestIconImageGenerator
   TestIconImageGenerator2
