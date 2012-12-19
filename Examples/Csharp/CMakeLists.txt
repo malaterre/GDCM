@@ -22,6 +22,7 @@ set(CSHARP_EXAMPLES
   CompressLossyJPEG
   SendFileSCU
   MpegVideoInfo
+  FileAnonymize
   )
 
 if(BUILD_TESTING)
