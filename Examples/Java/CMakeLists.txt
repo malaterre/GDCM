@@ -14,6 +14,7 @@ set(examples
   DecompressImage
   ScanDirectory
   ReadFiles
+  FileAnonymize
   )
 FOREACH(example ${examples})
   ADD_CUSTOM_COMMAND(
