@@ -129,6 +129,7 @@ static void PrintHelp()
   std::cout << "  -d --depth %d        Depth (Either 8/16/32 or BitsAllocated eg. 12 when known)." << std::endl;
   std::cout << "     --sign %s         Pixel sign (0/1)." << std::endl;
   std::cout << "     --spp  %d         Sample Per Pixel (1/3)." << std::endl;
+  std::cout << "     --pc [01]         Change planar configuration." << std::endl;
   std::cout << "  -s --size %d,%d      Size." << std::endl;
   std::cout << "  -C --sop-class-uid   SOP Class UID (name or value)." << std::endl;
   std::cout << "  -T --study-uid       Study UID." << std::endl;
@@ -288,6 +289,7 @@ static bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFrag
   image.SetDimensions( jpeg.GetDimensions() );
   image.SetPixelFormat( jpeg.GetPixelFormat() );
   image.SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
+  image.SetPlanarConfiguration( jpeg.GetPlanarConfiguration() );
   image.SetTransferSyntax( ts );
 
   AddStudyDateTime( writer.GetFile().GetDataSet(), filename );
@@ -369,7 +371,7 @@ static bool GetPixelFormat( gdcm::PixelFormat & pf, int depth, int bpp, int sign
       std::cerr << "Invalid depth: << " << bpp << std::endl;
       return false;
       }
-    pf.SetBitsStored( bpp );
+    pf.SetBitsStored( (short)bpp );
     }
   if( sign )
     {
@@ -399,6 +401,7 @@ int main (int argc, char *argv[])
   int fill = 0;
   int sign = 0;
   int spp = 0;
+  int pconf = 0; // planar configuration
   int studyuid = 0;
   int seriesuid = 0;
   unsigned int size[3] = {0,0,0};
@@ -441,6 +444,7 @@ int main (int argc, char *argv[])
         {"endian", 1, &endian, 1}, //
         {"sign", 1, &sign, 1}, //
         {"spp", 1, &spp, 1}, //
+        {"pc", 1, &pconf, 1}, //
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -531,6 +535,11 @@ int main (int argc, char *argv[])
             {
             assert( strcmp(s, "spp") == 0 );
             pixelspp = atoi(optarg);
+            }
+          else if( option_index == 13 ) /* pconf */
+            {
+            assert( strcmp(s, "pc") == 0 );
+            pconf = atoi(optarg);
             }
           //printf (" with arg %s", optarg);
           }
@@ -740,6 +749,11 @@ int main (int argc, char *argv[])
     {
     if( pixelspp != 1 && pixelspp != 3 ) return 1;
     }
+  if( pconf != 0 && pconf != 1 ) return 1;
+  if( pconf )
+    {
+    if( pixelspp != 3 ) return 1;
+    }
 
   const char *inputextension = filename.GetExtension();
   const char *outputextension = outfilename.GetExtension();
@@ -785,6 +799,7 @@ int main (int argc, char *argv[])
         }
       raw.SetPhotometricInterpretation( pi );
       raw.SetNeedByteSwap( false );
+      raw.SetPlanarConfiguration( pconf );
       if( endian )
         {
         if( lsb_msb == "LSB" || lsb_msb == "MSB" )
