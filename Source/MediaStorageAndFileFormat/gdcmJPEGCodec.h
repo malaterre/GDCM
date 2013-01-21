@@ -81,6 +81,8 @@ protected:
   // Instantiate the right jpeg codec (8, 12 or 16)
   void SetBitSample(int bit);
 
+  virtual bool IsStateSuspension() const;
+
 protected:
   int BitSample;
   bool Lossless;

@@ -36,6 +36,9 @@ public:
 
   bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
 
+protected:
+  bool IsStateSuspension() const;
+
 private:
   JPEGInternals *Internals;
 };
