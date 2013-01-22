@@ -465,6 +465,7 @@ EXTEND_CLASS_PRINT(gdcm::File)
 //%include "gdcm_arrays_csharp.i"
 
 %apply char[] { char* buffer }
+%apply unsigned int[] { unsigned int dims[2] }
 %apply unsigned int[] { unsigned int dims[3] }
 
 //%apply byte OUTPUT[] { char* buffer } ;
