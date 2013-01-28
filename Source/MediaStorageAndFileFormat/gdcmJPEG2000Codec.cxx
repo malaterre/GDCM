@@ -536,7 +536,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     opj_destroy_codec(dinfo);
     opj_stream_destroy(cio);
     gdcmErrorMacro( "opj_decode failed" );
-    return false;
+    return std::make_pair<char*,size_t>(0,0);
     }
 #endif // OPENJPEG_MAJOR_VERSION == 1
 
