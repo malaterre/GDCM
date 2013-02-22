@@ -85,6 +85,7 @@ public:
   //bool Empty( TagPath const &t );
 
   /// remove a tag (even a SQ can be removed)
+  /// Return code is false when tag t cannot be found
   bool Remove( Tag const &t );
   //bool Remove( PrivateTag const &t );
   //bool Remove( TagPath const &t );
