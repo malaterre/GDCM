@@ -99,7 +99,10 @@ bool Anonymizer::Empty( Tag const &t)
 bool Anonymizer::Remove( Tag const &t )
 {
   DataSet &ds = F->GetDataSet();
-  return ds.Remove( t ) == 1;
+  if(ds.FindDataElement(t))
+    return ds.Remove( t ) == 1;
+  else
+    return true;
 }
 
 bool Anonymizer::Replace( Tag const &t, const char *value )
