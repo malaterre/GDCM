@@ -45,23 +45,39 @@ public :
   ~Trace();
 
   /// Explicitely set the ostream for gdcm::Trace to report to
+  /// This will set the DebugStream, WarningStream and ErrorStream at once:
   static void SetStream(std::ostream &os);
   static std::ostream &GetStream();
+
+  /// Explicitely set the stream which receive Debug messages:
+  static void SetDebugStream(std::ostream &os);
+  static std::ostream &GetDebugStream();
+
+  /// Explicitely set the stream which receive Warning messages:
+  static void SetWarningStream(std::ostream &os);
+  static std::ostream &GetWarningStream();
+
+  /// Explicitely set the stream which receive Error messages:
+  static void SetErrorStream(std::ostream &os);
+  static std::ostream &GetErrorStream();
 
   /// Explicitely set the filename for gdcm::Trace to report to
   /// The file will be created (it will not append to existing file)
   static void SetStreamToFile( const char *filename );
 
+  /// Turn debug messages on (default: false)
   static void SetDebug(bool debug);
   static void DebugOn();
   static void DebugOff();
   static bool GetDebugFlag();
 
+  /// Turn warning messages on (default: true)
   static void SetWarning(bool debug);
   static void WarningOn();
   static void WarningOff();
   static bool GetWarningFlag();
 
+  /// Turn error messages on (default: true)
   static void SetError(bool debug);
   static void ErrorOn();
   static void ErrorOff();
@@ -109,7 +125,7 @@ private:
            << ", function " << GDCM_FUNCTION << '\n'              \
            << "Last system error was: "                           \
            << gdcm::System::GetLastSystemError() << '\n' << msg;  \
-   std::ostream &_os = gdcm::Trace::GetStream();                  \
+   std::ostream &_os = gdcm::Trace::GetDebugStream();             \
    _os << osmacro.str() << "\n\n" << std::endl;                   \
    }                                                              \
 }
@@ -130,8 +146,8 @@ private:
    osmacro << "Warning: In " __FILE__ ", line " << __LINE__       \
            << ", function " << GDCM_FUNCTION << "\n"              \
            << msg << "\n\n";                                      \
-   std::ostream &_os = gdcm::Trace::GetStream();                   \
-   _os << osmacro.str() << std::endl;                              \
+   std::ostream &_os = gdcm::Trace::GetWarningStream();           \
+   _os << osmacro.str() << std::endl;                             \
    }                                                              \
 }
 #endif //NDEBUG
@@ -152,8 +168,8 @@ private:
    osmacro << "Error: In " __FILE__ ", line " << __LINE__         \
            << ", function " << GDCM_FUNCTION << '\n'              \
            << msg << "\n\n";                                      \
-   std::ostream &_os = gdcm::Trace::GetStream();                   \
-   _os << osmacro.str() << std::endl;                              \
+   std::ostream &_os = gdcm::Trace::GetErrorStream();             \
+   _os << osmacro.str() << std::endl;                             \
    }                                                              \
 }
 #endif //NDEBUG
@@ -175,8 +191,8 @@ private:
    osmacro << "Assert: In " __FILE__ ", line " << __LINE__        \
            << ", function " << GDCM_FUNCTION                      \
            << "\n\n";                                             \
-   std::ostream &_os = gdcm::Trace::GetStream();                   \
-   _os << osmacro.str() << std::endl;                              \
+   std::ostream &_os = gdcm::Trace::GetErrorStream();             \
+   _os << osmacro.str() << std::endl;                             \
    assert ( arg );                                                \
    }                                                              \
 }
