@@ -524,10 +524,13 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           //so, we look either for pending, or for the number of operations left
           // (tag 0000, 1020) if the value is success, and that number should be 0.
           DataSet theRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(currentEvent.GetPDUs()));
-          if (Trace::GetDebugFlag()){
+          if (Trace::GetDebugFlag())
+            {
             Printer thePrinter;
+            Trace::GetStream() << "Response: " << std::endl;
             thePrinter.PrintDataSet(theRSP, Trace::GetStream());
-          }
+            Trace::GetStream() << std::endl;
+            }
           if (theRSP.FindDataElement(Tag(0x0, 0x0900))){
             DataElement de = theRSP.GetDataElement(Tag(0x0,0x0900));
             Attribute<0x0,0x0900> at;
@@ -779,7 +782,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
             gdcmDebugMacro("PDU code: " << static_cast<int>(itemtype) << std::endl);
             if (Trace::GetDebugFlag())
               {
-               theFirstPDU->Print(Trace::GetStream());
+              theFirstPDU->Print(Trace::GetStream());
               }
 
             if (theFirstPDU->IsLastFragment()) waitingForEvent = false;

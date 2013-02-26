@@ -91,6 +91,7 @@ void PrintHelp()
   std::cout << "  -h --help      print help." << std::endl;
   std::cout << "     --queryhelp print query help." << std::endl;
   std::cout << "  -v --version   print version." << std::endl;
+  std::cout << "  -L --log-file  set log file (instead of cout)." << std::endl;
 
   try
     {
@@ -168,11 +169,12 @@ int main(int argc, char *argv[])
   int seriesquery = 0;
   int imagequery = 0;
   int findpsonly = 0;
-  std::string xmlpath;
   std::string queryfile;
   std::string root;
   int rootuid = 0;
   int recursive = 0;
+  int logfile = 0;
+  std::string logfilename;
   gdcm::Tag tag;
   std::vector< std::pair<gdcm::Tag, std::string> > keys;
   
@@ -217,9 +219,10 @@ int main(int argc, char *argv[])
       {"study", 0, &studyquery, 1}, // --study
       {"series", 0, &seriesquery, 1}, // --series
       {"image", 0, &imagequery, 1}, // --image
+      {"log-file", 1, &logfile, 1}, // --log-file
       {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:H:p:VWDEhvk:o:r";
+    static const char short_options[] = "i:H:p:L:VWDEhvk:o:r";
     c = getopt_long (argc, argv, short_options,
                      long_options, &option_index);
     if (c == -1)
@@ -293,6 +296,11 @@ int main(int argc, char *argv[])
             assert( strcmp(s, "store-query") == 0 );
             queryfile = optarg;
           }
+          else if( option_index == 29 ) /* log-file */
+          {
+            assert( strcmp(s, "log-file") == 0 );
+            logfilename = optarg;
+          }
           else
           {
             // If you reach here someone mess-up the index and the argument in
@@ -352,6 +360,11 @@ int main(int argc, char *argv[])
         port = atoi( optarg );
         break;
         
+      case 'L':
+        logfile = 1;
+        logfilename = optarg;
+        break;
+
       case 'V':
         verbose = 1;
         break;
@@ -449,6 +462,10 @@ int main(int argc, char *argv[])
     {
     gdcm::Trace::SetWarning( theVerbose );
     gdcm::Trace::SetError( theVerbose);
+    }
+  if( logfile )
+    {
+    gdcm::Trace::SetStreamToFile( logfilename.c_str() );
     }
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( callaetitle.c_str() );
   if( !rootuid )
@@ -663,17 +680,18 @@ int main(int argc, char *argv[])
       }
 
     gdcm::Printer p;
+    std::ostream &os = gdcm::Trace::GetStream();
     for( std::vector<gdcm::DataSet>::iterator itor
       = theDataSet.begin(); itor != theDataSet.end(); itor++)
       {
-      std::cout << "Find Response: " << (itor - theDataSet.begin() + 1) << std::endl;
-      p.PrintDataSet( *itor, std::cout );
-      std::cout << std::endl;
+      os << "Find Response: " << (itor - theDataSet.begin() + 1) << std::endl;
+      p.PrintDataSet( *itor, os );
+      os << std::endl;
       }
 
     if( gdcm::Trace::GetWarningFlag() ) // == verbose flag
       {
-      std::cout << "Find was successful." << std::endl;
+      os << "Find was successful." << std::endl;
       }
     return 0;
     }

@@ -78,7 +78,7 @@ bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
     {
     DataSet ds = network::PresentationDataValue::ConcatenatePDVBlobs(theValues1);
     Printer thePrinter;
-    thePrinter.PrintDataSet(ds, std::cout);
+    thePrinter.PrintDataSet(ds, Trace::GetStream());
     }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 
@@ -142,7 +142,7 @@ BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
   // Print info:
   if (Trace::GetDebugFlag())
     {
-    outQuery->Print( std::cout );
+    outQuery->Print( Trace::GetStream() );
     }
 
   return outQuery;
