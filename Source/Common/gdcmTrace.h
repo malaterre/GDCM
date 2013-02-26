@@ -113,7 +113,7 @@ private:
  * \brief   Debug
  * @param msg message part
  */
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(GDCM_ALWAYS_TRACE_MACRO)
 #define gdcmDebugMacro(msg) {}
 #else
 #define gdcmDebugMacro(msg)                                       \
@@ -135,7 +135,7 @@ private:
  * \brief   Warning
  * @param msg message part
  */
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(GDCM_ALWAYS_TRACE_MACRO)
 #define gdcmWarningMacro(msg) {}
 #else
 #define gdcmWarningMacro(msg)                                     \
@@ -157,7 +157,7 @@ private:
  * It could mean lost of data, something not handle...
  * @param msg second message part
  */
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(GDCM_ALWAYS_TRACE_MACRO)
 #define gdcmErrorMacro(msg) {}
 #else
 #define gdcmErrorMacro(msg)                                       \
@@ -180,7 +180,7 @@ private:
  *        An easy solution to pass also a message is to do:
  *        gdcmAssertMacro( "my message" && 2 < 3 )
  */
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(GDCM_ALWAYS_TRACE_MACRO)
 #define gdcmAssertMacro(arg) {}
 #else
 #define gdcmAssertMacro(arg)                                      \
@@ -204,7 +204,7 @@ private:
  *        An easy solution to pass also a message is to do:
  *        gdcmAssertMacro( "my message" && 2 < 3 )
  */
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(GDCM_ALWAYS_TRACE_MACRO)
 // User asked for release compilation, but still need to report
 // if grave issue.
 #define gdcmAssertAlwaysMacro(arg) \
