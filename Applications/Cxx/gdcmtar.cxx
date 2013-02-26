@@ -44,14 +44,14 @@
 #include <getopt.h>
 #include <string.h>
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmtar: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmtar [OPTION] [FILE]" << std::endl;
@@ -308,7 +308,7 @@ void ProcessIntoVolume( Scanner const & s )
 
 };
 
-bool ConcatenateImages(Image &im1, Image const &im2)
+static bool ConcatenateImages(Image &im1, Image const &im2)
 {
   DataElement& de1 = im1.GetDataElement();
   if( de1.GetByteValue() )
@@ -340,7 +340,7 @@ bool ConcatenateImages(Image &im1, Image const &im2)
 } // namespace gdcm
 
 
-int MakeImageEnhanced( std::string const & filename, std::string const &outfilename )
+static int MakeImageEnhanced( std::string const & filename, std::string const &outfilename )
 {
   if( !gdcm::System::FileIsDirectory(filename.c_str()) )
     {
@@ -523,7 +523,7 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
 namespace gdcm
 {
 
-const DataElement &GetNestedDataElement( const DataSet &ds, const Tag & t1, const Tag & t2 )
+static const DataElement &GetNestedDataElement( const DataSet &ds, const Tag & t1, const Tag & t2 )
 {
   assert( ds.FindDataElement( t1 ) );
   SmartPointer<SequenceOfItems> sqi1 = ds.GetDataElement( t1 ).GetValueAsSQ();
@@ -718,7 +718,7 @@ int main (int argc, char *argv[])
       {
     case 0:
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {

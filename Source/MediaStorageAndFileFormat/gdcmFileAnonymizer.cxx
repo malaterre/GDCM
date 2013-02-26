@@ -93,7 +93,8 @@ void FileAnonymizer::Replace( Tag const &t, const char *value )
 
 void FileAnonymizer::Replace( Tag const &t, const char *value, VL const & vl )
 {
-  Internals->ReplaceTags.insert( std::make_pair<Tag,std::string>( t, std::string(value,vl) ) );
+  Internals->ReplaceTags.insert(
+    std::make_pair<Tag,std::string>( t, std::string(value,vl) ) );
 }
 
 void FileAnonymizer::SetInputFileName(const char *filename_native)

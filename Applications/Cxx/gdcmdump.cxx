@@ -71,7 +71,7 @@ enum {
 };
 
 template <typename T>
-void printvaluet(std::istream & is, uint32_t numels)
+static void printvaluet(std::istream & is, uint32_t numels)
 {
   T buffer;
   for( uint32_t i = 0; i < numels; ++i )
@@ -82,7 +82,7 @@ void printvaluet(std::istream & is, uint32_t numels)
     }
 }
 
-void printvalue(std::istream &is, uint32_t type, uint32_t numels, uint32_t pos)
+static void printvalue(std::istream &is, uint32_t type, uint32_t numels, uint32_t pos)
 {
   assert( numels > 0 );
   std::streampos start = is.tellg();
@@ -130,20 +130,20 @@ private:
   }
 };
 
-void printbinary(std::istream &is, PDFElement const & pdfel )
+static void printbinary(std::istream &is, PDFElement const & pdfel )
 {
   const char *bufferref = pdfel.getname();
   std::cout << "  " << bufferref << " ";
   uint32_t type = pdfel.gettype();
   uint32_t numels = pdfel.getnumelems();
   uint32_t dummy = pdfel.getdummy();
-  assert( dummy == 0 );
+  assert( dummy == 0 ); (void)dummy;
   uint32_t offset = pdfel.getoffset();
   uint32_t pos = (uint32_t)(offset + is.tellg() - 4);
   printvalue(is, type, numels, pos);
 }
 
-void ProcessSDSData( std::istream & is )
+static void ProcessSDSData( std::istream & is )
 {
   // havent been able to figure out what was the begin meant for
   is.seekg( 0x20 - 8 );
@@ -166,7 +166,7 @@ void ProcessSDSData( std::istream & is )
 
 }
 // PMS MR Series Data Storage
-int DumpPMS_MRSDS(const gdcm::DataSet & ds)
+static int DumpPMS_MRSDS(const gdcm::DataSet & ds)
 {
   const gdcm::PrivateTag tdata(0x2005,0x32,"Philips MR Imaging DD 002");
   if( !ds.FindDataElement( tdata ) ) return 1;
@@ -341,11 +341,11 @@ struct Data2
    }
 };
 
-bool ProcessData( const char *buf, size_t len )
+static bool ProcessData( const char *buf, size_t len )
 {
   Data2 data2;
-  size_t s = sizeof(data2);
-  assert( len >= s);
+  const size_t s = sizeof(data2);
+  assert( len >= s); (void)len;
   // VIMDATA2 is generally 2048 bytes, while s = 1786
   // the end is filled with \0 bytes
   memcpy(&data2, buf, s);
@@ -354,7 +354,7 @@ bool ProcessData( const char *buf, size_t len )
   return true;
 }
 
-int DumpVEPRO(const gdcm::DataSet & ds)
+static int DumpVEPRO(const gdcm::DataSet & ds)
 {
   // 01f7,1026
   const gdcm::ByteValue *bv2 = NULL;
@@ -384,7 +384,7 @@ int DumpVEPRO(const gdcm::DataSet & ds)
 }
 
 // ELSCINT1
-bool readastring(std::string &out, const char *input )
+static bool readastring(std::string &out, const char *input )
 {
   out.clear();
   while( *input )
@@ -508,7 +508,7 @@ struct info
     }
 };
 
-int DumpEl2_new(const gdcm::DataSet & ds)
+static int DumpEl2_new(const gdcm::DataSet & ds)
 {
   // 01f7,1026
   const gdcm::PrivateTag t01f7_26(0x01f7,0x1026,"ELSCINT1");
@@ -544,7 +544,7 @@ int DumpEl2_new(const gdcm::DataSet & ds)
 } // end namespace cleanup
 
 template <typename TPrinter>
-int DoOperation(const std::string & filename)
+static int DoOperation(const std::string & filename)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
@@ -564,7 +564,7 @@ int DoOperation(const std::string & filename)
   return success ? 0 : 1;
 }
 
-int PrintASN1(const std::string & filename, bool verbose)
+static int PrintASN1(const std::string & filename, bool verbose)
 {
   (void)verbose;
   gdcm::Reader reader;
@@ -603,7 +603,7 @@ int PrintASN1(const std::string & filename, bool verbose)
   return 0;
 }
 
-int PrintELSCINT(const std::string & filename, bool verbose)
+static int PrintELSCINT(const std::string & filename, bool verbose)
 {
   (void)verbose;
   gdcm::Reader reader;
@@ -620,7 +620,7 @@ int PrintELSCINT(const std::string & filename, bool verbose)
   return ret;
 }
 
-int PrintVEPRO(const std::string & filename, bool verbose)
+static int PrintVEPRO(const std::string & filename, bool verbose)
 {
   (void)verbose;
   gdcm::Reader reader;
@@ -637,7 +637,7 @@ int PrintVEPRO(const std::string & filename, bool verbose)
   return ret;
 }
 
-int PrintSDS(const std::string & filename, bool verbose)
+static int PrintSDS(const std::string & filename, bool verbose)
 {
   (void)verbose;
   gdcm::Reader reader;
@@ -655,7 +655,7 @@ int PrintSDS(const std::string & filename, bool verbose)
 }
 
 
-int PrintPDB(const std::string & filename, bool verbose)
+static int PrintPDB(const std::string & filename, bool verbose)
 {
   (void)verbose;
   gdcm::Reader reader;
@@ -688,7 +688,7 @@ int PrintPDB(const std::string & filename, bool verbose)
   return ret;
 }
 
-int PrintCSA(const std::string & filename)
+static int PrintCSA(const std::string & filename)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename.c_str() );
@@ -780,14 +780,14 @@ int PrintCSA(const std::string & filename)
 
 
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmdump: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmdump [OPTION]... FILE..." << std::endl;
@@ -890,7 +890,7 @@ int main (int argc, char *argv[])
     case 0:
     case '-':
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {

@@ -52,7 +52,7 @@
 #include <sys/stat.h>
 
 
-int checkmagick(unsigned char *input)
+static int checkmagick(unsigned char *input)
 {
   if( input[128+0] == 'D'
    && input[128+1] == 'I'
@@ -64,7 +64,7 @@ int checkmagick(unsigned char *input)
   return 0;
 }
 
-int checkdeflated(const char *name)
+static int checkdeflated(const char *name)
 {
   int ret;
   unsigned char *source;
@@ -183,13 +183,13 @@ int checkdeflated(const char *name)
 }
 
 #ifdef GDCM_USE_SYSTEM_POPPLER
-std::string getInfoDate(Dict *infoDict, const char *key)
+static std::string getInfoDate(Dict *infoDict, const char *key)
 {
   Object obj;
   char *s;
   int year, mon, day, hour, min, sec, n;
   struct tm tmStruct;
-  char buf[256];
+  //char buf[256];
   std::string out;
 
   if (infoDict->lookup((char*)key, &obj)->isString())
@@ -244,7 +244,7 @@ std::string getInfoDate(Dict *infoDict, const char *key)
   return out;
 }
 
-std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap)
+static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap)
 {
   Object obj;
   GooString *s1;
@@ -292,14 +292,14 @@ std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap)
 #endif
 
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcminfo: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcminfo [OPTION]... FILE..." << std::endl;
@@ -331,7 +331,7 @@ void PrintHelp()
   int checkcompression = 0;
   int md5sum = 0;
 
-int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
+static int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
 {
   (void)defs;
   if( deflated )
@@ -414,7 +414,7 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
     const gdcm::DataSet &ds = file.GetDataSet();
     const gdcm::DataElement& de = ds.GetDataElement( gdcm::Tag(0x42,0x11) );
     const gdcm::ByteValue* bv = de.GetByteValue();
-    const char *p = bv->GetPointer();
+    const char *p = bv->GetPointer(); (void)p;
     Object appearDict;
     //appearDict.initDict(xref);
     //appearDict.dictAdd(copyString("Length"),
@@ -572,7 +572,7 @@ int main(int argc, char *argv[])
     case 0:
     case '-':
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {

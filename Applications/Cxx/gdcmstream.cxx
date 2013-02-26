@@ -42,18 +42,18 @@
 
 #include <getopt.h>
 
-void error_callback(const char *msg, void *) {
+static void error_callback(const char *msg, void *) {
   (void)msg;
 }
-void warning_callback(const char *msg, void *) {
+static void warning_callback(const char *msg, void *) {
   (void)msg;
 }
-void info_callback(const char *msg, void *) {
+static void info_callback(const char *msg, void *) {
   (void)msg;
 }
 
 template <typename T>
-unsigned int readvector(std::vector<T> &v, const char *str)
+static unsigned int readvector(std::vector<T> &v, const char *str)
 {
   if( !str ) return 0;
   std::istringstream os( str );
@@ -67,7 +67,7 @@ unsigned int readvector(std::vector<T> &v, const char *str)
   return (unsigned int)v.size();
 }
 
-int No_Of_Resolutions(const char *filename)
+static int No_Of_Resolutions(const char *filename)
 {
   std::ifstream is;
   is.open( filename, std::ios::binary );
@@ -153,7 +153,7 @@ int No_Of_Resolutions(const char *filename)
 
 }
 
-bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *filename, int res, std::ostream& of, int flag,  gdcm::SequenceOfItems *sq)
+static bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *filename, int res, std::ostream& of, int flag,  gdcm::SequenceOfItems *sq)
 {
   (void)of;
   std::ifstream is;
@@ -469,7 +469,7 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
 
 }
 
-bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::StreamImageReader & reader, int resolution, std::ostream& of, int tile,std::vector<unsigned int> start, std::vector<unsigned int> end)
+static bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::StreamImageReader & reader, int resolution, std::ostream& of, int tile,std::vector<unsigned int> start, std::vector<unsigned int> end)
 {
   (void)of;
   gdcm::File file1 = reader.GetFile();
@@ -626,7 +626,7 @@ bool StreamImageRead_Write(gdcm::StreamImageWriter & theStreamWriter,gdcm::Strea
 }
 
 
-bool Different_Resolution_From_DICOM( gdcm::StreamImageWriter & theStreamWriter, const char *filename, std::ostream& of, int res, int tile,std::vector<unsigned int> start, std::vector<unsigned int> end)
+static bool Different_Resolution_From_DICOM( gdcm::StreamImageWriter & theStreamWriter, const char *filename, std::ostream& of, int res, int tile,std::vector<unsigned int> start, std::vector<unsigned int> end)
 {
   //std::vector<std::string>::const_iterator it = filenames.begin();
   gdcm::StreamImageReader reader;
@@ -781,7 +781,7 @@ bool Different_Resolution_From_DICOM( gdcm::StreamImageWriter & theStreamWriter,
 
 
 
-bool Different_Resolution_From_jp2( gdcm::StreamImageWriter & theStreamWriter, const char *filename, std::ostream& of, int nres)
+static bool Different_Resolution_From_jp2( gdcm::StreamImageWriter & theStreamWriter, const char *filename, std::ostream& of, int nres)
 {
   //std::vector<std::string>::const_iterator it = filenames.begin();
   bool b = true;
@@ -807,20 +807,20 @@ bool Different_Resolution_From_jp2( gdcm::StreamImageWriter & theStreamWriter, c
 
 
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmstream: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmstream [OPTION] input.dcm output.dcm" << std::endl;
 }
 
-void end_of_WSIFile(std::ostream& of)
+static void end_of_WSIFile(std::ostream& of)
 {
   uint16_t firstTag1 =  0xfffe;
   uint16_t secondTag1 = 0xe0dd;
@@ -893,7 +893,7 @@ int main (int argc, char *argv[])
       {
     case 0:
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
 
         //printf ("option %s", s);
         if (optarg)
@@ -930,14 +930,14 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "roi-start") == 0 );
             tile = 1;
             unsigned int n = readvector(start, optarg);
-            assert( n == 2 );
+            assert( n == 2 ); (void)n;
             }
           else if( option_index == 11 ) /* tile */
             {
             assert( strcmp(s, "roi-end") == 0 );
             tile = 1;
             unsigned int n = readvector(end, optarg);
-            assert( n == 2 );
+            assert( n == 2 ); (void)n;
             }
 
           //printf ("\n");

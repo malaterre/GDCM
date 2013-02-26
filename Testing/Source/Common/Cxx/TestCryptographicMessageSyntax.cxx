@@ -268,8 +268,8 @@ int TestCryptographicMessageSyntax(int, char *[])
   availableCMSName.push_back("CAPI");
 #endif
 
-  for (int i = 0; i < availableCMS.size(); ++i)
-    for (int j = i+1; j < availableCMS.size(); ++j)
+  for (size_t i = 0; i < availableCMS.size(); ++i)
+    for (size_t j = i+1; j < availableCMS.size(); ++j)
       bret = TestCMSCompatibility(*availableCMS[i], availableCMSName[i].c_str(), *availableCMS[j], availableCMSName[j].c_str()) && bret;
 
   return (bret ? 0 : 1);

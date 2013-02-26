@@ -41,14 +41,14 @@
 #include <getopt.h>
 #include <string.h>
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmscanner: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmscanner [OPTION] -d directory -t tag(s)" << std::endl;

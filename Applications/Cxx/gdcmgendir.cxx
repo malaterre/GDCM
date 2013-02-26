@@ -27,14 +27,14 @@
 #include <getopt.h>
 
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmgendir: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmgendir [OPTION]... FILE..." << std::endl;
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
     case 0:
     case '-':
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {

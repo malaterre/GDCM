@@ -79,14 +79,14 @@ int loadBulkData = 0;
 int loadTransferSyntax = 0;
 TransferSyntax ts;
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmxml: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmxml [OPTION]... FILE..." << std::endl;
@@ -124,7 +124,7 @@ void PrintHelp()
 #define CHECK_NAME(value)\
   strcmp((const char*)xmlTextReaderConstName(reader),value)
 
-void HandleBulkData(const char *uuid, DataElement &de)
+static void HandleBulkData(const char *uuid, DataElement &de)
   {
   // Load Bulk Data
   if(loadBulkData)
@@ -167,7 +167,7 @@ void HandleBulkData(const char *uuid, DataElement &de)
      }  
   }
 
-void HandlePN(xmlTextReaderPtr reader,DataElement &de)
+static void HandlePN(xmlTextReaderPtr reader,DataElement &de)
   {
   if(CHECK_NAME("DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15)
     return;//empty element
@@ -300,9 +300,9 @@ void HandlePN(xmlTextReaderPtr reader,DataElement &de)
     
   }
   
-void HandleSequence(SequenceOfItems *sqi,xmlTextReaderPtr reader,int depth);
+static void HandleSequence(SequenceOfItems *sqi,xmlTextReaderPtr reader,int depth);
 
-void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ )
+static void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ )
 {    
   (void)depth;
    int ret;  
@@ -561,7 +561,7 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
      }
 }
 
-void HandleSequence(SequenceOfItems *sqi, xmlTextReaderPtr reader,int depth)
+static void HandleSequence(SequenceOfItems *sqi, xmlTextReaderPtr reader,int depth)
 {
   int ret;
   while(!(  CHECK_NAME("DicomAttribute") == 0  && xmlTextReaderDepth(reader) == (depth - 1)  &&  xmlTextReaderNodeType(reader) == 15 )  )
@@ -596,7 +596,7 @@ void HandleSequence(SequenceOfItems *sqi, xmlTextReaderPtr reader,int depth)
     }
 }
 
-void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
+static void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
 {  
   int ret;
   
@@ -732,7 +732,7 @@ int main (int argc, char *argv[])
     case 0:
     case '-':
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         if (optarg)
           {
           if( option_index == 0 ) /* input */

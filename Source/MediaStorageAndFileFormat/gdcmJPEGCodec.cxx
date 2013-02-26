@@ -185,7 +185,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
         if( i >= this->GetDimensions()[2] )
           {
           // JPEGInvalidSecondFrag.dcm
-          assert( nfrags == this->GetNumberOfDimensions() ); // sentinel
+          assert( nfrags == this->GetNumberOfDimensions() ); (void)nfrags; // sentinel
           gdcmWarningMacro( "Invalid JPEG Fragment found at pos #" << i + 1 << ". Skipping it" );
           }
         else
@@ -459,7 +459,7 @@ bool JPEGCodec::DecodeExtent(
 
   if( NumberOfDimensions == 2 )
     {
-    char *dummy_buffer = NULL;
+    //char *dummy_buffer = NULL;
     std::vector<char> vdummybuffer;
     size_t buf_size = 0;
 
@@ -476,7 +476,7 @@ bool JPEGCodec::DecodeExtent(
         // update
         buf_size = fraglen + oldlen;
         vdummybuffer.resize( buf_size );
-        dummy_buffer = &vdummybuffer[0];
+        //dummy_buffer = &vdummybuffer[0];
         // read J2K
         is.read( &vdummybuffer[oldlen], fraglen );
         }

@@ -40,14 +40,14 @@
 #include "gdcmPrinter.h"
 
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmscu: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmscu [OPTION]...[OPERATION]...HOSTNAME...[PORT]..." << std::endl;
@@ -113,7 +113,7 @@ void PrintHelp()
   std::cout << "DICOM Character Set: [" << s << "]" << std::endl;
 }
 
-void PrintQueryHelp(int inFindPatientRoot)
+static void PrintQueryHelp(int inFindPatientRoot)
 {
   gdcm::BaseRootQuery* theBase;
   if (inFindPatientRoot)

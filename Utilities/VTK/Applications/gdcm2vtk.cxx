@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
       {
     case 0:
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {
@@ -455,7 +455,7 @@ int main(int argc, char *argv[])
     {
     imgreader->SetFileLowerLeft( lowerleft );
     if( names->GetNumberOfValues() == 1 )
-    imgreader->SetFileName(names->GetValue(0) );
+      imgreader->SetFileName( names->GetValue(0) );
     else
     imgreader->SetFileNames(names);
     imgreader->Update();

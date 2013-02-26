@@ -22,17 +22,17 @@
 
 #include <iostream>
 
-void usage();
-void difference_of_datasets(const gdcm::DataSet& ds1, const gdcm::DataSet& ds2, int depthSQ);
-void display_element(std::ostream& os, const gdcm::DataElement& de,
+static void usage();
+static void difference_of_datasets(const gdcm::DataSet& ds1, const gdcm::DataSet& ds2, int depthSQ);
+static void display_element(std::ostream& os, const gdcm::DataElement& de,
   const gdcm::DictEntry& dictentry, const char *note, int depthSQ);
-void underline(int depthSQ);
-void difference_of_sequences(const gdcm::DataElement& sqde1,
+static void underline(int depthSQ);
+static void difference_of_sequences(const gdcm::DataElement& sqde1,
   const gdcm::DataElement& sqde2, const gdcm::DictEntry& dictentry, int depthSQ);
 
 // previous declaration of 'int truncate(const char*, __off_t)'
-uint32_t Truncate=30; // trim dumped string values to this number of chars. zero means no trimming.
-std::stringstream sq_disp; // store SQ output while recursing through: only displayed if a difference is found within SQ
+static uint32_t Truncate=30; // trim dumped string values to this number of chars. zero means no trimming.
+static std::stringstream sq_disp; // store SQ output while recursing through: only displayed if a difference is found within SQ
 
 int main( int argc, const char* argv[] )
 {
@@ -98,7 +98,7 @@ int main( int argc, const char* argv[] )
   return 0;
 }
 
-void usage()
+static void usage()
 {
   std::cout <<
     "Usage: gdcmdiff [OPTIONS] DICOM_FILE1 DICOM_FILE2\n\n"
@@ -108,7 +108,7 @@ void usage()
     "                          0 means no trimmming. Default 30." << std::endl;
 }
 
-void difference_of_datasets(const gdcm::DataSet& ds1, const gdcm::DataSet& ds2, int depthSQ)
+static void difference_of_datasets(const gdcm::DataSet& ds1, const gdcm::DataSet& ds2, int depthSQ)
 {
   gdcm::DataSet::ConstIterator it1 = ds1.Begin();
   gdcm::DataSet::ConstIterator it2 = ds2.Begin();
@@ -184,7 +184,7 @@ void difference_of_datasets(const gdcm::DataSet& ds1, const gdcm::DataSet& ds2, 
   } while (it1 != ds1.End() || it2 != ds2.End() ); // with && we might miss some off the end that are only in one dataset
 }
 
-void display_element(std::ostream& os, const gdcm::DataElement& de,
+static void display_element(std::ostream& os, const gdcm::DataElement& de,
   const gdcm::DictEntry& dictentry, const char * note, int depthSQ)
  {
   const gdcm::VR & vr = dictentry.GetVR();
@@ -221,13 +221,13 @@ void display_element(std::ostream& os, const gdcm::DataElement& de,
   os << " # " << dictentry.GetName() << std::endl  ;
 }
 
-void underline(int depthSQ)
+static void underline(int depthSQ)
 {
   std::cout << std::string(depthSQ, ' '); //indent for SQ
   std::cout << "               -------------" << std::endl;
 }
 
-void difference_of_sequences(const gdcm::DataElement& sqde1,
+static void difference_of_sequences(const gdcm::DataElement& sqde1,
   const gdcm::DataElement& sqde2, const gdcm::DictEntry& dictentry, int depthSQ)
 {
   gdcm::SmartPointer<gdcm::SequenceOfItems> sqi1 = sqde1.GetValueAsSQ();

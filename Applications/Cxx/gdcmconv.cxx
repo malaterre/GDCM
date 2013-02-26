@@ -104,14 +104,14 @@ struct SetSQToUndefined
   }
 };
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmconv: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintLossyWarning()
+static void PrintLossyWarning()
 {
   std::cout << "You have selected a lossy compression transfer syntax." << std::endl;
   std::cout << "This will degrade the quality of your input image, and can." << std::endl;
@@ -120,7 +120,7 @@ void PrintLossyWarning()
   std::cout << "WARNING: this mode is very experimental." << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmconv [OPTION] input.dcm output.dcm" << std::endl;
@@ -186,7 +186,7 @@ void PrintHelp()
 }
 
 template <typename T>
-size_t readvector(std::vector<T> &v, const char *str)
+static size_t readvector(std::vector<T> &v, const char *str)
 {
   if( !str ) return 0;
   std::istringstream os( str );
@@ -422,7 +422,7 @@ static bool derives( File & file, const Pixmap& compressed_image )
 return true;
 
 }
-}
+} // end namespace gdcm
 
 int main (int argc, char *argv[])
 {
@@ -562,7 +562,7 @@ int main (int argc, char *argv[])
       {
     case 0:
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {
@@ -617,7 +617,7 @@ int main (int argc, char *argv[])
             {
             assert( strcmp(s, "tile") == 0 );
             size_t n = readvector(tilesize, optarg);
-            assert( n == 2 );
+            assert( n == 2 ); (void)n;
             }
           else if( option_index == 45 ) /* number of resolution */
             {

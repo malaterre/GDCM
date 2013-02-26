@@ -482,7 +482,7 @@ void Overlay::Decompress(std::ostream &os) const
 {
   const size_t unpacklen = GetUnpackBufferLength();
   unsigned char unpackedbytes[8];
-  std::vector<char>::const_iterator beg = Internal->Data.begin();
+  //std::vector<char>::const_iterator beg = Internal->Data.begin();
   size_t curlen = 0;
   for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
     {
