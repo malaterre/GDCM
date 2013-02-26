@@ -96,8 +96,8 @@ private:
            << ", function " << GDCM_FUNCTION << '\n'              \
            << "Last system error was: "                           \
            << gdcm::System::GetLastSystemError() << '\n' << msg;  \
-   std::ostream &_os = gdcm::Trace::GetStream();                   \
-   _os << osmacro.str() << "\n\n" << std::endl;                    \
+   std::ostream &_os = gdcm::Trace::GetStream();                  \
+   _os << osmacro.str() << "\n\n" << std::endl;                   \
    }                                                              \
 }
 #endif //NDEBUG

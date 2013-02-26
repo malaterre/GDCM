@@ -37,6 +37,7 @@
 
 #include "gdcmBaseRootQuery.h"
 #include "gdcmQueryFactory.h"
+#include "gdcmPrinter.h"
 
 
 void PrintVersion()
@@ -434,11 +435,11 @@ int main(int argc, char *argv[])
     PrintQueryHelp(findpatientroot);
     return 0;
     }
-  bool theDebug = debug != 0;
-  bool theWarning = warning != 0;
-  bool theError = error != 0;
-  bool theVerbose = verbose != 0;
-  bool theRecursive = recursive != 0;
+  const bool theDebug = debug != 0;
+  const bool theWarning = warning != 0;
+  const bool theError = error != 0;
+  const bool theVerbose = verbose != 0;
+  const bool theRecursive = recursive != 0;
   // Debug is a little too verbose
   gdcm::Trace::SetDebug( theDebug );
   gdcm::Trace::SetWarning( theWarning );
@@ -532,15 +533,8 @@ int main(int argc, char *argv[])
     // ./bin/gdcmscu --echo mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     bool didItWork = gdcm::CompositeNetworkFunctions::CEcho( hostname, (uint16_t)port,
       callingaetitle.c_str(), callaetitle.c_str() );
-    if (!didItWork)
-      {
-      std::cout << "Echo failed." << std::endl;
-      }
-    else
-      {
-      std::cout << "Echo succeeded." << std::endl;
-      }
-    return (didItWork ? 0 : 1);
+    gdcmDebugMacro( (didItWork ? "Echo succeeded." : "Echo failed.") );
+    return didItWork ? 0 : 1;
     }
   else if ( mode == "move" ) // C-FIND SCU
     {
@@ -601,15 +595,8 @@ int main(int argc, char *argv[])
     bool didItWork = gdcm::CompositeNetworkFunctions::CMove( hostname, (uint16_t)port,
       theQuery, (uint16_t)portscpnum,
       callingaetitle.c_str(), callaetitle.c_str(), outputdir.c_str() );
-    if (!didItWork)
-      {
-      std::cerr << "Move failed." << std::endl;
-      }
-    else
-      {
-      std::cout << "Move succeeded." << std::endl;
-      }
-    return (didItWork ? 0 : 1);
+    gdcmDebugMacro( (didItWork ? "Move succeeded." : "Move failed.") );
+    return didItWork ? 0 : 1;
     }
   else if ( mode == "find" ) // C-FIND SCU
     {
@@ -674,13 +661,20 @@ int main(int argc, char *argv[])
       std::cerr << "Problem in CFind." << std::endl;
       return 1;
       }
-    std::vector<gdcm::DataSet>::iterator itor;
-    for (itor = theDataSet.begin(); itor != theDataSet.end(); itor++)
+
+    gdcm::Printer p;
+    for( std::vector<gdcm::DataSet>::iterator itor
+      = theDataSet.begin(); itor != theDataSet.end(); itor++)
       {
-      itor->Print(std::cout);
+      std::cout << "Find Response: " << (itor - theDataSet.begin() + 1) << std::endl;
+      p.PrintDataSet( *itor, std::cout );
+      std::cout << std::endl;
       }
 
-    //std::cout << "Find was successful." << std::endl;
+    if( gdcm::Trace::GetWarningFlag() ) // == verbose flag
+      {
+      std::cout << "Find was successful." << std::endl;
+      }
     return 0;
     }
   else // C-STORE SCU
@@ -708,11 +702,8 @@ int main(int argc, char *argv[])
       gdcm::CompositeNetworkFunctions::CStore(hostname, (uint16_t)port, thefiles,
         callingaetitle.c_str(), callaetitle.c_str());
 
-    if (didItWork)
-      std::cout << "Store was successful." << std::endl;
-    else
-      std::cout << "Store failed." << std::endl;
-    return (didItWork ? 0 : 1);
+    gdcmDebugMacro( (didItWork ? "Store was successful." : "Store failed.") );
+    return didItWork ? 0 : 1;
     }
 
   return 0;
