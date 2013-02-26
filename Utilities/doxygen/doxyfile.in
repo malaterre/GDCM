@@ -584,7 +584,6 @@ WARN_LOGFILE           =
 INPUT                  = @GDCM_SOURCE_DIR@/Source \
                          @GDCM_SOURCE_DIR@/Wrapping \
                          @GDCM_SOURCE_DIR@/Utilities/VTK \
-                         @GDCM_SOURCE_DIR@/Utilities/Insight \
                          @GDCM_SOURCE_DIR@/Utilities/doxygen/man \
                          @GDCM_BINARY_DIR@/Utilities/doxygen/README.txt \
                          @GDCM_BINARY_DIR@/Utilities/doxygen/TestsList.txt
