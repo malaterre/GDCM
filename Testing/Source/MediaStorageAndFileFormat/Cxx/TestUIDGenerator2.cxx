@@ -46,9 +46,12 @@ int TestUIDGenerator2(int , char *[])
   const unsigned int nthreads = 10; // multiple of 2 please
   pthread_t th[nthreads];
   std::set<std::string> uids[nthreads];
-  unsigned int i; int ret;
+  unsigned int i;
   for (i = 0; i < nthreads; i++)
-    ret = pthread_create (&th[i], NULL, func, (void*)(uids+i));
+    {
+    const int ret = pthread_create (&th[i], NULL, func, (void*)(uids+i));
+    if( ret ) return 1;
+    }
   for (i = 0; i < nthreads; i++)
     pthread_join (th[i], NULL);
 
