@@ -47,6 +47,9 @@ CHECK_FUNCTION_EXISTS(gettimeofday GDCM_HAVE_GETTIMEOFDAY)
 
 INCLUDE(CheckCXXSourceCompiles)
 CHECK_CXX_SOURCE_COMPILES(
+  "int main() { const char *f = __FUNCTION__; return 0;}"
+  GDCM_CXX_HAS_FUNCTION)
+CHECK_CXX_SOURCE_COMPILES(
   "\#include <fstream>\nint main() { const wchar_t fn[10] = {}; std::ifstream is( fn ); return 0;}"
   GDCM_HAVE_WCHAR_IFSTREAM)
 IF(GDCM_USE_SYSTEM_OPENSSL)
