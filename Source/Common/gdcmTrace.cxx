@@ -20,15 +20,47 @@ namespace gdcm
 {
 //-----------------------------------------------------------------------------
 // Warning message level to be displayed
+static bool UseStreamToFile = false;
 static bool DebugFlag   = false;
 static bool WarningFlag = true;
 static bool ErrorFlag   = true;
+static std::ofstream * filesrc = NULL;
 static std::ostream * src = &std::cerr;
+
+void Trace::SetStreamToFile( const char *filename )
+{
+  if( UseStreamToFile )
+    {
+    assert( filesrc );
+    filesrc->close();
+    filesrc = NULL;
+    UseStreamToFile = false;
+    }
+  std::ofstream * out = new std::ofstream;
+  if( !out ) return;
+  out->open( filename );
+  if( !out->good() )
+    {
+    gdcmErrorMacro( "Could not open file: " << filename );
+    return;
+    }
+  filesrc = out;
+  UseStreamToFile = true;
+  src = filesrc;
+}
 
 void Trace::SetStream(std::ostream &os)
 {
+  if( UseStreamToFile )
+    {
+    assert( filesrc );
+    filesrc->close();
+    filesrc = NULL;
+    UseStreamToFile = false;
+    }
   src = &os;
 }
+
 std::ostream &Trace::GetStream()
 {
   return *src;
@@ -43,6 +75,12 @@ Trace::Trace()
 
 Trace::~Trace()
 {
+  if( UseStreamToFile )
+    {
+    assert( filesrc );
+    filesrc->close();
+    filesrc = NULL;
+    }
 }
 
 void Trace::SetDebug(bool debug)  { DebugFlag = debug; }

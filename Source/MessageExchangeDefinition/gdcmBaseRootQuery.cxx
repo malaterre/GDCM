@@ -40,9 +40,10 @@ The dataset held by this object (or, really, one of its derivates) should be pas
 #include "gdcmDictEntry.h"
 #include "gdcmDicts.h"
 #include "gdcmGlobal.h"
-#include <limits>
 #include "gdcmAttribute.h"
 #include "gdcmWriter.h"
+#include "gdcmPrinter.h"
+#include <limits>
 
 namespace gdcm{
 
@@ -187,7 +188,8 @@ bool BaseRootQuery::WriteQuery(const std::string& inFileName)
   writer.SetFileName( inFileName.c_str() );
   if( !writer.Write() )
     {
-      return false;
+    gdcmWarningMacro( "Could not write: " << inFileName );
+    return false;
     }
   return true;
 }
@@ -211,6 +213,21 @@ void BaseRootQuery::AddQueryDataSet(const DataSet & ds)
     {
     mDataSet.Replace( *it );
     }
+}
+
+void BaseRootQuery::Print(std::ostream &os) const
+{
+  UIDs::TSName asuid = GetAbstractSyntaxUID();
+  const char *asname = UIDs::GetUIDName( asuid );
+  os << "===================== OUTGOING DIMSE MESSAGE ====================" << std::endl;
+  os << "Affected SOP Class UID        :" << asname << std::endl;
+  os << "======================= END DIMSE MESSAGE =======================" << std::endl;
+
+  os << "Find SCU Request Identifiers:" << std::endl;
+  os << "# Dicom-Data-Set" << std::endl;
+  os << "# Used TransferSyntax: Unknown Transfer Syntax" << std::endl;
+  Printer p;
+  p.PrintDataSet( mDataSet, os );
 }
 
 }

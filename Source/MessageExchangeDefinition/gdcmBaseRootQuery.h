@@ -126,6 +126,8 @@ namespace gdcm{
     virtual bool ValidateQuery(bool inStrict = true) const = 0;
 
     virtual UIDs::TSName GetAbstractSyntaxUID() const = 0;
+
+    void Print(std::ostream &os) const;
   };
 }
 

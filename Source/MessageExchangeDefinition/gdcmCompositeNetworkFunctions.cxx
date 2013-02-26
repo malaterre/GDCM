@@ -21,6 +21,7 @@
 #include <socket++/echo.h>
 
 #include "gdcmReader.h"
+#include "gdcmPrinter.h"
 #include "gdcmAttribute.h"
 #include "gdcmULConnectionManager.h"
 #include "gdcmULConnection.h"
@@ -30,7 +31,6 @@
 #include "gdcmSystem.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmWriter.h"
-#include "gdcmPrinter.h"
 #include "gdcmSimpleSubjectWatcher.h"
 #include "gdcmProgressEvent.h"
 #include "gdcmQueryFactory.h"
@@ -78,7 +78,7 @@ bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
     {
     DataSet ds = network::PresentationDataValue::ConcatenatePDVBlobs(theValues1);
     Printer thePrinter;
-    thePrinter.PrintDataSet(ds, std::cout);
+    thePrinter.PrintDataSet(ds, Trace::GetStream());
     }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 
@@ -131,9 +131,6 @@ BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
     }
   outQuery->AddQueryDataSet(ds);
 
-  if (Trace::GetDebugFlag())
-    ds.Print( std::cout );
-
   // setup the special character set
   std::vector<ECharSet> inCharSetType;
   inCharSetType.push_back( QueryFactory::GetCharacterFromCurrentLocale() );
@@ -141,6 +138,12 @@ BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
   std::string param ( de.GetByteValue()->GetPointer(),
     de.GetByteValue()->GetLength() );
   outQuery->SetSearchParameter(de.GetTag(), param );
+
+  // Print info:
+  if (Trace::GetDebugFlag())
+    {
+    outQuery->Print( Trace::GetStream() );
+    }
 
   return outQuery;
 }

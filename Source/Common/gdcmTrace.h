@@ -27,7 +27,16 @@ namespace gdcm
  * \brief Trace
  * \details Debug / Warning and Error are encapsulated in this class
  * by default the Trace class will redirect any debug/warning/error
- * to std::cerr. Unless SetStream was specified with another (open) stream.
+ * to std::cerr. Unless SetStream was specified with another (open) stream or
+ * SetStreamToFile was specified to a writable file on the system.
+ *
+ * \warning
+ * All string messages are removed during compilation time when compiled with
+ * CMAKE_BUILD_TYPE being set to either:
+ * - Release
+ * - MinSizeRel
+ * It is recommended to compile with RelWithDebInfo and/or Debug during
+ * prototyping of applications.
  */
 class GDCM_EXPORT Trace
 {
@@ -38,6 +47,10 @@ public :
   /// Explicitely set the ostream for gdcm::Trace to report to
   static void SetStream(std::ostream &os);
   static std::ostream &GetStream();
+
+  /// Explicitely set the filename for gdcm::Trace to report to
+  /// The file will be created (it will not append to existing file)
+  static void SetStreamToFile( const char *filename );
 
   static void SetDebug(bool debug);
   static void DebugOn();
@@ -96,8 +109,8 @@ private:
            << ", function " << GDCM_FUNCTION << '\n'              \
            << "Last system error was: "                           \
            << gdcm::System::GetLastSystemError() << '\n' << msg;  \
-   std::ostream &_os = gdcm::Trace::GetStream();                   \
-   _os << osmacro.str() << "\n\n" << std::endl;                    \
+   std::ostream &_os = gdcm::Trace::GetStream();                  \
+   _os << osmacro.str() << "\n\n" << std::endl;                   \
    }                                                              \
 }
 #endif //NDEBUG
