@@ -86,6 +86,10 @@ C-MOVE operation are executed using two different ports (one for the SCU and one
 
   -D   --debug
          debug mode, print debug information
+
+  -L   --log-file
+         specify a filename where to write logs
+
   --queryhelp
          print query help
 \endverbatim
