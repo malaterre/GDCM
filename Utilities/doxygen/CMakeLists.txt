@@ -20,8 +20,11 @@ if(GDCM_DOCUMENTATION)
     "${GDCM_SOURCE_DIR}/Source/*.h"
     "${GDCM_SOURCE_DIR}/Wrapping/*.h"
     "${GDCM_SOURCE_DIR}/Utilities/VTK/*.h"
-    "${GDCM_SOURCE_DIR}/Utilities/Insight/*.h"
     "${GDCM_SOURCE_DIR}/Utilities/doxygen/man/*.man"
+  )
+  list(REMOVE_ITEM headerfiles
+    "${GDCM_SOURCE_DIR}/Source/DataDictionary/gdcmTagKeywords.h"
+    "${GDCM_SOURCE_DIR}/Source/DataDictionary/gdcmTagToType.h"
   )
   #message(${headerfiles})
   # We are depending only on header files and README.txt but other files

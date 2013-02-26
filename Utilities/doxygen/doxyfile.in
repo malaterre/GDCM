@@ -584,7 +584,6 @@ WARN_LOGFILE           =
 INPUT                  = @GDCM_SOURCE_DIR@/Source \
                          @GDCM_SOURCE_DIR@/Wrapping \
                          @GDCM_SOURCE_DIR@/Utilities/VTK \
-                         @GDCM_SOURCE_DIR@/Utilities/Insight \
                          @GDCM_SOURCE_DIR@/Utilities/doxygen/man \
                          @GDCM_BINARY_DIR@/Utilities/doxygen/README.txt \
                          @GDCM_BINARY_DIR@/Utilities/doxygen/TestsList.txt
@@ -619,6 +618,7 @@ RECURSIVE              = YES
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
 EXCLUDE                = @GDCM_SOURCE_DIR@/Source/DataDictionary/gdcmTagToType.h \
+                         @GDCM_SOURCE_DIR@/Source/DataDictionary/gdcmTagKeywords.h \
                          @GDCM_SOURCE_DIR@/Source/Common/zipstreamimpl.h \
                          @GDCM_SOURCE_DIR@/Source/Common/zipstreamimpl.hpp \
                          @GDCM_SOURCE_DIR@/Source/MediaStorageAndFileFormat/gdcm_jp2.h \
