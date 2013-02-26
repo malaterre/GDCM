@@ -235,7 +235,7 @@ int main(int argc, char *argv[])
       case 0:
       case '-':
       {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
         {

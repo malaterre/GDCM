@@ -3,9 +3,11 @@
 include_regular_expression("^gdcm.*$")
 
 # configure the .h file
+option(GDCM_ALWAYS_TRACE_MACRO "When set to ON, gdcm::Trace macros will dumps message (override NDEBUG settings)" OFF)
 option(GDCM_SUPPORT_BROKEN_IMPLEMENTATION "Handle broken DICOM" ON)
 option(GDCM_WRITE_ODD_LENGTH "Do not change" OFF)
 mark_as_advanced(
+  GDCM_ALWAYS_TRACE_MACRO
   GDCM_SUPPORT_BROKEN_IMPLEMENTATION
   GDCM_WRITE_ODD_LENGTH
   GDCM_AUTOLOAD_GDCMJNI

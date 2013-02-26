@@ -170,5 +170,6 @@
 #cmakedefine GDCM_LEGACY_REMOVE
 #cmakedefine GDCM_LEGACY_SILENT
 
+#cmakedefine GDCM_ALWAYS_TRACE_MACRO
 
 #endif

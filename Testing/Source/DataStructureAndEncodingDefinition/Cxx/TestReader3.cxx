@@ -204,9 +204,9 @@ int TestRead3(const char *subdir, const char * filename)
 
   int handle = ::open(path, flags, S_IRWXU);
 
-  bool success = true;
   struct stat info;
-  success = ::fstat(handle, &info) != -1;
+  const bool success = ::fstat(handle, &info) != -1;
+  if( !success ) return 1;
   off_t size = info.st_size;
 
   off_t offset = 0;
