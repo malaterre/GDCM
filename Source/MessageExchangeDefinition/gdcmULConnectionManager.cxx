@@ -357,7 +357,7 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
   }
 }
 
-std::vector<DataSet>  ULConnectionManager::SendMove(const BaseRootQuery* inRootQuery)
+std::vector<DataSet> ULConnectionManager::SendMove(const BaseRootQuery* inRootQuery)
 {
   ULBasicCallback theCallback;
   SendMove(inRootQuery, &theCallback);
@@ -399,7 +399,7 @@ std::vector<DataSet> ULConnectionManager::SendStore(const File &file)
 {
   ULBasicCallback theCallback;
   SendStore(file, &theCallback);
-  return theCallback.GetDataSets();
+  return theCallback.GetResponses();
 }
 
 void ULConnectionManager::SendStore(const File & file, ULConnectionCallback* inCallback)
@@ -835,7 +835,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                   PDUFactory::GetPDVs(currentEvent.GetPDUs()));
               if (inCallback)
                 {
-                inCallback->HandleDataSet(theRSP);
+                inCallback->HandleResponse(theRSP);
                 }
 
               if (theRSP.FindDataElement(Tag(0x0, 0x0900))){

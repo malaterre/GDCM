@@ -3,8 +3,9 @@ set(MEXD_TEST_SRCS
   TestPresentationContextRQ
   TestQueryFactory
   TestULConnectionManager
-  TestServiceClassUser
+  TestServiceClassUser1
   TestServiceClassUser2
+  TestServiceClassUser3
   TestSCUValidation
   TestEcho
   TestFind
@@ -40,8 +41,9 @@ set(GDCM_MEXD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMEXDTests")
 # Loop over files and create executables
 foreach(name ${MEXD_TEST_SRCS})
   if(${name} STREQUAL "TestSCUFunctions"
-      OR ${name} STREQUAL "TestServiceClassUser"
+      OR ${name} STREQUAL "TestServiceClassUser1"
       OR ${name} STREQUAL "TestServiceClassUser2"
+      OR ${name} STREQUAL "TestServiceClassUser3"
       )
     if(GDCM_DICOM_SERVER_AETITLE)
       add_test(${name} ${GDCM_MEXD_TESTS} ${name} ${GDCM_DICOM_CLIENT_AETITLE}

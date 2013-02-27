@@ -36,8 +36,7 @@ namespace gdcm
  *
  * http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=Imager_Pixel_Spacing
  *
- * \bug There currently a couple of bug in this implementation:
- * \li Frame Of Reference UID is not taken into account
+ * \bug There are currently a couple of bugs in this implementation:
  * \li Gantry Tilt is not considered
  */
 class GDCM_EXPORT IPPSorter : public Sorter

@@ -51,6 +51,9 @@ int TestServiceClassUser2(int argc, char *argv[])
   scu.SetCalledAETitle( call.c_str() );
   scu.SetAETitle( aetitle.c_str() );
 
+  std::ostringstream error_log;
+  gdcm::Trace::SetErrorStream( error_log );
+
   if( !scu.InitializeConnection() )
     {
     return 1;
@@ -226,6 +229,8 @@ int TestServiceClassUser2(int argc, char *argv[])
     if( !scu.SendMove(movequery1, data) )
       {
       std::cerr << "CMove Failure for: " << instanceuid << std::endl;
+      std::cerr << "Error log is:" << std::endl;
+      std::cerr << error_log.str() << std::endl;
       return 1;
       }
     if( data.size() != 1 )

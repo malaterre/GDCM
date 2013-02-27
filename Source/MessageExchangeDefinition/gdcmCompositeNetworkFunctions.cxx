@@ -35,6 +35,7 @@
 #include "gdcmProgressEvent.h"
 #include "gdcmQueryFactory.h"
 #include "gdcmULWritingCallback.h"
+#include "gdcmULBasicCallback.h"
 #include "gdcmPresentationContextGenerator.h"
 
 namespace gdcm
@@ -235,12 +236,69 @@ bool CompositeNetworkFunctions::CFind( const char *remote, uint16_t portno,
     return false;
     }
   std::vector<DataSet> theDataSets;
-  theDataSets = theManager.SendFind( query );
-  // Append the new DataSet to the ret one:
-  retDataSets.insert( retDataSets.end(), theDataSets.begin(), theDataSets.end() );
+  std::vector<DataSet> theResponses;
+  //theDataSets = theManager.SendFind( query );
+  network::ULBasicCallback theCallback;
+  theManager.SendFind(query, &theCallback);
+  theDataSets = theCallback.GetDataSets();
+  theResponses = theCallback.GetResponses();
 
+  bool ret = false; // by default an error
+  assert( theResponses.size() >= 1 );
+  // take the last one:
+  const DataSet &ds = theResponses[ theResponses.size() - 1 ]; // FIXME
+  assert ( ds.FindDataElement(Tag(0x0, 0x0900)) );
+  Attribute<0x0,0x0900> at;
+  at.SetFromDataSet( ds );
+
+  //          Table CC.2.8-2
+  //C-FIND RESPONSE STATUS VALUES
+  const uint16_t theVal = at.GetValue();
+  switch( theVal )
+    {
+  case 0x0: // Matching is complete - No final Identifier is supplied.
+    gdcmDebugMacro( "C-Find was successful." );
+    // Append the new DataSet to the ret one:
+    retDataSets.insert( retDataSets.end(), theDataSets.begin(), theDataSets.end() );
+    ret = true;
+    break;
+  case 0xA900: // Identifier Does Not Match SOP Class
+      {
+      Attribute<0x0,0x0901> errormsg;
+      errormsg.SetFromDataSet( ds );
+      gdcm::Tag const & t = errormsg.GetValue();
+      gdcmErrorMacro( "Offending Element: " << t ); (void)t;
+      }
+  case 0xA700: // Refused: Out of Resources
+      {
+      Attribute<0x0,0x0902> errormsg;
+      errormsg.SetFromDataSet( ds );
+      const char *themsg = errormsg.GetValue();
+      assert( themsg ); (void)themsg;
+      gdcmErrorMacro( "Response Status: [" << themsg << "]" );
+      }
+    break;
+  case 0x0122: // SOP Class not Supported
+    gdcmErrorMacro( "SOP Class not Supported" );
+    break;
+  case 0xfe00: // Matching terminated due to Cancel request
+    gdcmErrorMacro( "Matching terminated due to Cancel request" );
+    break;
+  default:
+      {
+      if( theVal >= 0xC000 && theVal <= 0xCFFF ) // Unable to process
+        {
+        Attribute<0x0,0x0902> errormsg;
+        errormsg.SetFromDataSet( ds );
+        const char *themsg = errormsg.GetValue();
+        assert( themsg ); (void)themsg;
+        gdcmErrorMacro( "Response Status: " << themsg );
+        }
+      }
+    }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-  return true;
+
+  return ret;
 }
 
 class MyWatcher : public SimpleSubjectWatcher
@@ -332,7 +390,6 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
       at.SetFromDataElement( de );
       // PS 3.4 - 2011
       // Table W.4-1 C-STORE RESPONSE STATUS VALUES
-      //const uint16_t Success = 0x0000;
       const uint16_t theVal = at.GetValue();
       switch( theVal )
         {
