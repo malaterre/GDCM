@@ -677,6 +677,16 @@ public:
     const ByteValue *bv = de.GetByteValue();
     SetByteValue(bv);
   }
+  void Set(DataSet const &ds) {
+    SetFromDataElement( ds.GetDataElement( GetTag() ) );
+  }
+  void SetFromDataSet(DataSet const &ds) {
+    if( ds.FindDataElement( GetTag() ) &&
+      !ds.GetDataElement( GetTag() ).IsEmpty() )
+      {
+      SetFromDataElement( ds.GetDataElement( GetTag() ) );
+      }
+  }
 protected:
   void SetByteValue(const ByteValue *bv) {
     assert( bv ); // FIXME

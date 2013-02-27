@@ -32,7 +32,7 @@
  * The test also uses the Subject/Observer API for progress report.
  */
 
-int TestServiceClassUser(int argc, char *argv[])
+int TestServiceClassUser1(int argc, char *argv[])
 {
   if( argc < 5 )
     {
@@ -47,7 +47,7 @@ int TestServiceClassUser(int argc, char *argv[])
 
   gdcm::SmartPointer<gdcm::ServiceClassUser> scup = new gdcm::ServiceClassUser;
   gdcm::ServiceClassUser &scu = *scup;
-  gdcm::SimpleSubjectWatcher w( &scu, "TestServiceClassUser" );
+  gdcm::SimpleSubjectWatcher w( &scu, "TestServiceClassUser1" );
 
   scu.SetHostname( remote.c_str() );
   scu.SetPort( portno );
@@ -121,6 +121,9 @@ int TestServiceClassUser(int argc, char *argv[])
   // C-STORE MRImageStorage/JPEGLossless
   if( !scu.SendStore( filename.c_str() ) )
     {
+    std::cerr << "Could not C-Store" << std::endl;
+    std::cerr << "Error log is:" << std::endl;
+    std::cerr << error_log.str() << std::endl;
     return 1;
     }
 
@@ -149,6 +152,9 @@ int TestServiceClassUser(int argc, char *argv[])
   // C-STORE MRImageStorage/LittleEndianImplicit
   if( !scu.SendStore( filename.c_str() ) )
     {
+    std::cerr << "Could not SendStore" << std::endl;
+    std::cerr << "Error log is:" << std::endl;
+    std::cerr << error_log.str() << std::endl;
     return 1;
     }
 

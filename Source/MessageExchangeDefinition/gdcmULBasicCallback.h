@@ -25,23 +25,31 @@
 namespace gdcm 
 {
   namespace network
-  {
-    ///This is the most basic of callbacks for how the ULConnectionManager handles
-    ///incoming datasets.  DataSets are just concatenated to the mDataSets vector,
-    ///and the result can be pulled out of the vector by later code.
-    ///Alternatives to this method include progress updates, saving to disk, etc.
-    ///This class is NOT THREAD SAFE.  Access the dataset vector after the
-    ///entire set of datasets has been returned by the ULConnectionManager.
-    class GDCM_EXPORT ULBasicCallback : public ULConnectionCallback{
-      std::vector<DataSet> mDataSets;
-    public:
-      ULBasicCallback() {};
-      virtual ~ULBasicCallback() {} //empty, for later inheritance
+    {
+    /**
+     * \brief ULBasicCallback
+     * This is the most basic of callbacks for how the ULConnectionManager handles
+     * incoming datasets.  DataSets are just concatenated to the mDataSets vector,
+     * and the result can be pulled out of the vector by later code.
+     * Alternatives to this method include progress updates, saving to disk, etc.
+     * This class is NOT THREAD SAFE.  Access the dataset vector after the
+     * entire set of datasets has been returned by the ULConnectionManager.
+     */
+    class GDCM_EXPORT ULBasicCallback : public ULConnectionCallback
+    {
+    std::vector<DataSet> mDataSets;
+    std::vector<DataSet> mResponses;
+  public:
+    ULBasicCallback() {};
+    virtual ~ULBasicCallback() {} //empty, for later inheritance
 
-      virtual void HandleDataSet(const DataSet& inDataSet);
+    virtual void HandleDataSet(const DataSet& inDataSet);
+    virtual void HandleResponse(const DataSet& inDataSet);
 
-      std::vector<DataSet> const & GetDataSets() const;
+    std::vector<DataSet> const & GetDataSets() const;
+    std::vector<DataSet> const & GetResponses() const;
     };
-  }
-}
-#endif //GDCMULCONNECTIONBASICCALLBACK_H
+    } // end namespace network
+} // end namespace gdcm
+
+#endif // GDCMULCONNECTIONBASICCALLBACK_H

@@ -675,7 +675,7 @@ int main(int argc, char *argv[])
     if( !gdcm::CompositeNetworkFunctions::CFind(hostname, (uint16_t)port, theQuery, theDataSet,
         callingaetitle.c_str(), callaetitle.c_str()) )
       {
-      std::cerr << "Problem in CFind." << std::endl;
+      gdcmDebugMacro( "Problem in CFind." );
       return 1;
       }
 

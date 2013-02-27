@@ -47,7 +47,7 @@ int TestImageFragmentSplitterFunc(const char *filename, bool verbose = false)
     }
   const gdcm::File &file = reader.GetFile();
   const gdcm::FileMetaInformation &header = file.GetHeader();
-  gdcm::MediaStorage ms = header.GetMediaStorage();
+  gdcm::MediaStorage ms = header.GetMediaStorage(); (void)ms;
   if(  header.GetDataSetTransferSyntax() == gdcm::TransferSyntax::ImplicitVRLittleEndian
     || header.GetDataSetTransferSyntax() == gdcm::TransferSyntax::ImplicitVRBigEndianPrivateGE
     || header.GetDataSetTransferSyntax() == gdcm::TransferSyntax::ExplicitVRLittleEndian

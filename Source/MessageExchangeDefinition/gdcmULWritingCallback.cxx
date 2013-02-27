@@ -61,5 +61,9 @@ void ULWritingCallback::HandleDataSet(const DataSet& inDataSet)
   DataSetHandled();
 }
 
+void ULWritingCallback::HandleResponse(const DataSet& )
+{
+}
+
 } // end namespace network
 } // end namespace gdcm
