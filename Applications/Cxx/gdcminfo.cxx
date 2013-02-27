@@ -189,7 +189,7 @@ std::string getInfoDate(Dict *infoDict, const char *key)
   char *s;
   int year, mon, day, hour, min, sec, n;
   struct tm tmStruct;
-  char buf[256];
+  //char buf[256];
   std::string out;
 
   if (infoDict->lookup((char*)key, &obj)->isString())
@@ -414,7 +414,7 @@ int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
     const gdcm::DataSet &ds = file.GetDataSet();
     const gdcm::DataElement& de = ds.GetDataElement( gdcm::Tag(0x42,0x11) );
     const gdcm::ByteValue* bv = de.GetByteValue();
-    const char *p = bv->GetPointer();
+    const char *p = bv->GetPointer(); (void)p;
     Object appearDict;
     //appearDict.initDict(xref);
     //appearDict.dictAdd(copyString("Length"),
