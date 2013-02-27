@@ -86,7 +86,15 @@ public:
 
 int main(int argc, char *argv[])
 {
+  if( argc < 4 )
+    {
+    std::cerr << argv[0] << " remote_server port filename" << std::endl;
+    return 1;
+    }
   QApplication a(argc, argv);
+
+  std::ostringstream error_log;
+  gdcm::Trace::SetErrorStream( error_log );
 
   const char *remote = argv[1];
   int portno = atoi(argv[2]);
@@ -114,6 +122,7 @@ int main(int argc, char *argv[])
 
   if( !scu.InitializeConnection() )
     {
+    std::cerr << "Could not InitializeConnection" << std::endl;
     return 1;
     }
 
@@ -124,6 +133,7 @@ int main(int argc, char *argv[])
   gdcm::PresentationContextGenerator generator;
   if( !generator.GenerateFromFilenames(filenames) )
     {
+    std::cerr << "Could not GenerateFromFilenames" << std::endl;
     return 1;
     }
 
@@ -133,18 +143,23 @@ int main(int argc, char *argv[])
   // Start ASSOCIATION
   if( !scu.StartAssociation() )
     {
+    std::cerr << "Could not Start" << std::endl;
     return 1;
     }
 
   // Send C-STORE
   if( !scu.SendStore( filename ) )
     {
+    std::cerr << "Could not Store" << std::endl;
+    std::cerr << "Error log is:" << std::endl;
+    std::cerr << error_log.str() << std::endl;
     return 1;
     }
 
   // Stop ASSOCIATION
   if( !scu.StopAssociation() )
     {
+    std::cerr << "Could not Stop" << std::endl;
     return 1;
     }
 

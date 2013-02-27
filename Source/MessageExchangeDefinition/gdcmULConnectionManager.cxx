@@ -193,15 +193,27 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
   //no callback, assume that no data is transferred back, because there shouldn't be any
   EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
 
-  if (Trace::GetDebugFlag())
+  if(theState != eSta6TransferReady)
     {
-      vector<BasePDU*> thePDUs = theEvent.GetPDUs();
-      vector<BasePDU*>::iterator itor;
-      for (itor = thePDUs.begin(); itor != thePDUs.end(); itor++)
-        {
-        if (*itor == NULL) continue; //can have a nulled pdu, apparently
-        (*itor)->Print(Trace::GetStream());
-        }
+    std::vector<BasePDU*> const & thePDUs = theEvent.GetPDUs();
+    for( std::vector<BasePDU*>::const_iterator itor
+      = thePDUs.begin(); itor != thePDUs.end(); itor++)
+      {
+      assert(*itor);
+      if (*itor == NULL) continue; //can have a nulled pdu, apparently
+      (*itor)->Print(Trace::GetErrorStream());
+      }
+    }
+  else if (Trace::GetDebugFlag())
+    {
+    std::vector<BasePDU*> const & thePDUs = theEvent.GetPDUs();
+    for( std::vector<BasePDU*>::const_iterator itor
+      = thePDUs.begin(); itor != thePDUs.end(); itor++)
+      {
+      assert(*itor);
+      if (*itor == NULL) continue; //can have a nulled pdu, apparently
+      (*itor)->Print(Trace::GetDebugStream());
+      }
     }
 
   return (theState == eSta6TransferReady);//ie, finished the transitions
@@ -362,8 +374,7 @@ void ULConnectionManager::SendMove(const BaseRootQuery* inRootQuery,
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, inRootQuery );
   ULEvent theEvent(ePDATArequest, theDataPDU);
   EStateID stateid = RunMoveEventLoop(theEvent, inCallback);
-  //assert( stateid == gdcm::network::eSta6TransferReady );
-  (void)stateid;
+  assert( stateid == gdcm::network::eSta6TransferReady ); (void)stateid;
 }
 
 std::vector<DataSet> ULConnectionManager::SendFind(const BaseRootQuery* inRootQuery)
@@ -403,7 +414,8 @@ void ULConnectionManager::SendStore(const File & file, ULConnectionCallback* inC
   this->InvokeEvent( dse );
 
   ULEvent theEvent(ePDATArequest, theDataPDU);
-  RunEventLoop(theEvent, mConnection, inCallback, false);
+  EStateID theState = RunEventLoop(theEvent, mConnection, inCallback, false);
+  assert( theState == eSta6TransferReady ); (void)theState;
 }
 
 bool ULConnectionManager::BreakConnection(const double& inTimeOut){
@@ -532,7 +544,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
             Trace::GetStream() << std::endl;
             }
           if (theRSP.FindDataElement(Tag(0x0, 0x0900))){
-            DataElement de = theRSP.GetDataElement(Tag(0x0,0x0900));
+            DataElement const & de = theRSP.GetDataElement(Tag(0x0,0x0900));
             Attribute<0x0,0x0900> at;
             at.SetFromDataElement( de );
             theVal = at.GetValues()[0];
@@ -544,7 +556,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           }
           uint32_t theCommandCode = 0;
           if (theRSP.FindDataElement(Tag(0x0,0x0100))){
-            DataElement de = theRSP.GetDataElement(Tag(0x0,0x0100));
+            DataElement const & de = theRSP.GetDataElement(Tag(0x0,0x0100));
             Attribute<0x0,0x0100> at;
             at.SetFromDataElement( de );
             theCommandCode = at.GetValues()[0];
@@ -793,7 +805,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
         catch (...)
           {
           //handle the exception, which is basically that nothing came in over the pipe.
-          assert( 0 );
+          gdcmAssertAlwaysMacro( 0 );
           }
       }
       //now, we have to figure out the event that just happened based on the PDU that was received.
@@ -821,6 +833,11 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
               DataSet theRSP =
                 PresentationDataValue::ConcatenatePDVBlobs(
                   PDUFactory::GetPDVs(currentEvent.GetPDUs()));
+              if (inCallback)
+                {
+                inCallback->HandleDataSet(theRSP);
+                }
+
               if (theRSP.FindDataElement(Tag(0x0, 0x0900))){
                 DataElement de = theRSP.GetDataElement(Tag(0x0,0x0900));
                 Attribute<0x0,0x0900> at;

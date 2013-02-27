@@ -141,6 +141,17 @@ bool ServiceClassUser::StartAssociation()
 
   ULEvent theEvent(eAASSOCIATERequestLocalUser, NULL);
   network::EStateID theState = RunEventLoop(theEvent, Internals->mConnection, NULL, false);
+  if(theState != eSta6TransferReady)
+    {
+    std::vector<BasePDU*> const & thePDUs = theEvent.GetPDUs();
+    for( std::vector<BasePDU*>::const_iterator itor
+      = thePDUs.begin(); itor != thePDUs.end(); itor++)
+      {
+      assert(*itor);
+      if (*itor == NULL) continue; //can have a nulled pdu, apparently
+      (*itor)->Print(Trace::GetErrorStream());
+      }
+    }
 
   return theState == eSta6TransferReady;
 }
@@ -255,17 +266,49 @@ bool ServiceClassUser::SendStore(File const &file)
     return false;
     }
 
-  //const DataSet* inDataSet = &file.GetDataSet();
-  //DataSetEvent dse( inDataSet );
-  //this->InvokeEvent( dse );
-
   network::ULBasicCallback theCallback;
   network::ULConnectionCallback* inCallback = &theCallback;
 
   ULEvent theEvent(ePDATArequest, theDataPDU);
-  RunEventLoop(theEvent, mConnection, inCallback, false);
+  EStateID stateid = RunEventLoop(theEvent, mConnection, inCallback, false);
+  assert( stateid == eSta6TransferReady ); (void)stateid;
+  std::vector<DataSet> const &theDataSets = theCallback.GetDataSets();
 
-  return true;
+  bool ret = true;
+  assert( theDataSets.size() == 1 );
+  const DataSet &ds = theDataSets[0];
+  assert ( ds.FindDataElement(Tag(0x0, 0x0900)) );
+  DataElement const & de = ds.GetDataElement(Tag(0x0,0x0900));
+  Attribute<0x0,0x0900> at;
+  at.SetFromDataElement( de );
+  // PS 3.4 - 2011
+  // Table W.4-1 C-STORE RESPONSE STATUS VALUES
+  const uint16_t theVal = at.GetValue();
+  switch( theVal )
+    {
+  case 0x0:
+    gdcmDebugMacro( "C-Store of file was successful." );
+    break;
+  case 0xA700:
+  case 0xA900:
+  case 0xC000:
+      {
+      // TODO: value from 0901 ?
+      gdcmErrorMacro( "C-Store of file was a failure." );
+      Attribute<0x0,0x0902> errormsg;
+      errormsg.SetFromDataSet( ds );
+      const char *themsg = errormsg.GetValue();
+      assert( themsg );
+      gdcmErrorMacro( "Response Status: " << themsg );
+      ret = false; // at least one file was not sent correctly
+      }
+    break;
+  default:
+    gdcmErrorMacro( "Unhandle error code: " << theVal );
+    gdcmAssertAlwaysMacro( 0 );
+    }
+
+  return ret;
 }
 
 bool ServiceClassUser::SendFind(const BaseRootQuery* query, std::vector<DataSet> &retDataSets)
@@ -461,6 +504,11 @@ EStateID ServiceClassUser::RunEventLoop(network::ULEvent& currentEvent,
               DataSet theRSP =
                 PresentationDataValue::ConcatenatePDVBlobs(
                   PDUFactory::GetPDVs(currentEvent.GetPDUs()));
+              if (inCallback)
+                {
+                inCallback->HandleDataSet(theRSP);
+                }
+
               if (theRSP.FindDataElement(Tag(0x0, 0x0900))){
                 DataElement de = theRSP.GetDataElement(Tag(0x0,0x0900));
                 Attribute<0x0,0x0900> at;

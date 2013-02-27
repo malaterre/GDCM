@@ -49,7 +49,7 @@ class ULEvent {
       }
 
     public:
-      ULEvent(const EEventID& inEventID, std::vector<BasePDU*> inBasePDU){
+      ULEvent(const EEventID& inEventID, std::vector<BasePDU*> const & inBasePDU){
         mEvent = inEventID;
         mBasePDU = inBasePDU;
       }
@@ -62,10 +62,10 @@ class ULEvent {
       }
 
       EEventID GetEvent() const { return mEvent; }
-      std::vector<BasePDU*> GetPDUs() const { return mBasePDU; }
+      std::vector<BasePDU*> const & GetPDUs() const { return mBasePDU; }
 
       void SetEvent(const EEventID& inEvent) { mEvent = inEvent; }
-      void SetPDU(std::vector<BasePDU*> inPDU) {
+      void SetPDU(std::vector<BasePDU*> const & inPDU) {
         DeletePDUVector();
         mBasePDU = inPDU;
       }
