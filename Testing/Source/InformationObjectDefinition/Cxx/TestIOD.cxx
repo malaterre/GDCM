@@ -47,7 +47,7 @@ int TestIOD(int, char *[])
       for(; dictit != pubdict.End(); ++dictit)
         {
         const gdcm::Tag &tag = dictit->first;
-        gdcm::Type t = iod.GetTypeFromTag(defs, tag);
+        gdcm::Type t = iod.GetTypeFromTag(defs, tag); (void)t;
         //std::cout << t << std::endl;
         }
       }

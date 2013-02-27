@@ -312,7 +312,7 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
       {
       const std::string & filename = files[i];
       fn = filename.c_str();
-      assert( fn && *fn );
+      assert( fn && *fn ); (void)fn;
       Reader reader;
       reader.SetFileName( filename.c_str() );
       gdcmDebugMacro( "Processing: " << filename );
@@ -348,7 +348,7 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
           Attribute<0x0,0x0902> errormsg;
           errormsg.SetFromDataSet( ds );
           const char *themsg = errormsg.GetValue();
-          assert( themsg );
+          assert( themsg ); (void)themsg;
           gdcmErrorMacro( "Response Status: " << themsg );
           ret = false; // at least one file was not sent correctly
           }

@@ -70,7 +70,7 @@ bool SHA1::Compute(const char *buffer, unsigned long buf_len, char digest[])
 #else
   (void)buffer;
   (void)buf_len;
-  digest = 0;
+  (void)digest;
   return false;
 #endif
 }
@@ -137,7 +137,7 @@ bool SHA1::ComputeFile(const char *filename, char digest_str[20*2+1])
   return true;
 #else
   (void)filename;
-  digest_str = 0;
+  (void)digest_str;
   return false;
 #endif
 }

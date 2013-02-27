@@ -562,7 +562,7 @@ int main (int argc, char *argv[])
       {
     case 0:
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {
@@ -617,7 +617,7 @@ int main (int argc, char *argv[])
             {
             assert( strcmp(s, "tile") == 0 );
             size_t n = readvector(tilesize, optarg);
-            assert( n == 2 );
+            assert( n == 2 ); (void)n;
             }
           else if( option_index == 45 ) /* number of resolution */
             {

@@ -29,7 +29,7 @@ bool WriteIconAsPNM(const char* filename, const gdcm::IconImage& icon)
   pnm.SetLUT( icon.GetLUT() );
   const gdcm::DataElement& in = icon.GetDataElement();
   bool b = pnm.Write( filename, in );
-  assert( b );
+  assert( b ); (void)b;
   return true;
 }
 

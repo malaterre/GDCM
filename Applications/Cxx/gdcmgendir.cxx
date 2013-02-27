@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
     case 0:
     case '-':
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {
@@ -319,7 +319,7 @@ int main(int argc, char *argv[])
   if( gdcm::System::FileIsDirectory(filename.c_str()) )
     {
     gdcm::Directory dir;
-    nfiles = dir.Load(filename, recursive!= 0);
+    nfiles = dir.Load(filename, recursive!= 0); (void)nfiles;
     filenames = dir.GetFilenames();
     gen.SetRootDirectory( filename );
     }

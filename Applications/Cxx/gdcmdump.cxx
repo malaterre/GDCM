@@ -137,7 +137,7 @@ void printbinary(std::istream &is, PDFElement const & pdfel )
   uint32_t type = pdfel.gettype();
   uint32_t numels = pdfel.getnumelems();
   uint32_t dummy = pdfel.getdummy();
-  assert( dummy == 0 );
+  assert( dummy == 0 ); (void)dummy;
   uint32_t offset = pdfel.getoffset();
   uint32_t pos = (uint32_t)(offset + is.tellg() - 4);
   printvalue(is, type, numels, pos);
@@ -345,7 +345,7 @@ bool ProcessData( const char *buf, size_t len )
 {
   Data2 data2;
   size_t s = sizeof(data2);
-  assert( len >= s);
+  assert( len >= s); (void)len;
   // VIMDATA2 is generally 2048 bytes, while s = 1786
   // the end is filled with \0 bytes
   memcpy(&data2, buf, s);
@@ -890,7 +890,7 @@ int main (int argc, char *argv[])
     case 0:
     case '-':
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {
