@@ -605,12 +605,12 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
             if (theRSP.FindDataElement(Tag(0x0,0x0901))){
               DataElement de = theRSP.GetDataElement(Tag(0x0,0x0901));
               err1 = de.GetByteValue();
-              gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl);
+              gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl); (void)err1;
             }
             if (theRSP.FindDataElement(Tag(0x0,0x0902))){
               DataElement de = theRSP.GetDataElement(Tag(0x0,0x0902));
               err2 = de.GetByteValue();
-              gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl);
+              gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl); (void)err2;
             }
           }
           receivingData = false;
@@ -893,12 +893,12 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                 if (theRSP.FindDataElement(Tag(0x0,0x0901))){
                   DataElement de = theRSP.GetDataElement(Tag(0x0,0x0901));
                   err1 = de.GetByteValue();
-                  gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl);
+                  gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl); (void)err1;
                 }
                 if (theRSP.FindDataElement(Tag(0x0,0x0902))){
                   DataElement de = theRSP.GetDataElement(Tag(0x0,0x0902));
                   err2 = de.GetByteValue();
-                  gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl);
+                  gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl); (void)err2;
                 }
               }
 

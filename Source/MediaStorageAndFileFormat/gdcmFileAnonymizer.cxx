@@ -87,14 +87,14 @@ void FileAnonymizer::Replace( Tag const &t, const char *value )
   if( t.GetGroup() >= 0x0008 )
     {
     Internals->ReplaceTags.insert(
-      std::make_pair<Tag,std::string>( t, value) );
+      std::make_pair( t, value) );
     }
 }
 
 void FileAnonymizer::Replace( Tag const &t, const char *value, VL const & vl )
 {
   Internals->ReplaceTags.insert(
-    std::make_pair<Tag,std::string>( t, std::string(value,vl) ) );
+    std::make_pair( t, std::string(value,vl) ) );
 }
 
 void FileAnonymizer::SetInputFileName(const char *filename_native)

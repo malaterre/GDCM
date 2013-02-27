@@ -332,14 +332,14 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
     // If you reach here this is basically because GDCM does not support encoding other
     // than raw transfer syntx (Little Endian Explicit/Implicit...)
     theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-    gdcmErrorMacro( "C-Store of file " << fn << " was unsuccessful, aborting. " )
+    gdcmErrorMacro( "C-Store of file " << fn << " was unsuccessful, aborting. " ); (void)fn;
     gdcmErrorMacro( "Error was " << e.what() );
     return false;
     }
   catch (...)
     {
     theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-    gdcmErrorMacro( "C-Store of file " << fn << " was unsuccessful, aborting. " )
+    gdcmErrorMacro( "C-Store of file " << fn << " was unsuccessful, aborting. " );
     return false;
     }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
