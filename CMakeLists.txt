@@ -657,7 +657,7 @@ if(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_PACKAGE_CONTACT ${GDCM_PACKAGE_CONTACT})
   set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6, libstdc++6 (>= 4.0.2-4), libuuid1, zlib1g (>= 1:1.2.1), libgcc1 (>= 1:4.0.2), libexpat1, swig") # bug: missing dep to python...
   set(CPACK_DEBIAN_PACKAGE_SUGGESTS "dcmtk")
-  set(CPACK_SOURCE_IGNORE_FILES "/\\\\.gitmodules" "/\\\\.git/" "TODO" "/Testing/Data/")
+  set(CPACK_SOURCE_IGNORE_FILES "/\\\\.gitmodules" "/\\\\.git/" "/\\\\.gitignore" "TODO" "/Testing/Data/")
   set(CPACK_IGNORE_FILES ${CPACK_SOURCE_IGNORE_FILES})
 
   # List executables
