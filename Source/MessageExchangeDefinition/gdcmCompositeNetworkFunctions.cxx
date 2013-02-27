@@ -305,13 +305,14 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
     }
 
   const char *fn = ""; // FIXME
+  bool ret = true; // by default no error
   try
     {
     for( size_t i = 0; i < files.size(); ++i )
       {
       const std::string & filename = files[i];
       fn = filename.c_str();
-      assert( fn && *fn );
+      assert( fn && *fn ); (void)fn;
       Reader reader;
       reader.SetFileName( filename.c_str() );
       gdcmDebugMacro( "Processing: " << filename );
@@ -321,9 +322,42 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
         return false;
         }
       const File &file = reader.GetFile();
-      theManager.SendStore( file );
+      std::vector<DataSet> theDataSets;
+      theDataSets = theManager.SendStore( file );
+      assert( theDataSets.size() == 1 );
+      const DataSet &ds = theDataSets[0];
+      assert ( ds.FindDataElement(Tag(0x0, 0x0900)) );
+      DataElement const & de = ds.GetDataElement(Tag(0x0,0x0900));
+      Attribute<0x0,0x0900> at;
+      at.SetFromDataElement( de );
+      // PS 3.4 - 2011
+      // Table W.4-1 C-STORE RESPONSE STATUS VALUES
+      //const uint16_t Success = 0x0000;
+      const uint16_t theVal = at.GetValue();
+      switch( theVal )
+        {
+      case 0x0:
+        gdcmDebugMacro( "C-Store of file " << filename << " was successful." );
+        break;
+      case 0xA700:
+      case 0xA900:
+      case 0xC000:
+          {
+          // TODO: value from 0901 ?
+          gdcmErrorMacro( "C-Store of file " << filename << " was a failure." );
+          Attribute<0x0,0x0902> errormsg;
+          errormsg.SetFromDataSet( ds );
+          const char *themsg = errormsg.GetValue();
+          assert( themsg ); (void)themsg;
+          gdcmErrorMacro( "Response Status: " << themsg );
+          ret = false; // at least one file was not sent correctly
+          }
+        break;
+      default:
+        gdcmErrorMacro( "Unhandle error code: " << theVal );
+        gdcmAssertAlwaysMacro( 0 );
+        }
       theManager.InvokeEvent( IterationEvent() );
-      gdcmDebugMacro( "C-Store of file " << filename << " was successful." );
       }
     }
   catch ( Exception &e )
@@ -343,7 +377,7 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
     return false;
     }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-  return true;
+  return ret;
 }
 
 } // end namespace gdcm

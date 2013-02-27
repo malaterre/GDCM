@@ -315,6 +315,12 @@ $ gdcmscu --find --patient --patientroot dicom.example.com 11112 --key 10,10="*J
 The query is always executed on the server side (SCP), some implementations
 does not support string matching with different Character Set.
 
+\section public_servers DICOM Public Servers
+
+An up to date list of DICOM Public Servers can be found at:
+
+http://www.dclunie.com/medical-image-faq/html/part8.html#DICOMPublicServers
+
 \section see_also SEE ALSO
 
 <b>gdcmconv</b>(1)

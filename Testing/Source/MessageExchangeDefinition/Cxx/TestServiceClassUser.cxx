@@ -55,6 +55,9 @@ int TestServiceClassUser(int argc, char *argv[])
   scu.SetCalledAETitle( call.c_str() );
   scu.SetAETitle( aetitle.c_str() );
 
+  std::ostringstream error_log;
+  gdcm::Trace::SetErrorStream( error_log );
+
   if( !scu.InitializeConnection() )
     {
     return 1;
@@ -76,12 +79,18 @@ int TestServiceClassUser(int argc, char *argv[])
 
   if( !scu.StartAssociation() )
     {
+    std::cerr << "Could not StartAssociation" << std::endl;
+    std::cerr << "Error log is:" << std::endl;
+    std::cerr << error_log.str() << std::endl;
     return 1;
     }
 
   // C-ECHO
   if( !scu.SendEcho() )
     {
+    std::cerr << "Could not Echo" << std::endl;
+    std::cerr << "Error log is:" << std::endl;
+    std::cerr << error_log.str() << std::endl;
     return 1;
     }
 
