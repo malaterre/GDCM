@@ -60,8 +60,8 @@ public:
   const char *GetCalledAETitle() const;
 
   /// set/get Timeout
-  void SetTimeout(time_t t);
-  time_t GetTimeout() const;
+  void SetTimeout(double t);
+  double GetTimeout() const;
 
   /// Will try to connect
   /// This will setup the actual timeout used during the whole connection time. Need to call
