@@ -431,7 +431,7 @@ void Curve::GetAsPoints(float *array) const
     }
   assert( Internal->Dimensions == 1 || Internal->Dimensions == 2 );
 
-  int mult = Internal->Dimensions;
+  const int mult = Internal->Dimensions;
   int genidx = -1;
   if( !Internal->CurveDataDescriptor.empty() )
     {
@@ -452,8 +452,22 @@ void Curve::GetAsPoints(float *array) const
       assert( 0 && "TODO" );
       }
     }
+  const char * beg = &Internal->Data[0];
+  const char * end = beg + Internal->Data.size();
+  if( genidx == -1 )
+    {
+    assert( end == beg + 2 * Internal->NumberOfPoints ); (void)beg;(void)end;
+    }
+  else
+    {
+    assert( end == beg + mult * Internal->NumberOfPoints ); (void)beg;(void)end;
+    }
+
+
   if( Internal->DataValueRepresentation == 0 )
     {
+    // PS 3.3 - 2004
+    // C.10.2.1.5 Curve data descriptor, coordinate start value, coordinate step value
     uint16_t * p = (uint16_t*)&Internal->Data[0];
     // X
     if( genidx == 0 )
@@ -461,19 +475,19 @@ void Curve::GetAsPoints(float *array) const
         array[3*i+0] = ComputeValueFromStartAndStep( i );
     else
       for(int i = 0; i < Internal->NumberOfPoints; i++ )
-        array[3*i+0] = p[mult*i + 0];
+        array[3*i+0] = p[i + 0];
     // Y
     if( genidx == 1 )
       for(int i = 0; i < Internal->NumberOfPoints; i++ )
         array[3*i+1] = ComputeValueFromStartAndStep( i );
     else
       {
-      if( mult > 1 && genidx == -1 )
+      if( mult == 2 && genidx == -1 )
         for(int i = 0; i < Internal->NumberOfPoints; i++ )
-          array[3*i+1] = p[mult*i + 1];
-      else if( mult > 1 )
+          array[3*i+1] = p[i + 1];
+      else if( mult == 2 && genidx == 0 )
         for(int i = 0; i < Internal->NumberOfPoints; i++ )
-          array[3*i+1] = p[mult*i + 0];
+          array[3*i+1] = p[i + 0];
       else
         for(int i = 0; i < Internal->NumberOfPoints; i++ )
           array[3*i+1] = 0;
