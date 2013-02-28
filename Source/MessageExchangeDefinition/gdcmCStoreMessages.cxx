@@ -64,7 +64,7 @@ const DataSet* inDataSet = &file.GetDataSet();
   MediaStorage mst;
   if (!mst.SetFromDataSet(*inDataSet))
     {
-    assert( 0 );
+    throw Exception("Missing MediaStorage");
     }
   UIDs uid;
   uid.SetFromUID( MediaStorage::GetMSString(mst) );

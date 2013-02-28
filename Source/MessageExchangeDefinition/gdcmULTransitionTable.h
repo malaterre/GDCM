@@ -61,7 +61,20 @@ class ULEvent;
     //don't need to store the event; that's implicitly defined in the Table itself by location
     class TableRow{
     public:
-      Transition transitions[cMaxStateID];
+      TableRow() {
+        for(int stateIndex = 0; stateIndex < cMaxStateID; ++stateIndex)
+          {
+          transitions[stateIndex] = NULL;
+          }
+      }
+      ~TableRow() {
+        for(int stateIndex = 0; stateIndex < cMaxStateID; ++stateIndex)
+          {
+          Transition *t = transitions[stateIndex];
+          delete t;
+          }
+       }
+      Transition *transitions[cMaxStateID];
 
       //copy constructor for stl additions into the transition table below.
     };

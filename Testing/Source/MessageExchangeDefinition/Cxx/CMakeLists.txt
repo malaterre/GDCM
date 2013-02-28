@@ -9,6 +9,7 @@ set(MEXD_TEST_SRCS
   TestSCUValidation
   TestEcho
   TestFind
+  TestULTransitionTable
   )
 if(GDCM_DATA_ROOT)
   set(MEXD_TEST_SRCS

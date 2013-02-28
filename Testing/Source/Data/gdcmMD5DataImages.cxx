@@ -679,6 +679,9 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "d40e2d27988f0c546b0daeb67fcbfba8" , "i32.XADC.7.215MegaBytes.dcm" },
 { "c383b244fd43cb0a9db764b71cb59741" , "1.3.46.670589.7.5.10.80002138018.20001204.181556.9.1.1.dcm" },
 
+{ "f111ed4eea73f535261039d3f7b112e9" , "JPEGInvalidSecondFrag.dcm" },
+
+
 /* Stopping condition */
 { 0 ,0 }
 };
