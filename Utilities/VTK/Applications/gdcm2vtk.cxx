@@ -394,6 +394,11 @@ int main(int argc, char *argv[])
       }
     }
 
+  if( !names->GetNumberOfValues() )
+    {
+    std::cerr << "Missing parameters on the command line" << std::endl;
+    return 1;
+    }
   const char *filename = names->GetValue( 0 ).c_str();
 
   gdcm::ImageHelper::SetForceRescaleInterceptSlope(forcerescale);
