@@ -28,7 +28,8 @@ static int TestImageRegionRead(const char* filename, bool verbose = false)
   // DMCPACS_ExplicitImplicit_BogusIOP.dcm is very difficult to handle since
   // we need to read 3 attribute to detect the "well known" bug. However the third
   // attribute is (b500,b700) which make ReadUpToTag(7fe0,0010) fails...
-  if( strcmp(fn.GetName(), "DMCPACS_ExplicitImplicit_BogusIOP.dcm" ) == 0 )
+  if( strcmp(fn.GetName(), "DMCPACS_ExplicitImplicit_BogusIOP.dcm" ) == 0
+    || strcmp(fn.GetName(), "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm" ) == 0 ) // bogus JPEG cannot be streamed
     {
     std::cerr << "Skipping impossible file" << std::endl;
     return 0;

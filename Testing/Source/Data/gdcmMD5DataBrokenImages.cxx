@@ -90,6 +90,9 @@ static const char * const gdcmMD5DataBrokenImages[][2] = {
 // Item length are bogus (explicit length)
 { "1225ea0a03b93393f70c73be35e2619d" , "PhilipsInteraSeqTermInvLen.dcm" },
 
+// Two Items in a single Frame JPEG compressed DICOM image:
+{ "cd00658f54dbd2d2a9d02d64c6f6497e" , "JPEGInvalidSecondFrag.dcm" },
+
 { 0 ,0 }
 };
 

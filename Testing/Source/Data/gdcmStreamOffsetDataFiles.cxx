@@ -222,6 +222,7 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "TOSHIBA_J2K_SIZ0_PixRep1.dcm", 2346  },
 { "NM-PAL-16-PixRep1.dcm", 4444 },
 { "MEDILABInvalidCP246_EVRLESQasUN.dcm", 19174 },
+{ "JPEGInvalidSecondFrag.dcm", 4800 },
 
 
 /* Stopping condition */
