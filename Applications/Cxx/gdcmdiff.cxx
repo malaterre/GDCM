@@ -119,7 +119,7 @@ void difference_of_datasets(const gdcm::DataSet& ds1, const gdcm::DataSet& ds2, 
     gdcm::Tag tag= (tag1<tag2) ? tag1 : tag2 ;
     // get VR for tag
     const gdcm::Dicts &dicts = gdcm::Global::GetInstance().GetDicts();
-    const gdcm::DictEntry &dictentry = dicts.GetDictEntry(tag,'\0');
+    const gdcm::DictEntry &dictentry = dicts.GetDictEntry(tag);
     // check for tags that are only in one of the files
     if (!ds1.FindDataElement(tag))
       {
