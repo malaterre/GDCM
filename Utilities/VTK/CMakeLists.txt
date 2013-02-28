@@ -1,8 +1,6 @@
 project(vtkgdcm)
 # We need VTK
 # Technically we require VTK 5.0 and above
-find_package(VTK REQUIRED)
-mark_as_advanced(VTK_DIR)
 
 # Define the src for the vtk-gdcm bridge
 set(vtkgdcm_SRCS
