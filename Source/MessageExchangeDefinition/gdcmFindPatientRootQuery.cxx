@@ -94,7 +94,12 @@ bool FindPatientRootQuery::ValidateQuery(bool inStrict) const
 {
   //if it's empty, it's not useful
   const DataSet &ds = GetQueryDataSet();
-  if (ds.Size() == 0) return false;
+  if (ds.Size() == 0)
+    {
+    if (inStrict)
+      gdcmWarningMacro( "Empty DataSet in ValidateQuery" );
+    return false;
+    }
 
   //search for 0x8,0x52
   Attribute<0x0008, 0x0052> level;
@@ -128,6 +133,7 @@ bool FindPatientRootQuery::ValidateQuery(bool inStrict) const
       }
     if (qb == NULL)
       {
+      gdcmWarningMacro( "Invalid Level" );
       return false;
       }
     tags = qb->GetAllTags(ePatientRootType);
@@ -197,6 +203,7 @@ bool FindPatientRootQuery::ValidateQuery(bool inStrict) const
       }
     if (tags.empty())
       {
+      gdcmWarningMacro( "Invalid Level" );
       return false;
       }
     }
@@ -224,7 +231,7 @@ bool FindPatientRootQuery::ValidateQuery(bool inStrict) const
         //check to see if it's a language tag, 8,5, and if it is, ignore if it's one
         //of the possible language tag values
         //well, for now, just allow it if it's present.
-        gdcmDebugMacro( "You have an extra tag: " << t );
+        gdcmWarningMacro( "You have an extra tag: " << t );
         theReturn = false;
         break;
         }
