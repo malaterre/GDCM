@@ -56,7 +56,7 @@ std::vector<Tag> QueryImage::GetOptionalTags(const ERootType& ) const
 
 DataElement QueryImage::GetQueryLevel() const
 {
-  const std::string theValue = "IMAGE";
+  const std::string theValue = "IMAGE ";
   DataElement de;
   de.SetTag(Tag(0x0008,0x0052));
   de.SetByteValue(theValue.c_str(), (uint32_t)theValue.length());
