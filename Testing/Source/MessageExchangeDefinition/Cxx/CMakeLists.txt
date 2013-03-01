@@ -9,7 +9,7 @@ SET(MEXD_TEST_SRCS
   TestSCUValidation
   TestEcho
   TestFind
-  TestULTransitionTable
+  #TestULTransitionTable # symbols are not exported, mainly used for debugging
   )
 IF(GDCM_DATA_ROOT)
   SET(MEXD_TEST_SRCS
