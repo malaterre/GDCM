@@ -170,7 +170,7 @@ bool FileAnonymizer::ComputeReplaceTagPosition()
         pe.BeginPos -= de.GetVL();
         pe.BeginPos -= 2 * de.GetVR().GetLength(); // (VR+) VL
         pe.BeginPos -= 4; // Tag
-        assert( pe.EndPos ==
+        assert( (int)pe.EndPos ==
           (int)pe.BeginPos + (int)de.GetVL() + 2 * de.GetVR().GetLength() + 4 );
         }
       pe.DE.SetByteValue( valuereplace.c_str(), valuereplace.size() );
