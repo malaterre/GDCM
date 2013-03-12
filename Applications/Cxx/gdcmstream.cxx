@@ -892,7 +892,7 @@ int main (int argc, char *argv[])
       {
     case 0:
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name;(void)s;
 
         //printf ("option %s", s);
         if (optarg)
@@ -929,14 +929,14 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "roi-start") == 0 );
             tile = 1;
             unsigned int n = readvector(start, optarg);
-            assert( n == 2 );
+            assert( n == 2 ); (void)n;
             }
           else if( option_index == 11 ) /* tile */
             {
             assert( strcmp(s, "roi-end") == 0 );
             tile = 1;
             unsigned int n = readvector(end, optarg);
-            assert( n == 2 );
+            assert( n == 2 ); (void)n;
             }
 
           //printf ("\n");

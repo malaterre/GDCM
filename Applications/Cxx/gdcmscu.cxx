@@ -566,7 +566,7 @@ int main(int argc, char *argv[])
     if (seriesquery)
       theLevel = gdcm::eSeries;
     if (imagequery)
-      theLevel = gdcm::eImageOrFrame;
+      theLevel = gdcm::eImage;
 
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys, true);
@@ -633,7 +633,7 @@ int main(int argc, char *argv[])
     if (seriesquery)
       theLevel = gdcm::eSeries;
     if (imagequery)
-      theLevel = gdcm::eImageOrFrame;
+      theLevel = gdcm::eImage;
 
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
