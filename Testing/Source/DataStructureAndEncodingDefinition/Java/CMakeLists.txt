@@ -15,7 +15,7 @@ set(classfilesdep)
 FOREACH(example ${GDCM_JAVA_TEST_SRCS})
   ADD_CUSTOM_COMMAND(
     OUTPUT ${EXECUTABLE_OUTPUT_PATH}/${example}.class
-    COMMAND ${Java_JAVAC_EXECUTABLE} ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java -d ${EXECUTABLE_OUTPUT_PATH} -classpath ${LIBRARY_OUTPUT_PATH}/gdcm.jar
+    COMMAND ${Java_JAVAC_EXECUTABLE} ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java -d ${EXECUTABLE_OUTPUT_PATH} -source 1.5 -classpath ${LIBRARY_OUTPUT_PATH}/gdcm.jar
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java
     COMMENT "javac ${example}.java"

@@ -49,5 +49,10 @@ void BitmapToBitmapFilter::SetInput(const Bitmap& image)
     }
 }
 
+const Bitmap &BitmapToBitmapFilter::GetOutputAsBitmap() const
+{
+  return *Output;
+}
+
 
 } // end namespace gdcm

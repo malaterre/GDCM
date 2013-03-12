@@ -21,6 +21,7 @@ SET(CSHARP_EXAMPLES
   ReformatFile
   CompressLossyJPEG
   SendFileSCU
+  BasicImageAnonymizer
   )
 
 IF(BUILD_TESTING)

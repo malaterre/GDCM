@@ -11,13 +11,14 @@ set(classfilesdep)
 set(examples
   HelloSimple
   DecompressPixmap
+  DecompressImage
   ScanDirectory
   ReadFiles
   )
 FOREACH(example ${examples})
   ADD_CUSTOM_COMMAND(
     OUTPUT ${EXECUTABLE_OUTPUT_PATH}/${example}.class
-    COMMAND ${Java_JAVAC_EXECUTABLE} ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java -d ${EXECUTABLE_OUTPUT_PATH} -classpath ${LIBRARY_OUTPUT_PATH}/gdcm.jar
+    COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -source 1.5 ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java -d ${EXECUTABLE_OUTPUT_PATH} -classpath ${LIBRARY_OUTPUT_PATH}/gdcm.jar
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java
     COMMENT "javac ${example}.java"
