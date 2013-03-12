@@ -15,43 +15,70 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
-filename: gdcmQuerySeries.cxx
-contains: class to construct a series-based query for c-find and c-move
-name and date: 15 oct 2010 mmr
 
-//note that at the series and image levels, there is no distinction between the root query types.
-*/
+//note that at the series and image levels, there is no distinction between
+//the root query types.
 
 #include "gdcmQuerySeries.h"
+#include "gdcmQueryPatient.h"
+#include "gdcmQueryStudy.h"
+#include "gdcmAttribute.h"
 
-namespace gdcm{
+namespace gdcm
+{
 
-std::vector<Tag> QuerySeries::GetRequiredTags(const ERootType& ) const{
+std::vector<Tag> QuerySeries::GetRequiredTags(const ERootType& ) const
+{
   std::vector<Tag> theReturn;//see 3.4 C.6.1.1.4
   theReturn.push_back(Tag(0x0008, 0x0060));
   theReturn.push_back(Tag(0x0020, 0x0011));
   return theReturn;
 }
-std::vector<Tag> QuerySeries::GetUniqueTags(const ERootType& ) const{
+
+std::vector<Tag> QuerySeries::GetUniqueTags(const ERootType& ) const
+{
   std::vector<Tag> theReturn;//see 3.4 C.6.1.1.4
   theReturn.push_back(Tag(0x0020, 0x000E));
 
   return theReturn;
-
 }
-std::vector<Tag> QuerySeries::GetOptionalTags(const ERootType& ) const{
+
+std::vector<Tag> QuerySeries::GetOptionalTags(const ERootType& ) const
+{
   std::vector<Tag> theReturn;//see 3.4 C.6.1.1.4
   theReturn.push_back(Tag(0x0020, 0x1209));
   return theReturn;
 }
 
-DataElement QuerySeries::GetQueryLevel() const{
-  std::string theValue = "SERIES";
-  DataElement de;
-  de.SetTag(Tag(0x0008,0x0052));
-  de.SetByteValue(theValue.c_str(), (uint32_t)theValue.length());
-  return de;
+std::vector<Tag> QuerySeries::GetHierachicalSearchTags(const ERootType& inRootType) const
+{
+  std::vector<Tag> tags;
+  if( inRootType == ePatientRootType )
+    {
+    QueryPatient qp;
+    tags = qp.GetUniqueTags(inRootType);
+    }
+  // add study level
+  QueryStudy qs;
+  std::vector<Tag> qstags = qs.GetUniqueTags(inRootType);
+  tags.insert(tags.end(), qstags.begin(), qstags.end());
+  // add series level
+  std::vector<Tag> utags = GetUniqueTags(inRootType);
+  tags.insert(tags.end(), utags.begin(), utags.end());
+  return tags;
+}
+
+DataElement QuerySeries::GetQueryLevel() const
+{
+  const Attribute<0x0008, 0x0052> level = { "SERIES" };
+  return level.GetAsDataElement();
+}
+
+static const char QuerySeriesString[] = "Series";
+
+const char * QuerySeries::GetName() const
+{
+  return QuerySeriesString;
 }
 
 }

@@ -151,7 +151,7 @@ int TestServiceClassUser2(int argc, char *argv[])
 
   gdcm::SmartPointer<gdcm::BaseRootQuery> findquery =
     gdcm::CompositeNetworkFunctions::ConstructQuery(
-      gdcm::ePatientRootType, gdcm::eImageOrFrame, findds);
+      gdcm::ePatientRootType, gdcm::eImage, findds);
 
   // make sure the query is valid
   if (!findquery->ValidateQuery(false))
@@ -198,7 +198,7 @@ int TestServiceClassUser2(int argc, char *argv[])
 
   gdcm::SmartPointer<gdcm::BaseRootQuery> movequery1 =
     gdcm::CompositeNetworkFunctions::ConstructQuery(
-      gdcm::ePatientRootType, gdcm::eImageOrFrame, moveds1, true);
+      gdcm::ePatientRootType, gdcm::eImage, moveds1, true);
 
   // Generate the PresentationContext array from the query UID:
   if( !generator.GenerateFromUID( movequery1->GetAbstractSyntaxUID() ) )

@@ -102,7 +102,7 @@ int TestServiceClassUser3(int argc, char *argv[])
 
   gdcm::SmartPointer<gdcm::BaseRootQuery> findquery =
     gdcm::CompositeNetworkFunctions::ConstructQuery(
-      gdcm::ePatientRootType, gdcm::eImageOrFrame, findds);
+      gdcm::ePatientRootType, gdcm::eImage, findds);
 
   // make sure the query is valid
   findquery->Print( std::cout );

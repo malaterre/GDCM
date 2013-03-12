@@ -29,13 +29,13 @@ namespace gdcm
  */
 class GDCM_EXPORT QueryImage : public QueryBase
 {
-  DataSet mCurrentQuery;
 public:
   std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;
   std::vector<Tag> GetUniqueTags(const ERootType& inRootType) const;
   std::vector<Tag> GetOptionalTags(const ERootType& inRootType) const;
+  std::vector<Tag> GetHierachicalSearchTags(const ERootType& inRootType) const;
 
-  std::string GetName() const { return "Composite Object Instance (Image)"; }
+  const char * GetName() const;
 
   DataElement GetQueryLevel() const;
 };

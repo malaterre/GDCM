@@ -13,6 +13,7 @@
 =========================================================================*/
 #include "gdcmFindPatientRootQuery.h"
 #include "gdcmAttribute.h"
+#include <algorithm>
 
 namespace gdcm
 {
@@ -50,7 +51,7 @@ void FindPatientRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel)
       Attribute<0x20, 0xd> Studylevel = { "" };
       mDataSet.Insert( Studylevel.GetAsDataElement() );
       }
-  case eImageOrFrame:
+  case eImage:
       {
       Attribute<0x8,0x52> at1 = { "IMAGE " };
       mDataSet.Insert( at1.GetAsDataElement() );
@@ -79,7 +80,7 @@ std::vector<Tag> FindPatientRootQuery::GetTagListByLevel(const EQueryLevel& inQu
   case eSeries:
 //  default:
     return mSeries.GetAllTags(ePatientRootType);
-  case eImageOrFrame:
+  case eImage:
     return mImage.GetAllTags(ePatientRootType);
   default: //have to return _something_ if a query level isn't given
 	  assert(0);
