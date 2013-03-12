@@ -21,7 +21,7 @@ set(classfilesdep)
 foreach(example ${VTKGDCM_JAVA_TEST_SRCS})
   add_custom_command(
     OUTPUT ${EXECUTABLE_OUTPUT_PATH}/${example}.class
-    COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -classpath "${classpath}"
+    COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -source 1.5 -classpath "${classpath}"
     ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java -d ${EXECUTABLE_OUTPUT_PATH}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java

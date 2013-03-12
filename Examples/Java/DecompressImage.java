@@ -17,20 +17,20 @@
  * as ImplicitVRLittleEndian Transfer Syntax).
  *
  * Compilation:
- * $ CLASSPATH=gdcm.jar javac ../../gdcm/Examples/Java/DecompressPixmap.java -d .
+ * $ CLASSPATH=gdcm.jar javac ../../gdcm/Examples/Java/DecompressImage.java -d .
  *
  * Usage:
- * $ LD_LIBRARY_PATH=. CLASSPATH=gdcm.jar:. java DecompressPixmap gdcmData/012345.002.050.dcm out.dcm
+ * $ LD_LIBRARY_PATH=. CLASSPATH=gdcm.jar:. java DecompressImage gdcmData/012345.002.050.dcm out.dcm
  */
 import gdcm.*;
 
-public class DecompressPixmap
+public class DecompressImage
 {
   public static void main(String[] args) throws Exception
     {
     String file1 = args[0];
     String file2 = args[1];
-    PixmapReader reader = new PixmapReader();
+    ImageReader reader = new ImageReader();
     reader.SetFileName( file1 );
     boolean ret = reader.Read();
     if( !ret )
@@ -40,25 +40,22 @@ public class DecompressPixmap
 
     ImageChangeTransferSyntax change = new ImageChangeTransferSyntax();
     change.SetTransferSyntax( new TransferSyntax(TransferSyntax.TSType.ImplicitVRLittleEndian) );
-    PixmapToPixmapFilter filter = (PixmapToPixmapFilter)change;
-    filter.SetInput( reader.GetPixmap() );
+    change.SetInput( reader.GetImage() );
     if( !change.Change() )
       {
       throw new Exception("Could not change: " + file1 );
       }
 
-    // The following does not work in Java/swig 2.0.7
-    //Pixmap p = ((PixmapToPixmapFilter)change).GetOutput();
-    Pixmap p = change.GetOutputAsPixmap();  // be explicit
-    //System.out.println( p.toString() );
+    Image out = change.GetOutput();
+    System.out.println( out.toString() );
 
     // Set the Source Application Entity Title
     FileMetaInformation.SetSourceApplicationEntityTitle( "Just For Fun" );
 
-    PixmapWriter writer = new PixmapWriter();
+    ImageWriter writer = new ImageWriter();
     writer.SetFileName( file2 );
     writer.SetFile( reader.GetFile() );
-    writer.SetImage( p );
+    writer.SetImage( out );
     ret = writer.Write();
     if( !ret )
       {

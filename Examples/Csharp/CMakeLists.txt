@@ -23,6 +23,7 @@ set(CSHARP_EXAMPLES
   SendFileSCU
   MpegVideoInfo
   FileAnonymize
+  BasicImageAnonymizer
   )
 
 if(BUILD_TESTING)

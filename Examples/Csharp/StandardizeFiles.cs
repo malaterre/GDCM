@@ -54,9 +54,7 @@ public class StandardizeFiles
     PixmapWriter writer = new PixmapWriter();
     writer.SetFileName( outfilename );
     writer.SetFile( reader.GetFile() );
-    gdcm.Bitmap bitout = change.GetOutput();
-    gdcm.Pixmap pixout = (gdcm.Pixmap)bitout;
-    //System.Console.WriteLine( "Debug: " + pixout.toString() );
+    gdcm.Pixmap pixout = ((PixmapToPixmapFilter)change).GetOutput();
 
     writer.SetPixmap( pixout );
     if( !writer.Write() )
