@@ -180,7 +180,7 @@ bool FindPatientRootQuery::ValidateQuery(bool inStrict) const
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
       }
-    else if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME ") == 0)
+    else if (strcmp(theVal.c_str(), "IMAGE ") == 0 )
       {
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       std::vector<Tag> tagGroup;

@@ -94,7 +94,7 @@ std::vector<Tag> MovePatientRootQuery::GetTagListByLevel(const EQueryLevel& inQu
 bool MovePatientRootQuery::ValidateQuery(bool inStrict) const
 {
   //if it's empty, it's not useful
-  DataSet ds = GetQueryDataSet();
+  const DataSet &ds = GetQueryDataSet();
   if (ds.Size() == 0)
     {
     if (inStrict)
@@ -105,39 +105,37 @@ bool MovePatientRootQuery::ValidateQuery(bool inStrict) const
   // search for 0x8,0x52
   Attribute<0x0008, 0x0052> level;
   level.SetFromDataSet( ds );
-  std::string theVal = level.GetValue();
+  const std::string theVal = level.GetValue();
+  const int ilevel = BaseRootQuery::GetQueryLevelFromString( theVal.c_str() );
+  if( ilevel == -1 )
+    {
+    gdcmWarningMacro( "Invalid Level" );
+    return false;
+    }
+
   bool theReturn = true;
 
-  std::vector<Tag> tags;
+  // requirement is that tag should belong to { opttags U requiredtags } && at
+  // least one tag from { requiredtags }
+  std::vector<Tag> tags; // Optional+Required (at same level)
+  std::vector<Tag> hiertags; // Unique + Unique level above (Hierarchical Search)
+
   if (inStrict)
     {
-    QueryBase* qb = NULL;
-    if (strcmp(theVal.c_str(), "PATIENT ") == 0)
-      {
-      //make sure remaining tags are somewhere in the list of required, unique, or optional tags
-      qb = new QueryPatient();
-      }
-    else if (strcmp(theVal.c_str(), "STUDY ") == 0)
-      {
-      //make sure remaining tags are somewhere in the list of required, unique, or optional tags
-      qb = new QueryStudy();
-      }
-    else if (strcmp(theVal.c_str(), "SERIES") == 0)
-      {
-      //make sure remaining tags are somewhere in the list of required, unique, or optional tags
-      qb = new QuerySeries();
-      }
-    else if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME ") == 0)
-      {
-      //make sure remaining tags are somewhere in the list of required, unique, or optional tags
-      qb = new QueryImage();
-      }
+    QueryBase* qb = BaseRootQuery::Construct( ePatientRootType, (EQueryLevel)ilevel );
     if (qb == NULL)
       {
-      gdcmWarningMacro( "Invalid Level" );
+      gdcmWarningMacro( "Invalid Query" );
       return false;
       }
-    tags = qb->GetUniqueTags(ePatientRootType);
+
+    std::vector<Tag> opttags = qb->GetOptionalTags(ePatientRootType);
+    tags.insert( tags.begin(), opttags.begin(), opttags.end() );
+    std::vector<Tag> reqtags = qb->GetRequiredTags(ePatientRootType);
+    tags.insert( tags.begin(), reqtags.begin(), reqtags.end() );
+    hiertags = qb->GetHierachicalSearchTags(ePatientRootType);
+    tags.insert( tags.begin(), hiertags.begin(), hiertags.end() );
+    delete qb;
     }
   else //include all previous levels (ie, series gets study and patient, image gets series, study, and patient)
     {
@@ -181,7 +179,7 @@ bool MovePatientRootQuery::ValidateQuery(bool inStrict) const
       tags.insert(tags.end(), tagGroup.begin(), tagGroup.end());
       delete qb;
       }
-    else if (strcmp(theVal.c_str(), "IMAGE ") == 0 || strcmp(theVal.c_str(), "FRAME ") == 0)
+    else if (strcmp(theVal.c_str(), "IMAGE ") == 0)
       {
       //make sure remaining tags are somewhere in the list of required, unique, or optional tags
       std::vector<Tag> tagGroup;
@@ -215,12 +213,11 @@ bool MovePatientRootQuery::ValidateQuery(bool inStrict) const
   //so, have two counts: 1 for tags that are found, 1 for tags that are not
   //if there are no found tags, then the query is invalid
   //if there is one improper tag found, then the query is invalid
-  int thePresentTagCount = 1;
   DataSet::ConstIterator itor;
   Attribute<0x0008, 0x0005> language;
   if( inStrict )
     {
-    thePresentTagCount = 0;
+    unsigned int thePresentTagCount = 0;
     for (itor = ds.Begin(); itor != ds.End(); itor++)
       {
       const Tag &t = itor->GetTag();
@@ -238,11 +235,25 @@ bool MovePatientRootQuery::ValidateQuery(bool inStrict) const
         }
       else
         {
-        thePresentTagCount++;
+        // Ok this tags is in Unique/Required or Optional, need to check
+        // if it is in Required/Unique now:
+        //std::copy( hiertags.begin(), hiertags.end(),
+        //  std::ostream_iterator<gdcm::Tag>( std::cout, "," ) );
+        if (std::find(hiertags.begin(), hiertags.end(), t) !=
+          hiertags.end())
+          {
+          gdcmDebugMacro( "Found at least one key: " << t );
+          thePresentTagCount++;
+          }
         }
       }
+    if( thePresentTagCount != hiertags.size() )
+      {
+      gdcmWarningMacro( "Missing Key found (within the hierachical search ones)" );
+      theReturn = false;
+      }
     }
-  return theReturn && (thePresentTagCount > 0);
+  return theReturn;
 }
 
 UIDs::TSName MovePatientRootQuery::GetAbstractSyntaxUID() const
