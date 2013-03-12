@@ -87,13 +87,14 @@ void FileAnonymizer::Replace( Tag const &t, const char *value )
   if( t.GetGroup() >= 0x0008 )
     {
     Internals->ReplaceTags.insert(
-      std::make_pair<Tag,std::string>( t, value) );
+      std::make_pair( t, value) );
     }
 }
 
 void FileAnonymizer::Replace( Tag const &t, const char *value, VL const & vl )
 {
-  Internals->ReplaceTags.insert( std::make_pair<Tag,std::string>( t, std::string(value,vl) ) );
+  Internals->ReplaceTags.insert(
+    std::make_pair( t, std::string(value,vl) ) );
 }
 
 void FileAnonymizer::SetInputFileName(const char *filename_native)
@@ -169,7 +170,7 @@ bool FileAnonymizer::ComputeReplaceTagPosition()
         pe.BeginPos -= de.GetVL();
         pe.BeginPos -= 2 * de.GetVR().GetLength(); // (VR+) VL
         pe.BeginPos -= 4; // Tag
-        assert( pe.EndPos ==
+        assert( (int)pe.EndPos ==
           (int)pe.BeginPos + (int)de.GetVL() + 2 * de.GetVR().GetLength() + 4 );
         }
       pe.DE.SetByteValue( valuereplace.c_str(), valuereplace.size() );
