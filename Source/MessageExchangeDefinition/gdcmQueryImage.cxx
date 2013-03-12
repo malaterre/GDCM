@@ -23,6 +23,10 @@ root query types.
  */
 
 #include "gdcmQueryImage.h"
+#include "gdcmQueryPatient.h"
+#include "gdcmQueryStudy.h"
+#include "gdcmQuerySeries.h"
+#include "gdcmAttribute.h"
 
 namespace gdcm
 {
@@ -54,13 +58,38 @@ std::vector<Tag> QueryImage::GetOptionalTags(const ERootType& ) const
   return theReturn;
 }
 
+std::vector<Tag> QueryImage::GetHierachicalSearchTags(const ERootType& inRootType) const
+{
+  std::vector<Tag> tags;
+  if( inRootType == ePatientRootType )
+    {
+    QueryPatient qp;
+    tags = qp.GetUniqueTags(inRootType);
+    }
+  // add study level
+  QueryStudy qst;
+  std::vector<Tag> qsttags = qst.GetUniqueTags(inRootType);
+  tags.insert(tags.end(), qsttags.begin(), qsttags.end());
+  // add series level
+  QuerySeries qse;
+  std::vector<Tag> qsetags = qse.GetUniqueTags(inRootType);
+  tags.insert(tags.end(), qsetags.begin(), qsetags.end());
+  // add image level
+  std::vector<Tag> utags = GetUniqueTags(inRootType);
+  tags.insert(tags.end(), utags.begin(), utags.end());
+  return tags;
+}
+
 DataElement QueryImage::GetQueryLevel() const
 {
-  const std::string theValue = "IMAGE ";
-  DataElement de;
-  de.SetTag(Tag(0x0008,0x0052));
-  de.SetByteValue(theValue.c_str(), (uint32_t)theValue.length());
-  return de;
+  const Attribute<0x0008, 0x0052> level = { "IMAGE " };
+  return level.GetAsDataElement();
+}
+
+static const char QueryImageString[] = "Composite Object Instance (Image)";
+const char *QueryImage::GetName() const
+{
+  return QueryImageString;
 }
 
 }

@@ -10,6 +10,8 @@ set(MEXD_TEST_SRCS
   TestEcho
   TestFind
   #TestULTransitionTable # symbols are not exported, mainly used for debugging
+  TestFindStudyRootQuery
+  TestFindPatientRootQuery
   )
 if(GDCM_DATA_ROOT)
   set(MEXD_TEST_SRCS

@@ -113,7 +113,7 @@ std::vector<gdcm::DataSet> GetImageInfo(const char *patientID,
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::BaseRootQuery* theQuery =
-    gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eFind, gdcm::eImageOrFrame);
+    gdcm::QueryFactory::ProduceQuery(gdcm::eStudyRootType, gdcm::eFind, gdcm::eImage);
   theQuery->SetSearchParameter(gdcm::Tag(0x8, 0x52), "SERIES"); //Query/Retrieval Level
 
   theQuery->SetSearchParameter(gdcm::Tag(0x10,0x20), patientID); //Patient ID

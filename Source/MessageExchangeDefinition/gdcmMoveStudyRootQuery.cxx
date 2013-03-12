@@ -15,6 +15,7 @@
 
 #include "gdcmAttribute.h"
 #include "gdcmDataSet.h"
+#include <algorithm>
 
 namespace gdcm
 {
@@ -44,7 +45,7 @@ void MoveStudyRootQuery::InitializeDataSet(const EQueryLevel& inQueryLevel)
       }
   default:
     break;
-  case eImageOrFrame:
+  case eImage:
       {
       Attribute<0x8,0x52> at1 = { "IMAGE " };
       mDataSet.Insert( at1.GetAsDataElement() );
@@ -70,7 +71,7 @@ std::vector<Tag> MoveStudyRootQuery::GetTagListByLevel(const EQueryLevel& inQuer
   case eSeries:
 //  default:
     return mSeries.GetUniqueTags(eStudyRootType);
-  case eImageOrFrame:
+  case eImage:
     return mImage.GetUniqueTags(eStudyRootType);
   default: //have to return _something_ if a query level isn't given
 	  assert(0);
