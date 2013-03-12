@@ -73,6 +73,7 @@ class GDCM_EXPORT QueryBase
     // Query/Retrieve level. No Required or Optional Keys shall be
     // specified which are associated with levels above the Query/Retrieve
     // level.
+    /// Return all Unique Key for a particular Query Root type (from the same level and above).
     virtual std::vector<Tag> GetHierachicalSearchTags(const ERootType& inRootType) const = 0;
 
     /// In order to validate a query dataset, just check for the presence
