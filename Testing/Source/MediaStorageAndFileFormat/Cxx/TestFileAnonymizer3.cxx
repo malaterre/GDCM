@@ -35,16 +35,16 @@ static int TestFileAnonymize3(const char *filename, bool verbose = false)
     }
   std::string outfilename = Testing::GetTempFilename( filename, subdir );
 
-  gdcm::Tag t1(0x0018,0x5100);
-  gdcm::Tag t2(0x0018,0x1312);
-  gdcm::Tag t3(0x0018,0x1313);
-  gdcm::Tag t4(0x0018,0x1317);
-  //gdcm::Tag t5(0x0008,0x2112); // SQ
-  //gdcm::Tag t6(0x0008,0x9215); // SQ
-  gdcm::Tag t7(0x0018,0x1020);
-  gdcm::Tag t8(0x0004,0x1130); // Test DICOMDIR !
-  gdcm::Tag t9(0x0008,0x0000); // Earliest possible Data Element
-  gdcm::Tag t0(0xffff,0xffff); // Latest Possible Element
+  const gdcm::Tag t1(0x0018,0x5100);
+  const gdcm::Tag t2(0x0018,0x1312);
+  const gdcm::Tag t3(0x0018,0x1313);
+  const gdcm::Tag t4(0x0018,0x1317);
+  //const gdcm::Tag t5(0x0008,0x2112); // SQ
+  //const gdcm::Tag t6(0x0008,0x9215); // SQ
+  const gdcm::Tag t7(0x0018,0x1020);
+  const gdcm::Tag t8(0x0004,0x1130); // Test DICOMDIR !
+  const gdcm::Tag t9(0x0008,0x0000); // Earliest possible Data Element
+  const gdcm::Tag t0(0xffff,0xffff); // Latest Possible Element
 
   std::vector<gdcm::Tag> tags;
   tags.push_back( t0 );
@@ -75,22 +75,36 @@ static int TestFileAnonymize3(const char *filename, bool verbose = false)
   r.SetFileName( outfilename.c_str() );
   if( !r.Read() )
     {
+    std::cerr << "Failed to read: " << outfilename << std::endl;
     return 1;
     }
   const File &f = r.GetFile();
+  gdcm::MediaStorage ms;
+  ms.SetFromFile( f );
+
   const DataSet &ds = f.GetDataSet();
   for( std::vector<gdcm::Tag>::const_iterator it = tags.begin();
     it != tags.end(); ++it )
     {
     const gdcm::Tag & t = *it;
+    // Special handling of t8 (DICOMDIR only)
+    const bool iserror = (ms == gdcm::MediaStorage::MediaStorageDirectoryStorage && t == t8);
     if( !ds.FindDataElement( t ) )
       {
-      return 1;
+      if( iserror )
+        {
+        std::cerr << "Found element: " << t << " in " << outfilename << std::endl;
+        return 1;
+        }
       }
     const gdcm::DataElement & de = ds.GetDataElement( t );
     if( de.GetVL() != 4 )
       {
-      return 1;
+      if( iserror )
+        {
+        std::cerr << "Wrong VL for: " << t << " in " << outfilename << std::endl;
+        return 1;
+        }
       }
     }
 

@@ -33,16 +33,16 @@ int TestFileAnonymize1(const char *filename, bool verbose = false)
     }
   std::string outfilename = Testing::GetTempFilename( filename, subdir );
 
-  gdcm::Tag t1(0x0018,0x5100);
-  gdcm::Tag t2(0x0018,0x1312);
-  gdcm::Tag t3(0x0018,0x1313);
-  gdcm::Tag t4(0x0018,0x1317);
-  gdcm::Tag t5(0x0008,0x2112);
-  gdcm::Tag t6(0x0008,0x9215);
-  gdcm::Tag t7(0x0018,0x1020);
-  gdcm::Tag t8(0x0004,0x1130); // Test DICOMDIR !
-  gdcm::Tag t9(0x0008,0x0000); // Earliest possible Data Element
-  gdcm::Tag t0(0xffff,0xffff); // Latest Possible Element
+  const gdcm::Tag t1(0x0018,0x5100);
+  const gdcm::Tag t2(0x0018,0x1312);
+  const gdcm::Tag t3(0x0018,0x1313);
+  const gdcm::Tag t4(0x0018,0x1317);
+  const gdcm::Tag t5(0x0008,0x2112);
+  const gdcm::Tag t6(0x0008,0x9215);
+  const gdcm::Tag t7(0x0018,0x1020);
+  const gdcm::Tag t8(0x0004,0x1130); // Test DICOMDIR !
+  const gdcm::Tag t9(0x0008,0x0000); // Earliest possible Data Element
+  const gdcm::Tag t0(0xffff,0xffff); // Latest Possible Element
 
   std::vector<gdcm::Tag> tags;
   tags.push_back( t0 );
@@ -75,6 +75,7 @@ int TestFileAnonymize1(const char *filename, bool verbose = false)
   r.SetFileName( outfilename.c_str() );
   if( !r.Read() )
     {
+    std::cerr << "Failed to read: " << outfilename << std::endl;
     return 1;
     }
   const File &f = r.GetFile();
@@ -85,6 +86,7 @@ int TestFileAnonymize1(const char *filename, bool verbose = false)
     const gdcm::Tag & t = *it;
     if( ds.FindDataElement( t ) )
       {
+      std::cerr << "Found element: " << t << " in " << outfilename << std::endl;
       return 1;
       }
     }
