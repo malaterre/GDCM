@@ -293,7 +293,7 @@ QueryBase * BaseRootQuery::Construct( ERootType inRootType, EQueryLevel qlevel )
 
 EQueryLevel BaseRootQuery::GetQueryLevelFromQueryRoot( ERootType roottype )
 {
-  EQueryLevel level;
+  EQueryLevel level = ePatient;
   switch( roottype )
     {
   case ePatientRootType:
