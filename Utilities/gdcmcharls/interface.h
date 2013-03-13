@@ -14,7 +14,11 @@
 #endif
 #else
 #ifndef CHARLS_IMEXPORT 
+#if __GNUC__ >= 4
+#define CHARLS_IMEXPORT(returntype) __attribute__ ((visibility ("default"))) returntype
+#else
 #define CHARLS_IMEXPORT(returntype) returntype
+#endif
 #endif
 #endif /* _WIN32 */
 
