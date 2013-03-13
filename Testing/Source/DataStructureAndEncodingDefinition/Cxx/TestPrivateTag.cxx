@@ -43,7 +43,7 @@ int TestPrivateTag(int , char * [])
     }
 
   const gdcm::PrivateTag pt1(0x1,0x2,"BLA");
-  const char str0[] = {};
+  const char str0[] = "";
   const char str1[] = "1,2,BLA";
   const char str2[] = "1,65536,BLU";
   const char str3[] = "65536,2,BLU";
