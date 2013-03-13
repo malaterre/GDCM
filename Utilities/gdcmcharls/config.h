@@ -9,7 +9,6 @@
 #ifdef NDEBUG
 #  ifndef ASSERT
 #    define ASSERT(t) { }
-#    define assert(t) { }
 #  endif
 #else
 #include <assert.h>
