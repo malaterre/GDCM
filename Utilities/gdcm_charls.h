@@ -26,7 +26,7 @@
 # include <CharLS/streams.h>
 # include <CharLS/processline.h>
 #else
-#include "gdcmcharls/stdafx.h"
+#include "gdcmcharls/header.h"
 #include "gdcmcharls/interface.h"
 #include "gdcmcharls/util.h"
 #include "gdcmcharls/defaulttraits.h"

@@ -96,11 +96,7 @@ int main(int argc, char *argv[])
       totalLen--;
       }
 
-#ifdef GDCM_USE_SYSTEM_CHARLS
     JlsParameters metadata;
-#else
-    JlsParamaters metadata;
-#endif
     if (JpegLsReadHeader(buffer, totalLen, &metadata) != OK)
       {
       std::cerr << "Cant parse jpegls" << std::endl;
@@ -189,11 +185,7 @@ int main(int argc, char *argv[])
     const char *pbyteCompressed = &vbuffer[0];
     size_t cbyteCompressed = vbuffer.size(); // updated legnth
 
-#ifdef GDCM_USE_SYSTEM_CHARLS
     JlsParameters params;
-#else
-    JlsParamaters params;
-#endif
     JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
     std::vector<BYTE> rgbyteOut;
@@ -201,13 +193,8 @@ int main(int argc, char *argv[])
     rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7)
         / 8) * params.components);
 
-#ifdef GDCM_USE_SYSTEM_CHARLS
     JLS_ERROR result =
       JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params );
-#else
-    JLS_ERROR result =
-      JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed );
-#endif
     if (result != OK)
       {
       std::cerr << "Could not patch JAI-JPEGLS" << std::endl;
