@@ -130,6 +130,8 @@ static void PrintHelp()
   std::cout << "     --sign %s         Pixel sign (0/1)." << std::endl;
   std::cout << "     --spp  %d         Sample Per Pixel (1/3)." << std::endl;
   std::cout << "     --pc [01]         Change planar configuration." << std::endl;
+  std::cout << "     --pi [str]        Change photometric interpretation." << std::endl;
+  std::cout << "     --pf %d,%d,%d     Change pixel format: (BA,BS,HB)." << std::endl;
   std::cout << "  -s --size %d,%d      Size." << std::endl;
   std::cout << "  -C --sop-class-uid   SOP Class UID (name or value)." << std::endl;
   std::cout << "  -T --study-uid       Study UID." << std::endl;
@@ -414,6 +416,10 @@ int main (int argc, char *argv[])
   std::string sopclass;
   std::string lsb_msb;
   int sopclassuid = 0;
+  int pinter = 0;
+  std::string pinterstr;
+  int pformat = 0;
+  std::string pformatstr;
 
   int verbose = 0;
   int warning = 0;
@@ -445,6 +451,8 @@ int main (int argc, char *argv[])
         {"sign", 1, &sign, 1}, //
         {"spp", 1, &spp, 1}, //
         {"pc", 1, &pconf, 1}, //
+        {"pi", 1, &pinter, 1}, //
+        {"pf", 1, &pformat, 1}, //
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -540,6 +548,18 @@ int main (int argc, char *argv[])
             {
             assert( strcmp(s, "pc") == 0 );
             pconf = atoi(optarg);
+            }
+          else if( option_index == 14 ) /* pinter */
+            {
+            assert( strcmp(s, "pi") == 0 );
+            pinter = 1;
+            pinterstr = optarg;
+            }
+          else if( option_index == 15 ) /* pformat */
+            {
+            assert( strcmp(s, "pf") == 0 );
+            pformat = 1;
+            pformatstr = optarg;
             }
           //printf (" with arg %s", optarg);
           }
@@ -754,6 +774,31 @@ int main (int argc, char *argv[])
     {
     if( pixelspp != 3 ) return 1;
     }
+  gdcm::PixelFormat pfref = gdcm::PixelFormat::UINT8;
+  if( pformat )
+    {
+    int ba, bs, hb;
+    int n = sscanf( pformatstr.c_str(), "%d,%d,%d", &ba, &bs, &hb );
+    if( n != 3 ) return 1;
+    pfref.SetBitsAllocated( ba );
+    pfref.SetBitsStored( bs );
+    pfref.SetHighBit( hb );
+    if( spp )
+      pfref.SetSamplesPerPixel( pixelspp );
+    if( sign )
+      pfref.SetPixelRepresentation( pixelsign );
+    }
+  gdcm::PhotometricInterpretation::PIType refpi = gdcm::PhotometricInterpretation::MONOCHROME2;
+  if( pinter )
+    {
+    refpi = gdcm::PhotometricInterpretation::GetPIType( pinterstr.c_str() );
+    if( refpi == gdcm::PhotometricInterpretation::UNKNOW
+      || refpi == gdcm::PhotometricInterpretation::PI_END )
+      {
+      std::cerr << "Invalid PI: " << pinterstr << std::endl;
+      return 1;
+      }
+    }
 
   const char *inputextension = filename.GetExtension();
   const char *outputextension = outfilename.GetExtension();
@@ -783,7 +828,7 @@ int main (int argc, char *argv[])
         }
       raw.SetDimensions( dims );
       gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
-      gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+      gdcm::PhotometricInterpretation pi = refpi;
       if( gdcm::System::StrCaseCmp(inputextension,".rgb") == 0 )
         {
         pi = gdcm::PhotometricInterpretation::RGB;
@@ -846,7 +891,7 @@ int main (int argc, char *argv[])
       gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
       if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign ) ) return 1;
       rle.SetPixelFormat( pf );
-      gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+      gdcm::PhotometricInterpretation pi = refpi;
       rle.SetPhotometricInterpretation( pi );
 
       if( !Populate( writer, rle, filenames ) ) return 1;
@@ -866,8 +911,22 @@ int main (int argc, char *argv[])
       || gdcm::System::StrCaseCmp(inputextension,".ppm") == 0 )
       {
       gdcm::PNMCodec pnm;
+      // Let's handle the case where user really wants to specify the data:
+      gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
+      if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign ) ) return 1;
+
       gdcm::PixmapWriter writer;
       if( !Populate( writer, pnm, filenames ) ) return 1;
+      // populate will guess pixel format and photometric inter from file, need
+      // to override after calling Populate:
+      if( pformat )
+        {
+        writer.GetPixmap().SetPixelFormat( pfref );
+        }
+      if( pinter )
+        {
+        writer.GetPixmap().SetPhotometricInterpretation( refpi );
+        }
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );
