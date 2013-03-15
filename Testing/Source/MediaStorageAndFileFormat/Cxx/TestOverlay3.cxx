@@ -17,26 +17,29 @@
 #include "gdcmSystem.h"
 #include "gdcmFilename.h"
 
+using namespace gdcm;
+
 struct ovel
 {
   const char *md5;
   const char *fn;
   unsigned int idx;
+  Overlay::OverlayType type;
 };
 
 static const ovel overlay3array[] = {
 // gdcmData
-    {"d42bff3545ed8c5fccb39d9a61828992", "MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm", 0 },
-    {"2cf60257b75a034fbdc98e560881184e", "PHILIPS_Brilliance_ExtraBytesInOverlay.dcm", 0 },
-    {"b2dd1007e018b3b9691761cf93f77552", "05115014-mr-siemens-avanto-syngo-with-palette-icone.dcm", 0 },
-    {"d42bff3545ed8c5fccb39d9a61828992", "MR-SIEMENS-DICOM-WithOverlays.dcm", 0 },
+    {"d42bff3545ed8c5fccb39d9a61828992", "MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm", 0, Overlay::Graphics },
+    {"2cf60257b75a034fbdc98e560881184e", "PHILIPS_Brilliance_ExtraBytesInOverlay.dcm", 0, Overlay::Graphics  },
+    {"b2dd1007e018b3b9691761cf93f77552", "05115014-mr-siemens-avanto-syngo-with-palette-icone.dcm", 0, Overlay::Graphics  },
+    {"d42bff3545ed8c5fccb39d9a61828992", "MR-SIEMENS-DICOM-WithOverlays.dcm", 0, Overlay::Graphics  },
 // gdcmDataExtra
-    {"4b0240033afba211eeac42a44417d4c9", "05119848_IS_Black_hasOverlayData.dcm", 0 },
-    {"349d1f9510f64467ecf73eeea46c9c6e", "45909476", 0 },
-    {"6a5f8038cc8cf753bf74422164adc24c", "45909517", 0 },
-    {"1a3bf73e42b0f6dc282a9be59c054027", "OverlayDICOMDataSet.dcm", 0 },
+    {"4b0240033afba211eeac42a44417d4c9", "05119848_IS_Black_hasOverlayData.dcm", 0, Overlay::Graphics  },
+    {"349d1f9510f64467ecf73eeea46c9c6e", "45909476", 0, Overlay::Graphics  },
+    {"6a5f8038cc8cf753bf74422164adc24c", "45909517", 0, Overlay::Graphics  },
+    {"1a3bf73e42b0f6dc282a9be59c054027", "OverlayDICOMDataSet.dcm", 0, Overlay::Graphics  },
 // gdcmConformanceTests
-    {"040560796c1a53ffce0d2f7e90c9dc26", "CT_OSIRIX_OddOverlay.dcm", 0 },
+    {"040560796c1a53ffce0d2f7e90c9dc26", "CT_OSIRIX_OddOverlay.dcm", 0, Overlay::Graphics  },
   // random
 //    {"f7e43de189a1bc08044c13aefac73fed", "1.dcm", 0 },
 //    {"e7859c818f26202fb63a2b205ff16297", "1.dcm", 1 },
@@ -44,7 +47,7 @@ static const ovel overlay3array[] = {
 //    {"31d58476326722793379fbcda55a4856", "0.dcm", 1 },
 
     // sentinel
-    { 0, 0, 0 }
+    { 0, 0, 0, Overlay::Invalid }
 };
 
 static int TestReadOverlay(const char* filename, bool verbose = false)
@@ -81,6 +84,7 @@ static int TestReadOverlay(const char* filename, bool verbose = false)
         }
       std::stringstream overlay2;
       ov.Decompress(overlay2);
+      Overlay::OverlayType type = ov.GetTypeAsEnum();
       const std::string soverlay2 = overlay2.str();
       if( soverlay2.size() != len )
         {
@@ -95,6 +99,7 @@ static int TestReadOverlay(const char* filename, bool verbose = false)
         ++ret;
         }
 
+      Overlay::OverlayType reftype = Overlay::Invalid;
       const char *refmd5 = NULL;
         {
         unsigned int i = 0;
@@ -111,6 +116,7 @@ static int TestReadOverlay(const char* filename, bool verbose = false)
           idx = overlay3array[i].idx;
           }
         refmd5 = overlay3array[i].md5;
+        reftype = overlay3array[i].type;
         }
 
       if( !refmd5 )
@@ -129,6 +135,13 @@ static int TestReadOverlay(const char* filename, bool verbose = false)
         {
         std::cerr << "strcmp/1/2: Problem with Overlay: #" << ovidx << std::endl;
         std::cerr << "digest1: " << digest1 << " vs " << digest2 << std::endl;
+        ++ret;
+        }
+      if( reftype != type )
+        {
+        std::cerr << "OverlayType: Problem with Overlay: #" << ovidx << std::endl;
+        std::cerr << "reftype: " << (int)reftype << " vs " << (int)type << std::endl;
+        std::cerr << name << std::endl;
         ++ret;
         }
       }

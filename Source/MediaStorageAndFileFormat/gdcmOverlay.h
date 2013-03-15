@@ -64,10 +64,18 @@ public:
   void SetDescription(const char* description);
   /// get description
   const char *GetDescription() const;
+  typedef enum {
+    Invalid  = 0,
+    Graphics = 1,
+    ROI      = 2
+  } OverlayType;
   /// set type
   void SetType(const char* type);
   /// get type
   const char *GetType() const;
+  OverlayType GetTypeAsEnum() const;
+  static const char *GetOverlayTypeAsString(OverlayType ot);
+  static OverlayType GetOverlayTypeFromString(const char *);
   /// set origin
   void SetOrigin(const signed short origin[2]);
   /// get origin
