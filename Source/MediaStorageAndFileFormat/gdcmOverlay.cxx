@@ -308,6 +308,47 @@ void Overlay::SetDescription(const char* description) { if( description ) Intern
 const char *Overlay::GetDescription() const { return Internal->Description.c_str(); }
 void Overlay::SetType(const char* type) { if( type ) Internal->Type = type; }
 const char *Overlay::GetType() const { return Internal->Type.c_str(); }
+static const char *OverlayTypeStrings[] = {
+  "INVALID",
+  "G ",
+  "R ",
+};
+const char *Overlay::GetOverlayTypeAsString(OverlayType ot)
+{
+  return OverlayTypeStrings[ (int) ot ];
+}
+Overlay::OverlayType Overlay::GetOverlayTypeFromString(const char *s)
+{
+  static const int n = sizeof( OverlayTypeStrings ) / sizeof ( *OverlayTypeStrings );
+  if( s )
+    {
+    for( int i = 0; i < n; ++i )
+      {
+      if( strcmp(s, OverlayTypeStrings[i] ) == 0 )
+        {
+        return (OverlayType)i;
+        }
+      }
+    }
+  // could not find the proper type, maybe padded with \0 ?
+  if( strlen(s) == 1 )
+    {
+    for( int i = 0; i < n; ++i )
+      {
+      if( strncmp(s, OverlayTypeStrings[i], 1 ) == 0 )
+        {
+        gdcmDebugMacro( "Invalid Padding for OVerlay Type" );
+        return (OverlayType)i;
+        }
+      }
+    }
+  return Overlay::Invalid;
+}
+Overlay::OverlayType Overlay::GetTypeAsEnum() const
+{
+  return GetOverlayTypeFromString( GetType() );
+}
+
 void Overlay::SetOrigin(const signed short origin[2])
 {
   if( origin )
