@@ -516,6 +516,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0018,0x1191,VR::CS,VM::VM1,"Anode Target Material","AnodeTargetMaterial",false },
   {0x0018,0x11a0,VR::DS,VM::VM1,"Body Part Thickness","BodyPartThickness",false },
   {0x0018,0x11a2,VR::DS,VM::VM1,"Compression Force","CompressionForce",false },
+  {0x0018,0x11a4,VR::LO,VM::VM1,"Paddle Description","PaddleDescription",false },
   {0x0018,0x1200,VR::DA,VM::VM1_n,"Date of Last Calibration","DateOfLastCalibration",false },
   {0x0018,0x1201,VR::TM,VM::VM1_n,"Time of Last Calibration","TimeOfLastCalibration",false },
   {0x0018,0x1210,VR::SH,VM::VM1_n,"Convolution Kernel","ConvolutionKernel",false },
