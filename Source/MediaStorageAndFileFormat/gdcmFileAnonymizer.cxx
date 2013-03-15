@@ -256,7 +256,7 @@ bool FileAnonymizer::ComputeRemoveTagPosition()
         pe.BeginPos -= de.GetVL();
         pe.BeginPos -= 2 * de.GetVR().GetLength(); // (VR+) VL
         pe.BeginPos -= 4; // Tag
-        assert( pe.EndPos ==
+        assert( (int)pe.EndPos ==
           (int)pe.BeginPos + (int)de.GetVL() + 2 * de.GetVR().GetLength() + 4 );
         }
       Internals->PositionEmptyArray.push_back( pe );
@@ -349,7 +349,7 @@ bool FileAnonymizer::ComputeEmptyTagPosition()
         else
           {
           pe.BeginPos -= de.GetVR().GetLength();
-          assert( pe.EndPos ==
+          assert( (int)pe.EndPos ==
             (int)pe.BeginPos + (int)de.GetVL() + de.GetVR().GetLength() );
           }
         }
