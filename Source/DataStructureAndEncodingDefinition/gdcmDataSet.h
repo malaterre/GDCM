@@ -18,6 +18,7 @@
 #include "gdcmTag.h"
 #include "gdcmVR.h"
 #include "gdcmElement.h"
+#include "gdcmMediaStorage.h"
 
 #include <set>
 #include <iterator>
@@ -257,6 +258,8 @@ public:
 
   template <typename TDE, typename TSwap>
   std::istream &ReadWithLength(std::istream &is, VL &length);
+
+  MediaStorage GetMediaStorage() const;
 
 protected:
   /* GetDEEnd is a Win32 only issue, one cannot use a dllexported

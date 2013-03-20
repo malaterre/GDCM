@@ -95,8 +95,9 @@ bool PixmapReader::Read()
   //  }
   else
     {
+    MediaStorage ms2 = ds.GetMediaStorage();
     //assert( !ds.FindDataElement( Tag(0x7fe0,0x0010 ) ) );
-    if( ms != MediaStorage::MS_END )
+    if( ms == ms2 && ms != MediaStorage::MS_END )
       {
       gdcmDebugMacro( "DICOM file is not an Image file but a : " <<
         MediaStorage::GetMSString(ms) << " SOP Class UID" );
@@ -104,27 +105,15 @@ bool PixmapReader::Read()
       }
     else
       {
-      // Too bad the media storage type was not recognized...
-      // what should we do ?
-      // Let's check 0008,0016:
-      // D 0008|0016 [UI] [SOP Class UID] [1.2.840.10008.5.1.4.1.1.7 ]
-      // ==> [Secondary Capture Image Storage]
-      const Tag tsopclassuid(0x0008, 0x0016);
-      if( ds.FindDataElement( tsopclassuid) && !ds.GetDataElement( tsopclassuid).IsEmpty() )
+      if( ms2 != MediaStorage::MS_END )
         {
-        const ByteValue *sopclassuid
-          = ImageHelper::GetPointerFromElement( tsopclassuid, *F );
-        std::string sopclassuid_str(
-          sopclassuid->GetPointer(),
-          sopclassuid->GetLength() );
-        MediaStorage ms2 = MediaStorage::GetMSType(sopclassuid_str.c_str());
         bool isImage2 = MediaStorage::IsImage( ms2 );
         if( isImage2 )
           {
           gdcmDebugMacro( "After all it might be a DICOM file "
             "(Mallinckrodt-like)" );
 
-    //PixelData->SetCompressionFromTransferSyntax( ts );
+          //PixelData->SetCompressionFromTransferSyntax( ts );
           //PixelData->SetCompressionType( Compression::RAW );
           res = ReadImage(ms2);
           }

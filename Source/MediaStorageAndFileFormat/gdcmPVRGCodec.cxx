@@ -125,12 +125,25 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   //std::cerr << "system: " << ret << std::endl;
 
   size_t len = gdcm::System::FileSize(output);
+  const char *rawfile = output;
+  std::string altfile;
   if(!len)
     {
-    return false;
+    gdcmDebugMacro( "Output file was empty: " << output );
+    // Could be some of PVRG handling, try again harder:
+    altfile = input;
+    altfile += ".1"; // dont ask
+    len = gdcm::System::FileSize(altfile.c_str());
+    if( !len )
+      {
+      gdcmDebugMacro( "Output file was really empty: " << altfile );
+      return false;
+      }
+    // else
+    rawfile = altfile.c_str();
     }
 
-  std::ifstream is(output);
+  std::ifstream is(rawfile, std::ios::binary);
   char * buf = new char[len];
   is.read(buf, len);
   out.SetTag( gdcm::Tag(0x7fe0,0x0010) );
@@ -154,9 +167,9 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
     gdcmErrorMacro( "Could not delete input: " << input );
     }
 
-  if( !System::RemoveFile(output) )
+  if( !System::RemoveFile(rawfile) )
     {
-    gdcmErrorMacro( "Could not delete output: " << output );
+    gdcmErrorMacro( "Could not delete output: " << rawfile);
     }
 
   free(input);
