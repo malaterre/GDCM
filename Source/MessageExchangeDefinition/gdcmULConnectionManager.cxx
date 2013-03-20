@@ -229,25 +229,27 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
   uint16_t inReturnPort,
   std::vector<PresentationContext> const & pcVector)
 {
-
-
+  gdcmDebugMacro( "Start EstablishConnectionMove" );
   //generate a ULConnectionInfo object
   UserInformation userInfo;
   ULConnectionInfo connectInfo;
   if (inConnectAETitle.size() > 16) return false;//too long an AETitle, probably need better failure message
   if (inAETitle.size() > 16) return false; //as above
   if (!connectInfo.Initialize(userInfo,inAETitle.c_str(), inConnectAETitle.c_str(),
-    inIPAddress, inReturnPort, inComputerName)){
+      inIPAddress, inReturnPort, inComputerName))
+    {
+    gdcmDebugMacro( "Could not Initialize connectInfo" );
     return false;
-  }
+    }
+  gdcmDebugMacro( "SCP: First connection established on port " << inReturnPort );
 
-  if (mSecondaryConnection != NULL){
+  if (mSecondaryConnection != NULL)
+    {
+    gdcmDebugMacro( "delete mSecondaryConnection" );
     delete mSecondaryConnection;
-  }
+    }
   mSecondaryConnection = new ULConnection(connectInfo);
-
   mSecondaryConnection->GetTimer().SetTimeout(inTimeout);
-
 
   //generate a ULConnectionInfo object
   UserInformation userInfo2;
@@ -255,15 +257,19 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
   if (inConnectAETitle.size() > 16) return false;//too long an AETitle, probably need better failure message
   if (inAETitle.size() > 16) return false; //as above
   if (!connectInfo2.Initialize(userInfo2, inConnectAETitle.c_str(),
-    inAETitle.c_str(), inIPAddress, inConnectPort, inComputerName)){
+      inAETitle.c_str(), inIPAddress, inConnectPort, inComputerName))
+    {
+    gdcmDebugMacro( "Could not Initialize connectInfo2" );
     return false;
-  }
+    }
+  gdcmDebugMacro( "SCU: Second connection established on port " << inConnectPort );
 
-  if (mConnection!= NULL){
+  if (mConnection!= NULL)
+    {
+    gdcmDebugMacro( "delete mConnection" );
     delete mConnection;
-  }
+    }
   mConnection = new ULConnection(connectInfo2);
-
   mConnection->GetTimer().SetTimeout(inTimeout);
 
 
@@ -494,6 +500,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
       while (waitingForEvent)
         {//loop for reading in the events that come down the wire
         uint8_t itemtype = 0x0;
+        gdcmDebugMacro( "Waiting for ItemType (#2)" );
         is.read( (char*)&itemtype, 1 );
 
         BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
@@ -749,6 +756,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
 //note that this is the ARTIM timeout event
 EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* inWhichConnection,
                                            ULConnectionCallback* inCallback, const bool& startWaiting = false){
+  gdcmDebugMacro( "Start RunEventLoop" );
   EStateID theState = eStaDoesNotExist;
   bool waitingForEvent = startWaiting;//overwritten if not starting waiting, but if waiting, then wait
   EEventID raisedEvent;
@@ -785,6 +793,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
       while (waitingForEvent){//loop for reading in the events that come down the wire
         uint8_t itemtype = 0x0;
         try {
+          gdcmDebugMacro( "Waiting for ItemType" );
           is.read( (char*)&itemtype, 1 );
           //what happens if nothing's read?
           theFirstPDU = PDUFactory::ConstructPDU(itemtype);
