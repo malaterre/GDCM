@@ -102,6 +102,16 @@ public:
     return str;
   }
 
+  static std::string Trim(const char *input) {
+    if( !input ) return "";
+    std::string str = input;
+    std::string::size_type pos1 = str.find_first_not_of(' ');
+    std::string::size_type pos2 = str.find_last_not_of(' ');
+    str = str.substr( (pos1 == std::string::npos) ? 0 : pos1,
+      (pos2 == std::string::npos) ? (str.size() - 1) : (pos2 - pos1 + 1));
+    return str;
+  }
+
 };
 template <char TDelimiter, unsigned int TMaxLength, char TPadChar>
 inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,TPadChar> &ms)

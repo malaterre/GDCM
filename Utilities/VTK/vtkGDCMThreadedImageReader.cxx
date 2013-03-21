@@ -277,7 +277,7 @@ struct threadparams
   const char **filenames;             // array of filenames thread will process (order is important!)
   unsigned int nfiles;                // number of files the thread will process
   char *scalarpointer;                // start of the image buffer affected to the thread
-  unsigned char *overlayscalarpointer;
+  char *overlayscalarpointer;
   unsigned long len;                  // This is not required but useful to check if files are consistant
   unsigned long overlaylen;
   unsigned long totalfiles;           // total number of files being processed (needed to compute progress)
@@ -347,11 +347,14 @@ void *ReadFilesThread(void *voidparams)
     if( numoverlays )
       {
       const gdcm::Overlay& ov = image.GetOverlay();
-      unsigned char * overlaypointer = params->overlayscalarpointer;
-      unsigned char *tempimage2 = overlaypointer + file*params->overlaylen;
+      char * overlaypointer = params->overlayscalarpointer;
+      char *tempimage2 = overlaypointer + file*params->overlaylen;
       memset(tempimage2,0,params->overlaylen);
       assert( (unsigned long)ov.GetRows()*ov.GetColumns() <= params->overlaylen );
-      ov.GetUnpackBuffer(tempimage2);
+      if( !ov.GetUnpackBuffer(tempimage2, params->overlaylen) )
+        {
+        vtkGenericWarningMacro( "Problem in GetUnpackBuffer" );
+        }
       }
     //if( params->reader->GetShift() != 1 || params->reader->GetScale() != 0 )
     if( params->reader->GetUseShiftScale() && (shift != 1 || scale != 0) )
@@ -420,13 +423,13 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
   const unsigned long overlaylen = output->GetNumberOfPoints() / nfiles;
   char * scalarpointer = static_cast<char*>(output->GetScalarPointer());
   // overlay data:
-  unsigned char * overlayscalarpointer = 0;
+  char * overlayscalarpointer = 0;
   if( this->LoadOverlays )
     {
     vtkImageData *overlayoutput = this->GetOutput(OverlayPortNumber);
     overlayoutput->SetScalarTypeToUnsignedChar();
     overlayoutput->AllocateScalars();
-    overlayscalarpointer = static_cast<unsigned char*>(overlayoutput->GetScalarPointer());
+    overlayscalarpointer = static_cast<char*>(overlayoutput->GetScalarPointer());
     }
 
 #ifdef _WIN32

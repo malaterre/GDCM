@@ -18,7 +18,9 @@
 #endif
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
+#ifdef GDCM_HAVE_CMS_RECIPIENT_PASSWORD
 #include "gdcmOpenSSLCryptoFactory.h"
+#endif
 #include "gdcmOpenSSLP7CryptoFactory.h"
 #endif
 
@@ -31,7 +33,9 @@ CryptoFactory* CryptoFactory::GetFactoryInstance(CryptoLib id)
   static CAPICryptoFactory capi(CryptoFactory::CAPI);
 #endif
 #ifdef GDCM_USE_SYSTEM_OPENSSL
+#ifdef GDCM_HAVE_CMS_RECIPIENT_PASSWORD
   static OpenSSLCryptoFactory ossl(CryptoFactory::OPENSSL);
+#endif
   static OpenSSLP7CryptoFactory osslp7(CryptoFactory::OPENSSLP7);
 #endif
 

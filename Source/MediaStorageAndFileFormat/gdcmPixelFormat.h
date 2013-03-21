@@ -97,6 +97,11 @@ public:
       BitsStored = ba;
       HighBit = (unsigned short)(ba - 1);
       }
+    else // Make the PixelFormat as UNKNOWN
+      {
+      BitsAllocated = 0;
+      PixelRepresentation = 0;
+      }
     }
 
   /// BitsStored see Tag (0028,0101) US Bits Stored

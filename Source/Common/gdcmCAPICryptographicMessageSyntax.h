@@ -33,11 +33,7 @@ public:
   bool ParseKeyFile( const char *filename );
 
   // PBE
-  bool SetPassword(const char * pass, size_t passLen)
-  {
-    gdcmWarningMacro( "CAPI does not support Password Based Encryption." );
-    return false;
-  }
+  bool SetPassword(const char * pass, size_t passLen);
 
   void SetCipherType(CipherTypes type);
 
@@ -56,7 +52,7 @@ public:
 private:
   bool Initialize();
   static ALG_ID GetAlgIdByObjId(const char * pszObjId);
-  LPSTR GetCipherObjId() const;
+  const char *GetCipherObjId() const;
   static void ReverseBytes(BYTE* data, DWORD len);
   static bool LoadFile(const char * filename, BYTE* & buffer, DWORD & bufLen);
 

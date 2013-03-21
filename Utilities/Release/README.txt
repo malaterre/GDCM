@@ -1,6 +1,4 @@
-$ svn co gdcm
-$ mkdir package
-$ cd package
-$ /home/mmalaterre/Projects/CMake26-gcc43/bin/cmake ../trunk  -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_BUILD_TESTING:BOOL=OFF -DGDCM_WRAP_PYTHON:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_CXX_FLAGS:STRING= -DCMAKE_C_FLAGS:STRING= -DGDCM_USE_SYSTEM_EXPAT:BOOL=ON -DGDCM_USE_SYSTEM_UUID:BOOL=ON -DGDCM_USE_SYSTEM_ZLIB:BOOL=ON -DCPACK_BINARY_DEB:BOOL=ON -DCPACK_BINARY_RPM:BOOL=ON
-
-$ make package
+1. For now need to make sure docstrings.i is up to date
+2. Run release.sh
+3. Run release.bat
+4. Done !

@@ -15,6 +15,7 @@
 
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
+#include "vtkErrorCode.h"
 #include "vtkMath.h"
 #include "vtkPolyData.h"
 #include "vtkCellArray.h"
@@ -601,6 +602,7 @@ ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
   else if ( filenames && filenames->GetNumberOfValues() > 0 )
     {
     std::set< gdcm::PixelFormat::ScalarType > pixeltypes;
+    std::set< unsigned short > samplesperpixel;
     // FIXME a gdcm::Scanner would be much faster here:
     for(int i = 0; i < filenames->GetNumberOfValues(); ++i )
       {
@@ -614,6 +616,8 @@ ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
         }
       const gdcm::Image &image = reader.GetImage();
       const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
+      samplesperpixel.insert( pixeltype.GetSamplesPerPixel() );
+
       double shift = image.GetIntercept();
       double scale = image.GetSlope();
 
@@ -628,10 +632,11 @@ ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
       }
     if( pixeltypes.size() == 1 )
       {
+      assert( samplesperpixel.size() == 1 );
       // Ok easy case
       outputpt = *pixeltypes.begin();
       }
-    else
+    else if( samplesperpixel.size() == 1 )
       {
       // Hardcoded. If Pixel Type found is the maximum (as of PS 3.5 - 2008)
       // There is nothing bigger that FLOAT64
@@ -649,6 +654,10 @@ ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
         vtkGenericWarningMacro( "This may not always be optimized. Sorry" );
         outputpt = gdcm::PixelFormat::FLOAT64;
         }
+      }
+    else
+      {
+      vtkGenericWarningMacro( "Could not compute Pixel Type. Sorry" );
       }
     }
   else
@@ -897,6 +906,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     this->DataScalarType = VTK_BIT;
     break;
   default:
+    this->SetErrorCode(vtkErrorCode::FileFormatError);
     vtkErrorMacro( "Do not support this Pixel Type: " << (int)pixeltype.GetScalarType()
       << " with " << (int)outputpt  );
     return 0;
@@ -1232,12 +1242,15 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
       chararray->Delete();
 
       assert( vtkimage->GetScalarType() == VTK_UNSIGNED_CHAR );
-      unsigned char * overlaypointer = static_cast<unsigned char*>(vtkimage->GetScalarPointer());
+      char * overlaypointer = static_cast<char*>(vtkimage->GetScalarPointer());
       assert( overlaypointer );
       //assert( image->GetPointData()->GetScalars() != 0 );
 
       //memset(overlaypointer,0,overlaylen); // FIXME: can be optimized
-      ov1.GetUnpackBuffer( overlaypointer );
+      if( !ov1.GetUnpackBuffer( overlaypointer, overlaylen ) )
+        {
+        vtkErrorMacro( "Problem in GetUnpackBuffer" );
+        }
       }
     if( numoverlays ) assert( (unsigned long)overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
     }

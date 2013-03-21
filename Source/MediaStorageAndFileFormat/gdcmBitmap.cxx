@@ -375,6 +375,8 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
   if( codec.CanDecode( ts ) )
     {
     unsigned long len = GetBufferLength();
+    codec.SetNumberOfDimensions( GetNumberOfDimensions() );
+    codec.SetDimensions( GetDimensions() );
     codec.SetPlanarConfiguration( GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( GetPhotometricInterpretation() );
     codec.SetPixelFormat( GetPixelFormat() );

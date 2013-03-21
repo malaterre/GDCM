@@ -17,9 +17,7 @@
 #include <limits> // numeric_limits
 #include <string.h> // memcpy
 
-#ifdef GDCM_HAVE_CMS_RECIPIENT_PASSWORD
 #include <openssl/cms.h>
-#endif
 #include <openssl/evp.h>
 #include <openssl/bio.h>
 #include <openssl/pem.h>
@@ -74,7 +72,6 @@ bool OpenSSLCryptographicMessageSyntax::SetPassword(const char * pass, size_t pa
 
 bool OpenSSLCryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const
 {
-#ifdef GDCM_HAVE_CMS_RECIPIENT_PASSWORD
   BIO *in = NULL, *out = NULL;
   CMS_ContentInfo *cms = NULL;
   int flags = CMS_BINARY | CMS_PARTIAL;
@@ -171,18 +168,10 @@ err:
     BIO_free(out);
 
   return ret;
-#else
-  (void)output;
-  (void)outlen;
-  (void)array;
-  (void)len;
-  return false;
-#endif
 }
 
 bool OpenSSLCryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const char *array, size_t len) const
 {
-#ifdef GDCM_HAVE_CMS_RECIPIENT_PASSWORD
   BIO *in = NULL, *out = NULL;
   CMS_ContentInfo *cms = NULL;
   bool ret = false;
@@ -256,13 +245,6 @@ err:
     BIO_free(out);
 
   return ret;
-#else
-  (void)output;
-  (void)outlen;
-  (void)array;
-  (void)len;
-  return false;
-#endif
 }
 
 bool OpenSSLCryptographicMessageSyntax::ParseKeyFile( const char *keyfile)

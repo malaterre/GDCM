@@ -69,7 +69,7 @@ public:
   /// get type
   const char *GetType() const;
   /// set origin
-  void SetOrigin(const signed short *origin);
+  void SetOrigin(const signed short origin[2]);
   /// get origin
   const signed short * GetOrigin() const;
   /// set frame origin
@@ -82,28 +82,47 @@ public:
   void SetBitPosition(unsigned short bitposition);
   /// return bit position
   unsigned short GetBitPosition() const;
+
   /// set overlay from byte array + length
-  void SetOverlay(const char *array, unsigned int length);
+  void SetOverlay(const char *array, size_t length);
   ///
   bool GrabOverlayFromPixelData(DataSet const &ds);
 
+  /// Return the Overlay Data as ByteValue:
+  /// Not thread safe
   const ByteValue &GetOverlayData() const;
 
+  /// Return whether or not the Overlay is empty:
   bool IsEmpty() const;
 
   /// return true if all bits are set to 0
   bool IsZero() const;
 
-  // return if the Overlay is stored in the pixel data or not
+  /// return if the Overlay is stored in the pixel data or not
   bool IsInPixelData() const;
+
+  /// Set wether or no the OverlayData is in the Pixel Data:
   void IsInPixelData(bool b);
 
-  void Decode(std::istream &is, std::ostream &os);
-
+  /// Decode the internal OverlayData (packed bits) into unpacked representation
   void Decompress(std::ostream &os) const;
 
-  bool GetBuffer(char *buffer) const;
-  bool GetUnpackBuffer(unsigned char *buffer) const;
+  /// Get the raw (packed bits) Overlay Data:
+  GDCM_LEGACY(bool GetBuffer(char *buffer) const)
+
+  /// Do not use
+  GDCM_LEGACY(bool GetUnpackBuffer(unsigned char *buffer) const)
+
+  /// Do not use
+  GDCM_LEGACY(void Decode(std::istream &is, std::ostream &os))
+
+  /// Retrieve the size of the buffer needed to hold the Overlay
+  /// as specified by Col & Row parameters
+  size_t GetUnpackBufferLength() const;
+
+  /// Retrieve the unpack buffer for Overlay. This is an error if
+  /// the size if below GetUnpackBufferLength()
+  bool GetUnpackBuffer(char *buffer, size_t len) const;
 
   Overlay(Overlay const &ov);
 

@@ -48,6 +48,7 @@ int TestIOD(int, char *[])
         {
         const gdcm::Tag &tag = dictit->first;
         gdcm::Type t = iod.GetTypeFromTag(defs, tag);
+        (void)t;
         //std::cout << t << std::endl;
         }
       }

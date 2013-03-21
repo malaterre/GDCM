@@ -9,6 +9,7 @@ set(DICT_TEST_SRCS
   TestGroupDict
   TestTagToType
   TestSOPClassUIDToIOD
+  TestTagKeywords
   )
 
 # Add the include paths

@@ -19,7 +19,7 @@
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
 
-int TestReadUpToTag(const char* filename, bool verbose = false)
+static int TestReadUpToTag(const char* filename, bool verbose = false)
 {
   if( verbose )
   std::cout << "TestRead: " << filename << std::endl;
@@ -56,7 +56,7 @@ int TestReadUpToTag(const char* filename, bool verbose = false)
   return 0;
 }
 
-int TestReadUpToTagExtra()
+static int TestReadUpToTagExtra()
 {
   const char *extradataroot = gdcm::Testing::GetDataExtraRoot();
   if( !extradataroot )

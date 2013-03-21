@@ -53,7 +53,7 @@ $ wget http://gdcm.sourceforge.net/gdcm.pdf
 $ gdcmpdf gdcm.pdf gdcm.dcm
 \endverbatim
 
-To re-extract the encapsulated pdf file:
+To re-extract the encapsulated PDF file:
 
 \verbatim
  $ gdcmraw -i gdcm.dcm -t 42,11 -o gdcm.dcm.pdf
@@ -134,7 +134,7 @@ Change: 2009-04-28 16:05:00.000000000 +0200
 Explanation for the different Date/Time mappings:
 
 \li Study Date/Time, Instance Creation Date/Time are both equal to the current time gdcmpdf tool was run,
-\li Acquisition Date Time is set to the Modify Time of the actual pdf file,
+\li Acquisition Date Time is set to the Modify Time of the actual PDF file,
 \li Content Date/Time are set from the actual PDF header info: CreationDate.
 
 

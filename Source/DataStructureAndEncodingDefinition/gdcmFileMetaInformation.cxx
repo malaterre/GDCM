@@ -56,31 +56,44 @@ const char * FileMetaInformation::GetGDCMSourceApplicationEntityTitle()
 
 void FileMetaInformation::SetImplementationClassUID(const char * imp)
 {
-  assert(0);
-  (void)imp;
+  // TODO: it would be nice to make sure imp is actually a valid UID
+  if( imp )
+    {
+    ImplementationClassUID = imp;
+    }
 }
 
 void FileMetaInformation::AppendImplementationClassUID(const char * imp)
 {
-  ImplementationClassUID = GetGDCMImplementationClassUID();
-  ImplementationClassUID += ".";
-  ImplementationClassUID += imp;
+  if( imp )
+    {
+    ImplementationClassUID = GetGDCMImplementationClassUID();
+    ImplementationClassUID += ".";
+    ImplementationClassUID += imp;
+    }
 }
+
 void FileMetaInformation::SetImplementationVersionName(const char * version)
 {
-  // Simply override the value since we cannot have more than 16bytes...
-  assert( strlen(version) <= 16 );
-  //ImplementationVersionName = GetGDCMImplementationVersionName();
-  //ImplementationVersionName += "-";
-  //ImplementationVersionName += version;
-  ImplementationVersionName = version;
+  if( version )
+    {
+    // Simply override the value since we cannot have more than 16bytes...
+    assert( strlen(version) <= 16 );
+    //ImplementationVersionName = GetGDCMImplementationVersionName();
+    //ImplementationVersionName += "-";
+    //ImplementationVersionName += version;
+    ImplementationVersionName = version;
+    }
 }
 void FileMetaInformation::SetSourceApplicationEntityTitle(const char * title)
 {
-  //SourceApplicationEntityTitle = GetGDCMSourceApplicationEntityTitle();
-  //SourceApplicationEntityTitle += "/";
-  AEComp ae( title );
-  SourceApplicationEntityTitle = ae.Truncate();
+  if( title )
+    {
+    //SourceApplicationEntityTitle = GetGDCMSourceApplicationEntityTitle();
+    //SourceApplicationEntityTitle += "/";
+    AEComp ae( title );
+    SourceApplicationEntityTitle = ae.Truncate();
+    }
 }
 const char *FileMetaInformation::GetImplementationClassUID()
 {

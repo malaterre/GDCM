@@ -225,6 +225,12 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
     case MediaStorage::RTTreatmentSummaryRecordStorage:
       iodname = "RT Treatment Summary Record IOD Modules";
       break;
+    case MediaStorage::VLEndoscopicImageStorage:
+      iodname = "VL Endoscopic Image IOD Modules";
+      break;
+    case MediaStorage::XRayRadiationDoseSR:
+      iodname = "X Ray Radiation Dose SR IOD Modules";
+      break;
     case MediaStorage::CSANonImageStorage:
       iodname = "Siemens Non-image IOD Modules";
       break;

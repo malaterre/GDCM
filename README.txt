@@ -1,7 +1,7 @@
 This is the source code of GDCM. It is available from sf.net website.
 Official GIT repository is at:
 
-  http://gdcm.git.sourceforge.net
+  https://sourceforge.net/p/gdcm/gdcm/
 
 For a general introduction/features/limitations/requirement please
 refer to
@@ -38,14 +38,14 @@ For more help you can go online in the GDCM Wiki:
 * http://gdcm.sourceforge.net/
 
 In Particular:
-* http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=GDCM_Release_2.0
-* http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=FAQ
+* http://gdcm.sourceforge.net/wiki/index.php/GDCM_Release_2.0
+* http://gdcm.sourceforge.net/wiki/index.php/FAQ
 
 And a page describing each tool can be found at:
-* http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=End_User_Applications
+* http://gdcm.sourceforge.net/wiki/index.php/End_User_Applications
 
 Eg:
-* http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Gdcminfo
+* http://gdcm.sourceforge.net/wiki/index.php/Gdcminfo
 
 Need VTK:
-* http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Gdcmviewer
+* http://gdcm.sourceforge.net/wiki/index.php/Gdcmviewer

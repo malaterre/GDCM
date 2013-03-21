@@ -133,6 +133,13 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
           {
           if( de.GetVR() == VR::SQ )
             {
+            if( vl == 0 && value && *value == 0 )
+              {
+              DataElement de2( t );
+              de2.SetVR( VR::SQ );
+              ds.Replace( de2 );
+              return true;
+              }
             gdcmDebugMacro( "Cannot replace a VR:SQ" );
             return false;
             }
@@ -483,6 +490,11 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
   static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
   static const Tag *end = start + numDeIds;
+  if( !CMS )
+    {
+    gdcmErrorMacro( "Need a certificate" );
+    return false;
+    }
 
   CryptographicMessageSyntax &p7 = *CMS;
   //p7.SetCertificate( this->x509 );
@@ -637,21 +649,26 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
 
     sq->AddItem(item2);
 
-    // 4. All instances of the Encrypted Attributes Data Set shall be encoded with a DICOM Transfer Syntax,
-    // encrypted, and stored in the dataset to be protected as an Item of the Encrypted Attributes Sequence
-    // (0400,0500). The encryption shall be done using RSA [RFC 2313] for the key transport of the
-    // content-encryption keys. A de-identifier conforming to this security profile may use either AES or
-    // Triple-DES for content-encryption. The AES key length may be any length allowed by the RFCs. The
-    // Triple-DES key length is 168 bits as defined by ANSI X9.52. Encoding shall be performed according
-    // to the specifications for RSA Key Transport and Triple DES Content Encryption in RFC-3370 and for
-    // AES Content Encryption in RFC-3565.
+    // 4. All instances of the Encrypted Attributes Data Set shall be encoded
+    // with a DICOM Transfer Syntax, encrypted, and stored in the dataset to be
+    // protected as an Item of the Encrypted Attributes Sequence (0400,0500).
+    // The encryption shall be done using RSA [RFC 2313] for the key transport
+    // of the content-encryption keys. A de-identifier conforming to this
+    // security profile may use either AES or Triple-DES for
+    // content-encryption. The AES key length may be any length allowed by the
+    // RFCs. The Triple-DES key length is 168 bits as defined by ANSI X9.52.
+    // Encoding shall be performed according to the specifications for RSA Key
+    // Transport and Triple DES Content Encryption in RFC-3370 and for AES
+    // Content Encryption in RFC-3565.
 
-    // 5. No requirements on the size of the asymmetric key pairs used for RSA key transport are defined in
-    // this confidentiality scheme. Implementations claiming conformance to the Basic Application Level
-    // Confidentiality Profile as a de-identifier shall always protect (e.g. encrypt and replace) the SOP
-    // Instance UID (0008,0018) Attribute as well as all references to other SOP Instances, whether
-    // contained in the main dataset or embedded in an Item of a Sequence of Items, that could potentially
-    // be used by unauthorized entities to identify the patient.
+    // 5. No requirements on the size of the asymmetric key pairs used for RSA
+    // key transport are defined in this confidentiality scheme.
+    // Implementations claiming conformance to the Basic Application Level
+    // Confidentiality Profile as a de-identifier shall always protect (e.g.
+    // encrypt and replace) the SOP Instance UID (0008,0018) Attribute as well
+    // as all references to other SOP Instances, whether contained in the main
+    // dataset or embedded in an Item of a Sequence of Items, that could
+    // potentially be used by unauthorized entities to identify the patient.
 
     // Insert sequence into data set
     DataElement subdes( Tag(0x0400,0x0500) );
@@ -663,8 +680,9 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     }
   this->InvokeEvent( IterationEvent() );
 
-  // 2. Each Attribute to be protected shall then either be removed from the dataset, or have its value
-  // replaced by a different "replacement value" which does not allow identification of the patient.
+  // 2. Each Attribute to be protected shall then either be removed from the
+  // dataset, or have its value replaced by a different "replacement value"
+  // which does not allow identification of the patient.
 
   //for(const Tag *ptr = start ; ptr != end ; ++ptr)
   //  {
@@ -694,12 +712,13 @@ catch(...)
   // Group Length are removed since PS 3.3-2008
   RemoveGroupLength();
 
-  // 3. At the discretion of the de-identifier, Attributes may be added to the dataset to be protected.
-  // ...
+  // 3. At the discretion of the de-identifier, Attributes may be added to the
+  // dataset to be protected.  ...
 
-  // 6. The attribute Patient Identity Removed (0012,0062) shall be replaced or added to the dataset with a
-  // value of YES, and a value inserted in De-identification Method (0012,0063) or De-identification
-  // Method Code Sequence (0012,0064).
+  // 6. The attribute Patient Identity Removed (0012,0062) shall be replaced or
+  // added to the dataset with a value of YES, and a value inserted in
+  // De-identification Method (0012,0063) or De-identification Method Code
+  // Sequence (0012,0064).
   Replace( Tag(0x0012,0x0062), "YES");
   Replace( Tag(0x0012,0x0063), "BASIC APPLICATION LEVEL CONFIDENTIALITY PROFILE");
 
@@ -956,6 +975,11 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
 
 bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
 {
+  if( !CMS )
+    {
+    gdcmErrorMacro( "Need a certificate" );
+    return false;
+    }
   // 1. The application shall decrypt, using its recipient key, one instance of
   // the Encrypted Content (0400,0520) Attribute within the Encrypted
   // Attributes Sequence (0400,0500) and decode the resulting block of bytes

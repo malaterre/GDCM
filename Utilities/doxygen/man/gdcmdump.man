@@ -30,17 +30,19 @@ dcm_directory   DICOM input directory
 
 \subsection options options
 \verbatim
-  -x --xml-dict  generate the XML dict (only private elements for now).
-  -r --recursive recursive (input is a directory)
-  -d --dump      dump value (limited use).
-  -p --print     print value instead of simply dumping (default).
-  -c --color     print in color.
-  -C --csa       print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER).
-  -P --pdb       print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01).
-     --elscint   print ELSCINT Protocol Information (01f7,26,ELSCINT1).
-     --vepro     print VEPRO Protocol Information (0055,20,VEPRO VIF 3.0 DATA).
-                    or VEPRO Protocol Information (0055,20,VEPRO VIM 5.0 DATA).
-  -A --asn1      print encapsulated ASN1 structure >(0400,0520).
+  -x --xml-dict       generate the XML dict (only private elements for now).
+  -r --recursive      recursive (input is a directory)
+  -d --dump           dump value (limited use).
+  -p --print          print value instead of simply dumping (default).
+  -c --color          print in color.
+  -C --csa            print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER).
+  -P --pdb            print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01).
+     --elscint        print ELSCINT Protocol Information (01f7,26,ELSCINT1).
+     --vepro          print VEPRO Protocol Information (0055,20,VEPRO VIF 3.0 DATA).
+                         or VEPRO Protocol Information (0055,20,VEPRO VIM 5.0 DATA).
+     --sds            print Philips MR Series Data Storage (1.3.46.670589.11.0.0.12.2) Information (2005,32,Philips MR Imaging DD 002).
+  -A --asn1           print encapsulated ASN1 structure >(0400,0520).
+     --map-uid-names  map UID to names.
 \endverbatim
 
 \subsection general_options general options

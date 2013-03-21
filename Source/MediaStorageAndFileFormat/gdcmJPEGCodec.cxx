@@ -157,7 +157,6 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
   std::stringstream os;
   if( sf0 )
     {
-    //unsigned long pos = 0;
     for(unsigned int i = 0; i < sf0->GetNumberOfFragments(); ++i)
       {
       std::stringstream is;
@@ -174,7 +173,23 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
       if( !r )
         {
-        return false;
+        gdcmDebugMacro( "Failed to decompress Frag #" << i );
+        const bool suspended = Internal->IsStateSuspension();
+        const size_t nfrags = sf0->GetNumberOfFragments();
+        // In case of chunked-jpeg, this is always an error
+        if( suspended )
+          return false;
+        // Ok so we are decoding a multiple frame jpeg DICOM file:
+        // if we are lucky, we might be trying to decode some sort of broken multi-frame
+        // DICOM file. In this case check that we have read all Fragment properly:
+        if( i >= this->GetDimensions()[2] )
+          {
+          // JPEGInvalidSecondFrag.dcm
+          assert( nfrags == this->GetNumberOfDimensions() ); // sentinel
+          gdcmWarningMacro( "Invalid JPEG Fragment found at pos #" << i + 1 << ". Skipping it" );
+          }
+        else
+          return false;
         }
       }
     }
@@ -606,6 +621,12 @@ bool JPEGCodec::DecodeExtent(
       }
     }
   return true;
+}
+
+bool JPEGCodec::IsStateSuspension() const
+{
+  assert( 0 );
+  return false;
 }
 
 } // end namespace gdcm

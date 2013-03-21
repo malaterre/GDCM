@@ -1328,4 +1328,9 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
   return true;
 }
 
+bool JPEGBITSCodec::IsStateSuspension() const
+{
+  return Internals->StateSuspension != 0;
+}
+
 } // end namespace gdcm

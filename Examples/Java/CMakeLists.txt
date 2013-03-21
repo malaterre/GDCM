@@ -13,6 +13,7 @@ set(examples
   DecompressPixmap
   ScanDirectory
   ReadFiles
+  FileAnonymize
   )
 foreach(example ${examples})
   add_custom_command(

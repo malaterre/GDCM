@@ -433,10 +433,10 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
           {
           std::streampos start = is.tellg();
           is.seekg( 0, std::ios::end);
-	  std::streampos end = is.tellg();
-	  std::streamoff theOffset = end-start;
-	  assert (theOffset > 0 || (uint32_t)theOffset < std::numeric_limits<uint32_t>::max());
-	  VL l = (uint32_t)(theOffset);
+          std::streampos end = is.tellg();
+          std::streamoff theOffset = end-start;
+          assert (theOffset > 0 || (uint32_t)theOffset < std::numeric_limits<uint32_t>::max());
+          VL l = (uint32_t)(theOffset);
           is.seekg( start, std::ios::beg );
           //F->GetDataSet().ReadUpToTagWithLength<ImplicitDataElement,SwapperNoOp>(is, tag, l);
           caller.template ReadCommonWithLength<ImplicitDataElement,SwapperNoOp>(is,l);
@@ -661,7 +661,7 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
     }
   catch( Exception &ex )
     {
-	(void)ex;  //to avoid unreferenced variable warning on release
+    (void)ex;  //to avoid unreferenced variable warning on release
     gdcmDebugMacro( ex.what() );
     success = false;
     }
@@ -676,7 +676,7 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
     }
   catch( Exception &ex )
     {
-	(void)ex;  //to avoid unreferenced variable warning on release
+    (void)ex;  //to avoid unreferenced variable warning on release
     gdcmDebugMacro( ex.what() );
     success = false;
     }
@@ -705,11 +705,12 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
 
 // This function re-implements code from:
 // http://www.dclunie.com/medical-image-faq/html/part2.html#DICOMTransferSyntaxDetermination
-// The above code does not work well for random file. It implicitly assumes we are trying
-// to read a DICOM file in the first place, while our goal is indeed to detect whether or
-// not the file can be assimilated as DICOM. So we extended it.
-// Of course this function only returns a 'maybe DICOM', since we are not guaranteed that
-// the stream is not truncated, but this is outside the scope of this function.
+// The above code does not work well for random file. It implicitly assumes we
+// are trying to read a DICOM file in the first place, while our goal is indeed
+// to detect whether or not the file can be assimilated as DICOM. So we
+// extended it.  Of course this function only returns a 'maybe DICOM', since we
+// are not guaranteed that the stream is not truncated, but this is outside the
+// scope of this function.
 bool Reader::CanRead() const
 {
   // fastpath
@@ -728,7 +729,7 @@ bool Reader::CanRead() const
 
   // Start overhead for backward compatibility
   bool bigendian = false;
-  bool explicitvr	= false;
+  bool explicitvr = false;
   is.clear();
   //is.seekg(0, std::ios::end);
   //std::streampos filelen = is.tellg();

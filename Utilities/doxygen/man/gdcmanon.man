@@ -129,6 +129,9 @@ format).
 $ gdcmanon --certificate certificate.pem -e original.dcm original_anonymized.dcm
 \endverbatim
 
+You can use --asn1 option from gdcmdump to dump the generated DataSet
+as ASN1 structure (see <b>gdcmdump</b>(1) for example).
+
 \subsection reindent Re-identification (de-anonymization,decrypt)
 
 The only thing required for this operation is a private key (in PEM format). It
@@ -179,9 +182,9 @@ $ gdcmanon --dumb --empty 10,10 --empty 10,20 --remove 10,40 --remove 10,1010 --
 \endverbatim
 
 Multiple operation of --dumb mode can take place, just reuse the output of the
-previous operation.  Always use gdcmdump on the input and output file to check
+previous operation. Always use gdcmdump on the input and output file to check
 what was actually achieved. You can use a diff program to check only what
-changed (see <b>diff</b>(1) for example).
+changed (see <b>gdcmdiff</b>(1) for example).
 
 \subsubsection irreversible_anon Irreversible Anonymization
 
@@ -190,7 +193,7 @@ as to take benefit of the automatic conversion of all content that could
 contain Patient related information.
 
 In the end all Patient related information has been removed and has been
-secretely stored in the 0400,0500 DICOM attribute. However to make sure that
+secretly stored in the 0400,0500 DICOM attribute. However to make sure that
 no-one ever try to break that security using brute-force algorithm, one want
 want to remove completely this DICOM attribute. This will make the DICOM:
 
@@ -211,7 +214,7 @@ $ gdcmanon --dumb --remove 400,500 --remove 12,62 --remove 12,63 anonymized_reve
 \endverbatim
 
 \remark
-As mentionned in DICOM Sup 142, this anonymization is prefered over
+As mentionned in DICOM Sup 142, this anonymization is preferred over
 de-identification since:
 
 It is not required that the Encrypted Attributes Data Set be created; indeed,
@@ -270,7 +273,7 @@ ftp://medical.nema.org/medical/dicom/2008/08_15pu.pdf
 
 \section gdcmanon_warnings Warnings
 
-Certains attributes may still contains Protected Health Information (PHI) after
+Certain attributes may still contains Protected Health Information (PHI) after
 an anonymization step. This is typically the case for Patient's Address (0010,1040).
 The reason is that this particular attribute is not supposed to be in the composite
 IODs in the first place. DICOM Supp 142 includes it (however gdcmanon does not
@@ -278,7 +281,7 @@ implement it).
 
 \section see_also SEE ALSO
 
-<b>gdcmconv</b>(1), <b>gdcmdump</b>(1), <b>gdcminfo</b>(1), <b>openssl</b>(1), <b>dumpasn1</b>(1)
+<b>gdcmconv</b>(1), <b>gdcmdump</b>(1), <b>gdcmdiff</b>(1), <b>openssl</b>(1), <b>dumpasn1</b>(1)
 
 \section copyright COPYRIGHT
 

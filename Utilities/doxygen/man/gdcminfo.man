@@ -10,8 +10,9 @@ gdcminfo [options] file-in
 
 \section description DESCRIPTION
 
-The \b gdcminfo command line program takes as input a DICOM file, or a directory and process it to extract meta-
-information about the DICOM file processed.
+The \b gdcminfo command line program takes as input a DICOM file, or a
+directory and process it to extract meta- information about the DICOM file
+processed.
 
 \section parameters PARAMETERS
 
@@ -136,8 +137,8 @@ The tool return: 0621954acd5815e0b4f7b65fcc6506b1
 
 \subsection checking_lossless Checking if Pixel Data is lossless
 
-In come environment one wish to check whether or not the DICOM file is lossless
-or not. It is fairly easy to do that in most cases. Only in two occasion this
+In some environment one wish to check whether or not the DICOM file is
+lossless. It is fairly easy to do that in most cases. Only in two occasion this
 is not clear from the sole DICOM Attribute. When the Transfer Syntax is JPEG
 2000 Image Compression (1.2.840.10008.1.2.4.91) and when the Transfer Syntax is
 JPEG-LS Lossy (Near-Lossless) Image Compression (1.2.840.10008.1.2.4.81).

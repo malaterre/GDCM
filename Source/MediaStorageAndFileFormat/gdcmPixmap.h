@@ -40,11 +40,11 @@ public:
   bool AreOverlaysInPixelData() const;
 
   /// Curve: group 50xx
-  Curve& GetCurve(unsigned int i = 0) {
+  Curve& GetCurve(size_t i = 0) {
     assert( i < Curves.size() );
     return Curves[i];
   }
-  const Curve& GetCurve(unsigned int i = 0) const {
+  const Curve& GetCurve(size_t i = 0) const {
     assert( i < Curves.size() );
     return Curves[i];
   }

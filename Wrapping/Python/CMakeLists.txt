@@ -88,6 +88,13 @@ endif()
 #set (SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS ${SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS} ${CMAKE_CURRENT_SOURCE_DIR}/docstrings.i)
 SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcmswig.i gdcmPythonFilter.cxx)
 SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMEXD gdcmMSFF gdcmIOD)
+# Apparently on my UNIX, python module (/usr/lib/pyshared/pythonX.Y/*/*.so) do not explicitely
+# link to python libraries...Leave default to always link to python libraries since
+# this is required at least on Apple & Win32, but leave the option to advanced user to explicitely
+# refuse linking to python libs (set GDCM_NO_PYTHON_LIBS_LINKING to ON):
+if(NOT GDCM_NO_PYTHON_LIBS_LINKING)
+  SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} ${PYTHON_LIBRARY})
+endif()
 set_property(TARGET ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTY NO_SONAME 1)
 
 # Python extension modules on Windows must have the extension ".pyd"

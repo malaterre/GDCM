@@ -17,7 +17,7 @@ set TMPDIR=%TMP%\gdcm_release
 
 set major=2
 set minor=2
-set patch=0
+set patch=1
 set version="%major%.%minor%.%patch%"
 
 @rem use VCExpress 2008 for compatibilities with OpenSSL binaries
@@ -28,9 +28,9 @@ SET LIB=C:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib;%LIB%
 SET INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v6.0A\Include;%INCLUDE%
 
 @rem GDCM deps:
-SET PATH=%PATH%;C:\Program Files\Git\bin
-SET PATH=%PATH%;C:\Program Files\Swig\swigwin-2.0.7
-SET PATH=%PATH%;C:\Program Files\Java\jdk1.6.0_25\bin
+SET PATH=%PATH%;%ProgramFiles(x86)%\Git\bin
+SET PATH=%PATH%;%ProgramFiles(x86)%\Swig\swigwin-2.0.8
+SET PATH=%PATH%;%ProgramFiles(x86)%\Java\jdk1.6.0_34\bin
 
 @rem needed to get RC.EXE:
 SET PATH=C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin;%PATH%
@@ -44,7 +44,7 @@ copy config.win32 %TMPDIR%\gdcm-build\CMakeCache.txt
 c:
 cd %TMPDIR%
 @rem git is itselft a batch:
-call git clone --branch release git://gdcm.git.sourceforge.net/gitroot/gdcm/gdcm > git.log 2>&1
+call git clone --branch release git://git.code.sf.net/p/gdcm/gdcm > git.log 2>&1
 cd gdcm
 call git checkout "v%version%"
 cd ..
