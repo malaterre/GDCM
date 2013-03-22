@@ -16,6 +16,8 @@
  *
  *=========================================================================*/
 #include "gdcmULConnection.h"
+
+#include <algorithm> // std::find
 #include <socket++/echo.h>
 
 namespace gdcm
@@ -172,14 +174,14 @@ bool ULConnection::InitializeConnection()
     }
   catch ( sockerr &err )
     {
-	(void)err;  //to avoid unreferenced variable warning on release
+    (void)err;  //to avoid unreferenced variable warning on release
     gdcmWarningMacro( "Unable to open connection with exception " << err.what()
       << std::endl );
     return false;
     }
   catch (std::exception& ex)
     {
-	(void)ex;  //to avoid unreferenced variable warning on release
+    (void)ex;  //to avoid unreferenced variable warning on release
     //unable to establish connection, so break off.
     gdcmWarningMacro( "Unable to open connection with exception " << ex.what()
       << std::endl );
@@ -219,6 +221,7 @@ bool ULConnection::InitializeIncomingConnection()
       }
     else
       {
+      gdcmDebugMacro( "Call to is_readready failed" );
       SetState(eStaDoesNotExist);
       return false; //no connection here, so have to initialize later.
       }
@@ -253,16 +256,20 @@ bool ULConnection::InitializeIncomingConnection()
   return true;
 }
 
-void ULConnection::StopProtocol(){
-  if (mEcho != NULL){
+void ULConnection::StopProtocol()
+{
+  if (mEcho != NULL)
+    {
     delete mEcho;
     mEcho = NULL;
     SetState(eSta1Idle);
-  } else {
+    }
+  else
+    {
     //don't actually kill the connection, just kill the association.
     //this is just for a cstorescp initialized by a cmove
     SetState(eSta2Open);
-  }
+    }
 }
 
 const PresentationContextRQ *ULConnection::GetPresentationContextRQByID(uint8_t id) const

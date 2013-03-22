@@ -26,8 +26,6 @@
 #include "gdcmPresentationContextAC.h"
 #include "gdcmPresentationContext.h"
 
-#include "gdcmScanner.h" // FIXME
-
 class iosockinet;
 class echo;
 namespace gdcm{
