@@ -331,12 +331,18 @@ void ULTransitionTable::HandleEvent(Subject *s, ULEvent& inEvent, ULConnection& 
     int stateIndex = GetStateIndex(inConnection.GetState());
     if (stateIndex >= 0 && stateIndex < cMaxStateID)
       {
-      if (mTable[eventID].transitions[stateIndex]->mAction != NULL)
+      if ( mTable[eventID].transitions[stateIndex] )
         {
-        gdcmDebugMacro( "Process: Event:" << (int)eventID << ", State:" << stateIndex );
-        inConnection.SetState(mTable[eventID].transitions[stateIndex]->mAction->
-          PerformAction(s,inEvent, inConnection, outWaitingForEvent, outRaisedEvent));
-
+        if (mTable[eventID].transitions[stateIndex]->mAction != NULL)
+          {
+          gdcmDebugMacro( "Process: Event:" << (int)eventID << ", State:" << stateIndex );
+          inConnection.SetState(mTable[eventID].transitions[stateIndex]->mAction->
+            PerformAction(s,inEvent, inConnection, outWaitingForEvent, outRaisedEvent));
+          }
+        }
+      else
+        {
+        gdcmDebugMacro( "Transition failed (NULL) for event:" << (int)eventID << ", State:" << stateIndex );
         }
       }
     }

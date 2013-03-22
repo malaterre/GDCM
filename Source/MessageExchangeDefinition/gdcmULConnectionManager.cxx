@@ -199,7 +199,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
     for( std::vector<BasePDU*>::const_iterator itor
       = thePDUs.begin(); itor != thePDUs.end(); itor++)
       {
-      assert(*itor);
+      //assert(*itor);
       if (*itor == NULL) continue; //can have a nulled pdu, apparently
       (*itor)->Print(Trace::GetErrorStream());
       }
