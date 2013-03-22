@@ -190,53 +190,66 @@ bool ULConnection::InitializeConnection()
 
 bool ULConnection::InitializeIncomingConnection()
 {
-  try{
-    if (mEcho != NULL){
+  try
+    {
+    if (mEcho != NULL)
+      {
       delete mEcho;
       mEcho = NULL;
-    }
-    if (mSocket != NULL){
+      }
+    if (mSocket != NULL)
+      {
       delete mSocket;
       mSocket = NULL;
-    }
+      }
     sockinetbuf sin (sockbuf::sock_stream);
     int val = 1;
     // http://hea-www.harvard.edu/~fine/Tech/addrinuse.html
-    sin.setopt( SO_REUSEADDR, &val, sizeof(val) );
+//    sin.setopt( SO_REUSEADDR, &val, sizeof(val) );
     sin.bind( mInfo.GetCalledIPPort() );
     //int theRecvTimeout = 
-    sin.recvtimeout(1);//(int)GetTimer().GetTimeout());
+    sin.recvtimeout(10);//(int)GetTimer().GetTimeout());
     //int theSendTimeout = 
-    sin.sendtimeout(1);//(int)GetTimer().GetTimeout());
+    sin.sendtimeout(10);//(int)GetTimer().GetTimeout());
     sin.listen();
-    if (sin.is_readready(1, 0)){
+    //sin.debug( true );
+    if (sin.is_readready(10, 0))
+      {
       mSocket = new iosockinet(sin.accept());
-    } else {
+      }
+    else
+      {
       SetState(eStaDoesNotExist);
       return false; //no connection here, so have to initialize later.
-    }
+      }
     SetState(eSta2Open);
 
     /*
     if (mSocket != NULL){
-      delete mSocket;
+    delete mSocket;
     }
     mSocket = new protocol();
     sockinetaddr theAddy(GetConnectionInfo().GetCalledComputerName().c_str(),
-      GetConnectionInfo().GetCalledIPPort());
+    GetConnectionInfo().GetCalledIPPort());
     mSocket->rdbuf()->connect(theAddy);
     mSocket->rdbuf()->recvtimeout((int)GetTimer().GetTimeout());
     mSocket->rdbuf()->sendtimeout((int)GetTimer().GetTimeout());
-*/
-  } catch (sockerr& ex){//unable to establish connection, so break off.
-     (void)ex;  //to avoid unreferenced variable warning on release
-     gdcmErrorMacro("Unable to open connection with exception " << ex.what() << " and " << ex.operation() << std::endl);
-     return false;
-  } catch (std::exception& ex){//unable to establish connection, so break off.
-     (void)ex;  //to avoid unreferenced variable warning on release
-     gdcmErrorMacro("Unable to open connection with exception " << ex.what() << std::endl);
-     return false;
+     */
   }
+  catch (sockerr& ex)
+    {
+    //unable to establish connection, so break off.
+    (void)ex;  //to avoid unreferenced variable warning on release
+    gdcmErrorMacro("Unable to open connection with exception " << ex.what() << " and " << ex.operation() << std::endl);
+    return false;
+    }
+  catch (std::exception& ex)
+    {
+    //unable to establish connection, so break off.
+    (void)ex;  //to avoid unreferenced variable warning on release
+    gdcmErrorMacro("Unable to open connection with exception " << ex.what() << std::endl);
+    return false;
+    }
   return true;
 }
 
