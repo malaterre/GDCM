@@ -1011,6 +1011,12 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                     //inWhichConnection->GetProtocol()->flush();
 
                     receivingData = false; //gotta get data on the other connection for a cmove
+
+                    // cleanup
+                    for (itor = theCStoreRSPPDU.begin(); itor < theCStoreRSPPDU.end(); itor++){
+                      delete *itor;
+                    }
+
                   }
                 }
               }
