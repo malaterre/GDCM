@@ -203,7 +203,7 @@ bool ULConnection::InitializeIncomingConnection()
       mSocket = NULL;
       }
     sockinetbuf sin (sockbuf::sock_stream);
-    int val = 1;
+//    int val = 1;
     // http://hea-www.harvard.edu/~fine/Tech/addrinuse.html
 //    sin.setopt( SO_REUSEADDR, &val, sizeof(val) );
     sin.bind( mInfo.GetCalledIPPort() );
