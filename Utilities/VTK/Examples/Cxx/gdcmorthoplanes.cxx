@@ -154,38 +154,49 @@ int main( int argc, char *argv[] )
     //names->Print( std::cout );
     }
 
-  //gdcm::Trace::DebugOn();
-  //gdcm::Trace::WarningOn();
-  gdcm::IPPSorter s;
-  s.SetComputeZSpacing( true );
-  s.SetZSpacingTolerance( 1e-3 );
-  bool b = s.Sort( filenames );
-  if( !b )
-    {
-    std::cerr << "Failed to sort files" << std::endl;
-    return 1;
-    }
-  std::cout << "Sorting succeeded:" << std::endl;
-  s.Print( std::cout );
-
-  std::cout << "Found z-spacing:" << std::endl;
-  std::cout << s.GetZSpacing() << std::endl;
-  double ippzspacing = s.GetZSpacing();
-
-  const std::vector<std::string> & sorted = s.GetFilenames();
-  vtkStringArray *files = vtkStringArray::New();
-  std::vector< std::string >::const_iterator it = sorted.begin();
-  for( ; it != sorted.end(); ++it)
-    {
-    const std::string &f = *it;
-    files->InsertNextValue( f.c_str() );
-    }
-
-  //delete[] fname;
   vtkGDCMImageReader * reader = vtkGDCMImageReader::New();
-  //reader->SetFileLowerLeft( 1 );
-  reader->SetFileNames( files );
-  reader->Update(); // important
+  double ippzspacing;
+  if( filenames.size() > 1 )
+    {
+    //gdcm::Trace::DebugOn();
+    //gdcm::Trace::WarningOn();
+    gdcm::IPPSorter s;
+    s.SetComputeZSpacing( true );
+    s.SetZSpacingTolerance( 1e-3 );
+    bool b = s.Sort( filenames );
+    if( !b )
+      {
+      std::cerr << "Failed to sort files" << std::endl;
+      return 1;
+      }
+    std::cout << "Sorting succeeded:" << std::endl;
+    s.Print( std::cout );
+
+    std::cout << "Found z-spacing:" << std::endl;
+    std::cout << s.GetZSpacing() << std::endl;
+    ippzspacing = s.GetZSpacing();
+
+    const std::vector<std::string> & sorted = s.GetFilenames();
+    vtkStringArray *files = vtkStringArray::New();
+    std::vector< std::string >::const_iterator it = sorted.begin();
+    for( ; it != sorted.end(); ++it)
+      {
+      const std::string &f = *it;
+      files->InsertNextValue( f.c_str() );
+      }
+    reader->SetFileNames( files );
+    //reader->SetFileLowerLeft( 1 );
+    reader->Update(); // important
+    files->Delete();
+    }
+  else
+    {
+    reader->SetFileName( argv[1] );
+    reader->Update(); // important
+    ippzspacing = reader->GetOutput()->GetSpacing()[2];
+    ippzspacing = 4;
+    }
+
   //reader->GetOutput()->Print( std::cout );
   //vtkFloatingPointType range[2];
   //reader->GetOutput()->GetScalarRange(range);
@@ -212,8 +223,6 @@ int main( int argc, char *argv[] )
     writer->Write();
 #endif
 
-
-  files->Delete();
 
   vtkOutlineFilter* outline = vtkOutlineFilter::New();
     outline->SetInputConnection(v16->GetOutputPort());
