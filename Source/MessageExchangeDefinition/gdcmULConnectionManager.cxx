@@ -452,6 +452,7 @@ void ULConnectionManager::BreakConnectionNow(){
 //one for storescp and the other for movescu.  Perhaps complicated, but
 //avoids starting a second process.
 EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnectionCallback* inCallback){
+  gdcmDebugMacro( "Start RunMoveEventLoop" );
   EStateID theState = eStaDoesNotExist;
   bool waitingForEvent;
   EEventID raisedEvent;
@@ -461,6 +462,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
   //when receiving data from a find, etc, then justWaiting is true and only receiving is done
   //eventually, could add cancel into the mix... but that would be through a callback or something similar
   do {
+    gdcmDebugMacro( "Before mTransitions.HandleEvent" );
     if (!justWaiting){
       mTransitions.HandleEvent(this,currentEvent, *mConnection, waitingForEvent, raisedEvent);
     }
@@ -475,20 +477,27 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
     //in our case we use another port to receive it.
     EStateID theCStoreStateID = eSta6TransferReady;
     bool secondConnectionEstablished = false;
+    gdcmDebugMacro( "Before mSecondaryConnection.GetProtocol" );
     if (mSecondaryConnection->GetProtocol() == NULL){
       //establish the connection
       //can fail if is_readready doesn't return true, ie, the connection
       //wasn't opened on the other side because the other side isn't sending data yet
       //for whatever reason (maybe there's nothing to get?)
+      gdcmDebugMacro( "Before mSecondaryConnection.InitializeIncomingConnection" );
       secondConnectionEstablished =
         mSecondaryConnection->InitializeIncomingConnection();
     }
+    gdcmDebugMacro( "After mSecondaryConnection.InitializeIncomingConnection: " <<
+      "secondConnectionEstablished=" << secondConnectionEstablished <<
+      " GetState() =" << (int)mSecondaryConnection->GetState()
+    );
     if (secondConnectionEstablished &&
       (mSecondaryConnection->GetState()== eSta1Idle ||
       mSecondaryConnection->GetState() == eSta2Open)){
       ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
       theCStoreStateID = RunEventLoop(theCStoreEvent, mSecondaryConnection, inCallback, true);
     }
+    gdcmDebugMacro( "After mSecondaryConnection / RunEventLoop: " << (int)theCStoreStateID );
 
     //just as for the regular event loop, but we have to alternate between the connections.
     //it may be that nothing comes back over the is connection, but lots over the
@@ -768,6 +777,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
   //when receiving data from a find, etc, then justWaiting is true and only receiving is done
   //eventually, could add cancel into the mix... but that would be through a callback or something similar
   do {
+    gdcmDebugMacro( "Before mTransitions.HandleEvent #2" );
     raisedEvent = eEventDoesNotExist;
     if (!waitingForEvent){//justWaiting){
       mTransitions.HandleEvent(this, currentEvent, *inWhichConnection, waitingForEvent, raisedEvent);
