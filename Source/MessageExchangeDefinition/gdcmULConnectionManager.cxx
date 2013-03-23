@@ -805,6 +805,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
         try {
           gdcmDebugMacro( "Waiting for ItemType" );
           is.read( (char*)&itemtype, 1 );
+          gdcmDebugMacro( "Received ItemType #" << (int)itemtype );
           //what happens if nothing's read?
           theFirstPDU = PDUFactory::ConstructPDU(itemtype);
           if (theFirstPDU != NULL){
@@ -818,6 +819,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
 
             if (theFirstPDU->IsLastFragment()) waitingForEvent = false;
           } else {
+            gdcmDebugMacro( "NULL theFirstPDU for ItemType" << (int)itemtype );
             waitingForEvent = false; //because no PDU means not waiting anymore
           }
         }
