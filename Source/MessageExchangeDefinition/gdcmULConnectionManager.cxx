@@ -382,8 +382,7 @@ bool ULConnectionManager::SendMove(const BaseRootQuery* inRootQuery,
   ULEvent theEvent(ePDATArequest, theDataPDU);
   EStateID stateid = RunMoveEventLoop(theEvent, inCallback);
   gdcmDebugMacro( "Final StateID: " << (int) stateid );
-  //assert( stateid == gdcm::network::eSta6TransferReady );
-  return true;
+  return stateid == gdcm::network::eSta6TransferReady;
 }
 
 std::vector<DataSet> ULConnectionManager::SendFind(const BaseRootQuery* inRootQuery)
@@ -836,6 +835,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
           } else {
             gdcmDebugMacro( "NULL theFirstPDU for ItemType" << (int)itemtype );
             waitingForEvent = false; //because no PDU means not waiting anymore
+            return eStaDoesNotExist;
           }
         }
         catch (...)
@@ -1033,7 +1033,6 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                     for (itor = theCStoreRSPPDU.begin(); itor < theCStoreRSPPDU.end(); itor++){
                       delete *itor;
                     }
-
                   }
                 }
               }
