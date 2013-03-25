@@ -134,7 +134,8 @@ namespace gdcm {
       ///callback based API
       void SendStore(const File & file, ULConnectionCallback* inCallback);
       void SendFind(const BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback);
-      void SendMove(const BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback);
+      /// return false upon error
+      bool SendMove(const BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback);
 
     };
   }

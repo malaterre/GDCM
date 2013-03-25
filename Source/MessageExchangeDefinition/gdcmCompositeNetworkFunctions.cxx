@@ -195,10 +195,11 @@ bool CompositeNetworkFunctions::CMove( const char *remote, uint16_t portno,
 
   network::ULWritingCallback theCallback;
   theCallback.SetDirectory(outputdir);
-  theManager.SendMove( query, &theCallback );
+  bool ret = theManager.SendMove( query, &theCallback );
+  assert( ret );
 
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-  return true;
+  return ret;
 }
 
 //note that pointer to the base root query-- the caller must instantiated and delete

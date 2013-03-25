@@ -83,6 +83,10 @@ public:
   const PresentationContextRQ *GetPresentationContextByAbstractSyntax(AbstractSyntax const & as ) const;
   bool IsLastFragment() const { return true; }
 
+protected:
+  friend class AAssociateACPDU;
+  std::string GetReserved43_74() const;
+
 private:
   // 1 PDU-type 01H
   static const uint8_t ItemType; // PDUType ?
@@ -128,7 +132,7 @@ private:
   43-74 Reserved This reserved field shall be sent with a value 00H for all bytes but not
   tested to this value when received
    */
-  static const uint8_t Reserved43_74[32]; // { 0 }
+  char Reserved43_74[32]; // { 0 }
   /*
   75-xxx Variable items This variable field shall contain the following items: one Application
   Context Item, one or more Presentation Context Items and one User
