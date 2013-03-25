@@ -175,6 +175,7 @@ EStateID ULActionAE6::PerformAction(Subject *, ULEvent& inEvent, ULConnection& i
 
     AAssociateACPDU acpdu;
 
+    assert( rqpdu->GetNumberOfPresentationContext() );
     for( unsigned int index = 0; index < rqpdu->GetNumberOfPresentationContext(); index++ )
       {
       // FIXME / HARDCODED We only ever accept Little Endian
@@ -191,22 +192,26 @@ EStateID ULActionAE6::PerformAction(Subject *, ULEvent& inEvent, ULConnection& i
 
       std::vector<TransferSyntaxSub> const & tsSet = pc.GetTransferSyntaxes();
       std::vector<TransferSyntaxSub>::const_iterator tsitor;
-      bool hasLittleEndian = false;
+      // PS 3.8 Table 9-18 PRESENTATION CONTEXT ITEM FIELDS
+      uint8_t result = 4; // transfer-syntaxes-not-supported (provider rejection)
       for (tsitor = tsSet.begin(); tsitor < tsSet.end(); tsitor++)
         {
-        if (strcmp(tsitor->GetName(), ts1.GetName())==0)
+        //gdcmDebugMacro( "Checking: [" << tsitor->GetName() << "] vs [" << ts1.GetName() << "]" << std::endl );
+        if (strcmp(tsitor->GetName(), ts1.GetName()) == 0 )
           {
-          hasLittleEndian = true;
+          result = 0; // 0 - acceptance
           }
         }
-      if (!hasLittleEndian) continue; //don't add this presentation context, because
-      //the client doesn't know how to handle it.
-
+      if( result )
+        {
+        gdcmErrorMacro( "Could not find Implicit Little Endian in Response. Giving up" );
+        }
       pcac1.SetPresentationContextID( id );
       pcac1.SetTransferSyntax( ts1 );
-      //pcac1.SetTransferSyntax( tsSet[0] );
+      pcac1.SetReason( result );
       acpdu.AddPresentationContextAC( pcac1 );
     }
+    assert( acpdu.GetNumberOfPresentationContextAC() );
 
     // Init AE-Titles:
     acpdu.InitFromRQ( *rqpdu );

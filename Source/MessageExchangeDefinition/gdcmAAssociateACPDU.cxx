@@ -146,6 +146,7 @@ const std::ostream &AAssociateACPDU::Write(std::ostream &os) const
   //os.write( called, 16 );
   os.write( (char*)&Reserved43_74, sizeof(Reserved43_74) );
   AppContext.Write( os );
+  assert( PresContextAC.size() );
   std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();
   for( ; it != PresContextAC.end(); ++it )
     {
@@ -230,12 +231,12 @@ void AAssociateACPDU::InitSimple( AAssociateRQPDU const & rqpdu )
   TransferSyntaxSub ts1;
   ts1.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
 
-
+  assert( rqpdu.GetNumberOfPresentationContext() );
   for( unsigned int index = 0; index < rqpdu.GetNumberOfPresentationContext(); index++ )
     {
     // FIXME / HARDCODED We only ever accept Little Endian
     // FIXME we should check :
-    // rqpdu.GetAbstractSyntax() contains LittleENdian
+    // rqpdu.GetAbstractSyntax() contains LittleEndian
     PresentationContextAC pcac1;
     PresentationContextRQ const &pc = rqpdu.GetPresentationContext(index);
     uint8_t id = pc.GetPresentationContextID();

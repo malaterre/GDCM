@@ -49,6 +49,9 @@ public:
     }
   TransferSyntaxSub const & GetTransferSyntax() const { return SubItems; }
 
+  void SetReason( uint8_t r ) { Result = r; }
+  uint8_t GetReason() const { return Result; }
+
 private:
   static const uint8_t ItemType;
   static const uint8_t Reserved2;
