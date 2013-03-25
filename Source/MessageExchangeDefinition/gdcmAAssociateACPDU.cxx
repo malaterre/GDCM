@@ -25,7 +25,7 @@ const uint16_t AAssociateACPDU::ProtocolVersion = 0x01; // big endian
 const uint16_t AAssociateACPDU::Reserved9_10 = 0x0000;
 //const uint8_t AAssociateACPDU::Reserved11_26[16] = {  };
 //const uint8_t AAssociateACPDU::Reserved27_42[16] = {  };
-const uint8_t AAssociateACPDU::Reserved43_74[32] = {  };
+//const uint8_t AAssociateACPDU::Reserved43_74[32] = {  };
 
 AAssociateACPDU::AAssociateACPDU()
 {
@@ -71,14 +71,18 @@ std::istream &AAssociateACPDU::Read(std::istream &is)
   uint16_t reserved9_10;
   is.read( (char*)&reserved9_10, sizeof(Reserved9_10) );
   SwapperDoOp::SwapArray(&reserved9_10,1);
-  char reserved11_26[16] = {  };
+  char reserved11_26[16];
+  memset( reserved11_26, 0, sizeof(reserved11_26));
   is.read( (char*)&reserved11_26, sizeof(Reserved11_26) ); // called
-  strncpy( Reserved11_26, reserved11_26, sizeof(Reserved11_26) );
-  char reserved27_42[16] = {  };
+  memcpy( Reserved11_26, reserved11_26, sizeof(Reserved11_26) );
+  char reserved27_42[16];
+  memset( reserved27_42, 0, sizeof(reserved27_42));
   is.read( (char*)&reserved27_42, sizeof(Reserved27_42) ); // calling
-  strncpy( Reserved27_42, reserved27_42, sizeof(Reserved27_42) );
-  uint8_t reserved43_74[32] = {  };
+  memcpy( Reserved27_42, reserved27_42, sizeof(Reserved27_42) );
+  uint8_t reserved43_74[32];
+  memset( reserved43_74, 0, sizeof(reserved43_74));
   is.read( (char*)&reserved43_74, sizeof(Reserved43_74) ); // 0 (32 times)
+  memcpy( Reserved43_74, reserved43_74, sizeof(Reserved43_74) );
 
   uint8_t itemtype2 = 0x0;
   size_t curlen = 0;
@@ -183,12 +187,21 @@ void AAssociateACPDU::AddPresentationContextAC( PresentationContextAC const &pca
 
 void AAssociateACPDU::Print(std::ostream &os) const
 {
+  os << "ProtocolVersion: " << std::hex << ProtocolVersion << std::dec << std::endl;
+  os << "Reserved9_10: " << std::hex << Reserved9_10 << std::dec << std::endl;
+  os << "Reserved11_26: [" << Reserved11_26 << "]" << std::endl;
+  os << "Reserved27_42: [" << Reserved27_42 << "]" << std::endl;
+  os << "Reserved43_74: [" << Reserved43_74 << "]" << std::endl;
+  os << "Application Context Name: ";
+  AppContext.Print( os );
   os << "List of PresentationContextAC: " << std::endl;
   std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();
   for( ; it != PresContextAC.end(); ++it )
     {
     it->Print(os);
     }
+  os << "User Information: ";
+  UserInfo.Print( os );
 }
 
 void AAssociateACPDU::InitFromRQ( AAssociateRQPDU const & rqpdu )

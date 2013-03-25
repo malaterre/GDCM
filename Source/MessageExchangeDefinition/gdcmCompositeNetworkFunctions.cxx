@@ -244,6 +244,11 @@ bool CompositeNetworkFunctions::CFind( const char *remote, uint16_t portno,
   theResponses = theCallback.GetResponses();
 
   bool ret = false; // by default an error
+  if( theResponses.empty() )
+    {
+    gdcmErrorMacro( "Failed to GetResponses." );
+    return false;
+    }
   assert( theResponses.size() >= 1 );
   // take the last one:
   const DataSet &ds = theResponses[ theResponses.size() - 1 ]; // FIXME
