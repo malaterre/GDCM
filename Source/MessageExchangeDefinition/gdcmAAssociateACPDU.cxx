@@ -32,6 +32,7 @@ AAssociateACPDU::AAssociateACPDU()
   PDULength = 0; // len of
   memset(Reserved11_26, ' ', sizeof(Reserved11_26));
   memset(Reserved27_42, ' ', sizeof(Reserved27_42));
+  memset(Reserved43_74, ' ', sizeof(Reserved43_74));
 
   PDULength = (uint32_t)(Size() - 6);
 }
@@ -145,6 +146,7 @@ const std::ostream &AAssociateACPDU::Write(std::ostream &os) const
   //os.write( called, 16 );
   os.write( (char*)&Reserved43_74, sizeof(Reserved43_74) );
   AppContext.Write( os );
+  assert( PresContextAC.size() );
   std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();
   for( ; it != PresContextAC.end(); ++it )
     {
@@ -209,8 +211,18 @@ void AAssociateACPDU::InitFromRQ( AAssociateRQPDU const & rqpdu )
   // Table 9-17 ASSOCIATE-AC PDU fields
   // This reserved field shall be sent with a value identical to the value
   // received in the same field of the A-ASSOCIATE-RQ PDU
+  const std::string called = rqpdu.GetCalledAETitle();
   SetCalledAETitle( rqpdu.GetCalledAETitle().c_str() );
+  const std::string calling = rqpdu.GetCallingAETitle();
   SetCallingAETitle( rqpdu.GetCallingAETitle().c_str() );
+  const std::string reserved = rqpdu.GetReserved43_74();
+  memcpy( Reserved43_74, reserved.c_str(), sizeof(Reserved43_74) );
+
+  assert( ProtocolVersion == 0x01 );
+  assert( Reserved9_10 == 0x0 );
+  assert( memcmp( Reserved11_26, called.c_str(), sizeof( Reserved11_26) ) == 0 );
+  assert( memcmp( Reserved27_42, calling.c_str(), sizeof(Reserved27_42) ) == 0 );
+  assert( memcmp( Reserved43_74, reserved.c_str(), sizeof(Reserved43_74) ) == 0 );
 }
 
 
@@ -219,12 +231,12 @@ void AAssociateACPDU::InitSimple( AAssociateRQPDU const & rqpdu )
   TransferSyntaxSub ts1;
   ts1.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
 
-
+  assert( rqpdu.GetNumberOfPresentationContext() );
   for( unsigned int index = 0; index < rqpdu.GetNumberOfPresentationContext(); index++ )
     {
     // FIXME / HARDCODED We only ever accept Little Endian
     // FIXME we should check :
-    // rqpdu.GetAbstractSyntax() contains LittleENdian
+    // rqpdu.GetAbstractSyntax() contains LittleEndian
     PresentationContextAC pcac1;
     PresentationContextRQ const &pc = rqpdu.GetPresentationContext(index);
     uint8_t id = pc.GetPresentationContextID();

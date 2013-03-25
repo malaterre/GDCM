@@ -34,7 +34,7 @@ const uint8_t AAssociateRQPDU::ItemType = 0x1; // PDUType ?
 const uint8_t AAssociateRQPDU::Reserved2 = 0x0;
 const uint16_t AAssociateRQPDU::ProtocolVersion = 0x1; // big - endian ?
 const uint16_t AAssociateRQPDU::Reserved9_10 = 0x0;
-const uint8_t AAssociateRQPDU::Reserved43_74[32] = {};
+//const uint8_t AAssociateRQPDU::Reserved43_74[32] = {};
 
 AAssociateRQPDU::AAssociateRQPDU()
 {
@@ -44,6 +44,7 @@ AAssociateRQPDU::AAssociateRQPDU()
   memset(CallingAETitle, ' ', sizeof(CallingAETitle));
   //const char calling[] = "ECHOSCU";
   //strncpy(CallingAETitle, calling, strlen(calling) );
+  memset(Reserved43_74, 0x0, sizeof(Reserved43_74));
 
   //SetCallingAETitle( "MOVESCU" );
 
@@ -78,6 +79,7 @@ std::istream &AAssociateRQPDU::Read(std::istream &is)
   is.read( (char*)&CallingAETitle, sizeof(CallingAETitle) ); // calling
   uint8_t reserved43_74[32] = {  };
   is.read( (char*)&reserved43_74, sizeof(Reserved43_74) ); // 0 (32 times)
+  memcpy( Reserved43_74, reserved43_74, sizeof(Reserved43_74) );
 
   uint8_t itemtype2 = 0x0;
   size_t curlen = 0;
@@ -221,6 +223,11 @@ void AAssociateRQPDU::SetCallingAETitle(const char callingaetitle[16])
     }
   // FIXME Need to check upper case
   // FIXME cannot set to only whitespaces
+}
+
+std::string AAssociateRQPDU::GetReserved43_74() const
+{
+  return std::string(Reserved43_74,32);
 }
 
 void AAssociateRQPDU::Print(std::ostream &os) const

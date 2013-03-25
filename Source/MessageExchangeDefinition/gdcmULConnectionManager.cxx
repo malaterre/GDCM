@@ -370,17 +370,19 @@ std::vector<DataSet> ULConnectionManager::SendMove(const BaseRootQuery* inRootQu
   return theCallback.GetDataSets();
 }
 
-void ULConnectionManager::SendMove(const BaseRootQuery* inRootQuery,
+bool ULConnectionManager::SendMove(const BaseRootQuery* inRootQuery,
   ULConnectionCallback* inCallback)
 {
   if (mConnection == NULL)
     {
-    return;
+    gdcmErrorMacro( "mConnection is NULL" );
+    return false;
     }
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, inRootQuery );
   ULEvent theEvent(ePDATArequest, theDataPDU);
   EStateID stateid = RunMoveEventLoop(theEvent, inCallback);
-  assert( stateid == gdcm::network::eSta6TransferReady ); (void)stateid;
+  gdcmDebugMacro( "Final StateID: " << (int) stateid );
+  return stateid == gdcm::network::eSta6TransferReady;
 }
 
 std::vector<DataSet> ULConnectionManager::SendFind(const BaseRootQuery* inRootQuery)
@@ -491,6 +493,11 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
       "secondConnectionEstablished=" << secondConnectionEstablished <<
       " GetState() =" << (int)mSecondaryConnection->GetState()
     );
+    if (!secondConnectionEstablished )
+      {
+      gdcmErrorMacro( "Could not establish 2nd connection" );
+      //return eStaDoesNotExist;
+      }
     if (secondConnectionEstablished &&
       (mSecondaryConnection->GetState()== eSta1Idle ||
       mSecondaryConnection->GetState() == eSta2Open)){
@@ -559,6 +566,13 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
             thePrinter.PrintDataSet(theRSP, Trace::GetStream());
             Trace::GetStream() << std::endl;
             }
+          if (theRSP.FindDataElement(Tag(0x0, 0x0800))){
+            DataElement const & de = theRSP.GetDataElement(Tag(0x0,0x0800));
+            Attribute<0x0,0x0800> at;
+            at.SetFromDataElement( de );
+            unsigned short datasettype = at.GetValue();
+            assert( datasettype == 0x0101 );
+          }
           if (theRSP.FindDataElement(Tag(0x0, 0x0900))){
             DataElement const & de = theRSP.GetDataElement(Tag(0x0,0x0900));
             Attribute<0x0,0x0900> at;
@@ -821,6 +835,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
           } else {
             gdcmDebugMacro( "NULL theFirstPDU for ItemType" << (int)itemtype );
             waitingForEvent = false; //because no PDU means not waiting anymore
+            return eStaDoesNotExist;
           }
         }
         catch (...)
@@ -1018,7 +1033,6 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                     for (itor = theCStoreRSPPDU.begin(); itor < theCStoreRSPPDU.end(); itor++){
                       delete *itor;
                     }
-
                   }
                 }
               }
