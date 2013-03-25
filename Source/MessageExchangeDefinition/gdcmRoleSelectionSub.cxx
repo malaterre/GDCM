@@ -104,5 +104,12 @@ size_t RoleSelectionSub::Size() const
   return ret;
 }
 
+void RoleSelectionSub::Print(std::ostream &os) const
+{
+  os << "SOP-class-uid" << Name << std::endl;
+  os << "SCURole: " << SCURole << std::endl;
+  os << "SCPRole: " << SCPRole << std::endl;
+}
+
 } // end namespace network
 } // end namespace gdcm

@@ -36,6 +36,7 @@ public:
   const std::ostream &Write(std::ostream &os) const;
 
   size_t Size() const;
+  void Print(std::ostream &os) const;
 
 private:
   static const uint8_t ItemType;

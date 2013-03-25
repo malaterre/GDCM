@@ -80,5 +80,10 @@ size_t MaximumLengthSub::Size() const
   return ret;
 }
 
+void MaximumLengthSub::Print(std::ostream &os) const
+{
+  os << "MaximumLength: " << MaximumLength << std::endl;
+}
+
 } // end namespace network
 } // end namespace gdcm

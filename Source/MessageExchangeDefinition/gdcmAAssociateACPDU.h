@@ -85,7 +85,7 @@ private:
   // This reserved field shall be sent with a value identical to the value
   // received in the same field of the A-ASSOCIATE-RQ PDU, but its value
   // shall not be tested when received.
-  static const uint8_t Reserved43_74[32];
+  uint8_t Reserved43_74[32];
   /*
   75-xxx Variable items This variable field shall contain the following items: one Application
   Context Item, one or more Presentation Context Item(s) and one User

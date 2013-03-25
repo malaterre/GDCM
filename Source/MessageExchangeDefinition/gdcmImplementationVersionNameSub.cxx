@@ -75,5 +75,10 @@ size_t ImplementationVersionNameSub::Size() const
   return ret;
 }
 
+void ImplementationVersionNameSub::Print(std::ostream &os) const
+{
+  os << "ImplementationVersionName: " << ImplementationVersionName << std::endl;
+}
+
 } // end namespace network
 } // end namespace gdcm

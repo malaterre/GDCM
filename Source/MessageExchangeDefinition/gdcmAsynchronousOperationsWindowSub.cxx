@@ -89,5 +89,11 @@ size_t AsynchronousOperationsWindowSub::Size() const
   return ret;
 }
 
+void AsynchronousOperationsWindowSub::Print(std::ostream &os) const
+{
+  os << "MaximumNumberOperationsInvoked: " << MaximumNumberOperationsInvoked << std::endl;
+  os << "MaximumNumberOperationsPerformed: " << MaximumNumberOperationsPerformed << std::endl;
+}
+
 } // end namespace network
 } // end namespace gdcm
