@@ -76,5 +76,10 @@ size_t ImplementationClassUIDSub::Size() const
   return ret;
 }
 
+void ImplementationClassUIDSub::Print(std::ostream &os) const
+{
+  os << "ImplementationClassUID: " << ImplementationClassUID << std::endl;
+}
+
 } // end namespace network
 } // end namespace gdcm

@@ -56,7 +56,6 @@ private:
   static const uint8_t Reserved2;
   uint16_t ItemLength; // len of
   MaximumLengthSub MLS;
-  //std::string /*UserInformation*/ Data; // ??
   ImplementationClassUIDSub ICUID;
   AsynchronousOperationsWindowSub *AOWS;
   RoleSelectionSub *RSS;

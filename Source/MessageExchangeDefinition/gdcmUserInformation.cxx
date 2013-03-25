@@ -151,7 +151,28 @@ size_t UserInformation::Size() const
 
 void UserInformation::Print(std::ostream &os) const
 {
-  (void)os;
+  os << "MaximumLengthSub: ";
+  MLS.Print( os );
+  os << "ImplementationClassUIDSub: ";
+  ICUID.Print( os );
+  if( AOWS )
+    {
+    os << "AsynchronousOperationsWindowSub: ";
+    AOWS->Print( os );
+    }
+  if( RSS )
+    {
+    os << "RoleSelectionSub: ";
+    RSS->Print( os );
+    }
+  os << "ImplementationVersionNameSub: ";
+  IVNS.Print( os );
+  if( SOPCENS )
+    {
+    os << "SOPClassExtendedNegociationSub: ";
+    SOPCENS->Print( os );
+    }
+  os << std::endl;
 }
 
 } // end namespace network

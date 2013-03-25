@@ -96,5 +96,11 @@ size_t SOPClassExtendedNegociationSub::Size() const
   return ret;
 }
 
+void SOPClassExtendedNegociationSub::Print(std::ostream &os) const
+{
+  os << "SOP-class-uid: " << Name << std::endl; // UID
+  os << "Service-class-application-information: " << Blob << std::endl;
+}
+
 } // end namespace network
 } // end namespace gdcm
