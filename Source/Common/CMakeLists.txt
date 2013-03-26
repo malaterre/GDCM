@@ -114,6 +114,7 @@ set(Common_SRCS
   gdcmEvent.cxx
   gdcmDataEvent.cxx
   gdcmProgressEvent.cxx
+  gdcmFileNameEvent.cxx
   gdcmCommand.cxx
   gdcmMD5.cxx
   gdcmBase64.cxx

@@ -38,6 +38,7 @@ protected:
   virtual void StartFilter();
   virtual void EndFilter();
   virtual void ShowProgress(Subject *caller, const Event &evt);
+  virtual void ShowFileName(Subject *caller, const Event &evt);
   virtual void ShowIteration();
   virtual void ShowAnonymization(Subject *caller, const Event &evt);
   virtual void ShowDataSet(Subject *caller, const Event &evt);
@@ -59,6 +60,7 @@ private:
   SmartPointer<SimpleCommandType> m_StartFilterCommand;
   SmartPointer<SimpleCommandType> m_EndFilterCommand;
   SmartPointer<CommandType> m_ProgressFilterCommand;
+  SmartPointer<CommandType> m_FileNameFilterCommand;
   SmartPointer<SimpleCommandType> m_IterationFilterCommand;
   SmartPointer<SimpleCommandType> m_AbortFilterCommand;
   SmartPointer<CommandType> m_AnonymizeFilterCommand;
@@ -68,6 +70,7 @@ private:
   unsigned long m_StartTag;
   unsigned long m_EndTag;
   unsigned long m_ProgressTag;
+  unsigned long m_FileNameTag;
   unsigned long m_IterationTag;
   unsigned long m_AbortTag;
   unsigned long m_AnonymizeTag;
