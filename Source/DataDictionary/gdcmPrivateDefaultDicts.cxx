@@ -37,6 +37,11 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x0029,0x0010,"ShowcaseAppearance",VR::DS,VM::VM1,"?",false },
+  {0x0029,0x0011,"ShowcaseAppearance",VR::DS,VM::VM1,"?",false },
+  {0x0029,0x0012,"ShowcaseAppearance",VR::DS,VM::VM1,"?",false },
+  {0x0029,0x0013,"ShowcaseAppearance",VR::DS,VM::VM1,"?",false },
+  {0x0029,0x0014,"ShowcaseAppearance",VR::SQ,VM::VM1,"?",false },
   {0x2111,0x0010,"Viztek OPALRAD PrivateGroup",VR::UT,VM::VM1,"XML annotations",false },
   {0x0caf,0x0011,"Xinapse Systems",VR::LO,VM::VM1,"Private attributes Identification Code",false },
   {0x0caf,0x0001,"Xinapse Systems",VR::OB,VM::VM1,"Regions of interest",false },
