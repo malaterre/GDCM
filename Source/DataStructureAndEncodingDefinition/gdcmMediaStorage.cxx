@@ -208,6 +208,7 @@ bool MediaStorage::IsImage(MSType ms)
     || ms == GeneralECGWaveformStorage
     || ms == RTIonBeamsTreatmentRecordStorage
     || ms == RTStructureSetStorage
+    || ms == MammographyCADSR
     || ms == SurfaceSegmentationStorage )
     {
     return false;
