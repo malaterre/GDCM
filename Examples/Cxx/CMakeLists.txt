@@ -31,6 +31,7 @@ set(EXAMPLES_SRCS
   ExtractIconFromFile
   CreateJPIPDataSet
   DumpADAC
+  DumpImageHeaderInfo
   ReadMultiTimesException
   pmsct_rgb1
   GenAllVR
