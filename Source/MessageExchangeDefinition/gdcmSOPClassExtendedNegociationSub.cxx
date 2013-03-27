@@ -55,7 +55,7 @@ std::istream &SOPClassExtendedNegociationSub::Read(std::istream &is)
 
   char blob[256];
   assert( uidlength < ItemLength );
-  uint16_t bloblength = (uint16_t)(ItemLength - 1 - 1 - 2 - 2 - uidlength);
+  uint16_t bloblength = (uint16_t)(ItemLength - 2 - uidlength);
   assert( bloblength < 256 );
   is.read( blob, bloblength );
   Blob = std::string(blob,bloblength);
@@ -99,7 +99,15 @@ size_t SOPClassExtendedNegociationSub::Size() const
 void SOPClassExtendedNegociationSub::Print(std::ostream &os) const
 {
   os << "SOP-class-uid: " << Name << std::endl; // UID
-  os << "Service-class-application-information: " << Blob << std::endl;
+  os << "Service-class-application-information: [";
+  const char *beg = Blob.c_str();
+  const char *end = beg + Blob.size();
+  for( const char *p = beg; p != end; ++p )
+    {
+    if ( p != beg ) os << " ";
+    os << "0x" << (int)*p;
+    }
+  os << "]" << std::endl;
 }
 
 } // end namespace network
