@@ -137,9 +137,39 @@ void Bitmap::SetPlanarConfiguration(unsigned int pc)
 {
   // precondition
   assert( pc == 0 || pc == 1 );
-  // LEADTOOLS_FLOWERS-8-MONO2-Uncompressed.dcm
-  if( pc ) assert( PF.GetSamplesPerPixel() == 3 ); // Please set PixelFormat first
   PlanarConfiguration = pc;
+  if( pc )
+    {
+    // LEADTOOLS_FLOWERS-8-MONO2-Uncompressed.dcm
+    if( PF.GetSamplesPerPixel() != 3 ) // Please set PixelFormat first
+      {
+      gdcmWarningMacro( "Cant have Planar Configuration in non RGB input. Discarding" );
+      PlanarConfiguration = 0;
+      }
+    const TransferSyntax &ts = GetTransferSyntax();
+    if(  ts == TransferSyntax::JPEGBaselineProcess1
+      || ts == TransferSyntax::JPEGExtendedProcess2_4
+      || ts == TransferSyntax::JPEGExtendedProcess3_5
+      || ts == TransferSyntax::JPEGSpectralSelectionProcess6_8
+      || ts == TransferSyntax::JPEGFullProgressionProcess10_12
+      || ts == TransferSyntax::JPEGLosslessProcess14
+      || ts == TransferSyntax::JPEGLosslessProcess14_1
+      || ts == TransferSyntax::JPEGLSLossless
+      || ts == TransferSyntax::JPEGLSNearLossless
+      || ts == TransferSyntax::JPEG2000Lossless
+      || ts == TransferSyntax::JPEG2000
+      || ts == TransferSyntax::JPIPReferenced
+    )
+      {
+      // PS 3.6 - 2011 8.2.4 JPEG 2000 IMAGE COMPRESSION
+      // The value of Planar Configuration (0028,0006) is irrelevant since the
+      // manner of encoding components is specified in the JPEG 2000 standard,
+      // hence it shall be set to 0.
+      // By extension, this behavior has been applied also to JPEG and JPEG-LS
+      gdcmWarningMacro( "Cant have Planar Configuration in JPEG/JPEG-LS/JPEG 2000. Discarding" );
+      PlanarConfiguration = 0;
+      }
+    }
   // \postcondition
   assert( PlanarConfiguration == 0 || PlanarConfiguration == 1 );
 }

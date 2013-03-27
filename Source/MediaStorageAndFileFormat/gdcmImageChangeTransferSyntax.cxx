@@ -268,8 +268,9 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Bit
     //bool r = codec.Code(input.GetDataElement(), out);
     bool r = codec->Code(pixelde, out);
 
-    // The value of Planar Configuration (0028,0006) is irrelevant since the manner of encoding components is
-    // specified in the JPEG 2000 standard, hence it shall be set to 0.
+    // The value of Planar Configuration (0028,0006) is irrelevant since the
+    // manner of encoding components is specified in the JPEG 2000 standard,
+    // hence it shall be set to 0.
     output.SetPlanarConfiguration( 0 );
 
     if( input.GetPixelFormat().GetSamplesPerPixel() == 3 )
