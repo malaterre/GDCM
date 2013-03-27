@@ -53,12 +53,10 @@ std::istream &SOPClassExtendedNegociationSub::Read(std::istream &is)
   is.read( name, uidlength );
   Name = std::string(name,uidlength);
 
-  char blob[256];
   assert( uidlength < ItemLength );
   uint16_t bloblength = (uint16_t)(ItemLength - 2 - uidlength);
-  assert( bloblength < 256 );
-  is.read( blob, bloblength );
-  Blob = std::string(blob,bloblength);
+  assert( bloblength == 6 );
+  SCAI.Read( is );
 
   return is;
 }
@@ -77,8 +75,7 @@ const std::ostream &SOPClassExtendedNegociationSub::Write(std::ostream &os) cons
   os.write( (char*)&uidlength, sizeof(UIDLength) );
 
   os.write( Name.c_str(), Name.size() );
-
-  os.write( Blob.c_str(), Blob.size() );
+  SCAI.Write( os );
 
   return os;
 }
@@ -91,7 +88,7 @@ size_t SOPClassExtendedNegociationSub::Size() const
   ret += sizeof(ItemLength);
   ret += sizeof(UIDLength);
   ret += UIDLength;
-  ret += Blob.size();
+  ret += SCAI.Size();
 
   return ret;
 }
@@ -99,7 +96,9 @@ size_t SOPClassExtendedNegociationSub::Size() const
 void SOPClassExtendedNegociationSub::Print(std::ostream &os) const
 {
   os << "SOP-class-uid: " << Name << std::endl; // UID
-  os << "Service-class-application-information: [";
+  os << "Service-class-application-information:";
+  SCAI.Print( os );
+#if 0
   const char *beg = Blob.c_str();
   const char *end = beg + Blob.size();
   for( const char *p = beg; p != end; ++p )
@@ -108,6 +107,20 @@ void SOPClassExtendedNegociationSub::Print(std::ostream &os) const
     os << "0x" << (int)*p;
     }
   os << "]" << std::endl;
+#endif
+}
+
+void SOPClassExtendedNegociationSub::SetTuple(const char *uid, uint8_t levelofsupport, uint8_t levelofdigitalsig, uint8_t elementcoercion)
+{
+  if( uid )
+    {
+    Name = uid;
+    UIDLength = strlen( uid );
+    SCAI.SetTuple( levelofsupport, levelofdigitalsig, elementcoercion);
+    ItemLength = (uint32_t)Size() - 4;
+    }
+  // post condition
+  assert( (size_t)ItemLength + 4 == Size() );
 }
 
 } // end namespace network

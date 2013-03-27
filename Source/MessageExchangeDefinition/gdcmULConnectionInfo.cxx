@@ -52,7 +52,7 @@ ULConnectionInfo::ULConnectionInfo(){
       //it is possible to misinitialize this object, so
       //have it return false if something breaks (ie, given AEs are bigger than 16 characters,
       //no name or IP address).
-bool ULConnectionInfo::Initialize(UserInformation inUserInformation,
+bool ULConnectionInfo::Initialize(UserInformation const & inUserInformation,
         const char inCalledAETitle[16], const char inCallingAETitle[16],
         unsigned long inCalledIPAddress, int inCalledIPPort,
         std::string inCalledComputerName)
@@ -75,13 +75,14 @@ bool ULConnectionInfo::Initialize(UserInformation inUserInformation,
   //    mCalledComputerName = "";
   }
 
-  mUserInformation = inUserInformation;
+  //mUserInformation = inUserInformation;
+  (void)inUserInformation;
   return true;
 }
 
-UserInformation ULConnectionInfo::GetUserInformation() const{
-  return mUserInformation;
-}
+//UserInformation ULConnectionInfo::GetUserInformation() const{
+//  return mUserInformation;
+//}
 const char* ULConnectionInfo::GetCalledAETitle() const{
   return mCalledAETitle;
 }

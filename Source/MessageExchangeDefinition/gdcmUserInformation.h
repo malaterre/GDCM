@@ -26,8 +26,8 @@ namespace network
 {
 
 class AsynchronousOperationsWindowSub;
-class RoleSelectionSub;
-class SOPClassExtendedNegociationSub;
+class RoleSelectionSubItems;
+class SOPClassExtendedNegociationSubItems;
 /**
  * \brief UserInformation
  * Table 9-16
@@ -42,6 +42,7 @@ class UserInformation
 {
 public:
   UserInformation();
+  ~UserInformation();
   std::istream &Read(std::istream &is);
   const std::ostream &Write(std::ostream &os) const;
   size_t Size() const;
@@ -58,9 +59,15 @@ private:
   MaximumLengthSub MLS;
   ImplementationClassUIDSub ICUID;
   AsynchronousOperationsWindowSub *AOWS;
-  RoleSelectionSub *RSS;
-  SOPClassExtendedNegociationSub *SOPCENS;
+  //RoleSelectionSub *RSS;
+  RoleSelectionSubItems *RSSI;
+  //SOPClassExtendedNegociationSub *SOPCENS;
+  SOPClassExtendedNegociationSubItems *SOPCENSI;
   ImplementationVersionNameSub IVNS;
+
+private:
+  UserInformation(const UserInformation&);  // Not implemented.
+  void operator=(const UserInformation&);  // Not implemented.
 };
 
 } // end namespace network

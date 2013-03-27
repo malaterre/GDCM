@@ -17,6 +17,8 @@
 #include "gdcmRoleSelectionSub.h"
 #include "gdcmSOPClassExtendedNegociationSub.h"
 
+#include <vector>
+
 namespace gdcm
 {
 namespace network
@@ -25,17 +27,118 @@ namespace network
 const uint8_t UserInformation::ItemType = 0x50;
 const uint8_t UserInformation::Reserved2 = 0x00;
 
+struct RoleSelectionSubItems
+{
+  void Print(std::ostream &os) const
+    {
+    std::vector<RoleSelectionSub>::const_iterator it = RSSArray.begin();
+    for( ; it != RSSArray.end(); ++it )
+      {
+      it->Print(os);
+      }
+    }
+  const std::ostream &Write(std::ostream &os) const
+    {
+    std::vector<RoleSelectionSub>::const_iterator it = RSSArray.begin();
+    for( ; it != RSSArray.end(); ++it )
+      {
+      it->Write(os);
+      }
+    return os;
+    }
+  void AddTuple(const char *uid, uint8_t scurole, uint8_t scprole)
+    {
+    RoleSelectionSub rss;
+    rss.SetTuple( uid, scurole, scprole );
+    RSSArray.push_back( rss );
+    }
+  bool Empty() const
+    {
+    return RSSArray.empty();
+    }
+  size_t Size() const
+    {
+    size_t s = 0;
+    std::vector<RoleSelectionSub>::const_iterator it = RSSArray.begin();
+    for( ; it != RSSArray.end(); ++it )
+      {
+      s += it->Size();
+      }
+    return s;
+    }
+  std::vector<RoleSelectionSub> RSSArray;
+};
+
+struct SOPClassExtendedNegociationSubItems
+{
+  void Print(std::ostream &os) const
+    {
+    std::vector<SOPClassExtendedNegociationSub>::const_iterator it = SOPCENSArray.begin();
+    for( ; it != SOPCENSArray.end(); ++it )
+      {
+      it->Print(os);
+      }
+    }
+  const std::ostream &Write(std::ostream &os) const
+    {
+    std::vector<SOPClassExtendedNegociationSub>::const_iterator it = SOPCENSArray.begin();
+    for( ; it != SOPCENSArray.end(); ++it )
+      {
+      it->Write(os);
+      }
+    return os;
+    }
+  void AddDefault(const char *uid)
+    {
+    SOPClassExtendedNegociationSub sub;
+    sub.SetTuple( uid );
+    SOPCENSArray.push_back( sub );
+    }
+  bool Empty() const
+    {
+    return SOPCENSArray.empty();
+    }
+  size_t Size() const
+    {
+    size_t s = 0;
+    std::vector<SOPClassExtendedNegociationSub>::const_iterator it = SOPCENSArray.begin();
+    for( ; it != SOPCENSArray.end(); ++it )
+      {
+      s += it->Size();
+      }
+    return s;
+    }
+  std::vector<SOPClassExtendedNegociationSub> SOPCENSArray;
+};
+
 UserInformation::UserInformation()
 {
   AOWS = NULL;
-  RSS = NULL;
-  SOPCENS = NULL;
+  RSSI = new RoleSelectionSubItems;
+  SOPCENSI = new SOPClassExtendedNegociationSubItems;
+#if 0
+  RSSI->AddTuple("1.2.840.10008.5.1.4.1.1.2", 1, 1); // DEBUG
+  RSSI->AddTuple("1.2.840.10008.5.1.4.1.1.4", 1, 1); // DEBUG
+  RSSI->AddTuple("1.2.840.10008.5.1.4.1.1.7", 1, 1); // DEBUG
+  SOPCENSI->AddDefault("1.2.840.10008.5.1.4.1.1.2"); // DEBUG
+  SOPCENSI->AddDefault("1.2.840.10008.5.1.4.1.1.4"); // DEBUG
+  SOPCENSI->AddDefault("1.2.840.10008.5.1.4.1.1.7"); // DEBUG
+#endif
   size_t t0 = MLS.Size();
   size_t t1 = ICUID.Size();
   size_t t2 = 0; //AOWS.Size();
   size_t t3 = IVNS.Size();
   ItemLength = (uint16_t)(t0 + t1 + t2 + t3);
+  if( !RSSI->Empty() ) ItemLength += RSSI->Size();
+  if( !SOPCENSI->Empty() ) ItemLength += SOPCENSI->Size();
   assert( (size_t)ItemLength + 4 == Size() );
+}
+
+UserInformation::~UserInformation()
+{
+  delete AOWS;
+  delete SOPCENSI;
+  delete RSSI;
 }
 
 std::istream &UserInformation::Read(std::istream &is)
@@ -52,6 +155,10 @@ std::istream &UserInformation::Read(std::istream &is)
 
   uint8_t itemtype2 = 0x0;
   size_t curlen = 0;
+#if 0
+  RSSI->RSSArray.clear(); // DEBUG
+  SOPCENSI->SOPCENSArray.clear(); // DEBUG
+#endif
   while( curlen < ItemLength )
     {
     is.read( (char*)&itemtype2, sizeof(ItemType) );
@@ -72,20 +179,26 @@ std::istream &UserInformation::Read(std::istream &is)
       curlen += AOWS->Size();
       break;
     case 0x54: // RoleSelectionSub
-      assert( !RSS );
-      RSS = new RoleSelectionSub;
-      RSS->Read( is );
-      curlen += RSS->Size();
+      assert( RSSI );
+        {
+        RoleSelectionSub rss;
+        rss.Read( is );
+        curlen += rss.Size();
+        RSSI->RSSArray.push_back( rss );
+        }
       break;
     case 0x55: // ImplementationVersionNameSub
       IVNS.Read( is );
       curlen += IVNS.Size();
       break;
     case 0x56: // SOPClassExtendedNegociationSub
-      assert( !SOPCENS );
-      SOPCENS = new SOPClassExtendedNegociationSub;
-      SOPCENS->Read( is );
-      curlen += SOPCENS->Size();
+      assert( SOPCENSI );
+        {
+        SOPClassExtendedNegociationSub sopcens;
+        sopcens.Read( is );
+        curlen += sopcens.Size();
+        SOPCENSI->SOPCENSArray.push_back( sopcens );
+        }
       break;
     default:
       gdcmErrorMacro( "Unknown ItemType: " << std::hex << (int) itemtype2 );
@@ -115,14 +228,14 @@ const std::ostream &UserInformation::Write(std::ostream &os) const
     {
     AOWS->Write(os);
     }
-  if( RSS )
+  if( !RSSI->Empty() )
     {
-    RSS->Write(os);
+    RSSI->Write(os);
     }
   IVNS.Write(os);
-  if( SOPCENS )
+  if( !SOPCENSI->Empty() )
     {
-    SOPCENS->Write(os);
+    SOPCENSI->Write(os);
     }
 
   assert( (size_t)ItemLength + 4 == Size() );
@@ -140,11 +253,11 @@ size_t UserInformation::Size() const
   ret += ICUID.Size();
   if( AOWS )
     ret += AOWS->Size();
-  if( RSS )
-    ret += RSS->Size();
+  if( !RSSI->Empty() )
+    ret += RSSI->Size();
   ret += IVNS.Size();
-  if( SOPCENS )
-    ret += SOPCENS->Size();
+  if( !SOPCENSI->Empty() )
+    ret += SOPCENSI->Size();
 
   return ret;
 }
@@ -160,17 +273,17 @@ void UserInformation::Print(std::ostream &os) const
     os << "AsynchronousOperationsWindowSub: ";
     AOWS->Print( os );
     }
-  if( RSS )
+  if( !RSSI->Empty() )
     {
     os << "RoleSelectionSub: ";
-    RSS->Print( os );
+    RSSI->Print( os );
     }
   os << "ImplementationVersionNameSub: ";
   IVNS.Print( os );
-  if( SOPCENS )
+  if( !SOPCENSI->Empty() )
     {
     os << "SOPClassExtendedNegociationSub: ";
-    SOPCENS->Print( os );
+    SOPCENSI->Print( os );
     }
   os << std::endl;
 }

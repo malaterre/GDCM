@@ -57,6 +57,7 @@ SET(MessageExchangeDefinition_SRCS
   gdcmQuerySeries.cxx
   gdcmQueryStudy.cxx
   gdcmServiceClassUser.cxx
+  gdcmServiceClassApplicationInformation.cxx
   gdcmFindStudyRootQuery.cxx
   gdcmMoveStudyRootQuery.cxx
   gdcmTransferSyntaxSub.cxx

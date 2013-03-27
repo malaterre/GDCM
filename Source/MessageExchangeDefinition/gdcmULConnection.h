@@ -56,7 +56,7 @@ namespace gdcm{
  */
 class ULConnection
 {
-      ULConnectionInfo mInfo;
+      ULConnectionInfo const & mInfo;
       //this is a dirty dirty hack
       //but to establish an outgoing connection (scu), we need the echo service
       //to establish incoming, we just need a port and localhost, so an iosockinet works while an
