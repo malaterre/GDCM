@@ -65,7 +65,7 @@ bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
     }
 
   network::ULConnectionManager theManager;
-  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10,
+  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000,
       generator.GetPresentationContexts() ))
     {
     gdcmErrorMacro( "Failed to establish connection." );
