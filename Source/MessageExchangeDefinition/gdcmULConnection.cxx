@@ -215,7 +215,7 @@ bool ULConnection::InitializeIncomingConnection()
     sin.sendtimeout(10);//(int)GetTimer().GetTimeout());
     sin.listen();
     //sin.debug( true );
-    if (sin.is_readready(10, 0))
+    if (sin.is_readready(60, 0))
       {
       mSocket = new iosockinet(sin.accept());
       }
