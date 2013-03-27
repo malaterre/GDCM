@@ -104,11 +104,25 @@ size_t RoleSelectionSub::Size() const
   return ret;
 }
 
+void RoleSelectionSub::SetTuple(const char *uid, uint8_t scurole, uint8_t scprole)
+{
+  if( uid )
+    {
+    Name = uid;
+    UIDLength = strlen( uid );
+    SCURole = scurole;
+    SCPRole = scprole;
+    ItemLength = (uint32_t)Size() - 4;
+    }
+  // post condition
+  assert( (size_t)ItemLength + 4 == Size() );
+}
+
 void RoleSelectionSub::Print(std::ostream &os) const
 {
   os << "SOP-class-uid" << Name << std::endl;
-  os << "SCURole: " << SCURole << std::endl;
-  os << "SCPRole: " << SCPRole << std::endl;
+  os << "SCURole: " << (int)SCURole << std::endl;
+  os << "SCPRole: " << (int)SCPRole << std::endl;
 }
 
 } // end namespace network

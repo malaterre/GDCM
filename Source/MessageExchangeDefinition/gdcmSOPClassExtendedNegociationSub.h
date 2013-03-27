@@ -14,11 +14,10 @@
 #ifndef GDCMSOPCLASSEXTENDEDNEGOCIATIONSUB_H
 #define GDCMSOPCLASSEXTENDEDNEGOCIATIONSUB_H
 
-#include "gdcmTypes.h"
+#include "gdcmServiceClassApplicationInformation.h"
 
 namespace gdcm
 {
-
 namespace network
 {
 
@@ -39,13 +38,17 @@ public:
   size_t Size() const;
   void Print(std::ostream &os) const;
 
+  void SetTuple(const char *uid, uint8_t levelofsupport = 3,
+    uint8_t levelofdigitalsig = 0,
+    uint8_t elementcoercion = 2);
+
 private:
   static const uint8_t ItemType;
   static const uint8_t Reserved2;
   uint16_t ItemLength;
   uint16_t UIDLength;
   std::string /*SOP-class-uid*/ Name; // UID
-  std::string /*Service-class-application-information*/ Blob;
+  ServiceClassApplicationInformation SCAI;
 };
 
 } // end namespace network

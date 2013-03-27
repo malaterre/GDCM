@@ -24,12 +24,11 @@ namespace gdcm
 {
 namespace network
 {
-ULConnection::ULConnection(const ULConnectionInfo& inConnectInfo)
+ULConnection::ULConnection(const ULConnectionInfo& inConnectInfo):mInfo(inConnectInfo)
 {
   mCurrentState = eSta1Idle;
   mSocket = NULL;
   mEcho = NULL;
-  mInfo = inConnectInfo;
 }
 
 ULConnection::~ULConnection()
@@ -215,7 +214,7 @@ bool ULConnection::InitializeIncomingConnection()
     sin.sendtimeout(10);//(int)GetTimer().GetTimeout());
     sin.listen();
     //sin.debug( true );
-    if (sin.is_readready(10, 0))
+    if (sin.is_readready(60, 0))
       {
       mSocket = new iosockinet(sin.accept());
       }
