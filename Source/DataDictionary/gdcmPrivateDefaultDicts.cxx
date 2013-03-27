@@ -3506,6 +3506,8 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0019,0x0044,"HOLOGIC, Inc.",VR::DS,VM::VM1,"?",false },
   {0x0019,0x0045,"HOLOGIC, Inc.",VR::IS,VM::VM1,"?",false },
   {0x0019,0x0046,"HOLOGIC, Inc.",VR::IS,VM::VM1,"?",false },
+  {0x0019,0x0060,"HOLOGIC, Inc.",VR::LT,VM::VM1,"?",false },
+  {0x0019,0x0061,"HOLOGIC, Inc.",VR::OB,VM::VM1,"?",false },
   {0x0019,0x0062,"HOLOGIC, Inc.",VR::LT,VM::VM1,"?",false },
   {0x0019,0x0070,"HOLOGIC, Inc.",VR::DS,VM::VM1,"?",false },
   {0x0019,0x0085,"HOLOGIC, Inc.",VR::SH,VM::VM1,"?",false },
