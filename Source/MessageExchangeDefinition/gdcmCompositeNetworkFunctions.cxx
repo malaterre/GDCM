@@ -42,7 +42,7 @@ namespace gdcm
 {
 
 // Execute like this:
-// gdcmscu www.dicomserver.co.uk 11112 echo
+// gdcmscu --echo www.dicomserver.co.uk 11112
 bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
   const char *aetitle, const char *call)
 {
