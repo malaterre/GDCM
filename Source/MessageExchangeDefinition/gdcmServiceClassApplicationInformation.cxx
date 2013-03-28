@@ -30,13 +30,13 @@ ServiceClassApplicationInformation::ServiceClassApplicationInformation()
 
 std::istream &ServiceClassApplicationInformation::Read(std::istream &is)
 {
-  is.read( InternalArray, sizeof(InternalArray) );
+  is.read( (char*)InternalArray, sizeof(InternalArray) );
   return is;
 }
 
 const std::ostream &ServiceClassApplicationInformation::Write(std::ostream &os) const
 {
-  os.write( InternalArray, sizeof(InternalArray) );
+  os.write( (char*)InternalArray, sizeof(InternalArray) );
   return os;
 }
 
