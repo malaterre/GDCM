@@ -281,13 +281,17 @@ JPEG2000Codec::~JPEG2000Codec()
 bool JPEG2000Codec::CanDecode(TransferSyntax const &ts) const
 {
   return ts == TransferSyntax::JPEG2000Lossless
-      || ts == TransferSyntax::JPEG2000;
+      || ts == TransferSyntax::JPEG2000
+      || ts == TransferSyntax::JPEG2000Part2Lossless
+      || ts == TransferSyntax::JPEG2000Part2;
 }
 
 bool JPEG2000Codec::CanCode(TransferSyntax const &ts) const
 {
   return ts == TransferSyntax::JPEG2000Lossless
-      || ts == TransferSyntax::JPEG2000;
+      || ts == TransferSyntax::JPEG2000
+      || ts == TransferSyntax::JPEG2000Part2Lossless
+      || ts == TransferSyntax::JPEG2000Part2;
 }
 
 /*
@@ -1402,17 +1406,37 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
 
   assert( PI != PhotometricInterpretation::UNKNOW );
 
-  if( reversible )
+  bool mct = false;
+  if( mct )
     {
-    ts = TransferSyntax::JPEG2000Lossless;
+    if( reversible )
+      {
+      ts = TransferSyntax::JPEG2000Part2Lossless;
+      }
+    else
+      {
+      ts = TransferSyntax::JPEG2000Part2;
+      if( PI == PhotometricInterpretation::YBR_RCT )
+        {
+        // FIXME ???
+        PI = PhotometricInterpretation::YBR_ICT;
+        }
+      }
     }
   else
     {
-    ts = TransferSyntax::JPEG2000;
-    if( PI == PhotometricInterpretation::YBR_RCT )
+    if( reversible )
       {
-      // FIXME ???
-      PI = PhotometricInterpretation::YBR_ICT;
+      ts = TransferSyntax::JPEG2000Lossless;
+      }
+    else
+      {
+      ts = TransferSyntax::JPEG2000;
+      if( PI == PhotometricInterpretation::YBR_RCT )
+        {
+        // FIXME ???
+        PI = PhotometricInterpretation::YBR_ICT;
+        }
       }
     }
 
