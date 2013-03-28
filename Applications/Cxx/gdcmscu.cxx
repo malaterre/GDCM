@@ -62,6 +62,7 @@ void PrintHelp()
   std::cout << "     --store          C-STORE." << std::endl;
   std::cout << "     --find           C-FIND." << std::endl;
   std::cout << "     --move           C-MOVE." << std::endl;
+  std::cout << "     --get            C-GET." << std::endl;
   std::cout << "C-STORE Options:" << std::endl;
   std::cout << "  -i --input          DICOM filename" << std::endl;
   std::cout << "  -r --recursive      recursively process (sub-)directories." << std::endl;
@@ -82,6 +83,7 @@ void PrintHelp()
   std::cout << "     --port-scp       Port used for incoming association." << std::endl;
   std::cout << "     --key            0123,4567=VALUE for specifying search criteria (wildcard not allowed)." << std::endl;
   std::cout << "  Note that C-MOVE supports the same queries as C-FIND, but no wildcards are allowed." << std::endl;
+  std::cout << "C-GET Options:" << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "     --root-uid               Root UID." << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
@@ -161,6 +163,7 @@ int main(int argc, char *argv[])
   int storemode = 0;
   int findmode = 0;
   int movemode = 0;
+  int getmode = 0;
   int findworklist = 0;
   int findpatientroot = 0;
   int findstudyroot = 0;
@@ -220,6 +223,7 @@ int main(int argc, char *argv[])
       {"series", 0, &seriesquery, 1}, // --series
       {"image", 0, &imagequery, 1}, // --image
       {"log-file", 1, &logfile, 1}, // --log-file
+      {"get", 0, &getmode, 1}, // --get
       {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:H:p:L:VWDEhvk:o:r";
@@ -535,6 +539,10 @@ int main(int argc, char *argv[])
     {
     mode = "move";
     }
+  else if ( getmode )
+    {
+    mode = "get";
+    }
   
   //this class contains the networking calls
   
@@ -695,7 +703,7 @@ int main(int argc, char *argv[])
       }
     return 0;
     }
-  else // C-STORE SCU
+  else if ( mode == "store" ) // C-STORE SCU
     {
     // mode == directory
     gdcm::Directory::FilenamesType thefiles;
@@ -722,6 +730,15 @@ int main(int argc, char *argv[])
 
     gdcmDebugMacro( (didItWork ? "Store was successful." : "Store failed.") );
     return didItWork ? 0 : 1;
+    }
+  else if ( mode == "get" ) // C-GET SCU
+    {
+    return 1;
+    }
+  else
+    {
+    assert( 0 );
+    return 1;
     }
 
   return 0;
