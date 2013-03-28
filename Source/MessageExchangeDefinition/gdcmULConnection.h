@@ -56,7 +56,7 @@ namespace gdcm{
  */
 class ULConnection
 {
-      ULConnectionInfo const & mInfo;
+      ULConnectionInfo mInfo;
       //this is a dirty dirty hack
       //but to establish an outgoing connection (scu), we need the echo service
       //to establish incoming, we just need a port and localhost, so an iosockinet works while an
@@ -125,6 +125,10 @@ class ULConnection
 
       /// used to establish scp connections
       bool InitializeIncomingConnection();
+private:
+  ULConnection(const ULConnection&);  // Not implemented.
+  void operator=(const ULConnection&);  // Not implemented.
+
     };
   }
 }
