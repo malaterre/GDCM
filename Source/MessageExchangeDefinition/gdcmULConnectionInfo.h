@@ -38,8 +38,8 @@ namespace gdcm{
 class ULConnectionInfo {
       UserInformation mUserInformation;
 
-      char mCalledAETitle[16];
-      char mCallingAETitle[16];
+      std::string mCalledAETitle;
+      std::string mCallingAETitle;
 
       unsigned long mCalledIPAddress;
       int mCalledIPPort;
@@ -53,7 +53,7 @@ class ULConnectionInfo {
       //have it return false if something breaks (ie, given AEs are bigger than 16 characters,
       //no name or IP address).
       bool Initialize(UserInformation const &inUserInformation,
-        const char inCalledAETitle[16], const char inCallingAETitle[16],
+        const char *inCalledAETitle, const char *inCallingAETitle,
         unsigned long inCalledIPAddress, int inCalledIPPort,
         std::string inCalledComputerName);
 
@@ -69,10 +69,6 @@ class ULConnectionInfo {
       //when a cstore connection is established (but not for the others).
       void SetMaxPDULength(unsigned long inMaxPDULength);
       unsigned long GetMaxPDULength() const;
-private:
-  ULConnectionInfo(const UserInformation&);  // Not implemented.
-  void operator=(const ULConnectionInfo&);  // Not implemented.
-
     };
   }
 }

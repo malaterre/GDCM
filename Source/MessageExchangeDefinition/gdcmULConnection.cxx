@@ -24,11 +24,12 @@ namespace gdcm
 {
 namespace network
 {
-ULConnection::ULConnection(const ULConnectionInfo& inConnectInfo):mInfo(inConnectInfo)
+ULConnection::ULConnection(const ULConnectionInfo& inConnectInfo)
 {
   mCurrentState = eSta1Idle;
   mSocket = NULL;
   mEcho = NULL;
+  mInfo = inConnectInfo;
 }
 
 ULConnection::~ULConnection()

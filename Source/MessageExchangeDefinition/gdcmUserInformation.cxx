@@ -288,5 +288,25 @@ void UserInformation::Print(std::ostream &os) const
   os << std::endl;
 }
 
+UserInformation &UserInformation::operator=(const UserInformation& ui)
+{
+  ItemLength = ui.ItemLength;
+  MLS = ui.MLS;
+  ICUID = ui.ICUID;
+  // FIXME: the following info from UserInfo is not handled by GDCM
+  // I do not see the point of copying that info then:
+#if 0
+  delete AOWS;
+  AOWS = new AsynchronousOperationsWindowSub;
+  delete RSSI;
+  RSSI = new RoleSelectionSubItems;
+  delete SOPCENSI;
+  SOPCENSI= new SOPClassExtendedNegociationSubItems;
+#endif
+  IVNS = ui.IVNS;
+
+  return *this;
+}
+
 } // end namespace network
 } // end namespace gdcm

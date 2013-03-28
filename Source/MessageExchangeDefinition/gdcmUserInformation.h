@@ -65,9 +65,9 @@ private:
   SOPClassExtendedNegociationSubItems *SOPCENSI;
   ImplementationVersionNameSub IVNS;
 
-private:
-  UserInformation(const UserInformation&);  // Not implemented.
-  void operator=(const UserInformation&);  // Not implemented.
+  UserInformation(const UserInformation&); // Not implemented
+public:
+  UserInformation &operator=(const UserInformation&);
 };
 
 } // end namespace network
