@@ -115,8 +115,8 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   // ./bin/pvrgjpeg -d -s jpeg.jpg -ci 0 out.raw
   pvrg_command += "-s ";
   pvrg_command += input;
-  pvrg_command += " -ci 0 ";
-  pvrg_command += output;
+  //pvrg_command += " -ci 0 ";
+  //pvrg_command += output;
 
   //std::cerr << pvrg_command << std::endl;
   gdcmDebugMacro( pvrg_command );
@@ -124,52 +124,56 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   (void)ret;
   //std::cerr << "system: " << ret << std::endl;
 
-  size_t len = gdcm::System::FileSize(output);
-  const char *rawfile = output;
-  std::string altfile;
-  if(!len)
+  int numoutfile = GetPixelFormat().GetSamplesPerPixel();
+  std::string wholebuf;
+  for( int file = 0; file < numoutfile; ++file )
     {
-    gdcmDebugMacro( "Output file was empty: " << output );
-    // Could be some of PVRG handling, try again harder:
-    altfile = input;
-    altfile += ".1"; // dont ask
-    len = gdcm::System::FileSize(altfile.c_str());
+    std::ostringstream os;
+    os << input;
+    os << ".";
+    os << file; // dont ask
+    const std::string altfile = os.str();
+    const size_t len = gdcm::System::FileSize(altfile.c_str());
     if( !len )
       {
       gdcmDebugMacro( "Output file was really empty: " << altfile );
       return false;
       }
-    // else
-    rawfile = altfile.c_str();
-    }
+    const char *rawfile = altfile.c_str();
 
-  std::ifstream is(rawfile, std::ios::binary);
-  char * buf = new char[len];
-  is.read(buf, len);
-  out.SetTag( gdcm::Tag(0x7fe0,0x0010) );
+    gdcmDebugMacro( "Processing: " << rawfile );
+    std::ifstream is(rawfile, std::ios::binary);
+    std::string buf;
+    buf.resize( len );
+    is.read(&buf[0], len);
+    out.SetTag( gdcm::Tag(0x7fe0,0x0010) );
 
-  if ( PF.GetBitsAllocated() == 16 )
-    {
-    ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
-      buf,
+    if ( PF.GetBitsAllocated() == 16 )
+      {
+      ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
+        &buf[0],
 #ifdef GDCM_WORDS_BIGENDIAN
-      SwapCode::LittleEndian,
+        SwapCode::LittleEndian,
 #else
-      SwapCode::BigEndian,
+        SwapCode::BigEndian,
 #endif
-      len/2);
+        len/2);
+      }
+    wholebuf.insert( wholebuf.end(), buf.begin(), buf.end() );
+    if( !System::RemoveFile(rawfile) )
+      {
+      gdcmErrorMacro( "Could not delete output: " << rawfile);
+      }
     }
-  out.SetByteValue( buf, (uint32_t)len );
-  delete[] buf;
+  out.SetByteValue( &wholebuf[0], (uint32_t)wholebuf.size() );
+  if( numoutfile == 3 )
+    {
+    this->PlanarConfiguration = 1;
+    }
 
   if( !System::RemoveFile(input) )
     {
     gdcmErrorMacro( "Could not delete input: " << input );
-    }
-
-  if( !System::RemoveFile(rawfile) )
-    {
-    gdcmErrorMacro( "Could not delete output: " << rawfile);
     }
 
   free(input);

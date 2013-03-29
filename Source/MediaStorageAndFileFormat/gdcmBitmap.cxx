@@ -530,6 +530,11 @@ bool Bitmap::TryPVRGCodec(char *buffer, bool &lossyflag) const
     bool r = codec.Decode(PixelData, out);
     if(!r) return false;
     assert( r );
+    if ( GetPlanarConfiguration() != codec.GetPlanarConfiguration() )
+      {
+      gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+      i->PlanarConfiguration = codec.GetPlanarConfiguration();
+      }
     const ByteValue *outbv = out.GetByteValue();
     assert( outbv );
     unsigned long check = outbv->GetLength();  // FIXME
