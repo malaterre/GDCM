@@ -35,10 +35,10 @@ void ULWritingCallback::HandleDataSet(const DataSet& inDataSet)
     !inDataSet.GetDataElement(Tag(0x0008,0x0018)).IsEmpty() )
     {
     const DataElement &de = inDataSet.GetDataElement(Tag(0x0008,0x0018));
-    std::string sopclassuid_str( de.GetByteValue()->GetPointer(),
-      de.GetByteValue()->GetLength() );
+    const ByteValue *bv = de.GetByteValue();
+    const std::string sopclassuid_str( bv->GetPointer(), bv->GetLength() );
     Writer w;
-    std::string theLoc = mDirectoryName + "/" + sopclassuid_str + ".dcm";
+    std::string theLoc = mDirectoryName + "/" + sopclassuid_str.c_str() + ".dcm";
     w.SetFileName(theLoc.c_str());
     File &f = w.GetFile();
     f.SetDataSet(inDataSet);
@@ -47,11 +47,11 @@ void ULWritingCallback::HandleDataSet(const DataSet& inDataSet)
     w.SetCheckFileMetaInformation( true );
     if (!w.Write())
       {
-      gdcmErrorMacro("Failed to write " << sopclassuid_str << std::endl);
+      gdcmErrorMacro("Failed to write " << sopclassuid_str.c_str() << std::endl);
       }
     else 
       {
-      gdcmDebugMacro( "Wrote " << sopclassuid_str << " to disk. " << std::endl);
+      gdcmDebugMacro( "Wrote " << sopclassuid_str.c_str() << " to disk. " << std::endl);
       }
     }
   else 
