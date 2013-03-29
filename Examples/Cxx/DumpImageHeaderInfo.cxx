@@ -68,7 +68,6 @@ std::istream & element::read( std::istream & is )
     {
     const char *p = &bytes[0];
     uint32_t val;
-    float f;
     memcpy( (char*)&val, p, sizeof(val) );
     os << " " << val << std::endl;
     p += sizeof(val);
@@ -88,6 +87,7 @@ std::istream & element::read( std::istream & is )
     os << " " << val << std::endl;
     p += sizeof(val);
 #if 0
+    float f;
     memcpy( (char*)&f, p, sizeof(f) );
     os << " " << f << std::endl;
     p += sizeof(f);
