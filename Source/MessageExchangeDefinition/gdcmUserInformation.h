@@ -26,8 +26,8 @@ namespace network
 {
 
 class AsynchronousOperationsWindowSub;
-class RoleSelectionSubItems;
-class SOPClassExtendedNegociationSubItems;
+struct RoleSelectionSubItems;
+struct SOPClassExtendedNegociationSubItems;
 /**
  * \brief UserInformation
  * Table 9-16
