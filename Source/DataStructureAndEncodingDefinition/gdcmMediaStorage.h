@@ -122,6 +122,7 @@ public:
     XRayRadiationDoseSR, // 1.2.840.10008.5.1.4.1.1.88.67
     VLEndoscopicImageStorage, // 1.2.840.10008.5.1.4.1.1.77.1.1
     BreastTomosynthesisImageStorage, // 1.2.840.10008.5.1.4.1.1.13.1.3
+    FujiPrivateCRImageStorage, // 1.2.392.200036.9125.1.1.2
     MS_END
   } MSType; // Media Storage Type
 
