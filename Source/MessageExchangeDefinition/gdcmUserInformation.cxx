@@ -129,8 +129,10 @@ UserInformation::UserInformation()
   size_t t2 = 0; //AOWS.Size();
   size_t t3 = IVNS.Size();
   ItemLength = (uint16_t)(t0 + t1 + t2 + t3);
+#if 0
   if( !RSSI->Empty() ) ItemLength += RSSI->Size();
   if( !SOPCENSI->Empty() ) ItemLength += SOPCENSI->Size();
+#endif
   assert( (size_t)ItemLength + 4 == Size() );
 }
 

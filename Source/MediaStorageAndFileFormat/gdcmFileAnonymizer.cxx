@@ -173,7 +173,7 @@ bool FileAnonymizer::ComputeReplaceTagPosition()
         assert( (int)pe.EndPos ==
           (int)pe.BeginPos + (int)de.GetVL() + 2 * de.GetVR().GetLength() + 4 );
         }
-      pe.DE.SetByteValue( valuereplace.c_str(), valuereplace.size() );
+      pe.DE.SetByteValue( valuereplace.c_str(), (uint32_t)valuereplace.size() );
       assert( pe.DE.GetVL() == valuereplace.size() );
       }
     else
@@ -181,7 +181,7 @@ bool FileAnonymizer::ComputeReplaceTagPosition()
       // We need to insert an Empty Data Element !
       //FIXME, for some public element we could do something nicer than VR:UN
       pe.DE.SetVR( VR::UN );
-      pe.DE.SetByteValue( valuereplace.c_str(), valuereplace.size() );
+      pe.DE.SetByteValue( valuereplace.c_str(), (uint32_t)valuereplace.size() );
       assert( pe.DE.GetVL() == valuereplace.size() );
       }
 
@@ -418,9 +418,9 @@ bool FileAnonymizer::Write()
       std::streampos end = pe.BeginPos;
 
       // FIXME: most efficient way to copy chunk of file in c++ ?
-      for( int i = prev; i < end; ++i)
+      for( int i = (int)prev; i < end; ++i)
         {
-        of.put( is.get() );
+        of.put( (char)is.get() );
         }
       if( action == EMPTY )
         {
@@ -468,9 +468,9 @@ bool FileAnonymizer::Write()
       std::streampos end = pe.BeginPos;
 
       // FIXME: most efficient way to copy chunk of file in c++ ?
-      for( int i = prev; i < end; ++i)
+      for( int i = (int)prev; i < end; ++i)
         {
-        of.put( is.get() );
+        of.put( (char)is.get() );
         }
       if( ts.GetSwapCode() == SwapCode::BigEndian )
         {
