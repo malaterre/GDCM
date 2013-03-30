@@ -109,10 +109,10 @@ void RoleSelectionSub::SetTuple(const char *uid, uint8_t scurole, uint8_t scprol
   if( uid )
     {
     Name = uid;
-    UIDLength = strlen( uid );
+    UIDLength = (uint16_t)strlen( uid );
     SCURole = scurole;
     SCPRole = scprole;
-    ItemLength = (uint32_t)Size() - 4;
+    ItemLength = (uint16_t)(Size() - 4);
     }
   // post condition
   assert( (size_t)ItemLength + 4 == Size() );
