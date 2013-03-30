@@ -97,7 +97,13 @@ bool PixmapReader::Read()
     {
     MediaStorage ms2 = ds.GetMediaStorage();
     //assert( !ds.FindDataElement( Tag(0x7fe0,0x0010 ) ) );
-    if( ms == ms2 && ms != MediaStorage::MS_END )
+    if( ms == MediaStorage::MediaStorageDirectoryStorage && ms2 == MediaStorage::MS_END )
+      {
+      gdcmDebugMacro( "DICOM file is not an Image file but a : " <<
+        MediaStorage::GetMSString(ms) << " SOP Class UID" );
+      res = false;
+      }
+    else if( ms == ms2 && ms != MediaStorage::MS_END )
       {
       gdcmDebugMacro( "DICOM file is not an Image file but a : " <<
         MediaStorage::GetMSString(ms) << " SOP Class UID" );
