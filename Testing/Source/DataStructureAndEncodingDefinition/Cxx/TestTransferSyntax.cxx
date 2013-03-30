@@ -30,6 +30,8 @@ static const int losslylosslessarray[][3] = {
     { 1, 1, 1 }, //    JPEGLSNearLossless,
     { 0, 1, 0 }, //    JPEG2000Lossless,
     { 1, 1, 1 }, //    JPEG2000,
+    { 0, 1, 0 }, //    JPEG2000Part2Lossless,
+    { 1, 1, 1 }, //    JPEG2000Part2,
     { 0, 1, 0 }, //    RLELossless,
     { 1, 0, 1 }, //    MPEG2MainProfile,
     { 0, 1, 1 }, //    ImplicitVRBigEndianACRNEMA,
