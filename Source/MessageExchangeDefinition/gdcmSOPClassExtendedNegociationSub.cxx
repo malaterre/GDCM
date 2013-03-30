@@ -115,9 +115,9 @@ void SOPClassExtendedNegociationSub::SetTuple(const char *uid, uint8_t levelofsu
   if( uid )
     {
     Name = uid;
-    UIDLength = strlen( uid );
+    UIDLength = (uint16_t)strlen( uid );
     SCAI.SetTuple( levelofsupport, levelofdigitalsig, elementcoercion);
-    ItemLength = (uint32_t)Size() - 4;
+    ItemLength = (uint16_t)(Size() - 4);
     }
   // post condition
   assert( (size_t)ItemLength + 4 == Size() );
