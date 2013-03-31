@@ -17,7 +17,7 @@ set TMPDIR=%TMP%\gdcm_release
 
 set major=2
 set minor=2
-set patch=2
+set patch=3
 set version="%major%.%minor%.%patch%"
 
 @rem use VCExpress 2008 for compatibilities with OpenSSL binaries
