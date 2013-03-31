@@ -118,6 +118,11 @@ MediaStorage DataSet::GetMediaStorage() const
     return MediaStorage::MS_END;
     }
   const DataElement &de = GetDataElement(tsopclassuid);
+  if( de.IsEmpty() )
+    {
+    gdcmDebugMacro( "Empty SOP Class UID" );
+    return MediaStorage::MS_END;
+    }
   std::string ts;
     {
     const ByteValue *bv = de.GetByteValue();
