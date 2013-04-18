@@ -831,6 +831,7 @@ int main(int argc, char *argv[])
       writer->SetShift( reader7->GetRescaleOffset() );
 //  vtkGetStringMacro(Modality);
       writer->GetMedicalImageProperties()->SetModality( reader7->GetModality() );
+    writer->SetFileLowerLeft( lowerleft );
 
 //  vtkGetStringMacro(DistanceUnits);
   // -> this one is insane, the default behavior is 'um' . What in the world is 'um' unit ?
