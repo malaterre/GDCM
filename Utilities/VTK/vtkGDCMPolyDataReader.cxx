@@ -218,6 +218,7 @@ void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &read
 //(3006,0022) ?? (IS) [2 ]                                      # 2,1 ROI Number
 //(3006,0024) ?? (UI) [2.16.840.1.114362.1.759508.1251415878280.193]         # 44,1 Referenced Frame of Reference UID
 //(3006,0026) ?? (LO) [Bladder ]                                # 8,1 ROI Name
+//(3006,0028) ST [STATIC]                                       #   6, 1 ROIDescription
 //(3006,0036) ?? (CS) [MANUAL]                                  # 6,1 ROI Generation Algorithm
 
 int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const &reader,
@@ -388,6 +389,8 @@ refinstanceuid.GetValue().c_str() );
     //structuresetroi.RefFrameRefUID = refframeuid.GetValue();
     gdcm::Attribute<0x3006,0x0026> roiname;
     roiname.SetFromDataSet( snestedds );
+    gdcm::Attribute<0x3006,0x0028> roidesc;
+    roidesc.SetFromDataSet( snestedds );
     assert( s == roiname.GetValue() );
     gdcm::Attribute<0x3006,0x0036> roigenalg;
     roigenalg.SetFromDataSet( snestedds );
@@ -398,7 +401,8 @@ refinstanceuid.GetValue().c_str() );
       roinumber.GetValue(),
       refframeuid.GetValue(),
       roiname.GetValue(),
-      roigenalg.GetValue()
+      roigenalg.GetValue(),
+      roidesc.GetValue()
     );
 
     const gdcm::DataSet& nestedds = item.GetNestedDataSet();
@@ -412,12 +416,16 @@ refinstanceuid.GetValue().c_str() );
       const gdcm::DataElement &decolor = nestedds.GetDataElement( troidc );
       color.SetFromDataElement( decolor );
       hasColor = true;
-      //std::cout << "color:" << color[0] << "," << color[1] << "," << color[2] << std::endl;
+      //std::cout << "color: " << roinumber.GetValue() << " -> " << color[0] << "," << color[1] << "," << color[2] << std::endl;
       }
     //(3006,0040) SQ (Sequence with explicit length #=8)      # 4326, 1 ContourSequence
     gdcm::Tag tcsq(0x3006,0x0040);
     if( !nestedds.FindDataElement( tcsq ) )
       {
+      // FIXME: What if a contour sequence is empty but the color is set to
+      // -say- 0/255/0 Since we are skipping entirely the contour sequence (no
+      // vtkCellArray) we will not save the color.  which means it will be
+      // reported as 0/0/0 in the output DICOM file.
       continue;
       }
     const gdcm::DataElement& csq = nestedds.GetDataElement( tcsq );
@@ -575,6 +583,8 @@ refinstanceuid.GetValue().c_str() );
     observationnumber.SetFromDataSet( nestedds );
     gdcm::Attribute<0x3006,0x0084> referencedroinumber;
     referencedroinumber.SetFromDataSet( nestedds );
+    gdcm::Attribute<0x3006,0x0085> roiobservationlabel;
+    roiobservationlabel.SetFromDataSet( nestedds );
     gdcm::Attribute<0x3006,0x00a4> rtroiinterpretedtype;
     rtroiinterpretedtype.SetFromDataSet( nestedds );
     gdcm::Attribute<0x3006,0x00a6> roiinterpreter;
@@ -583,7 +593,9 @@ refinstanceuid.GetValue().c_str() );
       AddStructureSetROIObservation( referencedroinumber.GetValue(),
         observationnumber.GetValue(),
         rtroiinterpretedtype.GetValue(),
-        roiinterpreter.GetValue() );
+        roiinterpreter.GetValue(),
+        roiobservationlabel.GetValue()
+      );
     }
 
   return 1;

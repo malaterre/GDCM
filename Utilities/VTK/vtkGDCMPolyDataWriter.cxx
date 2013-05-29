@@ -300,6 +300,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
     const char *refframerefuid = this->RTStructSetProperties->GetStructureSetROIRefFrameRefUID(id);
     const char *roiname        = this->RTStructSetProperties->GetStructureSetROIName(id);
     const char *roigenalgo     = this->RTStructSetProperties->GetStructureSetROIGenerationAlgorithm(id);
+    const char *roidesc        = this->RTStructSetProperties->GetStructureSetROIDescription(id);
     Item item;
     item.SetVLToUndefined();
     DataSet &subds = item.GetNestedDataSet();
@@ -315,6 +316,13 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
     gdcm::Attribute<0x3006,0x0026> atroiname;
     atroiname.SetValue( roiname );
     subds.Insert( atroiname.GetAsDataElement() );
+
+    if( roidesc && *roidesc )
+      {
+      gdcm::Attribute<0x3006,0x0028> atroidesc;
+      atroidesc.SetValue( roidesc );
+      subds.Insert( atroidesc.GetAsDataElement() );
+      }
 
     gdcm::Attribute<0x3006,0x0036> atroigenalg;
     atroigenalg.SetValue( roigenalgo );
@@ -333,6 +341,14 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTInfo(gdcm::File &file)
     gdcm::Attribute<0x3006,0x0084> atreferencedroinumber;
     atreferencedroinumber.SetValue( roinumber );
     subdsobs.Insert( atreferencedroinumber.GetAsDataElement() );
+
+    const char *roiobservationlabel = this->RTStructSetProperties->GetStructureSetROIObservationLabel(id);
+    if( roiobservationlabel && *roiobservationlabel )
+      {
+      gdcm::Attribute<0x3006,0x0085> atroiobservationlabel;
+      atroiobservationlabel.SetValue( roiobservationlabel );
+      subdsobs.Insert( atroiobservationlabel.GetAsDataElement() );
+      }
 
     const char *rtroiinterpretedtype = this->RTStructSetProperties->GetStructureSetRTROIInterpretedType(id);
     gdcm::Attribute<0x3006,0x00a4> atrtroiinterpretedtype;
@@ -559,12 +575,14 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
   DataSet &subds = item.GetNestedDataSet();
 
   gdcm::Attribute<0x3006,0x0084> referencedroinumber;
-  referencedroinumber.SetValue ( pdidx );
+  //referencedroinumber.SetValue ( pdidx );
+  referencedroinumber.SetValue( this->RTStructSetProperties->GetStructureSetROINumber(pdidx) );
   subds.Insert( referencedroinumber.GetAsDataElement() );
 
   //(3006,002a) IS [220\160\120]  #  12, 3 ROIDisplayColor
   gdcm::Attribute<0x3006,0x002a> roidispcolor;
-  int32_t intcolor[3];
+  int32_t intcolor[3] = {0,0,0};
+  //assert( darray || farray );
   if( darray )
     {
     double tuple[3];
@@ -573,7 +591,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     intcolor[1] = (int32_t)(tuple[1] * 255.);
     intcolor[2] = (int32_t)(tuple[2] * 255.);
     }
-  if( farray )
+  else if( farray )
     {
     float ftuple[3];
     farray->GetTupleValue( 0, ftuple );
@@ -581,15 +599,22 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
     intcolor[1] = (int32_t)(ftuple[1] * 255.);
     intcolor[2] = (int32_t)(ftuple[2] * 255.);
     }
+  else
+    {
+    vtkDebugMacro( "No color" );
+    }
   roidispcolor.SetValues( intcolor, 3 );
   subds.Insert( roidispcolor.GetAsDataElement() );
 
-  const Tag sisq2(0x3006,0x0040);
-  DataElement de2( sisq2 );
-  de2.SetVR( VR::SQ );
-  de2.SetValue( *sqi );
-  de2.SetVLToUndefined();
-  subds.Insert( de2 );
+  if(  sqi->GetNumberOfItems() )
+    {
+    const Tag sisq2(0x3006,0x0040);
+    DataElement de2( sisq2 );
+    de2.SetVR( VR::SQ );
+    de2.SetValue( *sqi );
+    de2.SetVLToUndefined();
+    subds.Insert( de2 );
+    }
 
     sqi1->AddItem( item );
 }

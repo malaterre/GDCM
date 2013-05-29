@@ -39,16 +39,19 @@ struct StructureSetROI
   std::string RefFrameRefUID;
   std::string ROIName;
   std::string ROIGenerationAlgorithm;
+  std::string ROIDescription;
 
   // (3006,0080) SQ (Sequence with undefine)# u/l, 1 RTROIObservationsSequence
   // (3006,0082) IS [0]                     #   2, 1 ObservationNumber
   // (3006,0084) IS [0]                     #   2, 1 ReferencedROINumber
+  // (3006,0085) SH [Station 4L]            #  10, 1 ROIObservationLabel
   // (3006,00a4) CS [ORGAN]                 #   6, 1 RTROIInterpretedType
   // (3006,00a6) PN (no value available)    #   0, 0 ROIInterpreter
   int ObservationNumber;
   // RefROI is AFAIK simply ROINumber
   std::string RTROIInterpretedType;
   std::string ROIInterpreter;
+  std::string ROIObservationLabel;
 };
 
 //----------------------------------------------------------------------------
@@ -108,19 +111,26 @@ public:
   void AddStructureSetROIObservation( int refnumber,
     int observationnumber,
     const char *rtroiinterpretedtype,
-    const char *roiinterpreter
+    const char *roiinterpreter,
+    const char *roiobservationlabel
   )
     {
+    //std::cout << "AddStructureSetROIObservation: " << refnumber << std::endl;
     std::vector<StructureSetROI>::iterator it = StructureSetROIs.begin();
     bool found = false;
     for( ; it != StructureSetROIs.end(); ++it )
       {
       if( it->ROINumber == refnumber )
         {
+        assert( !found );
         found = true;
         it->ObservationNumber = observationnumber;
-        it->RTROIInterpretedType = rtroiinterpretedtype;
-        it->ROIInterpreter = roiinterpreter;
+        if( rtroiinterpretedtype )
+          it->RTROIInterpretedType = rtroiinterpretedtype;
+        if( roiinterpreter )
+          it->ROIInterpreter = roiinterpreter;
+        if( roiobservationlabel )
+          it->ROIObservationLabel = roiobservationlabel;
         }
       }
     // postcond
@@ -130,14 +140,20 @@ public:
   void AddStructureSetROI( int roinumber,
     const char* refframerefuid,
     const char* roiname,
-    const char* roigenerationalgorithm
+    const char* roigenerationalgorithm,
+    const char* roidescription
   )
     {
     StructureSetROI structuresetroi;
-    structuresetroi.ROIName = roiname;
     structuresetroi.ROINumber = roinumber;
-    structuresetroi.RefFrameRefUID = refframerefuid;
-    structuresetroi.ROIGenerationAlgorithm = roigenerationalgorithm;
+    if( refframerefuid )
+      structuresetroi.RefFrameRefUID = refframerefuid;
+    if( roiname )
+      structuresetroi.ROIName = roiname;
+    if( roigenerationalgorithm )
+      structuresetroi.ROIGenerationAlgorithm = roigenerationalgorithm;
+    if( roidescription )
+      structuresetroi.ROIDescription = roidescription;
     StructureSetROIs.push_back( structuresetroi );
     }
   vtkIdType GetNumberOfStructureSetROIs()
@@ -156,6 +172,10 @@ public:
     {
     return StructureSetROIs[id].RTROIInterpretedType.c_str();
     }
+  const char *GetStructureSetROIObservationLabel(vtkIdType id)
+    {
+    return StructureSetROIs[id].ROIObservationLabel.c_str();
+    }
   const char *GetStructureSetROIRefFrameRefUID(vtkIdType id)
     {
     return StructureSetROIs[id].RefFrameRefUID.c_str();
@@ -167,6 +187,10 @@ public:
   const char *GetStructureSetROIGenerationAlgorithm(vtkIdType id)
     {
     return StructureSetROIs[id].ROIGenerationAlgorithm.c_str();
+    }
+  const char *GetStructureSetROIDescription(vtkIdType id)
+    {
+    return StructureSetROIs[id].ROIDescription.c_str();
     }
 
   std::vector<StructureSetROI> StructureSetROIs;
@@ -243,18 +267,21 @@ vtkIdType vtkRTStructSetProperties::GetNumberOfReferencedFrameOfReferences()
 void vtkRTStructSetProperties::AddStructureSetROIObservation( int refnumber,
     int observationnumber,
     const char *rtroiinterpretedtype,
-    const char *roiinterpreter)
+    const char *roiinterpreter,
+    const char *roiobservationlabel
+)
 {
-  this->Internals->AddStructureSetROIObservation( refnumber, observationnumber, rtroiinterpretedtype, roiinterpreter );
+  this->Internals->AddStructureSetROIObservation( refnumber, observationnumber, rtroiinterpretedtype, roiinterpreter, roiobservationlabel );
 }
 
 void vtkRTStructSetProperties::AddStructureSetROI( int roinumber,
     const char* refframerefuid,
     const char* roiname,
-    const char* roigenerationalgorithm
+    const char* roigenerationalgorithm,
+    const char* roidescription
   )
 {
-  this->Internals->AddStructureSetROI( roinumber, refframerefuid, roiname, roigenerationalgorithm );
+  this->Internals->AddStructureSetROI( roinumber, refframerefuid, roiname, roigenerationalgorithm, roidescription );
 }
 
 vtkIdType vtkRTStructSetProperties::GetNumberOfStructureSetROIs()
@@ -273,6 +300,10 @@ const char *vtkRTStructSetProperties::GetStructureSetRTROIInterpretedType(vtkIdT
 {
   return this->Internals->GetStructureSetRTROIInterpretedType(id);
 }
+const char *vtkRTStructSetProperties::GetStructureSetROIObservationLabel(vtkIdType id)
+{
+  return this->Internals->GetStructureSetROIObservationLabel(id);
+}
 
 const char *vtkRTStructSetProperties::GetStructureSetROIRefFrameRefUID(vtkIdType id)
 {
@@ -285,6 +316,10 @@ const char *vtkRTStructSetProperties::GetStructureSetROIName(vtkIdType id)
 const char *vtkRTStructSetProperties::GetStructureSetROIGenerationAlgorithm(vtkIdType id)
 {
   return this->Internals->GetStructureSetROIGenerationAlgorithm(id);
+}
+const char *vtkRTStructSetProperties::GetStructureSetROIDescription(vtkIdType id)
+{
+  return this->Internals->GetStructureSetROIDescription(id);
 }
 
 //----------------------------------------------------------------------------
