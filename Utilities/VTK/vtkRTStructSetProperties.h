@@ -82,11 +82,15 @@ public:
   void AddStructureSetROI( int roinumber,
     const char* refframerefuid,
     const char* roiname,
-    const char* ROIGenerationAlgorithm);
+    const char* ROIGenerationAlgorithm,
+    const char* ROIDescription = 0
+  );
   void AddStructureSetROIObservation( int refnumber,
     int observationnumber,
     const char *rtroiinterpretedtype,
-    const char *roiinterpreter);
+    const char *roiinterpreter,
+    const char *roiobservationlabel = 0
+  );
 
   vtkIdType GetNumberOfStructureSetROIs();
   int GetStructureSetObservationNumber(vtkIdType id);
@@ -94,7 +98,9 @@ public:
   const char *GetStructureSetROIRefFrameRefUID(vtkIdType);
   const char *GetStructureSetROIName(vtkIdType);
   const char *GetStructureSetROIGenerationAlgorithm(vtkIdType);
+  const char *GetStructureSetROIDescription(vtkIdType id);
   const char *GetStructureSetRTROIInterpretedType(vtkIdType id);
+  const char *GetStructureSetROIObservationLabel(vtkIdType id);
 
 protected:
   vtkRTStructSetProperties();
