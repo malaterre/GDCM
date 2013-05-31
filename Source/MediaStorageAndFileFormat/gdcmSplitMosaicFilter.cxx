@@ -38,7 +38,7 @@ static bool reorganize_mosaic(const unsigned short *input, const unsigned int *i
         {
         const size_t outputidx = x + y*outputdims[0] + z*outputdims[0]*outputdims[1];
         const size_t inputidx = (x + (z%square)*outputdims[0]) +
-          (y + (z/square)*outputdims[0])*inputdims[0];
+          (y + (z/square)*outputdims[1])*inputdims[0];
         output[ outputidx ] = input[ inputidx ];
         }
       }
