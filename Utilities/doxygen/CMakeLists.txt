@@ -173,7 +173,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmscanner.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmtar.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmviewer.html
-  #  DESTINATION ${GDCM_INSTALL_DOC_DIR} COMPONENT Development
+  #  DESTINATION ${GDCM_INSTALL_DOC_DIR} COMPONENT DebugDevel
   #)
   install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2vtk.1
@@ -191,7 +191,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmscanner.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmtar.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmviewer.1
-    DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT Development
+    DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT DebugDevel
   )
   install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${GDCM_INSTALL_DOC_DIR}
     PATTERN "*.md5" EXCLUDE
