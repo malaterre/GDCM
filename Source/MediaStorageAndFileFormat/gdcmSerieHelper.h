@@ -112,8 +112,6 @@ private:
   bool DirectOrder;
 
   BOOL_FUNCTION_PFILE_PFILE_POINTER UserLessThanFunction;
-
-  bool m_UseSeriesDetails;
 };
 
 // backward compat
