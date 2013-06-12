@@ -233,24 +233,25 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       ZSpacing = spacing_round(zspacing, l);
       }
     if( !spacingisgood )
-    {
-        std::cout << "Filenames and 'z' positions" << std::endl;
-        double prev = 0.;
-        for(SortedFilenames::const_iterator& it = sorted.begin(); it!= sorted.end(); ++it)
+      {
+      std::ostringstream os;
+      os << "Filenames and 'z' positions" << std::endl;
+      double prev1 = 0.;
+      for(SortedFilenames::const_iterator it1 = sorted.begin(); it1 != sorted.end(); ++it1)
         {
-            std::string f = it->second;
-            if( f.length() > 32 )
-            {
-                f = f.substr(0,10) + " ... " + f.substr(f.length()-17);
-            }
-            double d = it->first - prev;
-            if( it != sorted.begin() && fabs(d - zspacing) > ZTolerance) std::cout << "* ";
-            else std::cout << "  ";
-            std::cout << it->first << "\t" << f << std::endl;
-            prev = it->first;
+        std::string f = it1->second;
+        if( f.length() > 32 )
+          {
+          f = f.substr(0,10) + " ... " + f.substr(f.length()-17);
+          }
+        double d = it1->first - prev1;
+        if( it1 != sorted.begin() && fabs(d - zspacing) > ZTolerance) os << "* ";
+        else os << "  ";
+        os << it1->first << "\t" << f << std::endl;
+        prev1 = it1->first;
         }
-        std::cout << std::endl;
-    }
+      gdcmDebugMacro( os.str() );
+      }
     assert( spacingisgood == false ||  (ComputeZSpacing ? (ZSpacing > ZTolerance && ZTolerance > 0) : ZTolerance > 0) );
     }
 }
