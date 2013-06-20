@@ -58,10 +58,17 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
     }
   else
     {
-    gdcmWarningMacro( "PhotometricInterpretation unhandled: " << pi );
+    gdcmErrorMacro( "PhotometricInterpretation unhandled: " << pi );
     return false;
     }
   os << dims[0] << " " << dims[1] << "\n";
+
+  const unsigned int pc = this->GetPlanarConfiguration();
+  if( pc )
+    {
+    gdcmErrorMacro( "PlanarConfiguration unhandled: " << pc );
+    return false;
+    }
 
   const PixelFormat& pf = GetPixelFormat();
   switch(pf)
