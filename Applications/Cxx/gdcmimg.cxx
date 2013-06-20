@@ -1043,6 +1043,7 @@ int main (int argc, char *argv[])
       pnm.SetDimensions( imageori.GetDimensions() );
       pnm.SetPixelFormat( imageori.GetPixelFormat() );
       pnm.SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
+      pnm.SetPlanarConfiguration( imageori.GetPlanarConfiguration() );
       pnm.SetLUT( imageori.GetLUT() );
       const gdcm::DataElement& in = imageori.GetDataElement();
       bool b = pnm.Write( outfilename, in );
@@ -1060,6 +1061,7 @@ int main (int argc, char *argv[])
       pnm.SetDimensions( imageori.GetDimensions() );
       pnm.SetPixelFormat( imageori.GetPixelFormat() );
       pnm.SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
+      pnm.SetPlanarConfiguration( imageori.GetPlanarConfiguration() );
       pnm.SetLUT( imageori.GetLUT() );
       const gdcm::DataElement& in = imageori.GetDataElement();
       bool b = pnm.Write( outfilename, in );
