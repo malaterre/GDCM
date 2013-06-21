@@ -133,6 +133,7 @@ static void PrintHelp()
   std::cout << "     --pi [str]        Change photometric interpretation." << std::endl;
   std::cout << "     --pf %d,%d,%d     Change pixel format: (BA,BS,HB)." << std::endl;
   std::cout << "  -s --size %d,%d      Size." << std::endl;
+  std::cout << "     --offset %ull     Start Offset." << std::endl;
   std::cout << "  -C --sop-class-uid   SOP Class UID (name or value)." << std::endl;
   std::cout << "  -T --study-uid       Study UID." << std::endl;
   std::cout << "  -S --series-uid      Series UID." << std::endl;
@@ -271,7 +272,7 @@ static bool AddUIDs(int sopclassuid, std::string const & sopclass, std::string c
   return true;
 }
 
-static bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFragments *sq , gdcm::ImageCodec & jpeg, const char *filename )
+static bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFragments *sq , gdcm::ImageCodec & jpeg, const char *filename, std::streampos const pos = 0 )
 {
   /*
    * FIXME: when JPEG contains JFIF marker, we should only read them
@@ -307,6 +308,10 @@ static bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFrag
     // do not rewind file should be just at right offset
     }
   char *buf = new char[len];
+  if( pos )
+    {
+    is.seekg( pos, std::ios::beg );
+    }
   is.read(buf, len);
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
 
@@ -327,7 +332,7 @@ static bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFrag
   return true;
 }
 
-static bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Directory::FilenamesType const & filenames, unsigned int ndim = 2 )
+static bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Directory::FilenamesType const & filenames, unsigned int ndim = 2, std::streampos const & pos = 0 )
 {
   std::vector<std::string>::const_iterator it = filenames.begin();
   bool b = true;
@@ -341,7 +346,7 @@ static bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm
   gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
   for(; it != filenames.end(); ++it)
     {
-    b = b && PopulateSingeFile( writer, sq, jpeg, it->c_str() );
+    b = b && PopulateSingeFile( writer, sq, jpeg, it->c_str(), pos );
     }
   if( filenames.size() > 1 )
     {
@@ -420,6 +425,8 @@ int main (int argc, char *argv[])
   std::string pinterstr;
   int pformat = 0;
   std::string pformatstr;
+  int poffset = 0;
+  size_t start_pos = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -453,6 +460,7 @@ int main (int argc, char *argv[])
         {"pc", 1, &pconf, 1}, //
         {"pi", 1, &pinter, 1}, //
         {"pf", 1, &pformat, 1}, //
+        {"offset", 1, &poffset, 1}, //
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -560,6 +568,12 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "pf") == 0 );
             pformat = 1;
             pformatstr = optarg;
+            }
+          else if( option_index == 16 ) /* start_pos */
+            {
+            assert( strcmp(s, "offset") == 0 );
+            poffset = 1;
+            start_pos = atoll(optarg);
             }
           //printf (" with arg %s", optarg);
           }
@@ -861,7 +875,7 @@ int main (int argc, char *argv[])
           }
         }
 
-      if( !Populate( writer, raw, filenames, ndimension ) ) return 1;
+      if( !Populate( writer, raw, filenames, ndimension, start_pos ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );

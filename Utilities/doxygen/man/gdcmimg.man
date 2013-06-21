@@ -232,6 +232,15 @@ gdcmimg handle nicely a set of files (for instance jpeg):
 $ gdcmimg 1.jpg 2.jpg 3.jpg 4.jpg output.dcm
 \endverbatim
 
+\section start_offset Start Offset
+
+In some case, one may want to create a 2D slice from an arbitrary volume (e.g
+3D). In which case --offset becomes handy:
+
+\verbatim
+$ gdcmimg --offset 4954104330 --size 1673,1673 Input3D_1673_1673_1775.raw slice_1770.dcm
+\endverbatim
+
 \section warning Warning
 
 There are a couple of issues with gdcmimg implementation:
