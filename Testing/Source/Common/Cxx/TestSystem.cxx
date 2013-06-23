@@ -117,6 +117,11 @@ int TestSystem(int, char *[])
  * TODO: there can be trailing slash...
  */
   const char *path = gdcm::System::GetCurrentProcessFileName();
+  if( !path )
+    {
+    std::cerr << "Missing implemnetation for GetCurrentProcessFileName" << std::endl;
+    return 1;
+    }
   gdcm::Filename fn( path );
 //std::cerr << path << std::endl;
   if( strncmp(GDCM_EXECUTABLE_OUTPUT_PATH, fn.GetPath(), strlen(GDCM_EXECUTABLE_OUTPUT_PATH)) != 0 )
