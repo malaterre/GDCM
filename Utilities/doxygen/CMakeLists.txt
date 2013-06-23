@@ -131,15 +131,27 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
       COMMENT  "GDCM: Creating (patched) pdf of documentation"
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
     )
-    add_custom_command(
-      OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
-      COMMAND  ${PDFOPT_EXECUTABLE}
-      ARGS     ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
-               ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
-      DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
-      COMMENT  "GDCM: Creating optimized pdf version of documentation"
-      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
-    )
+    if(PDFOPT_EXECUTABLE)
+      add_custom_command(
+        OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
+        COMMAND  ${PDFOPT_EXECUTABLE}
+        ARGS     ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
+                 ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
+        DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
+        COMMENT  "GDCM: Creating optimized pdf version of documentation"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
+        )
+    else()
+      add_custom_command(
+        OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
+        COMMAND  ${CMAKE_COMMAND} -E copy
+        ARGS     ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
+                 ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
+        DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
+        COMMENT  "GDCM: Creating unoptimized pdf version of documentation"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
+        )
+    endif()
     # add target to 'ALL'
     add_custom_target(GDCMDoxygenPDF
       ALL
