@@ -464,6 +464,7 @@ const char *System::GetCurrentProcessFileName()
     return buf;
     }
 #elif defined(__APPLE__)
+  //  _NSGetExecutablePath()
   static char buf[PATH_MAX];
   Boolean success = false;
   CFURLRef pathURL = CFBundleCopyExecutableURL(CFBundleGetMainBundle());
@@ -476,13 +477,31 @@ const char *System::GetCurrentProcessFileName()
     {
     return buf;
     }
-#else
+#elif defined (__SVR4) && defined (__sun)
+  // solaris
+  const char *ret = getexecname();
+  if( ret ) return ret;
+//#elif defined(__NetBSD__)
+//  static char path[PATH_MAX];
+//  if ( readlink ("/proc/curproc/exe", path, sizeof(path)) > 0)
+//    {
+//    return path;
+//    }
+#elif defined(__DragonFly__) || defined(__OpenBSD__) || defined(__FreeBSD__)
+  static char path[PATH_MAX];
+  if ( readlink ("/proc/curproc/file", path, sizeof(path)) > 0)
+    {
+    return path;
+    }
+#elif defined(__linux__)
   static char path[PATH_MAX];
   if ( readlink ("/proc/self/exe", path, sizeof(path)) > 0) // Technically 0 is not an error, but that would mean
                                                             // 0 byte were copied ... thus considered it as an error
     {
     return path;
     }
+#else
+  gdcmErrorMacro( "missing implementation" );
 #endif
    return 0;
 }
