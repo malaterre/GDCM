@@ -40,6 +40,7 @@ SWIG_LINK_LIBRARIES(gdcmjni gdcmMSFF
   #${JNI_LIBRARIES}
 )
 SET_TARGET_PROPERTIES(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
+set_property(TARGET ${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTY NO_SONAME 1)
 
 # swig-java dummy run:
 # the following execute_process is a dummy run and generate all *.java files in a directory
