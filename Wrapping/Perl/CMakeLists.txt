@@ -28,6 +28,7 @@ SWIG_LINK_LIBRARIES(perl_gdcm gdcmMSFF)
 #set_target_properties(${SWIG_MODULE_perl_gdcm_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 # Remove 'lib' prefix :no-op on windows and valid for UNIX based syste
 set_target_properties(${SWIG_MODULE_perl_gdcm_REAL_NAME} PROPERTIES PREFIX "")
+set_property(TARGET ${SWIG_MODULE_perl_gdcm_REAL_NAME} PROPERTY NO_SONAME 1)
 
 if(UNIX)
   set_target_properties(${SWIG_MODULE_perl_gdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "gdcm")
