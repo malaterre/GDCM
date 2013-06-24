@@ -86,6 +86,7 @@
 #include "gdcmDictEntry.h"
 #include "gdcmCSAHeaderDictEntry.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmUUIDGenerator.h"
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
 #include "gdcmAttribute.h"
@@ -169,6 +170,7 @@
 #include "gdcmSimpleSubjectWatcher.h"
 #include "gdcmDICOMDIRGenerator.h"
 #include "gdcmFileDerivation.h"
+#include "gdcmFileAnonymizer.h"
 
 #include "gdcmQueryBase.h"
 #include "gdcmQueryFactory.h"
@@ -499,6 +501,8 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 //EXTEND_CLASS_PRINT(gdcm::StringFilter)
 %include "gdcmUIDGenerator.h"
 //EXTEND_CLASS_PRINT(gdcm::UIDGenerator)
+%include "gdcmUUIDGenerator.h"
+//EXTEND_CLASS_PRINT(gdcm::UUIDGenerator)
 //%include "gdcmConstCharWrapper.h"
 //%{
 //  typedef char * PString;   // copied to wrapper code
@@ -736,6 +740,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmSimpleSubjectWatcher.h"
 %include "gdcmDICOMDIRGenerator.h"
 %include "gdcmFileDerivation.h"
+%include "gdcmFileAnonymizer.h"
 
 // MEXD:
 %template(DataSetArrayType) std::vector< gdcm::DataSet >;
