@@ -132,6 +132,8 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.77.1.1", // VLEndoscopicImageStorage
   "1.2.840.10008.5.1.4.1.1.13.1.3", // BreastTomosynthesisImageStorage
   "1.2.392.200036.9125.1.1.2",  // FujiPrivateCRImageStorage
+  "1.2.840.10008.5.1.4.1.1.77.1.5.1", // OphthalmicPhotography8BitImageStorage
+  "1.2.840.10008.5.1.4.1.1.77.1.5.4", // OphthalmicTomographyImageStorage
   0
 };
 
@@ -306,6 +308,8 @@ static const MSModalityType MSModalityTypes[] = {
   {"ES", 2, 0},// VLEndoscopicImageStorage
   {"MG", 3, 0},// BreastTomosynthesisImageStorage
   {"CR", 2, 0},// FujiPrivateCRImageStorage
+  {"OP", 2, 0},// OphthalmicPhotography8BitImageStorage
+  {"OPT", 3, 0},// OphthalmicTomographyImageStorage
 
   {NULL, 0, 0} //MS_END
 };
