@@ -45,14 +45,16 @@ int main(int argc, char *argv[])
   if( !gdcm::System::FileExists( filename ) ) return 1;
 
   size_t s = gdcm::System::FileSize(filename);
+  if( !s ) return 1;
 
   magic_t cookie = magic_open(MAGIC_NONE);
   const char * file_type = magic_file(cookie, filename);
+  if( !file_type ) return 1;
   magic_close(cookie);
 
   gdcm::Writer w;
   gdcm::File &file = w.GetFile();
-  gdcm::DataSet &ds = file.GetDataSet();
+  //gdcm::DataSet &ds = file.GetDataSet();
   //w.SetCheckFileMetaInformation( true );
   w.SetFileName( outfilename );
 
