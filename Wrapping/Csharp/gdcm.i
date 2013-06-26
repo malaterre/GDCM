@@ -437,6 +437,8 @@ EXTEND_CLASS_PRINT(gdcm::DataSet)
 EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
 %include "gdcmObject.h"
 %apply char[] { char* thebuffer }
+%apply char[] { const char* inputbuffer }
+%apply char[] { char* outputbuffer }
 %ignore gdcm::LookupTable::GetLUT(LookupTableType type, unsigned char *array, unsigned int &length) const;
 %include "gdcmLookupTable.h"
 %extend gdcm::LookupTable
@@ -448,6 +450,8 @@ EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
   }
 };
 %clear char* thebuffer;
+%clear char* inputbuffer;
+%clear char* outputbuffer;
 EXTEND_CLASS_PRINT(gdcm::LookupTable)
 %include "gdcmOverlay.h"
 EXTEND_CLASS_PRINT(gdcm::Overlay)

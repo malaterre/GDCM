@@ -29,28 +29,33 @@ bool ImageApplyLookupTable::Apply()
     }
   const gdcm::LookupTable &lut = image.GetLUT();
   int bitsample = lut.GetBitSample();
-  assert( bitsample );
-  (void)bitsample;//warning removal
+  if( !bitsample ) return false;
 
-  //const DataElement& pixeldata = image.GetDataElement();
-  //const ByteValue *bv = pixeldata.GetByteValue();
-  //const char *p = bv->GetPointer();
-  //std::istringstream is;
-  //is.str( std::string( p, p + bv->GetLength() ) );
-  unsigned long len = image.GetBufferLength();
-  char *p = new char[len];
+  const unsigned long len = image.GetBufferLength();
+  std::vector<char> v;
+  v.resize( len );
+  char *p = &v[0];
   image.GetBuffer( p );
   std::stringstream is;
-  is.write( p, len );
-  delete[] p;
-
-  std::ostringstream os;
-  lut.Decode(is, os);
+  if( !is.write( p, len ) )
+    {
+    gdcmErrorMacro( "Could not write to stringstream" );
+    return false;
+    }
 
   DataElement &de = Output->GetDataElement();
-  std::string str = os.str();
+#if 0
+  std::ostringstream os;
+  lut.Decode(is, os);
+  const std::string str = os.str();
   VL::Type strSize = (VL::Type)str.size();
   de.SetByteValue( str.c_str(), strSize);
+#else
+  std::vector<char> v2;
+  v2.resize( len * 3 );
+  lut.Decode(&v2[0], v2.size(), &v[0], v.size());
+  de.SetByteValue( &v2[0], v2.size());
+#endif
   Output->GetLUT().Clear();
   Output->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
   Output->GetPixelFormat().SetSamplesPerPixel( 3 );

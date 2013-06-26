@@ -126,7 +126,8 @@ bool ImageRegionReader::ReadInformation()
   ms.SetFromFile(file);
   assert( ms != MediaStorage::VLWholeSlideMicroscopyImageStorage );
 
-  return true;
+  // populate Image meta data
+  return ReadImageInternal(ms, false);
 }
 
 bool ImageRegionReader::ReadRAWIntoBuffer(char *buffer, size_t buflen)
