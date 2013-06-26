@@ -16,17 +16,18 @@
  * This small code shows how to use the gdcm.ImageRegionReader API
  * In this example we are taking each frame by frame and dump them to
  * /tmp/frame.raw.
+ * Furthermore we are applying the LUT on this image.
+ * Special care should be taken in case the image is not PALETTE COLOR
  *
  * Usage:
- * $ bin/ExtractImageRegion.exe input.dcm
+ * $ bin/ExtractImageRegionWithLUT.exe input.dcm
  *
  * Example:
- * $ bin/ExtractImageRegion.exe gdcmData/012345.002.050.dcm
- * $ md5sum /tmp/frame.raw
- * d594a5e2fde12f32b6633ca859b4d4a6  /tmp/frame.raw
- * $ gdcminfo --md5sum gdcmData/012345.002.050.dcm
- * [...]
- * md5sum: d594a5e2fde12f32b6633ca859b4d4a6
+ * $ bin/ExtractImageRegionWithLUT.exe gdcmData/rle16loo.dcm
+ * $ md5sum /tmp/frame_rgb.raw
+ * 73bf61325fdb6e2830244a2b7b0c4ae2  /tmp/frame_rgb.raw
+ * $ gdcmimg --depth 16 --spp 3 --size 600,430 /tmp/frame_rgb.raw rgb.dcm 
+ * $ gdcmviewer rgb.dcm
  */
 using System;
 using gdcm;
@@ -46,6 +47,8 @@ public class ExtractImageRegion
     // Get file infos
     gdcm.File f = reader.GetFile();
 
+    gdcm.LookupTable lut = reader.GetImage().GetLUT();
+
     // get some info about image
     UIntArrayType dims = ImageHelper.GetDimensionsValue(f);
     PixelFormat pf = ImageHelper.GetPixelFormatValue (f);
@@ -53,6 +56,9 @@ public class ExtractImageRegion
 
     // buffer to get the pixels
     byte[] buffer = new byte[ dims[0] * dims[1] * pixelsize ];
+
+    // output buffer for the RGB decoded image:
+    byte[] buffer2 = new byte[ dims[0] * dims[1] * pixelsize * 3 ];
 
     // define a simple box region.
     BoxRegion box = new BoxRegion();
@@ -71,12 +77,17 @@ public class ExtractImageRegion
       // to get the exact size of minimum buffer
       if (reader.ReadIntoBuffer(buffer, (uint)buffer.Length))
         {
+        if( !lut.Decode( buffer2, (uint)buffer2.Length, buffer, (uint)buffer.Length ) )
+          {
+          throw new Exception("can't decode");
+          }
+
         using (System.IO.Stream stream =
-          System.IO.File.Open(@"/tmp/frame.raw",
+          System.IO.File.Open(@"/tmp/frame_rgb.raw",
             System.IO.FileMode.Create))
           {
           System.IO.BinaryWriter writer = new System.IO.BinaryWriter(stream);
-          writer.Write(buffer);
+          writer.Write(buffer2);
           }
         }
       else

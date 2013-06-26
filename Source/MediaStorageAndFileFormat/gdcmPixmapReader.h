@@ -56,6 +56,7 @@ public:
   //void SetPixamp(Pixmap const &pix);
 
 protected:
+  bool ReadImageInternal(MediaStorage const &ms, bool handlepixeldata = true);
   virtual bool ReadImage(MediaStorage const &ms);
   virtual bool ReadACRNEMAImage();
 

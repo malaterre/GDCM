@@ -71,6 +71,11 @@ public:
   /// Decode the LUT
   void Decode(std::istream &is, std::ostream &os) const;
 
+  /// Decode the LUT
+  /// outputbuffer will contains the RGB decoded PALETTE COLOR input image of size inlen
+  /// the outputbuffer should be at least 3 times the size of inlen
+  bool Decode(char *outputbuffer, size_t outlen, const char *inputbuffer, size_t inlen) const;
+
   LookupTable(LookupTable const &lut):Object(lut)
     {
     assert(0);

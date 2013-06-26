@@ -5,6 +5,7 @@ set(CSHARP_EXAMPLES
   SimplePrintPatientName
   ExtractOneFrame
   ExtractImageRegion
+  ExtractImageRegionWithLUT
   ManipulateFile
   RescaleImage
   ExtractEncapsulatedFile

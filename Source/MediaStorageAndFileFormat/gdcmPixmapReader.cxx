@@ -599,6 +599,11 @@ bool DoOverlays(const DataSet& ds, Pixmap& pixeldata)
 
 bool PixmapReader::ReadImage(MediaStorage const &ms)
 {
+  return ReadImageInternal(ms);
+}
+
+bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldata )
+{
   const DataSet &ds = F->GetDataSet();
   std::string conversion;
 
@@ -945,87 +950,90 @@ bool PixmapReader::ReadImage(MediaStorage const &ms)
     }
 
   // 8. Do the PixelData
-  if( ms == MediaStorage::MRSpectroscopyStorage )
+  if( handlepixeldata )
     {
-    const Tag spectdata = Tag(0x5600, 0x0020);
-    if( !ds.FindDataElement( spectdata ) )
+    if( ms == MediaStorage::MRSpectroscopyStorage )
       {
-      gdcmWarningMacro( "No Spectroscopy Data Found" );
-      return false;
-      }
-    const DataElement& xde = ds.GetDataElement( spectdata );
-    //bool need = PixelData->GetTransferSyntax() == TransferSyntax::ImplicitVRBigEndianPrivateGE;
-    //PixelData->SetNeedByteSwap( need );
-    PixelData->SetDataElement( xde );
-    }
-  else
-    {
-    const Tag pixeldata = Tag(0x7fe0, 0x0010);
-    if( !ds.FindDataElement( pixeldata ) )
-      {
-      gdcmWarningMacro( "No Pixel Data Found" );
-      return false;
-      }
-    const DataElement& xde = ds.GetDataElement( pixeldata );
-    bool need = PixelData->GetTransferSyntax() == TransferSyntax::ImplicitVRBigEndianPrivateGE;
-    PixelData->SetNeedByteSwap( need );
-    PixelData->SetDataElement( xde );
-
-    // FIXME:
-    // We should check that when PixelData is RAW that Col * Dim == PixelData->GetLength()
-    //PixelFormat guesspf = PixelFormat->GuessPixelFormat();
-
-    }
-
-  const unsigned int *dims = PixelData->GetDimensions();
-  if( dims[0] == 0 || dims[1] == 0 )
-    {
-    // Pseudo-declared JPEG SC image storage. Let's fix col/row/pf/pi
-    gdcm::JPEGCodec jpeg;
-    if( jpeg.CanDecode( PixelData->GetTransferSyntax() ) )
-      {
-      std::stringstream ss;
-      const DataElement &de = PixelData->GetDataElement();
-      //const ByteValue *bv = de.GetByteValue();
-      const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
-      if( !sqf )
+      const Tag spectdata = Tag(0x5600, 0x0020);
+      if( !ds.FindDataElement( spectdata ) )
         {
-        // TODO: It would be nice to recognize file such as JPEGDefinedLengthSequenceOfFragments.dcm
-        gdcmDebugMacro( "File is declared as JPEG compressed but does not contains Fragmens explicitely." );
+        gdcmWarningMacro( "No Spectroscopy Data Found" );
         return false;
         }
-      sqf->WriteBuffer( ss );
-      //std::string s( bv->GetPointer(), bv->GetLength() );
-      //is.str( s );
-      gdcm::PixelFormat jpegpf ( gdcm::PixelFormat::UINT8 ); // usual guess...
-      jpeg.SetPixelFormat( jpegpf );
-      gdcm::TransferSyntax ts;
-      bool b = jpeg.GetHeaderInfo( ss, ts );
-      if( b )
+      const DataElement& xde = ds.GetDataElement( spectdata );
+      //bool need = PixelData->GetTransferSyntax() == TransferSyntax::ImplicitVRBigEndianPrivateGE;
+      //PixelData->SetNeedByteSwap( need );
+      PixelData->SetDataElement( xde );
+      }
+    else
+      {
+      const Tag pixeldata = Tag(0x7fe0, 0x0010);
+      if( !ds.FindDataElement( pixeldata ) )
         {
-        std::vector<unsigned int> v(3);
-        v[0] = PixelData->GetDimensions()[0];
-        v[1] = PixelData->GetDimensions()[1];
-        v[2] = PixelData->GetDimensions()[2];
-        assert( jpeg.GetDimensions()[0] );
-        assert( jpeg.GetDimensions()[1] );
-        v[0] = jpeg.GetDimensions()[0];
-        v[1] = jpeg.GetDimensions()[1];
-        PixelData->SetDimensions( &v[0] );
-        //PixelData->SetPixelFormat( jpeg.GetPixelFormat() );
-        //PixelData->SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
-        assert( PixelData->IsTransferSyntaxCompatible( ts ) );
+        gdcmWarningMacro( "No Pixel Data Found" );
+        return false;
+        }
+      const DataElement& xde = ds.GetDataElement( pixeldata );
+      bool need = PixelData->GetTransferSyntax() == TransferSyntax::ImplicitVRBigEndianPrivateGE;
+      PixelData->SetNeedByteSwap( need );
+      PixelData->SetDataElement( xde );
+
+      // FIXME:
+      // We should check that when PixelData is RAW that Col * Dim == PixelData->GetLength()
+      //PixelFormat guesspf = PixelFormat->GuessPixelFormat();
+
+      }
+
+    const unsigned int *dims = PixelData->GetDimensions();
+    if( dims[0] == 0 || dims[1] == 0 )
+      {
+      // Pseudo-declared JPEG SC image storage. Let's fix col/row/pf/pi
+      gdcm::JPEGCodec jpeg;
+      if( jpeg.CanDecode( PixelData->GetTransferSyntax() ) )
+        {
+        std::stringstream ss;
+        const DataElement &de = PixelData->GetDataElement();
+        //const ByteValue *bv = de.GetByteValue();
+        const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
+        if( !sqf )
+          {
+          // TODO: It would be nice to recognize file such as JPEGDefinedLengthSequenceOfFragments.dcm
+          gdcmDebugMacro( "File is declared as JPEG compressed but does not contains Fragmens explicitely." );
+          return false;
+          }
+        sqf->WriteBuffer( ss );
+        //std::string s( bv->GetPointer(), bv->GetLength() );
+        //is.str( s );
+        gdcm::PixelFormat jpegpf ( gdcm::PixelFormat::UINT8 ); // usual guess...
+        jpeg.SetPixelFormat( jpegpf );
+        gdcm::TransferSyntax ts;
+        bool b = jpeg.GetHeaderInfo( ss, ts );
+        if( b )
+          {
+          std::vector<unsigned int> v(3);
+          v[0] = PixelData->GetDimensions()[0];
+          v[1] = PixelData->GetDimensions()[1];
+          v[2] = PixelData->GetDimensions()[2];
+          assert( jpeg.GetDimensions()[0] );
+          assert( jpeg.GetDimensions()[1] );
+          v[0] = jpeg.GetDimensions()[0];
+          v[1] = jpeg.GetDimensions()[1];
+          PixelData->SetDimensions( &v[0] );
+          //PixelData->SetPixelFormat( jpeg.GetPixelFormat() );
+          //PixelData->SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
+          assert( PixelData->IsTransferSyntaxCompatible( ts ) );
+          }
+        else
+          {
+          gdcmDebugMacro( "Columns or Row was found to be 0. Cannot compute dimension." );
+          return false;
+          }
         }
       else
         {
         gdcmDebugMacro( "Columns or Row was found to be 0. Cannot compute dimension." );
         return false;
         }
-      }
-    else
-      {
-      gdcmDebugMacro( "Columns or Row was found to be 0. Cannot compute dimension." );
-      return false;
       }
     }
 
