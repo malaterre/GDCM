@@ -240,10 +240,19 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     meanspacing += current;
     prev = distances[i];
     }
-  meanspacing /= (double)(nitems - 1);
+  if( nitems > 1 )
+    {
+    meanspacing /= (double)(nitems - 1);
+    if( meanspacing == 0.0 )
+      {
+      // Could be a time series. Assume time spacing of 1. for now:
+      gdcmDebugMacro( "Assuming time series for Z-spacing" );
+      meanspacing = 1.0;
+      }
+    }
 
-  //zspacing = distances[1] - distances[0];
   zspacing = meanspacing;
+  assert( zspacing != 0.0 ); // technically this should not happen
 
   // Check spacing is consistant:
   const double ZTolerance = 1e-3; // ??? FIXME
@@ -255,6 +264,7 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
       {
       // For now simply gives up
       gdcmErrorMacro( "This Enhanced Multiframe is not supported for now. Sorry" );
+      zspacing = NAN; // why not ?
       return false;
       }
     prev = distances[i];
@@ -401,6 +411,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::OphthalmicTomographyImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
     const Tag t1(0x5200,0x9229);
@@ -1049,6 +1060,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
 
   if( ms == MediaStorage::EnhancedCTImageStorage
     || ms == MediaStorage::EnhancedMRImageStorage
+    || ms == MediaStorage::OphthalmicTomographyImageStorage
     || ms == MediaStorage::SegmentationStorage )
     {
     // <entry group="5200" element="9230" vr="SQ" vm="1" name="Per-frame Functional Groups Sequence"/>

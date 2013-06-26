@@ -123,6 +123,8 @@ public:
     VLEndoscopicImageStorage, // 1.2.840.10008.5.1.4.1.1.77.1.1
     BreastTomosynthesisImageStorage, // 1.2.840.10008.5.1.4.1.1.13.1.3
     FujiPrivateCRImageStorage, // 1.2.392.200036.9125.1.1.2
+    OphthalmicPhotography8BitImageStorage, // 1.2.840.10008.5.1.4.1.1.77.1.5.1
+    OphthalmicTomographyImageStorage, // 1.2.840.10008.5.1.4.1.1.77.1.5.4
     MS_END
   } MSType; // Media Storage Type
 
