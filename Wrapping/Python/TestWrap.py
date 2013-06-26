@@ -65,7 +65,16 @@ blacklist = (
 "Exception"
 "ByteSwap"
 "Terminal"
+"CryptoFactory"
+"CAPICryptoFactory"
+"CAPICryptographicMessageSyntax"
+"FileNameEvent"
+"OpenSSLCryptoFactory"
+"OpenSSLCryptographicMessageSyntax"
+"OpenSSLP7CryptoFactory"
+"OpenSSLP7CryptographicMessageSyntax"
 # MediaStorageAndFileFormat
+"TagKeywords"
 "ConstCharWrapper"
 "ImageConverter"
 "SerieHelper"
@@ -170,6 +179,7 @@ blacklist = (
 "RoleSelectionSub"
 "SOPClassExtendedNegociationSub"
 "FindPatientRootQuery"
+"ServiceClassApplicationInformation"
 )
 
 def processonedir(dirname):
