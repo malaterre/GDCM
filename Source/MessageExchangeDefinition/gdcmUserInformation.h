@@ -59,9 +59,7 @@ private:
   MaximumLengthSub MLS;
   ImplementationClassUIDSub ICUID;
   AsynchronousOperationsWindowSub *AOWS;
-  //RoleSelectionSub *RSS;
   RoleSelectionSubItems *RSSI;
-  //SOPClassExtendedNegociationSub *SOPCENS;
   SOPClassExtendedNegociationSubItems *SOPCENSI;
   ImplementationVersionNameSub IVNS;
 
