@@ -17,6 +17,21 @@
 #include "gdcmImageReader.h"
 #include "gdcmImageWriter.h"
 #include "gdcmImage.h"
+#include "gdcmFilename.h"
+
+static const char * const lutarray[][2] = {
+    { "d613050ca0f9c924fb5282d140281fcc", "LEADTOOLS_FLOWERS-8-PAL-RLE.dcm" },
+    { "d613050ca0f9c924fb5282d140281fcc", "LEADTOOLS_FLOWERS-8-PAL-Uncompressed.dcm" },
+    { "7b8d795eaf99f1fff176c43f9cf76bfb", "NM-PAL-16-PixRep1.dcm" },
+    { "47715f0a5d5089268bbef6f83251a8ad", "OT-PAL-8-face.dcm" },
+    { "c70309b66045140b8e08c11aa319c0ab", "US-PAL-8-10x-echo.dcm" },
+    { "c370ca934dc910eb4b629a2fa8650b67", "gdcm-US-ALOKA-16.dcm" },
+    { "49ca8ad45fa7f24b0406a5a03ba8aff6", "rle16loo.dcm" },
+    { "964ea27345a7004325896d34b257f289", "rle16sti.dcm" },
+
+    // sentinel
+    { 0, 0 }
+};
 
 int TestImageApplyLookupTableFunc(const char *filename, bool verbose = false)
 {
@@ -77,7 +92,52 @@ int TestImageApplyLookupTableFunc(const char *filename, bool verbose = false)
     return 1;
     }
 
-  return 0;
+  // Let's read that file back in !
+  gdcm::ImageReader reader2;
+  reader2.SetFileName( outfilename.c_str() );
+  if ( !reader2.Read() )
+    {
+    std::cerr << "Failed to read back: " << outfilename << std::endl;
+    return 1;
+    }
+
+  const gdcm::Image &img = reader2.GetImage();
+  unsigned long len = img.GetBufferLength();
+  char* buffer = new char[len];
+  img.GetBuffer(buffer);
+
+  gdcm::Filename fn( filename );
+  const char *name = fn.GetName();
+  unsigned int i = 0;
+  const char *p = lutarray[i][1];
+  while( p != 0 )
+    {
+    if( strcmp( name, p ) == 0 )
+      {
+      break;
+      }
+    ++i;
+    p = lutarray[i][1];
+    }
+  const char *ref = lutarray[i][0];
+
+  char digest[33] = {};
+  gdcm::Testing::ComputeMD5(buffer, len, digest);
+  int res = 0;
+  if( !ref )
+    {
+    std::cerr << "Missing LUT-applied MD5 for image from: " << filename << std::endl;
+    res = 1;
+    }
+  else if( strcmp(digest, ref) )
+    {
+    std::cerr << "Problem reading image from: " << filename << std::endl;
+    std::cerr << "Found " << digest << " instead of " << ref << std::endl;
+    res = 1;
+    }
+  delete[] buffer;
+
+  return res;
 }
 
 int TestImageApplyLookupTable(int argc, char *argv[])
