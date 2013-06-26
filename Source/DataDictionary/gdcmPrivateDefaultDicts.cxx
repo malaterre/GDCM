@@ -37,6 +37,18 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x0029,0x0000,"VOLCANO-PCDE 1.0",VR::DS,VM::VM1,"Pullback Rate",false },
+  {0x0029,0x0001,"VOLCANO-PCDE 1.0",VR::FD,VM::VM1,"B Gain",false },
+  {0x0029,0x0002,"VOLCANO-PCDE 1.0",VR::US,VM::VM1,"B Persistence Index",false },
+  {0x0029,0x0003,"VOLCANO-PCDE 1.0",VR::FD,VM::VM1,"B ROI Diameter",false },
+  {0x0029,0x0004,"VOLCANO-PCDE 1.0",VR::US,VM::VM1,"CF Sensitivity Index",false },
+  {0x0029,0x0005,"VOLCANO-PCDE 1.0",VR::FD,VM::VM1,"CF ROI Diameter",false },
+  {0x0029,0x0006,"VOLCANO-PCDE 1.0",VR::US,VM::VM1,"Frame Capture Interleave Rate",false },
+  {0x0029,0x0007,"VOLCANO-PCDE 1.0",VR::US,VM::VM1,"Ringdown Subtraction",false },
+  {0x0029,0x0008,"VOLCANO-PCDE 1.0",VR::US,VM::VM1,"Graticule Spacing",false },
+  {0x0029,0x0010,"VOLCANO-PCDE 1.0",VR::SH,VM::VM1,"PIM Serial Number",false },
+  {0x0029,0x0016,"VOLCANO-PCDE 1.0",VR::US,VM::VM1,"Video Loop Number",false },
+  {0x0029,0x0030,"VOLCANO-PCDE 1.0",VR::SS,VM::VM1,"Catheter Boot Mode",false },
   {0x0029,0x0010,"ShowcaseAppearance",VR::DS,VM::VM1,"?",false },
   {0x0029,0x0011,"ShowcaseAppearance",VR::DS,VM::VM1,"?",false },
   {0x0029,0x0012,"ShowcaseAppearance",VR::DS,VM::VM1,"?",false },
@@ -5079,6 +5091,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x004e,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"?",false },
   {0x2005,0x004f,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"?",false },
   {0x2005,0x0050,"Philips MR Imaging DD 005",VR::SS,VM::VM1,"?",false },
+  {0x2005,0x0055,"Philips MR Imaging DD 005",VR::FD,VM::VM3,"?",false },
   {0x7043,0x0000,"Philips NM Private Group",VR::SH,VM::VM1,"?",false },
   {0x0511,0x0000,"Philips PET Private Group",VR::US,VM::VM1,"?",false },
   {0x0511,0x0001,"Philips PET Private Group",VR::US,VM::VM1,"?",false },
