@@ -125,6 +125,11 @@ bool ImageRegionReader::ReadInformation()
   MediaStorage ms;
   ms.SetFromFile(file);
   assert( ms != MediaStorage::VLWholeSlideMicroscopyImageStorage );
+  if( !MediaStorage::IsImage( ms ) )
+    {
+    gdcmDebugMacro( "Not an image recognized. Giving up");
+    return false;
+    }
 
   // populate Image meta data
   return ReadImageInternal(ms, false);
