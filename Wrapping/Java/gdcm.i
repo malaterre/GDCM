@@ -58,9 +58,9 @@
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
 #include "gdcmBitmap.h"
+#include "gdcmIconImage.h"
 #include "gdcmPixmap.h"
 #include "gdcmImage.h"
-#include "gdcmIconImage.h"
 #include "gdcmFragment.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmPDBHeader.h"
@@ -105,7 +105,6 @@
 #include "gdcmFiducials.h"
 #include "gdcmWaveform.h"
 #include "gdcmPersonName.h"
-#include "gdcmIconImage.h"
 #include "gdcmCurve.h"
 #include "gdcmDICOMDIR.h"
 #include "gdcmValidate.h"
@@ -486,13 +485,13 @@ EXTEND_CLASS_PRINT(gdcm::Bitmap)
 %clear signed char* buffer;
 %clear unsigned int* dims;
 
+%include "gdcmIconImage.h"
+EXTEND_CLASS_PRINT(gdcm::IconImage)
 %include "gdcmPixmap.h"
 EXTEND_CLASS_PRINT(gdcm::Pixmap)
 
 %include "gdcmImage.h"
 EXTEND_CLASS_PRINT(gdcm::Image)
-%include "gdcmIconImage.h"
-EXTEND_CLASS_PRINT(gdcm::IconImage)
 %include "gdcmFragment.h"
 EXTEND_CLASS_PRINT(gdcm::Fragment)
 %include "gdcmPDBElement.h"
@@ -649,7 +648,6 @@ EXTEND_CLASS_PRINT(gdcm::Scanner)
 %include "gdcmAnonymizer.h"
 %include "gdcmFileAnonymizer.h"
 
-
 //EXTEND_CLASS_PRINT(gdcm::Anonymizer)
 
 // System is a namespace in C#, need to rename to something different
@@ -680,7 +678,6 @@ EXTEND_CLASS_PRINT(gdcm::DirectionCosines)
 %include "gdcmFiducials.h"
 %include "gdcmWaveform.h"
 %include "gdcmPersonName.h"
-%include "gdcmIconImage.h"
 %include "gdcmCurve.h"
 %include "gdcmDICOMDIR.h"
 %include "gdcmValidate.h"
