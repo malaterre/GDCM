@@ -174,14 +174,63 @@ std::istream& ReadValue(std::istream &is)
       // ReadBacktrack function which in turn may backtrack up to 10 bytes
       // backward. This appears to be working on a set of DICOM/WSI files from
       // LEICA
-      gdcmWarningMacro( "Trying to fix the even-but-odd value length bug" );
+      gdcmWarningMacro( "Trying to fix the even-but-odd value length bug #1" );
       assert( Fragments.size() );
       const size_t lastf = Fragments.size() - 1;
       const ByteValue *bv = Fragments[ lastf ].GetByteValue();
       const char *a = bv->GetPointer();
-      assert( (unsigned char)a[ bv->GetLength() - 1 ] == 0xfe );
+      gdcmAssertAlwaysMacro( (unsigned char)a[ bv->GetLength() - 1 ] == 0xfe );
       Fragments[ lastf ].SetByteValue( bv->GetPointer(), bv->GetLength() - 1 );
       is.seekg( -9, std::ios::cur );
+      assert( is.good() );
+      while( frag.ReadBacktrack<TSwap>(is) && frag.GetTag() != seqDelItem )
+        {
+        gdcmDebugMacro( "Frag: " << frag );
+        Fragments.push_back( frag );
+        }
+      assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
+      }
+    // 4. LEICA/WSI (bis)
+    else if ( frag.GetTag().GetGroup() == 0xe000 )
+      {
+      // Looks like there is a mess with offset and odd byte array
+      // We are going first to backtrack one byte back, and then use a
+      // ReadBacktrack function which in turn may backtrack up to 10 bytes
+      // backward. This appears to be working on a set of DICOM/WSI files from
+      // LEICA
+      gdcmWarningMacro( "Trying to fix the even-but-odd value length bug #2" );
+      assert( Fragments.size() );
+      const size_t lastf = Fragments.size() - 1;
+      const ByteValue *bv = Fragments[ lastf ].GetByteValue();
+      const char *a = bv->GetPointer();
+      gdcmAssertAlwaysMacro( (unsigned char)a[ bv->GetLength() - 2 ] == 0xfe );
+      Fragments[ lastf ].SetByteValue( bv->GetPointer(), bv->GetLength() - 2 );
+      is.seekg( -10, std::ios::cur );
+      assert( is.good() );
+      while( frag.ReadBacktrack<TSwap>(is) && frag.GetTag() != seqDelItem )
+        {
+        gdcmDebugMacro( "Frag: " << frag );
+        Fragments.push_back( frag );
+        }
+      assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
+      }
+    // 5. LEICA/WSI (ter)
+    else if ( (frag.GetTag().GetGroup() & 0x00ff) == 0x00e0
+    && (frag.GetTag().GetElement() & 0xff00) == 0x0000 )
+      {
+      // Looks like there is a mess with offset and odd byte array
+      // We are going first to backtrack one byte back, and then use a
+      // ReadBacktrack function which in turn may backtrack up to 10 bytes
+      // backward. This appears to be working on a set of DICOM/WSI files from
+      // LEICA
+      gdcmWarningMacro( "Trying to fix the even-but-odd value length bug #3" );
+      assert( Fragments.size() );
+      const size_t lastf = Fragments.size() - 1;
+      const ByteValue *bv = Fragments[ lastf ].GetByteValue();
+      const char *a = bv->GetPointer();
+      gdcmAssertAlwaysMacro( (unsigned char)a[ bv->GetLength() - 3 ] == 0xfe );
+      Fragments[ lastf ].SetByteValue( bv->GetPointer(), bv->GetLength() - 3 );
+      is.seekg( -11, std::ios::cur );
       assert( is.good() );
       while( frag.ReadBacktrack<TSwap>(is) && frag.GetTag() != seqDelItem )
         {
