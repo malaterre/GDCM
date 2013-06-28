@@ -240,6 +240,7 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     meanspacing += current;
     prev = distances[i];
     }
+  bool timeseries = false;
   if( nitems > 1 )
     {
     meanspacing /= (double)(nitems - 1);
@@ -248,26 +249,30 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
       // Could be a time series. Assume time spacing of 1. for now:
       gdcmDebugMacro( "Assuming time series for Z-spacing" );
       meanspacing = 1.0;
+      timeseries = true;
       }
     }
 
   zspacing = meanspacing;
   assert( zspacing != 0.0 ); // technically this should not happen
 
-  // Check spacing is consistant:
-  const double ZTolerance = 1e-3; // ??? FIXME
-  prev = distances[0];
-  for(unsigned int i = 1; i < nitems; ++i)
+  if( !timeseries )
     {
-    const double current = distances[i] - prev;
-    if( fabs(current - zspacing) > ZTolerance )
+    // Check spacing is consistant:
+    const double ZTolerance = 1e-3; // ??? FIXME
+    prev = distances[0];
+    for(unsigned int i = 1; i < nitems; ++i)
       {
-      // For now simply gives up
-      gdcmErrorMacro( "This Enhanced Multiframe is not supported for now. Sorry" );
-      zspacing = NAN; // why not ?
-      return false;
+      const double current = distances[i] - prev;
+      if( fabs(current - zspacing) > ZTolerance )
+        {
+        // For now simply gives up
+        gdcmErrorMacro( "This Enhanced Multiframe is not supported for now. Sorry" );
+        zspacing = NAN; // why not ?
+        return false;
+        }
+      prev = distances[i];
       }
-    prev = distances[i];
     }
   return true;
 }
@@ -1075,7 +1080,9 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     // Else.
     // How do I send an error ?
     sp.resize( 3 ); // FIXME !!
-    sp[2] = 1.;
+    sp[0] = NAN;
+    sp[1] = NAN;
+    sp[2] = NAN;
     gdcmWarningMacro( "Could not find Spacing" );
     return sp;
     }
