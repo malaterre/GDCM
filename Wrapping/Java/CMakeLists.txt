@@ -95,8 +95,8 @@ add_custom_target(GDCMJavaJar ALL
 
 if(NOT GDCM_INSTALL_NO_LIBRARIES)
   install_swig_module(gdcmjni Java)
-  # because gdcm.jar is constructed with custom commands, it need the install(FILES signature:
+  # because gdcm.jar is constructed with custom commands, it need the INSTALL(FILES signature:
   install(FILES ${LIBRARY_OUTPUT_PATH}/gdcm.jar
-    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT JavaModule
+    DESTINATION ${GDCM_INSTALL_JARMODULE_DIR} COMPONENT JavaModule
   )
 endif()

@@ -191,10 +191,9 @@ if(GDCM_WRAP_PHP)
 
 if(NOT GDCM_INSTALL_NO_LIBRARIES)
   install(TARGETS ${SWIG_MODULE_php_vtkgdcm_REAL_NAME}
-      EXPORT ${GDCM_TARGETS_NAME}
+    EXPORT ${GDCM_TARGETS_NAME}
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
-    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries #${NAMELINK_SKIP}
-    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT DebugDevel
+    LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries
   )
 #if(NAMELINK_ONLY)
 #  install(TARGETS ${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME}
@@ -258,9 +257,8 @@ if(GDCM_WRAP_CSHARP)
     if(NOT GDCM_INSTALL_NO_LIBRARIES)
       install(TARGETS ${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME}
         EXPORT ${GDCM_TARGETS_NAME}
-        RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
-        LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries #${NAMELINK_SKIP}
-        ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT DebugDevel
+        RUNTIME DESTINATION ${GDCM_VTK_INSTALL_CSHARPMODULE_DIR} COMPONENT Applications
+        LIBRARY DESTINATION ${GDCM_VTK_INSTALL_CSHARPMODULE_DIR} COMPONENT Libraries
         )
     endif()
   endif()
@@ -603,7 +601,7 @@ if(GDCM_WRAP_JAVA)
     # Lars Matthäus patch (package vtk => imply vtk subdir )
     set(VTK_JAVA_HOME ${CMAKE_CURRENT_BINARY_DIR}/java/vtk)
     # This is *required* don't ask
-    make_directory(${VTK_JAVA_HOME})
+    file(MAKE_DIRECTORY ${VTK_JAVA_HOME})
     include(${VTK_CMAKE_DIR}/vtkWrapJava.cmake)
     include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -661,9 +659,8 @@ if(GDCM_WRAP_JAVA)
     if(NOT GDCM_INSTALL_NO_LIBRARIES)
       install(TARGETS ${VTKGDCM_NAME}Java
       EXPORT ${GDCM_TARGETS_NAME}
-        RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT VTKJavaModule
-        LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKJavaModule #${NAMELINK_SKIP}
-        ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKJavaModule
+        RUNTIME DESTINATION ${GDCM_VTK_INSTALL_JAVAMODULE_DIR} COMPONENT VTKJavaModule
+        LIBRARY DESTINATION ${GDCM_VTK_INSTALL_JAVAMODULE_DIR} COMPONENT VTKJavaModule
       )
   #DebugDevel
   #if(NAMELINK_ONLY)
@@ -672,9 +669,10 @@ if(GDCM_WRAP_JAVA)
   #  )
   #endif()
 
-    # because vtkgdcm.jar is constructed with custom commands, it need the install(FILES signature:
+    # because vtkgdcm.jar is constructed with custom commands, it need the
+    # install(FILES signature:
     install(FILES ${LIBRARY_OUTPUT_PATH}/vtkgdcm.jar
-      DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKJavaModule
+      DESTINATION ${GDCM_VTK_INSTALL_JARMODULE_DIR} COMPONENT VTKJavaModule
       )
     endif()
 
@@ -733,26 +731,19 @@ if(GDCM_WRAP_PYTHON)
       COMMENT   "Copy vtkgdcm.py into ${LIBRARY_OUTPUT_PATH}"
     )
     if(NOT GDCM_INSTALL_NO_LIBRARIES)
-        install(TARGETS ${VTKGDCM_NAME}Python
-      EXPORT ${GDCM_TARGETS_NAME}
-          RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT                        VTKPythonModule
-          LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT VTKPythonModule #${NAMELINK_SKIP}
-          ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT VTKPythonModule
+      install(TARGETS ${VTKGDCM_NAME}Python
+        EXPORT ${GDCM_TARGETS_NAME}
+        RUNTIME DESTINATION ${GDCM_VTK_INSTALL_PYTHONMODULE_DIR} COMPONENT                        VTKPythonModule
+        LIBRARY DESTINATION ${GDCM_VTK_INSTALL_PYTHONMODULE_DIR} COMPONENT VTKPythonModule #${NAMELINK_SKIP}
         )
-        install(TARGETS ${VTKGDCM_NAME}PythonD
-      EXPORT ${GDCM_TARGETS_NAME}
-          RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT VTKPythonModule
-          LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKPythonModule #${NAMELINK_ONLY}
-          ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKPythonModule
+      install(TARGETS ${VTKGDCM_NAME}PythonD
+        EXPORT ${GDCM_TARGETS_NAME}
+        RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT VTKPythonModule
+        LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT VTKPythonModule #${NAMELINK_ONLY}
         )
-      #  if(NAMELINK_ONLY)
-      #      install(TARGETS ${VTKGDCM_NAME}PythonD ${VTKGDCM_NAME}Python
-      #        LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT VTKDebugDevel ${NAMELINK_ONLY}
-      #        )
-      #  endif()
     # the python file is not a dev file, but part of the gdcm module...
       install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py
-        DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT VTKPythonModule
+        DESTINATION ${GDCM_VTK_INSTALL_PYTHONMODULE_DIR} COMPONENT VTKPythonModule
       )
     endif()
 

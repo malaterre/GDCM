@@ -11,7 +11,7 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-macro (install_swig_module module_name module_type)
+macro(install_swig_module module_name module_type)
   # The following trick permits installion of module to the right destination:
   # binary path for dll (on windows)
   # library for non-dll platform
@@ -20,16 +20,21 @@ macro (install_swig_module module_name module_type)
   else()
     set(MODDST ${GDCM_INSTALL_LIB_DIR})
   endif()
+  string(TOUPPER ${module_type}Module MODTYPE)
+  set(MODDIR GDCM_INSTALL_${MODTYPE}_DIR)
+  # if user sets a GDCM_INSTALL_PYTHONMODULE_DIR
+  if(${MODDIR})
+    SET(MODDST "${${MODDIR}}")
+  endif()
   if(NOT GDCM_INSTALL_NO_LIBRARIES)
     install(TARGETS ${SWIG_MODULE_${module_name}_REAL_NAME}
-      RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT ${module_type}Module
-      LIBRARY DESTINATION ${MODDST}               COMPONENT ${module_type}Module
-      ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT ${module_type}Module
+      RUNTIME DESTINATION ${MODDST} COMPONENT ${module_type}Module
+      LIBRARY DESTINATION ${MODDST} COMPONENT ${module_type}Module
       )
   endif()
-endmacro ()
+endmacro()
 
-macro (install_library library)
+macro(install_library library)
   if(NOT GDCM_INSTALL_NO_LIBRARIES)
     # Runtime
     install(TARGETS ${library}
@@ -46,7 +51,7 @@ macro (install_library library)
         )
     endif()
   endif()
-endmacro ()
+endmacro()
 
 macro (install_pdb library)
   if (MSVC)

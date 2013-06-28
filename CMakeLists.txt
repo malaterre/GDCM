@@ -216,6 +216,15 @@ endif()
 # GDCM_INSTALL_NO_RUNTIME       - do not install runtime files
 # GDCM_INSTALL_NO_DOCUMENTATION - do not install documentation files
 
+# GDCM_INSTALL_PYTHONMODULE_DIR     - Python Module install dir
+# GDCM_VTK_INSTALL_PYTHONMODULE_DIR - VTK/Python Module install dir
+# GDCM_INSTALL_CSHARPMODULE_DIR     - C# Module install dir
+# GDCM_VTK_INSTALL_CSHARPMODULE_DIR - VTK/C# Module install dir
+# GDCM_INSTALL_JAVAMODULE_DIR       - Java Module install dir (JNI glue)
+# GDCM_INSTALL_JARMODULE_DIR        - Java Module install dir (JAR)
+# GDCM_VTK_INSTALL_JAVAMODULE_DIR   - VTK/Java Module install dir (JNI glue)
+# GDCM_VTK_INSTALL_JARMODULE_DIR    - VTK/Java Module install dir (JAR)
+
 # --------------------------------------------------------------------------
 # Install directories
 
@@ -277,6 +286,31 @@ else()
   if(GDCM_INSTALL_NO_DEVELOPMENT)
     set(GDCM_INSTALL_NO_LIBRARIES 1)
   endif()
+endif()
+
+if(NOT GDCM_INSTALL_PYTHONMODULE_DIR)
+  set(GDCM_INSTALL_PYTHONMODULE_DIR ${GDCM_INSTALL_LIB_DIR}/${python_site_package})
+endif()
+if(NOT GDCM_VTK_INSTALL_PYTHONMODULE_DIR)
+  set(GDCM_VTK_INSTALL_PYTHONMODULE_DIR ${GDCM_INSTALL_PYTHONMODULE_DIR})
+endif()
+if(NOT GDCM_INSTALL_CSHARPMODULE_DIR)
+  set(GDCM_INSTALL_CSHARPMODULE_DIR ${GDCM_INSTALL_LIB_DIR})
+endif()
+if(NOT GDCM_VTK_INSTALL_CSHARPMODULE_DIR)
+  set(GDCM_VTK_INSTALL_CSHARPMODULE_DIR ${GDCM_INSTALL_CSHARPMODULE_DIR})
+endif()
+if(NOT GDCM_INSTALL_JAVAMODULE_DIR)
+  set(GDCM_INSTALL_JAVAMODULE_DIR ${GDCM_INSTALL_LIB_DIR})
+endif()
+if(NOT GDCM_VTK_INSTALL_JAVAMODULE_DIR)
+  set(GDCM_VTK_INSTALL_JAVAMODULE_DIR ${GDCM_INSTALL_JAVAMODULE_DIR})
+endif()
+if(NOT GDCM_INSTALL_JARMODULE_DIR)
+  set(GDCM_INSTALL_JARMODULE_DIR ${GDCM_INSTALL_LIB_DIR})
+endif()
+if(NOT GDCM_VTK_INSTALL_JARMODULE_DIR)
+  set(GDCM_VTK_INSTALL_JARMODULE_DIR ${GDCM_INSTALL_JARMODULE_DIR})
 endif()
 
 #-----------------------------------------------------------------------------

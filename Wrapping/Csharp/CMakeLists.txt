@@ -209,7 +209,6 @@ if(NOT GDCM_INSTALL_NO_LIBRARIES)
   # install(FILES signature:
   install(FILES
     ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll
-    #    ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll.config
-    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT CSharpModule
+    DESTINATION ${GDCM_INSTALL_CSHARPMODULE_DIR} COMPONENT CSharpModule
     )
 endif()
