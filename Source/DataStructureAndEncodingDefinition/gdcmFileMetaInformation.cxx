@@ -770,7 +770,6 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
     }
   // Pad string with a \0
   ts = std::string(bv->GetPointer(), bv->GetLength());
-  gdcmDebugMacro( "TS: " << ts.c_str() );
   TransferSyntax tst(TransferSyntax::GetTSType(ts.c_str()));
   if( tst == TransferSyntax::TS_END )
     {
@@ -820,7 +819,6 @@ MediaStorage FileMetaInformation::GetMediaStorage() const
       last = '\0';
       }
     }
-  gdcmDebugMacro( "TS: " << ts );
   MediaStorage ms = MediaStorage::GetMSType(ts.c_str());
   if( ms == MediaStorage::MS_END )
     {

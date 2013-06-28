@@ -85,7 +85,6 @@ bool PixmapReader::Read()
     //assert( ds.FindDataElement( Tag(0x7fe0,0x0010 ) ) );
     assert( ts != TransferSyntax::TS_END && ms != MediaStorage::MS_END );
     // Good it's the easy case. It's declared as an Image:
-    gdcmDebugMacro( "Sweet ! Finally a good DICOM file !" );
     //PixelData->SetCompressionFromTransferSyntax( ts );
     res = ReadImage(ms);
     }
