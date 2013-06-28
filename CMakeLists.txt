@@ -592,6 +592,9 @@ IF (GDCM_STANDALONE)
 
   IF(GDCM_USE_VTK)
     OPTION(GDCM_USE_PARAVIEW "paraview plugin ?" OFF)
+    # needed here so that we have VTK_WRAP_PYTHON and al. available
+    FIND_PACKAGE(VTK REQUIRED)
+    MARK_AS_ADVANCED(VTK_DIR)
     SUBDIRS(Utilities/VTK)
   ENDIF(GDCM_USE_VTK)
 ENDIF (GDCM_STANDALONE)
