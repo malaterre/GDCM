@@ -47,6 +47,7 @@
 #include "gdcmPDBHeader.h"
 #include "gdcmSequenceOfItems.h"
 #include "gdcmASN1.h"
+#include "gdcmAttribute.h"
 
 #include <string>
 #include <iostream>
@@ -56,9 +57,9 @@
 #include <getopt.h>
 #include <string.h>
 
-int color = 0;
+static int color = 0;
 
-int ignoreerrors = 0;
+static int ignoreerrors = 0;
 
 namespace cleanup
 {
@@ -215,6 +216,65 @@ static int DumpPMS_MRSDS(const gdcm::DataSet & ds)
     std::cout << "PMS/Item name: [" << s1 << "/" << s2 << "/" << s4 << "]" << std::endl;
     ProcessSDSData( is );
     }
+  return 0;
+}
+
+static int DumpTOSHIBA_MEC_CT3(const gdcm::DataSet & ds)
+{
+  const gdcm::PrivateTag tdata(0x7005,0x10,"TOSHIBA_MEC_CT3");
+  if( !ds.FindDataElement( tdata ) ) return 1;
+  const gdcm::DataElement &data = ds.GetDataElement( tdata );
+
+  const gdcm::ByteValue *bv = data.GetByteValue();
+  if( !bv ) return 1;
+
+  const int offset = 24;
+  if( bv->GetLength() < offset )
+    {
+    std::cerr << "Not enough header" << std::endl;
+    return 1;
+    }
+  std::istringstream is0;
+  const std::string str0 = std::string( bv->GetPointer(), offset );
+  is0.str( str0 );
+  gdcm::ImplicitDataElement ide0;
+  ide0.Read<gdcm::SwapperNoOp>(is0);
+  gdcm::ImplicitDataElement ide1;
+  ide1.Read<gdcm::SwapperNoOp>(is0);
+
+  gdcm::Attribute<0x0,0x0> at0;
+  at0.SetFromDataElement( ide0 );
+  if( at0.GetValue() != 12 )
+    {
+    std::cerr << "Bogus header value #0" << std::endl;
+    return 1;
+    }
+  gdcm::Attribute<0x0,0x1> at1;
+  at1.SetFromDataElement( ide1 );
+
+  const unsigned int dlen = bv->GetLength() - offset;
+  if( at1.GetValue() != dlen )
+    {
+    std::cerr << "Bogus header value #1" << std::endl;
+    return 1;
+    }
+  std::istringstream is1;
+  const std::string str1 = std::string( bv->GetPointer() + offset, bv->GetLength() - offset);
+  is1.str( str1 );
+
+  gdcm::Reader r;
+  r.SetStream( is1 );
+  if( !r.Read() )
+    {
+    std::cerr << "Could not read CT Private Data 2" << std::endl;
+    return 1;
+    }
+
+  gdcm::Printer printer;
+  printer.SetFile ( r.GetFile() );
+  printer.SetColor( color != 0 );
+  printer.Print( std::cout );
+
   return 0;
 }
 
@@ -654,6 +714,22 @@ static int PrintSDS(const std::string & filename, bool verbose)
   return ret;
 }
 
+static int PrintCT3(const std::string & filename, bool verbose)
+{
+  (void)verbose;
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  int ret = cleanup::DumpTOSHIBA_MEC_CT3( ds );
+
+  return ret;
+}
 
 static int PrintPDB(const std::string & filename, bool verbose)
 {
@@ -806,6 +882,7 @@ static void PrintHelp()
   std::cout << "     --vepro          print VEPRO Protocol Information (0055,20,VEPRO VIF 3.0 DATA)." << std::endl;
   std::cout << "                         or VEPRO Protocol Information (0055,20,VEPRO VIM 5.0 DATA)." << std::endl;
   std::cout << "     --sds            print Philips MR Series Data Storage (1.3.46.670589.11.0.0.12.2) Information (2005,32,Philips MR Imaging DD 002)." << std::endl;
+  std::cout << "     --ct3            print CT Private Data 2 (7005,10,TOSHIBA_MEC_CT3)." << std::endl;
   std::cout << "  -A --asn1           print encapsulated ASN1 structure >(0400,0520)." << std::endl;
   std::cout << "     --map-uid-names  map UID to names." << std::endl;
   std::cout << "General Options:" << std::endl;
@@ -818,7 +895,6 @@ static void PrintHelp()
   std::cout << "Special Options:" << std::endl;
   std::cout << "  -I --ignore-errors   print even if file is corrupted." << std::endl;
 }
-
 
 int main (int argc, char *argv[])
 {
@@ -834,6 +910,7 @@ int main (int argc, char *argv[])
   int printelscint = 0;
   int printvepro = 0;
   int printsds = 0; // MR Series Data Storage
+  int printct3 = 0; // TOSHIBA_MEC_CT3
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -875,6 +952,7 @@ int main (int argc, char *argv[])
         {"elscint", 0, &printelscint, 1},
         {"vepro", 0, &printvepro, 1},
         {"sds", 0, &printsds, 1},
+        {"ct3", 0, &printct3, 1},
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:xrpdcCPAVWDEhvI";
@@ -1076,6 +1154,10 @@ int main (int argc, char *argv[])
         {
         res += PrintSDS(*it, verbose!= 0);
         }
+      else if( printct3 )
+        {
+        res += PrintCT3(*it, verbose!= 0);
+        }
       else if( printelscint )
         {
         res += PrintELSCINT(*it, verbose!= 0);
@@ -1118,6 +1200,10 @@ int main (int argc, char *argv[])
     else if( printsds )
       {
       res += PrintSDS(filename, verbose!= 0);
+      }
+    else if( printct3 )
+      {
+      res += PrintCT3(filename, verbose!= 0);
       }
     else if( printelscint )
       {
