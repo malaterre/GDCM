@@ -26,7 +26,7 @@ set_source_files_properties(gdcm.i PROPERTIES CPLUSPLUS ON)
 #include(${GDCM_SOURCE_DIR}/CMake/UseSWIGExtra.cmake)
 
 set(GDCM_JAVA_HOME ${CMAKE_CURRENT_BINARY_DIR}/java/gdcm)
-make_directory(${GDCM_JAVA_HOME})
+file(MAKE_DIRECTORY ${GDCM_JAVA_HOME})
 set(CMAKE_SWIG_OUTDIR "${GDCM_JAVA_HOME}")
 
 set(CMAKE_SWIG_FLAGS "-package gdcm")

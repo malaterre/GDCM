@@ -106,8 +106,12 @@ endif()
 
 #-----------------------------------------------------------------------------
 # Build shared lib by default
-option(GDCM_BUILD_SHARED_LIBS "Build GDCM with shared libraries." OFF)
-set(BUILD_SHARED_LIBS ${GDCM_BUILD_SHARED_LIBS})
+if(GDCM_STANDALONE)
+  option(GDCM_BUILD_SHARED_LIBS "Build GDCM with shared libraries." OFF)
+  set(BUILD_SHARED_LIBS ${GDCM_BUILD_SHARED_LIBS})
+else()
+  set(GDCM_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
+endif()
 
 if(BUILD_SHARED_LIBS)
 if(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
@@ -121,14 +125,23 @@ endif()
 
 
 #-----------------------------------------------------------------------------
-set (EXECUTABLE_OUTPUT_PATH ${GDCM_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
-set (LIBRARY_OUTPUT_PATH ${GDCM_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
-mark_as_advanced(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
+if(NOT EXECUTABLE_OUTPUT_PATH)
+  set(EXECUTABLE_OUTPUT_PATH ${GDCM_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
+  mark_as_advanced(EXECUTABLE_OUTPUT_PATH)
+endif()
+if(NOT LIBRARY_OUTPUT_PATH)
+  set(LIBRARY_OUTPUT_PATH ${GDCM_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
+  mark_as_advanced(LIBRARY_OUTPUT_PATH)
+endif()
 
 #-----------------------------------------------------------------------------
 # Adding GDCM_DATA_ROOT
-find_path(GDCM_DATA_ROOT test.acr ${GDCM_SOURCE_DIR}/Testing/Data $ENV{GDCM_DATA_ROOT})
-mark_as_advanced(GDCM_DATA_ROOT)
+if(GDCM_STANDALONE)
+  find_path(GDCM_DATA_ROOT test.acr
+    ${GDCM_SOURCE_DIR}/Testing/Data
+    $ENV{GDCM_DATA_ROOT}
+    )
+  mark_as_advanced(GDCM_DATA_ROOT)
 # You can define a path where you extra the famous D. Clunie spacing dataset
 # http://www.dclunie.com/images/pixelspacingtestimages.zip
 # for example:
@@ -140,23 +153,24 @@ mark_as_advanced(GDCM_DATA_ROOT)
 # $HOME/pixelspacingtestimages/DISCIMG/IMAGES/DXIMAGE
 # $HOME/pixelspacingtestimages/DISCIMG/IMAGES/MGIMAGE
 # $HOME/pixelspacingtestimages/DISCIMG/IMAGES/CRIMAGE
-mark_as_advanced(GDCM_PIXEL_SPACING_DATA_ROOT)
+  mark_as_advanced(GDCM_PIXEL_SPACING_DATA_ROOT)
 
 #-----------------------------------------------------------------------------
-find_path(GDCM_DATA_EXTRA_ROOT gdcmData.tar.gz
-  ${GDCM_SOURCE_DIR}/../gdcmDataExtra
-  $ENV{GDCM_DATA_EXTRA_ROOT}
-  $ENV{PUB_DICT_PATH}/../../gdcmDataExtra
-  )
-mark_as_advanced(GDCM_DATA_EXTRA_ROOT)
+  find_path(GDCM_DATA_EXTRA_ROOT gdcmData.tar.gz
+    ${GDCM_SOURCE_DIR}/../gdcmDataExtra
+    $ENV{GDCM_DATA_EXTRA_ROOT}
+    $ENV{PUB_DICT_PATH}/../../gdcmDataExtra
+    )
+  mark_as_advanced(GDCM_DATA_EXTRA_ROOT)
+endif()
 
 # Define a temp directory in which we can output stuff
 set(GDCM_TEMP_DIRECTORY "${GDCM_BINARY_DIR}/Testing/Temporary" CACHE PATH "Path to a valid temp directory")
 mark_as_advanced(GDCM_TEMP_DIRECTORY)
 
 #-----------------------------------------------------------------------------
-include (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
-include (${CMAKE_ROOT}/Modules/CheckIncludeFiles.cmake)
+include(${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
+include(${CMAKE_ROOT}/Modules/CheckIncludeFiles.cmake)
 # Check if header file exists and add it to the list.
 macro(CHECK_INCLUDE_FILE_CONCAT FILE VARIABLE)
   CHECK_INCLUDE_FILES("${UUID_INCLUDES};${FILE}" ${VARIABLE})
@@ -178,12 +192,14 @@ endif()
 
 #-----------------------------------------------------------------------------
 # Build the main lib...
-if(MSVC)
-  include_directories(
-    "${GDCM_SOURCE_DIR}/Utilities/C99"
-  )
-  # Process the install rules from C99
-  subdirs(Utilities/C99)
+if(NOT GDCM_HAVE_STDINT_H)
+  if(MSVC)
+    include_directories(
+      "${GDCM_SOURCE_DIR}/Utilities/C99"
+      )
+    # Process the install rules from C99
+    subdirs(Utilities/C99)
+  endif()
 endif()
 
 # --------------------------------------------------------------------------
@@ -393,13 +409,22 @@ endif()
 
 
 #-----------------------------------------------------------------------------
-option(GDCM_BUILD_EXAMPLES "Build GDCM examples." OFF)
-set(BUILD_EXAMPLES ${GDCM_BUILD_EXAMPLES})
-
+if(GDCM_STANDALONE)
+  option(GDCM_BUILD_EXAMPLES "Build GDCM examples." OFF)
+  set(BUILD_EXAMPLES ${GDCM_BUILD_EXAMPLES})
+else()
+  set(GDCM_BUILD_EXAMPLES OFF)
+  set(BUILD_EXAMPLES OFF)
+endif()
 #-----------------------------------------------------------------------------
 # Add the testing directories
-option(GDCM_BUILD_TESTING "Build testing." ${GDCM_BUILD_TESTING_DEFAULT})
-set(BUILD_TESTING ${GDCM_BUILD_TESTING} CACHE BOOL "" FORCE)
+if(GDCM_STANDALONE)
+  option(GDCM_BUILD_TESTING "Build testing." ${GDCM_BUILD_TESTING_DEFAULT})
+  set(BUILD_TESTING ${GDCM_BUILD_TESTING}) # CACHE BOOL "" FORCE)
+else()
+  set(GDCM_BUILD_TESTING OFF)
+  set(BUILD_TESTING OFF)
+endif()
 # Hide BUILD_TESTING as user tend to always turn all options on and then complains when something
 # does not work 'by default'
 mark_as_advanced(BUILD_TESTING) # GDCM_BUILD_TESTING)
@@ -454,19 +479,21 @@ endif()
 
 #-----------------------------------------------------------------------------
 # Wrapping
-option(GDCM_WRAP_PYTHON "build python wrapping" OFF)
-option(GDCM_WRAP_PERL "perl wrapping (experimental !)" OFF)
-option(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
-option(GDCM_WRAP_JAVA "build java wrapping" OFF)
-option(GDCM_WRAP_CSHARP "build csharp wrapping" OFF)
-mark_as_advanced(GDCM_WRAP_PHP GDCM_WRAP_PERL)
-mark_as_advanced(GDCM_USE_RLE)
-mark_as_advanced(GDCM_USE_ACTIVIZ)
-option(GDCM_USE_JPEGLS "Build GDCM with JPEG-LS support" ON)
-mark_as_advanced(GDCM_USE_JPEGLS)
-if(GDCM_WRAP_CSHARP)
-  find_package(CSharp REQUIRED)
-  include(${CSharp_USE_FILE})
+if(GDCM_STANDALONE)
+  option(GDCM_WRAP_PYTHON "build python wrapping" OFF)
+  option(GDCM_WRAP_PERL "perl wrapping (experimental !)" OFF)
+  option(GDCM_WRAP_PHP "php wrapping (experimental !)" OFF)
+  option(GDCM_WRAP_JAVA "build java wrapping" OFF)
+  option(GDCM_WRAP_CSHARP "build csharp wrapping" OFF)
+  mark_as_advanced(GDCM_WRAP_PHP GDCM_WRAP_PERL)
+  mark_as_advanced(GDCM_USE_RLE)
+  mark_as_advanced(GDCM_USE_ACTIVIZ)
+  option(GDCM_USE_JPEGLS "Build GDCM with JPEG-LS support" ON)
+  mark_as_advanced(GDCM_USE_JPEGLS)
+  if(GDCM_WRAP_CSHARP)
+    find_package(CSharp REQUIRED)
+    include(${CSharp_USE_FILE})
+  endif()
 endif()
 
 set(GDCM_LIBRARY_DIR ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
@@ -480,13 +507,13 @@ endif()
 
 #-----------------------------------------------------------------------------
 # Allow user to set a postfix symbol to a target library name (eg. 'd')
-IF(WIN32)
-  SET(GDCM_DEBUG_POSTFIX "" CACHE STRING "Globally append a debug postfix symbols on all libraries")
+if(WIN32)
+  set(GDCM_DEBUG_POSTFIX "" CACHE STRING "Globally append a debug postfix symbols on all libraries")
   if(GDCM_DEBUG_POSTFIX)
     set(CMAKE_DEBUG_POSTFIX "${GDCM_DEBUG_POSTFIX}")
-  endif(GDCM_DEBUG_POSTFIX)
-  MARK_AS_ADVANCED(GDCM_DEBUG_POSTFIX)
-ENDIF(WIN32)
+  endif()
+  mark_as_advanced(GDCM_DEBUG_POSTFIX)
+endif()
 #-----------------------------------------------------------------------------
 
 # Need to subdirs in Source/Common before Wrapping
@@ -494,79 +521,86 @@ ENDIF(WIN32)
 subdirs(Utilities)
 add_subdirectory(Source)
 
-subdirs(Wrapping)
-if(GDCM_WRAP_CSHARP)
-  add_subdirectory(Wrapping/Csharp)
+if(GDCM_STANDALONE)
+  subdirs(Wrapping)
+  if(GDCM_WRAP_CSHARP)
+    add_subdirectory(Wrapping/Csharp)
+  endif()
 endif()
 
-# After Wrapping please
-if(BUILD_EXAMPLES)
-  subdirs(Examples)
+if(GDCM_STANDALONE)
+  # After Wrapping please
+  if(BUILD_EXAMPLES)
+    subdirs(Examples)
+  endif()
 endif()
 
 #-----------------------------------------------------------------------------
 # Special CMake Module required when doing Python Testing
-if(BUILD_TESTING AND GDCM_WRAP_PYTHON)
-  include(${GDCM_SOURCE_DIR}/CMake/UsePythonTest.cmake)
-endif()
+if(GDCM_STANDALONE)
+  if(BUILD_TESTING AND GDCM_WRAP_PYTHON)
+    include(${GDCM_SOURCE_DIR}/CMake/UsePythonTest.cmake)
+  endif()
 
 # Special CMake Module required when doing C# Testing
-if(BUILD_TESTING AND GDCM_WRAP_CSHARP)
-  include(${GDCM_SOURCE_DIR}/CMake/UseCSharpTest.cmake)
-endif()
+  if(BUILD_TESTING AND GDCM_WRAP_CSHARP)
+    include(${GDCM_SOURCE_DIR}/CMake/UseCSharpTest.cmake)
+  endif()
 
 # Special CMake Module required when doing Java Testing
-if(BUILD_TESTING AND GDCM_WRAP_JAVA)
-  include(${GDCM_SOURCE_DIR}/CMake/UseJavaTest.cmake)
+  if(BUILD_TESTING AND GDCM_WRAP_JAVA)
+    include(${GDCM_SOURCE_DIR}/CMake/UseJavaTest.cmake)
+  endif()
 endif()
-
 #-----------------------------------------------------------------------------
 # Need pthread for the following class:
 CHECK_INCLUDE_FILE("pthread.h"      GDCM_HAVE_PTHREAD_H)
 
 # Big endian thing:
-include (${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
-TEST_BIG_ENDIAN(GDCM_WORDS_BIGENDIAN)
+if(GDCM_STANDALONE)
+  include(${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
+  TEST_BIG_ENDIAN(GDCM_WORDS_BIGENDIAN)
+endif()
 
-if(BUILD_TESTING)
-  configure_file(${GDCM_SOURCE_DIR}/CMake/CTestCustom.ctest.in
-      ${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest @ONLY)
-  file(WRITE ${GDCM_BINARY_DIR}/CTestCustom.cmake
-    "include(\"${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest\")\n")
-  mark_as_advanced(DART_TESTING_TIMEOUT)
-  enable_testing()
-  include(CTest)
-  subdirs(Testing)
-  if(NOT GDCM_DATA_ROOT)
-    message("If you want to build the test suite, you must set GDCM_DATA_ROOT (advanced option) "
-    "to the full path name of the gdcmData directory; if you don't want, disable GDCM_BUILD_TESTING.\n"
-    "What is gdcmData? Please read: http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=General_questions#What_is_gdcmData_.3F")
+if(GDCM_STANDALONE)
+  if(BUILD_TESTING)
+    configure_file(${GDCM_SOURCE_DIR}/CMake/CTestCustom.ctest.in
+        ${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest @ONLY)
+    file(WRITE ${GDCM_BINARY_DIR}/CTestCustom.cmake
+      "include(\"${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest\")\n")
+    mark_as_advanced(DART_TESTING_TIMEOUT)
+    enable_testing()
+    include(CTest)
+    subdirs(Testing)
+    if(NOT GDCM_DATA_ROOT)
+      message("If you want to build the test suite, you must set GDCM_DATA_ROOT (advanced option) "
+      "to the full path name of the gdcmData directory; if you don't want, disable GDCM_BUILD_TESTING.\n"
+      "What is gdcmData? Please read: http://gdcm.sourceforge.net/wiki/index.php/General_questions#What_is_gdcmData_.3F")
+    endif()
   endif()
 endif()
 
+#-----------------------------------------------------------------------------
+if(GDCM_STANDALONE)
+  option(GDCM_DOCUMENTATION "Build source documentation using doxygen." OFF)
+  if(GDCM_DOCUMENTATION)
+    option(GDCM_PDF_DOCUMENTATION "Build source doxygen using doxygen as pdf" ON)
+    mark_as_advanced(GDCM_PDF_DOCUMENTATION)
+  endif()
+endif()
 
 #-----------------------------------------------------------------------------
-option(GDCM_DOCUMENTATION "Build source documentation using doxygen." OFF)
-if(GDCM_DOCUMENTATION)
-  option(GDCM_PDF_DOCUMENTATION "Build source doxygen using doxygen as pdf" ON)
-  mark_as_advanced(GDCM_PDF_DOCUMENTATION)
+if(GDCM_STANDALONE)
+  option(GDCM_USE_VTK "vtk bridge ?" OFF)
+  if(GDCM_USE_VTK AND GDCM_WRAP_CSHARP)
+    option(GDCM_USE_ACTIVIZ "vtk/Activiz bridge ?" OFF)
+  endif()
+
+  if(GDCM_USE_VTK)
+    option(GDCM_USE_PARAVIEW "paraview plugin ?" OFF)
+    subdirs(Utilities/VTK)
+  endif()
 endif()
-
-
-#-----------------------------------------------------------------------------
-option(GDCM_USE_VTK "vtk bridge ?" OFF)
-if(GDCM_USE_VTK AND GDCM_WRAP_CSHARP)
-  option(GDCM_USE_ACTIVIZ "vtk/Activiz bridge ?" OFF)
-endif()
-
-if(GDCM_USE_VTK)
-  option(GDCM_USE_PARAVIEW "paraview plugin ?" OFF)
-  # needed here so that we have VTK_WRAP_PYTHON and al. available
-  find_package(VTK REQUIRED)
-  mark_as_advanced(VTK_DIR)
-  subdirs(Utilities/VTK)
-endif()
-
 #-----------------------------------------------------------------------------
 option(GDCM_USE_WXWIDGETS "wxWidgets bridge ?" OFF)
 mark_as_advanced(GDCM_USE_WXWIDGETS)
@@ -575,10 +609,15 @@ if(GDCM_USE_WXWIDGETS)
 endif()
 
 #-----------------------------------------------------------------------------
-option(GDCM_BUILD_APPLICATIONS "apps ?" OFF)
-set(BUILD_APPLICATIONS ${GDCM_BUILD_APPLICATIONS})
-if(BUILD_APPLICATIONS)
-  subdirs(Applications)
+if(GDCM_STANDALONE)
+  option(GDCM_BUILD_APPLICATIONS "apps ?" OFF)
+  set(BUILD_APPLICATIONS ${GDCM_BUILD_APPLICATIONS})
+  if(BUILD_APPLICATIONS)
+    subdirs(Applications)
+  endif()
+else()
+  set(BUILD_APPLICATIONS OFF)
+  set(GDCM_BUILD_APPLICATIONS OFF)
 endif()
 #-----------------------------------------------------------------------------
 if(GDCM_USE_VTK)
@@ -589,7 +628,8 @@ endif()
 
 #-----------------------------------------------------------------------------
 # CPack stuff
-if(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
+if(GDCM_STANDALONE) # disabled for ITK distribution of gdcm
+  if(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   if(EXISTS "${CMAKE_ROOT}/Modules/InstallRequiredSystemLibraries.cmake")
     set(CMAKE_INSTALL_MFC_LIBRARIES 0)
     set(CMAKE_INSTALL_DEBUG_LIBRARIES 0)
@@ -846,6 +886,7 @@ if(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
   set(CPACK_COMPONENT_PARAVIEWMODULE_INSTALL_TYPES Developer Full)
 
   include(CPack)
+  endif()
 
 endif()
 
@@ -911,11 +952,13 @@ set(GDCM_INCLUDE_PATH
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   )
-if(MSVC)
-  set(GDCM_INCLUDE_PATH
-    ${GDCM_INCLUDE_PATH}
-    "${GDCM_SOURCE_DIR}/Utilities/C99"
-  )
+if(NOT GDCM_HAVE_STDINT_H)
+  if(MSVC)
+    set(GDCM_INCLUDE_PATH
+      ${GDCM_INCLUDE_PATH}
+      "${GDCM_SOURCE_DIR}/Utilities/C99"
+    )
+  endif()
 endif()
 if(GDCM_USE_VTK)
     set(GDCM_INCLUDE_PATH
@@ -924,4 +967,6 @@ if(GDCM_USE_VTK)
       )
 endif()
 set(GDCM_LIBRARY_DIRS ${LIBRARY_OUTPUT_PATH})
+if(GDCM_STANDALONE)
 subdirs(CMake/ExportConfiguration)
+endif()

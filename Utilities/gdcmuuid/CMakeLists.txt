@@ -6,7 +6,7 @@ endif()
 string(TOLOWER ${UUID_NAMESPACE} UUID_LIBRARY_NAME)
 
 project(${UUID_NAMESPACE} C)
-cmake_minimum_required(VERSION 2.2)
+cmake_minimum_required(VERSION 2.6)
 
 # Do full dependency headers.
 include_regular_expression("^.*$")

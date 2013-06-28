@@ -12,7 +12,7 @@ string(TOLOWER ${JPEG_NAMESPACE} JPEG_LIBRARY_NAME)
 
 
 project(${JPEG_NAMESPACE} C)
-cmake_minimum_required(VERSION 2.2)
+cmake_minimum_required(VERSION 2.6)
 
 # Do full dependency headers.
 include_regular_expression("^.*$")

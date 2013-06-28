@@ -17,9 +17,9 @@ set(CHARLS_VERSION
       "${CHARLS_MAJOR_VERSION}.${CHARLS_MINOR_VERSION}.${CHARLS_BUILD_VERSION}")
 
 #-----------------------------------------------------------------------------
-set (EXECUTABLE_OUTPUT_PATH ${CHARLS_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
-set (LIBRARY_OUTPUT_PATH ${CHARLS_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
-mark_as_advanced(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
+#set (EXECUTABLE_OUTPUT_PATH ${CHARLS_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
+#set (LIBRARY_OUTPUT_PATH ${CHARLS_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
+#mark_as_advanced(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 
 if(NOT CHARLS_INSTALL_BIN_DIR)
   set(CHARLS_INSTALL_BIN_DIR "bin")

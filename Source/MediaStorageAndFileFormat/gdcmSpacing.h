@@ -80,7 +80,7 @@ All pixel spacing related attributes shall have non-zero values, except when the
 column or pixel of data present, in which case the corresponding value may be zero.
 
 Ref:
-http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Imager_Pixel_Spacing
+http://gdcm.sourceforge.net/wiki/index.php/Imager_Pixel_Spacing
  */
 class GDCM_EXPORT Spacing
 {

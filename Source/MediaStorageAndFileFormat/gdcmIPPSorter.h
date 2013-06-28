@@ -34,7 +34,7 @@ namespace gdcm
  * For more information on Spacing, and how it is defined in DICOM, advanced
  * users may refers to:
  *
- * http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=Imager_Pixel_Spacing
+ * http://gdcm.sourceforge.net/wiki/index.php/Imager_Pixel_Spacing
  *
  * \bug There are currently a couple of bugs in this implementation:
  * \li Gantry Tilt is not considered

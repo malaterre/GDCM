@@ -311,7 +311,7 @@ internally I ++ the length, which would make it an undefined length.
 -----------------------------------------------------------------------
 Get rid of polarssl now that OpenSSL completely replaces it
 ... I might even have to get rid of OpenSSL
-http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Tools/openssl#Giving_up_on_OpenSSL
+http://gdcm.sourceforge.net/wiki/index.php/Tools/openssl#Giving_up_on_OpenSSL
 -----------------------------------------------------------------------
 gdcmdump map-uid-names
 -----------------------------------------------------------------------
