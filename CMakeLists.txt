@@ -569,7 +569,7 @@ IF (GDCM_STANDALONE)
     IF(NOT GDCM_DATA_ROOT)
       MESSAGE("If you want to build the test suite, you must set GDCM_DATA_ROOT (advanced option) "
       "to the full path name of the gdcmData directory; if you don't want, disable GDCM_BUILD_TESTING.\n"
-      "What is gdcmData? Please read: http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=General_questions#What_is_gdcmData_.3F")
+      "What is gdcmData? Please read: http://gdcm.sourceforge.net/wiki/index.php/General_questions#What_is_gdcmData_.3F")
     ENDIF(NOT GDCM_DATA_ROOT)
   ENDIF(BUILD_TESTING)
 ENDIF (GDCM_STANDALONE)

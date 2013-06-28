@@ -55,7 +55,7 @@
 // * VTK_YBR               <-> YBR_FULL
 //
 // For detailed information on color space transformation and true lossless transformation see:
-// http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Color_Space_Transformations
+// http://gdcm.sourceforge.net/wiki/index.php/Color_Space_Transformations
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMPolyDataReader vtkGDCMImageWriter
