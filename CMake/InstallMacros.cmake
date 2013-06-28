@@ -12,7 +12,8 @@
 #
 
 MACRO (install_swig_module module_name module_type)
-  # The following trick permits installion of module to the right destination:
+  # The following trick permits installation of modules to the right
+  # destination:
   # binary path for dll (on windows)
   # library for non-dll platform
   IF(WIN32)
@@ -20,11 +21,16 @@ MACRO (install_swig_module module_name module_type)
   ELSE()
     SET(MODDST ${GDCM_INSTALL_LIB_DIR})
   ENDIF()
+  string(TOUPPER ${module_type}Module MODTYPE)
+  SET(MODDIR GDCM_INSTALL_${MODTYPE}_DIR)
+  # if user sets a GDCM_INSTALL_PYTHONMODULE_DIR
+  if(${MODDIR})
+    SET(MODDST "${${MODDIR}}")
+  endif()
   IF(NOT GDCM_INSTALL_NO_LIBRARIES)
     INSTALL(TARGETS ${SWIG_MODULE_${module_name}_REAL_NAME}
-      RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT ${module_type}Module
-      LIBRARY DESTINATION ${MODDST}               COMPONENT ${module_type}Module
-      ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT ${module_type}Module
+      RUNTIME DESTINATION ${MODDST} COMPONENT ${module_type}Module
+      LIBRARY DESTINATION ${MODDST} COMPONENT ${module_type}Module
       )
   ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 ENDMACRO (install_swig_module)

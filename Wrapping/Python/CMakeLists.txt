@@ -127,13 +127,14 @@ ADD_CUSTOM_COMMAND(
 #Module are always place in the library destination
 #but for poor win32 user I decided to place them
 # right next to the other dlls
+
 IF(NOT GDCM_INSTALL_NO_LIBRARIES)
   install_swig_module(${GDCM_PYTHON_IMPLEMENTATION_NAME} Python)
   # the python file is not a dev file, but part of the gdcm module...
   INSTALL(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/gdcmswig.py
     ${CMAKE_CURRENT_SOURCE_DIR}/gdcm.py
-    DESTINATION ${GDCM_INSTALL_LIB_DIR}/${python_site_package} COMPONENT PythonModule
+    DESTINATION ${GDCM_INSTALL_PYTHONMODULE_DIR} COMPONENT PythonModule
   )
 ENDIF(NOT GDCM_INSTALL_NO_LIBRARIES)
 
