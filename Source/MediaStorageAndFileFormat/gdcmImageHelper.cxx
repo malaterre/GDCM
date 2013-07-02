@@ -268,7 +268,6 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
         {
         // For now simply gives up
         gdcmErrorMacro( "This Enhanced Multiframe is not supported for now. Sorry" );
-        zspacing = NAN; // why not ?
         return false;
         }
       prev = distances[i];
@@ -1080,9 +1079,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     // Else.
     // How do I send an error ?
     sp.resize( 3 ); // FIXME !!
-    sp[0] = NAN;
-    sp[1] = NAN;
-    sp[2] = NAN;
+    sp[2] = 1.;
     gdcmWarningMacro( "Could not find Spacing" );
     return sp;
     }
