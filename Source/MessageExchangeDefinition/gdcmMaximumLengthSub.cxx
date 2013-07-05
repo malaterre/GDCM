@@ -85,5 +85,11 @@ void MaximumLengthSub::Print(std::ostream &os) const
   os << "MaximumLength: " << MaximumLength << std::endl;
 }
 
+void MaximumLengthSub::SetMaximumLength(uint32_t maximumlength)
+{
+  MaximumLength = maximumlength;
+  MaximumLength -= (maximumlength % 2);
+}
+
 } // end namespace network
 } // end namespace gdcm

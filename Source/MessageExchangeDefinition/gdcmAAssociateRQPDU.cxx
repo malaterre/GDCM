@@ -123,9 +123,17 @@ std::istream &AAssociateRQPDU::Read(std::istream &is)
 
 const std::ostream &AAssociateRQPDU::Write(std::ostream &os) const
 {
+  assert( ItemLength + 4 + 1 + 1 == Size() );
+#if 0
+  // Need to check all context Id are ordered ? and odd number ?
+  std::vector<PresentationContextRQ>::const_iterator it = PresContext.begin();
+  for( ; it != PresContext.end(); ++it)
+    {
+    it->Write(os);
+    }
+#endif
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
-  //os.write( (char*)&ItemLength, sizeof(ItemLength) );
   uint32_t copy = ItemLength;
   SwapperDoOp::SwapArray(&copy,1);
   os.write( (char*)&copy, sizeof(ItemLength) );
@@ -188,6 +196,17 @@ bool AAssociateRQPDU::IsAETitleValid(const char title[16])
     str[i] = std::toupper(str[i],loc);
     }
   if( str != s ) return false;
+#else
+  std::string s ( title, 16 );
+  // check no \0 :
+  size_t len = strlen( s.c_str() );
+
+  char OnlySpaces[16];
+  memset(OnlySpaces, ' ', sizeof(OnlySpaces));
+  if( strncmp( title, OnlySpaces, len ) == 0 )
+    {
+    return false;
+    }
 #endif
   return true;
 }
@@ -281,6 +300,13 @@ const PresentationContextRQ *AAssociateRQPDU::GetPresentationContextByAbstractSy
       }
     }
   return NULL;
+}
+
+void AAssociateRQPDU::SetUserInformation( UserInformation const & ui )
+{
+  UserInfo = ui;
+  ItemLength = (uint32_t)Size() - 6;
+  assert( (ItemLength + 4 + 1 + 1) == Size() );
 }
 
 } // end namespace network

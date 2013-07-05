@@ -149,5 +149,15 @@ void AAbortPDU::Print(std::ostream &os) const
   os << "Reason: " << PrintReasonAsString( Reason ) << std::endl;
 }
 
+void AAbortPDU::SetSource(const uint8_t s)
+{
+  Source = s;
+}
+
+void AAbortPDU::SetReason(const uint8_t r)
+{
+  Reason = r;
+}
+
 } // end namespace network
 } // end namespace gdcm

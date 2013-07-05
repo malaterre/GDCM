@@ -217,9 +217,9 @@ std::istream &UserInformation::Read(std::istream &is)
 
 const std::ostream &UserInformation::Write(std::ostream &os) const
 {
+  assert( (size_t)ItemLength + 4 == Size() );
   os.write( (char*)&ItemType, sizeof(ItemType) );
   os.write( (char*)&Reserved2, sizeof(Reserved2) );
-  //os.write( (char*)&ItemLength, sizeof(ItemLength) );
   uint16_t copy = ItemLength;
   SwapperDoOp::SwapArray(&copy,1);
   os.write( (char*)&copy, sizeof(ItemLength) );
@@ -295,19 +295,33 @@ UserInformation &UserInformation::operator=(const UserInformation& ui)
   ItemLength = ui.ItemLength;
   MLS = ui.MLS;
   ICUID = ui.ICUID;
-  // FIXME: the following info from UserInfo is not handled by GDCM
-  // I do not see the point of copying that info then:
-#if 0
-  delete AOWS;
-  AOWS = new AsynchronousOperationsWindowSub;
-  delete RSSI;
-  RSSI = new RoleSelectionSubItems;
-  delete SOPCENSI;
-  SOPCENSI= new SOPClassExtendedNegociationSubItems;
-#endif
+  if( ui.AOWS )
+    {
+    delete AOWS;
+    AOWS = new AsynchronousOperationsWindowSub;
+    *AOWS = *ui.AOWS;
+    }
+  *RSSI = *ui.RSSI;
+  *SOPCENSI = *ui.SOPCENSI;
   IVNS = ui.IVNS;
 
+  assert( (size_t)ItemLength + 4 == Size() );
+
   return *this;
+}
+
+void UserInformation::AddRoleSelectionSub( RoleSelectionSub const & rss )
+{
+  RSSI->RSSArray.push_back( rss );
+  ItemLength = Size() - 4;
+  assert( (size_t)ItemLength + 4 == Size() );
+}
+
+void UserInformation::AddSOPClassExtendedNegociationSub( SOPClassExtendedNegociationSub const & sopcens )
+{
+  SOPCENSI->SOPCENSArray.push_back( sopcens );
+  ItemLength = Size() - 4;
+  assert( (size_t)ItemLength + 4 == Size() );
 }
 
 } // end namespace network

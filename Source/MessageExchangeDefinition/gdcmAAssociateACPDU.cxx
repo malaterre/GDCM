@@ -56,9 +56,10 @@ std::istream &AAssociateACPDU::Read(std::istream &is)
   //uint8_t itemtype = 0;
   //is.read( (char*)&itemtype, sizeof(ItemType) );
   //assert( itemtype == ItemType );
+  assert( is.good() );
   uint8_t reserved2;
-  is >> reserved2;
-  uint32_t pdulength;
+  is.read( (char*)&reserved2, sizeof(Reserved2) );
+  uint32_t pdulength = 0;
   is.read( (char*)&pdulength, sizeof(PDULength) );
   SwapperDoOp::SwapArray(&pdulength,1);
   PDULength = pdulength;
@@ -67,7 +68,7 @@ std::istream &AAssociateACPDU::Read(std::istream &is)
   SwapperDoOp::SwapArray(&protocolversion,1);
   if( protocolversion != ProtocolVersion )
     {
-    assert(0 && "TODO" );
+    gdcmErrorMacro( "Improper Protocol Version: " << protocolversion );
     }
   uint16_t reserved9_10;
   is.read( (char*)&reserved9_10, sizeof(Reserved9_10) );
@@ -146,7 +147,7 @@ const std::ostream &AAssociateACPDU::Write(std::ostream &os) const
   //os.write( called, 16 );
   os.write( (char*)&Reserved43_74, sizeof(Reserved43_74) );
   AppContext.Write( os );
-  assert( PresContextAC.size() );
+  gdcmAssertAlwaysMacro( PresContextAC.size() );
   std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();
   for( ; it != PresContextAC.end(); ++it )
     {
@@ -191,9 +192,9 @@ void AAssociateACPDU::Print(std::ostream &os) const
 {
   os << "ProtocolVersion: " << std::hex << ProtocolVersion << std::dec << std::endl;
   os << "Reserved9_10: " << std::hex << Reserved9_10 << std::dec << std::endl;
-  os << "Reserved11_26: [" << Reserved11_26 << "]" << std::endl;
-  os << "Reserved27_42: [" << Reserved27_42 << "]" << std::endl;
-  os << "Reserved43_74: [" << Reserved43_74 << "]" << std::endl;
+  os << "Reserved11_26: [" << std::string(Reserved11_26,sizeof(Reserved11_26)) << "]" << std::endl;
+  os << "Reserved27_42: [" << std::string(Reserved27_42,sizeof(Reserved27_42)) << "]" << std::endl;
+  os << "Reserved43_74: [" << std::string(Reserved43_74,sizeof(Reserved43_74)) << "]" << std::endl;
   os << "Application Context Name: ";
   AppContext.Print( os );
   os << "List of PresentationContextAC: " << std::endl;
