@@ -117,6 +117,8 @@ DataElement AbstractSyntax::GetAsDataElement() const
   de.SetVR( VR::UI );
   std::string suid;
   suid = Name;
+  if( suid.size() % 2 )
+    suid.push_back( 0 );
   de.SetByteValue( suid.c_str(), (uint32_t)suid.size()  );
 
   return de;

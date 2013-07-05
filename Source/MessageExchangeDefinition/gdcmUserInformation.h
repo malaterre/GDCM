@@ -26,7 +26,9 @@ namespace network
 {
 
 class AsynchronousOperationsWindowSub;
+class RoleSelectionSub;
 struct RoleSelectionSubItems;
+class SOPClassExtendedNegociationSub;
 struct SOPClassExtendedNegociationSubItems;
 /**
  * \brief UserInformation
@@ -51,6 +53,9 @@ public:
 
   const MaximumLengthSub &GetMaximumLengthSub() const { return MLS; }
   MaximumLengthSub &GetMaximumLengthSub() { return MLS; }
+
+  void AddRoleSelectionSub( RoleSelectionSub const & r );
+  void AddSOPClassExtendedNegociationSub( SOPClassExtendedNegociationSub const & s );
 
 private:
   static const uint8_t ItemType;

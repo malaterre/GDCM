@@ -36,12 +36,19 @@ std::istream &ServiceClassApplicationInformation::Read(std::istream &is)
 
 const std::ostream &ServiceClassApplicationInformation::Write(std::ostream &os) const
 {
+  assert( InternalArray[0] < 4 );
+  assert( InternalArray[1] == 0 );
+  assert( InternalArray[2] < 4 );
+  assert( InternalArray[3] == 0 );
+  assert( InternalArray[4] < 3 );
+  assert( InternalArray[5] == 0 );
   os.write( (char*)InternalArray, sizeof(InternalArray) );
   return os;
 }
 
 size_t ServiceClassApplicationInformation::Size() const
 {
+  assert( sizeof(InternalArray) == 6 );
   return 6;
 }
 
@@ -53,11 +60,53 @@ void ServiceClassApplicationInformation::Print(std::ostream &os) const
   os << " Element coercion: " << (int)InternalArray[4] << std::endl;
 }
 
+/*
+Level of support This byte field defines the supported storage level of the
+                 Association-acceptor. It shall be encoded as an
+                 unsigned binary integer and shall use one of the
+                 following values:
+                  0 - level 0 SCP
+                  1 - level 1 SCP
+                  2 - level 2 SCP
+                  3 - N/A - Association-acceptor is SCU only
+                 If extended negotiation is not supported, no
+                 assumptions shall be made by the Association-
+                 requester about the capabilities of the Association-
+                 acceptor based upon this extended negotiation.
+
+ Level of Digital A Level 2 SCP may further define its behavior in this
+Signature support byte field.
+                   0 – The signature level is unspecified, the AE is an
+                  SCU only, or the AE is not a level 2 SCP
+                   1 – signature level 1
+                   2 – signature level 2
+                   3 – signature level 3
+                  If extended negotiation is not supported, no
+                  assumptions shall be made by the Association-
+                  requester about the capabilities of the Association-
+                  acceptor based upon this extended negotiation.
+
+Element Coercion This byte field defines whether the Association-acceptor
+                 may coerce Data Elements. It shall be encoded as an
+                 unsigned binary integer and shall use one of the
+                 following values:
+                  0 - does not coerce any Data Element
+                  1 - may coerce Data Elements
+                  2 - N/A - Association-acceptor is SCU only
+                 If extended negotiation is not supported, no
+                 assumptions shall be made by the Association-
+                 requester about the capabilities of the Association-
+                 acceptor based upon this extended negotiation.
+*/
+
 void ServiceClassApplicationInformation::SetTuple(uint8_t levelofsupport, uint8_t levelofdigitalsig, uint8_t elementcoercion)
 {
-  InternalArray[0] = levelofsupport;
-  InternalArray[2] = levelofdigitalsig;
-  InternalArray[4] = elementcoercion;
+  if( levelofsupport < 4 )
+    InternalArray[0] = levelofsupport;
+  if( levelofdigitalsig < 4 )
+    InternalArray[2] = levelofdigitalsig;
+  if( elementcoercion < 3 )
+    InternalArray[4] = elementcoercion;
 }
 
 } // end namespace network

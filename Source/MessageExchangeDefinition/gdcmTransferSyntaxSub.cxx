@@ -68,6 +68,7 @@ const std::ostream &TransferSyntaxSub::Write(std::ostream &os) const
   SwapperDoOp::SwapArray(&copy,1);
   os.write( (char*)&copy, sizeof(ItemLength) );
 
+  assert( Name.size() < 256 );
   os.write( Name.c_str(), Name.size() );
   return os;
 }

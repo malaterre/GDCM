@@ -83,6 +83,9 @@ public:
   const PresentationContextRQ *GetPresentationContextByAbstractSyntax(AbstractSyntax const & as ) const;
   bool IsLastFragment() const { return true; }
 
+  const UserInformation & GetUserInformation() const { return UserInfo; }
+  void SetUserInformation( UserInformation const & ui );
+
 protected:
   friend class AAssociateACPDU;
   std::string GetReserved43_74() const;
