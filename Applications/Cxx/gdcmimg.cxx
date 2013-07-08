@@ -69,6 +69,10 @@
 #include <getopt.h>
 #include <string.h>
 
+#ifdef _MSC_VER
+#define atoll _atoi64
+#endif
+
 static unsigned int readsize(const char *str, unsigned int * size)
 {
   int n = sscanf( str, "%i,%i,%i", size, size+1, size+2);
