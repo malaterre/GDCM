@@ -9,13 +9,9 @@
 #include "publictypes.h"
 
 #if defined(_WIN32)
-
-#if defined(CHARLS_DLL)
-#define CHARLS_IMEXPORT(returntype) __declspec(dllexport) returntype __stdcall
-#else
-#define CHARLS_IMEXPORT(returntype) returntype __stdcall
+#ifndef CHARLS_IMEXPORT
+#define CHARLS_IMEXPORT(returntype) __declspec(dllimport) returntype __stdcall
 #endif
-
 #else
 #ifndef CHARLS_IMEXPORT 
 #if __GNUC__ >= 4
