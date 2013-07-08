@@ -48,13 +48,6 @@ ENDIF(NOT CMAKE_BUILD_TYPE)
 
 #OPTION(charls_BUILD_SHARED_LIBS "Build CharLS with shared libraries." OFF)
 #SET(BUILD_SHARED_LIBS ${charls_BUILD_SHARED_LIBS})
-if (WIN32)
-  if (GDCM_BUILD_SHARED_LIBS)
-    set(CHARLS_DLL 1)
-  else ()
-    set(CHARLS_STATIC 1)
-  endif ()
-endif ()
 
 add_library(${CHARLS_LIBRARY_NAME} header.cpp  interface.cpp  jpegls.cpp
   stdafx.cpp
