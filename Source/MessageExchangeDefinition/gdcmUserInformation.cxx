@@ -313,14 +313,14 @@ UserInformation &UserInformation::operator=(const UserInformation& ui)
 void UserInformation::AddRoleSelectionSub( RoleSelectionSub const & rss )
 {
   RSSI->RSSArray.push_back( rss );
-  ItemLength = Size() - 4;
+  ItemLength = (uint16_t)(Size() - 4);
   assert( (size_t)ItemLength + 4 == Size() );
 }
 
 void UserInformation::AddSOPClassExtendedNegociationSub( SOPClassExtendedNegociationSub const & sopcens )
 {
   SOPCENSI->SOPCENSArray.push_back( sopcens );
-  ItemLength = Size() - 4;
+  ItemLength = (uint16_t)(Size() - 4);
   assert( (size_t)ItemLength + 4 == Size() );
 }
 
