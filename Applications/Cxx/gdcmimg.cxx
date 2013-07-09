@@ -798,13 +798,13 @@ int main (int argc, char *argv[])
     int ba, bs, hb;
     int n = sscanf( pformatstr.c_str(), "%d,%d,%d", &ba, &bs, &hb );
     if( n != 3 ) return 1;
-    pfref.SetBitsAllocated( ba );
-    pfref.SetBitsStored( bs );
-    pfref.SetHighBit( hb );
+    pfref.SetBitsAllocated( (unsigned short)ba );
+    pfref.SetBitsStored( (unsigned short)bs );
+    pfref.SetHighBit( (unsigned short)hb );
     if( spp )
-      pfref.SetSamplesPerPixel( pixelspp );
+      pfref.SetSamplesPerPixel( (unsigned short)pixelspp );
     if( sign )
-      pfref.SetPixelRepresentation( pixelsign );
+      pfref.SetPixelRepresentation( (unsigned short)pixelsign );
     }
   gdcm::PhotometricInterpretation::PIType refpi = gdcm::PhotometricInterpretation::MONOCHROME2;
   if( pinter )

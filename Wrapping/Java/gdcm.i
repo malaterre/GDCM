@@ -812,6 +812,14 @@ typedef int64_t time_t; // FIXME
 EXTEND_CLASS_PRINT(gdcm::Region)
 %include "gdcmBoxRegion.h"
 EXTEND_CLASS_PRINT(gdcm::BoxRegion)
-%apply char[] { char* inreadbuffer }
+%ignore gdcm::ImageRegionReader::ReadIntoBuffer(char *inreadbuffer, size_t buflen);
+%apply signed char[] { signed char* inreadbuffer }
 %include "gdcmImageRegionReader.h"
-%clear char* inreadbuffer;
+%extend gdcm::ImageRegionReader
+{
+  bool ReadIntoBuffer(signed char *inreadbuffer, size_t buflen) {
+    return self->ReadIntoBuffer((char*)inreadbuffer, buflen);
+    }
+};
+//EXTEND_CLASS_PRINT(gdcm::ImageRegionReader)
+%clear signed char* inreadbuffer;
