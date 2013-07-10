@@ -804,9 +804,16 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmPresentationContextGenerator.h"
 typedef int64_t time_t; // FIXME
 %include "gdcmServiceClassUser.h"
-%apply char[] { char* inReadBuffer }
+%ignore gdcm::StreamImageReader::Read(char* inReadBuffer, const std::size_t& inBufferLength);
+%apply signed char[] { signed char* inReadBuffer }
 %include "gdcmStreamImageReader.h"
-%clear char* inReadBuffer;
+%extend gdcm::StreamImageReader
+{
+  bool Read(signed char* inReadBuffer, size_t inBufferLength) {
+    return self->Read((char*)inReadBuffer, inBufferLength);
+    }
+}
+%clear signed char* inReadBuffer;
 %include "gdcmStreamImageWriter.h"
 %include "gdcmRegion.h"
 EXTEND_CLASS_PRINT(gdcm::Region)
