@@ -10,6 +10,7 @@ include_directories(
 set(classfilesdep)
 set(examples
   HelloSimple
+  ExtractImageRegion
   DecompressPixmap
   DecompressImage
   ScanDirectory
