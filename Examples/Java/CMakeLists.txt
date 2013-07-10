@@ -10,6 +10,7 @@ INCLUDE_DIRECTORIES(
 set(classfilesdep)
 set(examples
   HelloSimple
+  ExtractImageRegion
   DecompressPixmap
   DecompressImage
   ScanDirectory
