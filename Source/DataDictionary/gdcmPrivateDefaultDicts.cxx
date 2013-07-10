@@ -37,6 +37,8 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x6301,0x0001,"KRETZ_PRIVATE",VR::IS,VM::VM1,"?",false },
+  {0x6301,0x0002,"KRETZ_PRIVATE",VR::IS,VM::VM1,"?",false },
   {0x0029,0x0000,"VOLCANO-PCDE 1.0",VR::DS,VM::VM1,"Pullback Rate",false },
   {0x0029,0x0001,"VOLCANO-PCDE 1.0",VR::FD,VM::VM1,"B Gain",false },
   {0x0029,0x0002,"VOLCANO-PCDE 1.0",VR::US,VM::VM1,"B Persistence Index",false },
