@@ -8775,6 +8775,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x7005,0x0047,"TOSHIBA_MEC_CT3",VR::DS,VM::VM1,"Slice Pitch of 4D Volume",false },
   {0x7005,0x0048,"TOSHIBA_MEC_CT3",VR::LO,VM::VM1,"Respiratory Gating Inf.",false },
   {0x7005,0x0049,"TOSHIBA_MEC_CT3",VR::SH,VM::VM1,"Respiration Phase",false },
+  {0x7005,0x0063,"TOSHIBA_MEC_CT3",VR::FD,VM::VM1,"CTDIw",false },
   {0x7005,0x00f1,"TOSHIBA_MEC_CT3",VR::CS,VM::VM1,"Protect Mark for Image, Curve or Private Record",false },
   {0x7005,0x00f2,"TOSHIBA_MEC_CT3",VR::CS,VM::VM1,"Protect Mark for Series Record",false },
   {0x7005,0x00f3,"TOSHIBA_MEC_CT3",VR::CS,VM::VM1,"Protect Mark for Study Record",false },
