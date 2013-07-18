@@ -200,9 +200,9 @@ bool CompositeNetworkFunctions::CMove( const char *remote, uint16_t portno,
   network::ULWritingCallback theCallback;
   theCallback.SetDirectory(outputdir);
   bool ret = theManager.SendMove( query, &theCallback );
-  assert( ret );
+  if( !ret ) return false;
 
-  theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
+  ret = theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
   return ret;
 }
 
