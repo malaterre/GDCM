@@ -77,6 +77,12 @@ class ULConnection
       std::vector<PresentationContextAC> mAcceptedPresentationContexts;//these come back from the server
       //and tell us what can be sent over this connection
 
+      TransferSyntaxSub cstorets;
+
+      friend class ULActionAE6;
+      void SetCStoreTransferSyntax( TransferSyntaxSub const & ts );
+      friend class ULConnectionManager;
+      TransferSyntaxSub const & GetCStoreTransferSyntax( ) const;
     public:
 
       ULConnection(const ULConnectionInfo& inUserInformation);

@@ -30,6 +30,10 @@ ULConnection::ULConnection(const ULConnectionInfo& inConnectInfo)
   mSocket = NULL;
   mEcho = NULL;
   mInfo = inConnectInfo;
+
+  TransferSyntaxSub ts1;
+  ts1.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+  SetCStoreTransferSyntax( ts1 );
 }
 
 ULConnection::~ULConnection()
@@ -321,6 +325,26 @@ uint8_t ULConnection::GetPresentationContextIDFromPresentationContext(Presentati
 
   assert( ret );
   return ret;
+}
+
+void ULConnection::SetCStoreTransferSyntax( TransferSyntaxSub const & ts )
+{
+  cstorets = ts;
+}
+
+TransferSyntaxSub const & ULConnection::GetCStoreTransferSyntax( ) const
+{
+  TransferSyntaxSub ts1;
+  ts1.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+
+  TransferSyntaxSub ts2;
+  ts2.SetNameFromUID( UIDs::ExplicitVRLittleEndian );
+
+  assert( strcmp(cstorets.GetName(), ts1.GetName()) == 0
+       || strcmp(cstorets.GetName(), ts2.GetName()) == 0
+  );
+
+  return cstorets;
 }
 
 } // end namespace network

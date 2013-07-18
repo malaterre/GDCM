@@ -188,7 +188,7 @@ EStateID ULActionAE6::PerformAction(Subject *, ULEvent& inEvent, ULConnection& i
       // BOGUS (MM):
       //inConnection.AddAcceptedPresentationContext(pc);
 
-      uint8_t id = pc.GetPresentationContextID();
+      const uint8_t id = pc.GetPresentationContextID();
 
       std::vector<TransferSyntaxSub> const & tsSet = pc.GetTransferSyntaxes();
       std::vector<TransferSyntaxSub>::const_iterator tsitor;
@@ -200,14 +200,32 @@ EStateID ULActionAE6::PerformAction(Subject *, ULEvent& inEvent, ULConnection& i
         if (strcmp(tsitor->GetName(), ts1.GetName()) == 0 )
           {
           result = 0; // 0 - acceptance
+          inConnection.SetCStoreTransferSyntax( ts1 );
+          pcac1.SetTransferSyntax( ts1 );
           }
         }
       if( result )
         {
-        gdcmErrorMacro( "Could not find Implicit Little Endian in Response. Giving up" );
+        gdcmWarningMacro( "Could not find Implicit or Explicit Little Endian in Response. Giving another try" );
+        // Okay little endian implicit was not found, this happen sometimes, for eg with DVTk, let's be nice and accept also Explicit
+        TransferSyntaxSub ts2;
+        ts2.SetNameFromUID( UIDs::ExplicitVRLittleEndian );
+        for (tsitor = tsSet.begin(); tsitor < tsSet.end(); tsitor++)
+          {
+          //gdcmDebugMacro( "Checking: [" << tsitor->GetName() << "] vs [" << ts1.GetName() << "]" << std::endl );
+          if (strcmp(tsitor->GetName(), ts2.GetName()) == 0 )
+            {
+            result = 0; // 0 - acceptance
+            inConnection.SetCStoreTransferSyntax( ts2 );
+            pcac1.SetTransferSyntax( ts2 );
+            }
+          }
+        }
+      if( result )
+        {
+        gdcmErrorMacro( "Could not find Implicit or Explicit Little Endian in Response. Giving up" );
         }
       pcac1.SetPresentationContextID( id );
-      pcac1.SetTransferSyntax( ts1 );
       pcac1.SetReason( result );
       acpdu.AddPresentationContextAC( pcac1 );
     }

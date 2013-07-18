@@ -994,8 +994,30 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                   //!!!need to handle incoming PDUs that are not data, ie, an abort
                 } while(!thePDU->IsLastFragment());
                 if (!interrupted){//ie, if the remote server didn't hang up
-                  DataSet theCompleteFindResponse =
-                    PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
+                  bool useimplicit = true;
+                  TransferSyntaxSub ts1;
+                  ts1.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+                  if( mSecondaryConnection )
+                    {
+                    const TransferSyntaxSub & ts_ = mSecondaryConnection->GetCStoreTransferSyntax();
+                    if( strcmp(ts_.GetName(), ts1.GetName()) != 0)
+                      {
+                      useimplicit = false;
+                      }
+                    }
+                  DataSet theCompleteFindResponse;
+                  if( useimplicit )
+                    {
+                    inCallback->SetImplicitFlag(true);
+                    theCompleteFindResponse =
+                      PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
+                    }
+                  else
+                    {
+                    inCallback->SetImplicitFlag(false);
+                    theCompleteFindResponse =
+                      PresentationDataValue::ConcatenatePDVBlobsAsExplicit(PDUFactory::GetPDVs(theData));
+                    }
                   //note that it's the responsibility of the event to delete the PDU in theFindRSP
                   for (size_t i = 0; i < theData.size(); i++)
                     {

@@ -43,7 +43,10 @@ void ULWritingCallback::HandleDataSet(const DataSet& inDataSet)
     File &f = w.GetFile();
     f.SetDataSet(inDataSet);
     FileMetaInformation &fmi = f.GetHeader();
-    fmi.SetDataSetTransferSyntax( TransferSyntax::ImplicitVRLittleEndian );
+    if( mImplicit )
+      fmi.SetDataSetTransferSyntax( TransferSyntax::ImplicitVRLittleEndian );
+    else
+      fmi.SetDataSetTransferSyntax( TransferSyntax::ExplicitVRLittleEndian );
     w.SetCheckFileMetaInformation( true );
     if (!w.Write())
       {
