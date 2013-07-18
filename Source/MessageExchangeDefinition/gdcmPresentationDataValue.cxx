@@ -153,7 +153,7 @@ DataSet PresentationDataValue::ConcatenatePDVBlobs(const std::vector<Presentatio
   std::string theEntireBuffer;//could do it as streams.  but apparently, std isn't letting me
   std::vector<PresentationDataValue>::const_iterator itor;
   for (itor = inPDVs.begin(); itor < inPDVs.end(); itor++){
-    std::string theBlobString = itor->GetBlob();
+    const std::string & theBlobString = itor->GetBlob();
     theEntireBuffer.insert(theEntireBuffer.end(), theBlobString.begin(), theBlobString.end());
   }
 
