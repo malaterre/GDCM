@@ -194,7 +194,7 @@ void AAssociateACPDU::Print(std::ostream &os) const
   os << "Reserved9_10: " << std::hex << Reserved9_10 << std::dec << std::endl;
   os << "Reserved11_26: [" << std::string(Reserved11_26,sizeof(Reserved11_26)) << "]" << std::endl;
   os << "Reserved27_42: [" << std::string(Reserved27_42,sizeof(Reserved27_42)) << "]" << std::endl;
-  os << "Reserved43_74: [" << std::string(Reserved43_74,sizeof(Reserved43_74)) << "]" << std::endl;
+  /*os << "Reserved43_74: [" << std::string(Reserved43_74,sizeof(Reserved43_74)) << "]" << std::endl;*/
   os << "Application Context Name: ";
   AppContext.Print( os );
   os << "List of PresentationContextAC: " << std::endl;
