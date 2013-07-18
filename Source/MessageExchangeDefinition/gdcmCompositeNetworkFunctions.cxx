@@ -86,15 +86,19 @@ bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
   // Check the Success Status
   DataSet ds = network::PresentationDataValue::ConcatenatePDVBlobs( theValues1 );
   Attribute<0x0,0x0900> at;
-  at.SetFromDataSet( ds );
-
-  if( at.GetValue() != 0 )
+  if( ds.FindDataElement( at.GetTag() ) )
     {
-    gdcmErrorMacro( "Wrong value" );
-    return false;
+    at.SetFromDataSet( ds );
+    if( at.GetValue() != 0 )
+      {
+      gdcmErrorMacro( "Wrong value for Status (C-ECHO)" );
+      return false;
+      }
+    return true;
     }
 
-  return true;
+  gdcmDebugMacro( "Empty return on C-ECHO (no Status)" );
+  return false;
 }
 
 // this function will take command line options and construct a cmove query from them
