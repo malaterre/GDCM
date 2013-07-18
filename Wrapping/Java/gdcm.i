@@ -358,12 +358,16 @@ EXTEND_CLASS_PRINT(gdcm::ByteValue)
 %include "gdcmSmartPointer.h"
 %template(SmartPtrSQ) gdcm::SmartPointer<gdcm::SequenceOfItems>;
 %template(SmartPtrFrag) gdcm::SmartPointer<gdcm::SequenceOfFragments>;
+%ignore gdcm::DataElement::SetByteValue(const char *array, VL length);
 %include "gdcmDataElement.h"
 EXTEND_CLASS_PRINT(gdcm::DataElement)
 
 %clear const char* array;
 %extend gdcm::DataElement
 {
+ /**
+  * Replace SetByteValue
+  */
  void SetArray(signed char array[], unsigned int nitems) {
    $self->SetByteValue((char*)array, nitems * sizeof(signed char) );
  }
