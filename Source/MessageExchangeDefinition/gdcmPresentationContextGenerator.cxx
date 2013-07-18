@@ -45,8 +45,6 @@ bool PresentationContextGenerator::GenerateFromUID(UIDs::TSName asname)
   const char *asnamestr = UIDs::GetUIDString( asname );
   const char *tsnamestr = GetDefaultTransferSyntax();
 
-  AddPresentationContext( asnamestr, tsnamestr );
-
   // There is a special case for MOVE operations. Need to have alternate FIND operations
   if( asname == UIDs::PatientRootQueryRetrieveInformationModelMOVE )
     {
@@ -54,12 +52,14 @@ bool PresentationContextGenerator::GenerateFromUID(UIDs::TSName asname)
       UIDs::PatientRootQueryRetrieveInformationModelFIND );
     AddPresentationContext( asnamestr0, tsnamestr );
     }
-  if( asname == UIDs::StudyRootQueryRetrieveInformationModelMOVE )
+  else if( asname == UIDs::StudyRootQueryRetrieveInformationModelMOVE )
     {
     const char *asnamestr0 = UIDs::GetUIDString(
       UIDs::StudyRootQueryRetrieveInformationModelFIND );
     AddPresentationContext( asnamestr0, tsnamestr );
     }
+  // Always set the *MOVE after the *FIND one
+  AddPresentationContext( asnamestr, tsnamestr );
 
   return true;
 }
