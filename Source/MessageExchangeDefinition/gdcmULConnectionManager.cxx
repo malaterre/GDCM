@@ -571,7 +571,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
             Attribute<0x0,0x0800> at;
             at.SetFromDataElement( de );
             unsigned short datasettype = at.GetValue();
-            assert( datasettype == 0x0101 );
+            assert( datasettype == 0x0101 || datasettype == 0x1 );
           }
           if (theRSP.FindDataElement(Tag(0x0, 0x0900))){
             DataElement const & de = theRSP.GetDataElement(Tag(0x0,0x0900));
