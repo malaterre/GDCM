@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
   const char *outfilename = argv[2];
 
   size_t len = gdcm::System::FileSize(filename);
-  std::ifstream is(filename);
+  std::ifstream is(filename, std::ios::binary);
 
   char * buf = new char[len];
   is.read(buf, len);

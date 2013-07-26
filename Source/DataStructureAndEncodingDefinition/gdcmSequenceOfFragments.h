@@ -83,11 +83,11 @@ public:
   BasicOffsetTable &GetTable() { return Table; }
 
 template <typename TSwap>
-std::istream& Read(std::istream &is)
+std::istream& Read(std::istream &is, bool readvalues = true)
 {
   assert( SequenceLengthField.IsUndefined() );
   ReadPreValue<TSwap>(is);
-  return ReadValue<TSwap>(is);
+  return ReadValue<TSwap>(is, readvalues);
 }
 
 template <typename TSwap>
@@ -124,7 +124,7 @@ std::istream& ReadPreValue(std::istream &is)
 }
 
 template <typename TSwap>
-std::istream& ReadValue(std::istream &is)
+std::istream& ReadValue(std::istream &is, bool /*readvalues*/)
 {
   const Tag seqDelItem(0xfffe,0xe0dd);
   // not used for now...

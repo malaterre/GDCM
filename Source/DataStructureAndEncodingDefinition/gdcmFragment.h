@@ -23,7 +23,7 @@ namespace gdcm
 {
 
 // Implementation detail:
-// I think Fragment should be a protected sublclass of DataElement:
+// I think Fragment should be a protected subclass of DataElement:
 // looking somewhat like this:
 /*
 class GDCM_EXPORT Fragment : protected DataElement

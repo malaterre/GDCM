@@ -1081,10 +1081,8 @@ int main (int argc, char *argv[])
     gdcm::DirectionCosines dc( cosines );
     double normal[3];
     dc.Cross( normal );
-    const double *origin = image.GetOrigin();
-    (void)origin;
-    double zspacing = image.GetSpacing(2);
-    (void)zspacing;
+    //const double *origin = image.GetOrigin();
+    //double zspacing = image.GetSpacing(2);
 
     // Remove SharedFunctionalGroupsSequence
     gdcm::SmartPointer<gdcm::SequenceOfItems> sfgs =

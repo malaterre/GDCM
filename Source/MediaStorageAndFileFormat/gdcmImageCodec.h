@@ -42,6 +42,8 @@ public:
 
   virtual bool GetHeaderInfo(std::istream &is_, TransferSyntax &ts);
 
+  virtual ImageCodec * Clone() const = 0;
+
 protected:
   bool DecodeByStreams(std::istream &is_, std::ostream &os);
   virtual bool IsValid(PhotometricInterpretation const &pi);

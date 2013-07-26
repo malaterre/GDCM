@@ -8,17 +8,17 @@
 
 #include "publictypes.h"
 
-#if defined(_WIN32)
-#ifndef CHARLS_IMEXPORT
+#if defined(_WIN32) && defined(CHARLS_SHARED)
+#ifdef gdcmcharls_EXPORTS
+#define CHARLS_IMEXPORT(returntype) __declspec(dllexport) returntype __stdcall
+#else
 #define CHARLS_IMEXPORT(returntype) __declspec(dllimport) returntype __stdcall
 #endif
 #else
-#ifndef CHARLS_IMEXPORT 
 #if __GNUC__ >= 4
 #define CHARLS_IMEXPORT(returntype) __attribute__ ((visibility ("default"))) returntype
 #else
 #define CHARLS_IMEXPORT(returntype) returntype
-#endif
 #endif
 #endif /* _WIN32 */
 

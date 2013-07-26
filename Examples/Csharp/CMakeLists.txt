@@ -25,6 +25,9 @@ set(CSHARP_EXAMPLES
   MpegVideoInfo
   FileAnonymize
   BasicImageAnonymizer
+  FileAnonymize
+  FileStreaming
+  FileChangeTS
   )
 
 if(BUILD_TESTING)

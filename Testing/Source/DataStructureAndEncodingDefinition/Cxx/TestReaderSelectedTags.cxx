@@ -18,11 +18,11 @@
 #include "gdcmMediaStorage.h"
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
+#include "gdcmFilename.h"
 
 int TestReadSelectedTags(const char* filename, bool verbose = false)
 {
-  if( verbose )
-    std::cout << "TestRead: " << filename << std::endl;
+  if( verbose ) std::cout << "TestRead: " << filename << std::endl;
 
   std::ifstream is( filename, std::ios::binary );
   gdcm::Reader reader;
@@ -47,6 +47,41 @@ int TestReadSelectedTags(const char* filename, bool verbose = false)
     std::cerr << filename << ": " << outStreamOffset << " should be " << refoffset << std::endl;
     return 1;
     }
+  size_t filesize = gdcm::System::FileSize(filename);
+  assert( (size_t)refoffset <= filesize );
+
+  std::streamoff refoffset2 = gdcm::Testing::GetStreamOffsetFromFile(filename);
+  const gdcm::File & file = reader.GetFile();
+  //const gdcm::DataSet & ds = file.GetDataSet();
+  //const bool isfound = ds.FindDataElement( pixeldatagl );
+  const gdcm::FileMetaInformation & fmi = file.GetHeader();
+  const gdcm::TransferSyntax & ts = fmi.GetDataSetTransferSyntax();
+
+  gdcm::Filename fn( filename );
+  const char *name = fn.GetName();
+  // Special handling:
+  bool checkconsist = true;
+  if( strcmp(name, "DMCPACS_ExplicitImplicit_BogusIOP.dcm" ) == 0
+  )
+    {
+    checkconsist = false;
+    }
+
+  if( (size_t)refoffset != filesize )
+    {
+    if( checkconsist )
+      {
+      if( ts.GetNegociatedType() == gdcm::TransferSyntax::Explicit )
+        {
+        assert( refoffset + 12 == refoffset2 );
+        }
+      else
+        {
+        assert( refoffset + 8 == refoffset2 );
+        }
+      }
+    }
+
   is.close();
 
   return 0;

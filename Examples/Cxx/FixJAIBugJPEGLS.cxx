@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
     vbuffer.insert (vbuffer.begin() + 0x0F, marker_lse, marker_lse+15);
 
 #if 0
-    std::ofstream of( "/tmp/d.jls" );
+    std::ofstream of( "/tmp/d.jls", std::ios::binary );
     of.write( &vbuffer[0], vbuffer.size() );
     of.close();
 #endif

@@ -110,7 +110,7 @@ static void process_input(iosockinet& sio)
   // C-STORE
   if( commanddatasettype == 0 )
     {
-    std::ofstream out( "movescu.dcm" );
+    std::ofstream out( "movescu.dcm", std::ios::binary );
     int i = 0;
     do
       {

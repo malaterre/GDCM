@@ -85,7 +85,10 @@ public:
   bool ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags = std::set<Tag>() );
 
   /// Will only read the specified selected tags.
-  bool ReadSelectedTags(std::set<Tag> const & tags);
+  bool ReadSelectedTags(std::set<Tag> const & tags, bool readvalues = true);
+
+  /// Will only read the specified selected private tags.
+  bool ReadSelectedPrivateTags(std::set<PrivateTag> const & ptags, bool readvalues = true);
 
   /// Test whether this is a DICOM file
   /// \warning need to call either SetFileName or SetStream first

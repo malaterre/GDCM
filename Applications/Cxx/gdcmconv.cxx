@@ -941,7 +941,9 @@ int main (int argc, char *argv[])
     gdcm::FileMetaInformation &fmi = file.GetHeader();
 
     const gdcm::TransferSyntax &orits = fmi.GetDataSetTransferSyntax();
-    if( orits != gdcm::TransferSyntax::ExplicitVRLittleEndian && orits != gdcm::TransferSyntax::ImplicitVRLittleEndian && orits != gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian )
+    if( orits != gdcm::TransferSyntax::ExplicitVRLittleEndian
+      && orits != gdcm::TransferSyntax::ImplicitVRLittleEndian
+      && orits != gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian )
       {
       std::cerr << "Sorry input Transfer Syntax not supported for this conversion: " << orits << std::endl;
       return 1;
@@ -956,10 +958,13 @@ int main (int argc, char *argv[])
       {
       ts = gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian;
       }
-    const char *tsuid = gdcm::TransferSyntax::GetTSString( ts );
-    // const char * is ok since padding is \0 anyway...
+    std::string tsuid = gdcm::TransferSyntax::GetTSString( ts );
+    if( tsuid.size() % 2 == 1 )
+      {
+      tsuid.push_back( 0 ); // 0 padding
+      }
     gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
-    de.SetByteValue( tsuid, (uint32_t)strlen(tsuid) );
+    de.SetByteValue( &tsuid[0], tsuid.size() );
     de.SetVR( gdcm::Attribute<0x0002, 0x0010>::GetVR() );
     fmi.Clear();
     fmi.Replace( de );

@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-  //std::ofstream out( outfilename );
+  //std::ofstream out( outfilename, std::ios::binary );
   //image.GetBuffer2(out);
   //out.close();
   gdcm::ImageWriter writer;

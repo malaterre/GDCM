@@ -208,7 +208,7 @@ bool Bitmap::GetBuffer(char *buffer) const
     // contains a compressed Icon Sequence, one has to guess this is lossless jpeg...
 #ifdef MDEBUG
     const SequenceOfFragments *sqf = PixelData.GetSequenceOfFragments();
-    std::ofstream os( "/tmp/kodak.ljpeg");
+    std::ofstream os( "/tmp/kodak.ljpeg", std::ios::binary);
     sqf->WriteBuffer( os );
 #endif
     gdcmWarningMacro( "Compressed Icon are not support for now" );

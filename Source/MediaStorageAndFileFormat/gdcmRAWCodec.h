@@ -34,6 +34,7 @@ public:
   bool Code(DataElement const &in, DataElement &out);
 
   bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
+  virtual ImageCodec * Clone() const;
 
   /// Used by the ImageStreamReader-- converts a read in 
   /// buffer into one with the proper encodings.

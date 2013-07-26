@@ -778,15 +778,24 @@ const char *System::GetTimezoneOffsetFromUTC()
 bool System::FormatDateTime(char date[22], time_t timep, long milliseconds)
 {
   // \precondition
-  if( !(milliseconds >= 0 && milliseconds < 1000000) ) return false;
+  if( !(milliseconds >= 0 && milliseconds < 1000000) )
+    {
+    return false;
+    }
 
   // YYYYMMDDHHMMSS.FFFFFF&ZZXX
-  if(!date) return false;
+  if(!date)
+    {
+    return false;
+    }
   const size_t maxsize = 40;
   char tmp[maxsize];
   // Obtain the time of day, and convert it to a tm struct.
   struct tm *ptm = localtime (&timep);
-  if(!ptm) return false;
+  if(!ptm)
+    {
+    return false;
+    }
   // Format the date and time, down to a single second.
   size_t ret = strftime (tmp, sizeof (tmp), "%Y%m%d%H%M%S", ptm);
   assert( ret == 14 );
@@ -797,10 +806,9 @@ bool System::FormatDateTime(char date[22], time_t timep, long milliseconds)
 
   // Add milliseconds
   const size_t maxsizall = 22;
-  //char tmpAll[maxsizall];
-  int ret2 = snprintf(date,maxsizall,"%s.%06ld",tmp,milliseconds);
-  assert( ret2 >= 0 );
-  if( (unsigned int)ret2 >= maxsizall )
+  const int ret2 = snprintf(date,maxsizall,"%s.%06ld",tmp,milliseconds);
+  if( ret2 < 0 ) return false;
+  if( (size_t)ret2 >= maxsizall )
     {
     return false;
     }

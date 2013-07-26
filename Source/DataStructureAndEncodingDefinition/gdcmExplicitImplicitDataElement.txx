@@ -92,7 +92,7 @@ std::istream &ExplicitImplicitDataElement::ReadPreValue(std::istream &is)
     is.seekg( s, std::ios::beg );
     ValueField->SetLength( (int32_t)(e - s) );
     ValueLengthField = ValueField->GetLength();
-    bool failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
+    bool failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField,true);
     gdcmAssertAlwaysMacro( !failed );
     return is;
     //throw Exception( "Unhandled" );
@@ -217,7 +217,7 @@ std::istream &ExplicitImplicitDataElement::ReadPreValue(std::istream &is)
         ValueField->SetLength(ValueLengthField); // perform realloc
         try
           {
-          if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
+          if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField,true) )
             {
             assert(0 && "Should not happen");
             }
@@ -235,7 +235,7 @@ std::istream &ExplicitImplicitDataElement::ReadPreValue(std::istream &is)
           << " instead of " << itemStart << " for tag: " << TagField );
         ValueField = new SequenceOfItems;
         ValueField->SetLength(ValueLengthField); // perform realloc
-        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
+        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField,true) )
           {
           assert(0 && "Should not happen");
           }
@@ -276,7 +276,7 @@ std::istream &ExplicitImplicitDataElement::ReadPreValue(std::istream &is)
 #endif
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
-  if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) )
+  if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField,true) )
     {
     // Special handling for PixelData tag:
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
@@ -332,7 +332,7 @@ std::istream &ExplicitImplicitDataElement::ReadPreValue(std::istream &is)
 }
 
 template <typename TSwap>
-std::istream &ExplicitImplicitDataElement::ReadValue(std::istream &is)
+std::istream &ExplicitImplicitDataElement::ReadValue(std::istream &is, bool readvalues)
 {
   if( is.eof() ) return is;
   /* thechnically the following is bad
@@ -370,7 +370,7 @@ std::istream &ExplicitImplicitDataElement::ReadValue(std::istream &is)
       try
         {
         //if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
-        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) ) // cp246 compliant
+        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField,readvalues) ) // cp246 compliant
           {
           assert(0);
           }
@@ -400,7 +400,7 @@ std::istream &ExplicitImplicitDataElement::ReadValue(std::istream &is)
     ValueField = new ByteValue;
     }
   // We have the length we should be able to read the value
-  ValueField->SetLength(ValueLengthField); // perform realloc
+  this->SetValueFieldLength( ValueLengthField, readvalues );
 #if defined(GDCM_SUPPORT_BROKEN_IMPLEMENTATION) && 0
   // PHILIPS_Intera-16-MONO2-Uncompress.dcm
   if( TagField == Tag(0x2001,0xe05f)
@@ -419,7 +419,7 @@ std::istream &ExplicitImplicitDataElement::ReadValue(std::istream &is)
     assert( TagField.IsPrivate() );
     try
       {
-      if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
+      if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField,readvalues) )
         {
         assert(0 && "Should not happen");
         }
@@ -448,7 +448,7 @@ std::istream &ExplicitImplicitDataElement::ReadValue(std::istream &is)
   if( VRField & VR::VRASCII )
     {
     //assert( VRField.GetSize() == 1 );
-    failed = !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField);
+    failed = !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField,readvalues);
     }
   else
     {
@@ -459,16 +459,16 @@ std::istream &ExplicitImplicitDataElement::ReadValue(std::istream &is)
     switch(vrsize)
       {
     case 1:
-      failed = !ValueIO<ExplicitImplicitDataElement,TSwap,uint8_t>::Read(is,*ValueField);
+      failed = !ValueIO<ExplicitImplicitDataElement,TSwap,uint8_t>::Read(is,*ValueField,readvalues);
       break;
     case 2:
-      failed = !ValueIO<ExplicitImplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
+      failed = !ValueIO<ExplicitImplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField,readvalues);
       break;
     case 4:
-      failed = !ValueIO<ExplicitImplicitDataElement,TSwap,uint32_t>::Read(is,*ValueField);
+      failed = !ValueIO<ExplicitImplicitDataElement,TSwap,uint32_t>::Read(is,*ValueField,readvalues);
       break;
     case 8:
-      failed = !ValueIO<ExplicitImplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField);
+      failed = !ValueIO<ExplicitImplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField,readvalues);
       break;
     default:
     failed = true;

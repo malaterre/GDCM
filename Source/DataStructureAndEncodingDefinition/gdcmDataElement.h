@@ -236,6 +236,11 @@ public:
     (void)skiptags;
     return static_cast<TDE*>(this)->template ReadValue<TSwap>(is);
   }
+  template <typename TDE, typename TSwap>
+  std::istream &ReadValueWithLength(std::istream &is, VL & length, std::set<Tag> const &skiptags) {
+    (void)skiptags;
+    return static_cast<TDE*>(this)->template ReadValueWithLength<TSwap>(is, length);
+  }
 
   template <typename TDE, typename TSwap>
   std::istream &ReadWithLength(std::istream &is, VL &length) {
@@ -256,6 +261,8 @@ protected:
   VR VRField;
   typedef SmartPointer<Value> ValuePtr;
   ValuePtr ValueField;
+
+  void SetValueFieldLength( VL vl, bool readvalues );
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const DataElement &val)

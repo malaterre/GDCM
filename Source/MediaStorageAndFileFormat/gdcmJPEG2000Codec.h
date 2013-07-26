@@ -42,6 +42,7 @@ public:
   bool Code(DataElement const &in, DataElement &out);
 
   virtual bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
+  virtual ImageCodec * Clone() const;
 
   // JPEG-2000 / OpenJPEG specific way of encoding lossy-ness
   // ref: http://www.openjpeg.org/index.php?menu=doc#encoder

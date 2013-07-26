@@ -325,7 +325,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
       delete[] mybuffer;
 
       try {
-        sf_bug->Read<SwapperNoOp>(is);
+        sf_bug->Read<SwapperNoOp>(is,true);
       } catch ( ... ) {
         return false;
       }
@@ -1070,7 +1070,7 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     os << c;
     c++;
     os << ".j2k";
-    std::ofstream debug(os.str().c_str());
+    std::ofstream debug(os.str().c_str(), std::ios::binary);
     debug.write((char*)(cio->buffer), codestream_length);
     debug.close();
 #endif
@@ -1596,6 +1596,11 @@ bool JPEG2000Codec::DecodeExtent(
       }
     }
   return true;
+}
+
+ImageCodec * JPEG2000Codec::Clone() const
+{
+  return NULL;
 }
 
 } // end namespace gdcm

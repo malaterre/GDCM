@@ -104,7 +104,7 @@ int main(int argc, char *argv [])
   const gdcm::ByteValue * bv = wave.GetByteValue();
   assert( bv );
 
-  std::ofstream os( outfilename );
+  std::ofstream os( outfilename, std::ios::binary );
   // Dump that to a CSV file:
   wave2stream( os, bv->GetPointer(), bv->GetLength() );
   os.close();

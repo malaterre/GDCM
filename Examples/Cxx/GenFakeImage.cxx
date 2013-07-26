@@ -33,22 +33,22 @@ int main(int, char *[])
   char * buffer = new char[ 256 * 256 * 3];
   char * p = buffer;
   int b = 128;
-  int ybr[3];
+  //int ybr[3];
   int ybr2[3];
-  int rgb[3];
+  //int rgb[3];
 
   for(int r = 0; r < 256; ++r)
     for(int g = 0; g < 256; ++g)
       //for(int b = 0; b < 256; ++b)
       {
-      rgb[0] = r;
-      rgb[1] = g;
-      rgb[1] = 128;
-      rgb[2] = b;
-      ybr[0] = r;
-      ybr[1] = g;
-      ybr[1] = 128;
-      ybr[2] = b;
+      //rgb[0] = r;
+      //rgb[1] = g;
+      //rgb[1] = 128;
+      //rgb[2] = b;
+      //ybr[0] = r;
+      //ybr[1] = g;
+      //ybr[1] = 128;
+      //ybr[2] = b;
 
       ybr2[0] = r;
       ybr2[1] = g;

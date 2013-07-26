@@ -211,7 +211,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       is0.seekg(0);
       SequenceOfFragments sf_bug;
       try {
-        sf_bug.Read<SwapperNoOp>(is0);
+        sf_bug.Read<SwapperNoOp>(is0,true);
       } catch ( ... ) {
         return false;
       }
@@ -627,6 +627,28 @@ bool JPEGCodec::IsStateSuspension() const
 {
   assert( 0 );
   return false;
+}
+
+ImageCodec * JPEGCodec::Clone() const
+{
+  JPEGCodec *copy = new JPEGCodec;
+  ImageCodec &ic = *copy;
+  ic = *this;
+  assert( copy->PF == PF );
+  //copy->SetupJPEGBitCodec( BitSample );
+  copy->SetPixelFormat( GetPixelFormat() );
+  assert( copy->BitSample == BitSample );
+  copy->Lossless = Lossless;
+  copy->Quality = Quality;
+
+  return copy;
+}
+
+bool JPEGCodec::EncodeBuffer( std::ostream & out,
+    const char *inbuffer, size_t inlen)
+{
+  assert( Internal );
+  return Internal->EncodeBuffer(out, inbuffer, inlen);
 }
 
 } // end namespace gdcm

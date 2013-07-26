@@ -67,7 +67,7 @@ static int TestImageRegionRead(const char* filename, bool verbose = false)
     return 1;
     }
 #if 0
-  std::ofstream of( "/tmp/dd.raw" );
+  std::ofstream of( "/tmp/dd.raw", std::ios::binary );
   of.write( buffer, len );
   of.close();
 #endif
