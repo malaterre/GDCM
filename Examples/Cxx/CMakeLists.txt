@@ -120,6 +120,13 @@ SET(EXAMPLES_SRCS
 )
 ENDIF(GDCM_BUILD_TESTING)
 
+if(BUILD_SHARED_LIBS)
+  set_source_files_properties(FixJAIBugJPEGLS.cxx
+                              PROPERTIES
+                              COMPILE_FLAGS -DCHARLS_SHARED
+                              )
+endif()
+
 FOREACH(example ${EXAMPLES_SRCS})
   ADD_EXECUTABLE(${example} ${example}.cxx)
   IF(${example} STREQUAL "FixJAIBugJPEGLS")
