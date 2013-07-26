@@ -133,8 +133,7 @@ bool FileChangeTransferSyntax::Change()
       {
       is.read( data, datalen );
       assert( is.good() );
-      //bool b = ((JPEGCodec*)Internals->IC)->EncodeBuffer(os, data, datalen);
-      bool b = Internals->jpeg.EncodeBuffer(os, data, datalen);
+      bool b = ((JPEGCodec*)Internals->IC)->EncodeBuffer(os, data, datalen);
       if( !b ) return false;
       Internals->Progress += progresstick;
       ProgressEvent pe;
