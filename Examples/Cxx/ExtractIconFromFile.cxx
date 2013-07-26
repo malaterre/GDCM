@@ -66,7 +66,7 @@ int main(int argc, char *argv [])
       const gdcm::DataElement& in = icon.GetDataElement();
       const gdcm::ByteValue *bv = in.GetByteValue();
       assert( bv );
-      std::ofstream out( "icon.jpg" );
+      std::ofstream out( "icon.jpg", std::ios::binary );
       out.write( bv->GetPointer(), bv->GetLength() );
       out.close();
       }

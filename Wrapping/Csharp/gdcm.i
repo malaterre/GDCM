@@ -140,6 +140,7 @@ public class";
 #include "gdcmCommand.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmFileAnonymizer.h"
+#include "gdcmFileStreamer.h"
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
 #include "gdcmUIDs.h"
@@ -195,6 +196,7 @@ public class";
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmImageChangeTransferSyntax.h"
+#include "gdcmFileChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
 #include "gdcmImageChangePhotometricInterpretation.h"
@@ -381,7 +383,6 @@ EXTEND_CLASS_PRINT(gdcm::Value)
 %include "gdcmByteValue.h"
 EXTEND_CLASS_PRINT(gdcm::ByteValue)
 %clear char* buffer;
-
 
 %apply char[] { const char* array }
 
@@ -596,7 +597,14 @@ EXTEND_CLASS_PRINT(gdcm::Scanner)
 //%feature("unref") Anonymizer "coucou $this->Delete();"
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus%5Fnn34
 %include "gdcmAnonymizer.h"
+%apply char[] { char* value_data }
 %include "gdcmFileAnonymizer.h"
+%clear char* value_data;
+
+%apply char[] { char* array }
+%template(SmartPtrFStreamer) gdcm::SmartPointer<gdcm::FileStreamer>;
+%include "gdcmFileStreamer.h"
+%clear char* array;
 
 //EXTEND_CLASS_PRINT(gdcm::Anonymizer)
 //%extend gdcm::Anonymizer
@@ -760,6 +768,8 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmJPEGLSCodec.h"
 %include "gdcmJPEG2000Codec.h"
 %include "gdcmImageChangeTransferSyntax.h"
+%template(SmartPtrFCTS) gdcm::SmartPointer<gdcm::FileChangeTransferSyntax>;
+%include "gdcmFileChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
 %include "gdcmSplitMosaicFilter.h"
 %include "gdcmImageChangePhotometricInterpretation.h"

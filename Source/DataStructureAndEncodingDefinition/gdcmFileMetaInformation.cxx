@@ -373,7 +373,7 @@ bool ReadExplicitDataElement(std::istream &is, ExplicitDataElement &de)
   //std::cout << "Tag: " << t << std::endl;
   if( t.GetGroup() != 0x0002 )
     {
-    gdcmDebugMacro( "Done reading File Meta Information" );
+    //gdcmDebugMacro( "Done reading File Meta Information" );
     std::streampos currentpos = is.tellg();
     // old code was fseeking from the beginning of file
     // which seems to be quite different than fseeking in reverse from

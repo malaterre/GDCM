@@ -119,8 +119,8 @@ bool ImageRegionReader::ReadInformation()
   Internals->SetFileOffset( fileoffset );
 
   const File &file = GetFile();
-  const DataSet &ds = file.GetDataSet();
-  (void)ds;
+  const DataSet &ds = file.GetDataSet(); (void)ds;
+  //std::cout << ds << std::endl;
 
   MediaStorage ms;
   ms.SetFromFile(file);

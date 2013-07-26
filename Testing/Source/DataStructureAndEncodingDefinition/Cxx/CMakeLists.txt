@@ -15,6 +15,7 @@ SET(DSED_TEST_SRCS
   TestReaderUpToTag
   TestReaderUpToTag2
   TestReaderSelectedTags
+  TestReaderSelectedPrivateGroups
   TestReaderCanRead
   TestWriter
   TestWriter2
@@ -118,7 +119,11 @@ SET(GDCM_DSED_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmDSEDTests")
 
 # Loop over files and create executables
 FOREACH(name ${DSED_TEST_SRCS})
+if(CMAKE_CROSSCOMPILING)
+  ADD_TEST(${name} ${TARGET_LINK_LIBRARIES} ${GDCM_DSED_TESTS}${CMAKE_EXECUTABLE_SUFFIX} ${name})
+else()
   ADD_TEST(${name} ${GDCM_DSED_TESTS} ${name})
+endif()
 ENDFOREACH(name)
 
 # FIXME

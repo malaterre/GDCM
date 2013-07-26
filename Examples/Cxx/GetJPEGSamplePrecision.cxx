@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
     }
 
   gdcm::JPEGCodec jpeg;
-  std::ifstream is(outfilename);
+  std::ifstream is(outfilename, std::ios::binary);
   gdcm::PixelFormat pf ( gdcm::PixelFormat::UINT8 ); // let's pretend it's a 8bits jpeg
   jpeg.SetPixelFormat( pf );
   gdcm::TransferSyntax ts_jpg;

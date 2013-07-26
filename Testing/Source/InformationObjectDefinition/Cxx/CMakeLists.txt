@@ -44,5 +44,9 @@ SET(GDCM_IOD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmIODTests")
 
 # Loop over files and create executables
 FOREACH(name ${IOD_TEST_SRCS})
-  ADD_TEST(${name} ${GDCM_IOD_TESTS} ${name})
+  if(CMAKE_CROSSCOMPILING)
+    ADD_TEST(${name} ${TARGET_SYSTEM_EMULATOR} ${GDCM_IOD_TESTS}${CMAKE_EXECUTABLE_SUFFIX} ${name})
+  else()
+    ADD_TEST(${name} ${GDCM_IOD_TESTS} ${name})
+  endif()
 ENDFOREACH(name)

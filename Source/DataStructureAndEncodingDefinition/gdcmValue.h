@@ -39,6 +39,9 @@ public:
 
   virtual bool operator==(const Value &val) const = 0;
 
+protected:
+  friend class DataElement;
+  virtual void SetLengthOnly(VL l);
 };
 
 

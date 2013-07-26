@@ -134,7 +134,7 @@ std::istream &UNExplicitDataElement::ReadPreValue(std::istream &is)
 }
 
 template <typename TSwap>
-std::istream &UNExplicitDataElement::ReadValue(std::istream &is)
+std::istream &UNExplicitDataElement::ReadValue(std::istream &is, bool readvalues)
 {
   if( is.eof() ) return is;
   if( ValueLengthField == 0 )
@@ -143,7 +143,6 @@ std::istream &UNExplicitDataElement::ReadValue(std::istream &is)
     ValueField = 0;
     return is;
     }
-
 
   //std::cerr << "exp cur tag=" << TagField << " VR=" << VRField << " VL=" << ValueLengthField << std::endl;
   // Read the Value
@@ -168,7 +167,7 @@ std::istream &UNExplicitDataElement::ReadValue(std::istream &is)
       try
         {
         //if( !ValueIO<UNExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
-        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) ) // cp246 compliant
+        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField,readvalues) ) // cp246 compliant
           {
           assert(0);
           }
@@ -213,7 +212,7 @@ std::istream &UNExplicitDataElement::ReadValue(std::istream &is)
     assert(0); // Could we possibly be so unlucky to have this mixture of bugs...
     }
 
-  if( !ValueIO<UNExplicitDataElement,TSwap>::Read(is,*ValueField) )
+  if( !ValueIO<UNExplicitDataElement,TSwap>::Read(is,*ValueField,readvalues) )
     {
     ParseException pe;
     pe.SetLastElement( *this );

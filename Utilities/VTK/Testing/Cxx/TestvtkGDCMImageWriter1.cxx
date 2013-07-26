@@ -207,7 +207,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
 unsigned long len = compimage.GetBufferLength();
 char* buffer = new char[len];
 bool res2 = compimage.GetBuffer(buffer);
-std::ofstream out("/tmp/debug.raw");
+std::ofstream out("/tmp/debug.raw", std::ios::binary);
 out.write( buffer, len );
 out.close();
 }

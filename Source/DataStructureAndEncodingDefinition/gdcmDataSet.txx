@@ -15,6 +15,7 @@
 #define GDCMDATASET_TXX
 
 #include "gdcmByteValue.h"
+#include "gdcmPrivateTag.h"
 #include "gdcmParseException.h"
 
 #include <cstring>
@@ -78,6 +79,39 @@ namespace gdcm
         }
       else
         {
+        assert( is.good() );
+        if( de.GetTag() != t )
+          is.seekg( de.GetVL(), std::ios::cur );
+        }
+      // tag was found, we can exit the loop:
+      if ( t <= de.GetTag() )
+        {
+        assert( is.good() );
+        break;
+        }
+      }
+    if( is.fail() )
+      {
+      assert( is.eof() );
+      is.clear();
+      is.seekg( 0, std::ios::end );
+      }
+    return is;
+  }
+
+  template <typename TDE, typename TSwap>
+  std::istream &DataSet::ReadUpToTagWithLength(std::istream &is, const Tag &t, std::set<Tag> const & skiptags, VL & length) {
+    DataElement de;
+    while( !is.eof() && de.template ReadPreValue<TDE,TSwap>(is, skiptags) )
+      {
+      // If tag read was in skiptags then we should NOT add it:
+      if( skiptags.count( de.GetTag() ) == 0 )
+        {
+        de.template ReadValueWithLength<TDE,TSwap>(is, length, skiptags);
+        InsertDataElement( de );
+        }
+      else
+        {
         /// FIXME we could just seek
         if( de.GetTag() != t )
           is.seekg( de.GetVL(), std::ios::cur );
@@ -92,27 +126,7 @@ namespace gdcm
   }
 
   template <typename TDE, typename TSwap>
-  std::istream &DataSet::ReadUpToTagWithLength(std::istream &is, const Tag &t, VL & length) {
-    DataElement de;
-    while( !is.eof() && de.ReadWithLength<TDE,TSwap>(is,length) )
-      {
-      //assert( de.GetTag() != Tag(0,0) );
-      InsertDataElement( de );
-      // FIXME FIXME
-      // the following is a HACK
-      if( de.GetTag() == t )
-        {
-        std::streamoff off = de.GetVL();
-        is.seekg( -off , std::ios_base::cur);
-        }
-      // tag was found, we can exit the loop:
-      if ( t <= de.GetTag() ) break;
-      }
-    return is;
-  }
-
-  template <typename TDE, typename TSwap>
-  std::istream &DataSet::ReadSelectedTags(std::istream &inputStream, const std::set<Tag> & selectedTags) {
+  std::istream &DataSet::ReadSelectedTags(std::istream &inputStream, const std::set<Tag> & selectedTags, bool readvalues ) {
     if ( ! (selectedTags.empty() || inputStream.fail()) )
       {
       const Tag maxTag = *(selectedTags.rbegin());
@@ -139,13 +153,7 @@ namespace gdcm
           // As we assume ascending tag ordering, we can exit the loop.
           break;
           }
-        static_cast<TDE&>(dataElem).template ReadValue<TSwap>(inputStream);
-
-        if ( inputStream.fail() )
-          {
-          // Failed to read the value.
-          break;
-          }
+        static_cast<TDE&>(dataElem).template ReadValue<TSwap>(inputStream, readvalues);
 
         const std::set<Tag>::iterator found = tags.find(tag);
 
@@ -168,12 +176,69 @@ namespace gdcm
           }
         }
       }
+    assert( inputStream.good() );
+    return inputStream;
+    }
+
+  template <typename TDE, typename TSwap>
+  std::istream &DataSet::ReadSelectedPrivateTags(std::istream &inputStream, const std::set<PrivateTag> & selectedPTags, bool readvalues) {
+    if ( ! (selectedPTags.empty() || inputStream.fail()) )
+      {
+      assert( selectedPTags.size() == 1 );
+      const PrivateTag refPTag = *(selectedPTags.rbegin());
+      PrivateTag nextPTag = refPTag;
+      nextPTag.SetElement( nextPTag.GetElement() + 0x1 );
+      assert( nextPTag.GetElement() & 0x00ff ); // no wrap please
+      Tag maxTag;
+      maxTag.SetPrivateCreator( nextPTag );
+      DataElement dataElem;
+
+      while( !inputStream.eof() )
+        {
+        static_cast<TDE&>(dataElem).template ReadPreValue<TSwap>(inputStream);
+        const Tag& tag = dataElem.GetTag();
+        if ( inputStream.fail() || maxTag < tag )
+          {
+          if( inputStream.good() )
+            {
+            const int l = dataElem.GetVR().GetLength();
+            inputStream.seekg( - 4 - 2 * l, std::ios::cur );
+            }
+          else
+            {
+            inputStream.clear();
+            inputStream.seekg( 0, std::ios::end );
+            }
+          // Failed to read the tag, or the read tag exceeds the maximum.
+          // As we assume ascending tag ordering, we can exit the loop.
+          break;
+          }
+        static_cast<TDE&>(dataElem).template ReadValue<TSwap>(inputStream, readvalues);
+
+        if ( inputStream.fail() )
+          {
+          // Failed to read the value.
+          break;
+          }
+
+        if( tag.GetPrivateCreator() == refPTag )
+          {
+          DES.insert( dataElem );
+          }
+        if ( ! (tag < maxTag ) )
+          {
+          // The maximum group was encountered, and as we assume
+          // ascending tag ordering, we can exit the loop:
+          break;
+          }
+        }
+      }
     return inputStream;
     }
 
 
   template <typename TDE, typename TSwap>
-    std::istream &DataSet::ReadSelectedTagsWithLength(std::istream &inputStream, const std::set<Tag> & selectedTags, VL & length)
+    std::istream &DataSet::ReadSelectedTagsWithLength(std::istream &inputStream, const std::set<Tag> & selectedTags, VL & length, bool readvalues )
       {
       (void)length;
       if ( ! selectedTags.empty() )
@@ -182,9 +247,6 @@ namespace gdcm
         std::set<Tag> tags = selectedTags;
         DataElement dataElem;
 
-        // TODO There's an optimization opportunity here:
-        // dataElem.ReadWithLength only needs to read the value if the tag is selected!
-        // Niels Dekker, LKEB, Jan 2010.
         while( !inputStream.eof() )
           {
           static_cast<TDE&>(dataElem).template ReadPreValue<TSwap>(inputStream);
@@ -205,7 +267,8 @@ namespace gdcm
             // As we assume ascending tag ordering, we can exit the loop.
             break;
             }
-          static_cast<TDE&>(dataElem).template ReadValue<TSwap>(inputStream);
+          static_cast<TDE&>(dataElem).template ReadValue<TSwap>(inputStream, readvalues);
+
           if ( inputStream.fail() )
             {
             // Failed to read the value.
@@ -235,6 +298,66 @@ namespace gdcm
         }
       return inputStream;
       }
+
+  template <typename TDE, typename TSwap>
+  std::istream &DataSet::ReadSelectedPrivateTagsWithLength(std::istream &inputStream, const std::set<PrivateTag> & selectedPTags, VL & length, bool readvalues ) {
+    (void)length;
+    if ( ! (selectedPTags.empty() || inputStream.fail()) )
+      {
+      assert( selectedPTags.size() == 1 );
+      const PrivateTag refPTag = *(selectedPTags.rbegin());
+      PrivateTag nextPTag = refPTag;
+      nextPTag.SetElement( nextPTag.GetElement() + 0x1 );
+      assert( nextPTag.GetElement() ); // no wrap please
+      Tag maxTag;
+      maxTag.SetPrivateCreator( nextPTag );
+      DataElement dataElem;
+
+      while( !inputStream.eof() )
+        {
+        static_cast<TDE&>(dataElem).template ReadPreValue<TSwap>(inputStream);
+        const Tag& tag = dataElem.GetTag();
+        if ( inputStream.fail() || maxTag < tag )
+          {
+          if( inputStream.good() )
+            {
+            const int l = dataElem.GetVR().GetLength();
+            inputStream.seekg( - 4 - 2 * l, std::ios::cur );
+            }
+          else
+            {
+            inputStream.clear();
+            inputStream.seekg( 0, std::ios::end );
+            }
+          // Failed to read the tag, or the read tag exceeds the maximum.
+          // As we assume ascending tag ordering, we can exit the loop.
+          break;
+          }
+        static_cast<TDE&>(dataElem).template ReadValue<TSwap>(inputStream, readvalues);
+
+        if ( inputStream.fail() )
+          {
+          // Failed to read the value.
+          break;
+          }
+
+        //const std::set<uint16_t>::iterator found = selectedPTags.find(tag.GetGroup());
+
+        //if ( found != groups.end() )
+        if( tag.GetPrivateCreator() == refPTag )
+          {
+          InsertDataElement( dataElem );
+          }
+        if ( ! (tag < maxTag ) )
+          {
+          // The maximum group was encountered, and as we assume
+          // ascending tag ordering, we can exit the loop:
+          break;
+          }
+        }
+      }
+    return inputStream;
+    }
 
   template <typename TDE, typename TSwap>
   std::istream &DataSet::ReadWithLength(std::istream &is, VL &length) {

@@ -163,7 +163,7 @@ DataSet PresentationDataValue::ConcatenatePDVBlobs(const std::vector<Presentatio
   ss.str( theEntireBuffer );
 
 #if 0
-  std::ofstream d( "/tmp/debug" );
+  std::ofstream d( "/tmp/debug", std::ios::binary );
   d.write( theEntireBuffer.c_str(), theEntireBuffer.size() );
   d.close();
 #endif

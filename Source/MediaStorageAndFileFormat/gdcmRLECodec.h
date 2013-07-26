@@ -47,6 +47,7 @@ public:
 
   bool Code(DataElement const &in, DataElement &out);
   bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
+  virtual ImageCodec * Clone() const;
 
 protected:
   bool DecodeExtent(

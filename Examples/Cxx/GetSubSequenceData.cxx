@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     (void)bv4;
 #if 0
       {
-      std::ofstream out( "/tmp/mo4" );
+      std::ofstream out( "/tmp/mo4", std::ios::binary );
       out.write( bv4->GetPointer(), bv4->GetLength());
       out.close();
       }
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
   const ByteValue *bv5 = seq5.GetByteValue();
 #if 0
     {
-    std::ofstream out( "/tmp/mo5" );
+    std::ofstream out( "/tmp/mo5", std::ios::binary );
     out.write( bv5->GetPointer(), bv5->GetLength());
     out.close();
     }

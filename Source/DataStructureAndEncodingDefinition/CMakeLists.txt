@@ -6,6 +6,7 @@ SET(DSED_SRCS
   gdcmPrivateTag.cxx
   gdcmCodeString.cxx
   gdcmByteValue.cxx
+  gdcmValue.cxx
   gdcmFileSet.cxx
   gdcmDataSet.cxx
   gdcmByteSwapFilter.cxx

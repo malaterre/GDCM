@@ -239,8 +239,8 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
        std::cout << "\n No of Resolutions"<< tccp->numresolutions << "\n";
    */
   //opj_j2k_t* j2k = NULL;
-  opj_jp2_t* jp2 = NULL;
-  jp2 = (opj_jp2_t*)dinfo->jp2_handle;
+  //opj_jp2_t* jp2 = NULL;
+  //jp2 = (opj_jp2_t*)dinfo->jp2_handle;
   //int reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
   //std:: cout << reversible;
   int Dimensions[2];

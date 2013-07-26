@@ -90,7 +90,7 @@ std::istream &ExplicitDataElement::ReadPreValue(std::istream &is)
     is.seekg( s, std::ios::beg );
     ValueField->SetLength( (int32_t)(e - s) );
     ValueLengthField = ValueField->GetLength();
-    bool failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
+    bool failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField,true);
     gdcmAssertAlwaysMacro( !failed );
     return is;
     //throw Exception( "Unhandled" );
@@ -177,7 +177,7 @@ std::istream &ExplicitDataElement::ReadPreValue(std::istream &is)
 }
 
 template <typename TSwap>
-std::istream &ExplicitDataElement::ReadValue(std::istream &is)
+std::istream &ExplicitDataElement::ReadValue(std::istream &is, bool readvalues)
 {
   if( is.eof() ) return is;
   if( ValueLengthField == 0 )
@@ -216,7 +216,7 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is)
       try
         {
         //if( !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
-        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) ) // cp246 compliant
+        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField,readvalues) ) // cp246 compliant
           {
           assert(0);
           }
@@ -239,7 +239,7 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is)
     ValueField = new ByteValue;
     }
   // We have the length we should be able to read the value
-  ValueField->SetLength(ValueLengthField); // perform realloc
+  this->SetValueFieldLength( ValueLengthField, readvalues );
 #if defined(GDCM_SUPPORT_BROKEN_IMPLEMENTATION) && 0
   // PHILIPS_Intera-16-MONO2-Uncompress.dcm
   if( TagField == Tag(0x2001,0xe05f)
@@ -258,7 +258,7 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is)
     assert( TagField.IsPrivate() );
     try
       {
-      if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
+      if( !ValueIO<ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField,readvalues) )
         {
         assert(0 && "Should not happen");
         }
@@ -287,7 +287,7 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is)
   if( VRField & VR::VRASCII )
     {
     //assert( VRField.GetSize() == 1 );
-    failed = !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField);
+    failed = !ValueIO<ExplicitDataElement,TSwap>::Read(is,*ValueField,readvalues);
     }
   else
     {
@@ -298,16 +298,16 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is)
     switch(vrsize)
       {
     case 1:
-      failed = !ValueIO<ExplicitDataElement,TSwap,uint8_t>::Read(is,*ValueField);
+      failed = !ValueIO<ExplicitDataElement,TSwap,uint8_t>::Read(is,*ValueField,readvalues);
       break;
     case 2:
-      failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField);
+      failed = !ValueIO<ExplicitDataElement,TSwap,uint16_t>::Read(is,*ValueField,readvalues);
       break;
     case 4:
-      failed = !ValueIO<ExplicitDataElement,TSwap,uint32_t>::Read(is,*ValueField);
+      failed = !ValueIO<ExplicitDataElement,TSwap,uint32_t>::Read(is,*ValueField,readvalues);
       break;
     case 8:
-      failed = !ValueIO<ExplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField);
+      failed = !ValueIO<ExplicitDataElement,TSwap,uint64_t>::Read(is,*ValueField,readvalues);
       break;
     default:
       failed = true;
@@ -401,17 +401,31 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
   bool vr16bitsimpossible = (VRField & VR::VL16) && (ValueLengthField > (uint32_t)VL::GetVL16Max());
   if( VRField == VR::INVALID || vr16bitsimpossible )
     {
-    VR un = VR::UN;
-    un.Write(os);
-    Value* v = &*ValueField;
-    if( dynamic_cast<const SequenceOfItems*>(v) )
+    if ( TagField.IsPrivateCreator() )
       {
-      VL vl = 0xFFFFFFFF;
-      assert( vl.IsUndefined() );
-      vl.Write<TSwap>(os);
+      gdcmAssertAlwaysMacro( !vr16bitsimpossible );
+      VR lo = VR::LO;
+      if( TagField.IsGroupLength() )
+        {
+        lo = VR::UL;
+        }
+      lo.Write(os);
+      ValueLengthField.Write16<TSwap>(os);
       }
     else
-      ValueLengthField.Write<TSwap>(os);
+      {
+      const VR un = VR::UN;
+      un.Write(os);
+      Value* v = &*ValueField;
+      if( dynamic_cast<const SequenceOfItems*>(v) )
+        {
+        VL vl = 0xFFFFFFFF;
+        assert( vl.IsUndefined() );
+        vl.Write<TSwap>(os);
+        }
+      else
+        ValueLengthField.Write<TSwap>(os);
+      }
     }
   else
     {

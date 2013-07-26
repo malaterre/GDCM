@@ -16,6 +16,7 @@
 
 #include "gdcmTag.h"
 #include "gdcmVR.h"
+#include "gdcmDataElement.h"
 
 #include <iostream>
 #include <iomanip>
@@ -42,6 +43,10 @@ public:
     // truncate the high bits
     SetElement( (uint8_t)element );
   }
+  PrivateTag( Tag const & t, const char *owner = ""):Tag(t),Owner(owner ? LOComp::Trim(owner) : "") {
+    // truncate the high bits
+    SetElement( (uint8_t)t.GetElement());
+  }
 
   const char *GetOwner() const { return Owner.c_str(); }
   void SetOwner(const char *owner) { if(owner) Owner = LOComp::Trim(owner); }
@@ -51,6 +56,8 @@ public:
   /// Read PrivateTag from a string. Element number will be truncated
   /// to 8bits. Eg: "1234,5678,GDCM" is private tag: (1234,78,"GDCM")
   bool ReadFromCommaSeparatedString(const char *str);
+
+  DataElement GetAsDataElement() const;
 
 private:
   // SIEMENS MED, GEMS_PETD_01 ...

@@ -35,10 +35,13 @@ public:
   std::istream &ReadPreValue(std::istream& is);
 
   template <typename TSwap>
-  std::istream &ReadValue(std::istream& is);
+  std::istream &ReadValue(std::istream& is, bool readvalues = true);
 
   template <typename TSwap>
-  std::istream &ReadWithLength(std::istream& is, VL & length);
+  std::istream &ReadWithLength(std::istream& is, VL & length, bool readvalues = true);
+
+  template <typename TSwap>
+  std::istream &ReadValueWithLength(std::istream& is, VL & length, bool readvalues = true);
 
   template <typename TSwap>
   const std::ostream &Write(std::ostream& os) const;

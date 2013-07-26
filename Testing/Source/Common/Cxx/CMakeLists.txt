@@ -16,7 +16,8 @@ SET(Common_TEST_SRCS
   TestObject
   TestSmartPointer
   TestSwapCode
-  TestSystem
+  TestSystem1
+  TestSystem2
   TestTrace
   TestTypes
   TestUnpacker12Bits

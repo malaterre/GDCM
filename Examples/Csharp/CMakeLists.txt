@@ -23,6 +23,9 @@ SET(CSHARP_EXAMPLES
   CompressLossyJPEG
   SendFileSCU
   BasicImageAnonymizer
+  FileAnonymize
+  FileStreaming
+  FileChangeTS
   )
 
 IF(BUILD_TESTING)

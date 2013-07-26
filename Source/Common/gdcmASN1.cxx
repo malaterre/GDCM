@@ -51,7 +51,7 @@ ASN1::~ASN1()
 bool ASN1::ParseDumpFile(const char *filename)
 {
   if(!filename) return false;
-  std::ifstream is(filename);
+  std::ifstream is(filename, std::ios::binary);
   if( !is.good() ) return false;
   size_t length = System::FileSize(filename);
   char * str = new char[length];

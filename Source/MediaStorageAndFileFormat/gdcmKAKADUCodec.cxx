@@ -108,7 +108,7 @@ bool KAKADUCodec::Decode(DataElement const &in, DataElement &out)
     size_t len = gdcm::System::FileSize(output.c_str());
     if(!len) return false;
 
-    std::ifstream is(output.c_str());
+    std::ifstream is(output.c_str(), std::ios::binary);
     char * buf = new char[len];
     is.read(buf, len);
     out.SetTag( gdcm::Tag(0x7fe0,0x0010) );
@@ -185,7 +185,7 @@ bool KAKADUCodec::Decode(DataElement const &in, DataElement &out)
       size_t len = gdcm::System::FileSize(output.c_str());
       if(!len) return false;
 
-      std::ifstream is(output.c_str());
+      std::ifstream is(output.c_str(), std::ios::binary);
       char * buf = new char[len];
       is.read(buf, len);
       os.write(buf, len);
@@ -233,6 +233,11 @@ bool KAKADUCodec::Code(DataElement const &in, DataElement &out)
   // That would be neat, please contribute :)
   return false;
 #endif
+}
+
+ImageCodec * KAKADUCodec::Clone() const
+{
+  return NULL;
 }
 
 } // end namespace gdcm

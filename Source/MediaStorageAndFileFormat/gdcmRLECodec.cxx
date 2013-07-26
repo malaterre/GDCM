@@ -839,4 +839,9 @@ bool RLECodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   return true;
 }
 
+ImageCodec * RLECodec::Clone() const
+{
+  return NULL;
+}
+
 } // end namespace gdcm

@@ -73,11 +73,11 @@ int main(int argc, char *argv[])
     std::cout << "Size match: " << s1 << " = " << s2 << std::endl;
     }
 
-  std::ifstream is1( filename1 );
+  std::ifstream is1( filename1, std::ios::binary );
   char *buffer1 = new char[s1];
   is1.read(buffer1, s1);
 
-  std::ifstream is2( filename2 );
+  std::ifstream is2( filename2, std::ios::binary );
   char *buffer2 = new char[s2];
   is2.read(buffer2, s2);
 

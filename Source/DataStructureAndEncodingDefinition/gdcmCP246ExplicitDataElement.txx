@@ -116,7 +116,7 @@ std::istream &CP246ExplicitDataElement::ReadPreValue(std::istream &is)
 }
 //-----------------------------------------------------------------------------
 template <typename TSwap>
-std::istream &CP246ExplicitDataElement::ReadValue(std::istream &is)
+std::istream &CP246ExplicitDataElement::ReadValue(std::istream &is, bool readvalues)
 {
   if( is.eof() ) return is;
   if( ValueLengthField == 0 )
@@ -148,7 +148,7 @@ std::istream &CP246ExplicitDataElement::ReadValue(std::istream &is)
       ValueField->SetLength(ValueLengthField); // perform realloc
       try
         {
-        if( !ValueIO<CP246ExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
+        if( !ValueIO<CP246ExplicitDataElement,TSwap>::Read(is,*ValueField,readvalues) ) // non cp246
           {
           assert(0);
           }
@@ -194,7 +194,7 @@ std::istream &CP246ExplicitDataElement::ReadValue(std::istream &is)
     assert( VRField == VR::SQ );
     try
       {
-      if( !ValueIO<CP246ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
+      if( !ValueIO<CP246ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField,readvalues) )
         {
         assert(0 && "Should not happen");
         }
@@ -207,7 +207,7 @@ std::istream &CP246ExplicitDataElement::ReadValue(std::istream &is)
     }
 #endif
   //if( !ValueField->Read<TSwap>(is) )
-  if( !ValueIO<CP246ExplicitDataElement,TSwap>::Read(is,*ValueField) )
+  if( !ValueIO<CP246ExplicitDataElement,TSwap>::Read(is,*ValueField,readvalues) )
     {
     // Might be the famous UN 16bits
     ParseException pe;

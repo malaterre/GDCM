@@ -2,6 +2,12 @@
 # MSFF
 SET(MSFF_TEST_SRCS
   TestAnonymizer
+  TestFileChangeTransferSyntax1
+  TestFileStreamer1
+  TestFileStreamer2
+  TestFileStreamer3
+  TestFileStreamer4
+  TestFileStreamer5
   TestFileAnonymizer1
   TestFileAnonymizer2
   TestFileAnonymizer3
@@ -163,7 +169,11 @@ SET(GDCM_MSFF_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMSFFTests")
 
 # Loop over files and create executables
 FOREACH(name ${MSFF_TEST_SRCS})
+if(CMAKE_CROSSCOMPILING)
+  ADD_TEST(${name} ${TARGET_SYSTEM_EMULATOR} ${GDCM_MSFF_TESTS}${CMAKE_EXECUTABLE_SUFFIX} ${name})
+else()
   ADD_TEST(${name} ${GDCM_MSFF_TESTS} ${name})
+endif()
 ENDFOREACH(name)
 IF(GDCM_DATA_ROOT)
   SET_TESTS_PROPERTIES(TestDICOMDIRGenerator2 PROPERTIES WILL_FAIL ON)

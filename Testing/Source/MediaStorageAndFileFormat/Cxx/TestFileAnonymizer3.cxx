@@ -34,6 +34,8 @@ static int TestFileAnonymize3(const char *filename, bool verbose = false)
     //return 1;
     }
   std::string outfilename = Testing::GetTempFilename( filename, subdir );
+  if( verbose )
+    std::cout << "Generating: " << outfilename << std::endl;
 
   const gdcm::Tag t1(0x0018,0x5100);
   const gdcm::Tag t2(0x0018,0x1312);

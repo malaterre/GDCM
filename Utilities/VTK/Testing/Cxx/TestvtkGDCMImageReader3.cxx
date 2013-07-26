@@ -119,11 +119,11 @@ int TestvtkGDCMImageRead3(const char *dir, const char *studyuid)
     ret = 1;
     }
 #if 0
-std::ofstream o1("/tmp/debug1.raw");
+std::ofstream o1("/tmp/debug1.raw", std::ios::binary);
 o1.write(&wholebuffer[0], wholebuffer.size());
 o1.close();
 
-std::ofstream o2("/tmp/debug2.raw");
+std::ofstream o2("/tmp/debug2.raw", std::ios::binary);
 o2.write(ptr, wholebuffer.size());
 o2.close();
 #endif

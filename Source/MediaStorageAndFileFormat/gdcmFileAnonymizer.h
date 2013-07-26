@@ -58,11 +58,11 @@ public:
   /// Replace tag with another value, if tag is not found it will be created:
   /// WARNING: this function can only execute if tag is a VRASCII
   /// WARNING: Do not ever try to write a value in a SQ Data Element !
-  void Replace( Tag const &t, const char *value );
+  void Replace( Tag const &t, const char *value_str );
 
   /// when the value contains \0, it is a good idea to specify the length. This function
   /// is required when dealing with VRBINARY tag
-  void Replace( Tag const &t, const char *value, VL const & vl );
+  void Replace( Tag const &t, const char *value_data, VL const & vl );
 
   /// Set input filename
   void SetInputFileName(const char *filename_native);

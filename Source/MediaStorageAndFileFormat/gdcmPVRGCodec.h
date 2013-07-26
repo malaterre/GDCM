@@ -42,6 +42,7 @@ public:
   bool Decode(DataElement const &is, DataElement &os);
   bool Code(DataElement const &in, DataElement &out);
 
+  virtual ImageCodec * Clone() const;
 private:
 };
 

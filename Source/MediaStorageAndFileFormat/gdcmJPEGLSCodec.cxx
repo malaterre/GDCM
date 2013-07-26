@@ -515,4 +515,9 @@ bool JPEGLSCodec::DecodeExtent(
   return true;
 }
 
+ImageCodec * JPEGLSCodec::Clone() const
+{
+  return NULL;
+}
+
 } // end namespace gdcm

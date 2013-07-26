@@ -1,6 +1,8 @@
 # Define the srcs for Media Storage And FileFormat
 # MSFF
 SET(MSFF_SRCS
+  gdcmFileStreamer.cxx
+  gdcmFileChangeTransferSyntax.cxx
   gdcmAnonymizer.cxx
   gdcmFileAnonymizer.cxx
   gdcmIconImageFilter.cxx
@@ -102,6 +104,11 @@ IF(NOT BUILD_SHARED_LIBS)
   SET_SOURCE_FILES_PROPERTIES(gdcmJPEG2000Codec.cxx
                               PROPERTIES
                               COMPILE_FLAGS -DOPJ_STATIC
+                              )
+else()
+  set_source_files_properties(gdcmJPEGLSCodec.cxx
+                              PROPERTIES
+                              COMPILE_FLAGS -DCHARLS_SHARED
                               )
 ENDIF(NOT BUILD_SHARED_LIBS)
 

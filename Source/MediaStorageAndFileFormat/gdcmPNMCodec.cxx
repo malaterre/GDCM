@@ -43,7 +43,7 @@ bool PNMCodec::CanCode(TransferSyntax const &) const
 
 bool PNMCodec::Write(const char *filename, const DataElement &out) const
 {
-  std::ofstream os(filename);
+  std::ofstream os(filename, std::ios::binary);
   const unsigned int *dims = this->GetDimensions();
   const PhotometricInterpretation &pi = this->GetPhotometricInterpretation();
   if( pi == PhotometricInterpretation::MONOCHROME2
@@ -126,7 +126,7 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
 bool PNMCodec::Read(const char *filename, DataElement &out) const
 {
   size_t len = gdcm::System::FileSize(filename);
-  std::ifstream is(filename);
+  std::ifstream is(filename, std::ios::binary);
   std::string type, str;
   std::getline(is,type);
   gdcm::PhotometricInterpretation pi;
@@ -151,7 +151,7 @@ bool PNMCodec::Read(const char *filename, DataElement &out) const
   unsigned int maxval;
   is >> maxval;
   // some kind of empty line...
-  while( is.peek() == '\n' )
+  if( is.peek() == '\n' )
     {
     is.get();
     }
@@ -299,6 +299,11 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   SetDimensions( dims );
 
   return true;
+}
+
+ImageCodec * PNMCodec::Clone() const
+{
+  return NULL;
 }
 
 } // end namespace gdcm

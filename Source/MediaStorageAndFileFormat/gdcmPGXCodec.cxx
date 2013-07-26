@@ -72,7 +72,7 @@ bool PGXCodec::Write(const char *filename, const DataElement &out) const
     {
     const char *targetname = fg.GetFilename( i );
 
-    std::ofstream os( targetname );
+    std::ofstream os( targetname, std::ios::binary );
     os << "PG ML ";
     os << (pf.GetPixelRepresentation() ? "-" : "+");
     os << " ";
@@ -98,6 +98,11 @@ bool PGXCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   (void)is;
   (void)ts;
   return false;
+}
+
+ImageCodec * PGXCodec::Clone() const
+{
+  return NULL;
 }
 
 } // end namespace gdcm

@@ -39,9 +39,11 @@ static int TestReadUpToTag(const char* filename, bool verbose = false)
     }
   std::streamoff outStreamOffset = is.tellg();
 
-  //commenting out for warning avoidance
-  //const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
-  //const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+#if 0
+  const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
+  const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+  std::cout << ds << std::endl;
+#endif
 
   if(verbose)
     std::cout << "{ \"" << filename << "\"," << outStreamOffset << " }," << std::endl;
