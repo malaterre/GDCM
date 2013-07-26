@@ -121,6 +121,13 @@ set(EXAMPLES_SRCS
 )
 endif()
 
+if(BUILD_SHARED_LIBS)
+  set_source_files_properties(FixJAIBugJPEGLS.cxx
+                              PROPERTIES
+                              COMPILE_FLAGS -DCHARLS_SHARED
+                              )
+endif()
+
 foreach(example ${EXAMPLES_SRCS})
   add_executable(${example} ${example}.cxx)
   if(${example} STREQUAL "FixJAIBugJPEGLS")
