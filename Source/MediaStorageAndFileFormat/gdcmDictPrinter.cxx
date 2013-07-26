@@ -490,20 +490,20 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
     //os << "</entry>\n";
     }
 
-  if( entry.GetVR() == VR::SQ )
-{
-  SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
-  if( sqi )
+  if( entry.GetVR() == VR::SQ || true )
     {
-    SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
-    for(; it != sqi->Items.end(); ++it)
+    SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
+    if( sqi )
       {
-      const Item &item = *it;
-      const DataSet &nestedds = item.GetNestedDataSet();
-      PrintDataSet2(os, nestedds);
+      SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
+      for(; it != sqi->Items.end(); ++it)
+        {
+        const Item &item = *it;
+        const DataSet &nestedds = item.GetNestedDataSet();
+        PrintDataSet2(os, nestedds);
+        }
       }
     }
-}
 }
 
 //-----------------------------------------------------------------------------
