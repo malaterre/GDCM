@@ -528,7 +528,7 @@ bool VR::Compatible(VR const &vr) const
 {
   //if( VRField == VR::INVALID && vr.VRField == VR::INVALID ) return true;
   if( vr.VRField == VR::INVALID ) return true;
-  else if( vr.VRField == VR::UN || VRField == VR::UN ) return true;
+  else if( vr.VRField == VR::UN ) return true;
   else return ((VRField & vr.VRField) > 0 ? true : false);
 }
 

@@ -122,6 +122,11 @@ namespace gdcm
         break;
         }
       }
+    if( is.eof() )
+      {
+      is.clear();
+      }
+    assert( is.good() );
     return is;
   }
 
