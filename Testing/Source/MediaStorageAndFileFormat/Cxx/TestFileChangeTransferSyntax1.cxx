@@ -92,6 +92,7 @@ int TestFileChangeTransferSyntax1Func(const char *filename, bool verbose = false
     || strcmp(name, "GE_CT_With_Private_compressed-icon.dcm") == 0 // Explicit VR Big Endian
     || strcmp(name, "JDDICOM_Sample2-dcmdjpeg.dcm") == 0 // cannot recreate FMI
     || strcmp(name, "DMCPACS_ExplicitImplicit_BogusIOP.dcm") == 0 // ImageRegionReader does not handle it
+    || strcmp(name, "unreadable.dcm") == 0 // No Pixel Data (old ACR-NEMA)
     || strncmp(name, "DICOMDIR", 8) == 0 // DICOMDIR*
     || strncmp(name, "dicomdir", 8) == 0 // dicomdir*
     )

@@ -39,7 +39,7 @@ static int TestImageRegionRead(const char* filename, bool verbose = false)
   bool canReadInformation = reader.ReadInformation();
   if (!canReadInformation)
     {
-    std::cerr << "Cannot ReadInformation: " << filename << std::endl;
+    //std::cerr << "Cannot ReadInformation: " << filename << std::endl;
     return 0; //unable to read tags as expected.
     }
 

@@ -108,13 +108,13 @@ bool ImageRegionReader::ReadInformation()
     gdcmWarningMacro("Failed ReadUpToTag.");
     return false;
     }
-  std::streampos fileoffset = GetStreamPtr()->tellg();
-
-  if( fileoffset == std::streampos(-1) )
+  const bool iseof = GetStreamPtr()->eof();
+  if( iseof )
     {
-    gdcmWarningMacro("Fail fileoffset.");
+    gdcmDebugMacro( "No Pixel Data, sorry" );
     return false;
     }
+  std::streampos fileoffset = GetStreamPtr()->tellg();
   assert( fileoffset != std::streampos(-1) );
   Internals->SetFileOffset( fileoffset );
 

@@ -37,6 +37,7 @@ static int TestReadUpToTag(const char* filename, bool verbose = false)
     std::cerr << "TestReadError: Failed to read: " << filename << std::endl;
     return 1;
     }
+  is.clear();
   std::streamoff outStreamOffset = is.tellg();
 
 #if 0

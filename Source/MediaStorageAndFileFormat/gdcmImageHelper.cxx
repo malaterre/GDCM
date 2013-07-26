@@ -770,7 +770,7 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
         {
         const DataElement &de = ds.GetDataElement( at.GetTag() );
         // SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm picks VR::SS instead...
-        if( de.GetVR().Compatible( at.GetVR() ) || de.GetVR() == VR::INVALID )
+        if( at.GetVR().Compatible( de.GetVR() ) )
           {
           at.SetFromDataSet( ds );
           int imagedimensions = at.GetValue();

@@ -681,6 +681,9 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "f111ed4eea73f535261039d3f7b112e9" , "JPEGInvalidSecondFrag.dcm" },
 
+// Computed with kakadu:
+{ "a218fcee00e16d430f30ec7ebd4937dc" , "lena512_rot90.j2k.dcm" },
+
 
 /* Stopping condition */
 { 0 ,0 }

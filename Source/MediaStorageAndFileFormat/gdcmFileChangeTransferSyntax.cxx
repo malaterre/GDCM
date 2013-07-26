@@ -133,8 +133,7 @@ bool FileChangeTransferSyntax::Change()
       {
       is.read( data, datalen );
       assert( is.good() );
-      //bool b = ((JPEGCodec*)Internals->IC)->EncodeBuffer(os, data, datalen);
-      bool b = Internals->jpeg.EncodeBuffer(os, data, datalen);
+      bool b = ((JPEGCodec*)Internals->IC)->EncodeBuffer(os, data, datalen);
       if( !b ) return false;
       Internals->Progress += progresstick;
       ProgressEvent pe;
@@ -211,6 +210,7 @@ bool FileChangeTransferSyntax::InitializeCopy()
         gdcmDebugMacro("ImageRegionReader::ReadInformation failed" );
         return false;
         }
+      is.clear(); // important
       Internals->PixelDataPos = is.tellg();
       gdcm::File & file = reader.GetFile();
       const DataSet & ds = file.GetDataSet();
