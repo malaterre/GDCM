@@ -63,6 +63,8 @@ SET(BLACK_LIST_READER
   SIEMENS_GBS_III-16-ACR_NEMA_1-ULis2Bytes.dcm
 # TestImageChangeTransferSyntax1
   MR-MONO2-12-angio-an1.acr
+# Openjpeg / Part 2:
+  lena512_rot90.j2k.dcm
 )
 IF(NOT GDCM_USE_PVRG)
   SET(BLACK_LIST_READER
