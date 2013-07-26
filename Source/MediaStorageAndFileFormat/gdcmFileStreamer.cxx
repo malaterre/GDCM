@@ -30,6 +30,7 @@
 
 #if defined(_WIN32) && (defined(_MSC_VER) || defined(__MINGW32__))
 #include <io.h>
+typedef int64_t off64_t;
 #else
 #include <unistd.h> // ftruncate
 #endif
@@ -80,8 +81,8 @@ static inline bool FTruncate( const int fd, const off64_t len )
   return ret == 0 ? true : false;
 #else
   const __int64 size  = len;
-  const errno_t errno = _chsize_s( fd, size );
-  return errno == 0 ? true : false;
+  const errno_t err = _chsize_s( fd, size );
+  return err == 0 ? true : false;
 #endif
 #else
   const int ret = ftruncate(fd, len);
