@@ -210,6 +210,9 @@ namespace details
       void ReadCommonWithLength(std::istream & is, VL & length) const
         {
         m_dataSet.template ReadWithLength<T1,T2>(is,length);
+        // manually set eofbit:
+        // https://groups.google.com/forum/?fromgroups#!topic/comp.lang.c++/yTW4ESh1IL8
+        is.setstate( std::ios::eofbit );
         }
     static void Check(bool b, std::istream &stream)
       {
@@ -466,20 +469,20 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
           {
           std::streampos start = is.tellg();
           is.seekg( 0, std::ios::end);
-	  std::streampos end = is.tellg();
-	  std::streamoff theOffset = end-start;
-	  assert (theOffset > 0 || (uint32_t)theOffset < std::numeric_limits<uint32_t>::max());
-	  VL l = (uint32_t)(theOffset);
-          is.seekg( start, std::ios::beg );
-          //F->GetDataSet().ReadUpToTagWithLength<ImplicitDataElement,SwapperNoOp>(is, tag, l);
-          caller.template ReadCommonWithLength<ImplicitDataElement,SwapperNoOp>(is,l);
+          std::streampos end = is.tellg();
+          assert( !is.eof() );
           assert( is.good() );
-          is.peek();
+          std::streamoff theOffset = end-start;
+          assert (theOffset > 0 || (uint32_t)theOffset < std::numeric_limits<uint32_t>::max());
+          VL l = (uint32_t)(theOffset);
+          is.seekg( start, std::ios::beg );
+          assert( is.good() );
+          assert( !is.eof() );
+          caller.template ReadCommonWithLength<ImplicitDataElement,SwapperNoOp>(is,l);
           }
         }
       else
         {
-        //F->GetDataSet().ReadUpToTag<ExplicitDataElement,SwapperNoOp>(is,tag, skiptags);
         caller.template ReadCommon<ExplicitDataElement,SwapperNoOp>(is);
         }
       }

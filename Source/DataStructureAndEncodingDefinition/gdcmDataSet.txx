@@ -90,12 +90,6 @@ namespace gdcm
         break;
         }
       }
-    if( is.fail() )
-      {
-      assert( is.eof() );
-      is.clear();
-      is.seekg( 0, std::ios::end );
-      }
     return is;
   }
 
@@ -112,21 +106,17 @@ namespace gdcm
         }
       else
         {
-        /// FIXME we could just seek
+        assert( is.good() );
         if( de.GetTag() != t )
           is.seekg( de.GetVL(), std::ios::cur );
         }
       // tag was found, we can exit the loop:
       if ( t <= de.GetTag() )
         {
+        assert( is.good() );
         break;
         }
       }
-    if( is.eof() )
-      {
-      is.clear();
-      }
-    assert( is.good() );
     return is;
   }
 
@@ -456,8 +446,8 @@ namespace gdcm
         }
       }
 
-    // technically we could only do this assert if the dataset did not contains duplicate data elements
-    // so only do a <= instead:
+    // technically we could only do this assert if the dataset did not contains
+    // duplicate data elements so only do a <= instead:
     //assert( l == locallength );
     assert( l <= locallength );
     return is;

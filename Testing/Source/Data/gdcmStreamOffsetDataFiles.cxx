@@ -224,6 +224,7 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "JPEGInvalidSecondFrag.dcm", 4800 },
 { "lena512_rot90.j2k.dcm", 768 },
 { "ELSCINT1_PMSCT_RLE1_priv.dcm", 298002 },
+{ "unreadable.dcm", 249230 },
 
 
 /* Stopping condition */

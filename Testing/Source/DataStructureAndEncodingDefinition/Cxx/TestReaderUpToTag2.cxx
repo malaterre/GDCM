@@ -52,7 +52,7 @@ static int TestReadUpToTag2(const char* filename, bool verbose = false)
 
   if( !iseof )
     {
-    std::cerr << "Lost in out of space: " << outStreamOffset << std::endl;
+    std::cerr << "Lost in out of space: " << outStreamOffset << " -> " << filename << std::endl;
     return 1;
     }
 

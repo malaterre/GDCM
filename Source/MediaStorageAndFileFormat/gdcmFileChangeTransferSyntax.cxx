@@ -210,6 +210,7 @@ bool FileChangeTransferSyntax::InitializeCopy()
         gdcmDebugMacro("ImageRegionReader::ReadInformation failed" );
         return false;
         }
+      is.clear(); // important
       Internals->PixelDataPos = is.tellg();
       gdcm::File & file = reader.GetFile();
       const DataSet & ds = file.GetDataSet();
