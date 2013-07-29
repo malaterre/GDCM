@@ -23,7 +23,6 @@ set(CSHARP_EXAMPLES
   CompressLossyJPEG
   SendFileSCU
   MpegVideoInfo
-  FileAnonymize
   BasicImageAnonymizer
   FileAnonymize
   FileStreaming
