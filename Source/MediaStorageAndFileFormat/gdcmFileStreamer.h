@@ -44,13 +44,17 @@ public:
   FileStreamer();
   ~FileStreamer();
 
-  /// Set template filename
+  /// Set input DICOM template filename
   void SetTemplateFileName(const char *filename_native);
 
-  /// Decide to check template or not (default: false)
+  // Decide to check template or not (default: false)
+  /// Instead of simply blindly copying the input DICOM Template file, GDCM will
+  /// be used to check the input file, and correct any issues recognized within
+  /// the file. Only use if you do not have control over the input template
+  /// file.
   void CheckTemplateFileName(bool check);
 
-  /// Set output filename
+  /// Set output filename (target file)
   void SetOutputFileName(const char *filename_native);
 
   /// Decide to check the Data Element to be written (default: off)

@@ -25,6 +25,16 @@ class TransferSyntax;
 
 /**
  * \brief FileChangeTransferSyntax
+ *
+ * This class is a file-based replacement of the in-memory
+ * ImageChangeTransferSyntax
+ *
+ * This class provide a file-based compression mecanism. It will take in an
+ * uncompressed DICOM image file (Pixel Data element). Then then produced as
+ * output a compressed DICOM file (Transfer Syntax will be updated).
+ *
+ * Currently it supports the following transfer syntax:
+ * - JPEGLosslessProcess14_1
  */
 class GDCM_EXPORT FileChangeTransferSyntax : public Subject
 {
@@ -32,19 +42,20 @@ public:
   FileChangeTransferSyntax();
   ~FileChangeTransferSyntax();
 
-  /// Set input filename
+  /// Set input filename (raw DICOM)
   void SetInputFileName(const char *filename_native);
 
-  /// Set output filename
+  /// Set output filename (target compressed DICOM)
   void SetOutputFileName(const char *filename_native);
 
-  /// Change
+  /// Change the transfer syntax
   bool Change();
 
   /// Specify the Target Transfer Syntax
   void SetTransferSyntax( TransferSyntax const & ts );
 
   /// Retrieve the actual codec (valid after calling SetTransferSyntax)
+  /// Only advanced users should call this function.
   ImageCodec * GetCodec();
 
   /// for wrapped language: instantiate a reference counted object
