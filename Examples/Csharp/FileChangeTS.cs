@@ -67,7 +67,7 @@ public class FileChangeTS
       PhotometricInterpretation pi = new PhotometricInterpretation( PhotometricInterpretation.PIType.MONOCHROME2 );
       img.SetPhotometricInterpretation( pi );
       gdcm.DataElement pixeldata = new gdcm.DataElement( new gdcm.Tag(0x7fe0,0x0010) );
-      byte[] buffer = new byte[ 256 * 256 * 2 ];
+      byte[] buffer = new byte[ 512 * 512 * 2 ];
       pixeldata.SetByteValue( buffer, new gdcm.VL((uint)buffer.Length) );
       img.SetDataElement( pixeldata );
 
