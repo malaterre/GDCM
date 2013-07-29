@@ -81,7 +81,7 @@ public:
   /// Stop appending to private creator
   bool StopGroupDataElement( const PrivateTag & pt );
   /// Optimisation: pre-allocate the number of dataelement within the private
-  /// group (ndataelement < 246)
+  /// group (ndataelement < 256)
   void ReserveGroupDataElement( unsigned char ndataelement );
 
   /// for wrapped language: instantiate a reference counted object
