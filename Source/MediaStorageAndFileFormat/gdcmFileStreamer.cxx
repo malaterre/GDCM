@@ -32,6 +32,9 @@
 #include <io.h>
 typedef int64_t off64_t;
 #else
+#ifdef __APPLE__
+#  define off64_t off_t
+#endif
 #include <unistd.h> // ftruncate
 #endif
 
