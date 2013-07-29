@@ -60,6 +60,10 @@ int TestFileStream1(const char *filename, bool verbose = false)
   const char *buffer = &vbuffer[0];
   const size_t len = vbuffer.size();
   PrivateTag pt( Tag(0x9,0x10), "MYTEST" );
+  if( !fs.ReserveGroupDataElement( 20 ) )
+    {
+    return 1;
+    }
   fs.StartGroupDataElement( pt, 1000 );
   fs.AppendToGroupDataElement( pt, buffer, len );
   fs.AppendToGroupDataElement( pt, buffer, len );

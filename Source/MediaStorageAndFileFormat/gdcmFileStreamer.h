@@ -70,6 +70,10 @@ public:
   bool AppendToDataElement( const Tag & t, const char *array, size_t len );
   /// Stop appending to tag t. This will compute the proper attribute length.
   bool StopDataElement( const Tag & t );
+  /// Add a hint on the final size of the dataelement. When optimally chosen,
+  /// this reduce the number of file in-place copying. Should be called before
+  /// StartDataElement
+  bool ReserveDataElement( size_t len );
 
   /// Start Private Group (multiple DataElement) Operation. Each newly added
   /// DataElement will have a length lower than \param maxsizede.
@@ -81,8 +85,8 @@ public:
   /// Stop appending to private creator
   bool StopGroupDataElement( const PrivateTag & pt );
   /// Optimisation: pre-allocate the number of dataelement within the private
-  /// group (ndataelement < 256)
-  void ReserveGroupDataElement( unsigned char ndataelement );
+  /// group (ndataelement <= 256). Should be called before StartGroupDataElement
+  bool ReserveGroupDataElement( unsigned short ndataelement );
 
   /// for wrapped language: instantiate a reference counted object
   static SmartPointer<FileStreamer> New() { return new FileStreamer; }

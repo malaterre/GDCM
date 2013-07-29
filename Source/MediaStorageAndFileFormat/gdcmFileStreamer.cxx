@@ -95,16 +95,12 @@ static inline bool FTruncate( const int fd, const off64_t len )
 
 static bool prepare_file( FILE * pFile, const off64_t offset, const off64_t inslen )
 {
+  // fast path
+  if( inslen == 0 ) return true;
+
   const size_t BUFFERSIZE = 4096;
   char buffer[BUFFERSIZE];
   struct stat sb;
-
-#if 0
-  const int soff = sizeof( off64_t );
-  const int si64 = sizeof( int64_t );
-  assert( soff == si64 );
-  assert( sizeof(sb.st_size) > 4 ); // LFS ?
-#endif
 
   int fd = fileno( pFile );
   if (fstat(fd, &sb) == 0)
@@ -203,6 +199,8 @@ public:
   InitializeCopy(false),
   CheckPixelDataElement(false),
   pFile(NULL),
+  ReservedDataLength(0),
+  ReservedGroupDataElement(0),
   Self(NULL)
     {
     PrivateCreator.SetByteValue("",0);
@@ -336,7 +334,23 @@ public:
       assert( (size_t)newlen == len );
       newlen += dicomlen;
       newlen -= actualde;
-      if( !prepare_file( pFile, (off64_t)thepos + actualde, newlen ) )
+      off64_t plength = newlen;
+      assert( ReservedDataLength >= 0 );
+      if( ReservedDataLength )
+        {
+        if( (newlen + ReservedDataLength) >= len )
+          {
+          plength = newlen + ReservedDataLength - len;
+          }
+        else
+          {
+          plength = newlen + ReservedDataLength - len;
+          }
+        ReservedDataLength -= len;
+        assert( ReservedDataLength >= 0 );
+        }
+      //if( !prepare_file( pFile, (off64_t)thepos + actualde, newlen ) )
+      if( !prepare_file( pFile, (off64_t)thepos + actualde, plength ) )
         {
         return false;
         }
@@ -367,13 +381,25 @@ public:
       {
       const off64_t curpos = FTello(pFile);
       assert( curpos == thepos );
-      if( !prepare_file( pFile, (off64_t)curpos, len) )
+      if( ReservedDataLength >= len )
         {
-        return false;
+        // simply update remaining reserved buffer:
+        ReservedDataLength -= len;
+        }
+      else
+        {
+        const off64_t plength = len - ReservedDataLength;
+        assert( plength >= 0 );
+        if( !prepare_file( pFile, (off64_t)curpos, plength) )
+          {
+          return false;
+          }
+        ReservedDataLength = 0; // no more reserved buffer
         }
       FSeeko(pFile, curpos, SEEK_SET);
       }
 
+    assert( ReservedDataLength >= 0 );
     fwrite(data, 1, len, pFile);
     thepos += len;
     CurrentDataLenth += len;
@@ -384,10 +410,22 @@ public:
     {
     // Update DataElement:
     const size_t currentdatalenth = CurrentDataLenth;
+    assert( ReservedDataLength >= 0);
+    //const off64_t refpos = FTello(pFile);
     if( !UpdateDataElement( t ) )
       {
       return false;
       }
+    if( ReservedDataLength > 0)
+      {
+      const off64_t curpos = thepos;
+      if( !prepare_file( pFile, curpos + ReservedDataLength, - ReservedDataLength) )
+        {
+        return false;
+        }
+      ReservedDataLength = 0;
+      }
+    assert( ReservedDataLength == 0);
     fclose(pFile);
     pFile = NULL;
     // Do some extra work:
@@ -433,6 +471,20 @@ public:
       }
     Self->InvokeEvent( EndEvent() );
     return true;
+    }
+  bool ReserveDataElement( size_t len )
+    {
+    ReservedDataLength = len;
+    return true;
+    }
+  bool ReserveGroupDataElement( unsigned short ndataelement )
+    {
+    if( ndataelement <= 256 )
+      {
+      this->ReservedGroupDataElement = ndataelement;
+      return true;
+      }
+    return false;
     }
   bool StartGroupDataElement( const PrivateTag & ori_pt )
     {
@@ -555,6 +607,14 @@ public:
     CurrentGroupTag.SetElement( 0x0 ); // First possible
     CurrentGroupTag.SetPrivateCreator( private_creator.GetTag() );
     CurrentDataLenth = 0;
+
+    if( this->ReservedGroupDataElement )
+      {
+      if( !this->ReserveDataElement( MaxSizeDE ) )
+        {
+        return false;
+        }
+      }
     return true;
     }
   bool AppendToGroupDataElement( const DataElement & , const char *data, size_t len )
@@ -564,6 +624,7 @@ public:
       {
       Self->InvokeEvent( IterationEvent() );
       const size_t len_this_time = std::min(MaxSizeDE - CurrentDataLenth, len_to_move);
+      assert( len_this_time % 2 == 0 );
       if( !AppendToDataElement( CurrentGroupTag, data, len_this_time ) )
         {
         return false;
@@ -614,6 +675,8 @@ private:
   size_t actualde;
   size_t CurrentDataLenth;
   Tag CurrentGroupTag;
+  off64_t ReservedDataLength;
+  unsigned short ReservedGroupDataElement;
 public:
   FileStreamer *Self;
 private:
@@ -625,9 +688,17 @@ private:
       if( CurrentDataLenth % 2 == 1 )
         {
         const off64_t curpos = FTello(pFile);
-        if( !prepare_file( pFile, (off64_t)curpos, 1) )
+        if( ReservedDataLength >= 1 )
           {
-          return false;
+          // simply update remaining reserved buffer:
+          ReservedDataLength -= 1;
+          }
+        else
+          {
+          if( !prepare_file( pFile, (off64_t)curpos, 1) )
+            {
+            return false;
+            }
           }
         FSeeko(pFile, curpos, SEEK_SET);
         int ret = fputc(0, pFile); // Set to NULL padding ?
@@ -689,6 +760,21 @@ void FileStreamer::SetTemplateFileName(const char *filename_native)
 
 bool FileStreamer::InitializeCopy()
 {
+#if 0
+  static int checksize = 0;
+  if( !checksize )
+    {
+    const int soff = sizeof( off64_t );
+    const int si64 = sizeof( int64_t );
+    if( soff != si64 ) return false;
+    if( !(sizeof(sb.st_size) > 4) ) // LFS ?
+      {
+      return false;
+      }
+    ++checksize;
+    }
+#endif
+
   if( !this->Internals->InitializeCopy )
     {
     const char *filename = this->Internals->TemplateFilename.c_str();
@@ -795,9 +881,13 @@ bool FileStreamer::StopGroupDataElement( const PrivateTag & pt )
   return this->Internals->StopGroupDataElement( private_creator );
 }
 
-void FileStreamer::ReserveGroupDataElement( unsigned char ndataelement )
+bool FileStreamer::ReserveGroupDataElement( unsigned short ndataelement )
 {
-  (void)ndataelement;
+  return Internals->ReserveGroupDataElement( ndataelement );
+}
+bool FileStreamer::ReserveDataElement( size_t len )
+{
+  return Internals->ReserveDataElement( len );
 }
 
 void FileStreamer::SetOutputFileName(const char *filename_native)
