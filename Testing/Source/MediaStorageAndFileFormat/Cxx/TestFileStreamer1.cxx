@@ -84,13 +84,13 @@ int TestFileStream1(const char *filename, bool verbose = false)
     return 1;
     }
   // Check all the group:
-  int nels = (2 * vbuffer.size() + 999) / 1000;
+  const size_t nels = (2 * vbuffer.size() + 999) / 1000;
   if( nels != 17 ) return 1;
   PrivateTag check = pt;
-  for( int i = 0; i < nels; ++i )
+  for( size_t i = 0; i < nels; ++i )
     {
 #if 1
-    check.SetElement( i );
+    check.SetElement( (uint16_t)i );
     check.SetPrivateCreator( pt );
 #else
     check.SetElement( check.GetElement() + 1 );

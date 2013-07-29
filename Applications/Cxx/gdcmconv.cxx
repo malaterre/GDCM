@@ -964,7 +964,7 @@ int main (int argc, char *argv[])
       tsuid.push_back( 0 ); // 0 padding
       }
     gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
-    de.SetByteValue( &tsuid[0], tsuid.size() );
+    de.SetByteValue( &tsuid[0], (uint32_t)tsuid.size() );
     de.SetVR( gdcm::Attribute<0x0002, 0x0010>::GetVR() );
     fmi.Clear();
     fmi.Replace( de );

@@ -182,7 +182,7 @@ namespace gdcm
       assert( selectedPTags.size() == 1 );
       const PrivateTag refPTag = *(selectedPTags.rbegin());
       PrivateTag nextPTag = refPTag;
-      nextPTag.SetElement( nextPTag.GetElement() + 0x1 );
+      nextPTag.SetElement( (uint16_t)(nextPTag.GetElement() + 0x1) );
       assert( nextPTag.GetElement() & 0x00ff ); // no wrap please
       Tag maxTag;
       maxTag.SetPrivateCreator( nextPTag );
@@ -302,7 +302,7 @@ namespace gdcm
       assert( selectedPTags.size() == 1 );
       const PrivateTag refPTag = *(selectedPTags.rbegin());
       PrivateTag nextPTag = refPTag;
-      nextPTag.SetElement( nextPTag.GetElement() + 0x1 );
+      nextPTag.SetElement( (uint16_t)(nextPTag.GetElement() + 0x1) );
       assert( nextPTag.GetElement() ); // no wrap please
       Tag maxTag;
       maxTag.SetPrivateCreator( nextPTag );

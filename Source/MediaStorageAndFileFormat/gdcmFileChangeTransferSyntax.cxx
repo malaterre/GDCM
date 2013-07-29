@@ -143,7 +143,7 @@ bool FileChangeTransferSyntax::Change()
     const std::streampos end = os.tellp();
 
     // Compute JPEG length:
-    const VL jpegvl = end - start;
+    const VL jpegvl = (uint32_t)(end - start);
     start -= 4;
     if( jpegvl.IsOdd() )
       {

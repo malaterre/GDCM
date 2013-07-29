@@ -464,7 +464,7 @@ public:
         cont = ds.FindDataElement( curtag );
         if( cont )
           {
-          curtag.SetElement( curtag.GetElement() + 0x1 );
+          curtag.SetElement( (uint16_t)(curtag.GetElement() + 0x1) );
           }
         else
           {
@@ -515,7 +515,8 @@ public:
       {
       std::set<Tag> tagset;
       Tag prev = private_creator.GetTag();
-      prev.SetElement( prev.GetElement() - 0x1 );
+      //assert( prev.GetElement() );
+      prev.SetElement( (uint16_t)(prev.GetElement() - 0x1) );
       tagset.insert( prev );
 
       std::ifstream is( outfilename, std::ios::binary );
@@ -575,7 +576,7 @@ public:
           return false;
           }
         assert( CurrentDataLenth == 0 );
-        CurrentGroupTag.SetElement( CurrentGroupTag.GetElement() + 1 );
+        CurrentGroupTag.SetElement( (uint16_t)(CurrentGroupTag.GetElement() + 1) );
         const int lowbits = CurrentGroupTag.GetElement() & 0x00ff;
         if( lowbits == 0 )
           {
@@ -640,6 +641,7 @@ private:
         vlpos -= 4; // VR
         }
       vlpos -= 4; // Tag
+      gdcmAssertAlwaysMacro( vlpos >= 0 );
       FSeeko(pFile, vlpos, SEEK_SET);
       std::stringstream ss;
       const Tag tag = t;
@@ -652,7 +654,8 @@ private:
         VR un = VR::UN;
         un.Write(ss);
         }
-      const VL vl = CurrentDataLenth;
+      gdcmAssertAlwaysMacro( CurrentDataLenth < std::numeric_limits<uint32_t>::max() );
+      const VL vl = (uint32_t)CurrentDataLenth;
       if( TS.GetSwapCode() == SwapCode::BigEndian )
         vl.Write<SwapperDoOp>(ss);
       else
