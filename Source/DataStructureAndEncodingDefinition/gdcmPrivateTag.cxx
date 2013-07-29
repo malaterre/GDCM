@@ -85,7 +85,7 @@ DataElement PrivateTag::GetAsDataElement() const
   DataElement de;
   de.SetTag( *this );
   de.SetVR( VR::LO );
-  de.SetByteValue( &Owner[0], Owner.size() );
+  de.SetByteValue( &Owner[0], (uint32_t)Owner.size() );
   return de;
 }
 
