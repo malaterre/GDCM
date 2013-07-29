@@ -213,7 +213,7 @@ DataSet PresentationDataValue::ConcatenatePDVBlobsAsExplicit(const std::vector<P
 
   DataSet outDataSet;
   //outDataSet.Read<ExplicitDataElement,SwapperNoOp>( ss );
-  VL length = theEntireBuffer.size();
+  VL length = (uint32_t)theEntireBuffer.size();
   //gdcm::Trace::DebugOn();
   outDataSet.ReadWithLength<ExplicitDataElement,SwapperNoOp>( ss, length );
 
