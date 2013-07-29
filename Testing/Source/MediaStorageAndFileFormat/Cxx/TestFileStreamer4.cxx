@@ -59,6 +59,7 @@ int TestFileStream4(const char *filename, bool verbose = false)
     gdcm::ImageHelper::GetDimensionsValue(file);
   PixelFormat pf = gdcm::ImageHelper::GetPixelFormatValue(file);
   int pixsize = pf.GetPixelSize();
+  const size_t computedlen = dims[0] * dims[1] * dims[2] * pixsize;
 
   const FileMetaInformation &header = file.GetHeader();
   const TransferSyntax &ts = header.GetDataSetTransferSyntax();
@@ -81,6 +82,7 @@ int TestFileStream4(const char *filename, bool verbose = false)
   const size_t len = vbuffer.size();
 
   gdcm::FileStreamer fs;
+  fs.ReserveDataElement( computedlen );
   fs.SetTemplateFileName( filename );
   fs.CheckTemplateFileName( checktemplate );
   fs.SetOutputFileName( outfilename.c_str() );
@@ -135,7 +137,6 @@ int TestFileStream4(const char *filename, bool verbose = false)
     }
   const gdcm::DataElement & de = ds.GetDataElement( pixeldata );
   const gdcm::ByteValue *bv = de.GetByteValue();
-  const size_t computedlen = dims[0] * dims[1] * dims[2] * pixsize;
   if( bv->GetLength() != computedlen )
     {
     std::cerr << "Mismatch len: " << outfilename << " : " << bv->GetLength() <<

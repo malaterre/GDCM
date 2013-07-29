@@ -57,6 +57,7 @@ int TestFileStream2(const char *filename, bool verbose = false)
 
   const char buffer[10] = { 0, 1, 2 , 3, 4, 5, 6, 7, 8, 9 };
   const size_t len = sizeof( buffer );
+  //fs.ReserveDataElement( 36 );
   fs.StartDataElement( t1 );
   fs.AppendToDataElement( t1, buffer, len );
   fs.AppendToDataElement( t1, buffer, len );
