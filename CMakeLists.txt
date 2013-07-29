@@ -218,8 +218,8 @@ endif()
 
 # GDCM_INSTALL_PYTHONMODULE_DIR     - Python Module install dir
 # GDCM_VTK_INSTALL_PYTHONMODULE_DIR - VTK/Python Module install dir
-# GDCM_INSTALL_CSHARPMODULE_DIR     - C# Module install dir
-# GDCM_VTK_INSTALL_CSHARPMODULE_DIR - VTK/C# Module install dir
+# GDCM_INSTALL_CSHARPMODULE_DIR     - C# Module install dir
+# GDCM_VTK_INSTALL_CSHARPMODULE_DIR - VTK/C# Module install dir
 # GDCM_INSTALL_JAVAMODULE_DIR       - Java Module install dir (JNI glue)
 # GDCM_INSTALL_JARMODULE_DIR        - Java Module install dir (JAR)
 # GDCM_VTK_INSTALL_JAVAMODULE_DIR   - VTK/Java Module install dir (JNI glue)

@@ -369,20 +369,26 @@ EXTEND_CLASS_PRINT(gdcm::DataElement)
  /**
   * Replace SetByteValue
   */
+ // http://docs.oracle.com/javase/specs/jls/se7/html/jls-10.html#jls-10.7
+ // Arrays must be indexed by int values; short, byte, or char values may also be
+ // used as index values because they are subjected to unary numeric promotion
+ // (§5.6.1) and become int values.
+ // An attempt to access an array component with a long index value results in a
+ // compile-time error.
  void SetArray(signed char array[], unsigned int nitems) {
-   $self->SetByteValue((char*)array, nitems * sizeof(signed char) );
+   $self->SetByteValue((char*)array, (uint32_t)(nitems * sizeof(signed char)) );
  }
  void SetArray(signed short array[], unsigned int nitems) {
-   $self->SetByteValue((char*)array, nitems * sizeof(signed short) );
+   $self->SetByteValue((char*)array, (uint32_t)(nitems * sizeof(signed short)) );
  }
  void SetArray(signed int array[], unsigned int nitems) {
-   $self->SetByteValue((char*)array, nitems * sizeof(signed int) );
+   $self->SetByteValue((char*)array, (uint32_t)(nitems * sizeof(signed int)) );
  }
  void SetArray(float array[], unsigned int nitems) {
-   $self->SetByteValue((char*)array, nitems * sizeof(float) );
+   $self->SetByteValue((char*)array, (uint32_t)(nitems * sizeof(float)) );
  }
  void SetArray(double array[], unsigned int nitems) {
-   $self->SetByteValue((char*)array, nitems * sizeof(double) );
+   $self->SetByteValue((char*)array, (uint32_t)(nitems * sizeof(double)) );
  }
 };
 
