@@ -19,6 +19,7 @@
 #include "gdcmImageReader.h"
 #include "gdcmFilename.h"
 #include "gdcmImageChangePlanarConfiguration.h"
+#include "gdcmByteSwap.h"
 
 int TestFileChangeTransferSyntax1Func(const char *filename, bool verbose = false)
 {
