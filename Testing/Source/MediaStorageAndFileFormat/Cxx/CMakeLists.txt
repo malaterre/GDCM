@@ -8,6 +8,7 @@ SET(MSFF_TEST_SRCS
   TestFileStreamer3
   TestFileStreamer4
   TestFileStreamer5
+  TestFileStreamer6
   TestFileAnonymizer1
   TestFileAnonymizer2
   TestFileAnonymizer3
