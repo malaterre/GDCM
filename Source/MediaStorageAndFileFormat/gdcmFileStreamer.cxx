@@ -195,6 +195,7 @@ public:
   FileStreamerInternals():operation(NOOPERATION),
   CurrentTag(0x0,0x0),
   MaxSizeDE(0),
+  StartOffset(0),
   CheckTemplateFileName(false),
   InitializeCopy(false),
   CheckPixelDataElement(false),
@@ -212,11 +213,12 @@ public:
     operation = DATAELEMENT;
     return true;
   }
-  bool SetPrivateCreator( const DataElement & de, const size_t maxsizde ) {
+  bool SetPrivateCreator( const DataElement & de, const size_t maxsizde, const uint8_t startoffset ) {
     if( !IsValid() ) return false;
     // else
     PrivateCreator = de;
     operation = GROUPDATAELEMENT;
+    StartOffset = startoffset;
     static const size_t limitmax = std::numeric_limits<uint32_t>::max();
     if( maxsizde % 2 == 0
       && maxsizde < limitmax )
@@ -604,7 +606,7 @@ public:
       thepos += pclen;
       }
 
-    CurrentGroupTag.SetElement( 0x0 ); // First possible
+    CurrentGroupTag.SetElement( this->StartOffset ); // First possible
     CurrentGroupTag.SetPrivateCreator( private_creator.GetTag() );
     CurrentDataLenth = 0;
 
@@ -664,6 +666,7 @@ private:
   Tag CurrentTag;
   DataElement PrivateCreator;
   size_t MaxSizeDE;
+  uint8_t StartOffset;
 public:
   bool CheckTemplateFileName;
   bool InitializeCopy;
@@ -844,10 +847,10 @@ bool FileStreamer::StopDataElement( const Tag & t )
   return this->Internals->StopDataElement( t );
 }
 
-bool FileStreamer::StartGroupDataElement( const PrivateTag & pt, size_t maxsizede  )
+bool FileStreamer::StartGroupDataElement( const PrivateTag & pt, size_t maxsizede, uint8_t startoffset )
 {
   const DataElement private_creator = pt.GetAsDataElement();
-  if( !this->Internals->SetPrivateCreator( private_creator, maxsizede ) )
+  if( !this->Internals->SetPrivateCreator( private_creator, maxsizede, startoffset ) )
     {
     gdcmDebugMacro( "Could not StartGroupDataElement" );
     return false;

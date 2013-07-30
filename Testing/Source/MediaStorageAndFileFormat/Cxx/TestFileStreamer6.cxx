@@ -20,14 +20,17 @@
 #include "gdcmPrivateTag.h"
 #include "gdcmFilename.h"
 
-int TestFileStream1(const char *filename, bool verbose = false)
+/*
+ * Make sure pseudo-private element also works:
+ */
+int TestFileStream6(const char *filename, bool verbose = false)
 {
   using namespace gdcm;
   if( verbose )
     std::cout << "Processing: " << filename << std::endl;
 
   // Create directory first:
-  const char subdir[] = "TestFileStreamer1";
+  const char subdir[] = "TestFileStreamer6";
   std::string tmpdir = Testing::GetTempDirectory( subdir );
   if( !System::FileIsDirectory( tmpdir.c_str() ) )
     {
@@ -59,16 +62,10 @@ int TestFileStream1(const char *filename, bool verbose = false)
   vbuffer.resize( 8192 );
   const char *buffer = &vbuffer[0];
   const size_t len = vbuffer.size();
-  PrivateTag pt( Tag(0x9,0x10), "MYTEST" );
-  if( !fs.ReserveGroupDataElement( 20 ) )
-    {
-    return 1;
-    }
-  const uint8_t startoffset = 0x13; // why not ?
-  fs.StartGroupDataElement( pt, 1000, startoffset );
-  fs.AppendToGroupDataElement( pt, buffer, len );
-  fs.AppendToGroupDataElement( pt, buffer, len );
-  fs.StopGroupDataElement( pt );
+  Tag t( Tag(0x9,0x1010) );
+  fs.StartDataElement( t );
+  fs.AppendToDataElement( t, buffer, len );
+  fs.StopDataElement( t );
 
   // Read back and check:
   gdcm::Reader r;
@@ -82,56 +79,37 @@ int TestFileStream1(const char *filename, bool verbose = false)
   gdcm::File & f = r.GetFile();
   gdcm::DataSet & ds = f.GetDataSet();
 
-  const DataElement private_creator = pt.GetAsDataElement();
-  if( !ds.FindDataElement( private_creator.GetTag() ) )
+  if( !ds.FindDataElement( t ) )
     {
-    std::cerr << "Could not find priv creator: " << outfilename << std::endl;
     return 1;
     }
-  // Check all the group:
-  const size_t nels = (2 * vbuffer.size() + 999) / 1000;
-  if( nels != 17 ) return 1;
-  PrivateTag check = pt;
-  for( size_t i = startoffset; i < startoffset + nels; ++i )
+
+  const gdcm::DataElement & de = ds.GetDataElement( t );
+  const gdcm::ByteValue * bv = de.GetByteValue();
+  if( !bv ) return 1;
+  if( bv->GetLength() != 8192 ) return 1;
+
+  const char *p = bv->GetPointer();
+  const char *end = p + bv->GetLength();
+  int res = 0;
+  for( ; p != end; ++p )
     {
-#if 1
-    check.SetElement( (uint16_t)i );
-    check.SetPrivateCreator( pt );
-#else
-    check.SetElement( check.GetElement() + 1 );
-#endif
-    if( !ds.FindDataElement( check ) )
-      {
-      std::cerr << "Could not find priv tag: " << check << " " << outfilename << std::endl;
-      return 1;
-      }
-    const DataElement & de = ds.GetDataElement( check );
-    const int vl = de.GetVL();
-    int reflen = 0;
-    if( i == (startoffset + nels - 1) )
-      {
-      reflen = 384;
-      }
-    else
-      {
-      reflen = 1000;
-      }
-    if( vl != reflen )
-      {
-      std::cerr << "Wrong length for: " << check << ":" << vl << " should be :" << reflen << std::endl;
-      return 1;
-      }
+    res += *p;
+    }
+  if( res )
+    {
+    std::cerr << "Mismatch: " << outfilename << std::endl;
     }
 
-  return 0;
+  return res;
 }
 
-int TestFileStreamer1(int argc, char *argv[])
+int TestFileStreamer6(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestFileStream1(filename, true);
+    return TestFileStream6(filename, true);
     }
 
   // else
@@ -143,7 +121,7 @@ int TestFileStreamer1(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestFileStream1( filename );
+    r += TestFileStream6( filename );
     ++i;
     }
 
