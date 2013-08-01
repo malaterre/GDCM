@@ -84,7 +84,7 @@ void FileAnonymizer::Remove( Tag const &t )
 
 void FileAnonymizer::Replace( Tag const &t, const char *value )
 {
-  if( t.GetGroup() >= 0x0008 )
+  if( value && t.GetGroup() >= 0x0008 )
     {
     Internals->ReplaceTags.insert(
       std::make_pair( t, value) );
@@ -93,18 +93,23 @@ void FileAnonymizer::Replace( Tag const &t, const char *value )
 
 void FileAnonymizer::Replace( Tag const &t, const char *value, VL const & vl )
 {
-  Internals->ReplaceTags.insert(
-    std::make_pair( t, std::string(value,vl) ) );
+  if( value && t.GetGroup() >= 0x0008 )
+    {
+    Internals->ReplaceTags.insert(
+      std::make_pair( t, std::string(value, vl) ) );
+    }
 }
 
 void FileAnonymizer::SetInputFileName(const char *filename_native)
 {
-  Internals->InputFilename = filename_native;
+  if( filename_native )
+    Internals->InputFilename = filename_native;
 }
 
 void FileAnonymizer::SetOutputFileName(const char *filename_native)
 {
-  Internals->OutputFilename = filename_native;
+  if( filename_native )
+    Internals->OutputFilename = filename_native;
 }
 
 bool FileAnonymizer::ComputeReplaceTagPosition()
