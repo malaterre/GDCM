@@ -309,7 +309,7 @@ public:
           {
           // if you trigger this assertion, this means we have been allocating
           // memory for an element when not needed.
-          assert( de.GetByteValue() && de.GetByteValue()->GetPointer() == 0 );
+          assert( (de.GetByteValue() && de.GetByteValue()->GetPointer() == 0) || de.GetSequenceOfFragments() );
           }
         actualde = de.GetVL() + 2 * de.GetVR().GetLength() + 4;
         thepos -= actualde;
@@ -458,6 +458,13 @@ public:
         }
       const File & f = reader.GetFile();
       const DataSet &ds = f.GetDataSet();
+      const FileMetaInformation &fmi = f.GetHeader();
+      const TransferSyntax &ts = fmi.GetDataSetTransferSyntax();
+      if( ts.IsEncapsulated() )
+        {
+        gdcmDebugMacro( "Only RAW (uncompressed) Pixel Data is supported for now" );
+        return false;
+        }
       spp.SetFromDataSet( ds );
       rows.SetFromDataSet( ds );
       cols.SetFromDataSet( ds );

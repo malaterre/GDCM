@@ -63,11 +63,6 @@ int TestFileStream4(const char *filename, bool verbose = false)
 
   const FileMetaInformation &header = file.GetHeader();
   const TransferSyntax &ts = header.GetDataSetTransferSyntax();
-  if( ts.IsEncapsulated() )
-    {
-    //std::cerr << "compressed: " << filename << std::endl;
-    return 0;
-    }
 
   if( verbose )
     {
@@ -114,6 +109,11 @@ int TestFileStream4(const char *filename, bool verbose = false)
       }
   if( !fs.StopDataElement( pixeldata ) )
     {
+    if( ts.IsEncapsulated() )
+      {
+      // Everything is under control
+      return 0;
+      }
     std::cerr << "Failed to StopDataElement: " << outfilename << std::endl;
     return 1;
     }
