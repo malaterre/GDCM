@@ -45,7 +45,7 @@ public class FileStreaming
     // We are also calling the function twice to check that appending mode is
     // working from one call to the other. The last element will have a length
     // of (2 * 8192) % 1000 = 384
-    if( !fs.StartGroupDataElement( pt, 1000 )
+    if( !fs.StartGroupDataElement( pt, 1000, 1 )
       || !fs.AppendToGroupDataElement( pt, buffer, len )
       || !fs.AppendToGroupDataElement( pt, buffer, len )
       || !fs.StopGroupDataElement( pt ) )
