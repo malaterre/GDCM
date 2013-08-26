@@ -55,7 +55,7 @@ int main(int argc, char *argv [])
     }
   else
     {
-    std::cerr << " Media Storage Sop Class UID not present" << std::cout;
+    std::cerr << " Media Storage Sop Class UID not present" << std::endl;
     }
 
   //TODO il faut trimer strm.str() avant la comparaison au cas ou...
