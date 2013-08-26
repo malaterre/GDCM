@@ -239,9 +239,13 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       }
     }
   //assert( pos == len );
-  std::string str = os.str();
-  VL::Type strSize = (VL::Type)str.size();
-  out.SetByteValue( &str[0], strSize );
+  const size_t sizeOfOs = os.tellp();
+  os.seekp( 0, std::ios::beg );
+  ByteValue * bv = new ByteValue;
+  bv->SetLength( sizeOfOs );
+  bv->Read<SwapperNoOp>( os );
+  out.SetValue( *bv );
+
   return true;
 }
 
