@@ -133,7 +133,7 @@ std::istream& ReadValue(std::istream &is, bool /*readvalues*/)
     {
     while( frag.Read<TSwap>(is) && frag.GetTag() != seqDelItem )
       {
-      gdcmDebugMacro( "Frag: " << frag );
+      //gdcmDebugMacro( "Frag: " << frag );
       Fragments.push_back( frag );
       }
     assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );

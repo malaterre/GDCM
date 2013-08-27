@@ -458,6 +458,11 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
     unsigned long check = outbv->GetLength();  // FIXME
     (void)check;
     // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
+    if( len > outbv->GetLength() )
+      {
+      gdcmErrorMacro( "Impossible length: " << len << " should be (max): " << outbv->GetLength() );
+      return false;
+      }
     assert( len <= outbv->GetLength() );
     if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
 

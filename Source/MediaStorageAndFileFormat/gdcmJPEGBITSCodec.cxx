@@ -788,6 +788,17 @@ bool JPEGBITSCodec::DecodeByStreams(std::istream &is, std::ostream &os)
     // JCS_CMYK
     // JCS_YCCK
 
+    // Sanity checks:
+    const unsigned int * dims = this->GetDimensions();
+    if( cinfo.image_width != dims[0]
+      || cinfo.image_height != dims[1] )
+      {
+      gdcmErrorMacro( "Unhandled: dimension mismatch" ); // FIXME is this ok by standard ?
+      return false;
+      }
+    assert( cinfo.image_width == dims[0] );
+    assert( cinfo.image_height == dims[1] );
+
     switch ( cinfo.jpeg_color_space )
       {
     case JCS_GRAYSCALE:

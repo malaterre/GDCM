@@ -28,6 +28,7 @@ endif()
 set(EXAMPLES_SRCS
   DumpGEMSMovieGroup
   DumpExamCard
+  DumpPhilipsECHO
   ExtractIconFromFile
   CreateJPIPDataSet
   DumpADAC
