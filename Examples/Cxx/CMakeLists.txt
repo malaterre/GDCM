@@ -27,6 +27,7 @@ ENDIF(GDCM_BINARY_DIR)
 
 SET(EXAMPLES_SRCS
   DumpGEMSMovieGroup
+  DumpPhilipsECHO
   ExtractIconFromFile
   CreateJPIPDataSet
   DumpADAC
