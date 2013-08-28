@@ -373,7 +373,7 @@ int main(int argc, char *argv[])
     const ByteValue *bv3 = crc.GetByteValue();
 
     std::string outfile = std::string( bvdatatype->GetPointer(), bvdatatype->GetLength() );
-    outfile = String<VR::LO>::Trim( outfile.c_str() );
+    outfile = LOComp::Trim( outfile.c_str() );
     const char *outfilename = outfile.c_str();
     assert( is_valid(outfilename) );
     if( bv2 )
