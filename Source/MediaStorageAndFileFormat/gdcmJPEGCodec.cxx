@@ -381,6 +381,7 @@ bool JPEGCodec::DecodeByStreams(std::istream &is, std::ostream &os)
       if( Internal )
         {
         //Internal->SetPixelFormat( this->GetPixelFormat() ); // FIXME
+        Internal->SetDimensions( this->GetDimensions() );
         Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() ); // meaningless ?
         Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
         if( Internal->DecodeByStreams(is,tmpos) )

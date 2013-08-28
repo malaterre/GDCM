@@ -793,7 +793,9 @@ bool JPEGBITSCodec::DecodeByStreams(std::istream &is, std::ostream &os)
     if( cinfo.image_width != dims[0]
       || cinfo.image_height != dims[1] )
       {
-      gdcmErrorMacro( "Unhandled: dimension mismatch" ); // FIXME is this ok by standard ?
+      gdcmErrorMacro( "Unhandled: dimension mismatch. JPEG is " <<
+        cinfo.image_width << "," << cinfo.image_height << " while DICOM " << dims[0] <<
+        "," << dims[1]  ); // FIXME is this ok by standard ?
       return false;
       }
     assert( cinfo.image_width == dims[0] );
