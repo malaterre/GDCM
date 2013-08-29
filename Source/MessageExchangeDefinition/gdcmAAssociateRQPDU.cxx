@@ -197,7 +197,8 @@ bool AAssociateRQPDU::IsAETitleValid(const char title[16])
     }
   if( str != s ) return false;
 #else
-  std::string s ( title, 16 );
+  const size_t reallen = strlen( title );
+  std::string s ( title, std::min(reallen, (size_t)16) );
   // check no \0 :
   size_t len = strlen( s.c_str() );
 
