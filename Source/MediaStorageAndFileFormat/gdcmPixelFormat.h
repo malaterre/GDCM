@@ -69,7 +69,6 @@ public:
   PixelRepresentation(pixelrepresentation) {}
   // helper, for the common case
   PixelFormat(ScalarType st);
-  ~PixelFormat() {}
 
   // For transparency of use
   operator ScalarType() const { return GetScalarType(); }
