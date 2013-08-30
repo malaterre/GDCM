@@ -43,7 +43,6 @@ class GDCM_EXPORT IPPSorter : public Sorter
 {
 public:
   IPPSorter();
-  ~IPPSorter();
 
   // FIXME: I do not like public virtual function...
   /// Main entry point to the sorter.

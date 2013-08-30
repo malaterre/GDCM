@@ -32,10 +32,6 @@ IPPSorter::IPPSorter()
 }
 
 
-IPPSorter::~IPPSorter()
-{
-}
-
 inline double spacing_round(double n, int d) /* pow is defined as pow( double, double) or pow(double int) on M$ comp */
 {
   return floor(n * pow(10., d) + .5) / pow(10., d);
