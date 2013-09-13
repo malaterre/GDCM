@@ -33,7 +33,7 @@ IF(PHP5_FOUND_INCLUDE_PATH)
   FOREACH(php5_path Zend main TSRM)
     SET(php5_paths ${php5_paths} "${PHP5_FOUND_INCLUDE_PATH}/${php5_path}")
   ENDFOREACH(php5_path Zend main TSRM)
-  SET(PHP5_INCLUDE_PATH "${php5_paths}" INTERNAL "PHP5 include paths")
+  SET(PHP5_INCLUDE_PATH "${php5_paths}" CACHE INTERNAL "PHP5 include paths")
 ENDIF(PHP5_FOUND_INCLUDE_PATH)
 
 FIND_PROGRAM(PHP5_EXECUTABLE NAMES php5 php )
