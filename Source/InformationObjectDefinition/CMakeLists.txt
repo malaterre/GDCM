@@ -37,8 +37,12 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Utilities"
-  "${EXPAT_INCLUDE_DIR}"
   )
+if(GDCM_USE_SYSTEM_EXPAT)
+  include_directories(
+    ${EXPAT_INCLUDE_DIRS}
+  )
+endif()
 
 add_library(gdcmIOD ${IOD_SRCS})
 target_link_libraries(gdcmIOD gdcmDSED gdcmCommon ${GDCM_EXPAT_LIBRARIES})
