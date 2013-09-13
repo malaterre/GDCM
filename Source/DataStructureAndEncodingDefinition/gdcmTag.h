@@ -247,6 +247,10 @@ public:
   /// It comes in useful when reading tag values from XML file(in NativeDICOMModel)
   bool ReadFromContinuousString(const char *str);
 
+  /// Print tag value with no separating comma: eg. tag = "12345678"
+  /// It comes in useful when reading tag values from XML file(in NativeDICOMModel)
+  std::string PrintAsContinuousString() const;
+
   /// Read from a pipe separated string (GDCM 1.x compat only). Do not use in newer code
   /// \see ReadFromCommaSeparatedString
   bool ReadFromPipeSeparatedString(const char *str);
