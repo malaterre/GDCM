@@ -21,6 +21,7 @@
 # Try first to locate a cmake config file
 find_package(OpenJPEG QUIET NO_MODULE)
 
+if( NOT OpenJPEG_DIR )
 set(OPENJPEG_MAJOR_VERSION 1) # FIXME ?
 find_path(OPENJPEG_INCLUDE_DIR
   NAMES openjpeg.h #openjpeg-1.0/openjpeg.h
@@ -49,3 +50,4 @@ mark_as_advanced(
   OPENJPEG_LIBRARY
   OPENJPEG_INCLUDE_DIR
   )
+endif()
