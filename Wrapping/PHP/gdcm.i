@@ -24,7 +24,6 @@
 %}
 #endif
 
-
 %{
 #include "gdcmTypes.h"
 #include "gdcmASN1.h"
@@ -34,7 +33,9 @@
 #include "gdcmProgressEvent.h"
 #include "gdcmAnonymizeEvent.h"
 #include "gdcmDirectory.h"
+#ifdef GDCM_BUILD_TESTING
 #include "gdcmTesting.h"
+#endif
 #include "gdcmObject.h"
 #include "gdcmPixelFormat.h"
 #include "gdcmMediaStorage.h"
@@ -55,9 +56,9 @@
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
 #include "gdcmBitmap.h"
+#include "gdcmIconImage.h"
 #include "gdcmPixmap.h"
 #include "gdcmImage.h"
-#include "gdcmIconImage.h"
 #include "gdcmFragment.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmPDBHeader.h"
@@ -89,6 +90,8 @@
 #include "gdcmSubject.h"
 #include "gdcmCommand.h"
 #include "gdcmAnonymizer.h"
+#include "gdcmFileAnonymizer.h"
+#include "gdcmFileStreamer.h"
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
 #include "gdcmUIDs.h"
@@ -101,7 +104,6 @@
 #include "gdcmFiducials.h"
 #include "gdcmWaveform.h"
 #include "gdcmPersonName.h"
-#include "gdcmIconImage.h"
 #include "gdcmCurve.h"
 #include "gdcmDICOMDIR.h"
 #include "gdcmValidate.h"
@@ -131,9 +133,9 @@
 #include "gdcmRescaler.h"
 #include "gdcmSegmentedPaletteColorLookupTable.h"
 #include "gdcmUnpacker12Bits.h"
-//#include "gdcmPythonFilter.h"
 #include "gdcmDirectionCosines.h"
 #include "gdcmTagPath.h"
+#include "gdcmBitmapToBitmapFilter.h"
 #include "gdcmPixmapToPixmapFilter.h"
 #include "gdcmImageToImageFilter.h"
 #include "gdcmSOPClassUIDToIOD.h"
@@ -146,9 +148,10 @@
 #include "gdcmJPEG2000Codec.h"
 #include "gdcmPNMCodec.h"
 #include "gdcmImageChangeTransferSyntax.h"
+#include "gdcmFileChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
-//#include "gdcmImageChangePhotometricInterpretation.h"
+#include "gdcmImageChangePhotometricInterpretation.h"
 #include "gdcmImageChangePlanarConfiguration.h"
 #include "gdcmImageFragmentSplitter.h"
 #include "gdcmDataSetHelper.h"
@@ -160,9 +163,27 @@
 #include "gdcmBase64.h"
 #include "gdcmCryptographicMessageSyntax.h"
 #include "gdcmSpacing.h"
+#include "gdcmIconImageGenerator.h"
+#include "gdcmIconImageFilter.h"
+
 #include "gdcmSimpleSubjectWatcher.h"
 #include "gdcmDICOMDIRGenerator.h"
 #include "gdcmFileDerivation.h"
+
+#include "gdcmQueryBase.h"
+#include "gdcmQueryFactory.h"
+#include "gdcmBaseRootQuery.h"
+#include "gdcmPresentationContext.h"
+#include "gdcmPresentationContextGenerator.h"
+#include "gdcmCompositeNetworkFunctions.h"
+#include "gdcmServiceClassUser.h"
+
+#include "gdcmStreamImageReader.h"
+#include "gdcmStreamImageWriter.h"
+
+#include "gdcmRegion.h"
+#include "gdcmBoxRegion.h"
+#include "gdcmImageRegionReader.h"
 
 using namespace gdcm;
 %}
@@ -244,7 +265,6 @@ EXTEND_CLASS_PRINT(gdcm::PrivateTag)
 
 %include "gdcmVL.h"
 EXTEND_CLASS_PRINT(gdcm::VL)
-
 %include "gdcmVR.h"
 EXTEND_CLASS_PRINT(gdcm::VR)
 %include "gdcmVM.h"
@@ -268,7 +288,6 @@ EXTEND_CLASS_PRINT(gdcm::Value)
 %include "gdcmByteValue.h"
 EXTEND_CLASS_PRINT(gdcm::ByteValue)
 %clear char* buffer;
-
 
 %apply char[] { const char* array }
 
@@ -341,6 +360,7 @@ EXTEND_CLASS_PRINT(gdcm::File)
 //%include "gdcm_arrays_csharp.i"
 
 %apply char[] { char* buffer }
+%apply unsigned int[] { unsigned int dims[2] }
 %apply unsigned int[] { unsigned int dims[3] }
 
 //%apply byte OUTPUT[] { char* buffer } ;
@@ -358,13 +378,13 @@ EXTEND_CLASS_PRINT(gdcm::File)
 %include "gdcmBitmap.h"
 EXTEND_CLASS_PRINT(gdcm::Bitmap)
 
+%include "gdcmIconImage.h"
+EXTEND_CLASS_PRINT(gdcm::IconImage)
 %include "gdcmPixmap.h"
 EXTEND_CLASS_PRINT(gdcm::Pixmap)
 
 %include "gdcmImage.h"
 EXTEND_CLASS_PRINT(gdcm::Image)
-%include "gdcmIconImage.h"
-EXTEND_CLASS_PRINT(gdcm::IconImage)
 %include "gdcmFragment.h"
 EXTEND_CLASS_PRINT(gdcm::Fragment)
 %include "gdcmPDBElement.h"
@@ -397,6 +417,9 @@ EXTEND_CLASS_PRINT(gdcm::Dict)
 EXTEND_CLASS_PRINT(gdcm::CSAHeaderDictEntry)
 %include "gdcmDicts.h"
 EXTEND_CLASS_PRINT(gdcm::Dicts)
+
+//%template (TagSetType) std::set<gdcm::Tag>;
+%ignore gdcm::Reader::SetStream;
 %include "gdcmReader.h"
 //EXTEND_CLASS_PRINT(gdcm::Reader)
 %include "gdcmPixmapReader.h"
@@ -416,12 +439,15 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 %include "gdcmUIDGenerator.h"
 //%template (ValuesType)      std::set<std::string>;
 %rename (CSharpTagToValue) SWIGTagToValue;
-%include "gdcmScanner.h"
-EXTEND_CLASS_PRINT(gdcm::Scanner)
 #define GDCM_STATIC_ASSERT(x)
 %include "gdcmAttribute.h"
 %include "gdcmSubject.h"
 %include "gdcmCommand.h"
+
+%template(SmartPtrScan) gdcm::SmartPointer<gdcm::Scanner>;
+%include "gdcmScanner.h"
+EXTEND_CLASS_PRINT(gdcm::Scanner)
+
 %template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
 //%ignore gdcm::Anonymizer::Anonymizer;
 
@@ -432,7 +458,14 @@ EXTEND_CLASS_PRINT(gdcm::Scanner)
 //%feature("unref") Anonymizer "coucou $this->Delete();"
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus%5Fnn34
 %include "gdcmAnonymizer.h"
+%apply char[] { char* value_data }
+%include "gdcmFileAnonymizer.h"
+%clear char* value_data;
 
+%apply char[] { char* array }
+%template(SmartPtrFStreamer) gdcm::SmartPointer<gdcm::FileStreamer>;
+%include "gdcmFileStreamer.h"
+%clear char* array;
 
 //EXTEND_CLASS_PRINT(gdcm::Anonymizer)
 //%extend gdcm::Anonymizer
@@ -519,7 +552,6 @@ EXTEND_CLASS_PRINT(gdcm::DirectionCosines)
 %include "gdcmFiducials.h"
 %include "gdcmWaveform.h"
 %include "gdcmPersonName.h"
-%include "gdcmIconImage.h"
 %include "gdcmCurve.h"
 %include "gdcmDICOMDIR.h"
 %include "gdcmValidate.h"
@@ -579,9 +611,10 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
   }
 };
 #endif
-//%include "gdcmPythonFilter.h"
 %include "gdcmTagPath.h"
+%include "gdcmBitmapToBitmapFilter.h"
 %include "gdcmPixmapToPixmapFilter.h"
+//%ignore gdcm::ImageToImageFilter::GetOutput() const;
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
 //%feature("director") Coder;
@@ -597,14 +630,18 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmJPEG2000Codec.h"
 %include "gdcmPNMCodec.h"
 %include "gdcmImageChangeTransferSyntax.h"
+%template(SmartPtrFCTS) gdcm::SmartPointer<gdcm::FileChangeTransferSyntax>;
+%include "gdcmFileChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
 %include "gdcmSplitMosaicFilter.h"
-//%include "gdcmImageChangePhotometricInterpretation.h"
+%include "gdcmImageChangePhotometricInterpretation.h"
 %include "gdcmImageChangePlanarConfiguration.h"
 %include "gdcmImageFragmentSplitter.h"
 %include "gdcmDataSetHelper.h"
 %include "gdcmFileExplicitFilter.h"
-%template (DoubleType) std::vector<double>;
+%template (DoubleArrayType) std::vector<double>;
+%template (UShortArrayType) std::vector<unsigned short>;
+%template (UIntArrayType) std::vector<unsigned int>;
 %include "gdcmImageHelper.h"
 %include "gdcmMD5.h"
 %include "gdcmDummyValueGenerator.h"
@@ -612,8 +649,39 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 //%include "gdcmBase64.h"
 %include "gdcmCryptographicMessageSyntax.h"
 %include "gdcmSpacing.h"
+%include "gdcmIconImageGenerator.h"
+%include "gdcmIconImageFilter.h"
 
 %feature("director") SimpleSubjectWatcher;
 %include "gdcmSimpleSubjectWatcher.h"
 %include "gdcmDICOMDIRGenerator.h"
 %include "gdcmFileDerivation.h"
+
+// MEXD:
+%template(DataSetArrayType) std::vector< gdcm::DataSet >;
+%template(FileArrayType) std::vector< gdcm::File >;
+%template(PresentationContextArrayType) std::vector< gdcm::PresentationContext >;
+%template(KeyValuePairType) std::pair< gdcm::Tag, std::string>;
+%template(KeyValuePairArrayType) std::vector< std::pair< gdcm::Tag, std::string> >;
+%template(TagArrayType) std::vector< gdcm::Tag >;
+%include "gdcmQueryBase.h"
+%include "gdcmBaseRootQuery.h"
+%include "gdcmQueryFactory.h"
+%template(CharSetArrayType) std::vector< gdcm::ECharSet >;
+%include "gdcmCompositeNetworkFunctions.h"
+%include "gdcmPresentationContext.h"
+//EXTEND_CLASS_PRINT(gdcm::PresentationContext)
+%include "gdcmPresentationContextGenerator.h"
+typedef int64_t time_t; // FIXME
+%include "gdcmServiceClassUser.h"
+%apply char[] { char* inReadBuffer }
+%include "gdcmStreamImageReader.h"
+%clear char* inReadBuffer;
+%include "gdcmStreamImageWriter.h"
+%include "gdcmRegion.h"
+EXTEND_CLASS_PRINT(gdcm::Region)
+%include "gdcmBoxRegion.h"
+EXTEND_CLASS_PRINT(gdcm::BoxRegion)
+%apply char[] { char* inreadbuffer }
+%include "gdcmImageRegionReader.h"
+%clear char* inreadbuffer;
