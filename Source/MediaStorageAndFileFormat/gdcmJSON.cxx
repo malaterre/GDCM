@@ -134,13 +134,42 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
         const ByteValue * bv = de.GetByteValue();
 
         const char * value = bv->GetPointer();
-        json_object_array_add(my_array, json_object_new_string(value));
+        const size_t len = bv->GetLength();
+        json_object_array_add(my_array, json_object_new_string_len(value, len));
 
         json_object_object_add(my_object_cur, "Value", my_array );
         }
       }
     else
       {
+      switch( vr )
+        {
+      case VR::FL:
+          {
+          Element<VR::FL,VM::VM1_n> el;
+          el.Set( de.GetValue() );
+          int ellen = el.GetLength();
+          for( int i = 0; i < ellen; ++i )
+            {
+            json_object_array_add(my_array, json_object_new_double( el.GetValue( i ) ));
+            }
+          }
+        break;
+      case VR::UL:
+          {
+          Element<VR::UL,VM::VM1_n> el;
+          el.Set( de.GetValue() );
+          int ellen = el.GetLength();
+          for( int i = 0; i < ellen; ++i )
+            {
+            json_object_array_add(my_array, json_object_new_int( el.GetValue( i ) ));
+            }
+          }
+        break;
+      default:
+        assert( 0 );
+        }
+      json_object_object_add(my_object_cur, "Value", my_array );
       }
     json_object_object_add(my_object, keyword, my_object_cur );
     }
@@ -188,10 +217,8 @@ bool JSON::Code(DataSet const & ds, std::ostream & os)
 #endif
 }
 
-#if 0
-// This function does not make any sense, since Tag is always send as part of
-// the JSON message so always rely on Tag value directly, instead of guessing !
-static Tag GetTagFromJSONName( const char *name )
+// Paranoid
+static bool CheckTagKeywordConsistency( const char *name, const Tag & thetag )
 {
   // Can be keyword or tag
   assert( name );
@@ -199,22 +226,28 @@ static Tag GetTagFromJSONName( const char *name )
   // start with easy one:
   // only test first string character:
   bool istag = *name >= '0' && *name <= '9'; // should be relatively efficient
-  Tag ret;
   if( istag )
     {
-    size_t len = strlen( name );
-    assert( len == 8 );
-    ret.ReadFromContinuousString( name );
-    return ret;
+    assert( strlen(name) == 8 );
+    Tag t;
+    t.ReadFromContinuousString( name );
+    return t == thetag;
     }
   // else keyword:
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
-  const Dict &d = dicts.GetPublicDict(); (void)d;
+  const Dict &d = dicts.GetPublicDict();
+  const char * keyword = d.GetKeywordFromTag(thetag);
+  if( !keyword )
+    {
+    gdcmDebugMacro( "Unknown Keyword: " << name );
+    return true;
+    }
+  // else
+  return strcmp( name, keyword ) == 0;
 }
-#endif
 
-static void ProcessJSONElement( json_object * obj, DataElement & de )
+static void ProcessJSONElement( const char *keyword, json_object * obj, DataElement & de )
 {
   json_type jtype = json_object_get_type( obj );
   assert( jtype == json_type_object );
@@ -226,6 +259,8 @@ static void ProcessJSONElement( json_object * obj, DataElement & de )
   const char * tag_str = json_object_get_string ( jtag );
   const char * vr_str = json_object_get_string ( jvr );
   de.GetTag().ReadFromContinuousString( tag_str );
+  assert( CheckTagKeywordConsistency( keyword, de.GetTag() ) );
+
   VR::VRType vrtype = VR::GetVRTypeFromFile( vr_str );
   assert( vrtype != VR::VR_END );
   de.SetVR( vrtype );
@@ -268,7 +303,7 @@ static void ProcessJSONElement( json_object * obj, DataElement & de )
           assert( name );
           json_object * value = json_object_iter_peek_value (&it);
           DataElement lde;
-          ProcessJSONElement( value, lde );
+          ProcessJSONElement( name, value, lde );
           nds.Insert( lde );
           json_object_iter_next(&it);
           }
@@ -298,6 +333,49 @@ static void ProcessJSONElement( json_object * obj, DataElement & de )
     }
   else
     {
+    json_type jvaluetype = json_object_get_type( jvalue );
+    //const char * dummy = json_object_to_json_string ( jvalue );
+    assert( jvaluetype == json_type_array || jvaluetype == json_type_null );
+    if( jvaluetype == json_type_array )
+      {
+      DataElement locde;
+      const int valuelen = json_object_array_length ( jvalue );
+      const int vrsizeof = de.GetVR().GetSizeof();
+      switch( vrtype )
+        {
+      case VR::FL:
+          {
+          Element<VR::FL,VM::VM1_n> el;
+          el.SetLength( valuelen * vrsizeof );
+          for( int validx = 0; validx < valuelen; ++validx )
+            {
+            json_object * value = json_object_array_get_idx ( jvalue, validx );
+            assert( json_object_get_type( value ) == json_type_double );
+            const double v = json_object_get_double ( value );
+            el.SetValue(v, validx);
+            }
+          locde = el.GetAsDataElement();
+          }
+        break;
+      case VR::UL:
+          {
+          Element<VR::UL,VM::VM1_n> el;
+          el.SetLength( valuelen * vrsizeof );
+          for( int validx = 0; validx < valuelen; ++validx )
+            {
+            json_object * value = json_object_array_get_idx ( jvalue, validx );
+            assert( json_object_get_type( value ) == json_type_int );
+            const int v = json_object_get_int( value );
+            el.SetValue(v, validx);
+            }
+          locde = el.GetAsDataElement();
+          }
+        break;
+      default:
+        assert( 0 );
+        }
+      de.SetValue( locde.GetValue() );
+      }
     }
 }
 
@@ -356,14 +434,8 @@ bool JSON::Decode(std::istream & is, DataSet & ds)
     assert( name );
     json_object * value = json_object_iter_peek_value (&it);
     DataElement de;
-    ProcessJSONElement( value, de );
+    ProcessJSONElement( name, value, de );
     ds.Insert( de );
-
-    //size_t len = strlen( name );
-    //json_object_object_foreach(value, key, val)
-    //  {
-    //  //printf("\t%s: %s\n", key, json_object_to_json_string(val));
-    //  }
     json_object_iter_next(&it);
     }
 #else

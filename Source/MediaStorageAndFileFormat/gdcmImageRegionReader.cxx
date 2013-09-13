@@ -204,7 +204,7 @@ bool ImageRegionReader::ReadRLEIntoBuffer(char *buffer, size_t buflen)
 {
   (void)buflen;
   std::vector<unsigned int> dimensions = ImageHelper::GetDimensionsValue(GetFile());
-  PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
+  //const PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
 
   const FileMetaInformation &header = GetFile().GetHeader();
   const TransferSyntax &ts = header.GetDataSetTransferSyntax();
@@ -253,7 +253,7 @@ bool ImageRegionReader::ReadJPEG2000IntoBuffer(char *buffer, size_t buflen)
 {
   (void)buflen;
   std::vector<unsigned int> dimensions = ImageHelper::GetDimensionsValue(GetFile());
-  PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
+  //const PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
 
   const FileMetaInformation &header = GetFile().GetHeader();
   const TransferSyntax &ts = header.GetDataSetTransferSyntax();
@@ -302,7 +302,7 @@ bool ImageRegionReader::ReadJPEGIntoBuffer(char *buffer, size_t buflen)
 {
   (void)buflen;
   std::vector<unsigned int> dimensions = ImageHelper::GetDimensionsValue(GetFile());
-  PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
+  //const PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
 
   const FileMetaInformation &header = GetFile().GetHeader();
   const TransferSyntax &ts = header.GetDataSetTransferSyntax();
@@ -351,7 +351,7 @@ bool ImageRegionReader::ReadJPEGLSIntoBuffer(char *buffer, size_t buflen)
 {
   (void)buflen;
   std::vector<unsigned int> dimensions = ImageHelper::GetDimensionsValue(GetFile());
-  PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
+  //const PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
 
   const FileMetaInformation &header = GetFile().GetHeader();
   const TransferSyntax &ts = header.GetDataSetTransferSyntax();
