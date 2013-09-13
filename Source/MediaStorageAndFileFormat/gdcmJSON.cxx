@@ -59,6 +59,7 @@ void JSON::PrettyPrintOff()
   Internals->PrettyPrint = false;
 }
 
+#ifdef GDCM_USE_SYSTEM_JSON
 // Encode from DICOM to JSON
 // TODO: do I really need libjson for this task ?
 // FIXME: once again everything is loaded into memory
@@ -174,6 +175,7 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
     json_object_object_add(my_object, keyword, my_object_cur );
     }
 }
+#endif
 
 bool JSON::Code(DataSet const & ds, std::ostream & os)
 {
@@ -211,7 +213,7 @@ bool JSON::Code(DataSet const & ds, std::ostream & os)
   json_object_put(my_object); // free memory
   return true;
 #else
-  (void)file;
+  (void)ds;
   (void)os;
   return false;
 #endif
@@ -247,6 +249,7 @@ static bool CheckTagKeywordConsistency( const char *name, const Tag & thetag )
   return strcmp( name, keyword ) == 0;
 }
 
+#ifdef GDCM_USE_SYSTEM_JSON
 static void ProcessJSONElement( const char *keyword, json_object * obj, DataElement & de )
 {
   json_type jtype = json_object_get_type( obj );
@@ -378,6 +381,7 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
       }
     }
 }
+#endif
 
 bool JSON::Decode(std::istream & is, DataSet & ds)
 {
@@ -444,7 +448,7 @@ bool JSON::Decode(std::istream & is, DataSet & ds)
   return true;
 #else
   (void)is;
-  (void)file;
+  (void)ds;
   return false;
 #endif
 }
