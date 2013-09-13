@@ -54,6 +54,7 @@
 #cmakedefine GDCM_USE_SYSTEM_OPENSSL
 #cmakedefine GDCM_USE_SYSTEM_MD5
 #cmakedefine GDCM_USE_SYSTEM_EXPAT
+#cmakedefine GDCM_USE_SYSTEM_JSON
 #cmakedefine GDCM_USE_SYSTEM_LJPEG
 #cmakedefine GDCM_USE_SYSTEM_OPENJPEG
 #cmakedefine GDCM_USE_OPENJPEG_V2

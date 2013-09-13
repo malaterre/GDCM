@@ -2,6 +2,7 @@
 # MSFF
 set(MSFF_SRCS
   gdcmFileStreamer.cxx
+  gdcmJSON.cxx
   gdcmFileChangeTransferSyntax.cxx
   gdcmAnonymizer.cxx
   gdcmFileAnonymizer.cxx
@@ -199,6 +200,9 @@ if(WIN32)
 #endif()
 else()
 target_link_libraries(gdcmMSFF ${GDCMUUID})
+endif()
+if(GDCM_USE_SYSTEM_JSON)
+target_link_libraries(gdcmMSFF ${JSON_LIBRARIES})
 endif()
 
 # libs

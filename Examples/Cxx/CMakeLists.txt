@@ -27,6 +27,7 @@ endif()
 
 set(EXAMPLES_SRCS
   DumpGEMSMovieGroup
+  QIDO-RS
   DumpExamCard
   DumpPhilipsECHO
   ExtractIconFromFile
