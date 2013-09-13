@@ -196,6 +196,7 @@ public class";
 #include "gdcmJPEGCodec.h"
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
+#include "gdcmPNMCodec.h"
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmFileChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
@@ -771,6 +772,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmJPEGCodec.h"
 %include "gdcmJPEGLSCodec.h"
 %include "gdcmJPEG2000Codec.h"
+%include "gdcmPNMCodec.h"
 %include "gdcmImageChangeTransferSyntax.h"
 %template(SmartPtrFCTS) gdcm::SmartPointer<gdcm::FileChangeTransferSyntax>;
 %include "gdcmFileChangeTransferSyntax.h"

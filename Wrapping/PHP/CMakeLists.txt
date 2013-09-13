@@ -10,6 +10,7 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
 )
 
 #find_package(PHP4 REQUIRED)
@@ -27,7 +28,13 @@ set_source_files_properties(gdcm.i PROPERTIES CPLUSPLUS ON)
 
 # swig expect a name like that: php_gdcm.so
 SWIG_ADD_MODULE(php_gdcm php gdcm.i)
-SWIG_LINK_LIBRARIES(php_gdcm gdcmMSFF)
+SWIG_LINK_LIBRARIES(php_gdcm gdcmMSFF gdcmMEXD)
+# warning, by default there are undefined symbols in the generated php/gdcm module
+# one would need to actually link to : /usr/lib/apache2/modules/libphp5.so
+# I do not believe this is correct, instead make sure that
+# CMAKE_MODULE_LINKER_FLAGS = -Wl,--no-undefined
+# will make gdcm fails to compile:
+# with something like undefined reference to `zend_error'
 set_property(TARGET ${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTY NO_SONAME 1)
 
 set_target_properties(${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
