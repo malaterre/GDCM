@@ -31,13 +31,13 @@ int main(int argc, char *argv[])
   gdcm::JSON json;
   json.PrettyPrintOn();
   std::stringstream ss;
-  const File & f = reader.GetFile();
+  const gdcm::File & f = reader.GetFile();
   json.Code( f.GetDataSet(), ss);
 
   //std::cout << ss.str() << std::endl;
 
   gdcm::Writer w;
-  File & ff = w.GetFile();
+  gdcm::File & ff = w.GetFile();
   ff.GetHeader().SetDataSetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
   json.Decode(ss, ff.GetDataSet() );
   w.SetFileName( "/tmp/debug.dcm" );
