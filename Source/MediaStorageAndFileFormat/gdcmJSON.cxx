@@ -95,7 +95,7 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
     json_object_object_add(my_object_cur, "Tag",
       json_object_new_string( str_tag.c_str()) );
     json_object_object_add(my_object_cur, "VR",
-      json_object_new_string( vr_str ) );
+      json_object_new_string_len( vr_str, 2 ) );
 
     if( vr == VR::SQ )
       {
@@ -167,6 +167,8 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
             }
           }
         break;
+      case VR::UN:
+        break;
       default:
         assert( 0 );
         }
@@ -180,17 +182,6 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
 bool JSON::Code(DataSet const & ds, std::ostream & os)
 {
 #ifdef GDCM_USE_SYSTEM_JSON
-#if 0
-  json_object *my_string;
-  my_string = json_object_new_string("coucou");
-//  printf("my_string=%s\n", json_object_get_string(my_string));
-//  printf("my_string.to_string()=%s\n", json_object_to_json_string(my_string));
-
-  const char* str = json_object_to_json_string( my_string );
-  os << str;
-
-  json_object_put(my_string); // free memory
-#endif
   json_object *my_object;
   my_object = json_object_new_object();
 
@@ -246,6 +237,7 @@ static bool CheckTagKeywordConsistency( const char *name, const Tag & thetag )
     return true;
     }
   // else
+  assert( strcmp( name, keyword ) == 0 );
   return strcmp( name, keyword ) == 0;
 }
 
@@ -327,11 +319,17 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
     if( jvaluetype == json_type_array )
       {
       int valuelen = json_object_array_length ( jvalue );
-      assert( valuelen == 1 );
-      json_object * value0 = json_object_array_get_idx ( jvalue, 0 );
-      const char * value_str = json_object_get_string ( value0 );
-      if( value_str )
-        de.SetByteValue( value_str, strlen( value_str ) );
+      std::string str;
+      for( int validx = 0; validx < valuelen; ++validx )
+        {
+        if( validx ) str += '\\';
+        json_object * value = json_object_array_get_idx ( jvalue, validx );
+        const char * value_str = json_object_get_string ( value );
+        assert( value_str );
+        str += value_str;
+        }
+      if( str.size() % 2 ) str.push_back( ' ' );
+      de.SetByteValue( &str[0], str.size() );
       }
     }
   else
@@ -374,10 +372,13 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
           locde = el.GetAsDataElement();
           }
         break;
+      case VR::UN:
+        break;
       default:
         assert( 0 );
         }
-      de.SetValue( locde.GetValue() );
+      if( !locde.IsEmpty() )
+        de.SetValue( locde.GetValue() );
       }
     }
 }
@@ -400,12 +401,14 @@ bool JSON::Decode(std::istream & is, DataSet & ds)
     mystring = str.c_str();
     stringlen = str.size();
     jobj = json_tokener_parse_ex(tok, mystring, stringlen);
-    } while ((jerr = json_tokener_get_error(tok)) == json_tokener_continue);
+    //if( is.eof() ) break;
+    } while ((jerr = json_tokener_get_error(tok)) == json_tokener_continue );
 
   if (jerr != json_tokener_success)
     {
     fprintf(stderr, "Error: %s\n", json_tokener_error_desc(jerr));
     // Handle errors, as appropriate for your application.
+    assert( 0 );
     }
   if (tok->char_offset < stringlen) // XXX shouldn't access internal fields
     {

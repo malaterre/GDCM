@@ -114,6 +114,12 @@ if(GDCM_DATA_ROOT)
         TestAnonymizer3
         )
     endif()
+    if(GDCM_USE_SYSTEM_JSON)
+      set(MSFF_TEST_SRCS
+        ${MSFF_TEST_SRCS}
+        TestJSON1
+      )
+    endif()
 endif()
 
 # gdcmDataExtra
