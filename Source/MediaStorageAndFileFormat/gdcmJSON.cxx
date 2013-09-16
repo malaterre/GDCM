@@ -15,6 +15,7 @@
 #include "gdcmGlobal.h"
 #include "gdcmDicts.h"
 #include "gdcmBase64.h"
+#include "gdcmSystem.h"
 
 #ifdef GDCM_USE_SYSTEM_JSON
 #include <json/json.h>
@@ -26,14 +27,81 @@
 
 // TODO: CP 246 / VR=SQ + Sequence: !
 
+// Clarification needed:
+//  "00081070":{
+//    "Tag":"00081070",
+//    "VR":"PN",
+//    "Value":[
+//      null
+//    ]
+//  },
+
+
+// Need to pay attention that:
+// \ISO 2022 IR 13\ISO 2022 IR 87
+// encodes to:
+// [ null, "ISO 2022 IR 13", "ISO 2022 IR 87" ]
+// or ?
+// [ "", "ISO 2022 IR 13", "ISO 2022 IR 87" ]
+
+// TODO:
+// DS/IS should be encoded as number
+
+// Question, does F.2.5 DICOM JSON Model Null Values
+// imply:
+// "Sequence": [ null ] ?
+
 namespace gdcm
 {
+
+static inline bool CanContainBackslash( const VR::VRType vrtype )
+{
+  assert( VR::IsASCII( vrtype ) );
+  // PS 3.5-2011 / Table 6.2-1 DICOM VALUE REPRESENTATIONS
+  switch( vrtype )
+    {
+  case VR::AE: // ScheduledStationAETitle
+    //case AS: // no
+    //case AT: // binary
+  case VR::CS: // SpecificCharacterSet
+  case VR::DA: // CalibrationDate
+  case VR::DS: // FrameTimeVector
+  case VR::DT: // ReferencedDateTime
+    //case FD: // binary
+    //case FL:
+  case VR::IS: // ReferencedFrameNumber
+  case VR::LO: // OtherPatientIDs
+    //case LT: // VM1
+    //case OB: // binary
+    //case OD: //binary
+    //case OF: // binary
+    //case OW: // binary
+  case VR::PN: // PerformingPhysicianName
+  case VR::SH: // PatientTelephoneNumbers
+    //case SL: // binary
+    //case SQ: // binary
+    //case SS: // binary
+  /*case VR::ST: // CADFileFormat*/
+  case VR::TM: // CalibrationTime
+  case VR::UI: // SOPClassesInStudy
+    //case UL: // binary
+    //case UN: // binary
+    //case US: // binary
+    //case UT: // VM1
+    assert( !(vrtype & VR::VR_VM1) );
+    return true;
+  default:
+    ;
+    }
+  return false;
+}
 
 class JSONInternal
 {
 public:
-  JSONInternal():PrettyPrint(false){}
+  JSONInternal():PrettyPrint(false),PreferKeyword(false){}
   bool PrettyPrint;
+  bool PreferKeyword;
 };
 
 JSON::JSON()
@@ -63,11 +131,16 @@ void JSON::PrettyPrintOff()
   Internals->PrettyPrint = false;
 }
 
+void JSON::SetPreferKeyword(bool onoff)
+{
+  Internals->PreferKeyword = onoff;
+}
+
 #ifdef GDCM_USE_SYSTEM_JSON
 // Encode from DICOM to JSON
 // TODO: do I really need libjson for this task ?
 // FIXME: once again everything is loaded into memory
-static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
+static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, const bool preferkeyword )
 {
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
@@ -88,8 +161,6 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
       owner = strowner.c_str();
       }
     const DictEntry &entry = dicts.GetDictEntry(t,owner);
-    const char *keyword = entry.GetKeyword();
-    //assert( keyword && *keyword );
     const std::string & str_tag = t.PrintAsContinuousUpperCaseString();
     const bool issequence = vr == VR::SQ || de.IsUndefinedLength();
     const bool isprivatecreator = t.IsPrivateCreator();
@@ -133,7 +204,7 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
           json_object *my_object_sq;
           my_object_sq = json_object_new_object();
 
-          ProcessNestedDataSet( nested, my_object_sq );
+          ProcessNestedDataSet( nested, my_object_sq, preferkeyword );
           json_object_array_add(my_array, my_object_sq );
           }
         json_object_object_add(my_object_cur, "Sequence", my_array );
@@ -150,24 +221,33 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
        */
       if( de.IsEmpty() )
         {
+        // F.2.5 DICOM JSON Model Null Values
+        json_object_array_add(my_array, NULL );
         }
       else
         {
+        const bool checkbackslash = CanContainBackslash( vr );
         const ByteValue * bv = de.GetByteValue();
         const char * value = bv->GetPointer();
-        const size_t len = bv->GetLength();
+        size_t len = bv->GetLength();
+
         if( vr == VR::UI )
           {
-          // do not encode trailing \0 ?
           const std::string strui( value, len );
-          json_object_array_add(my_array, json_object_new_string(strui.c_str()));
+          len = strlen( strui.c_str() ); // trick to remove trailing \0
           }
-        else
+        const char *str1 = value;
+        while (1)
           {
-          json_object_array_add(my_array, json_object_new_string_len(value, len));
+          const char * sep = strchr(str1, '\\');
+          const size_t llen = (sep != NULL) ? (sep - str1) : (value + len - str1);
+          json_object_array_add(my_array, json_object_new_string_len(str1, llen));
+          if (sep == NULL) break;
+          str1 = sep + 1;
+          assert( checkbackslash );
           }
-        json_object_object_add(my_object_cur, "Value", my_array );
         }
+      json_object_object_add(my_object_cur, "Value", my_array );
       }
     else
       {
@@ -182,6 +262,17 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
           for( int i = 0; i < ellen; ++i )
             {
             json_object_array_add(my_array, json_object_new_double( el.GetValue( i ) ));
+            }
+          }
+        break;
+      case VR::SS:
+          {
+          Element<VR::SS,VM::VM1_n> el;
+          el.Set( de.GetValue() );
+          int ellen = el.GetLength();
+          for( int i = 0; i < ellen; ++i )
+            {
+            json_object_array_add(my_array, json_object_new_int( el.GetValue( i ) ));
             }
           }
         break;
@@ -207,6 +298,18 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
             }
           }
         break;
+      case VR::AT:
+          {
+          Element<VR::AT,VM::VM1_n> el;
+          el.Set( de.GetValue() );
+          int ellen = el.GetLength();
+          for( int i = 0; i < ellen; ++i )
+            {
+            const std::string atstr = el.GetValue( i ).PrintAsContinuousUpperCaseString();
+            json_object_array_add(my_array, json_object_new_string( atstr.c_str() ));
+            }
+          }
+        break;
       case VR::UN:
       case VR::INVALID:
           {
@@ -217,23 +320,37 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
             const char *src = bv->GetPointer();
             const size_t len = bv->GetLength();
             assert( len % 2 == 0 );
-            const int len64 = Base64::GetEncodeLength(src, len);
+            const size_t len64 = Base64::GetEncodeLength(src, len);
             buffer.resize( len64 );
-            const int ret = Base64::Encode( &buffer[0], len64, src, len );
+            const size_t ret = Base64::Encode( &buffer[0], len64, src, len );
             assert( ret != 0 );
             json_object_array_add(my_array, json_object_new_string_len(&buffer[0], len64));
+            }
+          else
+            {
+            // F.2.5 DICOM JSON Model Null Values
+            json_object_array_add(my_array, NULL );
             }
           }
         break;
       case VR::OB:
+      case VR::OW:
         break;
       default:
         assert( 0 );
         }
       json_object_object_add(my_object_cur, wheretostore, my_array );
       }
-    json_object_object_add(my_object, str_tag.c_str(), my_object_cur );
-    //json_object_object_add(my_object, keyword, my_object_cur );
+    const char *keyword = entry.GetKeyword();
+    //assert( keyword && *keyword );
+    if( preferkeyword && keyword && *keyword )
+      {
+      json_object_object_add(my_object, keyword, my_object_cur );
+      }
+    else
+      {
+      json_object_object_add(my_object, str_tag.c_str(), my_object_cur );
+      }
     }
 }
 #endif
@@ -244,7 +361,7 @@ bool JSON::Code(DataSet const & ds, std::ostream & os)
   json_object *my_object;
   my_object = json_object_new_object();
 
-  ProcessNestedDataSet( ds, my_object );
+  ProcessNestedDataSet( ds, my_object, Internals->PreferKeyword );
 
   const char* str = NULL;
   if( Internals->PrettyPrint )
@@ -310,6 +427,8 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
   json_object * jtag = json_object_object_get(obj, "Tag");
   json_object * jvr = json_object_object_get(obj, "VR");
   json_object * jvalue = json_object_object_get(obj, "Value");
+    //json_type jvaluetype = json_object_get_type( jvalue );
+
   const char * tag_str = json_object_get_string ( jtag );
   const char * vr_str = json_object_get_string ( jvr );
   de.GetTag().ReadFromContinuousString( tag_str );
@@ -380,9 +499,16 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
     }
   else if( VR::IsASCII( vrtype ) )
     {
+/*
+    F.2.5              DICOM JSON Model Null Values
+    If an attribute is present in DICOM but empty, it shall be preserved in the DICOM JSON object and passed
+    with the value of “null”. For example:
+    "Value": [ null ]
+*/
     json_type jvaluetype = json_object_get_type( jvalue );
     //const char * dummy = json_object_to_json_string ( jvalue );
-    assert( jvaluetype == json_type_array || jvaluetype == json_type_null );
+    assert( jvaluetype == json_type_array );
+    assert( jvaluetype != json_type_null );
     if( jvaluetype == json_type_array )
       {
       const int valuelen = json_object_array_length ( jvalue );
@@ -391,9 +517,20 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
         {
         if( validx ) str += '\\';
         json_object * value = json_object_array_get_idx ( jvalue, validx );
-        const char * value_str = json_object_get_string ( value );
-        assert( value_str );
-        str += value_str;
+        json_type valuetype = json_object_get_type( value );
+        if( value )
+          {
+          assert( valuetype != json_type_null );
+          const char * value_str = json_object_get_string ( value );
+          assert( value_str );
+          str += value_str;
+          }
+        else
+          {
+          // We have a [ null ] array, so at most there is a single item:
+          assert( valuelen == 1 );
+          assert( valuetype == json_type_null );
+          }
         }
       if( str.size() % 2 )
         {
@@ -409,7 +546,8 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
     {
     json_type jvaluetype = json_object_get_type( jvalue );
     //const char * dummy = json_object_to_json_string ( jvalue );
-    assert( jvaluetype == json_type_array || jvaluetype == json_type_null );
+    assert( jvaluetype == json_type_array );
+    assert( jvaluetype != json_type_null );
     if( jvaluetype == json_type_array )
       {
       DataElement locde;
@@ -426,6 +564,20 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
             json_object * value = json_object_array_get_idx ( jvalue, validx );
             assert( json_object_get_type( value ) == json_type_double );
             const double v = json_object_get_double ( value );
+            el.SetValue(v, validx);
+            }
+          locde = el.GetAsDataElement();
+          }
+        break;
+      case VR::SS:
+          {
+          Element<VR::SS,VM::VM1_n> el;
+          el.SetLength( valuelen * vrsizeof );
+          for( int validx = 0; validx < valuelen; ++validx )
+            {
+            json_object * value = json_object_array_get_idx ( jvalue, validx );
+            assert( json_object_get_type( value ) == json_type_int );
+            const int v = json_object_get_int( value );
             el.SetValue(v, validx);
             }
           locde = el.GetAsDataElement();
@@ -459,6 +611,22 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
           locde = el.GetAsDataElement();
           }
         break;
+      case VR::AT:
+          {
+          Element<VR::AT,VM::VM1_n> el;
+          el.SetLength( valuelen * vrsizeof );
+          for( int validx = 0; validx < valuelen; ++validx )
+            {
+            json_object * value = json_object_array_get_idx ( jvalue, validx );
+            assert( json_object_get_type( value ) == json_type_string );
+            const char *atstr = json_object_get_string( value );
+            Tag t;
+            t.ReadFromContinuousString( atstr );
+            el.SetValue(t, validx);
+            }
+          locde = el.GetAsDataElement();
+          }
+        break;
       case VR::UN:
       case VR::INVALID:
           {
@@ -466,20 +634,32 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
           if( valuelen )
             {
             json_object * value = json_object_array_get_idx ( jvalue, 0 );
-            const char * value_str = json_object_get_string ( value );
-            assert( value_str );
-            const size_t len64 = strlen( value_str );
-            const int len = Base64::GetDecodeLength( value_str, len64 );
-            std::vector<char> buffer;
-            buffer.resize( len );
-            const int ret = Base64::Decode( &buffer[0], len,
-              value_str, len64 );
-            assert( ret != 0 );
-            locde.SetByteValue( &buffer[0], len );
+            json_type valuetype = json_object_get_type( value );
+            if( value )
+              {
+              assert( valuetype != json_type_null );
+              const char * value_str = json_object_get_string ( value );
+              assert( value_str );
+              const size_t len64 = strlen( value_str );
+              const size_t len = Base64::GetDecodeLength( value_str, len64 );
+              std::vector<char> buffer;
+              buffer.resize( len );
+              const size_t ret = Base64::Decode( &buffer[0], len,
+                value_str, len64 );
+              assert( ret != 0 );
+              locde.SetByteValue( &buffer[0], len );
+              }
+            else
+              {
+              // We have a [ null ] array, so at most there is a single item:
+              assert( valuelen == 1 );
+              assert( valuetype == json_type_null );
+              }
             }
           }
         break;
       case VR::OB:
+      case VR::OW:
         break;
       default:
         assert( 0 );

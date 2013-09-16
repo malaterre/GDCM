@@ -37,6 +37,8 @@ public:
   void PrettyPrintOn();
   void PrettyPrintOff();
 
+  void SetPreferKeyword(bool onoff);
+
   bool Code(DataSet const & in, std::ostream & os);
   bool Decode(std::istream & is, DataSet & out);
 
