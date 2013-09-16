@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
   const gdcm::File & f = reader.GetFile();
   json.Code( f.GetDataSet(), ss);
 
-  //std::cout << ss.str() << std::endl;
+  std::cout << ss.str() << std::endl;
 
   gdcm::Writer w;
   gdcm::File & ff = w.GetFile();

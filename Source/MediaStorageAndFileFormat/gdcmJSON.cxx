@@ -14,6 +14,7 @@
 #include "gdcmJSON.h"
 #include "gdcmGlobal.h"
 #include "gdcmDicts.h"
+#include "gdcmBase64.h"
 
 #ifdef GDCM_USE_SYSTEM_JSON
 #include <json/json.h>
@@ -22,6 +23,9 @@
 /*
  * Implementation is done based on Sup166, which may change in the future.
  */
+
+// TODO: CP 246 / VR=SQ + Sequence: !
+
 namespace gdcm
 {
 
@@ -69,11 +73,12 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
   const Dicts &dicts = g.GetDicts();
   const Dict &d = dicts.GetPublicDict(); (void)d;
 
+  std::vector<char> buffer;
   for( DataSet::ConstIterator it = ds.Begin();
     it != ds.End(); ++it )
     {
     const DataElement &de = *it;
-    VR const & vr = de.GetVR();
+    VR::VRType vr = de.GetVR();
     const Tag& t = de.GetTag();
     std::string strowner;
     const char *owner = 0;
@@ -84,8 +89,15 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
       }
     const DictEntry &entry = dicts.GetDictEntry(t,owner);
     const char *keyword = entry.GetKeyword();
-    const std::string & str_tag = t.PrintAsContinuousString();
+    //assert( keyword && *keyword );
+    const std::string & str_tag = t.PrintAsContinuousUpperCaseString();
+    const bool issequence = vr == VR::SQ || de.IsUndefinedLength();
+    const bool isprivatecreator = t.IsPrivateCreator();
+    if( issequence ) vr = VR::SQ;
+    else if( isprivatecreator ) vr = VR::LO; // always prefer VR::LO (over invalid/UN)
+    else if( vr == VR::INVALID ) vr = VR::UN;
     const char * vr_str = VR::GetVRString(vr);
+    assert( VR::GetVRTypeFromFile(vr_str) != VR::INVALID );
 
     json_object *my_object_cur;
     my_object_cur = json_object_new_object();
@@ -96,9 +108,18 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
       json_object_new_string( str_tag.c_str()) );
     json_object_object_add(my_object_cur, "VR",
       json_object_new_string_len( vr_str, 2 ) );
+    if( owner )
+      {
+      json_object_object_add(my_object_cur, "PrivateCreator",
+        json_object_new_string( owner ) );
+      }
 
     if( vr == VR::SQ )
       {
+      // Handle CP 246 and VR:INVALID:
+      json_object_object_add(my_object_cur, "VR",
+        json_object_new_string_len( "SQ", 2 ) );
+
       SmartPointer<SequenceOfItems> sqi;
       sqi = de.GetValueAsSQ();
       if( sqi )
@@ -133,16 +154,24 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
       else
         {
         const ByteValue * bv = de.GetByteValue();
-
         const char * value = bv->GetPointer();
         const size_t len = bv->GetLength();
-        json_object_array_add(my_array, json_object_new_string_len(value, len));
-
+        if( vr == VR::UI )
+          {
+          // do not encode trailing \0 ?
+          const std::string strui( value, len );
+          json_object_array_add(my_array, json_object_new_string(strui.c_str()));
+          }
+        else
+          {
+          json_object_array_add(my_array, json_object_new_string_len(value, len));
+          }
         json_object_object_add(my_object_cur, "Value", my_array );
         }
       }
     else
       {
+      const char *wheretostore = "Value";
       switch( vr )
         {
       case VR::FL:
@@ -153,6 +182,17 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
           for( int i = 0; i < ellen; ++i )
             {
             json_object_array_add(my_array, json_object_new_double( el.GetValue( i ) ));
+            }
+          }
+        break;
+      case VR::US:
+          {
+          Element<VR::US,VM::VM1_n> el;
+          el.Set( de.GetValue() );
+          int ellen = el.GetLength();
+          for( int i = 0; i < ellen; ++i )
+            {
+            json_object_array_add(my_array, json_object_new_int( el.GetValue( i ) ));
             }
           }
         break;
@@ -168,13 +208,32 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object )
           }
         break;
       case VR::UN:
+      case VR::INVALID:
+          {
+          assert( !de.IsUndefinedLength() ); // handled before
+          const ByteValue * bv = de.GetByteValue();
+          if( bv )
+            {
+            const char *src = bv->GetPointer();
+            const size_t len = bv->GetLength();
+            assert( len % 2 == 0 );
+            const int len64 = Base64::GetEncodeLength(src, len);
+            buffer.resize( len64 );
+            const int ret = Base64::Encode( &buffer[0], len64, src, len );
+            assert( ret != 0 );
+            json_object_array_add(my_array, json_object_new_string_len(&buffer[0], len64));
+            }
+          }
+        break;
+      case VR::OB:
         break;
       default:
         assert( 0 );
         }
-      json_object_object_add(my_object_cur, "Value", my_array );
+      json_object_object_add(my_object_cur, wheretostore, my_array );
       }
-    json_object_object_add(my_object, keyword, my_object_cur );
+    json_object_object_add(my_object, str_tag.c_str(), my_object_cur );
+    //json_object_object_add(my_object, keyword, my_object_cur );
     }
 }
 #endif
@@ -255,8 +314,16 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
   const char * vr_str = json_object_get_string ( jvr );
   de.GetTag().ReadFromContinuousString( tag_str );
   assert( CheckTagKeywordConsistency( keyword, de.GetTag() ) );
+  const char * pc_str = 0;
+  if( de.GetTag().IsPrivate() && !de.GetTag().IsPrivateCreator() )
+    {
+    json_object * jprivatecreator = json_object_object_get(obj, "PrivateCreator");
+    pc_str = json_object_get_string ( jprivatecreator );
+    assert( pc_str );
+    }
 
   VR::VRType vrtype = VR::GetVRTypeFromFile( vr_str );
+  assert( vrtype != VR::INVALID );
   assert( vrtype != VR::VR_END );
   de.SetVR( vrtype );
   if( vrtype == VR::SQ )
@@ -318,7 +385,7 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
     assert( jvaluetype == json_type_array || jvaluetype == json_type_null );
     if( jvaluetype == json_type_array )
       {
-      int valuelen = json_object_array_length ( jvalue );
+      const int valuelen = json_object_array_length ( jvalue );
       std::string str;
       for( int validx = 0; validx < valuelen; ++validx )
         {
@@ -328,7 +395,13 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
         assert( value_str );
         str += value_str;
         }
-      if( str.size() % 2 ) str.push_back( ' ' );
+      if( str.size() % 2 )
+        {
+        if( vrtype == VR::UI )
+          str.push_back( 0 );
+        else
+          str.push_back( ' ' );
+        }
       de.SetByteValue( &str[0], str.size() );
       }
     }
@@ -341,7 +414,7 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
       {
       DataElement locde;
       const int valuelen = json_object_array_length ( jvalue );
-      const int vrsizeof = de.GetVR().GetSizeof();
+      const int vrsizeof = vrtype == VR::INVALID ? 0 : de.GetVR().GetSizeof();
       switch( vrtype )
         {
       case VR::FL:
@@ -353,6 +426,20 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
             json_object * value = json_object_array_get_idx ( jvalue, validx );
             assert( json_object_get_type( value ) == json_type_double );
             const double v = json_object_get_double ( value );
+            el.SetValue(v, validx);
+            }
+          locde = el.GetAsDataElement();
+          }
+        break;
+      case VR::US:
+          {
+          Element<VR::US,VM::VM1_n> el;
+          el.SetLength( valuelen * vrsizeof );
+          for( int validx = 0; validx < valuelen; ++validx )
+            {
+            json_object * value = json_object_array_get_idx ( jvalue, validx );
+            assert( json_object_get_type( value ) == json_type_int );
+            const int v = json_object_get_int( value );
             el.SetValue(v, validx);
             }
           locde = el.GetAsDataElement();
@@ -373,6 +460,26 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
           }
         break;
       case VR::UN:
+      case VR::INVALID:
+          {
+          assert( valuelen == 1 || valuelen == 0 );
+          if( valuelen )
+            {
+            json_object * value = json_object_array_get_idx ( jvalue, 0 );
+            const char * value_str = json_object_get_string ( value );
+            assert( value_str );
+            const size_t len64 = strlen( value_str );
+            const int len = Base64::GetDecodeLength( value_str, len64 );
+            std::vector<char> buffer;
+            buffer.resize( len );
+            const int ret = Base64::Decode( &buffer[0], len,
+              value_str, len64 );
+            assert( ret != 0 );
+            locde.SetByteValue( &buffer[0], len );
+            }
+          }
+        break;
+      case VR::OB:
         break;
       default:
         assert( 0 );

@@ -251,6 +251,9 @@ public:
   /// It comes in useful when reading tag values from XML file(in NativeDICOMModel)
   std::string PrintAsContinuousString() const;
 
+  /// Same as PrintAsContinuousString, but hexadecimal [a-f] are printed using upper case
+  std::string PrintAsContinuousUpperCaseString() const;
+
   /// Read from a pipe separated string (GDCM 1.x compat only). Do not use in newer code
   /// \see ReadFromCommaSeparatedString
   bool ReadFromPipeSeparatedString(const char *str);

@@ -12,7 +12,7 @@
 
 =========================================================================*/
 #include "gdcmBase64.h"
-#include <string.h>
+#include <string.h> // memcpy
 #include <iostream>
 
 namespace gdcm
@@ -55,10 +55,11 @@ static inline bool is_base64(unsigned char c) {
   return (isalnum(c) || (c == '+') || (c == '/'));
 }
 
-std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len) {
+static std::string base64_encode(unsigned char const* bytes_to_encode, size_t in_len)
+{
   std::string ret;
-  int i = 0;
-  int j = 0;
+  size_t i = 0;
+  size_t j = 0;
   unsigned char char_array_3[3];
   unsigned char char_array_4[4];
 
@@ -77,7 +78,7 @@ std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_
   }
 
   if (i)
-  {
+    {
     for(j = i; j < 3; j++)
       char_array_3[j] = '\0';
 
@@ -92,17 +93,17 @@ std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_
     while((i++ < 3))
       ret += '=';
 
-  }
+    }
 
   return ret;
-
 }
 
-std::string base64_decode(std::string const& encoded_string) {
-  int in_len = encoded_string.size();
-  int i = 0;
-  int j = 0;
-  int in_ = 0;
+static std::string base64_decode(std::string const& encoded_string)
+{
+  size_t in_len = encoded_string.size();
+  size_t i = 0;
+  size_t j = 0;
+  size_t in_ = 0;
   unsigned char char_array_4[4], char_array_3[3];
   std::string ret;
 
@@ -139,38 +140,34 @@ std::string base64_decode(std::string const& encoded_string) {
   return ret;
 }
 
-int Base64::GetEncodeLength(const char *src, int slen )
+size_t Base64::GetEncodeLength(const char *src, size_t slen )
 {
   std::string ret = base64_encode((unsigned char*)src, slen);
-  return ret.size() + 1;
-}
-
-int Base64::Encode( char *dst, int dlen,
-                   const char *src, int  slen )
-{
-  if( dlen < 0 ) return -1;
-  std::string ret = base64_encode((unsigned char*)src, slen);
-  if( ret.size() > (size_t)dlen )
-    return -1;
-  strncpy( dst, ret.c_str(), ret.size() );
-  return 0;
-}
-
-int Base64::GetDecodeLength( const char *src, int  slen )
-{
-  std::string ret = base64_decode( std::string( src, slen) );
   return ret.size();
 }
 
-int Base64::Decode( char *dst, int dlen,
-                   const char *src, int  slen )
+size_t Base64::Encode( char *dst, size_t dlen, const char *src, size_t slen )
 {
-  if( dlen < 0 ) return -1;
-  std::string ret = base64_decode( std::string( src, slen) );
-  if( ret.size() > (size_t)dlen )
-    return -1;
-  strncpy( dst, ret.c_str(), ret.size() );
-  return 0;
+  const std::string & ret = base64_encode((unsigned char*)src, slen);
+  if( ret.size() > dlen )
+    return 0;
+  memcpy( dst, ret.c_str(), ret.size() );
+  return ret.size();
+}
+
+size_t Base64::GetDecodeLength( const char *src, size_t slen )
+{
+  const std::string & ret = base64_decode( std::string( src, slen) );
+  return ret.size();
+}
+
+size_t Base64::Decode( char *dst, size_t dlen, const char *src, size_t slen )
+{
+  const std::string & ret = base64_decode( std::string( src, slen) );
+  if( ret.size() > dlen )
+    return 0;
+  memcpy( dst, ret.c_str(), ret.size() );
+  return ret.size();
 }
 
 } // end namespace gdcm
