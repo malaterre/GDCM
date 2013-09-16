@@ -66,6 +66,17 @@ namespace gdcm
     return os.str();
     }
 
+  std::string Tag::PrintAsContinuousUpperCaseString() const
+    {
+    std::ostringstream os;
+    const Tag &val = *this;
+    os.setf( std::ios::right);
+    os << std::uppercase << std::hex << std::setw( 4 ) << std::setfill( '0' )
+      << val[0] << std::setw( 4 ) << std::setfill( '0' )
+      << val[1] << std::setfill( ' ' ) << std::dec;
+    return os.str();
+    }
+
   std::string Tag::PrintAsPipeSeparatedString() const
     {
     std::ostringstream _os;
