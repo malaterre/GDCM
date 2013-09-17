@@ -31,11 +31,12 @@ int TestJSON1(int, char *[])
   std::ifstream is( sup166.c_str() );
   gdcm::JSON json;
   json.PrettyPrintOn();
+  json.PreferKeywordOn();
 
 #if 1
   gdcm::DataSet ds;
   json.Decode(is, ds );
-  std::cout << ds << std::endl;
+  //std::cout << ds << std::endl;
 #else
   gdcm::Writer w;
   gdcm::File & ff = w.GetFile();

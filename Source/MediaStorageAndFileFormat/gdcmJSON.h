@@ -32,12 +32,15 @@ public:
   JSON();
   ~JSON();
 
-  void SetPrettyPrint(bool onoff);
   bool GetPrettyPrint() const;
+  void SetPrettyPrint(bool onoff);
   void PrettyPrintOn();
   void PrettyPrintOff();
 
+  bool GetPreferKeyword() const;
   void SetPreferKeyword(bool onoff);
+  void PreferKeywordOn();
+  void PreferKeywordOff();
 
   bool Code(DataSet const & in, std::ostream & os);
   bool Decode(std::istream & is, DataSet & out);

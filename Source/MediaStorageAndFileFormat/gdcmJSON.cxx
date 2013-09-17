@@ -51,6 +51,11 @@
 // imply:
 // "Sequence": [ null ] ?
 
+// does not make any sense to send Group Length...
+
+// Clarification needed, specs says IS should be a Number but example uses
+// String
+
 namespace gdcm
 {
 
@@ -61,33 +66,33 @@ static inline bool CanContainBackslash( const VR::VRType vrtype )
   switch( vrtype )
     {
   case VR::AE: // ScheduledStationAETitle
-    //case AS: // no
-    //case AT: // binary
+    //case VR::AS: // no
+    //case VR::AT: // binary
   case VR::CS: // SpecificCharacterSet
   case VR::DA: // CalibrationDate
   case VR::DS: // FrameTimeVector
   case VR::DT: // ReferencedDateTime
-    //case FD: // binary
-    //case FL:
+    //case VR::FD: // binary
+    //case VR::FL:
   case VR::IS: // ReferencedFrameNumber
   case VR::LO: // OtherPatientIDs
-    //case LT: // VM1
-    //case OB: // binary
-    //case OD: //binary
-    //case OF: // binary
-    //case OW: // binary
+    //case VR::LT: // VM1
+    //case VR::OB: // binary
+    //case VR::OD: // binary
+    //case VR::OF: // binary
+    //case VR::OW: // binary
   case VR::PN: // PerformingPhysicianName
   case VR::SH: // PatientTelephoneNumbers
-    //case SL: // binary
-    //case SQ: // binary
-    //case SS: // binary
-  /*case VR::ST: // CADFileFormat*/
+    //case VR::SL: // binary
+    //case VR::SQ: // binary
+    //case VR::SS: // binary
+    //case VR::ST: // VM1
   case VR::TM: // CalibrationTime
   case VR::UI: // SOPClassesInStudy
-    //case UL: // binary
-    //case UN: // binary
-    //case US: // binary
-    //case UT: // VM1
+    //case VR::UL: // binary
+    //case VR::UN: // binary
+    //case VR::US: // binary
+    //case VR::UT: // VM1
     assert( !(vrtype & VR::VR_VM1) );
     return true;
   default:
@@ -135,8 +140,136 @@ void JSON::SetPreferKeyword(bool onoff)
 {
   Internals->PreferKeyword = onoff;
 }
+bool JSON::GetPreferKeyword() const
+{
+  return Internals->PreferKeyword;
+}
+void JSON::PreferKeywordOn()
+{
+  Internals->PreferKeyword = true;
+}
+void JSON::PreferKeywordOff()
+{
+  Internals->PreferKeyword = false;
+}
 
 #ifdef GDCM_USE_SYSTEM_JSON
+
+/*
+  "StudyInstanceUID": {
+    "Tag": "0020000D",
+    "VR": "UI",
+    "Value": [ "1.2.392.200036.9116.2.2.2.1762893313.1029997326.945873" ]
+    },
+*/
+
+static void DataElementToJSONArray( const VR::VRType vr, const DataElement & de, json_object *my_array )
+{
+  if( de.IsEmpty() )
+    {
+    // F.2.5 DICOM JSON Model Null Values
+    if( vr == VR::PN )
+      {
+      json_object *my_object_comp = json_object_new_object();
+      json_object_array_add(my_array, my_object_comp );
+      }
+    else
+      json_object_array_add(my_array, NULL );
+    return;
+    }
+  // else
+  assert( !de.IsEmpty() );
+  const bool checkbackslash = CanContainBackslash( vr );
+  const ByteValue * bv = de.GetByteValue();
+  const char * value = bv->GetPointer();
+  const size_t len = bv->GetLength();
+
+  if( vr == VR::UI )
+    {
+    const std::string strui( value, len );
+    const size_t lenuid = strlen( strui.c_str() ); // trick to remove trailing \0
+    json_object_array_add(my_array, json_object_new_string_len(strui.c_str(), lenuid));
+    }
+  else if( vr == VR::PN )
+    {
+    const char *str1 = value;
+    assert( str1 );
+    std::stringstream ss;
+    static const char *Keys[] = {
+      "SingleByte",
+      "Ideographic",
+      "Phonetic",
+    };
+    while (1)
+      {
+      assert( str1 && (size_t)(str1 - value) < len );
+      const char * sep = strchr(str1, '\\');
+      const size_t llen = (sep != NULL) ? (sep - str1) : (value + len - str1);
+      const std::string component(str1, llen);
+
+      const char *str2 = component.c_str();
+      assert( str2 );
+      const size_t len2 = component.size();
+      assert( len2 == llen );
+
+      int idx = 0;
+      json_object *my_object_comp = json_object_new_object();
+      while (1)
+        {
+        assert( str2 && (size_t)(str2 - component.c_str() ) < len2 );
+        const char * sep2 = strchr(str2, '=');
+        const size_t llen2 = (sep2 != NULL) ? (sep2 - str2) : (component.c_str() + len2 - str2);
+        const std::string group(str2, llen2);
+        const char *thekey = Keys[idx++];
+
+        json_object_object_add(my_object_comp, thekey,
+          json_object_new_string_len( group.c_str(), group.size() ) );
+        if (sep2 == NULL) break;
+        str2 = sep2 + 1;
+        }
+      json_object_array_add(my_array, my_object_comp);
+      if (sep == NULL) break;
+      str1 = sep + 1;
+      assert( checkbackslash );
+      }
+    }
+  else if( vr == VR::DS || vr == VR::IS )
+    {
+    const char *str1 = value;
+    assert( str1 );
+    std::stringstream ss;
+    VRToType<VR::IS>::Type vris;
+    VRToType<VR::DS>::Type vrds;
+    while (1)
+      {
+      assert( str1 && (size_t)(str1 - value) < len );
+      const char * sep = strchr(str1, '\\');
+      const size_t llen = (sep != NULL) ? (sep - str1) : (value + len - str1);
+      // This is complex, IS/DS should not be stored as string anymore
+      switch( vr )
+        {
+      case VR::IS:
+        ss.str( std::string(str1, llen) );
+        ss >> vris;
+        json_object_array_add(my_array, json_object_new_int(vris)); // json_object_new_int takes an int32_t
+        break;
+      case VR::DS:
+        ss.str( std::string(str1, llen) );
+        ss >> vrds;
+        json_object_array_add(my_array, json_object_new_double(vrds));
+        break;
+        }
+      if (sep == NULL) break;
+      str1 = sep + 1;
+      assert( checkbackslash );
+      }
+    }
+  else // default
+    {
+    json_object_array_add(my_array, json_object_new_string_len(value, len));
+    }
+}
+
 // Encode from DICOM to JSON
 // TODO: do I really need libjson for this task ?
 // FIXME: once again everything is loaded into memory
@@ -153,6 +286,7 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
     const DataElement &de = *it;
     VR::VRType vr = de.GetVR();
     const Tag& t = de.GetTag();
+    if( t.IsGroupLength() ) continue; // I do not see why we should send those ?
     std::string strowner;
     const char *owner = 0;
     if( t.IsPrivate() && !t.IsPrivateCreator() )
@@ -187,10 +321,6 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
 
     if( vr == VR::SQ )
       {
-      // Handle CP 246 and VR:INVALID:
-      json_object_object_add(my_object_cur, "VR",
-        json_object_new_string_len( "SQ", 2 ) );
-
       SmartPointer<SequenceOfItems> sqi;
       sqi = de.GetValueAsSQ();
       if( sqi )
@@ -207,53 +337,39 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
           ProcessNestedDataSet( nested, my_object_sq, preferkeyword );
           json_object_array_add(my_array, my_object_sq );
           }
-        json_object_object_add(my_object_cur, "Sequence", my_array );
-        }
-      }
-    else if( VR::IsASCII( vr ) )
-      {
-      /*
-      "StudyInstanceUID": {
-      "Tag": "0020000D",
-      "VR": "UI",
-      "Value": [ "1.2.392.200036.9116.2.2.2.1762893313.1029997326.945873" ]
-      },
-       */
-      if( de.IsEmpty() )
-        {
-        // F.2.5 DICOM JSON Model Null Values
-        json_object_array_add(my_array, NULL );
         }
       else
         {
-        const bool checkbackslash = CanContainBackslash( vr );
-        const ByteValue * bv = de.GetByteValue();
-        const char * value = bv->GetPointer();
-        size_t len = bv->GetLength();
-
-        if( vr == VR::UI )
-          {
-          const std::string strui( value, len );
-          len = strlen( strui.c_str() ); // trick to remove trailing \0
-          }
-        const char *str1 = value;
-        while (1)
-          {
-          const char * sep = strchr(str1, '\\');
-          const size_t llen = (sep != NULL) ? (sep - str1) : (value + len - str1);
-          json_object_array_add(my_array, json_object_new_string_len(str1, llen));
-          if (sep == NULL) break;
-          str1 = sep + 1;
-          assert( checkbackslash );
-          }
+        assert( de.IsEmpty() );
+        json_object_array_add(my_array, NULL ); // F.2.5 req ?
         }
-      json_object_object_add(my_object_cur, "Value", my_array );
+      json_object_object_add(my_object_cur, "Sequence", my_array );
+      }
+    else if( VR::IsASCII( vr ) )
+      {
+      DataElementToJSONArray( vr, de, my_array );
+      if( vr == VR::PN )
+        json_object_object_add(my_object_cur, "PersonName", my_array );
+      else
+        json_object_object_add(my_object_cur, "Value", my_array );
       }
     else
       {
       const char *wheretostore = "Value";
       switch( vr )
         {
+      case VR::FD:
+          {
+          // Does not work, see https://github.com/json-c/json-c/pull/59
+          Element<VR::FD,VM::VM1_n> el;
+          el.Set( de.GetValue() );
+          int ellen = el.GetLength();
+          for( int i = 0; i < ellen; ++i )
+            {
+            json_object_array_add(my_array, json_object_new_double( el.GetValue( i ) ));
+            }
+          }
+        break;
       case VR::FL:
           {
           Element<VR::FL,VM::VM1_n> el;
@@ -279,6 +395,17 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
       case VR::US:
           {
           Element<VR::US,VM::VM1_n> el;
+          el.Set( de.GetValue() );
+          int ellen = el.GetLength();
+          for( int i = 0; i < ellen; ++i )
+            {
+            json_object_array_add(my_array, json_object_new_int( el.GetValue( i ) ));
+            }
+          }
+        break;
+      case VR::SL:
+          {
+          Element<VR::SL,VM::VM1_n> el;
           el.Set( de.GetValue() );
           int ellen = el.GetLength();
           for( int i = 0; i < ellen; ++i )
@@ -343,7 +470,7 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
       }
     const char *keyword = entry.GetKeyword();
     //assert( keyword && *keyword );
-    if( preferkeyword && keyword && *keyword )
+    if( preferkeyword && keyword && *keyword && !t.IsPrivateCreator() )
       {
       json_object_object_add(my_object, keyword, my_object_cur );
       }
@@ -387,7 +514,7 @@ bool JSON::Code(DataSet const & ds, std::ostream & os)
 }
 
 // Paranoid
-static bool CheckTagKeywordConsistency( const char *name, const Tag & thetag )
+static inline bool CheckTagKeywordConsistency( const char *name, const Tag & thetag )
 {
   // Can be keyword or tag
   assert( name );
@@ -426,8 +553,6 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
   //const char * dummy2 = json_object_to_json_string ( tag );
   json_object * jtag = json_object_object_get(obj, "Tag");
   json_object * jvr = json_object_object_get(obj, "VR");
-  json_object * jvalue = json_object_object_get(obj, "Value");
-    //json_type jvaluetype = json_object_get_type( jvalue );
 
   const char * tag_str = json_object_get_string ( jtag );
   const char * vr_str = json_object_get_string ( jvr );
@@ -445,13 +570,17 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
   assert( vrtype != VR::INVALID );
   assert( vrtype != VR::VR_END );
   de.SetVR( vrtype );
+
   if( vrtype == VR::SQ )
     {
+#ifndef NDEBUG
+    json_object * jvalue = json_object_object_get(obj, "Value");
     json_type jvaluetype = json_object_get_type( jvalue );
     assert( jvaluetype == json_type_null );
+#endif
     json_object * jseq = json_object_object_get(obj, "Sequence");
     json_type jsqtype = json_object_get_type( jseq );
-    assert( jsqtype == json_type_null || jsqtype == json_type_array );
+    assert( /*jsqtype == json_type_null ||*/ jsqtype == json_type_array );
 
     if( jsqtype == json_type_array )
       {
@@ -505,12 +634,16 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
     with the value of “null”. For example:
     "Value": [ null ]
 */
+    json_object * jvalue = json_object_object_get(obj, "Value");
+    json_object * jpn = json_object_object_get(obj, "PersonName");
     json_type jvaluetype = json_object_get_type( jvalue );
+    json_type jpntype = json_object_get_type( jpn );
     //const char * dummy = json_object_to_json_string ( jvalue );
-    assert( jvaluetype == json_type_array );
-    assert( jvaluetype != json_type_null );
+    assert( jvaluetype == json_type_array || jpntype == json_type_array );
+    assert( jvaluetype != json_type_null || jpntype != json_type_null );
     if( jvaluetype == json_type_array )
       {
+      assert( vrtype != VR::PN );
       const int valuelen = json_object_array_length ( jvalue );
       std::string str;
       for( int validx = 0; validx < valuelen; ++validx )
@@ -521,8 +654,29 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
         if( value )
           {
           assert( valuetype != json_type_null );
-          const char * value_str = json_object_get_string ( value );
-          assert( value_str );
+          std::string value_str;
+          std::stringstream ss;
+          VRToType<VR::IS>::Type vris;
+          VRToType<VR::DS>::Type vrds;
+          switch( vrtype )
+            {
+          case VR::PN:
+            assert( 0 );
+            break;
+          case VR::IS:
+            vris = json_object_get_int( value );
+            ss << vris;
+            value_str = ss.str();
+            break;
+          case VR::DS:
+            vrds = json_object_get_double( value );
+            ss << vrds;
+            value_str = ss.str();
+            break;
+          default:
+            value_str = json_object_get_string ( value );
+            }
+          assert( !value_str.empty() );
           str += value_str;
           }
         else
@@ -541,9 +695,39 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
         }
       de.SetByteValue( &str[0], str.size() );
       }
+    else if( jpntype == json_type_array )
+      {
+      assert( vrtype == VR::PN );
+      const int pnlen = json_object_array_length ( jpn );
+      std::string str;
+      for( int pnidx = 0; pnidx < pnlen; ++pnidx )
+        {
+        if( pnidx ) str += '\\';
+        json_object * value = json_object_array_get_idx ( jpn, pnidx );
+        json_type valuetype = json_object_get_type( value );
+        assert( valuetype == json_type_object );
+        assert( value );
+        json_object * jopn[3];
+        jopn[0] = json_object_object_get(value, "SingleByte");
+        jopn[1]= json_object_object_get(value, "Ideographic");
+        jopn[2]= json_object_object_get(value, "Phonetic");
+        for( int i = 0; i < 3; ++i )
+          {
+          const char *value_str = json_object_get_string ( jopn[i] );
+          if( value_str )
+            {
+            if( i ) str += '=';
+            str += value_str;
+            }
+          }
+        }
+      if( str.size() % 2 ) str.push_back( ' ' );
+      de.SetByteValue( &str[0], str.size() );
+      }
     }
   else
     {
+    json_object * jvalue = json_object_object_get(obj, "Value");
     json_type jvaluetype = json_object_get_type( jvalue );
     //const char * dummy = json_object_to_json_string ( jvalue );
     assert( jvaluetype == json_type_array );
@@ -555,6 +739,20 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
       const int vrsizeof = vrtype == VR::INVALID ? 0 : de.GetVR().GetSizeof();
       switch( vrtype )
         {
+      case VR::FD:
+          {
+          Element<VR::FD,VM::VM1_n> el;
+          el.SetLength( valuelen * vrsizeof );
+          for( int validx = 0; validx < valuelen; ++validx )
+            {
+            json_object * value = json_object_array_get_idx ( jvalue, validx );
+            assert( json_object_get_type( value ) == json_type_double );
+            const double v = json_object_get_double ( value );
+            el.SetValue(v, validx);
+            }
+          locde = el.GetAsDataElement();
+          }
+        break;
       case VR::FL:
           {
           Element<VR::FL,VM::VM1_n> el;
@@ -586,6 +784,20 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
       case VR::US:
           {
           Element<VR::US,VM::VM1_n> el;
+          el.SetLength( valuelen * vrsizeof );
+          for( int validx = 0; validx < valuelen; ++validx )
+            {
+            json_object * value = json_object_array_get_idx ( jvalue, validx );
+            assert( json_object_get_type( value ) == json_type_int );
+            const int v = json_object_get_int( value );
+            el.SetValue(v, validx);
+            }
+          locde = el.GetAsDataElement();
+          }
+        break;
+      case VR::SL:
+          {
+          Element<VR::SL,VM::VM1_n> el;
           el.SetLength( valuelen * vrsizeof );
           for( int validx = 0; validx < valuelen; ++validx )
             {
