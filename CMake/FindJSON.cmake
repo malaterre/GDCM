@@ -14,8 +14,10 @@
 # See:
 # https://github.com/json-c/json-c/wiki
 # $ sudo apt-get install libjson0-dev
+# in sid:
+# $ sudo apt-get install libjson-c-dev
 
-find_path(JSON_INCLUDE_DIR NAMES json/json.h)
+find_path(JSON_INCLUDE_DIR NAMES json-c/json.h json/json.h)
 find_library(JSON_LIBRARY NAMES json-c json)
 
 include(FindPackageHandleStandardArgs)
