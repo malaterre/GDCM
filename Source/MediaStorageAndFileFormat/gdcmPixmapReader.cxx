@@ -720,8 +720,16 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
       photometricinterpretation->GetPointer(),
       photometricinterpretation->GetLength() );
     pi = PhotometricInterpretation::GetPIType( photometricinterpretation_str.c_str() );
+    // http://www.dominator.com/assets/003/5278.pdf
+    // JPEG 2000 lossless YUV_RCT
+    if( pi == PhotometricInterpretation::PI_END )
+      {
+      gdcmWarningMacro( "Discarding suspicious PhotometricInterpretation found: "
+        << photometricinterpretation_str );
+      }
     }
-  else
+  // try again harder:
+  if( !photometricinterpretation || pi == PhotometricInterpretation::PI_END )
     {
     if( pf.GetSamplesPerPixel() == 1 )
       {
@@ -735,11 +743,16 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
       }
     else if( pf.GetSamplesPerPixel() == 4 )
       {
-      gdcmWarningMacro( "No PhotometricInterpretation found, default to RGB" );
+      gdcmWarningMacro( "No PhotometricInterpretation found, default to ARGB" );
       pi = PhotometricInterpretation::ARGB;
       }
+    else
+      {
+      gdcmWarningMacro( "Impossible value for Samples Per Pixel: " << pf.GetSamplesPerPixel() );
+      return false;
+      }
     }
-
+  assert( pi != PhotometricInterpretation::PI_END );
   if( !pf.GetSamplesPerPixel() || (pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel()) )
     {
     if( pi != PhotometricInterpretation::UNKNOW )
@@ -755,7 +768,9 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
       }
     else
       {
-      gdcmWarningMacro( "Cannot recognize image type. Does not looks like ACR-NEMA and is missing both Sample Per Pixel AND PhotometricInterpretation. Please report" );
+      gdcmWarningMacro( "Cannot recognize image type. Does not looks like"
+        "ACR-NEMA and is missing both Sample Per Pixel AND PhotometricInterpretation."
+        "Please report" );
       return false;
       }
     }
