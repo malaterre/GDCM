@@ -59,6 +59,12 @@
 namespace gdcm
 {
 
+static inline void wstrim(std::string& str)
+{
+  str.erase(0, str.find_first_not_of(' '));
+  str.erase(str.find_last_not_of(' ')+1);
+}
+
 static inline bool CanContainBackslash( const VR::VRType vrtype )
 {
   assert( VR::IsASCII( vrtype ) );
@@ -182,7 +188,7 @@ static void DataElementToJSONArray( const VR::VRType vr, const DataElement & de,
   const bool checkbackslash = CanContainBackslash( vr );
   const ByteValue * bv = de.GetByteValue();
   const char * value = bv->GetPointer();
-  const size_t len = bv->GetLength();
+  size_t len = bv->GetLength();
 
   if( vr == VR::UI )
     {
@@ -193,6 +199,11 @@ static void DataElementToJSONArray( const VR::VRType vr, const DataElement & de,
   else if( vr == VR::PN )
     {
     const char *str1 = value;
+    // remove whitespace:
+    while( str1[len-1] == ' ' )
+      {
+      len--;
+      }
     assert( str1 );
     std::stringstream ss;
     static const char *Keys[] = {
@@ -202,7 +213,7 @@ static void DataElementToJSONArray( const VR::VRType vr, const DataElement & de,
     };
     while (1)
       {
-      assert( str1 && (size_t)(str1 - value) < len );
+      assert( str1 && (size_t)(str1 - value) <= len );
       const char * sep = strchr(str1, '\\');
       const size_t llen = (sep != NULL) ? (sep - str1) : (value + len - str1);
       const std::string component(str1, llen);
@@ -216,7 +227,7 @@ static void DataElementToJSONArray( const VR::VRType vr, const DataElement & de,
       json_object *my_object_comp = json_object_new_object();
       while (1)
         {
-        assert( str2 && (size_t)(str2 - component.c_str() ) < len2 );
+        assert( str2 && (size_t)(str2 - component.c_str() ) <= len2 );
         const char * sep2 = strchr(str2, '=');
         const size_t llen2 = (sep2 != NULL) ? (sep2 - str2) : (component.c_str() + len2 - str2);
         const std::string group(str2, llen2);
@@ -242,7 +253,7 @@ static void DataElementToJSONArray( const VR::VRType vr, const DataElement & de,
     VRToType<VR::DS>::Type vrds;
     while (1)
       {
-      assert( str1 && (size_t)(str1 - value) < len );
+      assert( str1 && (size_t)(str1 - value) <= len );
       const char * sep = strchr(str1, '\\');
       const size_t llen = (sep != NULL) ? (sep - str1) : (value + len - str1);
       // This is complex, IS/DS should not be stored as string anymore
@@ -262,6 +273,20 @@ static void DataElementToJSONArray( const VR::VRType vr, const DataElement & de,
       if (sep == NULL) break;
       str1 = sep + 1;
       assert( checkbackslash );
+      }
+    }
+  else if( checkbackslash )
+    {
+    const char *str1 = value;
+    assert( str1 );
+    while (1)
+      {
+      assert( str1 && (size_t)(str1 - value) <= len );
+      const char * sep = strchr(str1, '\\');
+      const size_t llen = (sep != NULL) ? (sep - str1) : (value + len - str1);
+      json_object_array_add(my_array, json_object_new_string_len(str1, llen));
+      if (sep == NULL) break;
+      str1 = sep + 1;
       }
     }
   else // default
@@ -337,6 +362,10 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
           ProcessNestedDataSet( nested, my_object_sq, preferkeyword );
           json_object_array_add(my_array, my_object_sq );
           }
+        }
+      else if( const SequenceOfFragments *sqf = de.GetSequenceOfFragments() )
+        {
+        json_object_array_add(my_array, NULL ); // FIXME
         }
       else
         {
@@ -494,7 +523,7 @@ bool JSON::Code(DataSet const & ds, std::ostream & os)
   if( Internals->PrettyPrint )
     {
 #ifdef JSON_C_VERSION
-    str = json_object_to_json_string_ext(my_object, JSON_C_TO_STRING_PRETTY );
+    str = json_object_to_json_string_ext(my_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY );
 #else
     str = json_object_to_json_string( my_object );
 #endif
@@ -581,7 +610,7 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
     json_object * jseq = json_object_object_get(obj, "Sequence");
     json_type jsqtype = json_object_get_type( jseq );
     assert( /*jsqtype == json_type_null ||*/ jsqtype == json_type_array );
-
+    if( de.GetTag() == Tag(0x7fe0,0x0010) ) return; // FIXME
     if( jsqtype == json_type_array )
       {
       // Create a Sequence
@@ -676,7 +705,6 @@ static void ProcessJSONElement( const char *keyword, json_object * obj, DataElem
           default:
             value_str = json_object_get_string ( value );
             }
-          assert( !value_str.empty() );
           str += value_str;
           }
         else
