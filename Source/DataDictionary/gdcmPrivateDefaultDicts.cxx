@@ -3276,6 +3276,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0023,0x0070,"GEMS_STDY_01",VR::FD,VM::VM1,"Start time(secs) in first axial",false },
   {0x0023,0x0074,"GEMS_STDY_01",VR::SL,VM::VM1,"No. of updates to header",false },
   {0x0023,0x007d,"GEMS_STDY_01",VR::SS,VM::VM1,"Indicates study has complete info (DICOM/genesis)",false },
+  {0x0023,0x0080,"GEMS_STDY_01",VR::SQ,VM::VM1,"Has MPPS related tags",false },
   {0x6003,0x0010,"GEMS_Ultrasound_ImageGroup_001",VR::SQ,VM::VM1,"GEMS Image Thumbnail Sequence",false },
   {0x6003,0x0011,"GEMS_Ultrasound_ImageGroup_001",VR::OB,VM::VM1,"GEMS Thumbnail Pixel Data (uncompressed)",false },
   {0x7fe1,0x0001,"GEMS_Ultrasound_MovieGroup_001",VR::SQ,VM::VM1,"?",false },
