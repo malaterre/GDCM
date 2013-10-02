@@ -84,6 +84,7 @@
 #include "gdcmDictEntry.h"
 #include "gdcmCSAHeaderDictEntry.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmUUIDGenerator.h"
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
 #include "gdcmAttribute.h"
@@ -99,6 +100,7 @@
 #include "gdcmIPPSorter.h"
 #include "gdcmSpectroscopy.h"
 #include "gdcmPrinter.h"
+#include "gdcmXMLPrinter.h"
 #include "gdcmDumper.h"
 #include "gdcmOrientation.h"
 #include "gdcmFiducials.h"
@@ -162,6 +164,7 @@
 #include "gdcmSHA1.h"
 #include "gdcmBase64.h"
 #include "gdcmCryptographicMessageSyntax.h"
+#include "gdcmCryptoFactory.h"
 #include "gdcmSpacing.h"
 #include "gdcmIconImageGenerator.h"
 #include "gdcmIconImageFilter.h"
@@ -335,6 +338,7 @@ EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %include "gdcmDataSet.h"
 EXTEND_CLASS_PRINT(gdcm::DataSet)
 //%include "gdcmString.h"
+//%include "gdcmCodeString.h"
 //%include "gdcmTransferSyntax.h"
 %include "gdcmPhotometricInterpretation.h"
 EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
@@ -542,6 +546,8 @@ EXTEND_CLASS_PRINT(gdcm::IPPSorter)
 //EXTEND_CLASS_PRINT(gdcm::Spectroscopy)
 %include "gdcmPrinter.h"
 //EXTEND_CLASS_PRINT(gdcm::Printer)
+%include "gdcmXMLPrinter.h"
+//EXTEND_CLASS_PRINT(gdcm::XMLPrinter)
 %include "gdcmDumper.h"
 //EXTEND_CLASS_PRINT(gdcm::Dumper)
 %include "gdcmOrientation.h"
@@ -648,6 +654,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmSHA1.h"
 //%include "gdcmBase64.h"
 %include "gdcmCryptographicMessageSyntax.h"
+%include "gdcmCryptoFactory.h"
 %include "gdcmSpacing.h"
 %include "gdcmIconImageGenerator.h"
 %include "gdcmIconImageFilter.h"

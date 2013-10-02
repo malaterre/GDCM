@@ -71,7 +71,10 @@ ServiceClassUser::~ServiceClassUser()
 
 void ServiceClassUser::SetPresentationContexts(std::vector<PresentationContext> const & pcs)
 {
-  Internals->mConnection->SetPresentationContexts(pcs);
+  if( Internals->mConnection )
+    {
+    Internals->mConnection->SetPresentationContexts(pcs);
+    }
 }
 
 bool ServiceClassUser::IsPresentationContextAccepted(const PresentationContext& pc) const
@@ -346,9 +349,16 @@ bool ServiceClassUser::SendFind(const BaseRootQuery* query, std::vector<DataSet>
   case 0xA900: // Identifier Does Not Match SOP Class
       {
       Attribute<0x0,0x0901> errormsg;
-      errormsg.SetFromDataSet( ds );
-      gdcm::Tag const & t = errormsg.GetValue();
-      gdcmErrorMacro( "Offending Element: " << t ); (void)t;
+      if( ds.FindDataElement( errormsg.GetTag() ) )
+        {
+        errormsg.SetFromDataSet( ds );
+        gdcm::Tag const & t = errormsg.GetValue();
+        gdcmErrorMacro( "Offending Element: " << t ); (void)t;
+        }
+      else
+        {
+        gdcmErrorMacro( "Offending Element ??" );
+        }
       }
   case 0xA700: // Refused: Out of Resources
       {

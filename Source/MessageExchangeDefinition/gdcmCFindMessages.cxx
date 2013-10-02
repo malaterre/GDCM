@@ -51,8 +51,19 @@ std::vector<PresentationDataValue> CFindRQ::ConstructPDV(
   thePDV.SetPresentationContextID(contextID);//could it be 5, if the server does study?
 #else
   PresentationContextRQ pc( inRootQuery->GetAbstractSyntaxUID() );
-  thePDV.SetPresentationContextID(
-    inConnection.GetPresentationContextIDFromPresentationContext(pc) );
+  uint8_t presidx = inConnection.GetPresentationContextIDFromPresentationContext(pc);
+  if( !presidx )
+    {
+    // try harder:
+    PresentationContextRQ pc2( inRootQuery->GetAbstractSyntaxUID(), UIDs::ExplicitVRLittleEndian);
+    presidx = inConnection.GetPresentationContextIDFromPresentationContext(pc2);
+    if( !presidx )
+      {
+      gdcmErrorMacro( "Could not find Pres Cont ID" );
+      return thePDVs;
+      }
+    }
+  thePDV.SetPresentationContextID( presidx );
 #endif
 
   thePDV.SetCommand(true);

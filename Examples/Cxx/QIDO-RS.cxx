@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
 
   gdcm::JSON json;
   json.PrettyPrintOn();
-  json.PreferKeywordOn();
   std::stringstream ss;
   const gdcm::File & f = reader.GetFile();
   json.Code( f.GetDataSet(), ss);
@@ -40,7 +39,11 @@ int main(int argc, char *argv[])
   gdcm::Writer w;
   gdcm::File & ff = w.GetFile();
   ff.GetHeader().SetDataSetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
-  json.Decode(ss, ff.GetDataSet() );
+  if( !json.Decode(ss, ff.GetDataSet() ) )
+    {
+    std::cerr << "Could not decode" << std::endl;
+    return 1;
+    }
   w.SetFileName( "/tmp/debug.dcm" );
   if( !w.Write() ) return 1;
 
