@@ -18,7 +18,7 @@
 #include "gdcmSystem.h"
 
 #ifdef GDCM_USE_SYSTEM_JSON
-#include <json-c/json.h>
+#include <json.h>
 #endif
 
 /*

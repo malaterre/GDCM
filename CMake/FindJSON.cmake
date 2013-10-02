@@ -28,7 +28,9 @@ find_package_handle_standard_args(JSON DEFAULT_MSG
 
 if(JSON_FOUND)
   set(JSON_LIBRARIES ${JSON_LIBRARY})
-  set(JSON_INCLUDE_DIRS ${JSON_INCLUDE_DIR})
+  # hack to get old and new layout working:
+  set(JSON_INCLUDE_DIRS ${JSON_INCLUDE_DIR}/json-c
+    ${JSON_INCLUDE_DIR}/json)
 endif()
 
 mark_as_advanced(
