@@ -174,6 +174,11 @@ else()
   )
   set(GDCMUUID gdcmuuid)
 endif()
+if(GDCM_USE_SYSTEM_JSON)
+  include_directories(
+    ${JSON_INCLUDE_DIRS}
+  )
+endif()
 
 add_library(gdcmMSFF ${MSFF_SRCS})
 
