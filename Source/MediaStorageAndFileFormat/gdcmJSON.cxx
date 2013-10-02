@@ -142,23 +142,6 @@ void JSON::PrettyPrintOff()
   Internals->PrettyPrint = false;
 }
 
-void JSON::SetPreferKeyword(bool onoff)
-{
-  Internals->PreferKeyword = onoff;
-}
-bool JSON::GetPreferKeyword() const
-{
-  return Internals->PreferKeyword;
-}
-void JSON::PreferKeywordOn()
-{
-  Internals->PreferKeyword = true;
-}
-void JSON::PreferKeywordOff()
-{
-  Internals->PreferKeyword = false;
-}
-
 #ifdef GDCM_USE_SYSTEM_JSON
 
 /*
@@ -179,8 +162,8 @@ static void DataElementToJSONArray( const VR::VRType vr, const DataElement & de,
       json_object *my_object_comp = json_object_new_object();
       json_object_array_add(my_array, my_object_comp );
       }
-    else
-      json_object_array_add(my_array, NULL );
+    //else
+    //  json_object_array_add(my_array, NULL );
     return;
     }
   // else
@@ -207,7 +190,7 @@ static void DataElementToJSONArray( const VR::VRType vr, const DataElement & de,
     assert( str1 );
     std::stringstream ss;
     static const char *Keys[] = {
-      "SingleByte",
+      "Alphabetic",
       "Ideographic",
       "Phonetic",
     };
@@ -269,6 +252,8 @@ static void DataElementToJSONArray( const VR::VRType vr, const DataElement & de,
         ss >> vrds;
         json_object_array_add(my_array, json_object_new_double(vrds));
         break;
+      default:
+        assert( 0 ); // programmer error
         }
       if (sep == NULL) break;
       str1 = sep + 1;
@@ -334,8 +319,8 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
     json_object *my_array;
     my_array = json_object_new_array();
 
-    json_object_object_add(my_object_cur, "Tag",
-      json_object_new_string( str_tag.c_str()) );
+    //json_object_object_add(my_object_cur, "Tag",
+    //  json_object_new_string( str_tag.c_str()) );
     json_object_object_add(my_object_cur, "VR",
       json_object_new_string_len( vr_str, 2 ) );
     if( owner )
@@ -366,6 +351,7 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
       else if( const SequenceOfFragments *sqf = de.GetSequenceOfFragments() )
         {
         json_object_array_add(my_array, NULL ); // FIXME
+        assert( 0 );
         }
       else
         {
@@ -482,11 +468,11 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
             assert( ret != 0 );
             json_object_array_add(my_array, json_object_new_string_len(&buffer[0], len64));
             }
-          else
-            {
-            // F.2.5 DICOM JSON Model Null Values
-            json_object_array_add(my_array, NULL );
-            }
+          //else
+          //  {
+          //  // F.2.5 DICOM JSON Model Null Values
+          //  json_object_array_add(my_array, NULL );
+          //  }
           }
         break;
       case VR::OB:
@@ -497,13 +483,13 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
         }
       json_object_object_add(my_object_cur, wheretostore, my_array );
       }
-    const char *keyword = entry.GetKeyword();
+    //const char *keyword = entry.GetKeyword();
     //assert( keyword && *keyword );
-    if( preferkeyword && keyword && *keyword && !t.IsPrivateCreator() )
-      {
-      json_object_object_add(my_object, keyword, my_object_cur );
-      }
-    else
+    //if( preferkeyword && keyword && *keyword && !t.IsPrivateCreator() )
+    //  {
+    //  json_object_object_add(my_object, keyword, my_object_cur );
+    //  }
+    //else
       {
       json_object_object_add(my_object, str_tag.c_str(), my_object_cur );
       }
@@ -574,19 +560,14 @@ static inline bool CheckTagKeywordConsistency( const char *name, const Tag & the
 }
 
 #ifdef GDCM_USE_SYSTEM_JSON
-static void ProcessJSONElement( const char *keyword, json_object * obj, DataElement & de )
+static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElement & de )
 {
   json_type jtype = json_object_get_type( obj );
   assert( jtype == json_type_object );
-  //const char * dummy = json_object_to_json_string ( obj );
-  //const char * dummy2 = json_object_to_json_string ( tag );
-  json_object * jtag = json_object_object_get(obj, "Tag");
   json_object * jvr = json_object_object_get(obj, "VR");
 
-  const char * tag_str = json_object_get_string ( jtag );
   const char * vr_str = json_object_get_string ( jvr );
   de.GetTag().ReadFromContinuousString( tag_str );
-  assert( CheckTagKeywordConsistency( keyword, de.GetTag() ) );
   const char * pc_str = 0;
   if( de.GetTag().IsPrivate() && !de.GetTag().IsPrivateCreator() )
     {
