@@ -599,7 +599,6 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
     json_type jsqtype = json_object_get_type( jseq );
     assert( jsqtype == json_type_null );
 #endif
-    if( de.GetTag() == Tag(0x7fe0,0x0010) ) return; // FIXME
     if( jvaluetype == json_type_array )
       {
       // Create a Sequence
@@ -848,6 +847,10 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
         break;
       case VR::UN:
       case VR::INVALID:
+      case VR::OB:
+      case VR::OD:
+      case VR::OF:
+      case VR::OW:
           {
           assert( valuelen == 1 || valuelen == 0 );
           if( valuelen )
@@ -876,9 +879,6 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
               }
             }
           }
-        break;
-      case VR::OB:
-      case VR::OW:
         break;
       default:
         assert( 0 );
