@@ -31,7 +31,6 @@ int TestJSON1(int, char *[])
   std::ifstream is( sup166.c_str() );
   gdcm::JSON json;
   json.PrettyPrintOn();
-  json.PreferKeywordOn();
 
 #if 1
   gdcm::DataSet ds;
