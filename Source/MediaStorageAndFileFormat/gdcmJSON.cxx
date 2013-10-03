@@ -606,16 +606,16 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
     assert( jsqtype == json_type_null );
 #endif
     if( de.GetTag() == Tag(0x7fe0,0x0010) ) return; // FIXME
-    if( jsqtype == json_type_array )
+    if( jvaluetype == json_type_array )
       {
       // Create a Sequence
       gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems;
       sq->SetLengthToUndefined();
 
-      int sqlen = json_object_array_length ( jseq );
+      int sqlen = json_object_array_length ( jvalue );
       for( int itemidx = 0; itemidx < sqlen; ++itemidx )
         {
-        json_object * jitem = json_object_array_get_idx ( jseq, itemidx );
+        json_object * jitem = json_object_array_get_idx ( jvalue, itemidx );
         json_type jitemtype = json_object_get_type( jitem );
         assert( jitemtype == json_type_object );
         //const char * dummy = json_object_to_json_string ( jitem );
@@ -744,8 +744,7 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
     json_object * jvalue = json_object_object_get(obj, "Value");
     json_type jvaluetype = json_object_get_type( jvalue );
     //const char * dummy = json_object_to_json_string ( jvalue );
-    assert( jvaluetype == json_type_array );
-    assert( jvaluetype != json_type_null );
+    assert( jvaluetype == json_type_array || jvaluetype == json_type_null );
     if( jvaluetype == json_type_array )
       {
       DataElement locde;
