@@ -231,11 +231,11 @@ static void DataElementToJSONArray( const VR::VRType vr, const DataElement & de,
     {
     const char *str1 = value;
     assert( str1 );
-    std::stringstream ss;
     VRToType<VR::IS>::Type vris;
     VRToType<VR::DS>::Type vrds;
     while (1)
       {
+      std::stringstream ss;
       assert( str1 && (size_t)(str1 - value) <= len );
       const char * sep = strchr(str1, '\\');
       const size_t llen = (sep != NULL) ? (sep - str1) : (value + len - str1);
@@ -734,6 +734,8 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
     }
   else
     {
+    json_object * jvaluebin = json_object_object_get(obj, "InlineBinary");
+    json_type jvaluebintype = json_object_get_type( jvaluebin );
     json_object * jvalue = json_object_object_get(obj, "Value");
     json_type jvaluetype = json_object_get_type( jvalue );
     //const char * dummy = json_object_to_json_string ( jvalue );
@@ -845,6 +847,18 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
           locde = el.GetAsDataElement();
           }
         break;
+      default:
+        assert( 0 );
+        }
+      if( !locde.IsEmpty() )
+        de.SetValue( locde.GetValue() );
+      }
+    else if( jvaluebintype == json_type_array )
+      {
+      DataElement locde;
+      const int valuelen = json_object_array_length ( jvaluebin );
+      switch( vrtype )
+        {
       case VR::UN:
       case VR::INVALID:
       case VR::OB:
@@ -855,7 +869,7 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
           assert( valuelen == 1 || valuelen == 0 );
           if( valuelen )
             {
-            json_object * value = json_object_array_get_idx ( jvalue, 0 );
+            json_object * value = json_object_array_get_idx ( jvaluebin, 0 );
             json_type valuetype = json_object_get_type( value );
             if( value )
               {
@@ -885,6 +899,10 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
         }
       if( !locde.IsEmpty() )
         de.SetValue( locde.GetValue() );
+      }
+    else
+      {
+      assert( jvaluebintype == json_type_null && jvaluetype == json_type_null );
       }
     }
 }
