@@ -655,7 +655,7 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
 /*
     F.2.5              DICOM JSON Model Null Values
     If an attribute is present in DICOM but empty, it shall be preserved in the DICOM JSON object and passed
-    with the value of “null”. For example:
+    with the value of "null". For example:
     "Value": [ null ]
 */
     json_object * jvalue = json_object_object_get(obj, "Value");
@@ -666,10 +666,10 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
 #endif
     json_type jvaluetype = json_object_get_type( jvalue );
     //const char * dummy = json_object_to_json_string ( jvalue );
-    assert( jvaluetype != json_type_null && jvaluetype == json_type_array );
+    assert( jvaluetype == json_type_null || jvaluetype == json_type_array );
     if( jvaluetype == json_type_array )
       {
-      assert( vrtype != VR::PN );
+      //assert( vrtype != VR::PN );
       const int valuelen = json_object_array_length ( jvalue );
       std::string str;
       for( int validx = 0; validx < valuelen; ++validx )
@@ -687,7 +687,21 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
           switch( vrtype )
             {
           case VR::PN:
-            assert( 0 );
+              {
+              json_object * jopn[3];
+              jopn[0] = json_object_object_get(value, "Alphabetic");
+              jopn[1]= json_object_object_get(value, "Ideographic");
+              jopn[2]= json_object_object_get(value, "Phonetic");
+              for( int i = 0; i < 3; ++i )
+                {
+                const char *tmp = json_object_get_string ( jopn[i] );
+                if( tmp )
+                  {
+                  if( i ) value_str += '=';
+                  value_str += tmp;
+                  }
+                }
+              }
             break;
           case VR::IS:
             vris = json_object_get_int( value );
@@ -722,32 +736,7 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
       }
     else if( jpntype == json_type_array )
       {
-      assert( vrtype == VR::PN );
-      const int pnlen = json_object_array_length ( jpn );
-      std::string str;
-      for( int pnidx = 0; pnidx < pnlen; ++pnidx )
-        {
-        if( pnidx ) str += '\\';
-        json_object * value = json_object_array_get_idx ( jpn, pnidx );
-        json_type valuetype = json_object_get_type( value );
-        assert( valuetype == json_type_object );
-        assert( value );
-        json_object * jopn[3];
-        jopn[0] = json_object_object_get(value, "SingleByte");
-        jopn[1]= json_object_object_get(value, "Ideographic");
-        jopn[2]= json_object_object_get(value, "Phonetic");
-        for( int i = 0; i < 3; ++i )
-          {
-          const char *value_str = json_object_get_string ( jopn[i] );
-          if( value_str )
-            {
-            if( i ) str += '=';
-            str += value_str;
-            }
-          }
-        }
-      if( str.size() % 2 ) str.push_back( ' ' );
-      de.SetByteValue( &str[0], str.size() );
+      assert( 0 );
       }
     }
   else
