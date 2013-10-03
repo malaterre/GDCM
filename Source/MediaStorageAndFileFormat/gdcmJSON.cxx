@@ -464,6 +464,10 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
         break;
       case VR::UN:
       case VR::INVALID:
+      case VR::OD:
+      case VR::OF:
+      case VR::OB:
+      case VR::OW:
           {
           assert( !de.IsUndefinedLength() ); // handled before
           const ByteValue * bv = de.GetByteValue();
@@ -479,18 +483,7 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
             assert( ret != 0 );
             json_object_array_add(my_array, json_object_new_string_len(&buffer[0], len64));
             }
-          //else
-          //  {
-          //  // F.2.5 DICOM JSON Model Null Values
-          //  json_object_array_add(my_array, NULL );
-          //  }
           }
-        break;
-      case VR::OD:
-      case VR::OF:
-      case VR::OB:
-      case VR::OW:
-        wheretostore = "InlineBinary";
         break;
       default:
         assert( 0 ); // programmer error
@@ -574,6 +567,7 @@ static inline bool CheckTagKeywordConsistency( const char *name, const Tag & the
 }
 
 #ifdef GDCM_USE_SYSTEM_JSON
+#ifdef JSON_C_VERSION
 static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElement & de )
 {
   json_type jtype = json_object_get_type( obj );
@@ -895,6 +889,7 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
     }
 }
 #endif
+#endif
 
 bool JSON::Decode(std::istream & is, DataSet & ds)
 {
@@ -957,10 +952,11 @@ bool JSON::Decode(std::istream & is, DataSet & ds)
     ds.Insert( de );
     json_object_iter_next(&it);
     }
-#else
-#endif
-
   return true;
+#else
+  gdcmErrorMacro( "Version too old" );
+  return false;
+#endif
 #else
   (void)is;
   (void)ds;
