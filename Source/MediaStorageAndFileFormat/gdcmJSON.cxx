@@ -356,17 +356,27 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
       else
         {
         assert( de.IsEmpty() );
-        json_object_array_add(my_array, NULL ); // F.2.5 req ?
+        //json_object_array_add(my_array, NULL ); // F.2.5 req ?
         }
-      json_object_object_add(my_object_cur, "Sequence", my_array );
+      //json_object_object_add(my_object_cur, "Sequence", my_array );
+      int numel = json_object_array_length ( my_array );
+      if( numel )
+        json_object_object_add(my_object_cur, "Value", my_array );
       }
     else if( VR::IsASCII( vr ) )
       {
       DataElementToJSONArray( vr, de, my_array );
-      if( vr == VR::PN )
-        json_object_object_add(my_object_cur, "PersonName", my_array );
-      else
-        json_object_object_add(my_object_cur, "Value", my_array );
+      int numel = json_object_array_length ( my_array );
+      if( numel )
+        {
+        if( vr == VR::PN )
+          {
+          //json_object_object_add(my_object_cur, "PersonName", my_array );
+          json_object_object_add(my_object_cur, "Value", my_array );
+          }
+        else
+          json_object_object_add(my_object_cur, "Value", my_array );
+        }
       }
     else
       {
@@ -457,6 +467,7 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
           {
           assert( !de.IsUndefinedLength() ); // handled before
           const ByteValue * bv = de.GetByteValue();
+          wheretostore = "InlineBinary";
           if( bv )
             {
             const char *src = bv->GetPointer();
@@ -475,11 +486,14 @@ static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, co
           //  }
           }
         break;
+      case VR::OD:
+      case VR::OF:
       case VR::OB:
       case VR::OW:
+        wheretostore = "InlineBinary";
         break;
       default:
-        assert( 0 );
+        assert( 0 ); // programmer error
         }
       json_object_object_add(my_object_cur, wheretostore, my_array );
       }
@@ -583,14 +597,14 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
 
   if( vrtype == VR::SQ )
     {
-#ifndef NDEBUG
     json_object * jvalue = json_object_object_get(obj, "Value");
     json_type jvaluetype = json_object_get_type( jvalue );
-    assert( jvaluetype == json_type_null );
-#endif
+    assert( jvaluetype != json_type_null && jvaluetype == json_type_array  );
+#ifndef NDEBUG
     json_object * jseq = json_object_object_get(obj, "Sequence");
     json_type jsqtype = json_object_get_type( jseq );
-    assert( /*jsqtype == json_type_null ||*/ jsqtype == json_type_array );
+    assert( jsqtype == json_type_null );
+#endif
     if( de.GetTag() == Tag(0x7fe0,0x0010) ) return; // FIXME
     if( jsqtype == json_type_array )
       {
@@ -645,12 +659,14 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
     "Value": [ null ]
 */
     json_object * jvalue = json_object_object_get(obj, "Value");
+#ifndef NDEBUG
     json_object * jpn = json_object_object_get(obj, "PersonName");
-    json_type jvaluetype = json_object_get_type( jvalue );
     json_type jpntype = json_object_get_type( jpn );
+    assert( jpntype == json_type_null );
+#endif
+    json_type jvaluetype = json_object_get_type( jvalue );
     //const char * dummy = json_object_to_json_string ( jvalue );
-    assert( jvaluetype == json_type_array || jpntype == json_type_array );
-    assert( jvaluetype != json_type_null || jpntype != json_type_null );
+    assert( jvaluetype != json_type_null && jvaluetype == json_type_array );
     if( jvaluetype == json_type_array )
       {
       assert( vrtype != VR::PN );
