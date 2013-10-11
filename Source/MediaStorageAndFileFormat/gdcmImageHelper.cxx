@@ -1129,21 +1129,36 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         // The spacing is something like that: [0.2\0\0.200000]
         // I would need to throw an expection that VM is not compatible
         el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
-        el.Read( ss );
-        assert( el.GetLength() == 2 );
-        for(unsigned int i = 0; i < el.GetLength(); ++i)
+        std::string::size_type found = s.find('\\');
+        if( found != std::string::npos )
           {
-          if( el.GetValue(i) )
+          el.Read( ss );
+          assert( el.GetLength() == 2 );
+          for(unsigned int i = 0; i < el.GetLength(); ++i)
             {
-            sp.push_back( el.GetValue(i) );
+            if( el.GetValue(i) )
+              {
+              sp.push_back( el.GetValue(i) );
+              }
+            else
+              {
+              gdcmWarningMacro( "Cant have a spacing of 0" );
+              sp.push_back( 1.0 );
+              }
             }
-          else
-            {
-            gdcmWarningMacro( "Cant have a spacing of 0" );
-            sp.push_back( 1.0 );
-            }
+          std::swap( sp[0], sp[1]);
           }
-        std::swap( sp[0], sp[1]);
+        else
+          {
+          double singleval;
+          ss >> singleval;
+          if( singleval == 0.0 )
+            {
+            singleval = 1.0;
+            }
+          sp.push_back( singleval );
+          sp.push_back( singleval );
+          }
         assert( sp.size() == (unsigned int)entry.GetVM() );
         }
       break;
