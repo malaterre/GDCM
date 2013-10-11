@@ -13,6 +13,7 @@
 =========================================================================*/
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmImplicitDataElement.h"
+#include "gdcmByteValue.h"
 
 namespace gdcm
 {
@@ -125,6 +126,21 @@ bool SequenceOfFragments::WriteBuffer(std::ostream &os) const
   //  assert(0);
   //  return false;
   //  }
+  return true;
+}
+
+bool SequenceOfFragments::FillFragmentWithJPEG( Fragment & frag, std::istream & is )
+{
+  std::vector<unsigned char> jfif;
+  unsigned char byte;
+  // begin /simple/ JPEG parser:
+  while( is.read( (char*)&byte, 1 ) )
+    {
+    jfif.push_back( byte );
+    if( byte == 0xd9 && jfif[ jfif.size() - 2 ] == 0xff ) break;
+    }
+  const gdcm::VL len = (VL)jfif.size();
+  frag.SetByteValue( (char*)&jfif[0], len );
   return true;
 }
 
