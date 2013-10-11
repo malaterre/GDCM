@@ -26,8 +26,6 @@ void echo::echobuf::serve_clients (int portno)
       sockinetbuf::bind ((unsigned long) INADDR_ANY, "echo", protocol_name ());
     else if (portno <= 1024) {
       sockinetbuf::bind ();
-      cout << "Host: " << localhost () << endl
-           << "Port: " << localport () << endl;
     } else
       sockinetbuf::bind ((unsigned long) INADDR_ANY, portno);
 

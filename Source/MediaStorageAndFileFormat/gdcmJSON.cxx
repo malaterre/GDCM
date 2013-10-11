@@ -727,10 +727,12 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
         }
       de.SetByteValue( &str[0], str.size() );
       }
+#ifndef NDEBUG
     else if( jpntype == json_type_array )
       {
       assert( 0 );
       }
+#endif
     }
   else
     {
