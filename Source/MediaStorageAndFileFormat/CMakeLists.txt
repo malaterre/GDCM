@@ -173,6 +173,12 @@ ELSE(GDCM_USE_SYSTEM_UUID)
 ENDIF(GDCM_USE_SYSTEM_UUID)
 
 ADD_LIBRARY(gdcmMSFF ${MSFF_SRCS})
+# gdcmPVRGCodec calls gdcmjpeg
+if(GDCM_USE_PVRG)
+  if(NOT GDCM_USE_SYSTEM_PVRG)
+    add_dependencies(gdcmMSFF gdcmjpeg)
+  endif()
+endif()
 
 # main libs:
 TARGET_LINK_LIBRARIES(gdcmMSFF gdcmIOD gdcmDSED gdcmDICT ${GDCM_LJPEG_LIBRARIES} ${GDCM_OPENJPEG_LIBRARIES})
