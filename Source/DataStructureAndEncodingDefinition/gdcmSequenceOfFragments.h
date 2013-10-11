@@ -102,16 +102,21 @@ std::istream& ReadPreValue(std::istream &is)
     }
   catch(...)
     {
+    // throw "SIEMENS Icon thingy";
     // Bug_Siemens_PrivateIconNoItem.dcm
     // First thing first let's rewind
     is.seekg(-4, std::ios::cur);
+    // FF D8 <=> Start of Image (SOI) marker
+    // FF E0 <=> APP0 Reserved for Application Use
     if ( Table.GetTag() == Tag(0xd8ff,0xe0ff) )
       {
+      Table = BasicOffsetTable(); // clear up stuff
+      //Table.SetByteValue( "", 0 );
       Fragment frag;
-      is.seekg( 8340, std::ios::cur );
-      char dummy[8340];
-      frag.SetByteValue( dummy, 8340 - Table.GetLength() - 16 );
-      Fragments.push_back( frag );
+      if( FillFragmentWithJPEG( frag, is ) )
+        {
+        Fragments.push_back( frag );
+        }
       return is;
       }
     else
@@ -313,6 +318,9 @@ private:
   VL SequenceLengthField;
   /// \brief Vector of Sequence Fragments
   FragmentVector Fragments;
+
+private:
+  bool FillFragmentWithJPEG( Fragment & frag, std::istream & is );
 };
 
 /**

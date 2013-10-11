@@ -155,6 +155,7 @@ public:
   /// Return the Value of DataElement as a Sequence Of Fragments (if possible)
   /// \warning: You need to check for NULL return value
   const SequenceOfFragments* GetSequenceOfFragments() const;
+  SequenceOfFragments* GetSequenceOfFragments();
 
   /// return if Value Length if of undefined length
   bool IsUndefinedLength() const {
