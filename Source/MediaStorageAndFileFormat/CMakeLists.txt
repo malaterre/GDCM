@@ -181,6 +181,12 @@ if(GDCM_USE_SYSTEM_JSON)
 endif()
 
 add_library(gdcmMSFF ${MSFF_SRCS})
+# gdcmPVRGCodec calls gdcmjpeg
+if(GDCM_USE_PVRG)
+  if(NOT GDCM_USE_SYSTEM_PVRG)
+    add_dependencies(gdcmMSFF gdcmjpeg)
+  endif()
+endif()
 
 # main libs:
 target_link_libraries(gdcmMSFF gdcmIOD gdcmDSED gdcmDICT ${GDCM_LJPEG_LIBRARIES} ${GDCM_OPENJPEG_LIBRARIES})

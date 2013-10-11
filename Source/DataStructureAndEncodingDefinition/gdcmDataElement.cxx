@@ -62,6 +62,10 @@ namespace gdcm
     const SequenceOfFragments *sqf = dynamic_cast<SequenceOfFragments*>(ValueField.GetPointer());
     return sqf;
   }
+  SequenceOfFragments* DataElement::GetSequenceOfFragments() {
+    SequenceOfFragments *sqf = dynamic_cast<SequenceOfFragments*>(ValueField.GetPointer());
+    return sqf;
+  }
 
   /*
    *  Two cases are handled:

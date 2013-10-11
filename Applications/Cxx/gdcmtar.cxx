@@ -324,7 +324,14 @@ static bool ConcatenateImages(Image &im1, Image const &im2)
     }
   else if( de1.GetSequenceOfFragments() )
     {
-    assert( 0 );
+    SequenceOfFragments *sqf1 = de1.GetSequenceOfFragments();
+    assert( sqf1 );
+    const DataElement& de2 = im2.GetDataElement();
+    const SequenceOfFragments *sqf2 = de2.GetSequenceOfFragments();
+    assert( sqf2 );
+    assert( sqf2->GetNumberOfFragments() == 1 );
+    const Fragment& frag = sqf2->GetFragment(0);
+    sqf1->AddFragment(frag);
     }
   else
     {
@@ -369,13 +376,13 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
   if( vt.size() != 1 ) return 1;
 
   const char *sop = vt.begin()->c_str();
-{
-  gdcm::MediaStorage ms = gdcm::MediaStorage::GetMSType( sop );
-  if( ms != gdcm::MediaStorage::MRImageStorage )
+  gdcm::MediaStorage msorig = gdcm::MediaStorage::GetMSType( sop );
+  if( msorig != gdcm::MediaStorage::MRImageStorage
+   && msorig != gdcm::MediaStorage::CTImageStorage )
     {
+    std::cerr << "Sorry MediaStorage not supported: [" << sop << "]" << std::endl;
     return 1;
     }
-}
 
   gdcm::DiscriminateVolume dv;
   dv.ProcessIntoVolume( s );
@@ -484,7 +491,18 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
 
     gdcm::DataSet &ds = im0.GetFile().GetDataSet();
 
-    gdcm::MediaStorage ms = gdcm::MediaStorage::EnhancedMRImageStorage;
+    gdcm::MediaStorage ms;
+    switch( msorig )
+      {
+    case gdcm::MediaStorage::CTImageStorage:
+      ms = gdcm::MediaStorage::EnhancedCTImageStorage;
+      break;
+    case gdcm::MediaStorage::MRImageStorage:
+      ms = gdcm::MediaStorage::EnhancedMRImageStorage;
+      break;
+    default:
+      return 1;
+      }
 
     gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
     const char* msstr = gdcm::MediaStorage::GetMSString(ms);
