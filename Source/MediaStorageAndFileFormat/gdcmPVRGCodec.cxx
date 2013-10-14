@@ -121,8 +121,12 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   //std::cerr << pvrg_command << std::endl;
   gdcmDebugMacro( pvrg_command );
   int ret = system(pvrg_command.c_str());
-  (void)ret;
   //std::cerr << "system: " << ret << std::endl;
+  if( ret )
+    {
+    gdcmErrorMacro( "Looks like pvrg gave up in input, with ret value: " << ret );
+    return false;
+    }
 
   int numoutfile = GetPixelFormat().GetSamplesPerPixel();
   std::string wholebuf;
