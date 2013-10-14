@@ -187,6 +187,11 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 #endif
 }
 
+void PVRGCodec::SetLossyFlag( bool l )
+{
+  LossyFlag = l;
+}
+
 // Compress into JPEG
 bool PVRGCodec::Code(DataElement const &in, DataElement &out)
 {

@@ -48,7 +48,7 @@ static const char *TSStrings[] = {
   "1.2.840.10008.1.2.4.55",
   // JPEG Lossless, Non-Hierarchical (Process 14)
   "1.2.840.10008.1.2.4.57",
-  // JPEG Lossless, Hierarchical, First-Order Prediction (Process 14,
+  // JPEG Lossless, Non-Hierarchical, First-Order Prediction (Process 14,
   //                                                       [Selection Value 1])
   "1.2.840.10008.1.2.4.70",
   // JPEG-LS Lossless Image Compression
