@@ -100,7 +100,9 @@ private:
   Reader mReader;
 
   std::streamoff mFileOffset; //the file offset for getting header information
+#if 0
   std::streamoff mFileOffset1;
+#endif
   DataSet mHeaderInformation; //all the non-pixel information
 
   //for thread safety, these should not be stored here, but should be used
