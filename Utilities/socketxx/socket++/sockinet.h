@@ -109,7 +109,7 @@ class MY_API isockinet: public isockstream
         isockinet (sockbuf::type ty=sockbuf::sock_stream, int proto=0);
         ~isockinet ();
 
-        sockinetbuf* rdbuf () { return (sockinetbuf*)ios::rdbuf (); }
+        sockinetbuf* rdbuf () { return (sockinetbuf*)std::ios::rdbuf (); }
         sockinetbuf* operator -> () { return rdbuf (); }
 };
 
@@ -121,7 +121,7 @@ class osockinet: public osockstream
         osockinet (sockbuf::type ty=sockbuf::sock_stream, int proto=0);
         ~osockinet ();
 
-        sockinetbuf* rdbuf () { return (sockinetbuf*)ios::rdbuf (); }
+        sockinetbuf* rdbuf () { return (sockinetbuf*)std::ios::rdbuf (); }
 };
 
 class MY_API iosockinet: public iosockstream
@@ -132,7 +132,7 @@ class MY_API iosockinet: public iosockstream
         iosockinet (sockbuf::type ty=sockbuf::sock_stream, int proto=0);
         ~iosockinet ();
 
-        sockinetbuf* rdbuf () { return (sockinetbuf*)ios::rdbuf (); }
+        sockinetbuf* rdbuf () { return (sockinetbuf*)std::ios::rdbuf (); }
 };
 
 #endif    // _SOCKINET_H

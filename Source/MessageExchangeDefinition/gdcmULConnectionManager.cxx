@@ -332,8 +332,8 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
 
   if (Trace::GetDebugFlag())
     {
-      vector<BasePDU*> thePDUs = theEvent.GetPDUs();
-      vector<BasePDU*>::iterator itor;
+      std::vector<BasePDU*> thePDUs = theEvent.GetPDUs();
+      std::vector<BasePDU*>::iterator itor;
       for (itor = thePDUs.begin(); itor != thePDUs.end(); itor++)
         {
         if (*itor == NULL) continue; //can have a nulled pdu, apparently

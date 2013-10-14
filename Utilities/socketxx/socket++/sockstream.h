@@ -45,8 +45,6 @@
 #endif
 
 
-using namespace std;
-
 #if defined(__linux__) || defined(__CYGWIN__)
 #  define MSG_MAXIOVLEN     16
 #endif // __linux__
@@ -56,7 +54,7 @@ using namespace std;
 //see http://www.unknownroad.com/rtfm/VisualStudio/warningC4251.html
 class StringWrapper { 
 public:
-	string text;
+	std::string text;
 };
 
 // socket exception classes
@@ -83,7 +81,7 @@ class MY_API sockerr : public std::exception
                 text.text += ")";
             }
         }
-        sockerr (int e, const string &theoperation): err (e)
+        sockerr (int e, const std::string &theoperation): err (e)
         {
             text.text = theoperation;
         }
@@ -134,7 +132,7 @@ class sockAddr
 struct msghdr;
 
 // socket buffer class
-class MY_API sockbuf: public streambuf
+class MY_API sockbuf: public std::streambuf
 {
     public:
         enum type {
@@ -183,8 +181,8 @@ class MY_API sockbuf: public streambuf
         };
 
         typedef char          char_type;
-        typedef streampos     pos_type;
-        typedef streamoff     off_type;
+        typedef std::streampos     pos_type;
+        typedef std::streamoff     off_type;
         typedef int           int_type;
         typedef int           seekdir;
         //  const int_type eof = EOF;
@@ -224,14 +222,14 @@ class MY_API sockbuf: public streambuf
 
         virtual int           sync ();
 
-        virtual streamsize    showmanyc ();
-        virtual streamsize    xsgetn (char_type* s, streamsize n);
+        virtual std::streamsize    showmanyc ();
+        virtual std::streamsize    xsgetn (char_type* s, std::streamsize n);
         virtual int_type      underflow ();
         virtual int_type      uflow ();
 
         virtual int_type      pbackfail (int_type c = eof);
 
-        virtual streamsize    xsputn (const char_type* s, streamsize n);
+        virtual std::streamsize    xsputn (const char_type* s, std::streamsize n);
         virtual int_type      overflow (int_type c = eof);
 
     public:
@@ -308,8 +306,8 @@ class MY_API sockbuf: public streambuf
         long howmanyc();
         void nbio(bool set=true) const;
         inline void setname(const char *name);
-        inline void setname(const string &name);
-        inline const string& getname();
+        inline void setname(const std::string &name);
+        inline const std::string& getname();
 
 #if defined(__CYGWIN__) || !defined(WIN32)
         void async(bool set=true) const;
@@ -321,39 +319,39 @@ class MY_API sockbuf: public streambuf
 #endif
 };
 
-class MY_API isockstream: public istream
+class MY_API isockstream: public std::istream
 {
     protected:
         //isockstream (): istream(rdbuf()), ios (0) {}
 
     public:
-        isockstream(sockbuf* sb): ios (sb) , istream(sb) {}
+        isockstream(sockbuf* sb): std::ios (sb) , std::istream(sb) {}
         virtual ~isockstream () {}
 
-        sockbuf* rdbuf () { return (sockbuf*)ios::rdbuf(); }
+        sockbuf* rdbuf () { return (sockbuf*)std::ios::rdbuf(); }
         sockbuf* operator -> () { return rdbuf(); }
 };
 
-class osockstream: public ostream
+class osockstream: public std::ostream
 {
     protected:
         //osockstream (): ostream(static_cast<>rdbuf()), ios (0) {}
     public:
-        osockstream(sockbuf* sb): ios (sb) , ostream(sb) {}
+        osockstream(sockbuf* sb): std::ios (sb) , std::ostream(sb) {}
         virtual ~osockstream () {}
-        sockbuf* rdbuf () { return (sockbuf*)ios::rdbuf(); }
+        sockbuf* rdbuf () { return (sockbuf*)std::ios::rdbuf(); }
         sockbuf* operator -> () { return rdbuf(); }
 };
 
-class MY_API iosockstream: public iostream
+class MY_API iosockstream: public std::iostream
 {
     protected:
         iosockstream ();
     public:
-        iosockstream(sockbuf* sb): ios(sb), iostream(sb) {}
+        iosockstream(sockbuf* sb): std::ios(sb), std::iostream(sb) {}
         virtual ~iosockstream () {}
 
-        sockbuf* rdbuf () { return (sockbuf*)ios::rdbuf(); }
+        sockbuf* rdbuf () { return (sockbuf*)std::ios::rdbuf(); }
         sockbuf* operator -> () { return rdbuf(); }
 };
 
@@ -368,12 +366,12 @@ void sockbuf::setname (const char *name)
     sockname.text = name;
 }
 
-void sockbuf::setname (const string &name)
+void sockbuf::setname (const std::string &name)
 {
     sockname.text = name;
 }
 
-const string& sockbuf::getname ()
+const std::string& sockbuf::getname ()
 {
     return sockname.text;
 }

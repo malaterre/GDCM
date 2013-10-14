@@ -364,7 +364,7 @@ sockbuf::sockbuf (int domain, sockbuf::type st, int proto)
 
 sockbuf::sockbuf (const sockbuf& sb)
 :
-streambuf(),
+std::streambuf(),
 //streambuf (sb),
 rep (sb.rep)
 {
@@ -429,8 +429,8 @@ int sockbuf::sync ()
         catch (int wlen)
         {
             // write was not completely successful
-            stringstream sb;
-            string err ("sockbuf::sync");
+            std::stringstream sb;
+            std::string err ("sockbuf::sync");
             err += "(" + sockname.text + ")";
             if (wlen) {
                 // reposition unwritten chars
@@ -455,7 +455,7 @@ int sockbuf::sync ()
     return 0;
 }
 
-streamsize sockbuf::showmanyc ()
+std::streamsize sockbuf::showmanyc ()
 // return the number of chars in the input sequence
 {
     if (gptr () && gptr () < egptr ())
@@ -491,7 +491,7 @@ sockbuf::int_type sockbuf::uflow ()
   return ret;
 }
 
-streamsize sockbuf::xsgetn (char_type* s, streamsize n)
+std::streamsize sockbuf::xsgetn (char_type* s, std::streamsize n)
 {
   std::streamsize rval = showmanyc ();
   if (rval >= n) {
@@ -534,7 +534,7 @@ sockbuf::int_type sockbuf::overflow (sockbuf::int_type c)
   return c;
 }
 
-streamsize sockbuf::xsputn (const char_type* s, streamsize n)
+std::streamsize sockbuf::xsputn (const char_type* s, std::streamsize n)
 {
   std::streamsize wval = epptr () - pptr ();
   if (n <= wval) {
