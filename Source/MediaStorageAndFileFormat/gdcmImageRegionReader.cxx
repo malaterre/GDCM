@@ -315,7 +315,6 @@ bool ImageRegionReader::ReadJPEGIntoBuffer(char *buffer, size_t buflen)
   theCodec.SetPhotometricInterpretation(
     ImageHelper::GetPhotometricInterpretationValue(GetFile()));
   //theCodec.SetLUT( GetLUT() );
-  theCodec.SetPixelFormat( ImageHelper::GetPixelFormatValue(GetFile()) );
   theCodec.SetNeedByteSwap( needbyteswap );
   //theCodec.SetNeedOverlayCleanup( AreOverlaysInPixelData() );
   std::vector<unsigned int> d = ImageHelper::GetDimensionsValue(GetFile());
@@ -323,6 +322,8 @@ bool ImageRegionReader::ReadJPEGIntoBuffer(char *buffer, size_t buflen)
   theCodec.SetNumberOfDimensions( 2 );
   if( d[2] > 1 )
     theCodec.SetNumberOfDimensions( 3 );
+  // last call:
+  theCodec.SetPixelFormat( ImageHelper::GetPixelFormatValue(GetFile()) );
 
   std::istream* theStream = GetStreamPtr();
   const BoxRegion &boundingbox = this->Internals->GetRegion()->ComputeBoundingBox();
