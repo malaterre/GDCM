@@ -185,11 +185,11 @@
 #include "gdcmServiceClassUser.h"
 
 #include "gdcmStreamImageReader.h"
-#include "gdcmStreamImageWriter.h"
 
 #include "gdcmRegion.h"
 #include "gdcmBoxRegion.h"
 #include "gdcmImageRegionReader.h"
+#include "gdcmJSON.h"
 
 using namespace gdcm;
 %}
@@ -547,7 +547,14 @@ EXTEND_CLASS_PRINT(gdcm::Scanner)
 //%feature("unref") Anonymizer "coucou $this->Delete();"
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus%5Fnn34
 %include "gdcmAnonymizer.h"
+%apply char[] { char* value_data }
+%include "gdcmFileAnonymizer.h"
+%clear char* value_data;
 
+%apply char[] { char* array }
+%template(SmartPtrFStreamer) gdcm::SmartPointer<gdcm::FileStreamer>;
+%include "gdcmFileStreamer.h"
+%clear char* array;
 
 //EXTEND_CLASS_PRINT(gdcm::Anonymizer)
 %include "gdcmSystem.h"
@@ -770,7 +777,6 @@ typedef int64_t time_t; // FIXME
 %apply char[] { char* inReadBuffer }
 %include "gdcmStreamImageReader.h"
 %clear char* inReadBuffer;
-%include "gdcmStreamImageWriter.h"
 %include "gdcmRegion.h"
 EXTEND_CLASS_PRINT(gdcm::Region)
 %include "gdcmBoxRegion.h"
@@ -778,3 +784,4 @@ EXTEND_CLASS_PRINT(gdcm::BoxRegion)
 %apply char[] { char* inreadbuffer }
 %include "gdcmImageRegionReader.h"
 %clear char* inreadbuffer;
+%include "gdcmJSON.h"
