@@ -40,7 +40,7 @@ static const char * const gdcmMD5DataBrokenImages[][2] = {
 { "e1b2956f781685fc9e46e0da26b8a0fd" , "THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm" },
 
 // name says it all. dcmtk does not support this. dicom3tools confirmed that dataset is compatible
-{ "fa34d4886d9fce1cdf5e10f7d5abd2cc" , "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm" }, // size mismatch
+{ "66a75503221ef32b0236cf9f78e169ff" , "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm" }, // size mismatch
 
 // item length are supposed to be 0, not FFFF...
 { "3cc629fa470efb114a14ca3909117eb8" , "SIEMENS-MR-RGB-16Bits.dcm" }, // size match
