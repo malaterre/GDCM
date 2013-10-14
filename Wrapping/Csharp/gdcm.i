@@ -133,6 +133,7 @@ public class";
 #include "gdcmDictEntry.h"
 #include "gdcmCSAHeaderDictEntry.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmUUIDGenerator.h"
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
 #include "gdcmAttribute.h"
@@ -230,11 +231,11 @@ public class";
 #include "gdcmServiceClassUser.h"
 
 #include "gdcmStreamImageReader.h"
-#include "gdcmStreamImageWriter.h"
 
 #include "gdcmRegion.h"
 #include "gdcmBoxRegion.h"
 #include "gdcmImageRegionReader.h"
+#include "gdcmJSON.h"
 
 using namespace gdcm;
 %}
@@ -579,6 +580,9 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 %include "gdcmStringFilter.h"
 //EXTEND_CLASS_PRINT(gdcm::StringFilter)
 %include "gdcmUIDGenerator.h"
+//EXTEND_CLASS_PRINT(gdcm::UIDGenerator)
+%include "gdcmUUIDGenerator.h"
+//EXTEND_CLASS_PRINT(gdcm::UUIDGenerator)
 %template (ValuesType)      std::set<std::string>;
 %rename (CSharpTagToValue) SWIGTagToValue;
 #define GDCM_STATIC_ASSERT(x)
@@ -822,7 +826,6 @@ typedef int64_t time_t; // FIXME
 %apply char[] { char* inReadBuffer }
 %include "gdcmStreamImageReader.h"
 %clear char* inReadBuffer;
-%include "gdcmStreamImageWriter.h"
 %include "gdcmRegion.h"
 EXTEND_CLASS_PRINT(gdcm::Region)
 %include "gdcmBoxRegion.h"
@@ -830,3 +833,4 @@ EXTEND_CLASS_PRINT(gdcm::BoxRegion)
 %apply char[] { char* inreadbuffer }
 %include "gdcmImageRegionReader.h"
 %clear char* inreadbuffer;
+%include "gdcmJSON.h"

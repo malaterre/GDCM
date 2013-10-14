@@ -86,6 +86,7 @@
 #include "gdcmDictEntry.h"
 #include "gdcmCSAHeaderDictEntry.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmUUIDGenerator.h"
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
 #include "gdcmAttribute.h"
@@ -136,7 +137,6 @@
 #include "gdcmRescaler.h"
 #include "gdcmSegmentedPaletteColorLookupTable.h"
 #include "gdcmUnpacker12Bits.h"
-//#include "gdcmPythonFilter.h"
 #include "gdcmDirectionCosines.h"
 #include "gdcmTagPath.h"
 #include "gdcmBitmapToBitmapFilter.h"
@@ -184,11 +184,11 @@
 #include "gdcmServiceClassUser.h"
 
 #include "gdcmStreamImageReader.h"
-#include "gdcmStreamImageWriter.h"
 
 #include "gdcmRegion.h"
 #include "gdcmBoxRegion.h"
 #include "gdcmImageRegionReader.h"
+#include "gdcmJSON.h"
 
 using namespace gdcm;
 %}
@@ -406,7 +406,6 @@ EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %rename (JavaDataSet) SWIGDataSet;
 %rename (JavaTagToValue) SWIGTagToValue;
 %include "gdcmDataSet.h"
-EXTEND_CLASS_PRINT(gdcm::DataSet)
 //namespace std {
 //  //struct lttag
 //  //  {
@@ -420,7 +419,7 @@ EXTEND_CLASS_PRINT(gdcm::DataSet)
 //  //%template(DataElementSet) gdcm::DataSet::DataElementSet;
 //  %template(DataElementSet) set<DataElement, lttag>;
 //}
-
+EXTEND_CLASS_PRINT(gdcm::DataSet)
 %include "gdcmPhotometricInterpretation.h"
 EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
 %include "gdcmObject.h"
@@ -640,6 +639,9 @@ $1 = JNU_GetStringNativeChars(jenv, $input);
 %include "gdcmStringFilter.h"
 //EXTEND_CLASS_PRINT(gdcm::StringFilter)
 %include "gdcmUIDGenerator.h"
+//EXTEND_CLASS_PRINT(gdcm::UIDGenerator)
+%include "gdcmUUIDGenerator.h"
+//EXTEND_CLASS_PRINT(gdcm::UUIDGenerator)
 %template (ValuesType)      std::set<std::string>;
 %rename (JavaTagToValue) SWIGTagToValue;
 #define GDCM_STATIC_ASSERT(x)
@@ -662,6 +664,10 @@ EXTEND_CLASS_PRINT(gdcm::Scanner)
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus%5Fnn34
 %include "gdcmAnonymizer.h"
 %include "gdcmFileAnonymizer.h"
+%apply char[] { char* array }
+%template(SmartPtrFStreamer) gdcm::SmartPointer<gdcm::FileStreamer>;
+%include "gdcmFileStreamer.h"
+%clear char* array;
 
 //EXTEND_CLASS_PRINT(gdcm::Anonymizer)
 
@@ -757,11 +763,9 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
   }
 };
 #endif
-//%include "gdcmPythonFilter.h"
 %include "gdcmTagPath.h"
 %include "gdcmBitmapToBitmapFilter.h"
 %include "gdcmPixmapToPixmapFilter.h"
-//%ignore gdcm::ImageToImageFilter::GetOutput() const;
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
 //%feature("director") Coder;
@@ -832,7 +836,6 @@ typedef int64_t time_t; // FIXME
     }
 }
 %clear signed char* inReadBuffer;
-%include "gdcmStreamImageWriter.h"
 %include "gdcmRegion.h"
 EXTEND_CLASS_PRINT(gdcm::Region)
 %include "gdcmBoxRegion.h"
@@ -848,3 +851,4 @@ EXTEND_CLASS_PRINT(gdcm::BoxRegion)
 };
 //EXTEND_CLASS_PRINT(gdcm::ImageRegionReader)
 %clear signed char* inreadbuffer;
+%include "gdcmJSON.h"
