@@ -51,6 +51,7 @@ set(GDCM_EXECUTABLE_NAME
   gdcminfo
   gdcmscu
   gdcmxml
+  gdcmpap3
   )
 # poppler people have the worse API backward compatibility I know of.
 # there is absolutely no way to check the version of poppler
@@ -106,6 +107,12 @@ if(NOT BUILD_SHARED_LIBS)
                               )
 endif()
 
+if(GDCM_USE_SYSTEM_PAPYRUS3)
+  include_directories(
+    ${PAPYRUS3_INCLUDE_DIRS}
+    )
+endif()
+
 foreach(exename ${GDCM_EXECUTABLE_NAME})
   if(${exename} STREQUAL "gdcminfo")
     add_executable(${exename} ${exename}.cxx puff.c)
@@ -142,6 +149,10 @@ foreach(exename ${GDCM_EXECUTABLE_NAME})
     )
   endif()
 endforeach()
+
+if(GDCM_USE_SYSTEM_PAPYRUS3)
+  target_link_libraries(gdcmpap3 ${PAPYRUS3_LIBRARIES})
+endif()
 
 #if(BUILD_TESTING)
 #  if(GDCM_DATA_ROOT)

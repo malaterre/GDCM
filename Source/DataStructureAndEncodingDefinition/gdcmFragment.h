@@ -48,12 +48,9 @@ public:
   Fragment() : DataElement(Tag(0xfffe, 0xe000), 0) {}
   friend std::ostream &operator<<(std::ostream &os, const Fragment &val);
 
-  VL GetLength() const {
-    assert( !ValueLengthField.IsUndefined() );
-    assert( !ValueField || ValueField->GetLength() == ValueLengthField );
-    return TagField.GetLength() + ValueLengthField.GetLength()
-      + ValueLengthField;
-  }
+  VL GetLength() const;
+
+  VL ComputeLength() const;
 
   template <typename TSwap>
   std::istream &Read(std::istream &is)
@@ -200,7 +197,10 @@ public:
     else
       {
       assert( ValueLengthField );
-      if( !ValueLengthField.Write<TSwap>(os) )
+      assert( !ValueLengthField.IsUndefined() );
+      const VL actuallen = bv->ComputeLength();
+      assert( actuallen == ValueLengthField || actuallen == ValueLengthField + 1 );
+      if( !actuallen.Write<TSwap>(os) )
         {
         assert(0 && "Should not happen");
         return os;

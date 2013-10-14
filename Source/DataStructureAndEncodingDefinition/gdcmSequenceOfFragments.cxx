@@ -45,7 +45,9 @@ VL SequenceOfFragments::ComputeLength() const
   FragmentVector::const_iterator it = Fragments.begin();
   for(;it != Fragments.end(); ++it)
     {
-    length += it->GetLength();
+    const VL fraglen = it->ComputeLength();
+    assert( fraglen % 2 == 0 );
+    length += fraglen;
     }
   assert( SequenceLengthField.IsUndefined() );
   length += 8; // seq end delimitor (tag + vl)
@@ -139,7 +141,7 @@ bool SequenceOfFragments::FillFragmentWithJPEG( Fragment & frag, std::istream & 
     jfif.push_back( byte );
     if( byte == 0xd9 && jfif[ jfif.size() - 2 ] == 0xff ) break;
     }
-  const gdcm::VL len = (VL)jfif.size();
+  const uint32_t len = static_cast<uint32_t>(jfif.size());
   frag.SetByteValue( (char*)&jfif[0], len );
   return true;
 }

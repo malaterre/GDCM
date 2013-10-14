@@ -271,7 +271,8 @@ public:
       }
     else
       {
-      VL dummy = NestedDataSet.GetLength<TDE>();
+      const VL dummy = NestedDataSet.GetLength<TDE>();
+      assert( dummy % 2 == 0 );
       //assert( ValueLengthField == dummy );
       if( !dummy.Write<TSwap>(os) )
         {

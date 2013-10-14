@@ -232,7 +232,7 @@ void ProcessAFrameOfRef(Scanner const & s, Directory::FilenamesType const & subs
 void ProcessASeries(Scanner const & s, const char * seriesuid)
 {
   if( debuggdcmtar )
-  std::cout << "Series: " << seriesuid << std::endl;
+    std::cout << "Series: " << seriesuid << std::endl;
   // let's find all files belonging to this series:
   Directory::FilenamesType seriesfiles = GetAllFilenamesFromTagToValue(
     s, s.GetFilenames(), T2, seriesuid);
@@ -249,8 +249,10 @@ void ProcessASeries(Scanner const & s, const char * seriesuid)
 void ProcessAStudy(Scanner const & s, const char * studyuid)
 {
   if( debuggdcmtar )
-  std::cout << "Study: " << studyuid << std::endl;
+    std::cout << "Study: " << studyuid << std::endl;
   gdcm::Scanner::ValuesType vt2 = s.GetValues(T2);
+  if( vt2.empty() )
+    std::cerr << "No Series Found" << std::endl;
   for(
     gdcm::Scanner::ValuesType::const_iterator it = vt2.begin()
     ; it != vt2.end(); ++it )
@@ -520,8 +522,9 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
     }
 
   std::vector< gdcm::Directory::FilenamesType > const &unsorted = dv.GetUnsortedFiles();
-  std::cerr << "Could not process the following files (please report): " << std::endl;
+  if( !unsorted.empty() )
     {
+    std::cerr << "Could not process the following files (please report): " << std::endl;
     std::vector< gdcm::Directory::FilenamesType >::const_iterator it = unsorted.begin();
     for( ; it != unsorted.end(); ++it )
       {
