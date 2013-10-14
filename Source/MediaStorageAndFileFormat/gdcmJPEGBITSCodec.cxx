@@ -943,6 +943,7 @@ bool JPEGBITSCodec::DecodeByStreams(std::istream &is, std::ostream &os)
     {
     /* Suspension: jpeg_finish_decompress */
     Internals->StateSuspension = 4;
+    return true;
     }
 
   /* we are done decompressing the file, now is a good time to store the type
@@ -971,6 +972,11 @@ bool JPEGBITSCodec::DecodeByStreams(std::istream &is, std::ostream &os)
   /* At this point you may want to check to see whether any corrupt-data
    * warnings occurred (test whether jerr.pub.num_warnings is nonzero).
    */
+  if( jerr.pub.num_warnings )
+    {
+    gdcmErrorMacro( "Too many warning during decompression of JPEG stream" );
+    return false;
+    }
   /* In any case make sure the we reset the internal state suspension */
   Internals->StateSuspension = 0;
 
