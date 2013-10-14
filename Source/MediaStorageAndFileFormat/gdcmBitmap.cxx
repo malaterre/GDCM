@@ -534,6 +534,7 @@ bool Bitmap::TryPVRGCodec(char *buffer, bool &lossyflag) const
     DataElement out;
     bool r = codec.Decode(PixelData, out);
     if(!r) return false;
+    codec.SetLossyFlag( ts.IsLossy() );
     assert( r );
     if ( GetPlanarConfiguration() != codec.GetPlanarConfiguration() )
       {
