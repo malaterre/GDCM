@@ -79,7 +79,7 @@ class GDCM_EXPORT XMLPrinter
 {
 public:
   XMLPrinter();
-  ~XMLPrinter();
+  virtual ~XMLPrinter();
 
   // Set file
   void SetFile(File const &f) { F = &f; }
