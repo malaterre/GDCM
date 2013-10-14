@@ -62,7 +62,7 @@ set(MSFF_TEST_SRCS
   TestImageRegionReader1
   TestImageRegionReader2
   TestImageRegionReader3
-  TestStreamImageWriter
+  #TestStreamImageWriter
   TestImageReaderRandomEmpty
   TestDirectionCosines
   TestImageWriter

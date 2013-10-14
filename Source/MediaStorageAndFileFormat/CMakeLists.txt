@@ -79,7 +79,7 @@ set(MSFF_SRCS
   gdcmSegmentedPaletteColorLookupTable.cxx
   gdcmStreamImageReader.cxx
   gdcmImageRegionReader.cxx
-  gdcmStreamImageWriter.cxx
+  #gdcmStreamImageWriter.cxx
   gdcmDirectoryHelper.cxx
   gdcmSegment.cxx
   gdcmSurface.cxx
