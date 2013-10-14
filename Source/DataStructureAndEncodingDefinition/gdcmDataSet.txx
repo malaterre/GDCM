@@ -360,6 +360,7 @@ namespace gdcm
     VL l = 0;
     //std::cout << "ReadWithLength Length: " << length << std::endl;
     VL locallength = length;
+    const std::streampos startpos = is.tellg();
     try
       {
       while( l != locallength && de.ReadWithLength<TDE,TSwap>(is, locallength))
@@ -369,7 +370,11 @@ namespace gdcm
         assert( de.GetTag() != Tag(0xfffe,0xe000) ); // We should not be reading the next item...
 #endif
         InsertDataElement( de );
-        l += de.GetLength<TDE>();
+        const VL oflen = de.GetLength<TDE>();
+        l += oflen;
+        const std::streampos curpos = is.tellg();
+        //assert( (curpos - startpos) == l || (curpos - startpos) + 1 == l );
+
         //std::cout << "l:" << l << std::endl;
         //assert( !de.GetVL().IsUndefined() );
         //std::cerr << "DEBUG: " << de.GetTag() << " "<< de.GetLength() <<
@@ -381,10 +386,26 @@ namespace gdcm
           gdcmWarningMacro( "PMS: Super bad hack. Changing length" );
           length = locallength = 140;
           }
+        if( (curpos - startpos) + 1 == l )
+          {
+          gdcmDebugMacro( "Papyrus odd padding detected" );
+          throw Exception( "Papyrus odd padding" );
+          }
         if( l > locallength )
           {
-          gdcmDebugMacro( "Out of Range SQ detected: " << l << " while max: " << locallength );
-          throw Exception( "Out of Range" );
+          if( (curpos - startpos) == locallength )
+            {
+            // this means that something went wrong somewhere, and upon recomputing the length
+            // we found a discrepandy with own vendor made its layout.
+            // update the length directly
+            locallength = length = l;
+            throw Exception( "Changed Length" );
+            }
+          else
+            {
+            gdcmDebugMacro( "Out of Range SQ detected: " << l << " while max: " << locallength );
+            throw Exception( "Out of Range" );
+            }
           }
         }
     }
@@ -403,6 +424,7 @@ namespace gdcm
         // Could be the famous :
         // gdcmDataExtra/gdcmBreakers/BuggedDicomWorksImage_Hopeless.dcm
         // let's just give up:
+        gdcmErrorMacro( "Last Tag is : " << pe.GetLastElement().GetTag() );
         throw Exception( "Unhandled" );
         }
       }
@@ -437,6 +459,11 @@ namespace gdcm
         // let's fix the length now:
         length = locallength = l;
         gdcmWarningMacro( "Item length is wrong" );
+        throw Exception( "Changed Length" );
+        }
+      else if( strcmp( pe.GetDescription(), "Papyrus odd padding" ) == 0 )
+        {
+        is.get();
         throw Exception( "Changed Length" );
         }
       else

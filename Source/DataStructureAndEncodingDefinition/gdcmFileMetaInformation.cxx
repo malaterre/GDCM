@@ -786,7 +786,7 @@ void FileMetaInformation::SetDataSetTransferSyntax(const TransferSyntax &ts)
   DataSetTS = ts;
 }
 
-MediaStorage FileMetaInformation::GetMediaStorage() const
+std::string FileMetaInformation::GetMediaStorageAsString() const
 {
   // D 0002|0002 [UI] [Media Storage SOP Class UID]
   // [1.2.840.10008.5.1.4.1.1.12.1]
@@ -796,7 +796,7 @@ MediaStorage FileMetaInformation::GetMediaStorage() const
     {
     gdcmDebugMacro( "File Meta information is present but does not"
       " contains " << t );
-    return MediaStorage::MS_END;
+    return "";
     }
   const DataElement &de = GetDataElement(t);
   std::string ts;
@@ -819,6 +819,14 @@ MediaStorage FileMetaInformation::GetMediaStorage() const
       last = '\0';
       }
     }
+  return ts;
+}
+
+MediaStorage FileMetaInformation::GetMediaStorage() const
+{
+  const std::string &ts = GetMediaStorageAsString();
+  if( ts.empty() ) return MediaStorage::MS_END;
+
   MediaStorage ms = MediaStorage::GetMSType(ts.c_str());
   if( ms == MediaStorage::MS_END )
     {

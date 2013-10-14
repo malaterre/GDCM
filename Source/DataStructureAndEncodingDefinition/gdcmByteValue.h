@@ -74,6 +74,8 @@ public:
 #endif
   }
   VL GetLength() const { return Length; }
+
+  VL ComputeLength() const { return Length + Length % 2; }
   // Does a reallocation
   void SetLength(VL vl) {
     VL l(vl);

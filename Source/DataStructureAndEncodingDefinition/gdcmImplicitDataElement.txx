@@ -210,7 +210,7 @@ std::istream &ImplicitDataElement::ReadValue(std::istream &is, bool readvalues)
   if( ValueLengthField == 0x31f031c && TagField == Tag(0x031e,0x0324) )
     {
     // TestImages/elbow.pap
-    gdcmWarningMacro( "Replacing a VL. To be able to read a supposively"
+    gdcmWarningMacro( "Replacing a VL. To be able to read a supposively "
       "broken Payrus file." );
     ValueLengthField = 202; // 0xca
     }

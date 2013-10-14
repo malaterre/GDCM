@@ -51,6 +51,7 @@ public:
   void SetDataSetTransferSyntax(const TransferSyntax &ts);
   const TransferSyntax &GetDataSetTransferSyntax() const { return DataSetTS; }
   MediaStorage GetMediaStorage() const;
+  std::string GetMediaStorageAsString() const;
 
   // FIXME: no virtual function means: duplicate code...
   void Insert(const DataElement& de) {

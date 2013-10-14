@@ -202,7 +202,7 @@ bool PVRGCodec::Code(DataElement const &in, DataElement &out)
 #else
   (void)in;
   (void)out;
-  /* Do I really want to produce JPEG by PRVRG ? Shouldn't IJG handle all cases nicely ? */
+  /* Do I really want to produce JPEG by PVRG ? Shouldn't IJG handle all cases nicely ? */
   return false;
 #endif
 }

@@ -352,6 +352,12 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is, bool readvalues)
       gdcmAssertAlwaysMacro( dummy == ValueLengthField );
       }
     }
+  else if( SequenceOfFragments *sqf = dynamic_cast<SequenceOfFragments*>(&GetValue()) )
+    {
+    assert( ValueField->GetLength() == ValueLengthField );
+    assert( sqf->GetLength() == ValueLengthField );
+    assert( ValueLengthField.IsUndefined() );
+    }
 #endif
 
   return is;

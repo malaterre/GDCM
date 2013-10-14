@@ -30,6 +30,7 @@ VL Item::GetLength() const
     // DataSet                ?
     // Item End Delimitation  4
     // Item End Length        4
+    assert( NestedDataSet.GetLength<TDE>() % 2 == 0 );
     return TagField.GetLength() /* 4 */ + ValueLengthField.GetLength() /* 4 */
       + NestedDataSet.GetLength<TDE>() + 4 + 4;
     }
@@ -38,9 +39,16 @@ VL Item::GetLength() const
     // Item Start             4
     // Item Length            4
     // DataSet                ?
+    const VL nestedlen = NestedDataSet.GetLength<TDE>();
+    // The following line is commented out, since we could be in the case where
+    // we are computing the actual length of an implicit dataset, from an
+    // initially read explicit dataset in which case the two length cannot
+    // related to each other
+    //gdcmAssertAlwaysMacro( ValueLengthField == nestedlen );
+    assert( nestedlen % 2 == 0 );
     return TagField.GetLength() /* 4 */ + ValueLengthField.GetLength() /* 4 */
       //+ ValueLengthField;
-      + NestedDataSet.GetLength<TDE>();
+      + nestedlen;
     }
 }
 
