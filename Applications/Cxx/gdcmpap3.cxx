@@ -124,7 +124,7 @@ static bool DecompressPapyrus3( int pap3handle, int itemnum, gdcm::TransferSynta
         //assert( dims[1] == 512 );
         //assert( pf.GetPixelSize() == 2 );
         const size_t imglen = dims[0] * dims[1] * pf.GetPixelSize();
-        pixeldata.SetByteValue( (char*)theImage, imglen );
+        pixeldata.SetByteValue( (char*)theImage, (uint32_t)imglen );
 
         /* free group 7FE0 */
         err = Papy3GroupFree (&group, TRUE);
@@ -420,10 +420,11 @@ int main(int argc, char *argv[])
     gdcm::Writer w;
     w.CheckFileMetaInformationOff();
     w.SetFileName( outfilename.c_str() );
+    w.SetFile( reader.GetFile() );
 
-    gdcm::TransferSyntax outts = ts;
     if( decomp_pap3 )
       {
+      gdcm::TransferSyntax outts = ts;
       for( int i = 0; i < sq->GetNumberOfItems(); ++i )
         {
         gdcm::Item & it = sq->GetItem( i + 1 );
@@ -439,16 +440,26 @@ int main(int argc, char *argv[])
         nested.Replace( pixeldata );
         }
 
+      // make sq as undefined length (avoid length computation):
       gdcm::DataElement de_dup = depap;
       de_dup.SetValue( *sq );
       de_dup.SetVLToUndefined();
       ds.Replace( de_dup );
 
+      gdcm::FileMetaInformation & h = w.GetFile().GetHeader();
       // pap3 returns image as decompressed:
       outts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
+      gdcm::Attribute<0x0002, 0x0010> TransferSyntaxUID;
+      const char *tsstr = gdcm::TransferSyntax::GetTSString( outts );
+      TransferSyntaxUID.SetValue( tsstr );
+      h.Replace( TransferSyntaxUID.GetAsDataElement() );
+      gdcm::Attribute<0x0002, 0x0000> filemetagrouplength;
+      h.Remove( filemetagrouplength.GetTag() ); // important
+      unsigned int glen = h.GetLength<gdcm::ExplicitDataElement>();
+      filemetagrouplength.SetValue( glen );
+      h.Insert( filemetagrouplength.GetAsDataElement() );
       }
 
-    w.SetFile( reader.GetFile() );
     if( !w.Write() )
       {
       std::cerr << "Could not write output file: " << outfilename << std::endl;
@@ -508,13 +519,13 @@ int main(int argc, char *argv[])
 
       if( check_iop )
         {
-        bool error = false;
+        bool erroriop = false;
         std::vector<double> iop_orig;
         iop_orig.resize( 6 );
         // gdcm::ImageHelper::GetDirectionCosinesValue( w.GetFile() );
         if( !gdcm::ImageHelper::GetDirectionCosinesFromDataSet(w.GetFile().GetDataSet(), iop_orig) )
           {
-          error = true;
+          erroriop = true;
           gdcm::DirectionCosines dc( &iop_orig[0] );
           assert( !dc.IsValid() );
             {
@@ -527,20 +538,20 @@ int main(int argc, char *argv[])
               if( str == "AXIAL" )
                 {
                 w.GetFile().GetDataSet().Replace( at_axial.GetAsDataElement() );
-                error = false; // error has been corrected
+                erroriop = false; // error has been corrected
                 }
               else if( str == "LOCALIZER" )
                 {
                 static const double fake_axial[] = { 1, 0, 0, 0, 0, 0 };
                 assert( memcmp( &iop_orig[0], fake_axial, 6 * sizeof( double ) ) == 0 );
                 w.GetFile().GetDataSet().Replace( at_axial.GetAsDataElement() );
-                error = false; // error has been corrected
+                erroriop = false; // error has been corrected
                 }
               }
-            assert( !error ); // did our heuristic failed ?
+            assert( !erroriop ); // did our heuristic failed ?
             }
           }
-        if( error )
+        if( erroriop )
           {
           std::cerr << "Error IOP (could not correct) for frame #" << i << " value : ("
             << iop_orig[0] << ","
