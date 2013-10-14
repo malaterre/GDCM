@@ -448,6 +448,7 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
         // LIBIDO-16-ACR_NEMA-Volume.dcm
         //F->GetDataSet().ReadUpToTag<ImplicitDataElement,SwapperDoOp>(is,tag, skiptags);
         //caller.template ReadCommon<ImplicitDataElement,SwapperDoOp>(is);
+        gdcmErrorMacro( "VirtualBigEndianNotHandled" );
         throw "Virtual Big Endian Implicit is not defined by DICOM";
         }
       else
