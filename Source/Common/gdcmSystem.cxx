@@ -943,7 +943,7 @@ bool System::GetHostName(char name[255])
 
 char *System::StrTokR(char *str, const char *delim, char **nextp)
 {
-#if 0
+#if 1
   // http://groups.google.com/group/comp.lang.c/msg/2ab1ecbb86646684
   // PD -> http://groups.google.com/group/comp.lang.c/msg/7c7b39328fefab9c
   char *ret;
