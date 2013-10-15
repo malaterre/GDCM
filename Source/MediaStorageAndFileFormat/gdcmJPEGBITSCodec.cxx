@@ -972,9 +972,13 @@ bool JPEGBITSCodec::DecodeByStreams(std::istream &is, std::ostream &os)
   /* At this point you may want to check to see whether any corrupt-data
    * warnings occurred (test whether jerr.pub.num_warnings is nonzero).
    */
-  if( jerr.pub.num_warnings )
+  /* gdcmData/D_CLUNIE_MR4_JPLY.dcm produces a single warning:
+   *  Invalid SOS parameters for sequential JPEG
+   * Be nice with this one:
+   */
+  if( jerr.pub.num_warnings > 1 )
     {
-    gdcmErrorMacro( "Too many warning during decompression of JPEG stream" );
+    gdcmErrorMacro( "Too many warning during decompression of JPEG stream: " << jerr.pub.num_warnings );
     return false;
     }
   /* In any case make sure the we reset the internal state suspension */
