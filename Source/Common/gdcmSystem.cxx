@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string.h> // strspn
 #include <assert.h>
 #include <errno.h>
 #include <sys/stat.h>
@@ -941,40 +941,56 @@ bool System::GetHostName(char name[255])
   return false;
 }
 
-char *System::StrTokR(char *ptr, const char *sep, char **end)
+char *System::StrTokR(char *str, const char *delim, char **nextp)
 {
 #if 1
-  if (ptr == NULL)
+  // http://groups.google.com/group/comp.lang.c/msg/2ab1ecbb86646684
+  // PD -> http://groups.google.com/group/comp.lang.c/msg/7c7b39328fefab9c
+  char *ret;
+
+  if (str == NULL)
     {
-    ptr = *end;
+    str = *nextp;
     }
 
-  /* search string for set of char: strspn */
-  while (*ptr && strchr(sep, *ptr))
+  str += strspn(str, delim);
+
+  if (*str == '\0')
     {
-    ++ptr;
+    return NULL;
     }
 
-  if (*ptr == '\0') return NULL;
+  ret = str;
 
-  char *token = ptr;
-  *end = token + 1;
+  str += strcspn(str, delim);
 
-  char *pend = *end;
-  while (*pend && !strchr(sep, *pend))
+  if (*str)
     {
-    ++pend;
+    *str++ = '\0';
     }
 
-  if (*pend)
-    {
-    *pend = '\0';
-    ++pend;
-    }
+  *nextp = str;
 
-  return token;
+  return ret;
 #else
-  return strtok_r(ptr,sep,end);
+  return strtok_r(str,delim,nextp);
+#endif
+}
+
+char *System::StrSep(char **sp, const char *sep)
+{
+  // http://unixpapa.com/incnote/string.html
+  // http://stackoverflow.com/questions/8512958/is-there-a-windows-variant-of-strsep
+#if 1
+  char *p, *s;
+  if (sp == NULL || *sp == NULL || **sp == '\0') return NULL;
+  s = *sp;
+  p = s + strcspn(s, sep);
+  if (*p != '\0') *p++ = '\0';
+  *sp = p;
+  return s;
+#else
+  return strsep(sp, sep);
 #endif
 }
 

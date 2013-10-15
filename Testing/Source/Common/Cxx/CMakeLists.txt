@@ -7,6 +7,7 @@ SET(Common_TEST_SRCS
   TestDummyValueGenerator
   TestASN1
   TestTesting
+  TestSystem3
   TestSwapper
   TestByteSwap
   TestString
