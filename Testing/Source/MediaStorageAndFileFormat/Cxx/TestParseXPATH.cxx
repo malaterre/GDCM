@@ -28,6 +28,7 @@ static bool CheckResult( std::string const & filename, std::string const & value
     || filename == "D_CLUNIE_NM1_JPLY.dcm"
     || filename == "D_CLUNIE_MR4_JPLY.dcm"
     || filename == "D_CLUNIE_CT1_J2KI.dcm"
+    || filename == "D_CLUNIE_CT1_JLSN.dcm"
     || filename == "D_CLUNIE_MR1_JPLY.dcm"
     || filename == "D_CLUNIE_SC1_JPLY.dcm"
     || filename == "D_CLUNIE_MR2_JPLY.dcm"
@@ -36,8 +37,11 @@ static bool CheckResult( std::string const & filename, std::string const & value
     {
     return value == "Lossy Compression ";
     }
-  else if ( filename == "JPEG_LossyYBR.dcm" )
+  else if ( filename == "JPEG_LossyYBR.dcm"
+         || filename == "MEDILABInvalidCP246_EVRLESQasUN.dcm" )
     return value ==  "Full fidelity image, uncompressed or lossless compressed";
+  else if ( filename == "NM-PAL-16-PixRep1.dcm" )
+    return value == "Full fidelity image ";
   else
     return value == "";
 }
