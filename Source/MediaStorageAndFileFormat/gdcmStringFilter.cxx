@@ -156,8 +156,8 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
         break;
         }
       assert( subtokens[1] == "keyword" );
-      //const char *k = subtokens[2].c_str();//unused
-      //const gdcm::DictEntry &dictentry = pubdict.GetDictEntryByKeyword(k, t);//unused
+      const char *k = subtokens[2].c_str();
+      const gdcm::DictEntry &dictentry = pubdict.GetDictEntryByKeyword(k, t);
       if( !curds->FindDataElement( t ) )
         {
         state = -1;
