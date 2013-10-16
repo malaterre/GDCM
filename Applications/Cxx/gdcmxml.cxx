@@ -168,7 +168,7 @@ static void HandleBulkData(const char *uuid, DataElement &de)
   }
 
 static void HandlePN(xmlTextReaderPtr reader,DataElement &de)
-  {
+{
   if(CHECK_NAME("DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15)
     return;//empty element
   else if(!(CHECK_NAME("PersonName") == 0))
@@ -194,9 +194,8 @@ static void HandlePN(xmlTextReaderPtr reader,DataElement &de)
       }
       
     }
-  
-  gdcm::ByteValue *bv1 = new ByteValue( name.c_str(), name.length() );
-  de.SetValue(*bv1);
+
+  de.SetByteValue( name.c_str(), (uint32_t)name.size() );
   return;
   
   /*
@@ -298,7 +297,7 @@ static void HandlePN(xmlTextReaderPtr reader,DataElement &de)
   return;  
     */
     
-  }
+}
   
 static void HandleSequence(SequenceOfItems *sqi,xmlTextReaderPtr reader,int depth);
 
@@ -355,7 +354,8 @@ static void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool
           { \
           READ_NEXT \
           char *value_char = (char*)xmlTextReaderConstValue(reader); \
-          sscanf(value_char,"%d",&(values[count++]));  \
+          int nvalue = sscanf(value_char,"%d",&(values[count++]));  \
+          assert( nvalue == 1 );  \
           READ_NEXT /*Value ending tag*/ \
           name = (const char*)xmlTextReaderConstName(reader); \
           READ_NEXT \
@@ -365,7 +365,7 @@ static void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool
         int total = 0; \
         while(total < count) \
           { \
-          el.SetValue(values[total],total); \
+          el.SetValue( (VRToType<VR::type>::Type)(values[total]),total); \
           total++; \
           } \
         de = el.GetAsDataElement(); \
@@ -676,7 +676,7 @@ static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
     return;
     }
   fclose(in);
-  reader = xmlReaderForMemory  (buffer, numBytes, NULL, NULL, 0);
+  reader = xmlReaderForMemory  (buffer, (int)numBytes, NULL, NULL, 0);
   //reader = xmlReaderForFile(filename, "UTF-8", 0); Not Working!!
   if (reader != NULL) 
     {

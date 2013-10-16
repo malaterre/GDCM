@@ -50,7 +50,6 @@
 #cmakedefine GDCM_USE_SYSTEM_UUID
 #cmakedefine GDCM_USE_SYSTEM_POPPLER
 #cmakedefine GDCM_USE_SYSTEM_LIBXML2
-#cmakedefine GDCM_USE_SYSTEM_PODOFO
 #cmakedefine GDCM_USE_SYSTEM_OPENSSL
 #cmakedefine GDCM_USE_SYSTEM_MD5
 #cmakedefine GDCM_USE_SYSTEM_EXPAT
@@ -83,9 +82,6 @@
 #cmakedefine GDCM_USE_JPEGLS
 
 #cmakedefine GDCM_AUTOLOAD_GDCMJNI
-
-/* For older gcc / broken plateform */
-#cmakedefine GDCM_NO_ANSI_STRING_STREAM
 
 /* I guess something important */
 #cmakedefine GDCM_HAVE_STDINT_H
@@ -141,12 +137,6 @@
 
 #define GDCM_PVRG_JPEG_EXECUTABLE "@PVRGJPEG_EXECUTABLE@"
 #define GDCM_KAKADU_EXPAND_EXECUTABLE "@KDU_EXPAND_EXECUTABLE@"
-
-/* Undocumented on purpose :-P */
-#cmakedefine GDCM_WRITE_ODD_LENGTH
-#ifdef GDCM_WRITE_ODD_LENGTH
-#error do not use !
-#endif
 
 /*--------------------------------------------------------------------------*/
 /* GDCM Versioning                                                          */

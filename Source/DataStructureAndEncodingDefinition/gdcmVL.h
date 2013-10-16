@@ -99,14 +99,10 @@ public:
   const std::ostream &Write(std::ostream &os) const
     {
     uint32_t copy = ValueLength;
-#ifndef GDCM_WRITE_ODD_LENGTH
     if( IsOdd() )
       {
       ++copy;
       }
-#else
-    assert( !IsOdd() );
-#endif
     TSwap::SwapArray(&copy,1);
     return os.write((char*)(&copy), sizeof(uint32_t));
     }
@@ -116,14 +112,10 @@ public:
     {
     assert( ValueLength <=   65535 /*UINT16_MAX*/ );
     uint16_t copy = (uint16_t)ValueLength;
-#ifndef GDCM_WRITE_ODD_LENGTH
     if( IsOdd() )
       {
       ++copy;
       }
-#else
-    assert( !IsOdd() );
-#endif
     TSwap::SwapArray(&copy,1);
     return os.write((char*)(&copy), sizeof(uint16_t));
     }

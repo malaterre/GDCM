@@ -19,10 +19,6 @@
 #include "gdcmAttribute.h"
 #include "gdcmSystem.h"
 
-#ifdef GDCM_USE_SYSTEM_PODOFO
-#include <podofo/podofo.h>
-#endif
-
 #ifdef GDCM_USE_SYSTEM_POPPLER
 #include <poppler/poppler-config.h>
 #include <poppler/PDFDoc.h>
@@ -419,7 +415,7 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
   is.read (buffer,length);
   is.close();
 
-  de.SetByteValue( buffer, length );
+  de.SetByteValue( buffer, (uint32_t)length );
   delete[] buffer;
 
   gdcm::FileMetaInformation &fmi = writer.GetFile().GetHeader();
@@ -461,7 +457,7 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
 {
     const char *sop = uid.Generate();
     gdcm::DataElement de( gdcm::Tag(0x0008,0x0018) );
-    de.SetByteValue( sop, strlen(sop) );
+    de.SetByteValue( sop, (uint32_t)strlen(sop) );
     de.SetVR( gdcm::Attribute<0x0008, 0x0018>::GetVR() );
     ds.Insert( de );
 }
@@ -470,7 +466,7 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
     {
     gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
     const char* msstr = gdcm::MediaStorage::GetMSString(ms);
-    de.SetByteValue( msstr, strlen(msstr) );
+    de.SetByteValue( msstr, (uint32_t)strlen(msstr) );
     de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
     ds.Insert( de );
     }

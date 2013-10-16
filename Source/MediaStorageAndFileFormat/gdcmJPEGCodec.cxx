@@ -242,7 +242,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
   const size_t sizeOfOs = os.tellp();
   os.seekp( 0, std::ios::beg );
   ByteValue * bv = new ByteValue;
-  bv->SetLength( sizeOfOs );
+  bv->SetLength( (uint32_t)sizeOfOs );
   bv->Read<SwapperNoOp>( os );
   out.SetValue( *bv );
 

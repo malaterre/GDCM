@@ -34,30 +34,6 @@ namespace gdcm
     ValueLengthField.SetToUndefined();
   }
 
-#if !defined(GDCM_LEGACY_REMOVE)
-  SequenceOfItems* DataElement::GetSequenceOfItems() {
-    GDCM_LEGACY_REPLACED_BODY(DataElement::GetSequenceOfItems, "GDCM 2.2",
-                              DataElement::GetValueAsSQ);
-    SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
-    if(!sqi)
-      {
-      // Was the element loaded as a byte value ? Let's check:
-      assert( IsEmpty() );
-      }
-    return sqi;
-  }
-  const SequenceOfItems* DataElement::GetSequenceOfItems() const {
-    GDCM_LEGACY_REPLACED_BODY(DataElement::GetSequenceOfItems, "GDCM 2.2",
-                              DataElement::GetValueAsSQ);
-    const SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
-    if(!sqi)
-      {
-      // Was the element loaded as a byte value ? Let's check:
-      assert( IsEmpty() );
-      }
-    return sqi;
-  }
-#endif
   const SequenceOfFragments* DataElement::GetSequenceOfFragments() const {
     const SequenceOfFragments *sqf = dynamic_cast<SequenceOfFragments*>(ValueField.GetPointer());
     return sqf;

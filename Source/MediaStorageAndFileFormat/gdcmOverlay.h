@@ -115,15 +115,6 @@ public:
   /// Decode the internal OverlayData (packed bits) into unpacked representation
   void Decompress(std::ostream &os) const;
 
-  /// Get the raw (packed bits) Overlay Data:
-  GDCM_LEGACY(bool GetBuffer(char *buffer) const)
-
-  /// Do not use
-  GDCM_LEGACY(bool GetUnpackBuffer(unsigned char *buffer) const)
-
-  /// Do not use
-  GDCM_LEGACY(void Decode(std::istream &is, std::ostream &os))
-
   /// Retrieve the size of the buffer needed to hold the Overlay
   /// as specified by Col & Row parameters
   size_t GetUnpackBufferLength() const;

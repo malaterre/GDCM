@@ -487,7 +487,7 @@ static int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs
 #ifdef LIBPOPPLER_PDFDOC_HAS_PDFVERSION
       float pdfversion = doc->getPDFVersion();
 #else
-      float pdfversion = doc->getPDFMajorVersion() + 0.1 * doc->getPDFMinorVersion();
+      const double pdfversion = doc->getPDFMajorVersion() + 0.1 * doc->getPDFMinorVersion();
 #endif
 
 
