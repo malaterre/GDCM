@@ -645,6 +645,7 @@ if(GDCM_STANDALONE)
     # needed here so that we have VTK_WRAP_PYTHON and al. available
     find_package(VTK REQUIRED)
     mark_as_advanced(VTK_DIR)
+    mark_as_advanced(GDCM_USE_PARAVIEW)
     subdirs(Utilities/VTK)
   endif()
 endif()
