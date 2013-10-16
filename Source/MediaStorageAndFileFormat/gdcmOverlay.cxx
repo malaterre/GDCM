@@ -428,64 +428,6 @@ const ByteValue &Overlay::GetOverlayData() const
   return bv;
 }
 
-#if !defined(GDCM_LEGACY_REMOVE)
-void Overlay::Decode(std::istream &is, std::ostream &os)
-{
-  unsigned char packedbytes;
-  unsigned char unpackedbytes[8];
-  while( is.read((char*)&packedbytes,1) )
-    {
-    unsigned char mask = 1;
-    for (unsigned int i = 0; i < 8; ++i)
-      {
-      if ( (packedbytes & mask) == 0)
-        {
-        unpackedbytes[i] = 0;
-        }
-      else
-        {
-        unpackedbytes[i] = 1;
-        }
-      mask <<= 1;
-      }
-    os.write(reinterpret_cast<char*>(unpackedbytes), 8);
-    }
-}
-
-bool Overlay::GetBuffer(char *buffer) const
-{
-  const size_t length = Internal->Data.size();
-  std::copy(buffer, buffer+length, Internal->Data.begin());
-  return true;
-}
-
-bool Overlay::GetUnpackBuffer(unsigned char *buffer) const
-{
-  unsigned char *unpackedbytes = buffer;
-  for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
-    {
-    // const unsigned char &packedbytes = *it;
-    // weird bug with gcc 3.3 (prerelease on SuSE) apparently:
-    unsigned char packedbytes = static_cast<unsigned char>(*it);
-    unsigned char mask = 1;
-    for (unsigned int i = 0; i < 8; ++i)
-      {
-      if ( (packedbytes & mask) == 0)
-        {
-        *unpackedbytes = 0;
-        }
-      else
-        {
-        *unpackedbytes = 255;
-        }
-      ++unpackedbytes;
-      mask <<= 1;
-      }
-    }
-  return true;
-}
-#endif
-
 size_t Overlay::GetUnpackBufferLength() const
 {
   const size_t unpacklen = Internal->Rows * Internal->Columns;
