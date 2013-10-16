@@ -25,7 +25,7 @@ int TestBase64(int , char *[])
 
   //std::cout << "sizeof:" << sizeof(str) << std::endl;
   //std::cout << "strlen:" << strlen(str) << std::endl;
-  unsigned int l1 = gdcm::Base64::GetEncodeLength( str, strlen(str) );
+  const size_t l1 = gdcm::Base64::GetEncodeLength( str, strlen(str) );
   if( l1 != 36 )
     {
     std::cerr << "Fail 1: " << l1 << std::endl;
@@ -59,7 +59,7 @@ int TestBase64(int , char *[])
     return 1;
     }
 
-  unsigned int l3 = gdcm::Base64::GetDecodeLength( buffer, l1 );
+  const size_t l3 = gdcm::Base64::GetDecodeLength( buffer, l1 );
   if( l3 != 25 )
     {
     std::cerr << "Fail 5: " << l3 << std::endl;

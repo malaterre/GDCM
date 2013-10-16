@@ -302,8 +302,8 @@ int main(int argc, char *argv[])
   SmartPointer<SequenceOfItems> sqi1 = seq1.GetValueAsSQ();
   assert( sqi1->GetNumberOfItems() >= 1 );
 
-  const int nitems = sqi1->GetNumberOfItems();
-  for( int item = 1; item < nitems; ++item )
+  const size_t nitems = sqi1->GetNumberOfItems();
+  for( size_t item = 1; item < nitems; ++item )
     {
     Item &item1 = sqi1->GetItem(item);
     DataSet &ds2 = item1.GetNestedDataSet();
