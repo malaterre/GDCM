@@ -133,17 +133,6 @@ public:
     return bv; // Will return NULL if not ByteValue
   }
 
-  /// Return the Value of DataElement as a Sequence Of Items (if possible)
-  /// \warning: You need to check for NULL return value
-  /// \warning: In some case a Value could not have been recognized as a SequenceOfItems
-  /// in those case the return of the function will be NULL, while the Value would be
-  /// a valid SequenceOfItems, in those case prefer GetValueAsSQ. In which case
-  /// the code internally trigger an assert to warn developper.
-  /// When in doubt do not use this function and prefer GetValueAsSQ()
-  /// @deprecated Replaced by DataElement::GetValueAsSQ() as of GDCM 2.2.
-  GDCM_LEGACY(const SequenceOfItems* GetSequenceOfItems() const)
-  GDCM_LEGACY(SequenceOfItems* GetSequenceOfItems())
-
   /// Interpret the Value stored in the DataElement. This is more robust (but also more
   /// expensive) to call this function rather than the simpliest form: GetSequenceOfItems()
   /// It also return NULL when the Value is NOT of type SequenceOfItems
