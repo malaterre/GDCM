@@ -83,9 +83,6 @@
 
 #cmakedefine GDCM_AUTOLOAD_GDCMJNI
 
-/* For older gcc / broken plateform */
-#cmakedefine GDCM_NO_ANSI_STRING_STREAM
-
 /* I guess something important */
 #cmakedefine GDCM_HAVE_STDINT_H
 #cmakedefine GDCM_HAVE_INTTYPES_H
