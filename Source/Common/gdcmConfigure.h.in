@@ -141,12 +141,6 @@
 #define GDCM_PVRG_JPEG_EXECUTABLE "@PVRGJPEG_EXECUTABLE@"
 #define GDCM_KAKADU_EXPAND_EXECUTABLE "@KDU_EXPAND_EXECUTABLE@"
 
-/* Undocumented on purpose :-P */
-#cmakedefine GDCM_WRITE_ODD_LENGTH
-#ifdef GDCM_WRITE_ODD_LENGTH
-#error do not use !
-#endif
-
 /*--------------------------------------------------------------------------*/
 /* GDCM Versioning                                                          */
 
