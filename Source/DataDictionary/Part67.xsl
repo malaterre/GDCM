@@ -27,7 +27,7 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 </xsl:comment>
-    <dicts edition="2009">
+    <dicts edition="2011">
       <xsl:apply-templates select="article/informaltable"/>
       <xsl:apply-templates select="article/sect1/informaltable"/>
       <xsl:apply-templates select="article/sect1/sect2/informaltable"/>
