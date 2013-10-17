@@ -20,7 +20,7 @@
   <xsl:template match="/">
     <xsl:text>
 // GENERATED FILE DO NOT EDIT
-// $ xsltproc TagToType.xsl DICOMV3.xml &gt; gdcmTagToType.h
+// $ xsltproc TagToType.xsl Part6.xml &gt; gdcmTagToType.h
 
 /*=========================================================================
 
@@ -59,7 +59,9 @@ enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
 </xsl:text>
-    <xsl:for-each select="dict/entry">
+    <xsl:for-each select="dicts/dict/entry">
+      <xsl:sort select="@group" data-type="text" order="ascending"/>
+      <xsl:sort select="@element" data-type="text" order="ascending"/>
       <xsl:variable name="group" select="translate(@group,'x','0')"/>
       <xsl:variable name="element" select="translate(@element,'x','0')"/>
       <xsl:if test="contains(@element,'x') = true and contains(@element,'xx') = false and @vr != '' and @vr != 'US_SS' and @vr != 'US_SS_OW' and @vr != 'OB_OW'">

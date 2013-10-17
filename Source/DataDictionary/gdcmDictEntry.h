@@ -85,6 +85,7 @@ public:
 
 private:
   //
+  friend class Dict;
   static bool CheckKeywordAgainstName(const char *name, const char *keyword);
 
 private:

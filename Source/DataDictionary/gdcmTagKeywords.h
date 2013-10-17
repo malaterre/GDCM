@@ -1,5 +1,5 @@
 // GENERATED FILE DO NOT EDIT
-// $ xsltproc TagKeyword.xsl Part6.xml > gdcmTagKeywords.h
+// $ xsltproc TagKeywords.xsl Part6.xml > gdcmTagKeywords.h
 
 /*=========================================================================
 

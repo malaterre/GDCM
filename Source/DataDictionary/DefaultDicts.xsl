@@ -20,7 +20,7 @@
   <xsl:template match="/">
     <xsl:text>
 // GENERATED FILE DO NOT EDIT
-// $ xsltproc DefaultDicts.xsl DICOMV3.xml &gt; gdcmDefaultDicts.cxx
+// $ xsltproc DefaultDicts.xsl Part6.xml &gt; gdcmDefaultDicts.cxx
 
 /*=========================================================================
 
@@ -58,7 +58,10 @@ typedef struct
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
 </xsl:text>
-    <xsl:for-each select="dict/entry">
+    <xsl:for-each select="dicts/dict/entry">
+      <!-- need to sort based on text, since hex are not 'number' -->
+      <xsl:sort select="@group" data-type="text" order="ascending"/>
+      <xsl:sort select="@element" data-type="text" order="ascending"/>
       <xsl:variable name="group" select="translate(@group,'x','0')"/>
       <xsl:variable name="element" select="translate(@element,'x','0')"/>
       <xsl:choose>

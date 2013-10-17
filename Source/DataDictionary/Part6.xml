@@ -3472,7 +3472,7 @@ Manual changes:
     <entry group="4010" element="101a" keyword="BoardingPassID" vr="SH" vm="1" name="Boarding Pass ID"/>
     <entry group="4010" element="101b" keyword="CenterOfMass" vr="FL" vm="3" name="Center of Mass"/>
     <entry group="4010" element="101c" keyword="CenterOfPTO" vr="FL" vm="3" name="Center of PTO"/>
-    <entry group="4010" element="101d" keyword="BoundingPolygon" vr="FL" vm="6-n" name="Bounding Polygon"/>
+    <entry group="4010" element="101d" keyword="BoundingPolygon" vr="FL" vm="6-6n" name="Bounding Polygon"/>
     <entry group="4010" element="101e" keyword="RouteSegmentStartLocationID" vr="SH" vm="1" name="Route Segment Start Location ID"/>
     <entry group="4010" element="101f" keyword="RouteSegmentEndLocationID" vr="SH" vm="1" name="Route Segment End Location ID"/>
     <entry group="4010" element="1020" keyword="RouteSegmentLocationIDType" vr="CS" vm="1" name="Route Segment Location ID Type"/>
