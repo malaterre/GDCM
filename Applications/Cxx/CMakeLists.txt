@@ -24,10 +24,15 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Utilities"
 
-  "${GDCM_SOURCE_DIR}/Utilities/socketxx"
-  "${GDCM_SOURCE_DIR}/Utilities/socketxx/socket++" # local.h
-  "${GDCM_BINARY_DIR}/Utilities/socketxx/socket++" # config.h
   )
+
+if(NOT GDCM_USE_SYSTEM_SOCKETXX)
+  include_directories(
+    "${GDCM_SOURCE_DIR}/Utilities/socketxx"
+    "${GDCM_SOURCE_DIR}/Utilities/socketxx/socket++" # local.h
+    "${GDCM_BINARY_DIR}/Utilities/socketxx/socket++" # config.h
+    )
+endif()
 
 if(WIN32)
   if (BUILD_SHARED_LIBS)
