@@ -80,7 +80,12 @@ set(MessageExchangeDefinition_SRCS
   )
 
 add_library(gdcmMEXD ${MessageExchangeDefinition_SRCS})
-target_link_libraries(gdcmMEXD gdcmMSFF gdcmDICT gdcmDSED gdcmIOD socketxx)
+target_link_libraries(gdcmMEXD gdcmMSFF gdcmDICT gdcmDSED gdcmIOD)
+if(GDCM_USE_SYSTEM_SOCKETXX)
+  target_link_libraries(gdcmMEXD socket++)
+else()
+  target_link_libraries(gdcmMEXD socketxx)
+endif()
 set_target_properties(gdcmMEXD PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 if(WIN32)
   target_link_libraries(gdcmMEXD ws2_32)
