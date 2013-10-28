@@ -34,7 +34,9 @@
 #include <getopt.h>
 
 #ifdef GDCM_USE_SYSTEM_PAPYRUS3
+extern "C" {
 #include <Papyrus3.h>
+}
 #endif
 
 static void PrintVersion()

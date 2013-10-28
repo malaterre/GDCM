@@ -11,7 +11,13 @@
 #  BSD license.
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-find_path(PAPYRUS3_INCLUDE_DIR NAMES Papyrus3.h)
+set(PAPYRUS3_INCLUDE_DIRECTORIES
+  /usr/include/
+  /usr/include/Papyrus3
+  )
+find_path(PAPYRUS3_INCLUDE_DIR Papyrus3.h
+  ${PAPYRUS3_INCLUDE_DIRECTORIES}
+  )
 find_library(PAPYRUS3_LIBRARY NAMES Papyrus3)
 
 include(FindPackageHandleStandardArgs)
