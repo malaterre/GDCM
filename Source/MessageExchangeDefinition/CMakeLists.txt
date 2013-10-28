@@ -11,10 +11,15 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Testing/Source/Data"
 
   "${GDCM_SOURCE_DIR}/Utilities"
-  "${GDCM_SOURCE_DIR}/Utilities/socketxx"
-  "${GDCM_SOURCE_DIR}/Utilities/socketxx/socket++" # local.h
-  "${GDCM_BINARY_DIR}/Utilities/socketxx/socket++" # config.h
   )
+
+if(NOT GDCM_USE_SYSTEM_SOCKETXX)
+  include_directories(
+    "${GDCM_SOURCE_DIR}/Utilities/socketxx"
+    "${GDCM_SOURCE_DIR}/Utilities/socketxx/socket++" # local.h
+    "${GDCM_BINARY_DIR}/Utilities/socketxx/socket++" # config.h
+    )
+endif()
 
 set(MessageExchangeDefinition_SRCS
   gdcmAAbortPDU.cxx

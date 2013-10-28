@@ -27,17 +27,15 @@
 //placed into various primitives for actual communication.
 #include "gdcmULConnectionInfo.h"
 #include "gdcmAAssociateRQPDU.h"
+
 #include <socket++/sockinet.h>//for setting up the local socket
 
-#if defined (__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__sun__) // inet_addr
+#if defined(_WIN32)
+#else
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#endif
-
-#if defined (__APPLE__)
-#include <arpa/inet.h> // inet_addr
 #endif
 
 namespace gdcm

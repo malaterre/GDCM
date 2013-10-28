@@ -325,6 +325,7 @@ endif()
 option(GDCM_USE_SYSTEM_EXPAT "Use system expat" OFF)
 option(GDCM_USE_SYSTEM_JSON "Use system json" OFF)
 option(GDCM_USE_SYSTEM_PAPYRUS3 "Use system papyrus3" OFF)
+option(GDCM_USE_SYSTEM_SOCKETXX "Use system socket++" OFF)
 option(GDCM_USE_SYSTEM_LJPEG "Use system ljpeg (ijg lib)" OFF)
 option(GDCM_USE_SYSTEM_OPENJPEG "Use system openjpeg" OFF)
 option(GDCM_USE_SYSTEM_CHARLS "Use system charls" OFF)
@@ -335,6 +336,7 @@ mark_as_advanced(
   GDCM_USE_SYSTEM_EXPAT
   GDCM_USE_SYSTEM_JSON
   GDCM_USE_SYSTEM_PAPYRUS3
+  GDCM_USE_SYSTEM_SOCKETXX
   GDCM_USE_SYSTEM_LJPEG
   GDCM_USE_SYSTEM_OPENJPEG
   GDCM_USE_SYSTEM_CHARLS
