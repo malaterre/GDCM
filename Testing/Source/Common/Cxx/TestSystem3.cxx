@@ -47,7 +47,7 @@ int TestSystem3(int, char *[])
 {
   std::vector< std::string > v;
   char *string = strdup( isostr );
-  while ((token = strsep(&string, delim)) != NULL)
+  while ((token = gdcm::System::StrSep(&string, delim)) != NULL)
     {
     //printf("token=%s\n", token);
     v.push_back( token );
