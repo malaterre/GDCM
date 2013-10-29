@@ -77,6 +77,7 @@ set(MessageExchangeDefinition_SRCS
   gdcmULTransitionTable.cxx
   gdcmULWritingCallback.cxx
   gdcmUserInformation.cxx
+  gdcmWLMFindQuery.cxx
   )
 
 add_library(gdcmMEXD ${MessageExchangeDefinition_SRCS})

@@ -20,6 +20,7 @@
 #include "gdcmMovePatientRootQuery.h"
 #include "gdcmFindStudyRootQuery.h"
 #include "gdcmMoveStudyRootQuery.h"
+#include "gdcmWLMFindQuery.h"
 
 #include <locale>
 
@@ -55,7 +56,13 @@ BaseRootQuery* QueryFactory::ProduceQuery(ERootType inRootType, EQueryType inQue
       break;
       }
     break;
+  case eWLMFind:
+	theReturn = new WLMFindQuery();
+	  break;
     }
+
+
+
   if( theReturn )
     theReturn->InitializeDataSet(inQueryLevel);
   return theReturn;
