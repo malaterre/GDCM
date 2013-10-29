@@ -41,8 +41,9 @@ namespace gdcm
     };
   enum EQueryType
     {
-    eFind = 0,
-    eMove
+    eFind= 0,
+    eMove,
+    eWLMFind
     };
 
 /**

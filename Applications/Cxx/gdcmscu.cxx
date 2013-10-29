@@ -68,7 +68,7 @@ static void PrintHelp()
   std::cout << "  -r --recursive      recursively process (sub-)directories." << std::endl;
   std::cout << "     --store-query    Store constructed query in file." << std::endl;
   std::cout << "C-FIND Options:" << std::endl;
-  //std::cout << "     --worklist       C-FIND Worklist Model." << std::endl;//!!not supported atm
+  std::cout << "     --worklist       C-FIND Worklist Model." << std::endl;
   std::cout << "     --patientroot    C-FIND Patient Root Model." << std::endl;
   std::cout << "     --studyroot      C-FIND Study Root Model." << std::endl;
   std::cout << "     --patient        C-FIND Query on Patient Info (cannot be used with --studyroot)" << std::endl;
@@ -543,9 +543,13 @@ int main(int argc, char *argv[])
     {
     mode = "get";
     }
-  
+  else if ( findworklist )
+    {
+    mode = "worklist";
+    }
+
   //this class contains the networking calls
-  
+
   if ( mode == "server" ) // C-STORE SCP
     {
     // MM: Do not expose that to user for now (2010/10/11).
@@ -577,7 +581,7 @@ int main(int argc, char *argv[])
       theLevel = gdcm::eImage;
 
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
-      gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys, true);
+      gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys, gdcm::eMove );
 
     if (findstudyroot == 0 && findpatientroot == 0)
       {
@@ -622,6 +626,35 @@ int main(int argc, char *argv[])
       callingaetitle.c_str(), callaetitle.c_str(), outputdir.c_str() );
     gdcmDebugMacro( (didItWork ? "Move succeeded." : "Move failed.") );
     return didItWork ? 0 : 1;
+    }
+  else if ( mode == "worklist" )
+    {
+    gdcm::ERootType theRoot =  gdcm::ePatientRootType;
+    gdcm::EQueryLevel theLevel = gdcm::eSeries;
+    gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery = gdcm::CompositeNetworkFunctions::ConstructQuery( theRoot, theLevel ,keys, gdcm::eWLMFind );
+    if (!theQuery->ValidateQuery(false))
+      {
+      //issue
+      }
+    std::vector<gdcm::DataSet> theDataSet;
+    if( !gdcm::CompositeNetworkFunctions::CFind(hostname, (uint16_t)port, theQuery, theDataSet,
+        callingaetitle.c_str(), callaetitle.c_str()) )
+      {
+      }
+    gdcm::Printer p;
+    std::ostream &os = gdcm::Trace::GetStream();
+    for( std::vector<gdcm::DataSet>::iterator itor
+      = theDataSet.begin(); itor != theDataSet.end(); itor++)
+      {
+      os << "WL Find Response: " << (itor - theDataSet.begin() + 1) << std::endl;
+      p.PrintDataSet( *itor, os );
+      os << std::endl;
+      }
+
+    if( gdcm::Trace::GetWarningFlag() ) // == verbose flag
+      {
+      os << "WL Find was successful." << std::endl;
+      }
     }
   else if ( mode == "find" ) // C-FIND SCU
     {
