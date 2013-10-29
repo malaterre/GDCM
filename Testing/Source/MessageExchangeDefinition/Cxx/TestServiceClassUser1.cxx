@@ -238,7 +238,7 @@ int TestServiceClassUser1(int argc, char *argv[])
 
   gdcm::SmartPointer<gdcm::BaseRootQuery> movequery =
     gdcm::CompositeNetworkFunctions::ConstructQuery(
-      gdcm::ePatientRootType, gdcm::ePatient, moveds, true);
+      gdcm::ePatientRootType, gdcm::ePatient, moveds, gdcm::eMove);
   // make sure the query is valid
   if (!movequery->ValidateQuery())
     {

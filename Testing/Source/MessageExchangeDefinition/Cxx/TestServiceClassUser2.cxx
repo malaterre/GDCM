@@ -198,7 +198,7 @@ int TestServiceClassUser2(int argc, char *argv[])
 
   gdcm::SmartPointer<gdcm::BaseRootQuery> movequery1 =
     gdcm::CompositeNetworkFunctions::ConstructQuery(
-      gdcm::ePatientRootType, gdcm::eImage, moveds1, true);
+      gdcm::ePatientRootType, gdcm::eImage, moveds1, gdcm::eMove);
 
   // Generate the PresentationContext array from the query UID:
   if( !generator.GenerateFromUID( movequery1->GetAbstractSyntaxUID() ) )
@@ -248,7 +248,7 @@ int TestServiceClassUser2(int argc, char *argv[])
   moveds2.Insert( pid.GetAsDataElement() );
   gdcm::SmartPointer<gdcm::BaseRootQuery> movequery2 =
     gdcm::CompositeNetworkFunctions::ConstructQuery(
-      gdcm::ePatientRootType, gdcm::ePatient, moveds2, true);
+      gdcm::ePatientRootType, gdcm::ePatient, moveds2, gdcm::eMove );
 
   const char outputdir[] = "TestServiceClassUser2";
   // Make sure output dir exist, it will not be created
