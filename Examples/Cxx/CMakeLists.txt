@@ -13,6 +13,12 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Utilities"
   )
+# error C1083: Cannot open include file: 'zconf.h'
+if(NOT GDCM_USE_SYSTEM_ZLIB)
+include_directories(
+  "${GDCM_BINARY_DIR}/Utilities/gdcmzlib"
+)
+endif()
 
 if(GDCM_BINARY_DIR)
 find_package(SQLITE3)
