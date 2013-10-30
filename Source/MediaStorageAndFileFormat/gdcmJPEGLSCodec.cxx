@@ -163,8 +163,8 @@ bool JPEGLSCodec::DecodeByStreamsCommon(char *buffer, size_t totalLen, std::vect
     JlsParameters params = {};
     JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
-    std::vector<BYTE> rgbyteCompressed;
-    rgbyteCompressed.resize(params.height *params.width* 4);
+    //std::vector<BYTE> rgbyteCompressed;
+    //rgbyteCompressed.resize(params.height *params.width* 4);
 
     rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
 
@@ -240,8 +240,8 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       JlsParameters params = {};
       JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
-      std::vector<BYTE> rgbyteCompressed;
-      rgbyteCompressed.resize(params.height *params.width* 4);
+      //std::vector<BYTE> rgbyteCompressed;
+      //rgbyteCompressed.resize(params.height *params.width* 4);
 
       std::vector<BYTE> rgbyteOut;
       rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
