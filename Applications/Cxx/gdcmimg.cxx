@@ -136,7 +136,7 @@ static void PrintHelp()
   std::cout << "     --pc [01]         Change planar configuration." << std::endl;
   std::cout << "     --pi [str]        Change photometric interpretation." << std::endl;
   std::cout << "     --pf %d,%d,%d     Change pixel format: (BA,BS,HB)." << std::endl;
-  std::cout << "  -s --size %d,%d      Size." << std::endl;
+  std::cout << "  -s --size %d,%d,%d   Size." << std::endl;
   std::cout << "     --offset %ull     Start Offset." << std::endl;
   std::cout << "  -C --sop-class-uid   SOP Class UID (name or value)." << std::endl;
   std::cout << "  -T --study-uid       Study UID." << std::endl;
