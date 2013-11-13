@@ -18,6 +18,10 @@ endif()
 
 include(${VTK_USE_FILE})
 
+if( ${VTK_MAJOR_VERSION} GREATER 5 )
+  include(${VTK_CMAKE_DIR}/vtkMakeInstantiator.cmake)
+endif()
+
 include(CheckCXXSourceCompiles)
 set(CMAKE_REQUIRED_INCLUDES ${VTK_INCLUDE_DIRS})
 #set(CMAKE_REQUIRED_LIBRARIES vtkVolumeRendering) # can't get it to work
