@@ -21,6 +21,7 @@
 #include "gdcmSwapper.h"
 
 #include <vector>
+#include <algorithm> // req C++11
 #include <stddef.h> // ptrdiff_t fix
 #include <cstring>
 
