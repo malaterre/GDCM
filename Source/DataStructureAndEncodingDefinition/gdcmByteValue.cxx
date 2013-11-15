@@ -13,6 +13,7 @@
 =========================================================================*/
 #include "gdcmByteValue.h"
 
+#include <algorithm> // req C++11
 #include <cstring> // memcpy
 
 namespace gdcm
