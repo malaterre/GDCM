@@ -392,6 +392,11 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
       const File &file = reader.GetFile();
       std::vector<DataSet> theDataSets;
       theDataSets = theManager.SendStore( file );
+      if( theDataSets.empty() )
+        {
+        gdcmErrorMacro( "Could not C-STORE: " << filename );
+        return false;
+        }
       assert( theDataSets.size() == 1 );
       const DataSet &ds = theDataSets[0];
       assert ( ds.FindDataElement(Tag(0x0, 0x0900)) );
