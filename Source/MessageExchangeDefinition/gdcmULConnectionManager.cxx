@@ -423,7 +423,7 @@ void ULConnectionManager::SendStore(const File & file, ULConnectionCallback* inC
 
   ULEvent theEvent(ePDATArequest, theDataPDU);
   EStateID theState = RunEventLoop(theEvent, mConnection, inCallback, false);
-  assert( theState == eSta6TransferReady ); (void)theState;
+  assert( theState == eSta6TransferReady || theState == eStaDoesNotExist ); (void)theState;
 }
 
 bool ULConnectionManager::BreakConnection(const double& inTimeOut){
