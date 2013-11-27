@@ -81,7 +81,7 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
   std::istringstream is;
   is.str( std::string( buf, len ) );
 
-  uint32_t totalsize;
+  std::streamoff totalsize;
   is.read( (char*)&totalsize, sizeof( totalsize ));
   assert( totalsize == len );
 
@@ -89,7 +89,7 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
   is.read( (char*)&nframes, sizeof( nframes ));
   assert( nframes == (uint32_t)nslices );
 
-  std::vector< uint32_t > offsets;
+  std::vector< std::streamoff > offsets;
   offsets.reserve( nframes );
   for( uint32_t frame = 0; frame < nframes ; ++frame )
     {
@@ -155,7 +155,7 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
 }
 
 static bool ProcessNone( const char *outfilename, const int nslices, const
-  int buf_size, const char *buf, const size_t len,
+  int buf_size, const char *buf, const std::streampos len,
   const char *crcbuf, const size_t crclen )
 {
   std::vector< hframe > crcheaders;
@@ -182,7 +182,7 @@ static bool ProcessNone( const char *outfilename, const int nslices, const
   std::istringstream is;
   is.str( std::string( buf, len ) );
 
-  uint32_t totalsize;
+  std::streampos totalsize;
   is.read( (char*)&totalsize, sizeof( totalsize ));
   assert( totalsize == len );
 
@@ -394,7 +394,7 @@ int main(int argc, char *argv[])
       else if( strncmp(bv->GetPointer(), "None", 4) == 0 )
         {
         if( !ProcessNone( outfilename, nslicesref, zallocref, bv2->GetPointer(),
-            bv2->GetLength(), bv3->GetPointer(), bv3->GetLength() ) )
+            std::streampos(bv2->GetLength()), bv3->GetPointer(), bv3->GetLength() ) )
           {
           return 1;
           }
