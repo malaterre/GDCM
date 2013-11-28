@@ -350,6 +350,7 @@ bool ServiceClassUser::SendFind(const BaseRootQuery* query, std::vector<DataSet>
       gdcm::Tag const & t = errormsg.GetValue();
       gdcmErrorMacro( "Offending Element: " << t ); (void)t;
       }
+    break;
   case 0xA700: // Refused: Out of Resources
       {
       Attribute<0x0,0x0902> errormsg;
