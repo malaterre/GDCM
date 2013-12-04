@@ -19,7 +19,7 @@
 // .SECTION Warning
 // When using vtkGDCMPolyDataReader in conjonction with vtkGDCMImageReader
 // it is *required* that FileLowerLeft is set to ON as coordinate system
-// would be inconsistant in between the two data structures.
+// would be inconsistent in between the two data structures.
 //
 // .SECTION See Also
 // vtkGDCMImageReader vtkGDCMPolyDataWriter vtkRTStructSetProperties

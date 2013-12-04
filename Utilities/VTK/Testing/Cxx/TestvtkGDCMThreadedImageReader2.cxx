@@ -167,7 +167,7 @@ int TestvtkGDCMThreadedImageRead2(const char *filename, bool verbose = false)
     refimage = filename;
     }
 
-  // In all cases we need to explicitely say what the image type is:
+  // In all cases we need to explicitly say what the image type is:
   if( !ExecuteInformation<TReader>(refimage, reader) )
     {
     std::cerr << "file: " << refimage << " is not an image. giving up" << std::endl;

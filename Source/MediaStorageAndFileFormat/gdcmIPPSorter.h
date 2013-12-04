@@ -28,7 +28,7 @@ namespace gdcm
  * This algorithm does NOT support duplicate and will FAIL in case of duplicate
  * IPP.
  * \warning See special note for SetZSpacingTolerance when computing the
- * ZSpacing from the IPP of each DICOM files (default tolerance for consistant
+ * ZSpacing from the IPP of each DICOM files (default tolerance for consistent
  * spacing is: 1e-6mm)
  *
  * For more information on Spacing, and how it is defined in DICOM, advanced
@@ -49,7 +49,7 @@ public:
   /// It will execute the filter, option should be set before
   /// running this function (SetZSpacingTolerance, ...)
   /// Return value indicate if sorting could be achived. Warning this does *NOT* imply
-  /// that spacing is consistant, it only means the file are sorted according to IPP
+  /// that spacing is consistent, it only means the file are sorted according to IPP
   /// You should check if ZSpacing is 0 or not to deduce if file are actually a 3D volume
   virtual bool Sort(std::vector<std::string> const & filenames);
 

@@ -204,7 +204,7 @@ public:
   /**
    * \brief  Checks whether a 'ByteValue' is printable or not (in order
    *         to avoid corrupting the terminal of invocation when printing)
-   *         I dont think this function is working since it does not handle
+   *         I don't think this function is working since it does not handle
    *         UNICODE or character set...
    */
   bool IsPrintable(VL length) const {

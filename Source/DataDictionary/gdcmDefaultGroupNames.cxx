@@ -50,7 +50,7 @@ static GROUP_ENTRY groupname[] = {
   {0x0040,"MOD","Modality Worklist"},
   {0x0042,"EDOC","Encapsulated Document"},
   {0x0050,"XAD","XRay Angio Device"},
-  {0x0050,"DEV","Device Informations"},
+  {0x0050,"DEV","Device Information"},
   {0x0054,"NMI","Nuclear Medicine"},
   {0x0060,"HIS","Histogram"},
   {0x0070,"PRS","Presentation State"},
