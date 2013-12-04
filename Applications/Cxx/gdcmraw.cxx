@@ -330,7 +330,7 @@ int main(int argc, char *argv[])
   gdcm::Filename fn1(filename.c_str()), fn2(outfilename.c_str());
   if( fn1.IsIdentical(fn2) )
     {
-    std::cerr << "Ouput is Input\n";
+    std::cerr << "Output is Input\n";
     return 1;
     }
 

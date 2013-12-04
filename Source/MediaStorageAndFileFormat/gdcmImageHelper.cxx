@@ -258,7 +258,7 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
 
   if( !timeseries )
     {
-    // Check spacing is consistant:
+    // Check spacing is consistent:
     const double ZTolerance = 1e-3; // ??? FIXME
     prev = distances[0];
     for(unsigned int i = 1; i < nitems; ++i)

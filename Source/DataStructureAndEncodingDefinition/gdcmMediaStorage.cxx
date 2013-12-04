@@ -513,7 +513,7 @@ bool MediaStorage::SetFromFile(File const &file)
   /*
    * DICOMDIR usually have group 0002 present, but no 0008,0016 (doh!)
    * So we first check in header, if found, assumed it is ok (we should
-   * check that consistant with 0008,0016 ...)
+   * check that consistent with 0008,0016 ...)
    * A lot of DICOM image file are still missing the group header
    * this is why we check 0008,0016, and to preserve compat with ACR-NEMA
    * we also check Modality element to guess a fake Media Storage UID
