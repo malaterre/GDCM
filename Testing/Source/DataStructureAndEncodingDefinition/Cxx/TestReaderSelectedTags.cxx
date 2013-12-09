@@ -51,6 +51,7 @@ int TestReadSelectedTags(const char* filename, bool verbose = false)
   assert( (size_t)refoffset <= filesize );
 
   std::streamoff refoffset2 = gdcm::Testing::GetStreamOffsetFromFile(filename);
+  (void)refoffset2;
   const gdcm::File & file = reader.GetFile();
   //const gdcm::DataSet & ds = file.GetDataSet();
   //const bool isfound = ds.FindDataElement( pixeldatagl );

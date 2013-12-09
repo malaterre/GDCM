@@ -59,6 +59,7 @@
 namespace gdcm
 {
 
+#ifdef GDCM_USE_SYSTEM_JSON
 static inline void wstrim(std::string& str)
 {
   str.erase(0, str.find_first_not_of(' '));
@@ -106,6 +107,7 @@ static inline bool CanContainBackslash( const VR::VRType vrtype )
     }
   return false;
 }
+#endif
 
 class JSONInternal
 {
@@ -535,6 +537,7 @@ bool JSON::Code(DataSet const & ds, std::ostream & os)
 #endif
 }
 
+#ifdef GDCM_USE_SYSTEM_JSON
 // Paranoid
 static inline bool CheckTagKeywordConsistency( const char *name, const Tag & thetag )
 {
@@ -565,6 +568,7 @@ static inline bool CheckTagKeywordConsistency( const char *name, const Tag & the
   assert( strcmp( name, keyword ) == 0 );
   return strcmp( name, keyword ) == 0;
 }
+#endif
 
 #ifdef GDCM_USE_SYSTEM_JSON
 #ifdef JSON_C_VERSION

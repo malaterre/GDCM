@@ -355,7 +355,7 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is, bool readvalues)
   else if( SequenceOfFragments *sqf = dynamic_cast<SequenceOfFragments*>(&GetValue()) )
     {
     assert( ValueField->GetLength() == ValueLengthField );
-    assert( sqf->GetLength() == ValueLengthField );
+    assert( sqf->GetLength() == ValueLengthField ); (void)sqf;
     assert( ValueLengthField.IsUndefined() );
     }
 #endif
