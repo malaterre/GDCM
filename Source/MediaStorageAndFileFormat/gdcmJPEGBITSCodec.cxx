@@ -1354,6 +1354,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
 
 bool JPEGBITSCodec::EncodeBuffer(std::ostream &os, const char *data, size_t datalen)
 {
+  (void)datalen;
   JSAMPLE * image_buffer = (JSAMPLE*)data;  /* Points to large array of R,G,B-order data */
   const unsigned int *dims = this->GetDimensions();
   int image_height = dims[1];  /* Number of rows in image */
@@ -1542,7 +1543,7 @@ if ( Internals->StateSuspension == 1 )
        */
       row_pointer[0] = & image_buffer[cinfo.next_scanline * row_stride * 0];
       const JDIMENSION nscanline = jpeg_write_scanlines(&cinfo, row_pointer, 1);
-      assert( nscanline == 1 );
+      assert( nscanline == 1 ); (void)nscanline;
     assert(cinfo.next_scanline <= cinfo.image_height);
     //}
     }

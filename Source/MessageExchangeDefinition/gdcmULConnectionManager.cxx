@@ -571,7 +571,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
             Attribute<0x0,0x0800> at;
             at.SetFromDataElement( de );
             unsigned short datasettype = at.GetValue();
-            assert( datasettype == 0x0101 || datasettype == 0x1 );
+            assert( datasettype == 0x0101 || datasettype == 0x1 ); (void)datasettype;
           }
           if (theRSP.FindDataElement(Tag(0x0, 0x0900))){
             DataElement const & de = theRSP.GetDataElement(Tag(0x0,0x0900));
@@ -1068,8 +1068,10 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
               receivingData = true; //to continue the loop to process the release
               break;
             case eAABORTPDUReceivedOpen:
+              {
               raisedEvent = eEventDoesNotExist;
               theState = eStaDoesNotExist;
+              } // explicitely declare fall-through for some picky compiler
             case eAABORTRequest:
               waitingForEvent = false;
               inWhichConnection->StopProtocol();

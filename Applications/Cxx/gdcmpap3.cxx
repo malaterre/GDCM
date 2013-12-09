@@ -87,6 +87,8 @@ static bool InitPapyrus3( const char *filename, int & outfileNb)
   outfileNb = fileNb;
   return true;
 #else
+  (void)filename;
+  (void)outfileNb;
   std::cerr << "No PAPYRUS 3.0 library found" << std::endl;
   return false;
 #endif
@@ -149,6 +151,7 @@ static bool DecompressPapyrus3( int pap3handle, int itemnum, gdcm::TransferSynta
     }
   return true;
 #else
+  (void)pap3handle; (void)itemnum; (void)ts; (void)file;
   std::cerr << "No PAPYRUS 3.0 library found" << std::endl;
   return false;
 #endif
@@ -166,6 +169,7 @@ static bool CleanupPapyrus3( int pap3handle )
 
   return true;
 #else
+  (void)pap3handle;
   return false;
 #endif
 }
@@ -397,7 +401,7 @@ int main(int argc, char *argv[])
   gdcm::FileMetaInformation & header = file.GetHeader();
   gdcm::DataSet & ds = file.GetDataSet();
 
-  gdcm::MediaStorage ms = header.GetMediaStorage();
+  gdcm::MediaStorage ms = header.GetMediaStorage(); (void)ms;
   const gdcm::TransferSyntax & ts = header.GetDataSetTransferSyntax();
   //std::cout << ts << std::endl;
   std::string msstr = header.GetMediaStorageAsString();
@@ -427,7 +431,7 @@ int main(int argc, char *argv[])
     if( decomp_pap3 )
       {
       gdcm::TransferSyntax outts = ts;
-      for( int i = 0; i < sq->GetNumberOfItems(); ++i )
+      for( gdcm::SequenceOfItems::SizeType i = 0; i < sq->GetNumberOfItems(); ++i )
         {
         gdcm::Item & it = sq->GetItem( i + 1 );
         gdcm::DataSet & nested = it.GetNestedDataSet();
@@ -480,7 +484,7 @@ int main(int argc, char *argv[])
 
     const std::string seriesstr = uid.Generate();
 
-    for( int i = 0; i < sq->GetNumberOfItems(); ++i )
+    for( gdcm::SequenceOfItems::SizeType i = 0; i < sq->GetNumberOfItems(); ++i )
       {
       gdcm::Item & it = sq->GetItem( i + 1 );
       gdcm::DataSet & nested = it.GetNestedDataSet();
@@ -545,7 +549,7 @@ int main(int argc, char *argv[])
               else if( str == "LOCALIZER" )
                 {
                 static const double fake_axial[] = { 1, 0, 0, 0, 0, 0 };
-                assert( memcmp( &iop_orig[0], fake_axial, 6 * sizeof( double ) ) == 0 );
+                assert( memcmp( &iop_orig[0], fake_axial, 6 * sizeof( double ) ) == 0 ); (void)fake_axial;
                 w.GetFile().GetDataSet().Replace( at_axial.GetAsDataElement() );
                 erroriop = false; // error has been corrected
                 }

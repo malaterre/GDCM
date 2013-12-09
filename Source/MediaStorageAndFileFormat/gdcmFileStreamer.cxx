@@ -340,7 +340,7 @@ public:
       assert( ReservedDataLength >= 0 );
       if( ReservedDataLength )
         {
-        if( (newlen + ReservedDataLength) >= len )
+        if( (newlen + ReservedDataLength) >= (off64_t)len )
           {
           plength = newlen + ReservedDataLength - len;
           }
@@ -383,7 +383,7 @@ public:
       {
       const off64_t curpos = FTello(pFile);
       assert( curpos == thepos );
-      if( ReservedDataLength >= len )
+      if( ReservedDataLength >= (off64_t)len )
         {
         // simply update remaining reserved buffer:
         ReservedDataLength -= len;

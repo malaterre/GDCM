@@ -124,7 +124,7 @@ BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
 BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
   EQueryLevel inQueryLevel, const DataSet& ds, EQueryType queryType /*= eFind*/ )
 {
-  BaseRootQuery* outQuery;
+  BaseRootQuery* outQuery = NULL;
   if( queryType == eMove )
     outQuery = QueryFactory::ProduceQuery(inRootType, eMove, inQueryLevel);
   else if( queryType == eFind )
