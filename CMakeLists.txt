@@ -38,7 +38,7 @@ endif()
 #----------------------------------------------------------------------------
 set(GDCM_MAJOR_VERSION 2)
 set(GDCM_MINOR_VERSION 4)
-set(GDCM_BUILD_VERSION 1)
+set(GDCM_BUILD_VERSION 2)
 set(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 # let advanced user the option to define GDCM_API_VERSION:
