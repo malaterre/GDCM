@@ -65,7 +65,7 @@ public:
   /// Converting from RGB to PALETTE_COLOR can be a slow operation. However DICOM
   /// standard requires that color icon be described as palette. Set this boolean
   /// to false only if you understand the consequences.
-  /// \default true, false generates invalid Icon Image Sequence
+  /// default value is true, false generates invalid Icon Image Sequence
   void ConvertRGBToPaletteColor(bool b);
 
   /// Set a pixel value that should be discarded. This happen typically for CT image, where
