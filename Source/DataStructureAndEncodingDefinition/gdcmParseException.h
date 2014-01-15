@@ -17,6 +17,16 @@
 #include "gdcmException.h"
 #include "gdcmDataElement.h"
 
+// Disable clang warning "dynamic exception specifications are deprecated".
+// We need to be C++03 and C++11 compatible, and if we remove the 'throw()'
+// specifier we'll get an error in C++03 by not matching the superclass.
+#if defined(__clang__) && defined(__has_warning)
+# if __has_warning("-Wdeprecated")
+#  pragma clang diagnostic push
+#  pragma clang diagnostic ignored "-Wdeprecated"
+# endif
+#endif
+
 namespace gdcm
 {
 /**
@@ -69,5 +79,12 @@ private:
 };
 
 } // end namespace gdcm
+
+// Undo warning suppression.
+#if defined(__clang__) && defined(__has_warning)
+# if __has_warning("-Wdeprecated")
+#  pragma clang diagnostic pop
+# endif
+#endif
 
 #endif
