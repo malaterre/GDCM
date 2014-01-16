@@ -59,7 +59,7 @@ ServiceClassUser::ServiceClassUser()
   Internals->hostname = "localhost";
   Internals->port = 104;
   Internals->portscp = 104;
-  Internals->aetitle = "GDCMSCU";
+  Internals->aetitle = GDCM_AETITLE;
   Internals->calledaetitle = "ANY-SCP";
   Internals->timeout = 10;
 }
