@@ -25,6 +25,7 @@
 #include "gdcmDataElement.h"
 #include "gdcmImageWriter.h"
 #include "gdcmSplitMosaicFilter.h"
+#include "gdcmFilename.h"
 #include "gdcmFilenameGenerator.h"
 #include "gdcmDirectionCosines.h"
 #include "gdcmImageHelper.h"
@@ -524,6 +525,13 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
   std::vector< gdcm::Directory::FilenamesType > const &unsorted = dv.GetUnsortedFiles();
   if( !unsorted.empty() )
     {
+    std::string targetdir3 = outfilename;
+    targetdir3 += "/unhandled/";
+    if( !gdcm::System::MakeDirectory( targetdir3.c_str() ) )
+      {
+      std::cerr << "Could not create dir: " << outfilename << std::endl;
+      return 1;
+      }
     std::cerr << "Could not process the following files (please report): " << std::endl;
     std::vector< gdcm::Directory::FilenamesType >::const_iterator it = unsorted.begin();
     for( ; it != unsorted.end(); ++it )
@@ -532,9 +540,17 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
       gdcm::Directory::FilenamesType::const_iterator file = files.begin();
       for( ; file != files.end(); ++file )
         {
-        std::cerr << *file << std::endl;
+        const char *f = file->c_str();
+        std::string targetdir2 = outfilename;
+        targetdir2 += "/unhandled/";
+        gdcm::Filename fn2( f );
+        const char *outfn2 = fn2.GetName();
+        targetdir2 += outfn2;
+        //std::cerr << f << " -> " << targetdir2 << std::endl;
+        std::ifstream in( f, std::ios::binary );
+        std::ofstream out( targetdir2.c_str() , std::ios::binary );
+        out << in.rdbuf();
         }
-
       }
     }
 
