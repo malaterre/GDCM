@@ -68,7 +68,7 @@ if(Java_JAVA_EXECUTABLE)
       OUTPUT_STRIP_TRAILING_WHITESPACE
       ERROR_STRIP_TRAILING_WHITESPACE)
     if( res )
-      message( FATAL_ERROR "Error executing java -version" )
+      message( FATAL_ERROR "Error executing java -version. Message: ${var}" )
     else()
       # extract major/minor version and patch level from "java -version" output
       # Tested on linux using
