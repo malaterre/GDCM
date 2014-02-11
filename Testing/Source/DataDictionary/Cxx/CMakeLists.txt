@@ -32,9 +32,5 @@ set(GDCM_DICT_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmDICTTests")
 
 # Loop over files and create executables
 foreach(name ${DICT_TEST_SRCS})
-if(CMAKE_CROSSCOMPILING)
-  add_test(${name} ${TARGET_SYSTEM_EMULATOR} ${GDCM_DICT_TESTS}${CMAKE_EXECUTABLE_SUFFIX} ${name})
-else()
   add_test(${name} ${GDCM_DICT_TESTS} ${name})
-endif()
 endforeach()
