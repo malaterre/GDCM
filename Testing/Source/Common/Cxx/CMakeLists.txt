@@ -54,9 +54,5 @@ set(GDCM_Common_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmCommonTests")
 
 # Loop over files and create executables
 foreach(name ${Common_TEST_SRCS})
-if(CMAKE_CROSSCOMPILING)
-  add_test(${name} ${TARGET_SYSTEM_EMULATOR} ${GDCM_Common_TESTS}${CMAKE_EXECUTABLE_SUFFIX} ${name})
-else()
   add_test(${name} ${GDCM_Common_TESTS} ${name})
-endif()
 endforeach()
