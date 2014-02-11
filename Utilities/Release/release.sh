@@ -18,8 +18,9 @@ date
 echo ""
 
 major=2
-minor=2
+minor=4
 patch=1
+dirversion="$major.$minor"
 version="$major.$minor.$patch"
 version2="$major-$minor-$patch"
 
@@ -120,11 +121,11 @@ make rebuild_cache
 make vtkgdcmDoxygenDoc
 check_exit_value $? "vtkgdcmDoxygenDoc did not return properly" || exit 1
 
-rsync -av -r Utilities/doxygen/html malat,gdcm@web.sourceforge.net:htdocs/2.2
+rsync -av -r Utilities/doxygen/html malat,gdcm@web.sourceforge.net:htdocs/$dirversion
 check_exit_value $? "rsync recursive html did not return properly" || exit 1
-rsync -av Utilities/doxygen/gdcm-$version-doc.tar.gz malat,gdcm@web.sourceforge.net:htdocs/2.2
+rsync -av Utilities/doxygen/gdcm-$version-doc.tar.gz malat,gdcm@web.sourceforge.net:htdocs/$dirversion
 check_exit_value $? "rsync tarball did not return properly" || exit 1
-rsync -av Utilities/doxygen/latex/gdcm-$version.pdf malat,gdcm@web.sourceforge.net:htdocs/2.2
+rsync -av Utilities/doxygen/latex/gdcm-$version.pdf malat,gdcm@web.sourceforge.net:htdocs/$dirversion
 check_exit_value $? "rsync pdf did not return properly" || exit 1
 
 # Warning need to create /manually/ the subfolder:

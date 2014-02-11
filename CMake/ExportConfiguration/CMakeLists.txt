@@ -4,26 +4,26 @@ configure_file( GDCMConfig.cmake.in
   @ONLY
 )
 install( FILES ${GDCM_BINARY_DIR}/GDCMConfig.cmake
-  DESTINATION ${GDCM_INSTALL_PACKAGE_DIR}
+  DESTINATION ${GDCM_INSTALL_PACKAGE_DIR} COMPONENT Headers
 )
 configure_file( GDCMConfigVersion.cmake.in
   ${GDCM_BINARY_DIR}/GDCMConfigVersion.cmake
   @ONLY
 )
 install( FILES ${GDCM_BINARY_DIR}/GDCMConfigVersion.cmake
-  DESTINATION ${GDCM_INSTALL_PACKAGE_DIR}
+  DESTINATION ${GDCM_INSTALL_PACKAGE_DIR} COMPONENT Headers
 )
 configure_file( UseGDCM.cmake.in
   ${GDCM_BINARY_DIR}/UseGDCM.cmake
   @ONLY
 )
 install( FILES ${GDCM_BINARY_DIR}/UseGDCM.cmake
-  DESTINATION ${GDCM_INSTALL_PACKAGE_DIR}
+  DESTINATION ${GDCM_INSTALL_PACKAGE_DIR} COMPONENT Headers
 )
 
 # install all targets referenced as ${GDCM_TARGETS_NAME}
 if(GDCM_STANDALONE)
-  install(EXPORT ${GDCM_TARGETS_NAME} DESTINATION ${GDCM_INSTALL_PACKAGE_DIR})
+  install(EXPORT ${GDCM_TARGETS_NAME} DESTINATION ${GDCM_INSTALL_PACKAGE_DIR} COMPONENT Headers)
 endif()
 
 # [Prevent viral CMake dep]

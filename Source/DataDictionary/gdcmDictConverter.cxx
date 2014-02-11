@@ -91,7 +91,7 @@ void DictConverter::Convert()
   // Keep binary mode !!!
   from.open( Internal->InputFilename.c_str(), std::ios::binary);
   std::ofstream &into = Internal->OutputStream; //(outfilename);
-  into.open( Internal->OutputFilename.c_str() );
+  into.open( Internal->OutputFilename.c_str(), std::ios::binary );
 
   WriteHeader();
 

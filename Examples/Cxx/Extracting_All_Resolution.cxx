@@ -61,7 +61,7 @@ void info_callback(const char *msg, void *) {
 bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *filename, int res, std::ostream& of, int flag,  gdcm::SequenceOfItems *sq, int No_Of_Resolutions)
 {
   std::ifstream is;
-  is.open( filename );
+  is.open( filename, std::ios::binary );
   opj_dparameters_t parameters;  /* decompression parameters */
   opj_event_mgr_t event_mgr;    /* event manager */
   opj_dinfo_t* dinfo;  /* handle to a decompressor */

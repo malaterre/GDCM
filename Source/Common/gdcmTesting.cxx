@@ -408,6 +408,7 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 0, "TOSHIBA_J2K_OpenJPEGv2Regression.dcm" },
 { 0, "NM-PAL-16-PixRep1.dcm" },
 { 0, "MEDILABInvalidCP246_EVRLESQasUN.dcm" },
+{ 0, "JPEGInvalidSecondFrag.dcm" },
 { 0, NULL }
 };
 

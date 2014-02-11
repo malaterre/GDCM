@@ -3,11 +3,15 @@ set(MEXD_TEST_SRCS
   TestPresentationContextRQ
   TestQueryFactory
   TestULConnectionManager
-  TestServiceClassUser
+  TestServiceClassUser1
   TestServiceClassUser2
+  TestServiceClassUser3
   TestSCUValidation
   TestEcho
   TestFind
+  #TestULTransitionTable # symbols are not exported, mainly used for debugging
+  TestFindStudyRootQuery
+  TestFindPatientRootQuery
   )
 if(GDCM_DATA_ROOT)
   set(MEXD_TEST_SRCS
@@ -40,8 +44,9 @@ set(GDCM_MEXD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMEXDTests")
 # Loop over files and create executables
 foreach(name ${MEXD_TEST_SRCS})
   if(${name} STREQUAL "TestSCUFunctions"
-      OR ${name} STREQUAL "TestServiceClassUser"
+      OR ${name} STREQUAL "TestServiceClassUser1"
       OR ${name} STREQUAL "TestServiceClassUser2"
+      OR ${name} STREQUAL "TestServiceClassUser3"
       )
     if(GDCM_DICOM_SERVER_AETITLE)
       add_test(${name} ${GDCM_MEXD_TESTS} ${name} ${GDCM_DICOM_CLIENT_AETITLE}
@@ -49,7 +54,11 @@ foreach(name ${MEXD_TEST_SRCS})
         ${GDCM_DICOM_CLIENT_PORT} ${GDCM_DICOM_SERVER_PEER})
     endif()
   else()
+    if(CMAKE_CROSSCOMPILING)
+    add_test(${name} ${TARGET_SYSTEM_EMULATOR} ${GDCM_MEXD_TESTS}${CMAKE_EXECUTABLE_SUFFIX} ${name})
+    else()
     add_test(${name} ${GDCM_MEXD_TESTS} ${name})
+    endif()
   endif()
 endforeach()
 

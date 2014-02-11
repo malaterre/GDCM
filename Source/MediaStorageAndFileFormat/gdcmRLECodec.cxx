@@ -21,6 +21,7 @@
 #include "gdcmSwapper.h"
 
 #include <vector>
+#include <algorithm> // req C++11
 #include <stddef.h> // ptrdiff_t fix
 #include <cstring>
 
@@ -340,7 +341,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     bufferrgb = new char [ image_len ];
     }
 
-  int MaxNumSegments = 1;
+  unsigned int MaxNumSegments = 1;
   if( GetPixelFormat().GetBitsAllocated() == 8 )
     {
     MaxNumSegments *= 1;
@@ -479,7 +480,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     assert( image_len % MaxNumSegments == 0 );
     const size_t input_seg_length = image_len / MaxNumSegments;
     std::string datastr;
-    for(int seg = 0; seg < MaxNumSegments; ++seg )
+    for(unsigned int seg = 0; seg < MaxNumSegments; ++seg )
       {
       size_t partition = input_seg_length;
       const char *ptr = ptr_img + seg * input_seg_length;
@@ -769,7 +770,7 @@ bool RLECodec::DecodeByStreams(std::istream &is, std::ostream &os)
   // apply the PlanarConfiguration internally so that people don't get lost
   // Because GDCM internally set PlanarConfiguration == 0 by default, even if
   // the Attribute is not sent, it will still default to 0 and we will be
-  // consistant with ourselves...
+  // consistent with ourselves...
   if( GetPixelFormat().GetSamplesPerPixel() == 3 && GetPlanarConfiguration() == 0 )
     {
     RequestPlanarConfiguration = true;
@@ -837,6 +838,11 @@ bool RLECodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   (void)is;
   ts = TransferSyntax::RLELossless;
   return true;
+}
+
+ImageCodec * RLECodec::Clone() const
+{
+  return NULL;
 }
 
 } // end namespace gdcm

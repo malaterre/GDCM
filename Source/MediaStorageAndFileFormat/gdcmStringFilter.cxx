@@ -124,6 +124,7 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
   const gdcm::DataElement *curde = NULL;
   gdcm::Tag t;
   int state = 0;
+  SmartPointer<SequenceOfItems> sqi;
   for (j = 1, str1 = query; state >= 0 ; j++, str1 = NULL)
     {
     token = System::StrTokR(str1, delim, &saveptr1);
@@ -156,8 +157,8 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
         break;
         }
       assert( subtokens[1] == "keyword" );
-      //const char *k = subtokens[2].c_str();//unused
-      //const gdcm::DictEntry &dictentry = pubdict.GetDictEntryByKeyword(k, t);//unused
+      const char *k = subtokens[2].c_str();
+      /*const gdcm::DictEntry &dictentry = */pubdict.GetDictEntryByKeyword(k, t);
       if( !curds->FindDataElement( t ) )
         {
         state = -1;
@@ -170,7 +171,7 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
       assert( state == 1 );
       assert( curde );
       assert( subtokens[1] == "number" );
-      gdcm::SequenceOfItems *sqi = curde->GetValueAsSQ();
+      sqi = curde->GetValueAsSQ();
       if( !sqi )
         {
         state = -1;
@@ -186,7 +187,7 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
       state = 2;
       assert( subtokens[1] == "number" );
 #if !defined(NDEBUG)
-      const gdcm::ByteValue * const bv = curde->GetByteValue();
+      const gdcm::ByteValue * const bv = curde->GetByteValue(); (void)bv;
       assert( bv );
       //bv->Print( std::cout << std::endl );
 #endif

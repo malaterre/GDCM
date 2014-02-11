@@ -21,6 +21,7 @@
 #include <socket++/echo.h>
 
 #include "gdcmReader.h"
+#include "gdcmPrinter.h"
 #include "gdcmAttribute.h"
 #include "gdcmULConnectionManager.h"
 #include "gdcmULConnection.h"
@@ -30,18 +31,18 @@
 #include "gdcmSystem.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmWriter.h"
-#include "gdcmPrinter.h"
 #include "gdcmSimpleSubjectWatcher.h"
 #include "gdcmProgressEvent.h"
 #include "gdcmQueryFactory.h"
 #include "gdcmULWritingCallback.h"
+#include "gdcmULBasicCallback.h"
 #include "gdcmPresentationContextGenerator.h"
 
 namespace gdcm
 {
 
 // Execute like this:
-// gdcmscu www.dicomserver.co.uk 11112 echo
+// gdcmscu --echo www.dicomserver.co.uk 11112
 bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
   const char *aetitle, const char *call)
 {
@@ -64,7 +65,7 @@ bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
     }
 
   network::ULConnectionManager theManager;
-  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 10,
+  if (!theManager.EstablishConnection(aetitle, call, remote, 0, portno, 1000,
       generator.GetPresentationContexts() ))
     {
     gdcmErrorMacro( "Failed to establish connection." );
@@ -78,22 +79,26 @@ bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
     {
     DataSet ds = network::PresentationDataValue::ConcatenatePDVBlobs(theValues1);
     Printer thePrinter;
-    thePrinter.PrintDataSet(ds, std::cout);
+    thePrinter.PrintDataSet(ds, Trace::GetStream());
     }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
 
   // Check the Success Status
   DataSet ds = network::PresentationDataValue::ConcatenatePDVBlobs( theValues1 );
   Attribute<0x0,0x0900> at;
-  at.SetFromDataSet( ds );
-
-  if( at.GetValue() != 0 )
+  if( ds.FindDataElement( at.GetTag() ) )
     {
-    gdcmErrorMacro( "Wrong value" );
-    return false;
+    at.SetFromDataSet( ds );
+    if( at.GetValue() != 0 )
+      {
+      gdcmErrorMacro( "Wrong value for Status (C-ECHO)" );
+      return false;
+      }
+    return true;
     }
 
-  return true;
+  gdcmDebugMacro( "Empty return on C-ECHO (no Status)" );
+  return false;
 }
 
 // this function will take command line options and construct a cmove query from them
@@ -101,7 +106,7 @@ bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
 // note that the caller is responsible for deleting the constructed query.
 // used to build both a move and a find query (true for inMove if it's move, false if it's find)
 BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
-  EQueryLevel inQueryLevel, const KeyValuePairArrayType& keys, bool inMove)
+  EQueryLevel inQueryLevel, const KeyValuePairArrayType& keys, EQueryType queryType /*= eFind*/ )
 {
   KeyValuePairArrayType::const_iterator it = keys.begin();
   DataSet ds;
@@ -113,26 +118,26 @@ BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
     ds.Insert( de );
     }
   return CompositeNetworkFunctions::ConstructQuery( inRootType,
-    inQueryLevel, ds, inMove);
+    inQueryLevel, ds, queryType);
 }
 
 BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
-  EQueryLevel inQueryLevel, const DataSet& ds, bool inMove)
+  EQueryLevel inQueryLevel, const DataSet& ds, EQueryType queryType /*= eFind*/ )
 {
-  BaseRootQuery* outQuery;
-  if( inMove )
+  BaseRootQuery* outQuery = NULL;
+  if( queryType == eMove )
     outQuery = QueryFactory::ProduceQuery(inRootType, eMove, inQueryLevel);
-  else
+  else if( queryType == eFind )
     outQuery = QueryFactory::ProduceQuery(inRootType, eFind, inQueryLevel);
+  else if( queryType == eWLMFind )
+    outQuery = QueryFactory::ProduceQuery(inRootType, eWLMFind, inQueryLevel);
+
   if (!outQuery)
     {
     gdcmErrorMacro( "Specify the query" );
     return NULL;
     }
   outQuery->AddQueryDataSet(ds);
-
-  if (Trace::GetDebugFlag())
-    ds.Print( std::cout );
 
   // setup the special character set
   std::vector<ECharSet> inCharSetType;
@@ -141,6 +146,12 @@ BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
   std::string param ( de.GetByteValue()->GetPointer(),
     de.GetByteValue()->GetLength() );
   outQuery->SetSearchParameter(de.GetTag(), param );
+
+  // Print info:
+  if (Trace::GetDebugFlag())
+    {
+    outQuery->Print( Trace::GetStream() );
+    }
 
   return outQuery;
 }
@@ -191,10 +202,11 @@ bool CompositeNetworkFunctions::CMove( const char *remote, uint16_t portno,
 
   network::ULWritingCallback theCallback;
   theCallback.SetDirectory(outputdir);
-  theManager.SendMove( query, &theCallback );
+  bool ret = theManager.SendMove( query, &theCallback );
+  if( !ret ) return false;
 
-  theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-  return true;
+  ret = theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
+  return ret;
 }
 
 //note that pointer to the base root query-- the caller must instantiated and delete
@@ -232,12 +244,75 @@ bool CompositeNetworkFunctions::CFind( const char *remote, uint16_t portno,
     return false;
     }
   std::vector<DataSet> theDataSets;
-  theDataSets = theManager.SendFind( query );
-  // Append the new DataSet to the ret one:
-  retDataSets.insert( retDataSets.end(), theDataSets.begin(), theDataSets.end() );
+  std::vector<DataSet> theResponses;
+  //theDataSets = theManager.SendFind( query );
+  network::ULBasicCallback theCallback;
+  theManager.SendFind(query, &theCallback);
+  theDataSets = theCallback.GetDataSets();
+  theResponses = theCallback.GetResponses();
 
+  bool ret = false; // by default an error
+  if( theResponses.empty() )
+    {
+    gdcmErrorMacro( "Failed to GetResponses." );
+    return false;
+    }
+  assert( theResponses.size() >= 1 );
+  // take the last one:
+  const DataSet &ds = theResponses[ theResponses.size() - 1 ]; // FIXME
+  assert ( ds.FindDataElement(Tag(0x0, 0x0900)) );
+  Attribute<0x0,0x0900> at;
+  at.SetFromDataSet( ds );
+
+  //          Table CC.2.8-2
+  //C-FIND RESPONSE STATUS VALUES
+  const uint16_t theVal = at.GetValue();
+  switch( theVal )
+    {
+  case 0x0: // Matching is complete - No final Identifier is supplied.
+    gdcmDebugMacro( "C-Find was successful." );
+    // Append the new DataSet to the ret one:
+    retDataSets.insert( retDataSets.end(), theDataSets.begin(), theDataSets.end() );
+    ret = true;
+    break;
+  case 0xA900: // Identifier Does Not Match SOP Class
+      {
+      Attribute<0x0,0x0901> errormsg;
+      errormsg.SetFromDataSet( ds );
+      gdcm::Tag const & t = errormsg.GetValue();
+      gdcmErrorMacro( "Offending Element: " << t ); (void)t;
+      }
+    break;
+  case 0xA700: // Refused: Out of Resources
+      {
+      Attribute<0x0,0x0902> errormsg;
+      errormsg.SetFromDataSet( ds );
+      const char *themsg = errormsg.GetValue();
+      assert( themsg ); (void)themsg;
+      gdcmErrorMacro( "Response Status: [" << themsg << "]" );
+      }
+    break;
+  case 0x0122: // SOP Class not Supported
+    gdcmErrorMacro( "SOP Class not Supported" );
+    break;
+  case 0xfe00: // Matching terminated due to Cancel request
+    gdcmErrorMacro( "Matching terminated due to Cancel request" );
+    break;
+  default:
+      {
+      if( theVal >= 0xC000 && theVal <= 0xCFFF ) // Unable to process
+        {
+        Attribute<0x0,0x0902> errormsg;
+        errormsg.SetFromDataSet( ds );
+        const char *themsg = errormsg.GetValue();
+        assert( themsg ); (void)themsg;
+        gdcmErrorMacro( "Response Status: " << themsg );
+        }
+      }
+    }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-  return true;
+
+  return ret;
 }
 
 class MyWatcher : public SimpleSubjectWatcher
@@ -302,13 +377,14 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
     }
 
   const char *fn = ""; // FIXME
+  bool ret = true; // by default no error
   try
     {
     for( size_t i = 0; i < files.size(); ++i )
       {
       const std::string & filename = files[i];
       fn = filename.c_str();
-      assert( fn && *fn );
+      assert( fn && *fn ); (void)fn;
       Reader reader;
       reader.SetFileName( filename.c_str() );
       gdcmDebugMacro( "Processing: " << filename );
@@ -318,9 +394,46 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
         return false;
         }
       const File &file = reader.GetFile();
-      theManager.SendStore( file );
+      std::vector<DataSet> theDataSets;
+      theDataSets = theManager.SendStore( file );
+      if( theDataSets.empty() )
+        {
+        gdcmErrorMacro( "Could not C-STORE: " << filename );
+        return false;
+        }
+      assert( theDataSets.size() == 1 );
+      const DataSet &ds = theDataSets[0];
+      assert ( ds.FindDataElement(Tag(0x0, 0x0900)) );
+      DataElement const & de = ds.GetDataElement(Tag(0x0,0x0900));
+      Attribute<0x0,0x0900> at;
+      at.SetFromDataElement( de );
+      // PS 3.4 - 2011
+      // Table W.4-1 C-STORE RESPONSE STATUS VALUES
+      const uint16_t theVal = at.GetValue();
+      switch( theVal )
+        {
+      case 0x0:
+        gdcmDebugMacro( "C-Store of file " << filename << " was successful." );
+        break;
+      case 0xA700:
+      case 0xA900:
+      case 0xC000:
+          {
+          // TODO: value from 0901 ?
+          gdcmErrorMacro( "C-Store of file " << filename << " was a failure." );
+          Attribute<0x0,0x0902> errormsg;
+          errormsg.SetFromDataSet( ds );
+          const char *themsg = errormsg.GetValue();
+          assert( themsg ); (void)themsg;
+          gdcmErrorMacro( "Response Status: " << themsg );
+          ret = false; // at least one file was not sent correctly
+          }
+        break;
+      default:
+        gdcmErrorMacro( "Unhandle error code: " << theVal );
+        gdcmAssertAlwaysMacro( 0 );
+        }
       theManager.InvokeEvent( IterationEvent() );
-      gdcmDebugMacro( "C-Store of file " << filename << " was successful." );
       }
     }
   catch ( Exception &e )
@@ -329,18 +442,18 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
     // If you reach here this is basically because GDCM does not support encoding other
     // than raw transfer syntx (Little Endian Explicit/Implicit...)
     theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-    gdcmErrorMacro( "C-Store of file " << fn << " was unsuccessful, aborting. " )
+    gdcmErrorMacro( "C-Store of file " << fn << " was unsuccessful, aborting. " ); (void)fn;
     gdcmErrorMacro( "Error was " << e.what() );
     return false;
     }
   catch (...)
     {
     theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-    gdcmErrorMacro( "C-Store of file " << fn << " was unsuccessful, aborting. " )
+    gdcmErrorMacro( "C-Store of file " << fn << " was unsuccessful, aborting. " );
     return false;
     }
   theManager.BreakConnection(-1);//wait for a while for the connection to break, ie, infinite
-  return true;
+  return ret;
 }
 
 } // end namespace gdcm

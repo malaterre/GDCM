@@ -11,10 +11,15 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Testing/Source/Data"
 
   "${GDCM_SOURCE_DIR}/Utilities"
-  "${GDCM_SOURCE_DIR}/Utilities/socketxx"
-  "${GDCM_SOURCE_DIR}/Utilities/socketxx/socket++" # local.h
-  "${GDCM_BINARY_DIR}/Utilities/socketxx/socket++" # config.h
   )
+
+if(NOT GDCM_USE_SYSTEM_SOCKETXX)
+  include_directories(
+    "${GDCM_SOURCE_DIR}/Utilities/socketxx"
+    "${GDCM_SOURCE_DIR}/Utilities/socketxx/socket++" # local.h
+    "${GDCM_BINARY_DIR}/Utilities/socketxx/socket++" # config.h
+    )
+endif()
 
 set(MessageExchangeDefinition_SRCS
   gdcmAAbortPDU.cxx
@@ -57,6 +62,7 @@ set(MessageExchangeDefinition_SRCS
   gdcmQuerySeries.cxx
   gdcmQueryStudy.cxx
   gdcmServiceClassUser.cxx
+  gdcmServiceClassApplicationInformation.cxx
   gdcmFindStudyRootQuery.cxx
   gdcmMoveStudyRootQuery.cxx
   gdcmTransferSyntaxSub.cxx
@@ -71,10 +77,16 @@ set(MessageExchangeDefinition_SRCS
   gdcmULTransitionTable.cxx
   gdcmULWritingCallback.cxx
   gdcmUserInformation.cxx
+  gdcmWLMFindQuery.cxx
   )
 
 add_library(gdcmMEXD ${MessageExchangeDefinition_SRCS})
-target_link_libraries(gdcmMEXD gdcmMSFF gdcmDICT gdcmDSED gdcmIOD socketxx)
+target_link_libraries(gdcmMEXD gdcmMSFF gdcmDICT gdcmDSED gdcmIOD)
+if(GDCM_USE_SYSTEM_SOCKETXX)
+  target_link_libraries(gdcmMEXD socket++)
+else()
+  target_link_libraries(gdcmMEXD socketxx)
+endif()
 set_target_properties(gdcmMEXD PROPERTIES ${GDCM_LIBRARY_PROPERTIES} LINK_INTERFACE_LIBRARIES "")
 if(WIN32)
   target_link_libraries(gdcmMEXD ws2_32)

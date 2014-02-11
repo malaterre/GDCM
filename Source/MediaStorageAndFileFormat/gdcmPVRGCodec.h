@@ -21,11 +21,11 @@ namespace gdcm
 
 /**
  * \brief PVRGCodec
- * \note pvrg is a broken implementation of the JPEG standard. It is known to have a bug
- * in the 16bits lossless implementation of the standard.
+ * \note pvrg is a broken implementation of the JPEG standard. It is known to
+ * have a bug in the 16bits lossless implementation of the standard.
  *
- * In an ideal world, you should not need this codec at all. But to support some broken file
- * such as:
+ * In an ideal world, you should not need this codec at all. But to support
+ * some broken file such as:
  *
  * PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
  *
@@ -41,7 +41,9 @@ public:
 
   bool Decode(DataElement const &is, DataElement &os);
   bool Code(DataElement const &in, DataElement &out);
+  void SetLossyFlag( bool l );
 
+  virtual ImageCodec * Clone() const;
 private:
 };
 

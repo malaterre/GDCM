@@ -38,8 +38,8 @@ namespace gdcm{
 class ULConnectionInfo {
       UserInformation mUserInformation;
 
-      char mCalledAETitle[16];
-      char mCallingAETitle[16];
+      std::string mCalledAETitle;
+      std::string mCallingAETitle;
 
       unsigned long mCalledIPAddress;
       int mCalledIPPort;
@@ -52,12 +52,12 @@ class ULConnectionInfo {
       //it is possible to misinitialize this object, so
       //have it return false if something breaks (ie, given AEs are bigger than 16 characters,
       //no name or IP address).
-      bool Initialize(UserInformation inUserInformation,
-        const char inCalledAETitle[16], const char inCallingAETitle[16],
+      bool Initialize(UserInformation const &inUserInformation,
+        const char *inCalledAETitle, const char *inCallingAETitle,
         unsigned long inCalledIPAddress, int inCalledIPPort,
         std::string inCalledComputerName);
 
-      UserInformation GetUserInformation() const;
+      //UserInformation GetUserInformation() const;
       const char* GetCalledAETitle() const;
       const char* GetCallingAETitle() const;
 

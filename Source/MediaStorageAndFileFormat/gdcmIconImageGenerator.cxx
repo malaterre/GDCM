@@ -697,7 +697,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
           *ybr_out = (unsigned char)B; ++ybr_out;
           }
 #if 0
-    std::ofstream d( "/tmp/d.rgb" );
+    std::ofstream d( "/tmp/d.rgb", std::ios::binary );
     d.write( &tempvbuf[0], tempvbuf.size() );
     d.close();
 #endif

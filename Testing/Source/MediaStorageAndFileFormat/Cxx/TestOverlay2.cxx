@@ -49,6 +49,16 @@ int TestOverlay2(int, char *[])
     {
     return 1;
     }
+  size_t numoverlays = pixmap.GetNumberOfOverlays();
+  for( size_t ovidx = 0; ovidx < numoverlays; ++ovidx )
+    {
+    const gdcm::Overlay& ov = pixmap.GetOverlay(ovidx);
+    if( ov.GetTypeAsEnum() != gdcm::Overlay::Graphics )
+      {
+      std::cerr << "Wrong Type for overlay #" << ovidx << std::endl;
+      return 1;
+      }
+    }
 
   return 0;
 }

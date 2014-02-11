@@ -341,97 +341,97 @@ bool sockinetbuf::tcpnodelay (bool set) const
 }
 
 isockinet::isockinet (const sockbuf::sockdesc& sd)
-  : ios(0), isockstream(0)
+  : std::ios(0), isockstream(0)
 {
     sockinetbuf *t = new sockinetbuf (sd);
 
-    ios::init (t);
+    std::ios::init (t);
     isockstream::init (t);
 }
 
 isockinet::isockinet (sockbuf::type ty, int proto)
-  : ios (0), isockstream(0)
+  : std::ios (0), isockstream(0)
 {
     sockinetbuf *t = new sockinetbuf (ty, proto);
 
-    ios::init (t);
+    std::ios::init (t);
     isockstream::init (t);
 }
 
 isockinet::isockinet (const sockinetbuf& sb)
-  : ios (0), isockstream(0)
+  : std::ios (0), isockstream(0)
 {
     sockinetbuf *t = new sockinetbuf (sb);
 
-    ios::init (t);
+    std::ios::init (t);
     isockstream::init (t);
 }
 
 isockinet::~isockinet ()
 {
-  delete ios::rdbuf ();
+  delete std::ios::rdbuf ();
 }
 
 osockinet::osockinet (const sockbuf::sockdesc& sd)
-  : ios (0), osockstream(0)
+  : std::ios (0), osockstream(0)
 {
     sockinetbuf *t = new sockinetbuf (sd);
 
-    ios::init (t);
+    std::ios::init (t);
     osockstream::init (t);
 }
 
 osockinet::osockinet (sockbuf::type ty, int proto)
-  : ios (0), osockstream(0)
+  : std::ios (0), osockstream(0)
 {
     sockinetbuf *t = new sockinetbuf (ty, proto);
 
-    ios::init (t);
+    std::ios::init (t);
     osockstream::init (t);
 }
 
 osockinet::osockinet (const sockinetbuf& sb)
-  : ios (0), osockstream(0)
+  : std::ios (0), osockstream(0)
 {
     sockinetbuf *t = new sockinetbuf (sb);
 
-    ios::init (t);
+    std::ios::init (t);
     osockstream::init (t);
 }
 
 osockinet::~osockinet ()
 {
-  delete ios::rdbuf ();
+  delete std::ios::rdbuf ();
 }
 
 iosockinet::iosockinet (const sockbuf::sockdesc& sd)
-  : ios (0), iosockstream(0)
+  : std::ios (0), iosockstream(0)
 {
     sockinetbuf *t = new sockinetbuf(sd);
 
-    ios::init (t);
+    std::ios::init (t);
     iosockstream::init (t);
 }
 
 iosockinet::iosockinet (sockbuf::type ty, int proto)
-    : ios (0), iosockstream (0)
+    : std::ios (0), iosockstream (0)
 {
      sockinetbuf *t = new sockinetbuf (ty, proto);
 
-    ios::init (t);
+    std::ios::init (t);
     iosockstream::init (t);
 }
 
 iosockinet::iosockinet (const sockinetbuf& sb)
-  : ios (0), iosockstream(0)
+  : std::ios (0), iosockstream(0)
 {
     sockinetbuf *t = new sockinetbuf (sb);
 
-    ios::init (t);
+    std::ios::init (t);
     iosockstream::init (t);
 }
 
 iosockinet::~iosockinet ()
 {
-  delete ios::rdbuf ();
+  delete std::ios::rdbuf ();
 }

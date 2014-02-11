@@ -32,7 +32,7 @@ SWIG_LINK_LIBRARIES(gdcmsharpglue gdcmMSFF
   gdcmMEXD
 )
 set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
-
+set_property(TARGET ${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTY NO_SONAME 1)
 
 # Module are always place in the library destination but for poor win32 user I
 # decided to place them right next to the other dlls
@@ -40,7 +40,7 @@ if(NOT GDCM_INSTALL_NO_LIBRARIES)
   install(TARGETS ${SWIG_MODULE_gdcmsharpglue_REAL_NAME}
     RUNTIME DESTINATION ${GDCM_INSTALL_BIN_DIR} COMPONENT Applications
     LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries
-    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Development
+    ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT DebugDevel
     ${CPACK_NAMELINK_TYPE}
     )
 endif()
@@ -209,7 +209,6 @@ if(NOT GDCM_INSTALL_NO_LIBRARIES)
   # install(FILES signature:
   install(FILES
     ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll
-    #    ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll.config
-    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT CSharpModule
+    DESTINATION ${GDCM_INSTALL_CSHARPMODULE_DIR} COMPONENT CSharpModule
     )
 endif()

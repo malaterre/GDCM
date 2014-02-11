@@ -37,8 +37,9 @@ find_program(CSC_v2_EXECUTABLE csc
 find_program(CSC_v3_EXECUTABLE csc
  $ENV{windir}/Microsoft.NET/Framework/v3.5/
 )
-
-# C:/Windows/Microsoft.NET/Framework/v4.0.30319
+find_program(CSC_v4_EXECUTABLE csc
+ $ENV{windir}/Microsoft.NET/Framework/v4.0.30319/
+)
 
 get_filename_component(current_list_path ${CMAKE_CURRENT_LIST_FILE} PATH)
 set(DotNETFrameworkSDK_USE_FILE ${current_list_path}/UseDotNETFrameworkSDK.cmake)
@@ -47,4 +48,5 @@ mark_as_advanced(
   CSC_v1_EXECUTABLE
   CSC_v2_EXECUTABLE
   CSC_v3_EXECUTABLE
+  CSC_v4_EXECUTABLE
 )

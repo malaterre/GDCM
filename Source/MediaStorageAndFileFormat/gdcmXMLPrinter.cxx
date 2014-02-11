@@ -238,8 +238,8 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       el.Set( de.GetValue() ); \
       if( el.GetLength() ) { \
       os << "<Value number = \"1\" >" ;os << "" << el.GetValue();os << "</Value>\n"; \
-      VL l = (long) el.GetLength(); \
-      for(unsigned long i = 1; i < l; ++i) \
+      const uint32_t l = (uint32_t)el.GetLength(); \
+      for(uint32_t i = 1; i < l; ++i) \
       { \
       os << "<Value number = \"" << (i+1) << "\" >" ;\
       os << el.GetValue(i);os << "</Value>\n";} \

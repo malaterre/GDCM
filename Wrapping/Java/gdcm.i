@@ -16,7 +16,7 @@
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus
 
 %module(docstring="A DICOM library",directors=1) gdcm
-#pragma SWIG nowarn=302,303,312,325,362,383,389,401,503,504,509,510,514,516,822
+#pragma SWIG nowarn=302,303,312,325,362,383,389,401,503,504,509,510,514,516
 
 // There is something funky with swig 1.3.33, one cannot simply test defined(SWIGCSHARP)
 // I need to redefine it myself... seems to be solved in later revision
@@ -58,9 +58,9 @@
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
 #include "gdcmBitmap.h"
+#include "gdcmIconImage.h"
 #include "gdcmPixmap.h"
 #include "gdcmImage.h"
-#include "gdcmIconImage.h"
 #include "gdcmFragment.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmPDBHeader.h"
@@ -86,6 +86,7 @@
 #include "gdcmDictEntry.h"
 #include "gdcmCSAHeaderDictEntry.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmUUIDGenerator.h"
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
 #include "gdcmAttribute.h"
@@ -93,6 +94,7 @@
 #include "gdcmCommand.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmFileAnonymizer.h"
+#include "gdcmFileStreamer.h"
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
 #include "gdcmUIDs.h"
@@ -106,7 +108,6 @@
 #include "gdcmFiducials.h"
 #include "gdcmWaveform.h"
 #include "gdcmPersonName.h"
-#include "gdcmIconImage.h"
 #include "gdcmCurve.h"
 #include "gdcmDICOMDIR.h"
 #include "gdcmValidate.h"
@@ -136,7 +137,6 @@
 #include "gdcmRescaler.h"
 #include "gdcmSegmentedPaletteColorLookupTable.h"
 #include "gdcmUnpacker12Bits.h"
-//#include "gdcmPythonFilter.h"
 #include "gdcmDirectionCosines.h"
 #include "gdcmTagPath.h"
 #include "gdcmBitmapToBitmapFilter.h"
@@ -150,7 +150,9 @@
 #include "gdcmJPEGCodec.h"
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
+#include "gdcmPNMCodec.h"
 #include "gdcmImageChangeTransferSyntax.h"
+#include "gdcmFileChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
 #include "gdcmImageChangePhotometricInterpretation.h"
@@ -164,6 +166,7 @@
 #include "gdcmSHA1.h"
 #include "gdcmBase64.h"
 #include "gdcmCryptographicMessageSyntax.h"
+#include "gdcmCryptoFactory.h"
 #include "gdcmSpacing.h"
 #include "gdcmIconImageGenerator.h"
 #include "gdcmIconImageFilter.h"
@@ -181,11 +184,11 @@
 #include "gdcmServiceClassUser.h"
 
 #include "gdcmStreamImageReader.h"
-#include "gdcmStreamImageWriter.h"
 
 #include "gdcmRegion.h"
 #include "gdcmBoxRegion.h"
 #include "gdcmImageRegionReader.h"
+#include "gdcmJSON.h"
 
 using namespace gdcm;
 %}
@@ -360,26 +363,36 @@ EXTEND_CLASS_PRINT(gdcm::ByteValue)
 %include "gdcmSmartPointer.h"
 %template(SmartPtrSQ) gdcm::SmartPointer<gdcm::SequenceOfItems>;
 %template(SmartPtrFrag) gdcm::SmartPointer<gdcm::SequenceOfFragments>;
+%ignore gdcm::DataElement::SetByteValue(const char *array, VL length);
 %include "gdcmDataElement.h"
 EXTEND_CLASS_PRINT(gdcm::DataElement)
 
 %clear const char* array;
 %extend gdcm::DataElement
 {
+ /**
+  * Replace SetByteValue
+  */
+ // http://docs.oracle.com/javase/specs/jls/se7/html/jls-10.html#jls-10.7
+ // Arrays must be indexed by int values; short, byte, or char values may also be
+ // used as index values because they are subjected to unary numeric promotion
+ // (§5.6.1) and become int values.
+ // An attempt to access an array component with a long index value results in a
+ // compile-time error.
  void SetArray(signed char array[], unsigned int nitems) {
-   $self->SetByteValue((char*)array, nitems * sizeof(signed char) );
+   $self->SetByteValue((char*)array, (uint32_t)(nitems * sizeof(signed char)) );
  }
  void SetArray(signed short array[], unsigned int nitems) {
-   $self->SetByteValue((char*)array, nitems * sizeof(signed short) );
+   $self->SetByteValue((char*)array, (uint32_t)(nitems * sizeof(signed short)) );
  }
  void SetArray(signed int array[], unsigned int nitems) {
-   $self->SetByteValue((char*)array, nitems * sizeof(signed int) );
+   $self->SetByteValue((char*)array, (uint32_t)(nitems * sizeof(signed int)) );
  }
  void SetArray(float array[], unsigned int nitems) {
-   $self->SetByteValue((char*)array, nitems * sizeof(float) );
+   $self->SetByteValue((char*)array, (uint32_t)(nitems * sizeof(float)) );
  }
  void SetArray(double array[], unsigned int nitems) {
-   $self->SetByteValue((char*)array, nitems * sizeof(double) );
+   $self->SetByteValue((char*)array, (uint32_t)(nitems * sizeof(double)) );
  }
 };
 
@@ -393,7 +406,6 @@ EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %rename (JavaDataSet) SWIGDataSet;
 %rename (JavaTagToValue) SWIGTagToValue;
 %include "gdcmDataSet.h"
-EXTEND_CLASS_PRINT(gdcm::DataSet)
 //namespace std {
 //  //struct lttag
 //  //  {
@@ -407,7 +419,7 @@ EXTEND_CLASS_PRINT(gdcm::DataSet)
 //  //%template(DataElementSet) gdcm::DataSet::DataElementSet;
 //  %template(DataElementSet) set<DataElement, lttag>;
 //}
-
+EXTEND_CLASS_PRINT(gdcm::DataSet)
 %include "gdcmPhotometricInterpretation.h"
 EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
 %include "gdcmObject.h"
@@ -487,13 +499,13 @@ EXTEND_CLASS_PRINT(gdcm::Bitmap)
 %clear signed char* buffer;
 %clear unsigned int* dims;
 
+%include "gdcmIconImage.h"
+EXTEND_CLASS_PRINT(gdcm::IconImage)
 %include "gdcmPixmap.h"
 EXTEND_CLASS_PRINT(gdcm::Pixmap)
 
 %include "gdcmImage.h"
 EXTEND_CLASS_PRINT(gdcm::Image)
-%include "gdcmIconImage.h"
-EXTEND_CLASS_PRINT(gdcm::IconImage)
 %include "gdcmFragment.h"
 EXTEND_CLASS_PRINT(gdcm::Fragment)
 %include "gdcmPDBElement.h"
@@ -627,6 +639,9 @@ $1 = JNU_GetStringNativeChars(jenv, $input);
 %include "gdcmStringFilter.h"
 //EXTEND_CLASS_PRINT(gdcm::StringFilter)
 %include "gdcmUIDGenerator.h"
+//EXTEND_CLASS_PRINT(gdcm::UIDGenerator)
+%include "gdcmUUIDGenerator.h"
+//EXTEND_CLASS_PRINT(gdcm::UUIDGenerator)
 %template (ValuesType)      std::set<std::string>;
 %rename (JavaTagToValue) SWIGTagToValue;
 #define GDCM_STATIC_ASSERT(x)
@@ -649,7 +664,10 @@ EXTEND_CLASS_PRINT(gdcm::Scanner)
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus%5Fnn34
 %include "gdcmAnonymizer.h"
 %include "gdcmFileAnonymizer.h"
-
+%apply char[] { char* array }
+%template(SmartPtrFStreamer) gdcm::SmartPointer<gdcm::FileStreamer>;
+%include "gdcmFileStreamer.h"
+%clear char* array;
 
 //EXTEND_CLASS_PRINT(gdcm::Anonymizer)
 
@@ -683,7 +701,6 @@ EXTEND_CLASS_PRINT(gdcm::DirectionCosines)
 %include "gdcmFiducials.h"
 %include "gdcmWaveform.h"
 %include "gdcmPersonName.h"
-%include "gdcmIconImage.h"
 %include "gdcmCurve.h"
 %include "gdcmDICOMDIR.h"
 %include "gdcmValidate.h"
@@ -746,11 +763,9 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
   }
 };
 #endif
-//%include "gdcmPythonFilter.h"
 %include "gdcmTagPath.h"
 %include "gdcmBitmapToBitmapFilter.h"
 %include "gdcmPixmapToPixmapFilter.h"
-//%ignore gdcm::ImageToImageFilter::GetOutput() const;
 %include "gdcmImageToImageFilter.h"
 %include "gdcmSOPClassUIDToIOD.h"
 //%feature("director") Coder;
@@ -764,7 +779,10 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmJPEGCodec.h"
 %include "gdcmJPEGLSCodec.h"
 %include "gdcmJPEG2000Codec.h"
+%include "gdcmPNMCodec.h"
 %include "gdcmImageChangeTransferSyntax.h"
+%template(SmartPtrFCTS) gdcm::SmartPointer<gdcm::FileChangeTransferSyntax>;
+%include "gdcmFileChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
 %include "gdcmSplitMosaicFilter.h"
 %include "gdcmImageChangePhotometricInterpretation.h"
@@ -781,6 +799,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmSHA1.h"
 %include "gdcmBase64.h"
 %include "gdcmCryptographicMessageSyntax.h"
+%include "gdcmCryptoFactory.h"
 %include "gdcmSpacing.h"
 %include "gdcmIconImageGenerator.h"
 %include "gdcmIconImageFilter.h"
@@ -807,14 +826,29 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmPresentationContextGenerator.h"
 typedef int64_t time_t; // FIXME
 %include "gdcmServiceClassUser.h"
-%apply char[] { char* inReadBuffer }
+%ignore gdcm::StreamImageReader::Read(char* inReadBuffer, const std::size_t& inBufferLength);
+%apply signed char[] { signed char* inReadBuffer }
 %include "gdcmStreamImageReader.h"
-%clear char* inReadBuffer;
-%include "gdcmStreamImageWriter.h"
+%extend gdcm::StreamImageReader
+{
+  bool Read(signed char* inReadBuffer, size_t inBufferLength) {
+    return self->Read((char*)inReadBuffer, inBufferLength);
+    }
+}
+%clear signed char* inReadBuffer;
 %include "gdcmRegion.h"
 EXTEND_CLASS_PRINT(gdcm::Region)
 %include "gdcmBoxRegion.h"
 EXTEND_CLASS_PRINT(gdcm::BoxRegion)
-%apply char[] { char* inreadbuffer }
+%ignore gdcm::ImageRegionReader::ReadIntoBuffer(char *inreadbuffer, size_t buflen);
+%apply signed char[] { signed char* inreadbuffer }
 %include "gdcmImageRegionReader.h"
-%clear char* inreadbuffer;
+%extend gdcm::ImageRegionReader
+{
+  bool ReadIntoBuffer(signed char *inreadbuffer, size_t buflen) {
+    return self->ReadIntoBuffer((char*)inreadbuffer, buflen);
+    }
+};
+//EXTEND_CLASS_PRINT(gdcm::ImageRegionReader)
+%clear signed char* inreadbuffer;
+%include "gdcmJSON.h"

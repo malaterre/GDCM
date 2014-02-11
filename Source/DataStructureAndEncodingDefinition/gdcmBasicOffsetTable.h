@@ -54,6 +54,7 @@ public:
     if( TagField != itemStart )
       {
       // Bug_Siemens_PrivateIconNoItem.dcm
+      gdcmDebugMacro( "Could be Bug_Siemens_PrivateIconNoItem.dcm" );
       throw "SIEMENS Icon thingy";
       }
     if( !ValueLengthField.Read<TSwap>(is) )

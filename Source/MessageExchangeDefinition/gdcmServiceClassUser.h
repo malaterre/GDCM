@@ -60,8 +60,8 @@ public:
   const char *GetCalledAETitle() const;
 
   /// set/get Timeout
-  void SetTimeout(time_t t);
-  time_t GetTimeout() const;
+  void SetTimeout(double t);
+  double GetTimeout() const;
 
   /// Will try to connect
   /// This will setup the actual timeout used during the whole connection time. Need to call
@@ -100,6 +100,9 @@ public:
   bool SendMove(const BaseRootQuery* query, std::vector<DataSet> &retDatasets);
   /// Execute a C-MOVE, based on query, returned Files are stored in vector
   bool SendMove(const BaseRootQuery* query, std::vector<File> &retFile);
+
+  /// for wrapped language: instanciate a reference counted object
+  static SmartPointer<ServiceClassUser> New() { return new ServiceClassUser; }
 
 private:
   network::EStateID RunEventLoop(network::ULEvent& inEvent,

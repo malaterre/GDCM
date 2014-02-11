@@ -25,15 +25,12 @@ namespace gdcm
 IPPSorter::IPPSorter()
 {
   ComputeZSpacing = true;
+  DropDuplicatePositions = false;
   ZSpacing = 0;
   ZTolerance = 1e-6;
   DirCosTolerance = 0.;
 }
 
-
-IPPSorter::~IPPSorter()
-{
-}
 
 inline double spacing_round(double n, int d) /* pow is defined as pow( double, double) or pow(double int) on M$ comp */
 {
@@ -176,9 +173,14 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
         // FIXME: This test is weak, since implicitely we are doing a != on floating point value
         if( sorted.find(dist) != sorted.end() )
           {
-          gdcmWarningMacro( "dist: " << dist << " for " << filename <<
-            " already found in " << sorted.find(dist)->second );
-          return false;
+            if( this->DropDuplicatePositions )
+            {
+              gdcmWarningMacro( "dropping file " << filename << " since Z position: " << dist << " already found" );
+              continue;
+            }
+            gdcmWarningMacro( "dist: " << dist << " for " << filename <<
+              " already found in " << sorted.find(dist)->second );
+            return false;
           }
         sorted.insert(
           SortedFilenames::value_type(dist,filename) );
@@ -225,6 +227,26 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       // store the extra digits... this will make sure to return 2.2 from a 2.1999938551239993 value
       const int l = (int)( -log10(ZTolerance) );
       ZSpacing = spacing_round(zspacing, l);
+      }
+    if( !spacingisgood )
+      {
+      std::ostringstream os;
+      os << "Filenames and 'z' positions" << std::endl;
+      double prev1 = 0.;
+      for(SortedFilenames::const_iterator it1 = sorted.begin(); it1 != sorted.end(); ++it1)
+        {
+        std::string f = it1->second;
+        if( f.length() > 32 )
+          {
+          f = f.substr(0,10) + " ... " + f.substr(f.length()-17);
+          }
+        double d = it1->first - prev1;
+        if( it1 != sorted.begin() && fabs(d - zspacing) > ZTolerance) os << "* ";
+        else os << "  ";
+        os << it1->first << "\t" << f << std::endl;
+        prev1 = it1->first;
+        }
+      gdcmDebugMacro( os.str() );
       }
     assert( spacingisgood == false ||  (ComputeZSpacing ? (ZSpacing > ZTolerance && ZTolerance > 0) : ZTolerance > 0) );
     }

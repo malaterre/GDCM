@@ -28,30 +28,28 @@ namespace gdcm
  * This algorithm does NOT support duplicate and will FAIL in case of duplicate
  * IPP.
  * \warning See special note for SetZSpacingTolerance when computing the
- * ZSpacing from the IPP of each DICOM files (default tolerance for consistant
+ * ZSpacing from the IPP of each DICOM files (default tolerance for consistent
  * spacing is: 1e-6mm)
  *
  * For more information on Spacing, and how it is defined in DICOM, advanced
  * users may refers to:
  *
- * http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=Imager_Pixel_Spacing
+ * http://gdcm.sourceforge.net/wiki/index.php/Imager_Pixel_Spacing
  *
- * \bug There currently a couple of bug in this implementation:
- * \li Frame Of Reference UID is not taken into account
+ * \bug There are currently a couple of bugs in this implementation:
  * \li Gantry Tilt is not considered
  */
 class GDCM_EXPORT IPPSorter : public Sorter
 {
 public:
   IPPSorter();
-  ~IPPSorter();
 
   // FIXME: I do not like public virtual function...
   /// Main entry point to the sorter.
   /// It will execute the filter, option should be set before
   /// running this function (SetZSpacingTolerance, ...)
   /// Return value indicate if sorting could be achived. Warning this does *NOT* imply
-  /// that spacing is consistant, it only means the file are sorted according to IPP
+  /// that spacing is consistent, it only means the file are sorted according to IPP
   /// You should check if ZSpacing is 0 or not to deduce if file are actually a 3D volume
   virtual bool Sort(std::vector<std::string> const & filenames);
 
@@ -81,6 +79,11 @@ public:
   void SetDirectionCosinesTolerance(double tol) { DirCosTolerance = tol; }
   double GetDirectionCosinesTolerance() const { return DirCosTolerance; }
 
+  /// Makes the IPPSorter ignore multiple images located at the same position.
+  /// Only the first occurence will be kept.
+  /// DropDuplicatePositions defaults to false.
+  void SetDropDuplicatePositions(bool b) { DropDuplicatePositions = b; }
+
   /// Read-only function to provide access to the computed value for the Z-Spacing
   /// The ComputeZSpacing must have been set to true before execution of
   /// sort algorithm. Call this function *after* calling Sort();
@@ -91,6 +94,7 @@ public:
 
 protected:
   bool ComputeZSpacing;
+  bool DropDuplicatePositions;
   double ZSpacing;
   double ZTolerance;
   double DirCosTolerance;

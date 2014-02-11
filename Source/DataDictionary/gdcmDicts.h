@@ -36,6 +36,7 @@ public:
   /// owner is null for public dict
   /// \warning owner need to be set to appropriate owner for call to work. see
   // DataSet::GetPrivateCreator
+  /// NOT THREAD SAFE
   const DictEntry &GetDictEntry(const Tag& tag, const char *owner = NULL) const;
 
   const DictEntry &GetDictEntry(const PrivateTag& tag) const;

@@ -240,24 +240,38 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     meanspacing += current;
     prev = distances[i];
     }
-  meanspacing /= (double)(nitems - 1);
-
-  //zspacing = distances[1] - distances[0];
-  zspacing = meanspacing;
-
-  // Check spacing is consistant:
-  const double ZTolerance = 1e-3; // ??? FIXME
-  prev = distances[0];
-  for(unsigned int i = 1; i < nitems; ++i)
+  bool timeseries = false;
+  if( nitems > 1 )
     {
-    const double current = distances[i] - prev;
-    if( fabs(current - zspacing) > ZTolerance )
+    meanspacing /= (double)(nitems - 1);
+    if( meanspacing == 0.0 )
       {
-      // For now simply gives up
-      gdcmErrorMacro( "This Enhanced Multiframe is not supported for now. Sorry" );
-      return false;
+      // Could be a time series. Assume time spacing of 1. for now:
+      gdcmDebugMacro( "Assuming time series for Z-spacing" );
+      meanspacing = 1.0;
+      timeseries = true;
       }
-    prev = distances[i];
+    }
+
+  zspacing = meanspacing;
+  assert( zspacing != 0.0 ); // technically this should not happen
+
+  if( !timeseries )
+    {
+    // Check spacing is consistent:
+    const double ZTolerance = 1e-3; // ??? FIXME
+    prev = distances[0];
+    for(unsigned int i = 1; i < nitems; ++i)
+      {
+      const double current = distances[i] - prev;
+      if( fabs(current - zspacing) > ZTolerance )
+        {
+        // For now simply gives up
+        gdcmErrorMacro( "This Enhanced Multiframe is not supported for now. Sorry" );
+        return false;
+        }
+      prev = distances[i];
+      }
     }
   return true;
 }
@@ -401,6 +415,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::OphthalmicTomographyImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
     const Tag t1(0x5200,0x9229);
@@ -710,6 +725,7 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
   MediaStorage ms;
   ms.SetFromFile(f);
   std::vector<unsigned int> theReturn(3);
+#if 0
   if( ms == MediaStorage::VLWholeSlideMicroscopyImageStorage )
     {
       {
@@ -725,6 +741,7 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
     theReturn[2] = 1;
     }
   else
+#endif
     {
       {
       Attribute<0x0028,0x0011> at = { 0 };
@@ -753,7 +770,7 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
         {
         const DataElement &de = ds.GetDataElement( at.GetTag() );
         // SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm picks VR::SS instead...
-        if( de.GetVR().Compatible( at.GetVR() ) || de.GetVR() == VR::INVALID )
+        if( at.GetVR().Compatible( de.GetVR() ) )
           {
           at.SetFromDataSet( ds );
           int imagedimensions = at.GetValue();
@@ -782,6 +799,7 @@ void ImageHelper::SetDimensionsValue(File& f, const Image & img)
   ms.SetFromFile(f);
   DataSet& ds = f.GetDataSet();
   assert( MediaStorage::IsImage( ms ) );
+#if 0
   if( ms == MediaStorage::VLWholeSlideMicroscopyImageStorage )
     {
     Attribute<0x0048,0x0006> columns;
@@ -796,6 +814,7 @@ void ImageHelper::SetDimensionsValue(File& f, const Image & img)
       }
     }
   else
+#endif
     {
     Attribute<0x0028,0x0010> rows;
     rows.SetValue( (uint16_t)dims[1] );
@@ -1045,6 +1064,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
 
   if( ms == MediaStorage::EnhancedCTImageStorage
     || ms == MediaStorage::EnhancedMRImageStorage
+    || ms == MediaStorage::OphthalmicTomographyImageStorage
     || ms == MediaStorage::SegmentationStorage )
     {
     // <entry group="5200" element="9230" vr="SQ" vm="1" name="Per-frame Functional Groups Sequence"/>
@@ -1109,21 +1129,36 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         // The spacing is something like that: [0.2\0\0.200000]
         // I would need to throw an expection that VM is not compatible
         el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
-        el.Read( ss );
-        assert( el.GetLength() == 2 );
-        for(unsigned int i = 0; i < el.GetLength(); ++i)
+        std::string::size_type found = s.find('\\');
+        if( found != std::string::npos )
           {
-          if( el.GetValue(i) )
+          el.Read( ss );
+          assert( el.GetLength() == 2 );
+          for(unsigned int i = 0; i < el.GetLength(); ++i)
             {
-            sp.push_back( el.GetValue(i) );
+            if( el.GetValue(i) )
+              {
+              sp.push_back( el.GetValue(i) );
+              }
+            else
+              {
+              gdcmWarningMacro( "Cant have a spacing of 0" );
+              sp.push_back( 1.0 );
+              }
             }
-          else
-            {
-            gdcmWarningMacro( "Cant have a spacing of 0" );
-            sp.push_back( 1.0 );
-            }
+          std::swap( sp[0], sp[1]);
           }
-        std::swap( sp[0], sp[1]);
+        else
+          {
+          double singleval;
+          ss >> singleval;
+          if( singleval == 0.0 )
+            {
+            singleval = 1.0;
+            }
+          sp.push_back( singleval );
+          sp.push_back( singleval );
+          }
         assert( sp.size() == (unsigned int)entry.GetVM() );
         }
       break;
@@ -1171,7 +1206,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
       const Dicts &dicts = g.GetDicts();
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();
-      assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
+      assert( de.GetVR() == vr || de.GetVR() == VR::INVALID || de.GetVR() == VR::UN );
       if( entry.GetVM() == VM::VM1 )
         {
         switch(vr)
@@ -1222,7 +1257,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     gdcm::Attribute<0x0028,0x0009,VR::AT,VM::VM1> at;
     at.SetFromDataElement( de );
     assert( ds.FindDataElement( at.GetTag() ) );
-    if( ds.FindDataElement( at.GetTag() ) )
+    if( ds.FindDataElement( at.GetValue() ) )
       {
 /*
 $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
@@ -1255,6 +1290,12 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
         gdcmWarningMacro( "Dont know how to handle spacing for: " << de );
         sp.push_back( 1.0 );
         }
+      }
+    else
+      {
+      gdcmErrorMacro( "Tag: " << at.GetTag() << " was found to point to missing"
+        "Tag: " << at.GetValue() << " default to 1.0." );
+      sp.push_back( 1.0 );
       }
     }
   else

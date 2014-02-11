@@ -308,20 +308,31 @@ public:
 void FillCornerFromMedProp( vtkCornerAnnotation *ca, vtkMedicalImageProperties *medprop )
 {
   std::string bottomleft = "S: ";
-  bottomleft += medprop->GetSeriesNumber();
+  if( medprop->GetSeriesNumber() )
+    bottomleft += medprop->GetSeriesNumber();
   bottomleft += "\nI: ";
-  bottomleft += medprop->GetImageNumber();
+  if( medprop->GetImageNumber() )
+    bottomleft += medprop->GetImageNumber();
   bottomleft += "\n<window_level>";
   ca->SetText(0, bottomleft.c_str());
-  std::string bottomright = medprop->GetStationName();
-  ca->SetText(1, bottomright.c_str());
-  std::string topleft = medprop->GetInstitutionName();
+  if( medprop->GetStationName() )
+    {
+    const std::string bottomright = medprop->GetStationName();
+    ca->SetText(1, bottomright.c_str());
+    }
+  std::string topleft;
+  if( medprop->GetInstitutionName() )
+    topleft += medprop->GetInstitutionName();
   topleft += "\n";
-  topleft += medprop->GetPatientName();
+  if( medprop->GetPatientName() )
+    topleft += medprop->GetPatientName();
   ca->SetText(2, topleft.c_str());
-  std::string topright = medprop->GetStudyDate();
+  std::string topright;
+  if( medprop->GetStudyDate() )
+    topright += medprop->GetStudyDate();
   topright += "\n";
-  topright += medprop->GetAcquisitionTime();
+  if( medprop->GetAcquisitionTime() )
+    topright += medprop->GetAcquisitionTime();
   ca->SetText(3, topright.c_str());
 }
 
@@ -793,7 +804,7 @@ int main(int argc, char *argv[])
       {
     case 0:
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {

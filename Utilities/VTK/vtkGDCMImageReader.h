@@ -44,7 +44,7 @@
 // .SECTION Warning
 // When using vtkGDCMPolyDataReader in conjonction with vtkGDCMImageReader
 // it is *required* that FileLowerLeft is set to ON as coordinate system
-// would be inconsistant in between the two data structures.
+// would be inconsistent in between the two data structures.
 // .SECTION Color Space mapping:
 // * VTK_LUMINANCE         <-> MONOCHROME2
 // * VTK_LUMINANCE_ALPHA   <-> Not supported
@@ -55,7 +55,7 @@
 // * VTK_YBR               <-> YBR_FULL
 //
 // For detailed information on color space transformation and true lossless transformation see:
-// http://apps.sourceforge.net/mediawiki/gdcm/index.php?title=Color_Space_Transformations
+// http://gdcm.sourceforge.net/wiki/index.php/Color_Space_Transformations
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMPolyDataReader vtkGDCMImageWriter

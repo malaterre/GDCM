@@ -32,6 +32,7 @@ public:
   bool CanCode(TransferSyntax const &ts) const;
 
   bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
+  virtual ImageCodec * Clone() const;
 
   bool Read(const char *filename, DataElement &out) const;
   bool Write(const char *filename, const DataElement &out) const;

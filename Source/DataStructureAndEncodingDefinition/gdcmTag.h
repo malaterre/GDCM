@@ -180,10 +180,14 @@ public:
     {
     // See PS 3.5 - 7.8.1 PRIVATE DATA ELEMENT TAGS
     // eg: 0x0123,0x1425 -> 0x0123,0x0014
-    assert( IsPrivate() && !IsPrivateCreator() );
-    Tag r = *this;
-    r.SetElement( (uint16_t)(GetElement() >> 8) );
-    return r;
+    if( IsPrivate() && !IsPrivateCreator() )
+      {
+      Tag r = *this;
+      r.SetElement( (uint16_t)(GetElement() >> 8) );
+      return r;
+      }
+    if( IsPrivateCreator() ) return *this;
+    return Tag(0x0,0x0);
     }
   /// Set private creator:
   void SetPrivateCreator(Tag const &t)
@@ -191,9 +195,10 @@ public:
     // See PS 3.5 - 7.8.1 PRIVATE DATA ELEMENT TAGS
     // eg: 0x0123,0x0045 -> 0x0123,0x4567
     assert( t.IsPrivate() /*&& t.IsPrivateCreator()*/ );
-    uint16_t element = (uint16_t)(t.GetElement() << 8);
-    uint16_t base = (uint16_t)(GetElement() << 8);
+    const uint16_t element = (uint16_t)(t.GetElement() << 8);
+    const uint16_t base = (uint16_t)(GetElement() << 8);
     SetElement( (uint16_t)((base >> 8) + element) );
+    SetGroup( t.GetGroup() );
     }
 
   /// Returns if tag is a Private Creator (xxxx,00yy), where xxxx is odd number
@@ -241,6 +246,13 @@ public:
   /// Read From XML formatted tag value eg. tag = "12345678"
   /// It comes in useful when reading tag values from XML file(in NativeDICOMModel)
   bool ReadFromContinuousString(const char *str);
+
+  /// Print tag value with no separating comma: eg. tag = "12345678"
+  /// It comes in useful when reading tag values from XML file(in NativeDICOMModel)
+  std::string PrintAsContinuousString() const;
+
+  /// Same as PrintAsContinuousString, but hexadecimal [a-f] are printed using upper case
+  std::string PrintAsContinuousUpperCaseString() const;
 
   /// Read from a pipe separated string (GDCM 1.x compat only). Do not use in newer code
   /// \see ReadFromCommaSeparatedString

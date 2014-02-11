@@ -30,8 +30,7 @@ public class DecompressPixmap
     {
     String file1 = args[0];
     String file2 = args[1];
-    //PixmapReader reader = new PixmapReader();
-    ImageReader reader = new ImageReader();
+    PixmapReader reader = new PixmapReader();
     reader.SetFileName( file1 );
     boolean ret = reader.Read();
     if( !ret )
@@ -41,19 +40,17 @@ public class DecompressPixmap
 
     ImageChangeTransferSyntax change = new ImageChangeTransferSyntax();
     change.SetTransferSyntax( new TransferSyntax(TransferSyntax.TSType.ImplicitVRLittleEndian) );
-    change.SetInput( reader.GetPixmap() );
+    PixmapToPixmapFilter filter = (PixmapToPixmapFilter)change;
+    filter.SetInput( reader.GetPixmap() );
     if( !change.Change() )
       {
       throw new Exception("Could not change: " + file1 );
       }
 
-    // When using a PixmapReader the following code crashes, I do not understand why (MM)
-    // Instead hack our way in, and use an ImageReader instead of a PixmapReader
-    //
-    // Hum looks like Java Covariant Return type is not working for some reason
-    //Pixmap out = ((PixmapToPixmapFilter)change).GetOutput(); // old syntax
-    Pixmap out2 = (Pixmap)change.GetOutput(); // new syntax
-    System.out.println( out2.toString() );
+    // The following does not work in Java/swig 2.0.7
+    //Pixmap p = ((PixmapToPixmapFilter)change).GetOutput();
+    Pixmap p = change.GetOutputAsPixmap();  // be explicit
+    //System.out.println( p.toString() );
 
     // Set the Source Application Entity Title
     FileMetaInformation.SetSourceApplicationEntityTitle( "Just For Fun" );
@@ -61,8 +58,7 @@ public class DecompressPixmap
     PixmapWriter writer = new PixmapWriter();
     writer.SetFileName( file2 );
     writer.SetFile( reader.GetFile() );
-    //writer.SetImage( out );
-    writer.SetImage( out2 );
+    writer.SetImage( p );
     ret = writer.Write();
     if( !ret )
       {

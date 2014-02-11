@@ -112,7 +112,7 @@ int TestSplitMosaicFilter(int argc, char *argv[])
     div, mos_dims, (const unsigned short*)&buf[0] );
 
 #if 0
-  std::ofstream o( "/tmp/debug" );
+  std::ofstream o( "/tmp/debug", std::ios::binary );
   o.write( &outbuf[0], ll );
   o.close();
 #endif

@@ -35,6 +35,9 @@ public:
   /// Get Output image
   const Bitmap &GetOutput() const { return *Output; }
 
+  // SWIG/Java hack:
+  const Bitmap &GetOutputAsBitmap() const;
+
 protected:
   SmartPointer<Bitmap> Input;
   SmartPointer<Bitmap> Output;

@@ -36,6 +36,8 @@ public:
 private:
   DataSet &DS;
   bool ByteSwapTag;
+
+  ByteSwapFilter& operator=(const ByteSwapFilter &);
 };
 
 } // end namespace gdcm

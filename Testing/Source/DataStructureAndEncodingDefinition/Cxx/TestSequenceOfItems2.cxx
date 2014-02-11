@@ -71,7 +71,7 @@ int TestSequenceOfItems2(int, char *[])
   if( v != 26 ) return 1;
 
 #if 0
-  std::ofstream of( "/tmp/o.jpg" );
+  std::ofstream of( "/tmp/o.jpg", std::ios::binary );
   of.write( bv->GetPointer(), bv->GetLength() );
   of.close();
 #endif

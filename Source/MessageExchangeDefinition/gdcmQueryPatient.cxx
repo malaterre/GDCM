@@ -15,11 +15,11 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-/*
-//note that at the series and image levels, there is no distinction between the root query types.
-*/
+//note that at the series and image levels, there is no distinction between
+//the root query types.
 
 #include "gdcmQueryPatient.h"
+#include "gdcmAttribute.h"
 
 namespace gdcm
 {
@@ -56,7 +56,19 @@ std::vector<Tag> QueryPatient::GetUniqueTags(const ERootType& inRootType) const
   return theReturn;
 }
 
-std::vector<Tag> QueryPatient::GetOptionalTags(const ERootType& inRootType) const{
+std::vector<Tag> QueryPatient::GetHierachicalSearchTags(const ERootType& inRootType) const
+{
+  assert( inRootType == ePatientRootType );
+  std::vector<Tag> tags;
+  // Patient is always toplevel !
+  // just return Required and Unique
+  std::vector<Tag> utags = GetUniqueTags(inRootType);
+  tags.insert(tags.end(), utags.begin(), utags.end());
+  return tags;
+}
+
+std::vector<Tag> QueryPatient::GetOptionalTags(const ERootType& inRootType) const
+{
   std::vector<Tag> theReturn;//see 3.4 C.6.1.1.2
   switch (inRootType){
     case ePatientRootType:
@@ -81,11 +93,16 @@ std::vector<Tag> QueryPatient::GetOptionalTags(const ERootType& inRootType) cons
   return theReturn;
 }
 
-DataElement QueryPatient::GetQueryLevel() const{
-  std::string theValue = "PATIENT";
-  DataElement de;
-  de.SetTag(Tag(0x0008,0x0052));
-  de.SetByteValue(theValue.c_str(), (uint32_t)theValue.length());
-  return de;
+DataElement QueryPatient::GetQueryLevel() const
+{
+  const Attribute<0x0008, 0x0052> level = { "PATIENT " };
+  return level.GetAsDataElement();
 }
+
+static const char QueryPatientString[] = "Patient";
+const char * QueryPatient::GetName() const
+{
+  return QueryPatientString;
+}
+
 }

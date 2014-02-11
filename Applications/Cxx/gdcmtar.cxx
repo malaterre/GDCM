@@ -44,14 +44,14 @@
 #include <getopt.h>
 #include <string.h>
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmtar: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmtar [OPTION] [FILE]" << std::endl;
@@ -232,7 +232,7 @@ void ProcessAFrameOfRef(Scanner const & s, Directory::FilenamesType const & subs
 void ProcessASeries(Scanner const & s, const char * seriesuid)
 {
   if( debuggdcmtar )
-  std::cout << "Series: " << seriesuid << std::endl;
+    std::cout << "Series: " << seriesuid << std::endl;
   // let's find all files belonging to this series:
   Directory::FilenamesType seriesfiles = GetAllFilenamesFromTagToValue(
     s, s.GetFilenames(), T2, seriesuid);
@@ -249,8 +249,10 @@ void ProcessASeries(Scanner const & s, const char * seriesuid)
 void ProcessAStudy(Scanner const & s, const char * studyuid)
 {
   if( debuggdcmtar )
-  std::cout << "Study: " << studyuid << std::endl;
+    std::cout << "Study: " << studyuid << std::endl;
   gdcm::Scanner::ValuesType vt2 = s.GetValues(T2);
+  if( vt2.empty() )
+    std::cerr << "No Series Found" << std::endl;
   for(
     gdcm::Scanner::ValuesType::const_iterator it = vt2.begin()
     ; it != vt2.end(); ++it )
@@ -308,7 +310,7 @@ void ProcessIntoVolume( Scanner const & s )
 
 };
 
-bool ConcatenateImages(Image &im1, Image const &im2)
+static bool ConcatenateImages(Image &im1, Image const &im2)
 {
   DataElement& de1 = im1.GetDataElement();
   if( de1.GetByteValue() )
@@ -324,7 +326,14 @@ bool ConcatenateImages(Image &im1, Image const &im2)
     }
   else if( de1.GetSequenceOfFragments() )
     {
-    assert( 0 );
+    SequenceOfFragments *sqf1 = de1.GetSequenceOfFragments();
+    assert( sqf1 );
+    const DataElement& de2 = im2.GetDataElement();
+    const SequenceOfFragments *sqf2 = de2.GetSequenceOfFragments();
+    assert( sqf2 );
+    assert( sqf2->GetNumberOfFragments() == 1 );
+    const Fragment& frag = sqf2->GetFragment(0);
+    sqf1->AddFragment(frag);
     }
   else
     {
@@ -340,7 +349,7 @@ bool ConcatenateImages(Image &im1, Image const &im2)
 } // namespace gdcm
 
 
-int MakeImageEnhanced( std::string const & filename, std::string const &outfilename )
+static int MakeImageEnhanced( std::string const & filename, std::string const &outfilename )
 {
   if( !gdcm::System::FileIsDirectory(filename.c_str()) )
     {
@@ -369,13 +378,13 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
   if( vt.size() != 1 ) return 1;
 
   const char *sop = vt.begin()->c_str();
-{
-  gdcm::MediaStorage ms = gdcm::MediaStorage::GetMSType( sop );
-  if( ms != gdcm::MediaStorage::MRImageStorage )
+  gdcm::MediaStorage msorig = gdcm::MediaStorage::GetMSType( sop );
+  if( msorig != gdcm::MediaStorage::MRImageStorage
+   && msorig != gdcm::MediaStorage::CTImageStorage )
     {
+    std::cerr << "Sorry MediaStorage not supported: [" << sop << "]" << std::endl;
     return 1;
     }
-}
 
   gdcm::DiscriminateVolume dv;
   dv.ProcessIntoVolume( s );
@@ -484,7 +493,18 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
 
     gdcm::DataSet &ds = im0.GetFile().GetDataSet();
 
-    gdcm::MediaStorage ms = gdcm::MediaStorage::EnhancedMRImageStorage;
+    gdcm::MediaStorage ms;
+    switch( msorig )
+      {
+    case gdcm::MediaStorage::CTImageStorage:
+      ms = gdcm::MediaStorage::EnhancedCTImageStorage;
+      break;
+    case gdcm::MediaStorage::MRImageStorage:
+      ms = gdcm::MediaStorage::EnhancedMRImageStorage;
+      break;
+    default:
+      return 1;
+      }
 
     gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
     const char* msstr = gdcm::MediaStorage::GetMSString(ms);
@@ -502,8 +522,9 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
     }
 
   std::vector< gdcm::Directory::FilenamesType > const &unsorted = dv.GetUnsortedFiles();
-  std::cerr << "Could not process the following files (please report): " << std::endl;
+  if( !unsorted.empty() )
     {
+    std::cerr << "Could not process the following files (please report): " << std::endl;
     std::vector< gdcm::Directory::FilenamesType >::const_iterator it = unsorted.begin();
     for( ; it != unsorted.end(); ++it )
       {
@@ -523,7 +544,7 @@ int MakeImageEnhanced( std::string const & filename, std::string const &outfilen
 namespace gdcm
 {
 
-const DataElement &GetNestedDataElement( const DataSet &ds, const Tag & t1, const Tag & t2 )
+static const DataElement &GetNestedDataElement( const DataSet &ds, const Tag & t1, const Tag & t2 )
 {
   assert( ds.FindDataElement( t1 ) );
   SmartPointer<SequenceOfItems> sqi1 = ds.GetDataElement( t1 ).GetValueAsSQ();
@@ -718,7 +739,7 @@ int main (int argc, char *argv[])
       {
     case 0:
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {
@@ -1081,10 +1102,8 @@ int main (int argc, char *argv[])
     gdcm::DirectionCosines dc( cosines );
     double normal[3];
     dc.Cross( normal );
-    const double *origin = image.GetOrigin();
-    (void)origin;
-    double zspacing = image.GetSpacing(2);
-    (void)zspacing;
+    //const double *origin = image.GetOrigin();
+    //double zspacing = image.GetSpacing(2);
 
     // Remove SharedFunctionalGroupsSequence
     gdcm::SmartPointer<gdcm::SequenceOfItems> sfgs =

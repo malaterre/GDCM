@@ -49,7 +49,7 @@ public:
   void SetCallingAETitle(const char callingaetitle[16]);
   std::string GetCallingAETitle() const { return std::string(CallingAETitle,16); }
 
-  /// Check whether or not the \input title is a valid AE title
+  /// Check whether or not the \param title is a valid AE title
   static bool IsAETitleValid(const char title[16]);
 
   /// This function will initialize an AAssociateACPDU from
@@ -82,6 +82,13 @@ public:
   const PresentationContextRQ *GetPresentationContextByID(uint8_t i) const;
   const PresentationContextRQ *GetPresentationContextByAbstractSyntax(AbstractSyntax const & as ) const;
   bool IsLastFragment() const { return true; }
+
+  const UserInformation & GetUserInformation() const { return UserInfo; }
+  void SetUserInformation( UserInformation const & ui );
+
+protected:
+  friend class AAssociateACPDU;
+  std::string GetReserved43_74() const;
 
 private:
   // 1 PDU-type 01H
@@ -128,7 +135,7 @@ private:
   43-74 Reserved This reserved field shall be sent with a value 00H for all bytes but not
   tested to this value when received
    */
-  static const uint8_t Reserved43_74[32]; // { 0 }
+  char Reserved43_74[32]; // { 0 }
   /*
   75-xxx Variable items This variable field shall contain the following items: one Application
   Context Item, one or more Presentation Context Items and one User

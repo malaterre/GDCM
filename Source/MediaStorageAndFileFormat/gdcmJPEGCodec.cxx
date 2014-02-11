@@ -185,7 +185,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
         if( i >= this->GetDimensions()[2] )
           {
           // JPEGInvalidSecondFrag.dcm
-          assert( nfrags == this->GetNumberOfDimensions() ); // sentinel
+          assert( nfrags == this->GetNumberOfDimensions() ); (void)nfrags; // sentinel
           gdcmWarningMacro( "Invalid JPEG Fragment found at pos #" << i + 1 << ". Skipping it" );
           }
         else
@@ -211,7 +211,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       is0.seekg(0);
       SequenceOfFragments sf_bug;
       try {
-        sf_bug.Read<SwapperNoOp>(is0);
+        sf_bug.Read<SwapperNoOp>(is0,true);
       } catch ( ... ) {
         return false;
       }
@@ -239,9 +239,13 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       }
     }
   //assert( pos == len );
-  std::string str = os.str();
-  VL::Type strSize = (VL::Type)str.size();
-  out.SetByteValue( &str[0], strSize );
+  const size_t sizeOfOs = os.tellp();
+  os.seekp( 0, std::ios::beg );
+  ByteValue * bv = new ByteValue;
+  bv->SetLength( (uint32_t)sizeOfOs );
+  bv->Read<SwapperNoOp>( os );
+  out.SetValue( *bv );
+
   return true;
 }
 
@@ -377,6 +381,7 @@ bool JPEGCodec::DecodeByStreams(std::istream &is, std::ostream &os)
       if( Internal )
         {
         //Internal->SetPixelFormat( this->GetPixelFormat() ); // FIXME
+        Internal->SetDimensions( this->GetDimensions() );
         Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() ); // meaningless ?
         Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
         if( Internal->DecodeByStreams(is,tmpos) )
@@ -459,7 +464,7 @@ bool JPEGCodec::DecodeExtent(
 
   if( NumberOfDimensions == 2 )
     {
-    char *dummy_buffer = NULL;
+    //char *dummy_buffer = NULL;
     std::vector<char> vdummybuffer;
     size_t buf_size = 0;
 
@@ -476,7 +481,7 @@ bool JPEGCodec::DecodeExtent(
         // update
         buf_size = fraglen + oldlen;
         vdummybuffer.resize( buf_size );
-        dummy_buffer = &vdummybuffer[0];
+        //dummy_buffer = &vdummybuffer[0];
         // read J2K
         is.read( &vdummybuffer[oldlen], fraglen );
         }
@@ -627,6 +632,28 @@ bool JPEGCodec::IsStateSuspension() const
 {
   assert( 0 );
   return false;
+}
+
+ImageCodec * JPEGCodec::Clone() const
+{
+  JPEGCodec *copy = new JPEGCodec;
+  ImageCodec &ic = *copy;
+  ic = *this;
+  assert( copy->PF == PF );
+  //copy->SetupJPEGBitCodec( BitSample );
+  copy->SetPixelFormat( GetPixelFormat() );
+  assert( copy->BitSample == BitSample );
+  copy->Lossless = Lossless;
+  copy->Quality = Quality;
+
+  return copy;
+}
+
+bool JPEGCodec::EncodeBuffer( std::ostream & out,
+    const char *inbuffer, size_t inlen)
+{
+  assert( Internal );
+  return Internal->EncodeBuffer(out, inbuffer, inlen);
 }
 
 } // end namespace gdcm

@@ -73,7 +73,7 @@ Checked against:
         <xsl:value-of select="translate(@name, $apos, '')"/>
       </xsl:variable>
       <xsl:variable name="description_dash">
-        <!-- the dicom3tools is not always consistant with capitalization.
+        <!-- the dicom3tools is not always consistent with capitalization.
              Assume that every time there is a - we want capitalization -->
         <xsl:value-of select="translate($description_apos,'-',' ')"/>
       </xsl:variable>

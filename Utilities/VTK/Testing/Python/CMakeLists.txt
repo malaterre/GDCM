@@ -26,6 +26,7 @@ if(GDCM_WRAP_PYTHON)
   endif()
   set(VTK_PYTHON_TESTS
     TestvtkGDCMImageReader
+    TestvtkGDCMImageReader2
     TestvtkGDCMImageWriter
     TestMultiframeGrayscaleWordSecondaryCaptureImageStorage
   )

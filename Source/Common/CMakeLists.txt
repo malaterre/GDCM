@@ -3,11 +3,11 @@
 include_regular_expression("^gdcm.*$")
 
 # configure the .h file
+option(GDCM_ALWAYS_TRACE_MACRO "When set to ON, gdcm::Trace macros will dumps message (override NDEBUG settings)" OFF)
 option(GDCM_SUPPORT_BROKEN_IMPLEMENTATION "Handle broken DICOM" ON)
-option(GDCM_WRITE_ODD_LENGTH "Do not change" OFF)
 mark_as_advanced(
+  GDCM_ALWAYS_TRACE_MACRO
   GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-  GDCM_WRITE_ODD_LENGTH
   GDCM_AUTOLOAD_GDCMJNI
   )
 
@@ -46,6 +46,9 @@ CHECK_FUNCTION_EXISTS(_snprintf   GDCM_HAVE__SNPRINTF)
 CHECK_FUNCTION_EXISTS(gettimeofday GDCM_HAVE_GETTIMEOFDAY)
 
 include(CheckCXXSourceCompiles)
+CHECK_CXX_SOURCE_COMPILES(
+  "int main() { const char *f = __FUNCTION__; return 0;}"
+  GDCM_CXX_HAS_FUNCTION)
 CHECK_CXX_SOURCE_COMPILES(
   "\#include <fstream>\nint main() { const wchar_t fn[10] = {}; std::ifstream is( fn ); return 0;}"
   GDCM_HAVE_WCHAR_IFSTREAM)
@@ -109,6 +112,7 @@ set(Common_SRCS
   gdcmEvent.cxx
   gdcmDataEvent.cxx
   gdcmProgressEvent.cxx
+  gdcmFileNameEvent.cxx
   gdcmCommand.cxx
   gdcmMD5.cxx
   gdcmBase64.cxx

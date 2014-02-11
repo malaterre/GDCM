@@ -24,7 +24,7 @@
 //
 // .SECTION Warning
 // You need to specify the correct ImageFormat (taken from the reader)
-// You need to explicitely specify the DirectionCosines (taken from the reader)
+// You need to explicitly specify the DirectionCosines (taken from the reader)
 // Since VTK 5.4 vtkMedicalImageProperties has its own DirectionCosine (no 's')
 // user need to make sure the vtkMatrix4x4 is compatible with the 6-vector DirectionCosine.
 //

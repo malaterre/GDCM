@@ -16,12 +16,11 @@
  *
  *=========================================================================*/
 /*
-file name: gdcmBaseRootQuery.cpp
-contains: a baseclass which will produce a dataset for c-find and c-move with patient root
-name and date: 18 oct 2010 mmr
+contains: a baseclass which will produce a dataset for c-find and c-move with
+patient root
 
-This class contains the functionality used in patient c-find and c-move queries.
-StudyRootQuery derives from this class.
+This class contains the functionality used in patient c-find and c-move
+queries.  StudyRootQuery derives from this class.
 
 Namely:
 1) list all tags associated with a particular query type
@@ -29,7 +28,8 @@ Namely:
 
 Eventually, it can be used to validate a particular dataset type.
 
-The dataset held by this object (or, really, one of its derivates) should be passed to a c-find or c-move query.
+The dataset held by this object (or, really, one of its derivates) should be
+passed to a c-find or c-move query.
 
 */
 
@@ -40,21 +40,25 @@ The dataset held by this object (or, really, one of its derivates) should be pas
 #include "gdcmDictEntry.h"
 #include "gdcmDicts.h"
 #include "gdcmGlobal.h"
-#include <limits>
 #include "gdcmAttribute.h"
 #include "gdcmWriter.h"
+#include "gdcmPrinter.h"
+#include <limits>
 
-namespace gdcm{
+namespace gdcm
+{
 
-BaseRootQuery::BaseRootQuery(){
+BaseRootQuery::BaseRootQuery()
+{
   //nothing to do, really
 }
-BaseRootQuery::~BaseRootQuery(){
+BaseRootQuery::~BaseRootQuery()
+{
   //nothing to do, really
 }
 
-void BaseRootQuery::SetSearchParameter(const Tag& inTag, const DictEntry& inDictEntry, const std::string& inValue){
-
+void BaseRootQuery::SetSearchParameter(const Tag& inTag, const DictEntry& inDictEntry, const std::string& inValue)
+{
   //borrowed this code from anonymization; not sure if it's correct, though.
   DataElement de;
   de.SetTag( inTag );
@@ -115,8 +119,8 @@ void BaseRootQuery::SetSearchParameter(const std::string& inKeyword, const std::
   SetSearchParameter(theTag, dictentry, inValue);
 }
 
-const std::ostream &BaseRootQuery::WriteHelpFile(std::ostream &os) {
-
+const std::ostream &BaseRootQuery::WriteHelpFile(std::ostream &os)
+{
   //mash all the query types into a vector for ease-of-use
   std::vector<QueryBase*> theQueries;
   std::vector<QueryBase*>::const_iterator qtor;
@@ -187,7 +191,8 @@ bool BaseRootQuery::WriteQuery(const std::string& inFileName)
   writer.SetFileName( inFileName.c_str() );
   if( !writer.Write() )
     {
-      return false;
+    gdcmWarningMacro( "Could not write: " << inFileName );
+    return false;
     }
   return true;
 }
@@ -213,4 +218,93 @@ void BaseRootQuery::AddQueryDataSet(const DataSet & ds)
     }
 }
 
+void BaseRootQuery::Print(std::ostream &os) const
+{
+  UIDs::TSName asuid = GetAbstractSyntaxUID();
+  const char *asname = UIDs::GetUIDName( asuid );
+  os << "===================== OUTGOING DIMSE MESSAGE ====================" << std::endl;
+  os << "Affected SOP Class UID        :" << asname << std::endl;
+  os << "======================= END DIMSE MESSAGE =======================" << std::endl;
+
+  os << "Find SCU Request Identifiers:" << std::endl;
+  os << "# Dicom-Data-Set" << std::endl;
+  os << "# Used TransferSyntax: Unknown Transfer Syntax" << std::endl;
+  Printer p;
+  p.PrintDataSet( mDataSet, os );
 }
+
+static const char *QueryLevelStrings[] = {
+  "PATIENT ",
+  "STUDY ",
+  "SERIES",
+  "IMAGE ",
+};
+
+const char *BaseRootQuery::GetQueryLevelString( EQueryLevel ql )
+{
+  return QueryLevelStrings[ ql ];
+}
+
+int BaseRootQuery::GetQueryLevelFromString( const char * str )
+{
+  if( str )
+    {
+    const std::string s = str;
+    static const int n =
+      sizeof( QueryLevelStrings ) / sizeof( *QueryLevelStrings );
+    for( int i = 0; i < n; ++i )
+      {
+      if( s == QueryLevelStrings[ i ] )
+        {
+        return i;
+        }
+      }
+    }
+  return -1; // FIXME never use it as valid enum
+}
+
+QueryBase * BaseRootQuery::Construct( ERootType inRootType, EQueryLevel qlevel )
+{
+  QueryBase* qb = NULL;
+  // Check no new extension:
+  assert( inRootType == ePatientRootType || inRootType == eStudyRootType );
+
+  if( qlevel == ePatient )
+    {
+    if( inRootType == ePatientRootType )
+      {
+      qb = new QueryPatient;
+      }
+    }
+  else if( qlevel == eStudy )
+    {
+    qb = new QueryStudy;
+    }
+  else if( qlevel == eSeries )
+    {
+    qb = new QuerySeries;
+    }
+  else if( qlevel == eImage )
+    {
+    qb = new QueryImage;
+    }
+  return qb;
+}
+
+EQueryLevel BaseRootQuery::GetQueryLevelFromQueryRoot( ERootType roottype )
+{
+  EQueryLevel level = ePatient;
+  switch( roottype )
+    {
+  case ePatientRootType:
+    level = ePatient;
+    break;
+  case eStudyRootType:
+    level = eStudy;
+    break;
+    }
+  assert( level == eStudy || level == ePatient );
+  return level;
+}
+
+} // end namespace gdcm

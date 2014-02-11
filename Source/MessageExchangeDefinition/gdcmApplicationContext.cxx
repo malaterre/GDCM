@@ -23,9 +23,13 @@ namespace network
 const uint8_t ApplicationContext::ItemType = 0x10;
 const uint8_t ApplicationContext::Reserved2 = 0x00;
 
+// PS 3.7 - 2011
+// A.2.1 DICOM Registered Application Context Names
+static const char DICOMApplicationContextName[] = "1.2.840.10008.3.1.1.1";
+
 ApplicationContext::ApplicationContext()
 {
-  UpdateName( "1.2.840.10008.3.1.1.1" ); // DICOMApplicationContextName = 68, // DICOM Application Context Name
+  UpdateName( DICOMApplicationContextName );
 }
 
 std::istream &ApplicationContext::Read(std::istream &is)
@@ -44,6 +48,7 @@ std::istream &ApplicationContext::Read(std::istream &is)
   assert( itemlength < 256 );
   is.read( name, ItemLength );
   Name = std::string(name,itemlength);
+  assert( Name == DICOMApplicationContextName );
 
   return is;
 }
@@ -56,6 +61,7 @@ const std::ostream &ApplicationContext::Write(std::ostream &os) const
   SwapperDoOp::SwapArray(&copy,1);
   os.write( (char*)&copy, sizeof(ItemLength) );
 
+  assert( Name == DICOMApplicationContextName );
   os.write( Name.c_str(), Name.size() );
   return os;
 }

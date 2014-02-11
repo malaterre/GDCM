@@ -19,6 +19,7 @@
 #include "gdcmDictEntry.h"
 #include "gdcmStringFilter.h"
 #include "gdcmProgressEvent.h"
+#include "gdcmFileNameEvent.h"
 
 #include <algorithm> // std::find
 
@@ -159,6 +160,9 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
       ProgressEvent pe;
       pe.SetProgress( Progress );
       this->InvokeEvent( pe );
+      // For outside application tell which file is being processed:
+      FileNameEvent fe( filename );
+      this->InvokeEvent( fe );
       }
     }
 

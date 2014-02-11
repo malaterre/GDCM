@@ -1,6 +1,9 @@
 # Define the srcs for Media Storage And FileFormat
 # MSFF
 set(MSFF_SRCS
+  gdcmFileStreamer.cxx
+  gdcmJSON.cxx
+  gdcmFileChangeTransferSyntax.cxx
   gdcmAnonymizer.cxx
   gdcmFileAnonymizer.cxx
   gdcmIconImageFilter.cxx
@@ -76,7 +79,7 @@ set(MSFF_SRCS
   gdcmSegmentedPaletteColorLookupTable.cxx
   gdcmStreamImageReader.cxx
   gdcmImageRegionReader.cxx
-  gdcmStreamImageWriter.cxx
+  #gdcmStreamImageWriter.cxx
   gdcmDirectoryHelper.cxx
   gdcmSegment.cxx
   gdcmSurface.cxx
@@ -104,6 +107,11 @@ if(NOT BUILD_SHARED_LIBS)
   set_source_files_properties(gdcmJPEG2000Codec.cxx
                               PROPERTIES
                               COMPILE_FLAGS -DOPJ_STATIC
+                              )
+else()
+  set_source_files_properties(gdcmJPEGLSCodec.cxx
+                              PROPERTIES
+                              COMPILE_FLAGS -DCHARLS_SHARED
                               )
 endif()
 
@@ -140,6 +148,11 @@ else()
   include_directories(
   "${GDCM_BINARY_DIR}/Utilities/gdcmopenjpeg"
     )
+if(GDCM_USE_OPENJPEG_V2)
+  INCLUDE_DIRECTORIES(
+  "${GDCM_BINARY_DIR}/Utilities/gdcmopenjpeg-v2"
+    )
+endif()
 endif()
 if(GDCM_USE_SYSTEM_LJPEG)
   #message(${LJPEG_INCLUDE_DIRS} )
@@ -161,8 +174,19 @@ else()
   )
   set(GDCMUUID gdcmuuid)
 endif()
+if(GDCM_USE_SYSTEM_JSON)
+  include_directories(
+    ${JSON_INCLUDE_DIRS}
+  )
+endif()
 
 add_library(gdcmMSFF ${MSFF_SRCS})
+# gdcmPVRGCodec calls gdcmjpeg
+if(GDCM_USE_PVRG)
+  if(NOT GDCM_USE_SYSTEM_PVRG)
+    add_dependencies(gdcmMSFF gdcmjpeg)
+  endif()
+endif()
 
 # main libs:
 target_link_libraries(gdcmMSFF gdcmIOD gdcmDSED gdcmDICT ${GDCM_LJPEG_LIBRARIES} ${GDCM_OPENJPEG_LIBRARIES})
@@ -187,6 +211,9 @@ if(WIN32)
 #endif()
 else()
 target_link_libraries(gdcmMSFF ${GDCMUUID})
+endif()
+if(GDCM_USE_SYSTEM_JSON)
+target_link_libraries(gdcmMSFF ${JSON_LIBRARIES})
 endif()
 
 # libs

@@ -1235,6 +1235,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
         }
       if( origin[0] != 1 || origin[1] != 1 )
         {
+        // Table C.9-2 OVERLAY PLANE MODULE ATTRIBUTES
         vtkWarningMacro( "Overlay with origin are not supported right now" );
         }
       vtkimage->GetPointData()->SetScalars( chararray );

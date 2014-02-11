@@ -173,7 +173,7 @@ std::istream &VR16ExplicitDataElement::ReadPreValue(std::istream &is)
 }
 
 template <typename TSwap>
-std::istream &VR16ExplicitDataElement::ReadValue(std::istream &is)
+std::istream &VR16ExplicitDataElement::ReadValue(std::istream &is, bool readvalues )
 {
   if( is.eof() ) return is;
 
@@ -206,7 +206,7 @@ std::istream &VR16ExplicitDataElement::ReadValue(std::istream &is)
       try
         {
         //if( !ValueIO<VR16ExplicitDataElement,TSwap>::Read(is,*ValueField) ) // non cp246
-        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField) ) // cp246 compliant
+        if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField,readvalues) ) // cp246 compliant
           {
           assert(0);
           }
@@ -262,7 +262,7 @@ std::istream &VR16ExplicitDataElement::ReadValue(std::istream &is)
     assert( TagField.IsPrivate() );
     try
       {
-      if( !ValueIO<VR16ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField) )
+      if( !ValueIO<VR16ExplicitDataElement,SwapperDoOp>::Read(is,*ValueField,readvalues) )
         {
         assert(0 && "Should not happen");
         }
@@ -286,7 +286,7 @@ std::istream &VR16ExplicitDataElement::ReadValue(std::istream &is)
     }
 #endif
 
-  if( !ValueIO<VR16ExplicitDataElement,TSwap>::Read(is,*ValueField) )
+  if( !ValueIO<VR16ExplicitDataElement,TSwap>::Read(is,*ValueField,readvalues) )
     {
     // Might be the famous UN 16bits
     ParseException pe;

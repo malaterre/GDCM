@@ -358,7 +358,7 @@ int main(int argc, char *argv[])
   const char *filename = argv[1];
   gdcm::Reader reader;
   reader.SetFileName( filename );
-  reader.Read();
+  if( !reader.Read() ) return 1;
 
   gdcm::File &file = reader.GetFile();
   gdcm::DataSet &ds = file.GetDataSet();

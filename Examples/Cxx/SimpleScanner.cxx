@@ -27,6 +27,21 @@
  */
 
 #include "gdcmScanner.h"
+#include "gdcmSimpleSubjectWatcher.h"
+#include "gdcmFileNameEvent.h"
+
+class MyFileWatcher : public gdcm::SimpleSubjectWatcher
+{
+public:
+  MyFileWatcher(gdcm::Subject * s, const char *comment = ""):
+    gdcm::SimpleSubjectWatcher(s,comment){}
+  void ShowFileName(gdcm::Subject *, const gdcm::Event &evt)
+    {
+    const gdcm::FileNameEvent &pe = dynamic_cast<const gdcm::FileNameEvent&>(evt);
+    const char *fn = pe.GetFileName();
+    std::cout << "FileName: " << fn << " FileSize: " << gdcm::System::FileSize( fn ) << std::endl;
+    }
+};
 
 int main(int argc, char *argv[])
 {
@@ -37,7 +52,11 @@ int main(int argc, char *argv[])
   const char *filename = argv[1];
   const char filename_invalid[] = "this is a file that may not exist on this disk.dcm";
 
-  gdcm::Scanner s;
+
+  gdcm::SmartPointer<gdcm::Scanner> sp = new gdcm::Scanner;
+  gdcm::Scanner &s = *sp;
+  //gdcm::SimpleSubjectWatcher w(&s, "TestFileName" );
+  MyFileWatcher w(&s, "TestFileName" );
 
   const gdcm::Tag tag_array[] = {
     gdcm::Tag(0x8,0x50),

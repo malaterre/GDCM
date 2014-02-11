@@ -79,14 +79,14 @@ int loadBulkData = 0;
 int loadTransferSyntax = 0;
 TransferSyntax ts;
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmxml: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmxml [OPTION]... FILE..." << std::endl;
@@ -124,7 +124,7 @@ void PrintHelp()
 #define CHECK_NAME(value)\
   strcmp((const char*)xmlTextReaderConstName(reader),value)
 
-void HandleBulkData(const char *uuid, DataElement &de)
+static void HandleBulkData(const char *uuid, DataElement &de)
   {
   // Load Bulk Data
   if(loadBulkData)
@@ -167,8 +167,8 @@ void HandleBulkData(const char *uuid, DataElement &de)
      }  
   }
 
-void HandlePN(xmlTextReaderPtr reader,DataElement &de)
-  {
+static void HandlePN(xmlTextReaderPtr reader,DataElement &de)
+{
   if(CHECK_NAME("DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15)
     return;//empty element
   else if(!(CHECK_NAME("PersonName") == 0))
@@ -194,9 +194,8 @@ void HandlePN(xmlTextReaderPtr reader,DataElement &de)
       }
       
     }
-  
-  gdcm::ByteValue *bv1 = new ByteValue( name.c_str(), name.length() );
-  de.SetValue(*bv1);
+
+  de.SetByteValue( name.c_str(), (uint32_t)name.size() );
   return;
   
   /*
@@ -298,11 +297,11 @@ void HandlePN(xmlTextReaderPtr reader,DataElement &de)
   return;  
     */
     
-  }
+}
   
-void HandleSequence(SequenceOfItems *sqi,xmlTextReaderPtr reader,int depth);
+static void HandleSequence(SequenceOfItems *sqi,xmlTextReaderPtr reader,int depth);
 
-void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ )
+static void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ )
 {    
   (void)depth;
    int ret;  
@@ -355,7 +354,8 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
           { \
           READ_NEXT \
           char *value_char = (char*)xmlTextReaderConstValue(reader); \
-          sscanf(value_char,"%d",&(values[count++]));  \
+          int nvalue = sscanf(value_char,"%d",&(values[count++]));  \
+          assert( nvalue == 1 );  \
           READ_NEXT /*Value ending tag*/ \
           name = (const char*)xmlTextReaderConstName(reader); \
           READ_NEXT \
@@ -365,7 +365,7 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
         int total = 0; \
         while(total < count) \
           { \
-          el.SetValue(values[total],total); \
+          el.SetValue( (VRToType<VR::type>::Type)(values[total]),total); \
           total++; \
           } \
         de = el.GetAsDataElement(); \
@@ -561,7 +561,7 @@ void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool SetSQ 
      }
 }
 
-void HandleSequence(SequenceOfItems *sqi, xmlTextReaderPtr reader,int depth)
+static void HandleSequence(SequenceOfItems *sqi, xmlTextReaderPtr reader,int depth)
 {
   int ret;
   while(!(  CHECK_NAME("DicomAttribute") == 0  && xmlTextReaderDepth(reader) == (depth - 1)  &&  xmlTextReaderNodeType(reader) == 15 )  )
@@ -596,7 +596,7 @@ void HandleSequence(SequenceOfItems *sqi, xmlTextReaderPtr reader,int depth)
     }
 }
 
-void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
+static void WriteDICOM(xmlTextReaderPtr reader, gdcm::Filename file2)
 {  
   int ret;
   
@@ -676,7 +676,7 @@ static void XMLtoDICOM(gdcm::Filename file1, gdcm::Filename file2)
     return;
     }
   fclose(in);
-  reader = xmlReaderForMemory  (buffer, numBytes, NULL, NULL, 0);
+  reader = xmlReaderForMemory  (buffer, (int)numBytes, NULL, NULL, 0);
   //reader = xmlReaderForFile(filename, "UTF-8", 0); Not Working!!
   if (reader != NULL) 
     {
@@ -732,7 +732,7 @@ int main (int argc, char *argv[])
     case 0:
     case '-':
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         if (optarg)
           {
           if( option_index == 0 ) /* input */

@@ -64,6 +64,7 @@ int main(int argc, char *argv[])
   anon.Replace( gdcm::Tag(0x0020,0xd), gen.Generate() );
   anon.Replace( gdcm::Tag(0x0020,0xe), gen.Generate() );
   anon.Replace( gdcm::Tag(0x0008,0x64), "WSD " );
+  anon.Replace( gdcm::Tag(0x0008,0x60), "OT" );
 
   gdcm::Attribute<0x0028,0x7FE0> at;
   at.SetValue( "http://dicom.example.com/jpipserver.cgi?target=img.jp2" );

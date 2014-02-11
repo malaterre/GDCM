@@ -52,7 +52,7 @@ public:
   /// remote server is responding on the given IP and port number as expected.
   /// \param aetitle when not set will default to 'GDCMSCU'
   /// \param call when not set will default to 'ANY-SCP'
-  /// \error This is an error to set remote to NULL or portno to 0
+  /// \warning This is an error to set remote to NULL or portno to 0
   /// \return true if it worked.
   static bool CEcho( const char *remote, uint16_t portno, const char *aetitle = NULL,
     const char *call = NULL );
@@ -67,11 +67,11 @@ public:
   /// This function is used to build both a move and a find query 
   /// (true for inMove if it's move, false if it's find)
   static BaseRootQuery* ConstructQuery(ERootType inRootType, EQueryLevel inQueryLevel,
-    const DataSet& queryds, bool inMove = false );
+    const DataSet& queryds, EQueryType queryType = eFind );
 
   /// \deprecated
   static BaseRootQuery* ConstructQuery(ERootType inRootType, EQueryLevel inQueryLevel,
-    const KeyValuePairArrayType& keys, bool inMove = false );
+    const KeyValuePairArrayType& keys, EQueryType queryType = eFind );
 
   /// This function will use the provided query to get files from a remote server.
   /// NOTE that this functionality is essentially equivalent to C-GET in the
@@ -99,7 +99,7 @@ public:
   /// which case, the user should monitor the error and warning streams.
   /// \param aetitle when not set will default to 'GDCMSCU'
   /// \param call when not set will default to 'ANY-SCP'
-  /// \error This is an error to set remote to NULL or portno to 0
+  /// \warning This is an error to set remote to NULL or portno to 0
   /// \return true if it worked.
   static bool CFind( const char *remote, uint16_t portno, 
     const BaseRootQuery* query,
@@ -112,7 +112,7 @@ public:
   /// \warning the server side can refuse an association on a given file
   /// \param aetitle when not set will default to 'GDCMSCU'
   /// \param call when not set will default to 'ANY-SCP'
-  /// \error This is an error to set remote to NULL or portno to 0
+  /// \warning This is an error to set remote to NULL or portno to 0
   /// \return true if it worked for all files
   static bool CStore( const char *remote, uint16_t portno,
     const Directory::FilenamesType & filenames,

@@ -343,7 +343,7 @@ not used, in favor of a YBR one. Changing from one color space to the other is
 
 For more detail, see what are the true lossless transformations as described:
 
-http://sourceforge.net/apps/mediawiki/gdcm/index.php?title=Color_Space_Transformations
+http://gdcm.sourceforge.net/wiki/index.php/Color_Space_Transformations
 
 \section quality_control Quality Control
 

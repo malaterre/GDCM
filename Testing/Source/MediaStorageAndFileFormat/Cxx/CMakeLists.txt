@@ -2,6 +2,13 @@
 # MSFF
 set(MSFF_TEST_SRCS
   TestAnonymizer
+  TestFileChangeTransferSyntax1
+  TestFileStreamer1
+  TestFileStreamer2
+  TestFileStreamer3
+  TestFileStreamer4
+  TestFileStreamer5
+  TestFileStreamer6
   TestFileAnonymizer1
   TestFileAnonymizer2
   TestFileAnonymizer3
@@ -55,7 +62,7 @@ set(MSFF_TEST_SRCS
   TestImageRegionReader1
   TestImageRegionReader2
   TestImageRegionReader3
-  TestStreamImageWriter
+  #TestStreamImageWriter
   TestImageReaderRandomEmpty
   TestDirectionCosines
   TestImageWriter
@@ -106,6 +113,12 @@ if(GDCM_DATA_ROOT)
         TestAnonymizer2
         TestAnonymizer3
         )
+    endif()
+    if(GDCM_USE_SYSTEM_JSON)
+      set(MSFF_TEST_SRCS
+        ${MSFF_TEST_SRCS}
+        TestJSON1
+      )
     endif()
 endif()
 
@@ -165,7 +178,11 @@ set(GDCM_MSFF_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMSFFTests")
 
 # Loop over files and create executables
 foreach(name ${MSFF_TEST_SRCS})
+if(CMAKE_CROSSCOMPILING)
+  add_test(${name} ${TARGET_SYSTEM_EMULATOR} ${GDCM_MSFF_TESTS}${CMAKE_EXECUTABLE_SUFFIX} ${name})
+else()
   add_test(${name} ${GDCM_MSFF_TESTS} ${name})
+endif()
 endforeach()
 if(GDCM_DATA_ROOT)
   set_tests_properties(TestDICOMDIRGenerator2 PROPERTIES WILL_FAIL ON)

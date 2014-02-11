@@ -294,7 +294,7 @@ int TestSCUFunctions(int argc, char *argv[])
       return 1;
       }
 
-    theQuery = gdcm::CompositeNetworkFunctions::ConstructQuery(gdcm::ePatientRootType, gdcm::ePatient, keys, true);
+    theQuery = gdcm::CompositeNetworkFunctions::ConstructQuery(gdcm::ePatientRootType, gdcm::ePatient, keys, gdcm::eMove );
     didItWork = gdcm::CompositeNetworkFunctions::CMove(remote.c_str(), portno, theQuery,
       moveReturnPort, aetitle.c_str(), call.c_str(), outputDir.c_str() );
     if ( !didItWork )

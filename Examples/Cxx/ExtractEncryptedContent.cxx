@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
   const gdcm::ByteValue *bv = EncryptedContent.GetByteValue();
 
-  std::ofstream of( outfilename );
+  std::ofstream of( outfilename, std::ios::binary );
   of.write( bv->GetPointer(), bv->GetLength() );
   of.close();
 

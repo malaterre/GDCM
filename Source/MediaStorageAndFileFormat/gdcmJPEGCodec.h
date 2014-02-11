@@ -55,6 +55,7 @@ public:
   bool Code(DataElement const &in, DataElement &out);
 
   virtual bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
+  virtual ImageCodec * Clone() const;
 
   //void SetReversible(bool res);
 
@@ -63,6 +64,9 @@ public:
 
   void SetLossless(bool l);
   bool GetLossless() const;
+
+  virtual bool EncodeBuffer( std::ostream & out,
+    const char *inbuffer, size_t inlen);
 
 protected:
   bool DecodeExtent(

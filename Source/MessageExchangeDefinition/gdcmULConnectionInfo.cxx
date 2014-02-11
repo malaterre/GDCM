@@ -26,17 +26,16 @@
 //A connection must be established with this information, that's subsequently
 //placed into various primitives for actual communication.
 #include "gdcmULConnectionInfo.h"
+#include "gdcmAAssociateRQPDU.h"
+
 #include <socket++/sockinet.h>//for setting up the local socket
 
-#if defined (__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__sun__) // inet_addr
+#if defined(_WIN32)
+#else
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#endif
-
-#if defined (__APPLE__)
-#include <arpa/inet.h> // inet_addr
 #endif
 
 namespace gdcm
@@ -44,26 +43,29 @@ namespace gdcm
 namespace network
 {
 
-ULConnectionInfo::ULConnectionInfo(){
-  memset(mCallingAETitle, 0, 16);
-  memset(mCalledAETitle, 0, 16);
+ULConnectionInfo::ULConnectionInfo()
+{
 }
 
       //it is possible to misinitialize this object, so
       //have it return false if something breaks (ie, given AEs are bigger than 16 characters,
       //no name or IP address).
-bool ULConnectionInfo::Initialize(UserInformation inUserInformation,
-        const char inCalledAETitle[16], const char inCallingAETitle[16],
+bool ULConnectionInfo::Initialize(UserInformation const & inUserInformation,
+        const char *inCalledAETitle, const char *inCallingAETitle,
         unsigned long inCalledIPAddress, int inCalledIPPort,
         std::string inCalledComputerName)
 {
   if (inCalledIPAddress == 0 && inCalledComputerName.empty()){
     return false;
   }
-  //if (strcpy_s(mCalledAETitle, 16, inCalledAETitle) != 0) return false;
-  strncpy(mCalledAETitle, inCalledAETitle, 16);
-  //if (strcpy_s(mCallingAETitle, 16, inCallingAETitle) != 0) return false;
-  strncpy(mCallingAETitle, inCallingAETitle, 16);
+  assert( inCalledAETitle );
+  assert( inCallingAETitle );
+  assert( AAssociateRQPDU::IsAETitleValid( inCalledAETitle ) );
+  assert( AAssociateRQPDU::IsAETitleValid( inCallingAETitle ) );
+  const size_t lcalled  = strlen( inCalledAETitle );
+  const size_t lcalling = strlen( inCallingAETitle );
+  mCalledAETitle = std::string(inCalledAETitle, lcalled > 16 ? 16 : lcalled );
+  mCallingAETitle = std::string(inCallingAETitle, lcalling > 16 ? 16 : lcalling );
   mCalledComputerName = inCalledComputerName;
   mCalledIPPort = inCalledIPPort;
   mCalledIPAddress = inCalledIPAddress;
@@ -75,18 +77,19 @@ bool ULConnectionInfo::Initialize(UserInformation inUserInformation,
   //    mCalledComputerName = "";
   }
 
-  mUserInformation = inUserInformation;
+  //mUserInformation = inUserInformation;
+  (void)inUserInformation;
   return true;
 }
 
-UserInformation ULConnectionInfo::GetUserInformation() const{
-  return mUserInformation;
-}
+//UserInformation ULConnectionInfo::GetUserInformation() const{
+//  return mUserInformation;
+//}
 const char* ULConnectionInfo::GetCalledAETitle() const{
-  return mCalledAETitle;
+  return mCalledAETitle.c_str();
 }
 const char* ULConnectionInfo::GetCallingAETitle() const{
-  return mCallingAETitle;
+  return mCallingAETitle.c_str();
 }
 
 unsigned long ULConnectionInfo::GetCalledIPAddress() const{

@@ -27,7 +27,16 @@ namespace gdcm
  * \brief Trace
  * \details Debug / Warning and Error are encapsulated in this class
  * by default the Trace class will redirect any debug/warning/error
- * to std::cerr. Unless SetStream was specified with another (open) stream.
+ * to std::cerr. Unless SetStream was specified with another (open) stream or
+ * SetStreamToFile was specified to a writable file on the system.
+ *
+ * \warning
+ * All string messages are removed during compilation time when compiled with
+ * CMAKE_BUILD_TYPE being set to either:
+ * - Release
+ * - MinSizeRel
+ * It is recommended to compile with RelWithDebInfo and/or Debug during
+ * prototyping of applications.
  */
 class GDCM_EXPORT Trace
 {
@@ -36,19 +45,39 @@ public :
   ~Trace();
 
   /// Explicitely set the ostream for gdcm::Trace to report to
+  /// This will set the DebugStream, WarningStream and ErrorStream at once:
   static void SetStream(std::ostream &os);
   static std::ostream &GetStream();
 
+  /// Explicitely set the stream which receive Debug messages:
+  static void SetDebugStream(std::ostream &os);
+  static std::ostream &GetDebugStream();
+
+  /// Explicitely set the stream which receive Warning messages:
+  static void SetWarningStream(std::ostream &os);
+  static std::ostream &GetWarningStream();
+
+  /// Explicitely set the stream which receive Error messages:
+  static void SetErrorStream(std::ostream &os);
+  static std::ostream &GetErrorStream();
+
+  /// Explicitely set the filename for gdcm::Trace to report to
+  /// The file will be created (it will not append to existing file)
+  static void SetStreamToFile( const char *filename );
+
+  /// Turn debug messages on (default: false)
   static void SetDebug(bool debug);
   static void DebugOn();
   static void DebugOff();
   static bool GetDebugFlag();
 
+  /// Turn warning messages on (default: true)
   static void SetWarning(bool debug);
   static void WarningOn();
   static void WarningOff();
   static bool GetWarningFlag();
 
+  /// Turn error messages on (default: true)
   static void SetError(bool debug);
   static void ErrorOn();
   static void ErrorOff();
@@ -84,7 +113,7 @@ private:
  * \brief   Debug
  * @param msg message part
  */
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(GDCM_ALWAYS_TRACE_MACRO)
 #define gdcmDebugMacro(msg) {}
 #else
 #define gdcmDebugMacro(msg)                                       \
@@ -96,8 +125,8 @@ private:
            << ", function " << GDCM_FUNCTION << '\n'              \
            << "Last system error was: "                           \
            << gdcm::System::GetLastSystemError() << '\n' << msg;  \
-   std::ostream &_os = gdcm::Trace::GetStream();                   \
-   _os << osmacro.str() << "\n\n" << std::endl;                    \
+   std::ostream &_os = gdcm::Trace::GetDebugStream();             \
+   _os << osmacro.str() << "\n\n" << std::endl;                   \
    }                                                              \
 }
 #endif //NDEBUG
@@ -106,7 +135,7 @@ private:
  * \brief   Warning
  * @param msg message part
  */
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(GDCM_ALWAYS_TRACE_MACRO)
 #define gdcmWarningMacro(msg) {}
 #else
 #define gdcmWarningMacro(msg)                                     \
@@ -117,8 +146,8 @@ private:
    osmacro << "Warning: In " __FILE__ ", line " << __LINE__       \
            << ", function " << GDCM_FUNCTION << "\n"              \
            << msg << "\n\n";                                      \
-   std::ostream &_os = gdcm::Trace::GetStream();                   \
-   _os << osmacro.str() << std::endl;                              \
+   std::ostream &_os = gdcm::Trace::GetWarningStream();           \
+   _os << osmacro.str() << std::endl;                             \
    }                                                              \
 }
 #endif //NDEBUG
@@ -128,7 +157,7 @@ private:
  * It could mean lost of data, something not handle...
  * @param msg second message part
  */
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(GDCM_ALWAYS_TRACE_MACRO)
 #define gdcmErrorMacro(msg) {}
 #else
 #define gdcmErrorMacro(msg)                                       \
@@ -139,8 +168,8 @@ private:
    osmacro << "Error: In " __FILE__ ", line " << __LINE__         \
            << ", function " << GDCM_FUNCTION << '\n'              \
            << msg << "\n\n";                                      \
-   std::ostream &_os = gdcm::Trace::GetStream();                   \
-   _os << osmacro.str() << std::endl;                              \
+   std::ostream &_os = gdcm::Trace::GetErrorStream();             \
+   _os << osmacro.str() << std::endl;                             \
    }                                                              \
 }
 #endif //NDEBUG
@@ -151,7 +180,7 @@ private:
  *        An easy solution to pass also a message is to do:
  *        gdcmAssertMacro( "my message" && 2 < 3 )
  */
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(GDCM_ALWAYS_TRACE_MACRO)
 #define gdcmAssertMacro(arg) {}
 #else
 #define gdcmAssertMacro(arg)                                      \
@@ -162,8 +191,8 @@ private:
    osmacro << "Assert: In " __FILE__ ", line " << __LINE__        \
            << ", function " << GDCM_FUNCTION                      \
            << "\n\n";                                             \
-   std::ostream &_os = gdcm::Trace::GetStream();                   \
-   _os << osmacro.str() << std::endl;                              \
+   std::ostream &_os = gdcm::Trace::GetErrorStream();             \
+   _os << osmacro.str() << std::endl;                             \
    assert ( arg );                                                \
    }                                                              \
 }
@@ -175,7 +204,7 @@ private:
  *        An easy solution to pass also a message is to do:
  *        gdcmAssertMacro( "my message" && 2 < 3 )
  */
-#ifdef NDEBUG
+#if defined(NDEBUG) && !defined(GDCM_ALWAYS_TRACE_MACRO)
 // User asked for release compilation, but still need to report
 // if grave issue.
 #define gdcmAssertAlwaysMacro(arg) \

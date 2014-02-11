@@ -193,15 +193,27 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
   //no callback, assume that no data is transferred back, because there shouldn't be any
   EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
 
-  if (Trace::GetDebugFlag())
+  if(theState != eSta6TransferReady)
     {
-      vector<BasePDU*> thePDUs = theEvent.GetPDUs();
-      vector<BasePDU*>::iterator itor;
-      for (itor = thePDUs.begin(); itor != thePDUs.end(); itor++)
-        {
-        if (*itor == NULL) continue; //can have a nulled pdu, apparently
-        (*itor)->Print(Trace::GetStream());
-        }
+    std::vector<BasePDU*> const & thePDUs = theEvent.GetPDUs();
+    for( std::vector<BasePDU*>::const_iterator itor
+      = thePDUs.begin(); itor != thePDUs.end(); itor++)
+      {
+      //assert(*itor);
+      if (*itor == NULL) continue; //can have a nulled pdu, apparently
+      (*itor)->Print(Trace::GetErrorStream());
+      }
+    }
+  else if (Trace::GetDebugFlag())
+    {
+    std::vector<BasePDU*> const & thePDUs = theEvent.GetPDUs();
+    for( std::vector<BasePDU*>::const_iterator itor
+      = thePDUs.begin(); itor != thePDUs.end(); itor++)
+      {
+      assert(*itor);
+      if (*itor == NULL) continue; //can have a nulled pdu, apparently
+      (*itor)->Print(Trace::GetDebugStream());
+      }
     }
 
   return (theState == eSta6TransferReady);//ie, finished the transitions
@@ -217,25 +229,27 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
   uint16_t inReturnPort,
   std::vector<PresentationContext> const & pcVector)
 {
-
-
+  gdcmDebugMacro( "Start EstablishConnectionMove" );
   //generate a ULConnectionInfo object
   UserInformation userInfo;
   ULConnectionInfo connectInfo;
   if (inConnectAETitle.size() > 16) return false;//too long an AETitle, probably need better failure message
   if (inAETitle.size() > 16) return false; //as above
   if (!connectInfo.Initialize(userInfo,inAETitle.c_str(), inConnectAETitle.c_str(),
-    inIPAddress, inReturnPort, inComputerName)){
+      inIPAddress, inReturnPort, inComputerName))
+    {
+    gdcmDebugMacro( "Could not Initialize connectInfo" );
     return false;
-  }
+    }
+  gdcmDebugMacro( "SCP: First connection established on port " << inReturnPort );
 
-  if (mSecondaryConnection != NULL){
+  if (mSecondaryConnection != NULL)
+    {
+    gdcmDebugMacro( "delete mSecondaryConnection" );
     delete mSecondaryConnection;
-  }
+    }
   mSecondaryConnection = new ULConnection(connectInfo);
-
   mSecondaryConnection->GetTimer().SetTimeout(inTimeout);
-
 
   //generate a ULConnectionInfo object
   UserInformation userInfo2;
@@ -243,15 +257,19 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
   if (inConnectAETitle.size() > 16) return false;//too long an AETitle, probably need better failure message
   if (inAETitle.size() > 16) return false; //as above
   if (!connectInfo2.Initialize(userInfo2, inConnectAETitle.c_str(),
-    inAETitle.c_str(), inIPAddress, inConnectPort, inComputerName)){
+      inAETitle.c_str(), inIPAddress, inConnectPort, inComputerName))
+    {
+    gdcmDebugMacro( "Could not Initialize connectInfo2" );
     return false;
-  }
+    }
+  gdcmDebugMacro( "SCU: Second connection established on port " << inConnectPort );
 
-  if (mConnection!= NULL){
+  if (mConnection!= NULL)
+    {
+    gdcmDebugMacro( "delete mConnection" );
     delete mConnection;
-  }
+    }
   mConnection = new ULConnection(connectInfo2);
-
   mConnection->GetTimer().SetTimeout(inTimeout);
 
 
@@ -314,8 +332,8 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
 
   if (Trace::GetDebugFlag())
     {
-      vector<BasePDU*> thePDUs = theEvent.GetPDUs();
-      vector<BasePDU*>::iterator itor;
+      std::vector<BasePDU*> thePDUs = theEvent.GetPDUs();
+      std::vector<BasePDU*>::iterator itor;
       for (itor = thePDUs.begin(); itor != thePDUs.end(); itor++)
         {
         if (*itor == NULL) continue; //can have a nulled pdu, apparently
@@ -345,25 +363,26 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
   }
 }
 
-std::vector<DataSet>  ULConnectionManager::SendMove(const BaseRootQuery* inRootQuery)
+std::vector<DataSet> ULConnectionManager::SendMove(const BaseRootQuery* inRootQuery)
 {
   ULBasicCallback theCallback;
   SendMove(inRootQuery, &theCallback);
   return theCallback.GetDataSets();
 }
 
-void ULConnectionManager::SendMove(const BaseRootQuery* inRootQuery,
+bool ULConnectionManager::SendMove(const BaseRootQuery* inRootQuery,
   ULConnectionCallback* inCallback)
 {
   if (mConnection == NULL)
     {
-    return;
+    gdcmErrorMacro( "mConnection is NULL" );
+    return false;
     }
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCMovePDU( *mConnection, inRootQuery );
   ULEvent theEvent(ePDATArequest, theDataPDU);
   EStateID stateid = RunMoveEventLoop(theEvent, inCallback);
-  //assert( stateid == gdcm::network::eSta6TransferReady );
-  (void)stateid;
+  gdcmDebugMacro( "Final StateID: " << (int) stateid );
+  return stateid == gdcm::network::eSta6TransferReady;
 }
 
 std::vector<DataSet> ULConnectionManager::SendFind(const BaseRootQuery* inRootQuery)
@@ -388,7 +407,7 @@ std::vector<DataSet> ULConnectionManager::SendStore(const File &file)
 {
   ULBasicCallback theCallback;
   SendStore(file, &theCallback);
-  return theCallback.GetDataSets();
+  return theCallback.GetResponses();
 }
 
 void ULConnectionManager::SendStore(const File & file, ULConnectionCallback* inCallback)
@@ -403,7 +422,8 @@ void ULConnectionManager::SendStore(const File & file, ULConnectionCallback* inC
   this->InvokeEvent( dse );
 
   ULEvent theEvent(ePDATArequest, theDataPDU);
-  RunEventLoop(theEvent, mConnection, inCallback, false);
+  EStateID theState = RunEventLoop(theEvent, mConnection, inCallback, false);
+  assert( theState == eSta6TransferReady || theState == eStaDoesNotExist ); (void)theState;
 }
 
 bool ULConnectionManager::BreakConnection(const double& inTimeOut){
@@ -434,6 +454,7 @@ void ULConnectionManager::BreakConnectionNow(){
 //one for storescp and the other for movescu.  Perhaps complicated, but
 //avoids starting a second process.
 EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnectionCallback* inCallback){
+  gdcmDebugMacro( "Start RunMoveEventLoop" );
   EStateID theState = eStaDoesNotExist;
   bool waitingForEvent;
   EEventID raisedEvent;
@@ -443,6 +464,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
   //when receiving data from a find, etc, then justWaiting is true and only receiving is done
   //eventually, could add cancel into the mix... but that would be through a callback or something similar
   do {
+    gdcmDebugMacro( "Before mTransitions.HandleEvent" );
     if (!justWaiting){
       mTransitions.HandleEvent(this,currentEvent, *mConnection, waitingForEvent, raisedEvent);
     }
@@ -457,20 +479,32 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
     //in our case we use another port to receive it.
     EStateID theCStoreStateID = eSta6TransferReady;
     bool secondConnectionEstablished = false;
+    gdcmDebugMacro( "Before mSecondaryConnection.GetProtocol" );
     if (mSecondaryConnection->GetProtocol() == NULL){
       //establish the connection
       //can fail if is_readready doesn't return true, ie, the connection
       //wasn't opened on the other side because the other side isn't sending data yet
       //for whatever reason (maybe there's nothing to get?)
+      gdcmDebugMacro( "Before mSecondaryConnection.InitializeIncomingConnection" );
       secondConnectionEstablished =
         mSecondaryConnection->InitializeIncomingConnection();
     }
+    gdcmDebugMacro( "After mSecondaryConnection.InitializeIncomingConnection: " <<
+      "secondConnectionEstablished=" << secondConnectionEstablished <<
+      " GetState() =" << (int)mSecondaryConnection->GetState()
+    );
+    if (!secondConnectionEstablished )
+      {
+      gdcmErrorMacro( "Could not establish 2nd connection" );
+      //return eStaDoesNotExist;
+      }
     if (secondConnectionEstablished &&
       (mSecondaryConnection->GetState()== eSta1Idle ||
       mSecondaryConnection->GetState() == eSta2Open)){
       ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
       theCStoreStateID = RunEventLoop(theCStoreEvent, mSecondaryConnection, inCallback, true);
     }
+    gdcmDebugMacro( "After mSecondaryConnection / RunEventLoop: " << (int)theCStoreStateID );
 
     //just as for the regular event loop, but we have to alternate between the connections.
     //it may be that nothing comes back over the is connection, but lots over the
@@ -482,6 +516,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
       while (waitingForEvent)
         {//loop for reading in the events that come down the wire
         uint8_t itemtype = 0x0;
+        gdcmDebugMacro( "Waiting for ItemType (#2)" );
         is.read( (char*)&itemtype, 1 );
 
         BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
@@ -524,12 +559,22 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           //so, we look either for pending, or for the number of operations left
           // (tag 0000, 1020) if the value is success, and that number should be 0.
           DataSet theRSP = PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(currentEvent.GetPDUs()));
-          if (Trace::GetDebugFlag()){
+          if (Trace::GetDebugFlag())
+            {
             Printer thePrinter;
+            Trace::GetStream() << "Response: " << std::endl;
             thePrinter.PrintDataSet(theRSP, Trace::GetStream());
+            Trace::GetStream() << std::endl;
+            }
+          if (theRSP.FindDataElement(Tag(0x0, 0x0800))){
+            DataElement const & de = theRSP.GetDataElement(Tag(0x0,0x0800));
+            Attribute<0x0,0x0800> at;
+            at.SetFromDataElement( de );
+            unsigned short datasettype = at.GetValue();
+            assert( datasettype == 0x0101 || datasettype == 0x1 ); (void)datasettype;
           }
           if (theRSP.FindDataElement(Tag(0x0, 0x0900))){
-            DataElement de = theRSP.GetDataElement(Tag(0x0,0x0900));
+            DataElement const & de = theRSP.GetDataElement(Tag(0x0,0x0900));
             Attribute<0x0,0x0900> at;
             at.SetFromDataElement( de );
             theVal = at.GetValues()[0];
@@ -541,7 +586,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           }
           uint32_t theCommandCode = 0;
           if (theRSP.FindDataElement(Tag(0x0,0x0100))){
-            DataElement de = theRSP.GetDataElement(Tag(0x0,0x0100));
+            DataElement const & de = theRSP.GetDataElement(Tag(0x0,0x0100));
             Attribute<0x0,0x0100> at;
             at.SetFromDataElement( de );
             theCommandCode = at.GetValues()[0];
@@ -602,12 +647,12 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
             if (theRSP.FindDataElement(Tag(0x0,0x0901))){
               DataElement de = theRSP.GetDataElement(Tag(0x0,0x0901));
               err1 = de.GetByteValue();
-              gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl);
+              gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl); (void)err1;
             }
             if (theRSP.FindDataElement(Tag(0x0,0x0902))){
               DataElement de = theRSP.GetDataElement(Tag(0x0,0x0902));
               err2 = de.GetByteValue();
-              gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl);
+              gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl); (void)err2;
             }
           }
           receivingData = false;
@@ -734,6 +779,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
 //note that this is the ARTIM timeout event
 EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* inWhichConnection,
                                            ULConnectionCallback* inCallback, const bool& startWaiting = false){
+  gdcmDebugMacro( "Start RunEventLoop" );
   EStateID theState = eStaDoesNotExist;
   bool waitingForEvent = startWaiting;//overwritten if not starting waiting, but if waiting, then wait
   EEventID raisedEvent;
@@ -745,6 +791,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
   //when receiving data from a find, etc, then justWaiting is true and only receiving is done
   //eventually, could add cancel into the mix... but that would be through a callback or something similar
   do {
+    gdcmDebugMacro( "Before mTransitions.HandleEvent #2" );
     raisedEvent = eEventDoesNotExist;
     if (!waitingForEvent){//justWaiting){
       mTransitions.HandleEvent(this, currentEvent, *inWhichConnection, waitingForEvent, raisedEvent);
@@ -770,7 +817,9 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
       while (waitingForEvent){//loop for reading in the events that come down the wire
         uint8_t itemtype = 0x0;
         try {
+          gdcmDebugMacro( "Waiting for ItemType" );
           is.read( (char*)&itemtype, 1 );
+          gdcmDebugMacro( "Received ItemType #" << (int)itemtype );
           //what happens if nothing's read?
           theFirstPDU = PDUFactory::ConstructPDU(itemtype);
           if (theFirstPDU != NULL){
@@ -779,18 +828,20 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
             gdcmDebugMacro("PDU code: " << static_cast<int>(itemtype) << std::endl);
             if (Trace::GetDebugFlag())
               {
-               theFirstPDU->Print(Trace::GetStream());
+              theFirstPDU->Print(Trace::GetStream());
               }
 
             if (theFirstPDU->IsLastFragment()) waitingForEvent = false;
           } else {
+            gdcmDebugMacro( "NULL theFirstPDU for ItemType" << (int)itemtype );
             waitingForEvent = false; //because no PDU means not waiting anymore
+            return eStaDoesNotExist;
           }
         }
         catch (...)
           {
           //handle the exception, which is basically that nothing came in over the pipe.
-          assert( 0 );
+          gdcmAssertAlwaysMacro( 0 );
           }
       }
       //now, we have to figure out the event that just happened based on the PDU that was received.
@@ -818,6 +869,11 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
               DataSet theRSP =
                 PresentationDataValue::ConcatenatePDVBlobs(
                   PDUFactory::GetPDVs(currentEvent.GetPDUs()));
+              if (inCallback)
+                {
+                inCallback->HandleResponse(theRSP);
+                }
+
               if (theRSP.FindDataElement(Tag(0x0, 0x0900))){
                 DataElement de = theRSP.GetDataElement(Tag(0x0,0x0900));
                 Attribute<0x0,0x0900> at;
@@ -890,12 +946,12 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                 if (theRSP.FindDataElement(Tag(0x0,0x0901))){
                   DataElement de = theRSP.GetDataElement(Tag(0x0,0x0901));
                   err1 = de.GetByteValue();
-                  gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl);
+                  gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl); (void)err1;
                 }
                 if (theRSP.FindDataElement(Tag(0x0,0x0902))){
                   DataElement de = theRSP.GetDataElement(Tag(0x0,0x0902));
                   err2 = de.GetByteValue();
-                  gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl);
+                  gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl); (void)err2;
                 }
               }
 
@@ -938,8 +994,30 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                   //!!!need to handle incoming PDUs that are not data, ie, an abort
                 } while(!thePDU->IsLastFragment());
                 if (!interrupted){//ie, if the remote server didn't hang up
-                  DataSet theCompleteFindResponse =
-                    PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
+                  bool useimplicit = true;
+                  TransferSyntaxSub ts1;
+                  ts1.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+                  if( mSecondaryConnection )
+                    {
+                    const TransferSyntaxSub & ts_ = mSecondaryConnection->GetCStoreTransferSyntax();
+                    if( strcmp(ts_.GetName(), ts1.GetName()) != 0)
+                      {
+                      useimplicit = false;
+                      }
+                    }
+                  DataSet theCompleteFindResponse;
+                  if( useimplicit )
+                    {
+                    inCallback->SetImplicitFlag(true);
+                    theCompleteFindResponse =
+                      PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
+                    }
+                  else
+                    {
+                    inCallback->SetImplicitFlag(false);
+                    theCompleteFindResponse =
+                      PresentationDataValue::ConcatenatePDVBlobsAsExplicit(PDUFactory::GetPDVs(theData));
+                    }
                   //note that it's the responsibility of the event to delete the PDU in theFindRSP
                   for (size_t i = 0; i < theData.size(); i++)
                     {
@@ -972,6 +1050,11 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                     //inWhichConnection->GetProtocol()->flush();
 
                     receivingData = false; //gotta get data on the other connection for a cmove
+
+                    // cleanup
+                    for (itor = theCStoreRSPPDU.begin(); itor < theCStoreRSPPDU.end(); itor++){
+                      delete *itor;
+                    }
                   }
                 }
               }
@@ -984,6 +1067,11 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
               waitingForEvent = false;
               receivingData = true; //to continue the loop to process the release
               break;
+            case eAABORTPDUReceivedOpen:
+              {
+              raisedEvent = eEventDoesNotExist;
+              theState = eStaDoesNotExist;
+              } // explicitely declare fall-through for some picky compiler
             case eAABORTRequest:
               waitingForEvent = false;
               inWhichConnection->StopProtocol();

@@ -18,6 +18,7 @@
 #include "gdcmTag.h"
 #include "gdcmVR.h"
 #include "gdcmElement.h"
+#include "gdcmMediaStorage.h"
 
 #include <set>
 #include <iterator>
@@ -245,18 +246,25 @@ public:
   std::istream &ReadUpToTag(std::istream &is, const Tag &t, std::set<Tag> const & skiptags);
 
   template <typename TDE, typename TSwap>
-  std::istream &ReadUpToTagWithLength(std::istream &is, const Tag &t, VL & length);
+  std::istream &ReadUpToTagWithLength(std::istream &is, const Tag &t, std::set<Tag> const & skiptags, VL & length);
 
   template <typename TDE, typename TSwap>
-  std::istream &ReadSelectedTags(std::istream &is, const std::set<Tag> & tags);
+  std::istream &ReadSelectedTags(std::istream &is, const std::set<Tag> & tags, bool readvalues = true);
   template <typename TDE, typename TSwap>
-  std::istream &ReadSelectedTagsWithLength(std::istream &is, const std::set<Tag> & tags, VL & length);
+  std::istream &ReadSelectedTagsWithLength(std::istream &is, const std::set<Tag> & tags, VL & length, bool readvalues = true);
+
+  template <typename TDE, typename TSwap>
+  std::istream &ReadSelectedPrivateTags(std::istream &is, const std::set<PrivateTag> & tags, bool readvalues = true);
+  template <typename TDE, typename TSwap>
+  std::istream &ReadSelectedPrivateTagsWithLength(std::istream &is, const std::set<PrivateTag> & tags, VL & length, bool readvalues = true);
 
   template <typename TDE, typename TSwap>
   std::ostream const &Write(std::ostream &os) const;
 
   template <typename TDE, typename TSwap>
   std::istream &ReadWithLength(std::istream &is, VL &length);
+
+  MediaStorage GetMediaStorage() const;
 
 protected:
   /* GetDEEnd is a Win32 only issue, one cannot use a dllexported

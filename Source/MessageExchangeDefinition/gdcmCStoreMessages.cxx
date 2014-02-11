@@ -64,7 +64,7 @@ const DataSet* inDataSet = &file.GetDataSet();
   MediaStorage mst;
   if (!mst.SetFromDataSet(*inDataSet))
     {
-    assert( 0 );
+    throw Exception("Missing MediaStorage");
     }
   UIDs uid;
   uid.SetFromUID( MediaStorage::GetMSString(mst) );
@@ -125,7 +125,7 @@ const DataSet* inDataSet = &file.GetDataSet();
   if( acpc == 0 )
     {
     // Technically we should fallback to something else. Anyway lets' give up
-    // and hope the use will convert the encapsulated stream to something else...
+    // and hope the user will convert the encapsulated stream to something else...
     throw Exception("Server side refuse our proposed PC.");
     }
 
@@ -244,13 +244,16 @@ static uint32_t messageid = 1;
     thePDV.SetPresentationContextID( prescontid );
 
     thePDV.SetBlob( sub );
-    if( remaining == maxpdu )
+    cur += remaining;
+
+    if( cur < end )
       thePDV.SetMessageHeader( 0 );
     else
+      {
+      assert( cur == end );
       thePDV.SetMessageHeader( 2 );
+      }
     thePDVs.push_back(thePDV);
-
-    cur += remaining;
     }
 }
 

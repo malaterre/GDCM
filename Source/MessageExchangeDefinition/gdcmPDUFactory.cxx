@@ -70,8 +70,11 @@ BasePDU* PDUFactory::ConstructPDU(uint8_t itemtype)
     break;
     //default is that the PDU remains null
     }
+  if( !thePDU )
+    {
+    gdcmErrorMacro( "Could not construct PDU for itemtype: " << (int)itemtype );
+    }
   return thePDU;
-
 }
 
 //determine which event was received by the PDU type

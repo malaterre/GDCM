@@ -16,6 +16,8 @@
  *
  *=========================================================================*/
 #include "gdcmULConnection.h"
+
+#include <algorithm> // std::find
 #include <socket++/echo.h>
 
 namespace gdcm
@@ -28,6 +30,10 @@ ULConnection::ULConnection(const ULConnectionInfo& inConnectInfo)
   mSocket = NULL;
   mEcho = NULL;
   mInfo = inConnectInfo;
+
+  TransferSyntaxSub ts1;
+  ts1.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+  SetCStoreTransferSyntax( ts1 );
 }
 
 ULConnection::~ULConnection()
@@ -172,14 +178,14 @@ bool ULConnection::InitializeConnection()
     }
   catch ( sockerr &err )
     {
-	(void)err;  //to avoid unreferenced variable warning on release
+    (void)err;  //to avoid unreferenced variable warning on release
     gdcmWarningMacro( "Unable to open connection with exception " << err.what()
       << std::endl );
     return false;
     }
   catch (std::exception& ex)
     {
-	(void)ex;  //to avoid unreferenced variable warning on release
+    (void)ex;  //to avoid unreferenced variable warning on release
     //unable to establish connection, so break off.
     gdcmWarningMacro( "Unable to open connection with exception " << ex.what()
       << std::endl );
@@ -190,66 +196,86 @@ bool ULConnection::InitializeConnection()
 
 bool ULConnection::InitializeIncomingConnection()
 {
-  try{
-    if (mEcho != NULL){
+  try
+    {
+    if (mEcho != NULL)
+      {
       delete mEcho;
       mEcho = NULL;
-    }
-    if (mSocket != NULL){
+      }
+    if (mSocket != NULL)
+      {
       delete mSocket;
       mSocket = NULL;
-    }
+      }
     sockinetbuf sin (sockbuf::sock_stream);
-    int val = 1;
     // http://hea-www.harvard.edu/~fine/Tech/addrinuse.html
+    int val = 1;
     sin.setopt( SO_REUSEADDR, &val, sizeof(val) );
     sin.bind( mInfo.GetCalledIPPort() );
     //int theRecvTimeout = 
-    sin.recvtimeout(1);//(int)GetTimer().GetTimeout());
+    sin.recvtimeout(60);//(int)GetTimer().GetTimeout());
     //int theSendTimeout = 
-    sin.sendtimeout(1);//(int)GetTimer().GetTimeout());
+    sin.sendtimeout(60);//(int)GetTimer().GetTimeout());
     sin.listen();
-    if (sin.is_readready(1, 0)){
+    //sin.debug( true );
+    if (sin.is_readready(60, 0))
+      {
       mSocket = new iosockinet(sin.accept());
-    } else {
+      }
+    else
+      {
+      gdcmDebugMacro( "Call to is_readready failed" );
       SetState(eStaDoesNotExist);
       return false; //no connection here, so have to initialize later.
-    }
+      }
     SetState(eSta2Open);
 
     /*
     if (mSocket != NULL){
-      delete mSocket;
+    delete mSocket;
     }
     mSocket = new protocol();
     sockinetaddr theAddy(GetConnectionInfo().GetCalledComputerName().c_str(),
-      GetConnectionInfo().GetCalledIPPort());
+    GetConnectionInfo().GetCalledIPPort());
     mSocket->rdbuf()->connect(theAddy);
     mSocket->rdbuf()->recvtimeout((int)GetTimer().GetTimeout());
     mSocket->rdbuf()->sendtimeout((int)GetTimer().GetTimeout());
-*/
-  } catch (sockerr& ex){//unable to establish connection, so break off.
-     (void)ex;  //to avoid unreferenced variable warning on release
-     gdcmErrorMacro("Unable to open connection with exception " << ex.what() << " and " << ex.operation() << std::endl);
-     return false;
-  } catch (std::exception& ex){//unable to establish connection, so break off.
-     (void)ex;  //to avoid unreferenced variable warning on release
-     gdcmErrorMacro("Unable to open connection with exception " << ex.what() << std::endl);
-     return false;
+     */
   }
+  catch (sockerr& ex)
+    {
+    //unable to establish connection, so break off.
+    (void)ex;  //to avoid unreferenced variable warning on release
+    gdcmErrorMacro("Unable to open connection with exception " << ex.what() <<
+      " and " << ex.operation() << " on port: " << mInfo.GetCalledIPPort() <<
+      std::endl);
+    return false;
+    }
+  catch (std::exception& ex)
+    {
+    //unable to establish connection, so break off.
+    (void)ex;  //to avoid unreferenced variable warning on release
+    gdcmErrorMacro("Unable to open connection with exception " << ex.what() << std::endl);
+    return false;
+    }
   return true;
 }
 
-void ULConnection::StopProtocol(){
-  if (mEcho != NULL){
+void ULConnection::StopProtocol()
+{
+  if (mEcho != NULL)
+    {
     delete mEcho;
     mEcho = NULL;
     SetState(eSta1Idle);
-  } else {
+    }
+  else
+    {
     //don't actually kill the connection, just kill the association.
     //this is just for a cstorescp initialized by a cmove
     SetState(eSta2Open);
-  }
+    }
 }
 
 const PresentationContextRQ *ULConnection::GetPresentationContextRQByID(uint8_t id) const
@@ -299,6 +325,26 @@ uint8_t ULConnection::GetPresentationContextIDFromPresentationContext(Presentati
 
   assert( ret );
   return ret;
+}
+
+void ULConnection::SetCStoreTransferSyntax( TransferSyntaxSub const & ts )
+{
+  cstorets = ts;
+}
+
+TransferSyntaxSub const & ULConnection::GetCStoreTransferSyntax( ) const
+{
+  TransferSyntaxSub ts1;
+  ts1.SetNameFromUID( UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
+
+  TransferSyntaxSub ts2;
+  ts2.SetNameFromUID( UIDs::ExplicitVRLittleEndian );
+
+  assert( strcmp(cstorets.GetName(), ts1.GetName()) == 0
+       || strcmp(cstorets.GetName(), ts2.GetName()) == 0
+  );
+
+  return cstorets;
 }
 
 } // end namespace network

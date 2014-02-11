@@ -34,32 +34,12 @@ namespace gdcm
     ValueLengthField.SetToUndefined();
   }
 
-#if !defined(GDCM_LEGACY_REMOVE)
-  SequenceOfItems* DataElement::GetSequenceOfItems() {
-    GDCM_LEGACY_REPLACED_BODY(DataElement::GetSequenceOfItems, "GDCM 2.2",
-                              DataElement::GetValueAsSQ);
-    SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
-    if(!sqi)
-      {
-      // Was the element loaded as a byte value ? Let's check:
-      assert( IsEmpty() );
-      }
-    return sqi;
-  }
-  const SequenceOfItems* DataElement::GetSequenceOfItems() const {
-    GDCM_LEGACY_REPLACED_BODY(DataElement::GetSequenceOfItems, "GDCM 2.2",
-                              DataElement::GetValueAsSQ);
-    const SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
-    if(!sqi)
-      {
-      // Was the element loaded as a byte value ? Let's check:
-      assert( IsEmpty() );
-      }
-    return sqi;
-  }
-#endif
   const SequenceOfFragments* DataElement::GetSequenceOfFragments() const {
     const SequenceOfFragments *sqf = dynamic_cast<SequenceOfFragments*>(ValueField.GetPointer());
+    return sqf;
+  }
+  SequenceOfFragments* DataElement::GetSequenceOfFragments() {
+    SequenceOfFragments *sqf = dynamic_cast<SequenceOfFragments*>(ValueField.GetPointer());
     return sqf;
   }
 
@@ -100,7 +80,7 @@ namespace gdcm
             {
             std::stringstream ss;
             ss.str( s );
-            sqi->Read<ImplicitDataElement,SwapperNoOp>( ss );
+            sqi->Read<ImplicitDataElement,SwapperNoOp>( ss, true );
             }
           catch(Exception &ex)
             {
@@ -116,7 +96,7 @@ namespace gdcm
             item.Read<SwapperNoOp>(ss);
             assert( item == itemPMSStart );
             ss.seekg(-4,std::ios::cur);
-            sqi->Read<ExplicitDataElement,SwapperDoOp>( ss );
+            sqi->Read<ExplicitDataElement,SwapperDoOp>( ss, true );
             gdcmWarningMacro(ex.what());
             (void)ex;  //to avoid unreferenced variable warning on release
             }
@@ -134,7 +114,7 @@ namespace gdcm
             {
             std::stringstream ss;
             ss.str( s );
-            sqi->Read<ImplicitDataElement,SwapperNoOp>( ss );
+            sqi->Read<ImplicitDataElement,SwapperNoOp>( ss, true );
             }
           catch ( Exception &ex0 )
             {
@@ -147,7 +127,7 @@ namespace gdcm
               {
               std::stringstream ss;
               ss.str(s);
-              sqi->Read<ExplicitDataElement,SwapperDoOp>( ss );
+              sqi->Read<ExplicitDataElement,SwapperDoOp>( ss, true );
               gdcmWarningMacro(ex0.what()); (void)ex0;
               }
             catch ( Exception &ex1 )
@@ -158,7 +138,7 @@ namespace gdcm
                 {
                 std::stringstream ss;
                 ss.str(s);
-                sqi->Read<ExplicitDataElement,SwapperNoOp>( ss );
+                sqi->Read<ExplicitDataElement,SwapperNoOp>( ss, true );
                 gdcmWarningMacro(ex1.what()); (void)ex1;
                 }
               catch ( Exception &ex2 )
@@ -195,5 +175,13 @@ namespace gdcm
 
     return 0;
     }
+
+void DataElement::SetValueFieldLength( VL vl, bool readvalues )
+{
+  if( readvalues )
+    ValueField->SetLength(vl); // perform realloc
+  else
+    ValueField->SetLengthOnly(vl); // do not perform realloc
+}
 
 } // end namespace gdcm

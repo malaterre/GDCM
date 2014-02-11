@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
       {
     case 0:
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {
@@ -394,6 +394,11 @@ int main(int argc, char *argv[])
       }
     }
 
+  if( !names->GetNumberOfValues() )
+    {
+    std::cerr << "Missing parameters on the command line" << std::endl;
+    return 1;
+    }
   const char *filename = names->GetValue( 0 ).c_str();
 
   gdcm::ImageHelper::SetForceRescaleInterceptSlope(forcerescale);
@@ -455,7 +460,7 @@ int main(int argc, char *argv[])
     {
     imgreader->SetFileLowerLeft( lowerleft );
     if( names->GetNumberOfValues() == 1 )
-    imgreader->SetFileName(names->GetValue(0) );
+      imgreader->SetFileName( names->GetValue(0) );
     else
     imgreader->SetFileNames(names);
     imgreader->Update();
@@ -826,6 +831,7 @@ int main(int argc, char *argv[])
       writer->SetShift( reader7->GetRescaleOffset() );
 //  vtkGetStringMacro(Modality);
       writer->GetMedicalImageProperties()->SetModality( reader7->GetModality() );
+    writer->SetFileLowerLeft( lowerleft );
 
 //  vtkGetStringMacro(DistanceUnits);
   // -> this one is insane, the default behavior is 'um' . What in the world is 'um' unit ?

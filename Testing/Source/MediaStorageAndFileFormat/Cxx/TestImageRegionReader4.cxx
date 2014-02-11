@@ -46,7 +46,7 @@ static int TestImageRegionRead(const char* filename, bool verbose = false)
   std::string outfilename = Testing::GetTempFilename( filename, subdir );
   outfilename += ".raw";
 
-  std::ofstream of( outfilename.c_str() );
+  std::ofstream of( outfilename.c_str(), std::ios::binary );
 
   int res = 0;
 

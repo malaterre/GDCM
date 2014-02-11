@@ -43,7 +43,7 @@ bool PNMCodec::CanCode(TransferSyntax const &) const
 
 bool PNMCodec::Write(const char *filename, const DataElement &out) const
 {
-  std::ofstream os(filename);
+  std::ofstream os(filename, std::ios::binary);
   const unsigned int *dims = this->GetDimensions();
   const PhotometricInterpretation &pi = this->GetPhotometricInterpretation();
   if( pi == PhotometricInterpretation::MONOCHROME2
@@ -58,10 +58,17 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
     }
   else
     {
-    gdcmWarningMacro( "PhotometricInterpretation unhandled: " << pi );
+    gdcmErrorMacro( "PhotometricInterpretation unhandled: " << pi );
     return false;
     }
   os << dims[0] << " " << dims[1] << "\n";
+
+  const unsigned int pc = this->GetPlanarConfiguration();
+  if( pc )
+    {
+    gdcmErrorMacro( "PlanarConfiguration unhandled: " << pc );
+    return false;
+    }
 
   const PixelFormat& pf = GetPixelFormat();
   switch(pf)
@@ -119,7 +126,7 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
 bool PNMCodec::Read(const char *filename, DataElement &out) const
 {
   size_t len = gdcm::System::FileSize(filename);
-  std::ifstream is(filename);
+  std::ifstream is(filename, std::ios::binary);
   std::string type, str;
   std::getline(is,type);
   gdcm::PhotometricInterpretation pi;
@@ -144,7 +151,7 @@ bool PNMCodec::Read(const char *filename, DataElement &out) const
   unsigned int maxval;
   is >> maxval;
   // some kind of empty line...
-  while( is.peek() == '\n' )
+  if( is.peek() == '\n' )
     {
     is.get();
     }
@@ -234,8 +241,9 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   is >> dims[0]; is >> dims[1];
   unsigned int maxval;
   is >> maxval;
+  // http://netpbm.sourceforge.net/doc/pgm.html
   // some kind of empty line...
-  while( is.peek() == '\n' )
+  if( is.peek() == '\n' )
     {
     is.get();
     }
@@ -246,6 +254,8 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   if( m * dims[0] * dims[1] != (size_t)len - pos )
     {
     std::cerr << "Problem computing length" << std::endl;
+    std::cerr << "Pos: " << len - pos << std::endl;
+    std::cerr << "expected: " << m * dims[0] * dims[1] << std::endl;
     return false;
     }
   gdcm::PixelFormat pf;
@@ -289,6 +299,11 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   SetDimensions( dims );
 
   return true;
+}
+
+ImageCodec * PNMCodec::Clone() const
+{
+  return NULL;
 }
 
 } // end namespace gdcm

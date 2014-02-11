@@ -29,15 +29,18 @@ class FileAnonymizerInternals;
  * This Anonymizer is a file-based Anonymizer. It requires a valid DICOM
  * file and will use the Value Length to skip over any information.
  *
- * It will not load the data into memory and should consume much less
- * memory than gdcm::Anonymizer
+ * It will not load the DICOM dataset taken from SetInputFileName() into memory
+ * and should consume much less memory than gdcm::Anonymizer.
+ *
+ * \warning: Each time you call Replace() with a value. This value will copied,
+ * and stored in memory.  The behavior is not ideal for extremely large data
+ * (larger than memory size). This class is really meant to take a large DICOM
+ * input file and then only changed some small attribute.
  *
  * caveats:
- * This class will NOT work with unordered attributes in a DICOM File.
- *
- * This class does neither recompute nor update the Group Length element.
- *
- * This class currently does not update the File Meta Information header
+ * \li This class will NOT work with unordered attributes in a DICOM File,
+ * \li This class does neither recompute nor update the Group Length element,
+ * \li This class currently does not update the File Meta Information header.
  */
 class GDCM_EXPORT FileAnonymizer : public Subject
 {
@@ -55,11 +58,11 @@ public:
   /// Replace tag with another value, if tag is not found it will be created:
   /// WARNING: this function can only execute if tag is a VRASCII
   /// WARNING: Do not ever try to write a value in a SQ Data Element !
-  void Replace( Tag const &t, const char *value );
+  void Replace( Tag const &t, const char *value_str );
 
   /// when the value contains \0, it is a good idea to specify the length. This function
   /// is required when dealing with VRBINARY tag
-  void Replace( Tag const &t, const char *value, VL const & vl );
+  void Replace( Tag const &t, const char *value_data, VL const & vl );
 
   /// Set input filename
   void SetInputFileName(const char *filename_native);

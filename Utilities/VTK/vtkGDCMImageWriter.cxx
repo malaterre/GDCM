@@ -727,7 +727,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   gdcm::ByteValue *bv = new gdcm::ByteValue(); // (char*)data->GetScalarPointer(), len );
   bv->SetLength( (uint32_t)len ); // allocate !
 
-//  std::ofstream of( "/tmp/bla.raw" );
+//  std::ofstream of( "/tmp/bla.raw", std::ios::binary );
 //  of.write( (char*)data->GetScalarPointer(), len);
 //  of.close();
   // re shuffle the line within ByteValue:

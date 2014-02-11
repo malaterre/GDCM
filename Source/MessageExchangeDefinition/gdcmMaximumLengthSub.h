@@ -43,7 +43,9 @@ public:
   size_t Size() const;
 
   uint32_t GetMaximumLength() const { return MaximumLength; }
-  void SetMaximumLength(uint32_t maximumlength) { MaximumLength = maximumlength; }
+  void SetMaximumLength(uint32_t maximumlength);
+
+  void Print(std::ostream &os) const;
 
 private:
   static const uint8_t ItemType;

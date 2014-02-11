@@ -167,7 +167,7 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
         res = 1;
         } 
 #if 0
-      std::ofstream debug("/tmp/dump.gray");
+      std::ofstream debug("/tmp/dump.gray",std::ios::binary);
       debug.write(finalBuffer, len);
       debug.close();
 #endif

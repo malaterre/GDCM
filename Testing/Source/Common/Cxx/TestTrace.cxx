@@ -65,5 +65,55 @@ int TestTrace(int, char *[])
     return 1;
     }
 #endif
+
+  // Test Debug/Warning/Error interface:
+  std::ostringstream debug;
+  std::ostringstream warning;
+  std::ostringstream error;
+
+  gdcm::Trace::SetDebugStream( debug );
+  gdcm::Trace::SetWarningStream( warning );
+  gdcm::Trace::SetErrorStream( error );
+
+  gdcmDebugMacro( "Debug1234" );
+  gdcmWarningMacro( "Warning1234" );
+  gdcmErrorMacro( "Error1234" );
+
+#ifndef NDEBUG
+  std::string result1 = debug.str();
+  std::string result2 = warning.str();
+  std::string result3 = error.str();
+  if( result1.find( "Debug1234" ) == std::string::npos )
+    {
+    std::cerr << result1 << std::endl;
+    return 1;
+    }
+  if( result2.find( "Warning1234" ) == std::string::npos )
+    {
+    std::cerr << result2 << std::endl;
+    return 1;
+    }
+  if( result3.find( "Error1234" ) == std::string::npos )
+    {
+    std::cerr << result3 << std::endl;
+    return 1;
+    }
+  if( result1.find( "Warning1234" ) != std::string::npos )
+    {
+    std::cerr << result1 << std::endl;
+    return 1;
+    }
+  if( result2.find( "Error1234" ) != std::string::npos )
+    {
+    std::cerr << result2 << std::endl;
+    return 1;
+    }
+  if( result3.find( "Debug1234" ) != std::string::npos )
+    {
+    std::cerr << result3 << std::endl;
+    return 1;
+    }
+#endif
+
   return 0;
 }

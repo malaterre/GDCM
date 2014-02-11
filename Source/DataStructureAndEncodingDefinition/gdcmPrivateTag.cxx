@@ -80,5 +80,15 @@ namespace gdcm
     else return t1 < t2;
     }
 
+DataElement PrivateTag::GetAsDataElement() const
+{
+  DataElement de;
+  de.SetTag( *this );
+  de.SetVR( VR::LO );
+  std::string copy = Owner;
+  if( copy.size() % 2 ) copy.push_back( ' ' );
+  de.SetByteValue( copy.c_str(), (uint32_t)copy.size() );
+  return de;
+}
 
 } // end namespace gdcm

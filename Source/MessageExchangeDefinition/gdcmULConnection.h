@@ -26,8 +26,6 @@
 #include "gdcmPresentationContextAC.h"
 #include "gdcmPresentationContext.h"
 
-#include "gdcmScanner.h" // FIXME
-
 class iosockinet;
 class echo;
 namespace gdcm{
@@ -68,8 +66,6 @@ class ULConnection
       //echo most closely matches what the DICOM standard describes as a network connection
       ARTIMTimer mTimer;
 
-      ULConnection(ULConnection& inConnection); //no copy construction allowed
-
       EStateID mCurrentState;
 
       std::vector<PresentationContextRQ> mPresentationContexts;
@@ -79,6 +75,12 @@ class ULConnection
       std::vector<PresentationContextAC> mAcceptedPresentationContexts;//these come back from the server
       //and tell us what can be sent over this connection
 
+      TransferSyntaxSub cstorets;
+
+      friend class ULActionAE6;
+      void SetCStoreTransferSyntax( TransferSyntaxSub const & ts );
+      friend class ULConnectionManager;
+      TransferSyntaxSub const & GetCStoreTransferSyntax( ) const;
     public:
 
       ULConnection(const ULConnectionInfo& inUserInformation);
@@ -127,6 +129,10 @@ class ULConnection
 
       /// used to establish scp connections
       bool InitializeIncomingConnection();
+private:
+  ULConnection(const ULConnection&);  // Not implemented.
+  void operator=(const ULConnection&);  // Not implemented.
+
     };
   }
 }

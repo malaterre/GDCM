@@ -39,15 +39,19 @@ namespace gdcm
     class GDCM_EXPORT ULConnectionCallback {
       bool mHandledDataSet;
     protected:
+      bool mImplicit;
       //inherited callbacks MUST call this function for the cmove loop to work properly
       void DataSetHandled() { mHandledDataSet = true; }
     public:
-      ULConnectionCallback() { mHandledDataSet = false; }
+      ULConnectionCallback():mHandledDataSet(false),mImplicit(true){}
       virtual ~ULConnectionCallback() {}; //placeholder for inherited objects
       virtual void HandleDataSet(const DataSet& inDataSet) = 0;
+      virtual void HandleResponse(const DataSet& inDataSet) = 0;
 
       bool DataSetHandles() const { return mHandledDataSet; }
       void ResetHandledDataSet() { mHandledDataSet = false; }
+
+      void SetImplicitFlag( const bool imp ) { mImplicit = imp; }
     };
   }
 }

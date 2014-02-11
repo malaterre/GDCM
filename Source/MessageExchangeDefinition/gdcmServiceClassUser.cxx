@@ -71,7 +71,10 @@ ServiceClassUser::~ServiceClassUser()
 
 void ServiceClassUser::SetPresentationContexts(std::vector<PresentationContext> const & pcs)
 {
-  Internals->mConnection->SetPresentationContexts(pcs);
+  if( Internals->mConnection )
+    {
+    Internals->mConnection->SetPresentationContexts(pcs);
+    }
 }
 
 bool ServiceClassUser::IsPresentationContextAccepted(const PresentationContext& pc) const
@@ -141,6 +144,17 @@ bool ServiceClassUser::StartAssociation()
 
   ULEvent theEvent(eAASSOCIATERequestLocalUser, NULL);
   network::EStateID theState = RunEventLoop(theEvent, Internals->mConnection, NULL, false);
+  if(theState != eSta6TransferReady)
+    {
+    std::vector<BasePDU*> const & thePDUs = theEvent.GetPDUs();
+    for( std::vector<BasePDU*>::const_iterator itor
+      = thePDUs.begin(); itor != thePDUs.end(); itor++)
+      {
+      assert(*itor);
+      if (*itor == NULL) continue; //can have a nulled pdu, apparently
+      (*itor)->Print(Trace::GetErrorStream());
+      }
+    }
 
   return theState == eSta6TransferReady;
 }
@@ -156,14 +170,14 @@ bool ServiceClassUser::StopAssociation()
   return theState == eSta1Idle;
 }
 
-void ServiceClassUser::SetTimeout(time_t t)
+void ServiceClassUser::SetTimeout(double t)
 {
-  Internals->timeout = (double)t;
+  Internals->timeout = t;
 }
 
-time_t ServiceClassUser::GetTimeout() const
+double ServiceClassUser::GetTimeout() const
 {
-  return (time_t)Internals->timeout;
+  return Internals->timeout;
 }
 
 void ServiceClassUser::SetCalledAETitle(const char *aetitle)
@@ -255,17 +269,49 @@ bool ServiceClassUser::SendStore(File const &file)
     return false;
     }
 
-  //const DataSet* inDataSet = &file.GetDataSet();
-  //DataSetEvent dse( inDataSet );
-  //this->InvokeEvent( dse );
-
   network::ULBasicCallback theCallback;
   network::ULConnectionCallback* inCallback = &theCallback;
 
   ULEvent theEvent(ePDATArequest, theDataPDU);
-  RunEventLoop(theEvent, mConnection, inCallback, false);
+  EStateID stateid = RunEventLoop(theEvent, mConnection, inCallback, false);
+  assert( stateid == eSta6TransferReady ); (void)stateid;
+  std::vector<DataSet> const &theDataSets = theCallback.GetResponses();
 
-  return true;
+  bool ret = true;
+  assert( theDataSets.size() == 1 );
+  const DataSet &ds = theDataSets[0];
+  assert ( ds.FindDataElement(Tag(0x0, 0x0900)) );
+  DataElement const & de = ds.GetDataElement(Tag(0x0,0x0900));
+  Attribute<0x0,0x0900> at;
+  at.SetFromDataElement( de );
+  // PS 3.4 - 2011
+  // Table W.4-1 C-STORE RESPONSE STATUS VALUES
+  const uint16_t theVal = at.GetValue();
+  switch( theVal )
+    {
+  case 0x0:
+    gdcmDebugMacro( "C-Store of file was successful." );
+    break;
+  case 0xA700:
+  case 0xA900:
+  case 0xC000:
+      {
+      // TODO: value from 0901 ?
+      gdcmErrorMacro( "C-Store of file was a failure." );
+      Attribute<0x0,0x0902> errormsg;
+      errormsg.SetFromDataSet( ds );
+      const char *themsg = errormsg.GetValue();
+      assert( themsg ); (void)themsg;
+      gdcmErrorMacro( "Response Status: " << themsg );
+      ret = false; // at least one file was not sent correctly
+      }
+    break;
+  default:
+    gdcmErrorMacro( "Unhandle error code: " << theVal );
+    gdcmAssertAlwaysMacro( 0 );
+    }
+
+  return ret;
 }
 
 bool ServiceClassUser::SendFind(const BaseRootQuery* query, std::vector<DataSet> &retDataSets)
@@ -279,9 +325,71 @@ bool ServiceClassUser::SendFind(const BaseRootQuery* query, std::vector<DataSet>
   RunEventLoop(theEvent, mConnection, inCallback, false);
 
   std::vector<DataSet> const & theDataSets = theCallback.GetDataSets();
-  retDataSets.insert( retDataSets.end(), theDataSets.begin(), theDataSets.end() );
+  std::vector<DataSet> const & theResponses = theCallback.GetResponses();
 
-  return true;
+  bool ret = false; // by default an error
+  assert( theResponses.size() >= 1 );
+  // take the last one:
+  const DataSet &ds = theResponses[ theResponses.size() - 1 ]; // FIXME
+  assert ( ds.FindDataElement(Tag(0x0, 0x0900)) );
+  Attribute<0x0,0x0900> at;
+  at.SetFromDataSet( ds );
+
+  //          Table CC.2.8-2
+  //C-FIND RESPONSE STATUS VALUES
+  const uint16_t theVal = at.GetValue();
+  switch( theVal )
+    {
+  case 0x0: // Matching is complete - No final Identifier is supplied.
+    gdcmDebugMacro( "C-Find was successful." );
+    // Append the new DataSet to the ret one:
+    retDataSets.insert( retDataSets.end(), theDataSets.begin(), theDataSets.end() );
+    ret = true;
+    break;
+  case 0xA900: // Identifier Does Not Match SOP Class
+      {
+      Attribute<0x0,0x0901> errormsg;
+      if( ds.FindDataElement( errormsg.GetTag() ) )
+        {
+        errormsg.SetFromDataSet( ds );
+        gdcm::Tag const & t = errormsg.GetValue();
+        gdcmErrorMacro( "Offending Element: " << t ); (void)t;
+        }
+      else
+        {
+        gdcmErrorMacro( "Offending Element ??" );
+        }
+      }
+    break;
+  case 0xA700: // Refused: Out of Resources
+      {
+      Attribute<0x0,0x0902> errormsg;
+      errormsg.SetFromDataSet( ds );
+      const char *themsg = errormsg.GetValue();
+      assert( themsg ); (void)themsg;
+      gdcmErrorMacro( "Response Status: [" << themsg << "]" );
+      }
+    break;
+  case 0x0122: // SOP Class not Supported
+    gdcmErrorMacro( "SOP Class not Supported" );
+    break;
+  case 0xfe00: // Matching terminated due to Cancel request
+    gdcmErrorMacro( "Matching terminated due to Cancel request" );
+    break;
+  default:
+      {
+      if( theVal >= 0xC000 && theVal <= 0xCFFF ) // Unable to process
+        {
+        Attribute<0x0,0x0902> errormsg;
+        errormsg.SetFromDataSet( ds );
+        const char *themsg = errormsg.GetValue();
+        assert( themsg ); (void)themsg;
+        gdcmErrorMacro( "Response Status: " << themsg );
+        }
+      }
+    }
+
+  return ret;
 }
 
 bool ServiceClassUser::SendMove(const BaseRootQuery* query, const char *outputdir)
@@ -461,6 +569,11 @@ EStateID ServiceClassUser::RunEventLoop(network::ULEvent& currentEvent,
               DataSet theRSP =
                 PresentationDataValue::ConcatenatePDVBlobs(
                   PDUFactory::GetPDVs(currentEvent.GetPDUs()));
+              if (inCallback)
+                {
+                inCallback->HandleResponse(theRSP);
+                }
+
               if (theRSP.FindDataElement(Tag(0x0, 0x0900))){
                 DataElement de = theRSP.GetDataElement(Tag(0x0,0x0900));
                 Attribute<0x0,0x0900> at;
@@ -533,12 +646,12 @@ EStateID ServiceClassUser::RunEventLoop(network::ULEvent& currentEvent,
                 if (theRSP.FindDataElement(Tag(0x0,0x0901))){
                   DataElement de = theRSP.GetDataElement(Tag(0x0,0x0901));
                   err1 = de.GetByteValue();
-                  gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl);
+                  gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl); (void)err1;
                 }
                 if (theRSP.FindDataElement(Tag(0x0,0x0902))){
                   DataElement de = theRSP.GetDataElement(Tag(0x0,0x0902));
                   err2 = de.GetByteValue();
-                  gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl);
+                  gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl); (void)err2;
                 }
               }
 
@@ -838,12 +951,12 @@ EStateID ServiceClassUser::RunMoveEventLoop(ULEvent& currentEvent, ULConnectionC
             if (theRSP.FindDataElement(Tag(0x0,0x0901))){
               DataElement de = theRSP.GetDataElement(Tag(0x0,0x0901));
               err1 = de.GetByteValue();
-              gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl);
+              gdcmErrorMacro( " Tag 0x0,0x901 reported as " << *err1 << std::endl); (void)err1;
             }
             if (theRSP.FindDataElement(Tag(0x0,0x0902))){
               DataElement de = theRSP.GetDataElement(Tag(0x0,0x0902));
               err2 = de.GetByteValue();
-              gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl);
+              gdcmErrorMacro( " Tag 0x0,0x902 reported as " << *err2 << std::endl); (void)err2;
             }
           }
           receivingData = false;

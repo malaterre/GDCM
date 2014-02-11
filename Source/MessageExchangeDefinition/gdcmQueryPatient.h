@@ -32,8 +32,9 @@ public:
   std::vector<Tag> GetRequiredTags(const ERootType& inRootType) const;
   std::vector<Tag> GetUniqueTags(const ERootType& inRootType) const;
   std::vector<Tag> GetOptionalTags(const ERootType& inRootType) const;
+  std::vector<Tag> GetHierachicalSearchTags(const ERootType& inRootType) const;
 
-  std::string GetName() const { return "Patient"; }
+  const char * GetName() const;
   DataElement GetQueryLevel() const;
 };
 

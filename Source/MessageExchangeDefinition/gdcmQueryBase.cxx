@@ -12,6 +12,7 @@
 
 =========================================================================*/
 #include "gdcmQueryBase.h"
+#include "gdcmBaseRootQuery.h"
 
 namespace gdcm
 {
@@ -22,6 +23,14 @@ std::vector<Tag> QueryBase::GetAllTags(const ERootType& inRootType) const
   std::vector<Tag> theNext = GetUniqueTags(inRootType);
   theReturn.insert(theReturn.end(), theNext.begin(), theNext.end());
   theNext = GetOptionalTags(inRootType);
+  theReturn.insert(theReturn.end(), theNext.begin(), theNext.end());
+  return theReturn;
+}
+
+std::vector<Tag> QueryBase::GetAllRequiredTags(const ERootType& inRootType) const
+{
+  std::vector<Tag> theReturn = GetRequiredTags(inRootType);
+  std::vector<Tag> theNext = GetUniqueTags(inRootType);
   theReturn.insert(theReturn.end(), theNext.begin(), theNext.end());
   return theReturn;
 }

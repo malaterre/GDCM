@@ -154,7 +154,7 @@ struct param
   int32_t type;
   uint32_t dim;
   uint32_t v4;
-  int32_t offset;
+  /*int32_t*/ std::streamoff offset;
   param_type gettype() const { return (param_type)type; }
   uint32_t getdim() const { return dim; }
   void read( std::istream & is )
@@ -171,7 +171,7 @@ struct param
     is.read( (char*)&dim, sizeof( dim ) );
     is.read( (char*)&v4, sizeof( v4 ) );
     //assert( v4 == 0 ); // always 0 ? sometimes not...
-    const uint32_t cur = is.tellg();
+    const std::streamoff cur = is.tellg();
     is.read( (char*)&offset, sizeof( offset ) );
     offset += cur;
     }
@@ -329,7 +329,7 @@ Wotsit ?
     out2.close();
 #endif
 
-    int dlen = gdcm::Base64::GetDecodeLength(b64.c_str(), b64.size() );
+    const size_t dlen = gdcm::Base64::GetDecodeLength(b64.c_str(), b64.size() );
 
     std::string decoded;
     decoded.resize( dlen );

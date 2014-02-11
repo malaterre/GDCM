@@ -77,6 +77,8 @@ public:
   /// \warning DataSet will be read as Implicit Little Endian TS
   static DataSet ConcatenatePDVBlobs(const std::vector<PresentationDataValue>& inPDVs);
 
+  static DataSet ConcatenatePDVBlobsAsExplicit(const std::vector<PresentationDataValue>& inPDVs);
+
 private:
   uint32_t ItemLength;
   uint8_t PresentationContextID;

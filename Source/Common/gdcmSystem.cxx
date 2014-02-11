@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string.h> // strspn
 #include <assert.h>
 #include <errno.h>
 #include <sys/stat.h>
@@ -464,6 +464,7 @@ const char *System::GetCurrentProcessFileName()
     return buf;
     }
 #elif defined(__APPLE__)
+  //  _NSGetExecutablePath()
   static char buf[PATH_MAX];
   Boolean success = false;
   CFURLRef pathURL = CFBundleCopyExecutableURL(CFBundleGetMainBundle());
@@ -476,13 +477,31 @@ const char *System::GetCurrentProcessFileName()
     {
     return buf;
     }
-#else
+#elif defined (__SVR4) && defined (__sun)
+  // solaris
+  const char *ret = getexecname();
+  if( ret ) return ret;
+//#elif defined(__NetBSD__)
+//  static char path[PATH_MAX];
+//  if ( readlink ("/proc/curproc/exe", path, sizeof(path)) > 0)
+//    {
+//    return path;
+//    }
+#elif defined(__DragonFly__) || defined(__OpenBSD__) || defined(__FreeBSD__)
+  static char path[PATH_MAX];
+  if ( readlink ("/proc/curproc/file", path, sizeof(path)) > 0)
+    {
+    return path;
+    }
+#elif defined(__linux__)
   static char path[PATH_MAX];
   if ( readlink ("/proc/self/exe", path, sizeof(path)) > 0) // Technically 0 is not an error, but that would mean
                                                             // 0 byte were copied ... thus considered it as an error
     {
     return path;
     }
+#else
+  gdcmErrorMacro( "missing implementation" );
 #endif
    return 0;
 }
@@ -759,15 +778,24 @@ const char *System::GetTimezoneOffsetFromUTC()
 bool System::FormatDateTime(char date[22], time_t timep, long milliseconds)
 {
   // \precondition
-  if( !(milliseconds >= 0 && milliseconds < 1000000) ) return false;
+  if( !(milliseconds >= 0 && milliseconds < 1000000) )
+    {
+    return false;
+    }
 
   // YYYYMMDDHHMMSS.FFFFFF&ZZXX
-  if(!date) return false;
+  if(!date)
+    {
+    return false;
+    }
   const size_t maxsize = 40;
   char tmp[maxsize];
   // Obtain the time of day, and convert it to a tm struct.
   struct tm *ptm = localtime (&timep);
-  if(!ptm) return false;
+  if(!ptm)
+    {
+    return false;
+    }
   // Format the date and time, down to a single second.
   size_t ret = strftime (tmp, sizeof (tmp), "%Y%m%d%H%M%S", ptm);
   assert( ret == 14 );
@@ -778,10 +806,9 @@ bool System::FormatDateTime(char date[22], time_t timep, long milliseconds)
 
   // Add milliseconds
   const size_t maxsizall = 22;
-  //char tmpAll[maxsizall];
-  int ret2 = snprintf(date,maxsizall,"%s.%06ld",tmp,milliseconds);
-  assert( ret2 >= 0 );
-  if( (unsigned int)ret2 >= maxsizall )
+  const int ret2 = snprintf(date,maxsizall,"%s.%06ld",tmp,milliseconds);
+  if( ret2 < 0 ) return false;
+  if( (size_t)ret2 >= maxsizall )
     {
     return false;
     }
@@ -914,40 +941,56 @@ bool System::GetHostName(char name[255])
   return false;
 }
 
-char *System::StrTokR(char *ptr, const char *sep, char **end)
+char *System::StrTokR(char *str, const char *delim, char **nextp)
 {
 #if 1
-  if (ptr == NULL)
+  // http://groups.google.com/group/comp.lang.c/msg/2ab1ecbb86646684
+  // PD -> http://groups.google.com/group/comp.lang.c/msg/7c7b39328fefab9c
+  char *ret;
+
+  if (str == NULL)
     {
-    ptr = *end;
+    str = *nextp;
     }
 
-  /* search string for set of char: strspn */
-  while (*ptr && strchr(sep, *ptr))
+  str += strspn(str, delim);
+
+  if (*str == '\0')
     {
-    ++ptr;
+    return NULL;
     }
 
-  if (*ptr == '\0') return NULL;
+  ret = str;
 
-  char *token = ptr;
-  *end = token + 1;
+  str += strcspn(str, delim);
 
-  char *pend = *end;
-  while (*pend && !strchr(sep, *pend))
+  if (*str)
     {
-    ++pend;
+    *str++ = '\0';
     }
 
-  if (*pend)
-    {
-    *pend = '\0';
-    ++pend;
-    }
+  *nextp = str;
 
-  return token;
+  return ret;
 #else
-  return strtok_r(ptr,sep,end);
+  return strtok_r(str,delim,nextp);
+#endif
+}
+
+char *System::StrSep(char **sp, const char *sep)
+{
+  // http://unixpapa.com/incnote/string.html
+  // http://stackoverflow.com/questions/8512958/is-there-a-windows-variant-of-strsep
+#if 1
+  char *p, *s;
+  if (sp == NULL || *sp == NULL || **sp == '\0') return NULL;
+  s = *sp;
+  p = s + strcspn(s, sep);
+  if (*p != '\0') *p++ = '\0';
+  *sp = p;
+  return s;
+#else
+  return strsep(sp, sep);
 #endif
 }
 

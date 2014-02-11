@@ -48,7 +48,7 @@ static const char *TSStrings[] = {
   "1.2.840.10008.1.2.4.55",
   // JPEG Lossless, Non-Hierarchical (Process 14)
   "1.2.840.10008.1.2.4.57",
-  // JPEG Lossless, Hierarchical, First-Order Prediction (Process 14,
+  // JPEG Lossless, Non-Hierarchical, First-Order Prediction (Process 14,
   //                                                       [Selection Value 1])
   "1.2.840.10008.1.2.4.70",
   // JPEG-LS Lossless Image Compression
@@ -59,6 +59,10 @@ static const char *TSStrings[] = {
   "1.2.840.10008.1.2.4.90",
   // JPEG 2000
   "1.2.840.10008.1.2.4.91",
+  // JPEG 2000 Part 2 Lossless
+  "1.2.840.10008.1.2.4.92",
+  // JPEG 2000 Part 2
+  "1.2.840.10008.1.2.4.93",
   // RLE Lossless
   "1.2.840.10008.1.2.5",
   // MPEG2 Main Profile @ Main Level
@@ -148,6 +152,7 @@ bool TransferSyntax::IsLossy() const
     TSField == JPEGFullProgressionProcess10_12 ||
     TSField == JPEGLSNearLossless ||
     TSField == JPEG2000 ||
+    TSField == JPEG2000Part2 ||
     TSField == JPIPReferenced ||
     TSField == MPEG2MainProfile
   )
@@ -174,6 +179,7 @@ bool TransferSyntax::CanStoreLossy() const
     TSField == JPEGLosslessProcess14_1 ||
     TSField == JPEGLSLossless ||
     TSField == JPEG2000Lossless ||
+    TSField == JPEG2000Part2Lossless ||
     TSField == RLELossless
   )
     {
@@ -192,6 +198,7 @@ bool TransferSyntax::IsLossless() const
     TSField == JPEGFullProgressionProcess10_12 ||
     // TSField == JPEGLSNearLossless || -> can be lossy & lossless
     // TSField == JPEG2000 || -> can be lossy & lossless
+    // TSField == JPEG2000Part2 || -> can be lossy & lossless
     // TSField == JPIPReferenced || -> can be lossy & lossless
     TSField == MPEG2MainProfile
   )
@@ -272,6 +279,8 @@ bool TransferSyntax::IsEncapsulated() const
   case JPEGLSNearLossless:
   case JPEG2000Lossless:
   case JPEG2000:
+  case JPEG2000Part2Lossless:
+  case JPEG2000Part2:
   case JPIPReferenced:
   case RLELossless:
   case MPEG2MainProfile:

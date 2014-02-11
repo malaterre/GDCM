@@ -153,7 +153,7 @@ DataSet PresentationDataValue::ConcatenatePDVBlobs(const std::vector<Presentatio
   std::string theEntireBuffer;//could do it as streams.  but apparently, std isn't letting me
   std::vector<PresentationDataValue>::const_iterator itor;
   for (itor = inPDVs.begin(); itor < inPDVs.end(); itor++){
-    std::string theBlobString = itor->GetBlob();
+    const std::string & theBlobString = itor->GetBlob();
     theEntireBuffer.insert(theEntireBuffer.end(), theBlobString.begin(), theBlobString.end());
   }
 
@@ -163,7 +163,10 @@ DataSet PresentationDataValue::ConcatenatePDVBlobs(const std::vector<Presentatio
   ss.str( theEntireBuffer );
 
 #if 0
-  std::ofstream d( "/tmp/debug" );
+  char fn[512];
+  static int i = 0;
+  sprintf( fn, "/tmp/debugimp%d", i++ );
+  std::ofstream d( fn, std::ios::binary );
   d.write( theEntireBuffer.c_str(), theEntireBuffer.size() );
   d.close();
 #endif
@@ -171,6 +174,48 @@ DataSet PresentationDataValue::ConcatenatePDVBlobs(const std::vector<Presentatio
   outDataSet.Read<ImplicitDataElement,SwapperNoOp>( ss );
   //outDataSet.Read<ExplicitDataElement,SwapperNoOp>( ss );
 
+
+  return outDataSet;
+}
+
+DataSet PresentationDataValue::ConcatenatePDVBlobsAsExplicit(const std::vector<PresentationDataValue>& inPDVs)
+{
+#if 0
+  std::stringstream ss;
+  std::vector<PresentationDataValue>::const_iterator itor;
+  for (itor = inPDVs.begin(); itor < inPDVs.end(); itor++)
+    {
+    const std::string & theBlobString = itor->GetBlob();
+    ss.write( &theBlobString[0], theBlobString.size() );
+    }
+#else
+  std::string theEntireBuffer;//could do it as streams.  but apparently, std isn't letting me
+  std::vector<PresentationDataValue>::const_iterator itor;
+  for (itor = inPDVs.begin(); itor < inPDVs.end(); itor++){
+    const std::string & theBlobString = itor->GetBlob();
+    theEntireBuffer.insert(theEntireBuffer.end(), theBlobString.begin(), theBlobString.end());
+  }
+
+
+  std::stringstream ss;
+  ss.str( theEntireBuffer );
+
+#endif
+
+#if 0
+  char fn[512];
+  static int i = 0;
+  sprintf( fn, "/tmp/debugex%d", i++ );
+  std::ofstream d( fn, std::ios::binary );
+  d.write( theEntireBuffer.c_str(), theEntireBuffer.size() );
+  d.close();
+#endif
+
+  DataSet outDataSet;
+  //outDataSet.Read<ExplicitDataElement,SwapperNoOp>( ss );
+  VL length = (uint32_t)theEntireBuffer.size();
+  //gdcm::Trace::DebugOn();
+  outDataSet.ReadWithLength<ExplicitDataElement,SwapperNoOp>( ss, length );
 
   return outDataSet;
 }

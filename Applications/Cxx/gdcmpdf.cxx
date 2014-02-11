@@ -19,10 +19,6 @@
 #include "gdcmAttribute.h"
 #include "gdcmSystem.h"
 
-#ifdef GDCM_USE_SYSTEM_PODOFO
-#include <podofo/podofo.h>
-#endif
-
 #ifdef GDCM_USE_SYSTEM_POPPLER
 #include <poppler/poppler-config.h>
 #include <poppler/PDFDoc.h>
@@ -38,13 +34,13 @@
 #include <getopt.h>
 #include <string.h>
 
-std::string getInfoDate(Dict *infoDict, const char *key)
+static std::string getInfoDate(Dict *infoDict, const char *key)
 {
   Object obj;
   char *s;
   int year, mon, day, hour, min, sec, n;
   struct tm tmStruct;
-  char buf[256];
+  //char buf[256];
   std::string out;
 
   if (infoDict->lookup((char*)key, &obj)->isString())
@@ -99,11 +95,11 @@ std::string getInfoDate(Dict *infoDict, const char *key)
   return out;
 }
 
-std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap)
+static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap, GBool & unicode)
 {
   Object obj;
   GooString *s1;
-  GBool isUnicode;
+  GBool isUnicode = gFalse;
   Unicode u;
   char buf[8];
   int i, n;
@@ -142,17 +138,18 @@ std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap)
       }
     }
   obj.free();
+  unicode = unicode || isUnicode;
   return out;
 }
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmpdf: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmpdf [OPTION]... FILE..." << std::endl;
@@ -217,7 +214,7 @@ int main (int argc, char *argv[])
     case 0:
     case '-':
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {
@@ -386,17 +383,18 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
   std::string creationdate;
   std::string moddate;
 
+  GBool isUnicode = gFalse;
   if (doc->isOk())
     {
     doc->getDocInfo(&info);
     if (info.isDict())
       {
-      title        = getInfoString(info.getDict(), "Title",    uMap);
-      subject      = getInfoString(info.getDict(), "Subject",  uMap);
-      keywords     = getInfoString(info.getDict(), "Keywords", uMap);
-      author       = getInfoString(info.getDict(), "Author",   uMap);
-      creator      = getInfoString(info.getDict(), "Creator",  uMap);
-      producer     = getInfoString(info.getDict(), "Producer", uMap);
+      title        = getInfoString(info.getDict(), "Title",    uMap, isUnicode);
+      subject      = getInfoString(info.getDict(), "Subject",  uMap, isUnicode);
+      keywords     = getInfoString(info.getDict(), "Keywords", uMap, isUnicode);
+      author       = getInfoString(info.getDict(), "Author",   uMap, isUnicode);
+      creator      = getInfoString(info.getDict(), "Creator",  uMap, isUnicode);
+      producer     = getInfoString(info.getDict(), "Producer", uMap, isUnicode);
       creationdate = getInfoDate(  info.getDict(), "CreationDate"  );
       moddate      = getInfoDate(  info.getDict(), "ModDate"       );
       info.free();
@@ -404,6 +402,8 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
     }
 
   gdcm::Writer writer;
+  gdcm::DataSet &ds = writer.GetFile().GetDataSet();
+{
   gdcm::DataElement de( gdcm::Tag(0x42,0x11) );
   de.SetVR( gdcm::VR::OB );
   std::ifstream is;
@@ -415,14 +415,14 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
   is.read (buffer,length);
   is.close();
 
-  de.SetByteValue( buffer, length );
+  de.SetByteValue( buffer, (uint32_t)length );
   delete[] buffer;
 
   gdcm::FileMetaInformation &fmi = writer.GetFile().GetHeader();
   gdcm::TransferSyntax ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
   fmi.SetDataSetTransferSyntax( ts );
-  gdcm::DataSet &ds = writer.GetFile().GetDataSet();
   ds.Insert( de );
+}
 
 
 {
@@ -439,6 +439,7 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
     }
   // StudyTime
   const size_t timelen = 6 + 1 + 6; // time + milliseconds
+  (void)timelen;
     {
     gdcm::Attribute<0x8,0x30> at;
     at.SetValue( date+datelen );
@@ -456,7 +457,7 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
 {
     const char *sop = uid.Generate();
     gdcm::DataElement de( gdcm::Tag(0x0008,0x0018) );
-    de.SetByteValue( sop, strlen(sop) );
+    de.SetByteValue( sop, (uint32_t)strlen(sop) );
     de.SetVR( gdcm::Attribute<0x0008, 0x0018>::GetVR() );
     ds.Insert( de );
 }
@@ -465,7 +466,7 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
     {
     gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
     const char* msstr = gdcm::MediaStorage::GetMSString(ms);
-    de.SetByteValue( msstr, strlen(msstr) );
+    de.SetByteValue( msstr, (uint32_t)strlen(msstr) );
     de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
     ds.Insert( de );
     }
@@ -474,13 +475,17 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
 
   char date[22];
   const size_t datelen = 8;
-  bool b = gdcm::System::GetCurrentDateTime(date);
+  bool b = gdcm::System::GetCurrentDateTime(date); (void)b;
   //std::cout << date << std::endl;
 
 {
-  gdcm::Attribute<0x0008, 0x005> at;
-  const char s[]="ISO_IR 100";
+  gdcm::Attribute<0x0008, 0x0005> at;
+  const char s[] = "ISO_IR 100";
+  const char s_unicode[] = "ISO_IR 192";
   at.SetNumberOfValues( 1 );
+  if( isUnicode )
+  at.SetValue( s_unicode );
+  else
   at.SetValue( s );
   ds.Insert( at.GetAsDataElement() );
 }
@@ -514,9 +519,9 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
 {
   gdcm::Attribute<0x0008, 0x002a> at;
   time_t studydatetime = gdcm::System::FileTime( filename.c_str() );
-  char date[22];
-  gdcm::System::FormatDateTime(date, studydatetime);
-  at.SetValue( date );
+  char date2[22];
+  gdcm::System::FormatDateTime(date2, studydatetime);
+  at.SetValue( date2 );
   ds.Insert( at.GetAsDataElement() );
 }
 //(0008,0030) TM (no value available)                     #   0, 0 StudyTime

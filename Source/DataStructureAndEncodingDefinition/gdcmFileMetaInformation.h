@@ -42,7 +42,6 @@ class GDCM_EXPORT FileMetaInformation : public DataSet
 public:
   // FIXME: TransferSyntax::TS_END -> TransferSyntax::ImplicitDataElement
   FileMetaInformation():DataSetTS(TransferSyntax::TS_END),MetaInformationTS(TransferSyntax::Unknown),DataSetMS(MediaStorage::MS_END) {}
- ~FileMetaInformation() { };
 
   friend std::ostream &operator<<(std::ostream &_os, const FileMetaInformation &_val);
 
@@ -52,6 +51,7 @@ public:
   void SetDataSetTransferSyntax(const TransferSyntax &ts);
   const TransferSyntax &GetDataSetTransferSyntax() const { return DataSetTS; }
   MediaStorage GetMediaStorage() const;
+  std::string GetMediaStorageAsString() const;
 
   // FIXME: no virtual function means: duplicate code...
   void Insert(const DataElement& de) {

@@ -97,7 +97,7 @@ int TestWrite(const char *subdir, const char* filename, bool recursing, bool ver
        //assert( size1 == size2 ); // cannot deal with implicit VR meta data header
        return 0;
        }
-      std::cerr << "incompatible ref:" << ref << " vs " << outdigest << " for file: " << filename << " & " << outfilename << std::endl;
+      std::cerr << "incompatible ref: " << ref << " vs " << outdigest << " for file: " << filename << " & " << outfilename << std::endl;
       return 1; // ref exist but does not match, how is that possible ?
      }
    //if( !ref )

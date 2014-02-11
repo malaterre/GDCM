@@ -17,7 +17,7 @@ set TMPDIR=%TMP%\gdcm_release
 
 set major=2
 set minor=2
-set patch=1
+set patch=5
 set version="%major%.%minor%.%patch%"
 
 @rem use VCExpress 2008 for compatibilities with OpenSSL binaries
@@ -28,10 +28,18 @@ SET LIB=C:\Program Files\Microsoft SDKs\Windows\v6.0A\Lib;%LIB%
 SET INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v6.0A\Include;%INCLUDE%
 
 @rem GDCM deps:
-SET PATH=%PATH%;%ProgramFiles(x86)%\Git\bin
-SET PATH=%PATH%;%ProgramFiles(x86)%\Swig\swigwin-2.0.8
-SET PATH=%PATH%;%ProgramFiles(x86)%\Java\jdk1.6.0_34\bin
 
+@rem IF "%ProgramFiles(x86)%"=="" (
+SET PATH=%PATH%;%ProgramFiles%\Git\bin
+SET PATH=%PATH%;%ProgramFiles%\Swig\swigwin-2.0.7
+SET PATH=%PATH%;%ProgramFiles%\Java\jdk1.6.0_25\bin
+@rem ) ELSE (
+@rem SET PATH=%PATH%;%ProgramFiles(x86)%\Git\bin
+@rem SET PATH=%PATH%;%ProgramFiles(x86)%\Swig\swigwin-2.0.8
+@rem SET PATH=%PATH%;%ProgramFiles(x86)%\Java\jdk1.6.0_34\bin
+@rem )
+ECHO %PATH%
+PAUSE
 @rem needed to get RC.EXE:
 SET PATH=C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin;%PATH%
 

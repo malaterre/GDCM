@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -xe
 
 ############################################################################
 #
@@ -20,7 +20,9 @@
 # $ process.sh agfa.tpl
 
 # remove empty lines
-sed '/^\s*$/d' $1 > /tmp/clean.tpl
+sed '/^\s*$/d' $1 > /tmp/clean2.tpl
+# remove comments:
+sed '/^#/d' /tmp/clean2.tpl > /tmp/clean.tpl
 # convert to xml
 sed 's/^.*$/<d3t tag="&\/>/' /tmp/clean.tpl > /tmp/dummy.xml
 # make sure to close quotes

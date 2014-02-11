@@ -16,19 +16,31 @@
  *
  *=========================================================================*/
 
-
 #include "gdcmULBasicCallback.h"
 
 namespace gdcm {
-  namespace network {
+namespace network {
+
 void ULBasicCallback::HandleDataSet(const DataSet& inDataSet)
 {
   mDataSets.push_back(inDataSet);
   DataSetHandled();
 }
 
-std::vector<DataSet> const & ULBasicCallback::GetDataSets() const {
+std::vector<DataSet> const & ULBasicCallback::GetDataSets() const
+{
   return mDataSets;
 }
-  }
+
+void ULBasicCallback::HandleResponse(const DataSet& inDataSet)
+{
+  mResponses.push_back(inDataSet);
 }
+
+std::vector<DataSet> const & ULBasicCallback::GetResponses() const
+{
+  return mResponses;
+}
+
+} // end namespace network
+} // end namespace gdcm

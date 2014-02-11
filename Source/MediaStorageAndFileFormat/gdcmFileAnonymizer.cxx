@@ -84,26 +84,32 @@ void FileAnonymizer::Remove( Tag const &t )
 
 void FileAnonymizer::Replace( Tag const &t, const char *value )
 {
-  if( t.GetGroup() >= 0x0008 )
+  if( value && t.GetGroup() >= 0x0008 )
     {
     Internals->ReplaceTags.insert(
-      std::make_pair<Tag,std::string>( t, value) );
+      std::make_pair( t, value) );
     }
 }
 
 void FileAnonymizer::Replace( Tag const &t, const char *value, VL const & vl )
 {
-  Internals->ReplaceTags.insert( std::make_pair<Tag,std::string>( t, std::string(value,vl) ) );
+  if( value && t.GetGroup() >= 0x0008 )
+    {
+    Internals->ReplaceTags.insert(
+      std::make_pair( t, std::string(value, vl) ) );
+    }
 }
 
 void FileAnonymizer::SetInputFileName(const char *filename_native)
 {
-  Internals->InputFilename = filename_native;
+  if( filename_native )
+    Internals->InputFilename = filename_native;
 }
 
 void FileAnonymizer::SetOutputFileName(const char *filename_native)
 {
-  Internals->OutputFilename = filename_native;
+  if( filename_native )
+    Internals->OutputFilename = filename_native;
 }
 
 bool FileAnonymizer::ComputeReplaceTagPosition()
@@ -169,10 +175,10 @@ bool FileAnonymizer::ComputeReplaceTagPosition()
         pe.BeginPos -= de.GetVL();
         pe.BeginPos -= 2 * de.GetVR().GetLength(); // (VR+) VL
         pe.BeginPos -= 4; // Tag
-        assert( pe.EndPos ==
+        assert( (int)pe.EndPos ==
           (int)pe.BeginPos + (int)de.GetVL() + 2 * de.GetVR().GetLength() + 4 );
         }
-      pe.DE.SetByteValue( valuereplace.c_str(), valuereplace.size() );
+      pe.DE.SetByteValue( valuereplace.c_str(), (uint32_t)valuereplace.size() );
       assert( pe.DE.GetVL() == valuereplace.size() );
       }
     else
@@ -180,7 +186,7 @@ bool FileAnonymizer::ComputeReplaceTagPosition()
       // We need to insert an Empty Data Element !
       //FIXME, for some public element we could do something nicer than VR:UN
       pe.DE.SetVR( VR::UN );
-      pe.DE.SetByteValue( valuereplace.c_str(), valuereplace.size() );
+      pe.DE.SetByteValue( valuereplace.c_str(), (uint32_t)valuereplace.size() );
       assert( pe.DE.GetVL() == valuereplace.size() );
       }
 
@@ -255,7 +261,7 @@ bool FileAnonymizer::ComputeRemoveTagPosition()
         pe.BeginPos -= de.GetVL();
         pe.BeginPos -= 2 * de.GetVR().GetLength(); // (VR+) VL
         pe.BeginPos -= 4; // Tag
-        assert( pe.EndPos ==
+        assert( (int)pe.EndPos ==
           (int)pe.BeginPos + (int)de.GetVL() + 2 * de.GetVR().GetLength() + 4 );
         }
       Internals->PositionEmptyArray.push_back( pe );
@@ -348,7 +354,7 @@ bool FileAnonymizer::ComputeEmptyTagPosition()
         else
           {
           pe.BeginPos -= de.GetVR().GetLength();
-          assert( pe.EndPos ==
+          assert( (int)pe.EndPos ==
             (int)pe.BeginPos + (int)de.GetVL() + de.GetVR().GetLength() );
           }
         }
@@ -417,9 +423,9 @@ bool FileAnonymizer::Write()
       std::streampos end = pe.BeginPos;
 
       // FIXME: most efficient way to copy chunk of file in c++ ?
-      for( int i = prev; i < end; ++i)
+      for( int i = (int)prev; i < end; ++i)
         {
-        of.put( is.get() );
+        of.put( (char)is.get() );
         }
       if( action == EMPTY )
         {
@@ -467,9 +473,9 @@ bool FileAnonymizer::Write()
       std::streampos end = pe.BeginPos;
 
       // FIXME: most efficient way to copy chunk of file in c++ ?
-      for( int i = prev; i < end; ++i)
+      for( int i = (int)prev; i < end; ++i)
         {
-        of.put( is.get() );
+        of.put( (char)is.get() );
         }
       if( ts.GetSwapCode() == SwapCode::BigEndian )
         {

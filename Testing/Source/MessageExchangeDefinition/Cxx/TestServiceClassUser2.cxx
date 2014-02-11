@@ -51,6 +51,9 @@ int TestServiceClassUser2(int argc, char *argv[])
   scu.SetCalledAETitle( call.c_str() );
   scu.SetAETitle( aetitle.c_str() );
 
+  std::ostringstream error_log;
+  gdcm::Trace::SetErrorStream( error_log );
+
   if( !scu.InitializeConnection() )
     {
     return 1;
@@ -148,7 +151,7 @@ int TestServiceClassUser2(int argc, char *argv[])
 
   gdcm::SmartPointer<gdcm::BaseRootQuery> findquery =
     gdcm::CompositeNetworkFunctions::ConstructQuery(
-      gdcm::ePatientRootType, gdcm::eImageOrFrame, findds);
+      gdcm::ePatientRootType, gdcm::eImage, findds);
 
   // make sure the query is valid
   if (!findquery->ValidateQuery(false))
@@ -195,7 +198,7 @@ int TestServiceClassUser2(int argc, char *argv[])
 
   gdcm::SmartPointer<gdcm::BaseRootQuery> movequery1 =
     gdcm::CompositeNetworkFunctions::ConstructQuery(
-      gdcm::ePatientRootType, gdcm::eImageOrFrame, moveds1, true);
+      gdcm::ePatientRootType, gdcm::eImage, moveds1, gdcm::eMove);
 
   // Generate the PresentationContext array from the query UID:
   if( !generator.GenerateFromUID( movequery1->GetAbstractSyntaxUID() ) )
@@ -226,6 +229,8 @@ int TestServiceClassUser2(int argc, char *argv[])
     if( !scu.SendMove(movequery1, data) )
       {
       std::cerr << "CMove Failure for: " << instanceuid << std::endl;
+      std::cerr << "Error log is:" << std::endl;
+      std::cerr << error_log.str() << std::endl;
       return 1;
       }
     if( data.size() != 1 )
@@ -243,7 +248,7 @@ int TestServiceClassUser2(int argc, char *argv[])
   moveds2.Insert( pid.GetAsDataElement() );
   gdcm::SmartPointer<gdcm::BaseRootQuery> movequery2 =
     gdcm::CompositeNetworkFunctions::ConstructQuery(
-      gdcm::ePatientRootType, gdcm::ePatient, moveds2, true);
+      gdcm::ePatientRootType, gdcm::ePatient, moveds2, gdcm::eMove );
 
   const char outputdir[] = "TestServiceClassUser2";
   // Make sure output dir exist, it will not be created

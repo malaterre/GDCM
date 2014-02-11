@@ -20,8 +20,11 @@ if(GDCM_DOCUMENTATION)
     "${GDCM_SOURCE_DIR}/Source/*.h"
     "${GDCM_SOURCE_DIR}/Wrapping/*.h"
     "${GDCM_SOURCE_DIR}/Utilities/VTK/*.h"
-    "${GDCM_SOURCE_DIR}/Utilities/Insight/*.h"
     "${GDCM_SOURCE_DIR}/Utilities/doxygen/man/*.man"
+  )
+  list(REMOVE_ITEM headerfiles
+    "${GDCM_SOURCE_DIR}/Source/DataDictionary/gdcmTagKeywords.h"
+    "${GDCM_SOURCE_DIR}/Source/DataDictionary/gdcmTagToType.h"
   )
   #message(${headerfiles})
   # We are depending only on header files and README.txt but other files
@@ -128,15 +131,27 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
       COMMENT  "GDCM: Creating (patched) pdf of documentation"
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
     )
-    add_custom_command(
-      OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
-      COMMAND  ${PDFOPT_EXECUTABLE}
-      ARGS     ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
-               ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
-      DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
-      COMMENT  "GDCM: Creating optimized pdf version of documentation"
-      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
-    )
+    if(PDFOPT_EXECUTABLE)
+      add_custom_command(
+        OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
+        COMMAND  ${PDFOPT_EXECUTABLE}
+        ARGS     ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
+                 ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
+        DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
+        COMMENT  "GDCM: Creating optimized pdf version of documentation"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
+        )
+    else()
+      add_custom_command(
+        OUTPUT   ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
+        COMMAND  ${CMAKE_COMMAND} -E copy
+        ARGS     ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
+                 ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
+        DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/latex/refman.pdf
+        COMMENT  "GDCM: Creating unoptimized pdf version of documentation"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
+        )
+    endif()
     # add target to 'ALL'
     add_custom_target(GDCMDoxygenPDF
       ALL
@@ -170,12 +185,14 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmscanner.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmtar.html
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmviewer.html
-  #  DESTINATION ${GDCM_INSTALL_DOC_DIR} COMPONENT Development
+  #  DESTINATION ${GDCM_INSTALL_DOC_DIR} COMPONENT DebugDevel
   #)
   install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2vtk.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2pnm.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmconv.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmpap3.1
+    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmxml.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmanon.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmgendir.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdump.1
@@ -188,7 +205,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmscanner.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmtar.1
     ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmviewer.1
-    DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT Development
+    DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT DebugDevel
   )
   install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${GDCM_INSTALL_DOC_DIR}
     PATTERN "*.md5" EXCLUDE

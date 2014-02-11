@@ -93,7 +93,7 @@ int TestImageRead(const char* filename, bool verbose = false, bool lossydump = f
       std::cerr << "Found " << digest << " instead of " << ref << std::endl;
       res = 1;
 #if 0
-      std::ofstream debug("/tmp/dump.gray");
+      std::ofstream debug("/tmp/dump.gray",std::ios::binary);
       debug.write(buffer, len);
       debug.close();
       //assert(0);

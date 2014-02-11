@@ -24,10 +24,15 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Utilities"
 
-  "${GDCM_SOURCE_DIR}/Utilities/socketxx"
-  "${GDCM_SOURCE_DIR}/Utilities/socketxx/socket++" # local.h
-  "${GDCM_BINARY_DIR}/Utilities/socketxx/socket++" # config.h
   )
+
+if(NOT GDCM_USE_SYSTEM_SOCKETXX)
+  include_directories(
+    "${GDCM_SOURCE_DIR}/Utilities/socketxx"
+    "${GDCM_SOURCE_DIR}/Utilities/socketxx/socket++" # local.h
+    "${GDCM_BINARY_DIR}/Utilities/socketxx/socket++" # config.h
+    )
+endif()
 
 if(WIN32)
   if (BUILD_SHARED_LIBS)
@@ -46,11 +51,12 @@ set(GDCM_EXECUTABLE_NAME
   gdcmimg
   #deflate
   gdcmconv
-  gdcmstream
+  #gdcmstream
   gdcmtar
   gdcminfo
   gdcmscu
   gdcmxml
+  gdcmpap3
   )
 # poppler people have the worse API backward compatibility I know of.
 # there is absolutely no way to check the version of poppler
@@ -106,6 +112,12 @@ if(NOT BUILD_SHARED_LIBS)
                               )
 endif()
 
+if(GDCM_USE_SYSTEM_PAPYRUS3)
+  include_directories(
+    ${PAPYRUS3_INCLUDE_DIRS}
+    )
+endif()
+
 foreach(exename ${GDCM_EXECUTABLE_NAME})
   if(${exename} STREQUAL "gdcminfo")
     add_executable(${exename} ${exename}.cxx puff.c)
@@ -118,13 +130,14 @@ foreach(exename ${GDCM_EXECUTABLE_NAME})
   elseif(${exename} STREQUAL "gdcmxml")
     target_link_libraries(${exename} ${LIBXML2_LIBRARIES})
   elseif(${exename} STREQUAL "gdcmscu")
-    target_link_libraries(${exename} gdcmMEXD socketxx)
+    if(NOT GDCM_USE_SYSTEM_SOCKETXX)
+      target_link_libraries(${exename} gdcmMEXD socketxx)
+    else()
+      target_link_libraries(${exename} gdcmMEXD socket++)
+    endif()
   elseif(${exename} STREQUAL "gdcmstream")
     target_link_libraries(${exename} ${GDCM_OPENJPEG_LIBRARIES})
   elseif(${exename} STREQUAL "gdcminfo")
-    if(GDCM_USE_SYSTEM_PODOFO)
-      target_link_libraries(${exename} ${PODOFO_LIBRARIES})
-    endif()
     if(GDCM_USE_SYSTEM_POPPLER)
       target_link_libraries(${exename} ${POPPLER_LIBRARIES})
     endif()
@@ -142,6 +155,10 @@ foreach(exename ${GDCM_EXECUTABLE_NAME})
     )
   endif()
 endforeach()
+
+if(GDCM_USE_SYSTEM_PAPYRUS3)
+  target_link_libraries(gdcmpap3 ${PAPYRUS3_LIBRARIES})
+endif()
 
 #if(BUILD_TESTING)
 #  if(GDCM_DATA_ROOT)

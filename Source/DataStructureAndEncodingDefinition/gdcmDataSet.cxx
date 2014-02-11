@@ -106,4 +106,50 @@ const DataElement& DataSet::GetDataElement(const PrivateTag &t) const
   return GetDataElement( ComputeDataElement(t) );
 }
 
+MediaStorage DataSet::GetMediaStorage() const
+{
+  // Let's check 0008,0016:
+  // D 0008|0016 [UI] [SOP Class UID] [1.2.840.10008.5.1.4.1.1.7 ]
+  // ==> [Secondary Capture Image Storage]
+  const Tag tsopclassuid(0x0008, 0x0016);
+  if( !FindDataElement( tsopclassuid) )
+    {
+    gdcmDebugMacro( "No SOP Class UID" );
+    return MediaStorage::MS_END;
+    }
+  const DataElement &de = GetDataElement(tsopclassuid);
+  if( de.IsEmpty() )
+    {
+    gdcmDebugMacro( "Empty SOP Class UID" );
+    return MediaStorage::MS_END;
+    }
+  std::string ts;
+    {
+    const ByteValue *bv = de.GetByteValue();
+    assert( bv );
+    if( bv->GetPointer() && bv->GetLength() )
+      {
+      // Pad string with a \0
+      ts = std::string(bv->GetPointer(), bv->GetLength());
+      }
+    }
+  // Paranoid check: if last character of a VR=UI is space let's pretend this is a \0
+  if( ts.size() )
+    {
+    char &last = ts[ts.size()-1];
+    if( last == ' ' )
+      {
+      gdcmWarningMacro( "Media Storage Class UID: " << ts << " contained a trailing space character" );
+      last = '\0';
+      }
+    }
+  gdcmDebugMacro( "TS: " << ts );
+  MediaStorage ms = MediaStorage::GetMSType(ts.c_str());
+  if( ms == MediaStorage::MS_END )
+    {
+    gdcmWarningMacro( "Media Storage Class UID: " << ts << " is unknow" );
+    }
+  return ms;
+}
+
 } // end namespace gdcm

@@ -37,16 +37,17 @@
 
 #include "gdcmBaseRootQuery.h"
 #include "gdcmQueryFactory.h"
+#include "gdcmPrinter.h"
 
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmscu: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmscu [OPTION]...[OPERATION]...HOSTNAME...[PORT]..." << std::endl;
@@ -61,12 +62,13 @@ void PrintHelp()
   std::cout << "     --store          C-STORE." << std::endl;
   std::cout << "     --find           C-FIND." << std::endl;
   std::cout << "     --move           C-MOVE." << std::endl;
+  std::cout << "     --get            C-GET." << std::endl;
   std::cout << "C-STORE Options:" << std::endl;
   std::cout << "  -i --input          DICOM filename" << std::endl;
   std::cout << "  -r --recursive      recursively process (sub-)directories." << std::endl;
   std::cout << "     --store-query    Store constructed query in file." << std::endl;
   std::cout << "C-FIND Options:" << std::endl;
-  //std::cout << "     --worklist       C-FIND Worklist Model." << std::endl;//!!not supported atm
+  std::cout << "     --worklist       C-FIND Worklist Model." << std::endl;
   std::cout << "     --patientroot    C-FIND Patient Root Model." << std::endl;
   std::cout << "     --studyroot      C-FIND Study Root Model." << std::endl;
   std::cout << "     --patient        C-FIND Query on Patient Info (cannot be used with --studyroot)" << std::endl;
@@ -81,6 +83,7 @@ void PrintHelp()
   std::cout << "     --port-scp       Port used for incoming association." << std::endl;
   std::cout << "     --key            0123,4567=VALUE for specifying search criteria (wildcard not allowed)." << std::endl;
   std::cout << "  Note that C-MOVE supports the same queries as C-FIND, but no wildcards are allowed." << std::endl;
+  std::cout << "C-GET Options:" << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "     --root-uid               Root UID." << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
@@ -90,6 +93,7 @@ void PrintHelp()
   std::cout << "  -h --help      print help." << std::endl;
   std::cout << "     --queryhelp print query help." << std::endl;
   std::cout << "  -v --version   print version." << std::endl;
+  std::cout << "  -L --log-file  set log file (instead of cout)." << std::endl;
 
   try
     {
@@ -111,7 +115,7 @@ void PrintHelp()
   std::cout << "DICOM Character Set: [" << s << "]" << std::endl;
 }
 
-void PrintQueryHelp(int inFindPatientRoot)
+static void PrintQueryHelp(int inFindPatientRoot)
 {
   gdcm::BaseRootQuery* theBase;
   if (inFindPatientRoot)
@@ -159,6 +163,7 @@ int main(int argc, char *argv[])
   int storemode = 0;
   int findmode = 0;
   int movemode = 0;
+  int getmode = 0;
   int findworklist = 0;
   int findpatientroot = 0;
   int findstudyroot = 0;
@@ -167,11 +172,12 @@ int main(int argc, char *argv[])
   int seriesquery = 0;
   int imagequery = 0;
   int findpsonly = 0;
-  std::string xmlpath;
   std::string queryfile;
   std::string root;
   int rootuid = 0;
   int recursive = 0;
+  int logfile = 0;
+  std::string logfilename;
   gdcm::Tag tag;
   std::vector< std::pair<gdcm::Tag, std::string> > keys;
   
@@ -216,9 +222,11 @@ int main(int argc, char *argv[])
       {"study", 0, &studyquery, 1}, // --study
       {"series", 0, &seriesquery, 1}, // --series
       {"image", 0, &imagequery, 1}, // --image
+      {"log-file", 1, &logfile, 1}, // --log-file
+      {"get", 0, &getmode, 1}, // --get
       {0, 0, 0, 0} // required
     };
-    static const char short_options[] = "i:H:p:VWDEhvk:o:r";
+    static const char short_options[] = "i:H:p:L:VWDEhvk:o:r";
     c = getopt_long (argc, argv, short_options,
                      long_options, &option_index);
     if (c == -1)
@@ -231,7 +239,7 @@ int main(int argc, char *argv[])
       case 0:
       case '-':
       {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
         {
@@ -292,6 +300,11 @@ int main(int argc, char *argv[])
             assert( strcmp(s, "store-query") == 0 );
             queryfile = optarg;
           }
+          else if( option_index == 29 ) /* log-file */
+          {
+            assert( strcmp(s, "log-file") == 0 );
+            logfilename = optarg;
+          }
           else
           {
             // If you reach here someone mess-up the index and the argument in
@@ -351,6 +364,11 @@ int main(int argc, char *argv[])
         port = atoi( optarg );
         break;
         
+      case 'L':
+        logfile = 1;
+        logfilename = optarg;
+        break;
+
       case 'V':
         verbose = 1;
         break;
@@ -434,11 +452,11 @@ int main(int argc, char *argv[])
     PrintQueryHelp(findpatientroot);
     return 0;
     }
-  bool theDebug = debug != 0;
-  bool theWarning = warning != 0;
-  bool theError = error != 0;
-  bool theVerbose = verbose != 0;
-  bool theRecursive = recursive != 0;
+  const bool theDebug = debug != 0;
+  const bool theWarning = warning != 0;
+  const bool theError = error != 0;
+  const bool theVerbose = verbose != 0;
+  const bool theRecursive = recursive != 0;
   // Debug is a little too verbose
   gdcm::Trace::SetDebug( theDebug );
   gdcm::Trace::SetWarning( theWarning );
@@ -448,6 +466,10 @@ int main(int argc, char *argv[])
     {
     gdcm::Trace::SetWarning( theVerbose );
     gdcm::Trace::SetError( theVerbose);
+    }
+  if( logfile )
+    {
+    gdcm::Trace::SetStreamToFile( logfilename.c_str() );
     }
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( callaetitle.c_str() );
   if( !rootuid )
@@ -517,9 +539,17 @@ int main(int argc, char *argv[])
     {
     mode = "move";
     }
-  
+  else if ( getmode )
+    {
+    mode = "get";
+    }
+  else if ( findworklist )
+    {
+    mode = "worklist";
+    }
+
   //this class contains the networking calls
-  
+
   if ( mode == "server" ) // C-STORE SCP
     {
     // MM: Do not expose that to user for now (2010/10/11).
@@ -532,15 +562,8 @@ int main(int argc, char *argv[])
     // ./bin/gdcmscu --echo mi2b2.slicer.org 11112  --aetitle ACME1 --call MI2B2
     bool didItWork = gdcm::CompositeNetworkFunctions::CEcho( hostname, (uint16_t)port,
       callingaetitle.c_str(), callaetitle.c_str() );
-    if (!didItWork)
-      {
-      std::cout << "Echo failed." << std::endl;
-      }
-    else
-      {
-      std::cout << "Echo succeeded." << std::endl;
-      }
-    return (didItWork ? 0 : 1);
+    gdcmDebugMacro( (didItWork ? "Echo succeeded." : "Echo failed.") );
+    return didItWork ? 0 : 1;
     }
   else if ( mode == "move" ) // C-FIND SCU
     {
@@ -555,10 +578,10 @@ int main(int argc, char *argv[])
     if (seriesquery)
       theLevel = gdcm::eSeries;
     if (imagequery)
-      theLevel = gdcm::eImageOrFrame;
+      theLevel = gdcm::eImage;
 
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
-      gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys, true);
+      gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys, gdcm::eMove );
 
     if (findstudyroot == 0 && findpatientroot == 0)
       {
@@ -572,7 +595,7 @@ int main(int argc, char *argv[])
 
     if( !portscp )
       {
-      std::cerr << "Need to set explicitely port number for SCP association"
+      std::cerr << "Need to set explicitly port number for SCP association"
         " --port-scp" << std::endl;
       //std::cerr << "Move failed." << std::endl;
       return 1;
@@ -601,15 +624,37 @@ int main(int argc, char *argv[])
     bool didItWork = gdcm::CompositeNetworkFunctions::CMove( hostname, (uint16_t)port,
       theQuery, (uint16_t)portscpnum,
       callingaetitle.c_str(), callaetitle.c_str(), outputdir.c_str() );
-    if (!didItWork)
+    gdcmDebugMacro( (didItWork ? "Move succeeded." : "Move failed.") );
+    return didItWork ? 0 : 1;
+    }
+  else if ( mode == "worklist" )
+    {
+    gdcm::ERootType theRoot =  gdcm::ePatientRootType;
+    gdcm::EQueryLevel theLevel = gdcm::eSeries;
+    gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery = gdcm::CompositeNetworkFunctions::ConstructQuery( theRoot, theLevel ,keys, gdcm::eWLMFind );
+    if (!theQuery->ValidateQuery(false))
       {
-      std::cerr << "Move failed." << std::endl;
+      //issue
       }
-    else
+    std::vector<gdcm::DataSet> theDataSet;
+    if( !gdcm::CompositeNetworkFunctions::CFind(hostname, (uint16_t)port, theQuery, theDataSet,
+        callingaetitle.c_str(), callaetitle.c_str()) )
       {
-      std::cout << "Move succeeded." << std::endl;
       }
-    return (didItWork ? 0 : 1);
+    gdcm::Printer p;
+    std::ostream &os = gdcm::Trace::GetStream();
+    for( std::vector<gdcm::DataSet>::iterator itor
+      = theDataSet.begin(); itor != theDataSet.end(); itor++)
+      {
+      os << "WL Find Response: " << (itor - theDataSet.begin() + 1) << std::endl;
+      p.PrintDataSet( *itor, os );
+      os << std::endl;
+      }
+
+    if( gdcm::Trace::GetWarningFlag() ) // == verbose flag
+      {
+      os << "WL Find was successful." << std::endl;
+      }
     }
   else if ( mode == "find" ) // C-FIND SCU
     {
@@ -629,7 +674,7 @@ int main(int argc, char *argv[])
     if (seriesquery)
       theLevel = gdcm::eSeries;
     if (imagequery)
-      theLevel = gdcm::eImageOrFrame;
+      theLevel = gdcm::eImage;
 
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
@@ -671,19 +716,27 @@ int main(int argc, char *argv[])
     if( !gdcm::CompositeNetworkFunctions::CFind(hostname, (uint16_t)port, theQuery, theDataSet,
         callingaetitle.c_str(), callaetitle.c_str()) )
       {
-      std::cerr << "Problem in CFind." << std::endl;
+      gdcmDebugMacro( "Problem in CFind." );
       return 1;
       }
-    std::vector<gdcm::DataSet>::iterator itor;
-    for (itor = theDataSet.begin(); itor != theDataSet.end(); itor++)
+
+    gdcm::Printer p;
+    std::ostream &os = gdcm::Trace::GetStream();
+    for( std::vector<gdcm::DataSet>::iterator itor
+      = theDataSet.begin(); itor != theDataSet.end(); itor++)
       {
-      itor->Print(std::cout);
+      os << "Find Response: " << (itor - theDataSet.begin() + 1) << std::endl;
+      p.PrintDataSet( *itor, os );
+      os << std::endl;
       }
 
-    //std::cout << "Find was successful." << std::endl;
+    if( gdcm::Trace::GetWarningFlag() ) // == verbose flag
+      {
+      os << "Find was successful." << std::endl;
+      }
     return 0;
     }
-  else // C-STORE SCU
+  else if ( mode == "store" ) // C-STORE SCU
     {
     // mode == directory
     gdcm::Directory::FilenamesType thefiles;
@@ -708,11 +761,17 @@ int main(int argc, char *argv[])
       gdcm::CompositeNetworkFunctions::CStore(hostname, (uint16_t)port, thefiles,
         callingaetitle.c_str(), callaetitle.c_str());
 
-    if (didItWork)
-      std::cout << "Store was successful." << std::endl;
-    else
-      std::cout << "Store failed." << std::endl;
-    return (didItWork ? 0 : 1);
+    gdcmDebugMacro( (didItWork ? "Store was successful." : "Store failed.") );
+    return didItWork ? 0 : 1;
+    }
+  else if ( mode == "get" ) // C-GET SCU
+    {
+    return 1;
+    }
+  else
+    {
+    assert( 0 );
+    return 1;
     }
 
   return 0;

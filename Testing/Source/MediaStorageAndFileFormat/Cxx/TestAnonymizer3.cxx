@@ -70,7 +70,7 @@ int TestAnonymizer3(int , char *[])
   DataElement instanceuid = ds.GetDataElement( Tag(0x8,0x18) );
   UIDGenerator uid;
   const char *s = uid.Generate();
-  instanceuid.SetByteValue( s, strlen(s) );
+  instanceuid.SetByteValue( s, (uint32_t)strlen(s) );
   ds.Replace( instanceuid );
 
   FileDerivation fd;

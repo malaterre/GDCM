@@ -32,10 +32,11 @@ public:
 
   Pixmap &GetInput();
 
-#ifndef SWIG
   /// Get Output image
   const Pixmap &GetOutput() const;
-#endif
+
+  // SWIG/Java hack:
+  const Pixmap &GetOutputAsPixmap() const;
 };
 
 } // end namespace gdcm

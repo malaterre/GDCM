@@ -38,6 +38,7 @@ public:
 
 protected:
   bool IsStateSuspension() const;
+  virtual bool EncodeBuffer(std::ostream &os, const char *data, size_t datalen);
 
 private:
   JPEGInternals *Internals;

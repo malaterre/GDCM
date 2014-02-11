@@ -66,10 +66,16 @@ public:
   }
 
   bool IsEmpty() const {
+#if 0
     if( Internal.empty() ) assert( Length == 0 );
     return Internal.empty();
+#else
+  return Length == 0;
+#endif
   }
   VL GetLength() const { return Length; }
+
+  VL ComputeLength() const { return Length + Length % 2; }
   // Does a reallocation
   void SetLength(VL vl) {
     VL l(vl);
@@ -151,16 +157,23 @@ public:
   }
 
   template <typename TSwap, typename TType>
-  std::istream &Read(std::istream &is) {
+  std::istream &Read(std::istream &is, bool readvalues = true) {
     // If Length is odd we have detected that in SetLength
     // and calling std::vector::resize make sure to allocate *AND*
     // initialize values to 0 so we are sure to have a \0 at the end
     // even in this case
     if(Length)
       {
-      is.read(&Internal[0], Length);
-      assert( Internal.size() == Length || Internal.size() == Length + 1 );
-      TSwap::SwapArray((TType*)&Internal[0], Internal.size() / sizeof(TType) );
+      if( readvalues )
+        {
+        is.read(&Internal[0], Length);
+        assert( Internal.size() == Length || Internal.size() == Length + 1 );
+        TSwap::SwapArray((TType*)&Internal[0], Internal.size() / sizeof(TType) );
+        }
+      else
+        {
+        is.seekg(Length, std::ios::cur);
+        }
       }
     return is;
   }
@@ -191,7 +204,7 @@ public:
   /**
    * \brief  Checks whether a 'ByteValue' is printable or not (in order
    *         to avoid corrupting the terminal of invocation when printing)
-   *         I dont think this function is working since it does not handle
+   *         I don't think this function is working since it does not handle
    *         UNICODE or character set...
    */
   bool IsPrintable(VL length) const {
@@ -239,6 +252,10 @@ protected:
 //Introduce check for invalid XML characters
 friend std::ostream& operator<<(std::ostream &os,const char c);
 */
+
+  void SetLengthOnly(VL vl) {
+    Length = vl;
+  }
 
 private:
   std::vector<char> Internal;

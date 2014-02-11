@@ -38,7 +38,7 @@ public:
   std::istream &ReadPreValue(std::istream &is);
 
   template <typename TSwap>
-  std::istream &ReadValue(std::istream &is);
+  std::istream &ReadValue(std::istream &is, bool readvalues = true);
 
   template <typename TSwap>
   std::istream &ReadWithLength(std::istream &is, VL & length)

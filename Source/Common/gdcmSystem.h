@@ -120,6 +120,9 @@ public:
   /// strtok_r
   static char *StrTokR(char *ptr, const char *sep, char **end);
 
+  /// strsep
+  static char *StrSep(char **stringp, const char *delim);
+
   /// return `locale charmap`
   static const char *GetLocaleCharset();
 

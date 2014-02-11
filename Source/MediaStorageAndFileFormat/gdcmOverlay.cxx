@@ -245,7 +245,11 @@ bool Overlay::GrabOverlayFromPixelData(DataSet const &ds)
   if( Internal->BitsAllocated == 16 )
     {
     //assert( Internal->BitPosition >= 12 );
-    assert( ds.FindDataElement( Tag(0x7fe0,0x0010) ) );
+    if( ds.FindDataElement( Tag(0x7fe0,0x0010) ) )
+      {
+      gdcmErrorMacro("Could not find Pixel Data. Cannot extract Overlay." );
+      return false;
+      }
     const DataElement &pixeldata = ds.GetDataElement( Tag(0x7fe0,0x0010) );
     const ByteValue *bv = pixeldata.GetByteValue();
     if( !bv )
@@ -308,6 +312,47 @@ void Overlay::SetDescription(const char* description) { if( description ) Intern
 const char *Overlay::GetDescription() const { return Internal->Description.c_str(); }
 void Overlay::SetType(const char* type) { if( type ) Internal->Type = type; }
 const char *Overlay::GetType() const { return Internal->Type.c_str(); }
+static const char *OverlayTypeStrings[] = {
+  "INVALID",
+  "G ",
+  "R ",
+};
+const char *Overlay::GetOverlayTypeAsString(OverlayType ot)
+{
+  return OverlayTypeStrings[ (int) ot ];
+}
+Overlay::OverlayType Overlay::GetOverlayTypeFromString(const char *s)
+{
+  static const int n = sizeof( OverlayTypeStrings ) / sizeof ( *OverlayTypeStrings );
+  if( s )
+    {
+    for( int i = 0; i < n; ++i )
+      {
+      if( strcmp(s, OverlayTypeStrings[i] ) == 0 )
+        {
+        return (OverlayType)i;
+        }
+      }
+    }
+  // could not find the proper type, maybe padded with \0 ?
+  if( strlen(s) == 1 )
+    {
+    for( int i = 0; i < n; ++i )
+      {
+      if( strncmp(s, OverlayTypeStrings[i], 1 ) == 0 )
+        {
+        gdcmDebugMacro( "Invalid Padding for OVerlay Type" );
+        return (OverlayType)i;
+        }
+      }
+    }
+  return Overlay::Invalid;
+}
+Overlay::OverlayType Overlay::GetTypeAsEnum() const
+{
+  return GetOverlayTypeFromString( GetType() );
+}
+
 void Overlay::SetOrigin(const signed short origin[2])
 {
   if( origin )
@@ -383,64 +428,6 @@ const ByteValue &Overlay::GetOverlayData() const
   return bv;
 }
 
-#if !defined(GDCM_LEGACY_REMOVE)
-void Overlay::Decode(std::istream &is, std::ostream &os)
-{
-  unsigned char packedbytes;
-  unsigned char unpackedbytes[8];
-  while( is.read((char*)&packedbytes,1) )
-    {
-    unsigned char mask = 1;
-    for (unsigned int i = 0; i < 8; ++i)
-      {
-      if ( (packedbytes & mask) == 0)
-        {
-        unpackedbytes[i] = 0;
-        }
-      else
-        {
-        unpackedbytes[i] = 1;
-        }
-      mask <<= 1;
-      }
-    os.write(reinterpret_cast<char*>(unpackedbytes), 8);
-    }
-}
-
-bool Overlay::GetBuffer(char *buffer) const
-{
-  const size_t length = Internal->Data.size();
-  std::copy(buffer, buffer+length, Internal->Data.begin());
-  return true;
-}
-
-bool Overlay::GetUnpackBuffer(unsigned char *buffer) const
-{
-  unsigned char *unpackedbytes = buffer;
-  for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
-    {
-    // const unsigned char &packedbytes = *it;
-    // weird bug with gcc 3.3 (prerelease on SuSE) apparently:
-    unsigned char packedbytes = static_cast<unsigned char>(*it);
-    unsigned char mask = 1;
-    for (unsigned int i = 0; i < 8; ++i)
-      {
-      if ( (packedbytes & mask) == 0)
-        {
-        *unpackedbytes = 0;
-        }
-      else
-        {
-        *unpackedbytes = 255;
-        }
-      ++unpackedbytes;
-      mask <<= 1;
-      }
-    }
-  return true;
-}
-#endif
-
 size_t Overlay::GetUnpackBufferLength() const
 {
   const size_t unpacklen = Internal->Rows * Internal->Columns;
@@ -482,7 +469,7 @@ void Overlay::Decompress(std::ostream &os) const
 {
   const size_t unpacklen = GetUnpackBufferLength();
   unsigned char unpackedbytes[8];
-  std::vector<char>::const_iterator beg = Internal->Data.begin();
+  //std::vector<char>::const_iterator beg = Internal->Data.begin();
   size_t curlen = 0;
   for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
     {

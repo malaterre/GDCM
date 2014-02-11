@@ -32,7 +32,7 @@
  * The test also uses the Subject/Observer API for progress report.
  */
 
-int TestServiceClassUser(int argc, char *argv[])
+int TestServiceClassUser1(int argc, char *argv[])
 {
   if( argc < 5 )
     {
@@ -47,13 +47,16 @@ int TestServiceClassUser(int argc, char *argv[])
 
   gdcm::SmartPointer<gdcm::ServiceClassUser> scup = new gdcm::ServiceClassUser;
   gdcm::ServiceClassUser &scu = *scup;
-  gdcm::SimpleSubjectWatcher w( &scu, "TestServiceClassUser" );
+  gdcm::SimpleSubjectWatcher w( &scu, "TestServiceClassUser1" );
 
   scu.SetHostname( remote.c_str() );
   scu.SetPort( portno );
   scu.SetTimeout( 1000 );
   scu.SetCalledAETitle( call.c_str() );
   scu.SetAETitle( aetitle.c_str() );
+
+  std::ostringstream error_log;
+  gdcm::Trace::SetErrorStream( error_log );
 
   if( !scu.InitializeConnection() )
     {
@@ -76,12 +79,18 @@ int TestServiceClassUser(int argc, char *argv[])
 
   if( !scu.StartAssociation() )
     {
+    std::cerr << "Could not StartAssociation" << std::endl;
+    std::cerr << "Error log is:" << std::endl;
+    std::cerr << error_log.str() << std::endl;
     return 1;
     }
 
   // C-ECHO
   if( !scu.SendEcho() )
     {
+    std::cerr << "Could not Echo" << std::endl;
+    std::cerr << "Error log is:" << std::endl;
+    std::cerr << error_log.str() << std::endl;
     return 1;
     }
 
@@ -112,6 +121,9 @@ int TestServiceClassUser(int argc, char *argv[])
   // C-STORE MRImageStorage/JPEGLossless
   if( !scu.SendStore( filename.c_str() ) )
     {
+    std::cerr << "Could not C-Store" << std::endl;
+    std::cerr << "Error log is:" << std::endl;
+    std::cerr << error_log.str() << std::endl;
     return 1;
     }
 
@@ -140,6 +152,9 @@ int TestServiceClassUser(int argc, char *argv[])
   // C-STORE MRImageStorage/LittleEndianImplicit
   if( !scu.SendStore( filename.c_str() ) )
     {
+    std::cerr << "Could not SendStore" << std::endl;
+    std::cerr << "Error log is:" << std::endl;
+    std::cerr << error_log.str() << std::endl;
     return 1;
     }
 
@@ -223,7 +238,7 @@ int TestServiceClassUser(int argc, char *argv[])
 
   gdcm::SmartPointer<gdcm::BaseRootQuery> movequery =
     gdcm::CompositeNetworkFunctions::ConstructQuery(
-      gdcm::ePatientRootType, gdcm::ePatient, moveds, true);
+      gdcm::ePatientRootType, gdcm::ePatient, moveds, gdcm::eMove);
   // make sure the query is valid
   if (!movequery->ValidateQuery())
     {

@@ -19,6 +19,8 @@
 #include "gdcmEvent.h"
 #include "gdcmSmartPointer.h"
 
+#include <map>
+
 namespace gdcm
 {
 class TagPath;
@@ -85,6 +87,7 @@ public:
   //bool Empty( TagPath const &t );
 
   /// remove a tag (even a SQ can be removed)
+  /// Return code is false when tag t cannot be found
   bool Remove( Tag const &t );
   //bool Remove( PrivateTag const &t );
   //bool Remove( TagPath const &t );
@@ -132,6 +135,10 @@ public:
   /// Return the list of Tag that will be considered when anonymizing a DICOM file.
   static std::vector<Tag> GetBasicApplicationLevelConfidentialityProfileAttributes();
 
+  /// Clear the internal mapping of real UIDs to generated UIDs
+  /// \warning the mapping is definitely lost
+  static void ClearInternalUIDs();
+
 protected:
   // Internal function used to either empty a tag or set it's value to a dummy value (Type 1 vs Type 2)
   bool BALCPProtect(DataSet &ds, Tag const & tag, const IOD &iod);
@@ -147,6 +154,12 @@ private:
   // I would prefer to have a smart pointer to DataSet but DataSet does not derive from Object...
   SmartPointer<File> F;
   CryptographicMessageSyntax *CMS;
+
+  typedef std::pair< Tag, std::string > TagValueKey;
+  typedef std::map< TagValueKey, std::string > DummyMapNonUIDTags;
+  typedef std::map< std::string, std::string > DummyMapUIDTags;
+  static DummyMapNonUIDTags dummyMapNonUIDTags;
+  static DummyMapUIDTags dummyMapUIDTags;
 };
 
 /**

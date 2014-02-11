@@ -63,7 +63,7 @@ public class";
 */
 
 %module(docstring="A DICOM library",directors=1) gdcm
-#pragma SWIG nowarn=302,303,312,362,383,389,401,503,504,509,510,514,516,842
+#pragma SWIG nowarn=302,303,312,362,383,389,401,503,504,509,510,514,516
 
 // There is something funky with swig 1.3.33, one cannot simply test defined(SWIGCSHARP)
 // I need to redefine it myself... seems to be solved in later revision
@@ -105,9 +105,9 @@ public class";
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
 #include "gdcmBitmap.h"
+#include "gdcmIconImage.h"
 #include "gdcmPixmap.h"
 #include "gdcmImage.h"
-#include "gdcmIconImage.h"
 #include "gdcmFragment.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmPDBHeader.h"
@@ -133,6 +133,7 @@ public class";
 #include "gdcmDictEntry.h"
 #include "gdcmCSAHeaderDictEntry.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmUUIDGenerator.h"
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
 #include "gdcmAttribute.h"
@@ -140,6 +141,7 @@ public class";
 #include "gdcmCommand.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmFileAnonymizer.h"
+#include "gdcmFileStreamer.h"
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
 #include "gdcmUIDs.h"
@@ -153,7 +155,6 @@ public class";
 #include "gdcmFiducials.h"
 #include "gdcmWaveform.h"
 #include "gdcmPersonName.h"
-#include "gdcmIconImage.h"
 #include "gdcmCurve.h"
 #include "gdcmDICOMDIR.h"
 #include "gdcmValidate.h"
@@ -196,7 +197,9 @@ public class";
 #include "gdcmJPEGCodec.h"
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
+#include "gdcmPNMCodec.h"
 #include "gdcmImageChangeTransferSyntax.h"
+#include "gdcmFileChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
 #include "gdcmImageChangePhotometricInterpretation.h"
@@ -228,11 +231,11 @@ public class";
 #include "gdcmServiceClassUser.h"
 
 #include "gdcmStreamImageReader.h"
-#include "gdcmStreamImageWriter.h"
 
 #include "gdcmRegion.h"
 #include "gdcmBoxRegion.h"
 #include "gdcmImageRegionReader.h"
+#include "gdcmJSON.h"
 
 using namespace gdcm;
 %}
@@ -385,7 +388,6 @@ EXTEND_CLASS_PRINT(gdcm::Value)
 EXTEND_CLASS_PRINT(gdcm::ByteValue)
 %clear char* buffer;
 
-
 %apply char[] { const char* array }
 
 %include "gdcmASN1.h"
@@ -437,6 +439,8 @@ EXTEND_CLASS_PRINT(gdcm::DataSet)
 EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
 %include "gdcmObject.h"
 %apply char[] { char* thebuffer }
+%apply char[] { const char* inputbuffer }
+%apply char[] { char* outputbuffer }
 %ignore gdcm::LookupTable::GetLUT(LookupTableType type, unsigned char *array, unsigned int &length) const;
 %include "gdcmLookupTable.h"
 %extend gdcm::LookupTable
@@ -448,6 +452,8 @@ EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
   }
 };
 %clear char* thebuffer;
+%clear char* inputbuffer;
+%clear char* outputbuffer;
 EXTEND_CLASS_PRINT(gdcm::LookupTable)
 %include "gdcmOverlay.h"
 EXTEND_CLASS_PRINT(gdcm::Overlay)
@@ -515,13 +521,13 @@ EXTEND_CLASS_PRINT(gdcm::Bitmap)
 %clear char* buffer;
 %clear unsigned int* dims;
 
+%include "gdcmIconImage.h"
+EXTEND_CLASS_PRINT(gdcm::IconImage)
 %include "gdcmPixmap.h"
 EXTEND_CLASS_PRINT(gdcm::Pixmap)
 
 %include "gdcmImage.h"
 EXTEND_CLASS_PRINT(gdcm::Image)
-%include "gdcmIconImage.h"
-EXTEND_CLASS_PRINT(gdcm::IconImage)
 %include "gdcmFragment.h"
 EXTEND_CLASS_PRINT(gdcm::Fragment)
 %include "gdcmPDBElement.h"
@@ -574,6 +580,9 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 %include "gdcmStringFilter.h"
 //EXTEND_CLASS_PRINT(gdcm::StringFilter)
 %include "gdcmUIDGenerator.h"
+//EXTEND_CLASS_PRINT(gdcm::UIDGenerator)
+%include "gdcmUUIDGenerator.h"
+//EXTEND_CLASS_PRINT(gdcm::UUIDGenerator)
 %template (ValuesType)      std::set<std::string>;
 %rename (CSharpTagToValue) SWIGTagToValue;
 #define GDCM_STATIC_ASSERT(x)
@@ -595,7 +604,14 @@ EXTEND_CLASS_PRINT(gdcm::Scanner)
 //%feature("unref") Anonymizer "coucou $this->Delete();"
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus%5Fnn34
 %include "gdcmAnonymizer.h"
+%apply char[] { char* value_data }
 %include "gdcmFileAnonymizer.h"
+%clear char* value_data;
+
+%apply char[] { char* array }
+%template(SmartPtrFStreamer) gdcm::SmartPointer<gdcm::FileStreamer>;
+%include "gdcmFileStreamer.h"
+%clear char* array;
 
 //EXTEND_CLASS_PRINT(gdcm::Anonymizer)
 //%extend gdcm::Anonymizer
@@ -684,7 +700,6 @@ EXTEND_CLASS_PRINT(gdcm::DirectionCosines)
 %include "gdcmFiducials.h"
 %include "gdcmWaveform.h"
 %include "gdcmPersonName.h"
-%include "gdcmIconImage.h"
 %include "gdcmCurve.h"
 %include "gdcmDICOMDIR.h"
 %include "gdcmValidate.h"
@@ -761,7 +776,10 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmJPEGCodec.h"
 %include "gdcmJPEGLSCodec.h"
 %include "gdcmJPEG2000Codec.h"
+%include "gdcmPNMCodec.h"
 %include "gdcmImageChangeTransferSyntax.h"
+%template(SmartPtrFCTS) gdcm::SmartPointer<gdcm::FileChangeTransferSyntax>;
+%include "gdcmFileChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
 %include "gdcmSplitMosaicFilter.h"
 %include "gdcmImageChangePhotometricInterpretation.h"
@@ -808,7 +826,6 @@ typedef int64_t time_t; // FIXME
 %apply char[] { char* inReadBuffer }
 %include "gdcmStreamImageReader.h"
 %clear char* inReadBuffer;
-%include "gdcmStreamImageWriter.h"
 %include "gdcmRegion.h"
 EXTEND_CLASS_PRINT(gdcm::Region)
 %include "gdcmBoxRegion.h"
@@ -816,3 +833,4 @@ EXTEND_CLASS_PRINT(gdcm::BoxRegion)
 %apply char[] { char* inreadbuffer }
 %include "gdcmImageRegionReader.h"
 %clear char* inreadbuffer;
+%include "gdcmJSON.h"

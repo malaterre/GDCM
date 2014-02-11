@@ -42,7 +42,7 @@ static int TestBothFuncs(const char *info , const char *ba_str)
     ++res;
     }
   gdcm::Reader reader;
-  std::ifstream is( ba_str );
+  std::ifstream is( ba_str, std::ios::binary );
   if( is.is_open() )
     {
     std::cout << info << " is_open: " << ba_str << std::endl;

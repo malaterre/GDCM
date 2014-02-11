@@ -26,7 +26,7 @@ set_source_files_properties(gdcm.i PROPERTIES CPLUSPLUS ON)
 #include(${GDCM_SOURCE_DIR}/CMake/UseSWIGExtra.cmake)
 
 set(GDCM_JAVA_HOME ${CMAKE_CURRENT_BINARY_DIR}/java/gdcm)
-make_directory(${GDCM_JAVA_HOME})
+file(MAKE_DIRECTORY ${GDCM_JAVA_HOME})
 set(CMAKE_SWIG_OUTDIR "${GDCM_JAVA_HOME}")
 
 set(CMAKE_SWIG_FLAGS "-package gdcm")
@@ -40,6 +40,7 @@ SWIG_LINK_LIBRARIES(gdcmjni gdcmMSFF
   #${JNI_LIBRARIES}
 )
 set_target_properties(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
+set_property(TARGET ${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTY NO_SONAME 1)
 
 # swig-java dummy run:
 # the following execute_process is a dummy run and generate all *.java files in a directory
@@ -76,7 +77,7 @@ add_custom_command(
 # please compiler such as ecj (Eclipse Java Compiler 0.894_R34x) explicitly
 # state we want 1.5 version to compile gdcm::ImageToImageFilter::GetOutput()
 # const as covariant return type
-  COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -source 1.5 "gdcm/*.java" #${javafiles}
+  COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -source 1.5 -target 1.5 "gdcm/*.java" #${javafiles}
 # 2. now that the *.class have been generated construct the jar file. We can
 # only rely on the gdcm.java / gdcm.class to build dependencie, I am pretty
 # sure it will break parallel builds... oh well
@@ -94,8 +95,8 @@ add_custom_target(GDCMJavaJar ALL
 
 if(NOT GDCM_INSTALL_NO_LIBRARIES)
   install_swig_module(gdcmjni Java)
-  # because gdcm.jar is constructed with custom commands, it need the install(FILES signature:
+  # because gdcm.jar is constructed with custom commands, it need the INSTALL(FILES signature:
   install(FILES ${LIBRARY_OUTPUT_PATH}/gdcm.jar
-    DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT JavaModule
+    DESTINATION ${GDCM_INSTALL_JARMODULE_DIR} COMPONENT JavaModule
   )
 endif()

@@ -90,7 +90,8 @@ bool Sorter::StableSort(std::vector<std::string> const & filenames)
       }
     else
       {
-      f = NULL;
+      gdcmErrorMacro( "File could not be read: " << it->c_str() );
+      return false;
       }
     }
   SortFunctor sf;

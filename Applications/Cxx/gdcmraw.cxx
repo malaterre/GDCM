@@ -44,14 +44,14 @@
 #include <getopt.h>
 #include <string.h>
 
-void PrintVersion()
+static void PrintVersion()
 {
   std::cout << "gdcmraw: gdcm " << gdcm::Version::GetVersion() << " ";
   const char date[] = "$Date$";
   std::cout << date << std::endl;
 }
 
-void PrintHelp()
+static void PrintHelp()
 {
   PrintVersion();
   std::cout << "Usage: gdcmraw [OPTION]... FILE..." << std::endl;
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
       {
     case 0:
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {
@@ -330,7 +330,7 @@ int main(int argc, char *argv[])
   gdcm::Filename fn1(filename.c_str()), fn2(outfilename.c_str());
   if( fn1.IsIdentical(fn2) )
     {
-    std::cerr << "Ouput is Input\n";
+    std::cerr << "Output is Input\n";
     return 1;
     }
 

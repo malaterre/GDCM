@@ -30,7 +30,7 @@ namespace gdcm
 // -> Optional VR (Explicit Transfer Syntax)
 // -> ValueLength
 // -> Value
-// TODO: This class SHOULD be pure virtual. I dont want a user
+// TODO: This class SHOULD be pure virtual. I don't want a user
 // to shoot himself in the foot.
 
 class SequenceOfItems;
@@ -133,17 +133,6 @@ public:
     return bv; // Will return NULL if not ByteValue
   }
 
-  /// Return the Value of DataElement as a Sequence Of Items (if possible)
-  /// \warning: You need to check for NULL return value
-  /// \warning: In some case a Value could not have been recognized as a SequenceOfItems
-  /// in those case the return of the function will be NULL, while the Value would be
-  /// a valid SequenceOfItems, in those case prefer GetValueAsSQ. In which case
-  /// the code internally trigger an assert to warn developper.
-  /// When in doubt do not use this function and prefer GetValueAsSQ()
-  /// @deprecated Replaced by DataElement::GetValueAsSQ() as of GDCM 2.2.
-  GDCM_LEGACY(const SequenceOfItems* GetSequenceOfItems() const)
-  GDCM_LEGACY(SequenceOfItems* GetSequenceOfItems())
-
   /// Interpret the Value stored in the DataElement. This is more robust (but also more
   /// expensive) to call this function rather than the simpliest form: GetSequenceOfItems()
   /// It also return NULL when the Value is NOT of type SequenceOfItems
@@ -155,6 +144,7 @@ public:
   /// Return the Value of DataElement as a Sequence Of Fragments (if possible)
   /// \warning: You need to check for NULL return value
   const SequenceOfFragments* GetSequenceOfFragments() const;
+  SequenceOfFragments* GetSequenceOfFragments();
 
   /// return if Value Length if of undefined length
   bool IsUndefinedLength() const {
@@ -236,6 +226,11 @@ public:
     (void)skiptags;
     return static_cast<TDE*>(this)->template ReadValue<TSwap>(is);
   }
+  template <typename TDE, typename TSwap>
+  std::istream &ReadValueWithLength(std::istream &is, VL & length, std::set<Tag> const &skiptags) {
+    (void)skiptags;
+    return static_cast<TDE*>(this)->template ReadValueWithLength<TSwap>(is, length);
+  }
 
   template <typename TDE, typename TSwap>
   std::istream &ReadWithLength(std::istream &is, VL &length) {
@@ -256,6 +251,8 @@ protected:
   VR VRField;
   typedef SmartPointer<Value> ValuePtr;
   ValuePtr ValueField;
+
+  void SetValueFieldLength( VL vl, bool readvalues );
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const DataElement &val)

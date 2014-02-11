@@ -373,7 +373,7 @@ bool ReadExplicitDataElement(std::istream &is, ExplicitDataElement &de)
   //std::cout << "Tag: " << t << std::endl;
   if( t.GetGroup() != 0x0002 )
     {
-    gdcmDebugMacro( "Done reading File Meta Information" );
+    //gdcmDebugMacro( "Done reading File Meta Information" );
     std::streampos currentpos = is.tellg();
     // old code was fseeking from the beginning of file
     // which seems to be quite different than fseeking in reverse from
@@ -770,7 +770,6 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
     }
   // Pad string with a \0
   ts = std::string(bv->GetPointer(), bv->GetLength());
-  gdcmDebugMacro( "TS: " << ts.c_str() );
   TransferSyntax tst(TransferSyntax::GetTSType(ts.c_str()));
   if( tst == TransferSyntax::TS_END )
     {
@@ -787,7 +786,7 @@ void FileMetaInformation::SetDataSetTransferSyntax(const TransferSyntax &ts)
   DataSetTS = ts;
 }
 
-MediaStorage FileMetaInformation::GetMediaStorage() const
+std::string FileMetaInformation::GetMediaStorageAsString() const
 {
   // D 0002|0002 [UI] [Media Storage SOP Class UID]
   // [1.2.840.10008.5.1.4.1.1.12.1]
@@ -797,7 +796,7 @@ MediaStorage FileMetaInformation::GetMediaStorage() const
     {
     gdcmDebugMacro( "File Meta information is present but does not"
       " contains " << t );
-    return MediaStorage::MS_END;
+    return "";
     }
   const DataElement &de = GetDataElement(t);
   std::string ts;
@@ -820,7 +819,14 @@ MediaStorage FileMetaInformation::GetMediaStorage() const
       last = '\0';
       }
     }
-  gdcmDebugMacro( "TS: " << ts );
+  return ts;
+}
+
+MediaStorage FileMetaInformation::GetMediaStorage() const
+{
+  const std::string &ts = GetMediaStorageAsString();
+  if( ts.empty() ) return MediaStorage::MS_END;
+
   MediaStorage ms = MediaStorage::GetMSType(ts.c_str());
   if( ms == MediaStorage::MS_END )
     {

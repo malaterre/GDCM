@@ -52,7 +52,7 @@ int TestAttribute(int argc, char *argv[])
     {
     filename = argv[1];
     }
-  std::ofstream os(filename);
+  std::ofstream os(filename, std::ios::binary);
 
   //gdcm::Attribute<0x0008,0x0000, gdcm::VR::UL, gdcm::VM::VM1> a = { 38 };
   gdcm::Attribute<0x0008,0x0000> a = { 38 };

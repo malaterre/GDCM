@@ -366,7 +366,7 @@ int main(int argc, char *argv[])
       {
     case 0:
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {
@@ -718,7 +718,7 @@ int main(int argc, char *argv[])
   // when verbose is true, make sure warning+error are turned on:
   if( verbose )
     {
-    gdcm::Trace::SetWarning( (verbose  > 0 ? true : false) );
+    gdcm::Trace::SetWarning( (verbose > 0 ? true : false) );
     gdcm::Trace::SetError( (verbose  > 0 ? true : false) );
     }
 

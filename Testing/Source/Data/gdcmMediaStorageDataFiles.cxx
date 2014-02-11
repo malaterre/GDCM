@@ -233,6 +233,9 @@ static const char * const gdcmMediaStorageDataFiles[][2] = {
 { "TOSHIBA_J2K_OpenJPEGv2Regression.dcm", "1.2.840.10008.5.1.4.1.1.2" },
 { "NM-PAL-16-PixRep1.dcm", "1.2.840.10008.5.1.4.1.1.20" },
 { "MEDILABInvalidCP246_EVRLESQasUN.dcm", "1.2.840.10008.5.1.4.1.1.2" },
+{ "JPEGInvalidSecondFrag.dcm", "1.2.840.10008.5.1.4.1.1.2" },
+{ "ELSCINT1_PMSCT_RLE1_priv.dcm", "1.2.840.10008.5.1.4.1.1.2" },
+{ "unreadable.dcm", "1.2.840.10008.5.1.4.1.1.2" },
 
 /* Stopping condition */
 { 0 ,0 }

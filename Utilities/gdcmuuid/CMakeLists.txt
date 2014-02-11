@@ -6,7 +6,7 @@ endif()
 string(TOLOWER ${UUID_NAMESPACE} UUID_LIBRARY_NAME)
 
 project(${UUID_NAMESPACE} C)
-cmake_minimum_required(VERSION 2.2)
+cmake_minimum_required(VERSION 2.6)
 
 # Do full dependency headers.
 include_regular_expression("^.*$")
@@ -118,7 +118,7 @@ if(NOT UUID_INSTALL_NO_LIBRARIES)
     EXPORT ${GDCM_TARGETS_NAME}
     RUNTIME DESTINATION ${UUID_INSTALL_BIN_DIR} COMPONENT Applications
     LIBRARY DESTINATION ${UUID_INSTALL_LIB_DIR} COMPONENT Libraries
-    ARCHIVE DESTINATION ${UUID_INSTALL_LIB_DIR} COMPONENT Development
+    ARCHIVE DESTINATION ${UUID_INSTALL_LIB_DIR} COMPONENT DebugDevel
   ${CPACK_NAMELINK_TYPE}
   )
 endif()

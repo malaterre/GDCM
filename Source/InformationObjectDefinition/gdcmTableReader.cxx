@@ -543,7 +543,7 @@ void TableReader::CharacterDataHandler(const char *data, int length)
 
 int TableReader::Read()
 {
-  std::ifstream is( Filename.c_str() );
+  std::ifstream is( Filename.c_str(), std::ios::binary );
 
   char buf[BUFSIZ];
   XML_Parser parser = XML_ParserCreate(NULL);

@@ -440,13 +440,8 @@ void LookupTable::Decode(std::istream &is, std::ostream &os) const
     unsigned char rgb[3];
     while( !is.eof() )
       {
-      //is.Get(c);
       is.read( (char*)(&idx), 1);
-      // FIXME
-      if( is.eof() )
-        {
-        break;
-        }
+      if( is.eof() ) break;
       if( IncompleteLUT )
         {
         assert( idx < Internal->Length[RED] );
@@ -461,14 +456,13 @@ void LookupTable::Decode(std::istream &is, std::ostream &os) const
     }
   else if ( BitSample == 16 )
     {
+    // gdcmData/NM-PAL-16-PixRep1.dcm
     const uint16_t *rgb16 = (uint16_t*)&Internal->RGB[0];
     while( !is.eof() )
       {
       unsigned short idx;
       unsigned short rgb[3];
       is.read( (char*)(&idx), 2);
-      //is.Get(c);
-      // FIXME
       if( is.eof() ) break;
       if( IncompleteLUT )
         {
@@ -482,6 +476,62 @@ void LookupTable::Decode(std::istream &is, std::ostream &os) const
       os.write((char*)rgb, 3*2);
       }
     }
+}
+
+bool LookupTable::Decode(char *output, size_t outlen, const char *input, size_t inlen ) const
+{
+  bool success = false;
+  if( outlen < 3 * inlen )
+    {
+    gdcmDebugMacro( "Out buffer too small" );
+    return false;
+    }
+  if( !Initialized() )
+    {
+    gdcmDebugMacro( "Not Initialized" );
+    return false;
+    }
+  if ( BitSample == 8 )
+    {
+    const unsigned char * end = (unsigned char*)input + inlen;
+    unsigned char * rgb = (unsigned char*)output;
+    for( unsigned char * idx = (unsigned char*)input; idx != end; ++idx )
+      {
+      if( IncompleteLUT )
+        {
+        assert( *idx < Internal->Length[RED] );
+        assert( *idx < Internal->Length[GREEN] );
+        assert( *idx < Internal->Length[BLUE] );
+        }
+      rgb[RED]   = Internal->RGB[3 * *idx+RED];
+      rgb[GREEN] = Internal->RGB[3 * *idx+GREEN];
+      rgb[BLUE]  = Internal->RGB[3 * *idx+BLUE];
+      rgb += 3;
+      }
+    success = true;
+    }
+  else if ( BitSample == 16 )
+    {
+    const uint16_t *rgb16 = (uint16_t*)&Internal->RGB[0];
+    assert( inlen % 2 == 0 );
+    const uint16_t * end = (uint16_t*)(input + inlen);
+    uint16_t * rgb = (uint16_t*)output;
+    for( uint16_t * idx = (uint16_t*)input; idx != end; ++idx )
+      {
+      if( IncompleteLUT )
+        {
+        assert( *idx < Internal->Length[RED] );
+        assert( *idx < Internal->Length[GREEN] );
+        assert( *idx < Internal->Length[BLUE] );
+        }
+      rgb[RED]   = rgb16[3 * *idx+RED];
+      rgb[GREEN] = rgb16[3 * *idx+GREEN];
+      rgb[BLUE]  = rgb16[3 * *idx+BLUE];
+      rgb += 3;
+      }
+    success = true;
+    }
+  return success;
 }
 
 const unsigned char *LookupTable::GetPointer() const

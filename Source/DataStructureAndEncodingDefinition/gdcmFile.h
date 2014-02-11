@@ -34,7 +34,6 @@ class GDCM_EXPORT File : public Object
 {
 public:
   File() {};
-  ~File() {};
 
   friend std::ostream &operator<<(std::ostream &os, const File &val);
 

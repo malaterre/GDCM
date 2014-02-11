@@ -49,7 +49,7 @@ public:
   ...
    */
   /// The current implementation in GDCM make use of the UUID implementation (RFC 4122) and has been
-  /// successfully been tested for a root of size 26 bytes. Any longer root should work (the ::Generate()
+  /// successfully been tested for a root of size 26 bytes. Any longer root should work (the Generate()
   /// function will return a string), but will truncate the high bits of the 128bits UUID until the
   /// generated string fits on 64 bits. The authors disclaims any
   /// responsabitlity for garanteeing uniqueness of UIDs when the root is longer than 26 bytes.

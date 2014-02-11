@@ -225,6 +225,7 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "e4d559b6db04679b54bea40c763b09e4"  , "TOSHIBA_J2K_SIZ0_PixRep1.dcm" },
 { "58ab110be40303952e05d50e64823192"  , "NM-PAL-16-PixRep1.dcm" },
 { "deb7e4ee592efca5d475aaa6fab06459"  , "MEDILABInvalidCP246_EVRLESQasUN.dcm" },
+{ "52f727de4f831ff2bae850fdd8b1413a"  , "JPEGInvalidSecondFrag.dcm" },
 
 { NULL, NULL}
 };

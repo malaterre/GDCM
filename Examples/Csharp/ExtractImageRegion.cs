@@ -37,7 +37,7 @@ public class ExtractImageRegion
     {
     string filename = args[0];
 
-    // instanciate the reader:
+    // instantiate the reader:
     gdcm.ImageRegionReader reader = new gdcm.ImageRegionReader();
     reader.SetFileName( filename );
 

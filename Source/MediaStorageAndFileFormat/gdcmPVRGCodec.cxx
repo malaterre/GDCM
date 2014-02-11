@@ -115,48 +115,69 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   // ./bin/pvrgjpeg -d -s jpeg.jpg -ci 0 out.raw
   pvrg_command += "-s ";
   pvrg_command += input;
-  pvrg_command += " -ci 0 ";
-  pvrg_command += output;
+  //pvrg_command += " -ci 0 ";
+  //pvrg_command += output;
 
   //std::cerr << pvrg_command << std::endl;
   gdcmDebugMacro( pvrg_command );
   int ret = system(pvrg_command.c_str());
-  (void)ret;
   //std::cerr << "system: " << ret << std::endl;
-
-  size_t len = gdcm::System::FileSize(output);
-  if(!len)
+  if( ret )
     {
+    gdcmErrorMacro( "Looks like pvrg gave up in input, with ret value: " << ret );
     return false;
     }
 
-  std::ifstream is(output);
-  char * buf = new char[len];
-  is.read(buf, len);
-  out.SetTag( gdcm::Tag(0x7fe0,0x0010) );
-
-  if ( PF.GetBitsAllocated() == 16 )
+  int numoutfile = GetPixelFormat().GetSamplesPerPixel();
+  std::string wholebuf;
+  for( int file = 0; file < numoutfile; ++file )
     {
-    ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
-      buf,
+    std::ostringstream os;
+    os << input;
+    os << ".";
+    os << file; // dont ask
+    const std::string altfile = os.str();
+    const size_t len = gdcm::System::FileSize(altfile.c_str());
+    if( !len )
+      {
+      gdcmDebugMacro( "Output file was really empty: " << altfile );
+      return false;
+      }
+    const char *rawfile = altfile.c_str();
+
+    gdcmDebugMacro( "Processing: " << rawfile );
+    std::ifstream is(rawfile, std::ios::binary);
+    std::string buf;
+    buf.resize( len );
+    is.read(&buf[0], len);
+    out.SetTag( gdcm::Tag(0x7fe0,0x0010) );
+
+    if ( PF.GetBitsAllocated() == 16 )
+      {
+      ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
+        &buf[0],
 #ifdef GDCM_WORDS_BIGENDIAN
-      SwapCode::LittleEndian,
+        SwapCode::LittleEndian,
 #else
-      SwapCode::BigEndian,
+        SwapCode::BigEndian,
 #endif
-      len/2);
+        len/2);
+      }
+    wholebuf.insert( wholebuf.end(), buf.begin(), buf.end() );
+    if( !System::RemoveFile(rawfile) )
+      {
+      gdcmErrorMacro( "Could not delete output: " << rawfile);
+      }
     }
-  out.SetByteValue( buf, (uint32_t)len );
-  delete[] buf;
+  out.SetByteValue( &wholebuf[0], (uint32_t)wholebuf.size() );
+  if( numoutfile == 3 )
+    {
+    this->PlanarConfiguration = 1;
+    }
 
   if( !System::RemoveFile(input) )
     {
     gdcmErrorMacro( "Could not delete input: " << input );
-    }
-
-  if( !System::RemoveFile(output) )
-    {
-    gdcmErrorMacro( "Could not delete output: " << output );
     }
 
   free(input);
@@ -170,6 +191,11 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 #endif
 }
 
+void PVRGCodec::SetLossyFlag( bool l )
+{
+  LossyFlag = l;
+}
+
 // Compress into JPEG
 bool PVRGCodec::Code(DataElement const &in, DataElement &out)
 {
@@ -180,9 +206,14 @@ bool PVRGCodec::Code(DataElement const &in, DataElement &out)
 #else
   (void)in;
   (void)out;
-  /* Do I really want to produce JPEG by PRVRG ? Shouldn't IJG handle all cases nicely ? */
+  /* Do I really want to produce JPEG by PVRG ? Shouldn't IJG handle all cases nicely ? */
   return false;
 #endif
+}
+
+ImageCodec * PVRGCodec::Clone() const
+{
+  return NULL;
 }
 
 } // end namespace gdcm

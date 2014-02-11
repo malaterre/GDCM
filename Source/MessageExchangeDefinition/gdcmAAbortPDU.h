@@ -40,6 +40,9 @@ public:
 
   bool IsLastFragment() const { return true; }
 
+  void SetSource(const uint8_t s);
+  void SetReason(const uint8_t r);
+
 private:
   static const uint8_t ItemType; // PDUType ?
   static const uint8_t Reserved2;

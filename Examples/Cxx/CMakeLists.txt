@@ -13,6 +13,12 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Utilities"
   )
+# error C1083: Cannot open include file: 'zconf.h'
+if(NOT GDCM_USE_SYSTEM_ZLIB)
+include_directories(
+  "${GDCM_BINARY_DIR}/Utilities/gdcmzlib"
+)
+endif()
 
 if(GDCM_BINARY_DIR)
 find_package(SQLITE3)
@@ -27,10 +33,13 @@ endif()
 
 set(EXAMPLES_SRCS
   DumpGEMSMovieGroup
+  QIDO-RS
   DumpExamCard
+  DumpPhilipsECHO
   ExtractIconFromFile
   CreateJPIPDataSet
   DumpADAC
+  DumpImageHeaderInfo
   ReadMultiTimesException
   pmsct_rgb1
   GenAllVR
@@ -120,10 +129,19 @@ set(EXAMPLES_SRCS
 )
 endif()
 
+if(BUILD_SHARED_LIBS)
+  set_source_files_properties(FixJAIBugJPEGLS.cxx
+                              PROPERTIES
+                              COMPILE_FLAGS -DCHARLS_SHARED
+                              )
+endif()
+
 foreach(example ${EXAMPLES_SRCS})
   add_executable(${example} ${example}.cxx)
   if(${example} STREQUAL "FixJAIBugJPEGLS")
     target_link_libraries(${example} gdcmMSFF ${GDCM_CHARLS_LIBRARIES})
+  elseif(${example} STREQUAL "DumpPhilipsECHO")
+    target_link_libraries(${example} gdcmMSFF ${GDCM_ZLIB_LIBRARIES})
   else()
     target_link_libraries(${example} gdcmMSFF)
   endif()

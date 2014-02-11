@@ -36,11 +36,11 @@ int main(int argc, char *argv[])
   const char *filename = argv[1];
   const char *outfilename = argv[2];
 
-      size_t len = gdcm::System::FileSize(filename);
-      std::ifstream is(filename);
+  size_t len = gdcm::System::FileSize(filename);
+  std::ifstream is(filename, std::ios::binary);
 
-      char * buf = new char[len];
-      is.read(buf, len);
+  char * buf = new char[len];
+  is.read(buf, len);
 
   gdcm::ImageWriter writer;
   gdcm::Image &image = writer.GetImage();

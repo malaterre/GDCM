@@ -91,8 +91,9 @@ public:
     }
 
   template <typename TDE, typename TSwap>
-  std::istream &Read(std::istream &is)
+  std::istream &Read(std::istream &is, bool readvalues = true)
     {
+    (void)readvalues;
     const Tag seqDelItem(0xfffe,0xe0dd);
     if( SequenceLengthField.IsUndefined() )
       {
@@ -159,6 +160,7 @@ public:
           throw "Length of Item larger than expected";
           }
         assert( l <= SequenceLengthField );
+        //std::cerr << "sqi debug len: " << is.tellg() << " " <<  l << " " <<  SequenceLengthField << std::endl;
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
         // MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm
         // (0x2005, 0x1080): for some reason computation of length fails...

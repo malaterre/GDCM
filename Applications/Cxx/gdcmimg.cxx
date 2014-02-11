@@ -69,6 +69,10 @@
 #include <getopt.h>
 #include <string.h>
 
+#ifdef _MSC_VER
+#define atoll _atoi64
+#endif
+
 static unsigned int readsize(const char *str, unsigned int * size)
 {
   int n = sscanf( str, "%i,%i,%i", size, size+1, size+2);
@@ -130,7 +134,10 @@ static void PrintHelp()
   std::cout << "     --sign %s         Pixel sign (0/1)." << std::endl;
   std::cout << "     --spp  %d         Sample Per Pixel (1/3)." << std::endl;
   std::cout << "     --pc [01]         Change planar configuration." << std::endl;
-  std::cout << "  -s --size %d,%d      Size." << std::endl;
+  std::cout << "     --pi [str]        Change photometric interpretation." << std::endl;
+  std::cout << "     --pf %d,%d,%d     Change pixel format: (BA,BS,HB)." << std::endl;
+  std::cout << "  -s --size %d,%d,%d   Size." << std::endl;
+  std::cout << "     --offset %ull     Start Offset." << std::endl;
   std::cout << "  -C --sop-class-uid   SOP Class UID (name or value)." << std::endl;
   std::cout << "  -T --study-uid       Study UID." << std::endl;
   std::cout << "  -S --series-uid      Series UID." << std::endl;
@@ -269,7 +276,7 @@ static bool AddUIDs(int sopclassuid, std::string const & sopclass, std::string c
   return true;
 }
 
-static bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFragments *sq , gdcm::ImageCodec & jpeg, const char *filename )
+static bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFragments *sq , gdcm::ImageCodec & jpeg, const char *filename, std::streampos const pos = 0 )
 {
   /*
    * FIXME: when JPEG contains JFIF marker, we should only read them
@@ -305,6 +312,10 @@ static bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFrag
     // do not rewind file should be just at right offset
     }
   char *buf = new char[len];
+  if( pos )
+    {
+    is.seekg( pos, std::ios::beg );
+    }
   is.read(buf, len);
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
 
@@ -325,7 +336,7 @@ static bool PopulateSingeFile( gdcm::PixmapWriter & writer, gdcm::SequenceOfFrag
   return true;
 }
 
-static bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Directory::FilenamesType const & filenames, unsigned int ndim = 2 )
+static bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Directory::FilenamesType const & filenames, unsigned int ndim = 2, std::streampos const & pos = 0 )
 {
   std::vector<std::string>::const_iterator it = filenames.begin();
   bool b = true;
@@ -339,7 +350,7 @@ static bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm
   gdcm::SmartPointer<gdcm::SequenceOfFragments> sq = new gdcm::SequenceOfFragments;
   for(; it != filenames.end(); ++it)
     {
-    b = b && PopulateSingeFile( writer, sq, jpeg, it->c_str() );
+    b = b && PopulateSingeFile( writer, sq, jpeg, it->c_str(), pos );
     }
   if( filenames.size() > 1 )
     {
@@ -414,6 +425,12 @@ int main (int argc, char *argv[])
   std::string sopclass;
   std::string lsb_msb;
   int sopclassuid = 0;
+  int pinter = 0;
+  std::string pinterstr;
+  int pformat = 0;
+  std::string pformatstr;
+  int poffset = 0;
+  size_t start_pos = 0;
 
   int verbose = 0;
   int warning = 0;
@@ -445,6 +462,9 @@ int main (int argc, char *argv[])
         {"sign", 1, &sign, 1}, //
         {"spp", 1, &spp, 1}, //
         {"pc", 1, &pconf, 1}, //
+        {"pi", 1, &pinter, 1}, //
+        {"pf", 1, &pformat, 1}, //
+        {"offset", 1, &poffset, 1}, //
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -471,7 +491,7 @@ int main (int argc, char *argv[])
       {
     case 0:
         {
-        const char *s = long_options[option_index].name;
+        const char *s = long_options[option_index].name; (void)s;
         //printf ("option %s", s);
         if (optarg)
           {
@@ -540,6 +560,24 @@ int main (int argc, char *argv[])
             {
             assert( strcmp(s, "pc") == 0 );
             pconf = atoi(optarg);
+            }
+          else if( option_index == 14 ) /* pinter */
+            {
+            assert( strcmp(s, "pi") == 0 );
+            pinter = 1;
+            pinterstr = optarg;
+            }
+          else if( option_index == 15 ) /* pformat */
+            {
+            assert( strcmp(s, "pf") == 0 );
+            pformat = 1;
+            pformatstr = optarg;
+            }
+          else if( option_index == 16 ) /* start_pos */
+            {
+            assert( strcmp(s, "offset") == 0 );
+            poffset = 1;
+            start_pos = atoll(optarg);
             }
           //printf (" with arg %s", optarg);
           }
@@ -754,6 +792,31 @@ int main (int argc, char *argv[])
     {
     if( pixelspp != 3 ) return 1;
     }
+  gdcm::PixelFormat pfref = gdcm::PixelFormat::UINT8;
+  if( pformat )
+    {
+    int ba, bs, hb;
+    int n = sscanf( pformatstr.c_str(), "%d,%d,%d", &ba, &bs, &hb );
+    if( n != 3 ) return 1;
+    pfref.SetBitsAllocated( (unsigned short)ba );
+    pfref.SetBitsStored( (unsigned short)bs );
+    pfref.SetHighBit( (unsigned short)hb );
+    if( spp )
+      pfref.SetSamplesPerPixel( (unsigned short)pixelspp );
+    if( sign )
+      pfref.SetPixelRepresentation( (unsigned short)pixelsign );
+    }
+  gdcm::PhotometricInterpretation::PIType refpi = gdcm::PhotometricInterpretation::MONOCHROME2;
+  if( pinter )
+    {
+    refpi = gdcm::PhotometricInterpretation::GetPIType( pinterstr.c_str() );
+    if( refpi == gdcm::PhotometricInterpretation::UNKNOW
+      || refpi == gdcm::PhotometricInterpretation::PI_END )
+      {
+      std::cerr << "Invalid PI: " << pinterstr << std::endl;
+      return 1;
+      }
+    }
 
   const char *inputextension = filename.GetExtension();
   const char *outputextension = outfilename.GetExtension();
@@ -784,7 +847,7 @@ int main (int argc, char *argv[])
         }
       raw.SetDimensions( dims );
       gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
-      gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+      gdcm::PhotometricInterpretation pi = refpi;
       if( gdcm::System::StrCaseCmp(inputextension,".rgb") == 0 )
         {
         pi = gdcm::PhotometricInterpretation::RGB;
@@ -816,7 +879,7 @@ int main (int argc, char *argv[])
           }
         }
 
-      if( !Populate( writer, raw, filenames, ndimension ) ) return 1;
+      if( !Populate( writer, raw, filenames, ndimension, start_pos ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );
@@ -847,7 +910,7 @@ int main (int argc, char *argv[])
       gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
       if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign ) ) return 1;
       rle.SetPixelFormat( pf );
-      gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+      gdcm::PhotometricInterpretation pi = refpi;
       rle.SetPhotometricInterpretation( pi );
 
       if( !Populate( writer, rle, filenames ) ) return 1;
@@ -867,8 +930,22 @@ int main (int argc, char *argv[])
       || gdcm::System::StrCaseCmp(inputextension,".ppm") == 0 )
       {
       gdcm::PNMCodec pnm;
+      // Let's handle the case where user really wants to specify the data:
+      gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
+      if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign ) ) return 1;
+
       gdcm::PixmapWriter writer;
       if( !Populate( writer, pnm, filenames ) ) return 1;
+      // populate will guess pixel format and photometric inter from file, need
+      // to override after calling Populate:
+      if( pformat )
+        {
+        writer.GetPixmap().SetPixelFormat( pfref );
+        }
+      if( pinter )
+        {
+        writer.GetPixmap().SetPhotometricInterpretation( refpi );
+        }
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );
@@ -984,6 +1061,7 @@ int main (int argc, char *argv[])
       pnm.SetDimensions( imageori.GetDimensions() );
       pnm.SetPixelFormat( imageori.GetPixelFormat() );
       pnm.SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
+      pnm.SetPlanarConfiguration( imageori.GetPlanarConfiguration() );
       pnm.SetLUT( imageori.GetLUT() );
       const gdcm::DataElement& in = imageori.GetDataElement();
       bool b = pnm.Write( outfilename, in );
@@ -1001,6 +1079,7 @@ int main (int argc, char *argv[])
       pnm.SetDimensions( imageori.GetDimensions() );
       pnm.SetPixelFormat( imageori.GetPixelFormat() );
       pnm.SetPhotometricInterpretation( imageori.GetPhotometricInterpretation() );
+      pnm.SetPlanarConfiguration( imageori.GetPlanarConfiguration() );
       pnm.SetLUT( imageori.GetLUT() );
       const gdcm::DataElement& in = imageori.GetDataElement();
       bool b = pnm.Write( outfilename, in );

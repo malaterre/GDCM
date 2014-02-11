@@ -36,6 +36,7 @@ each class have its own file for the sake of brevity of the number of files.
 #include "gdcmAAssociateRQPDU.h"
 #include "gdcmAAssociateACPDU.h"
 #include "gdcmAReleaseRQPDU.h"
+#include "gdcmSubject.h"
 
 #include <socket++/echo.h>//for setting up the local socket
 
@@ -109,7 +110,7 @@ static void process_input(iosockinet& sio)
   // C-STORE
   if( commanddatasettype == 0 )
     {
-    std::ofstream out( "movescu.dcm" );
+    std::ofstream out( "movescu.dcm", std::ios::binary );
     int i = 0;
     do
       {

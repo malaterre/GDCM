@@ -38,9 +38,15 @@ int TestRead(const char* filename, bool verbose = false)
   //std::cout << ds << std::endl;
 
   const char *ref = gdcm::Testing::GetMediaStorageFromFile(filename);
-
   gdcm::MediaStorage ms;
   ms.SetFromFile( reader.GetFile() );
+  if( !ref )
+    {
+    std::cerr << "TestReadError: Missing MediaStorage: " << filename << std::endl;
+    std::cerr << "It should be: " << ms << std::endl;
+    return 1;
+    }
+
   if( ms.IsUndefined() && ref && *ref != 0 )
     {
     std::cerr << "TestReadError: MediaStorage: " << filename << std::endl;

@@ -35,7 +35,7 @@ int TestSimplePrint(const char *filename, bool verbose = false)
     const gdcm::DataElement &ref = *it;
     os << ref << std::endl;
     }
-  if( verbose ) std::cout << os;
+  if( verbose ) std::cout << os.str();
 
   return ret;
 }

@@ -99,7 +99,10 @@ bool Anonymizer::Empty( Tag const &t)
 bool Anonymizer::Remove( Tag const &t )
 {
   DataSet &ds = F->GetDataSet();
-  return ds.Remove( t ) == 1;
+  if(ds.FindDataElement(t))
+    return ds.Remove( t ) == 1;
+  else
+    return true;
 }
 
 bool Anonymizer::Replace( Tag const &t, const char *value )
@@ -819,6 +822,15 @@ generate a DICOMDIR
   return !b;
 }
 
+Anonymizer::DummyMapNonUIDTags Anonymizer::dummyMapNonUIDTags;
+Anonymizer::DummyMapUIDTags Anonymizer::dummyMapUIDTags;
+
+void Anonymizer::ClearInternalUIDs()
+{
+  dummyMapNonUIDTags.clear();
+  dummyMapUIDTags.clear();
+}
+
 bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
 {
   // \precondition
@@ -828,11 +840,6 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
   ae.SetTag( tag );
   this->InvokeEvent( ae );
 
-  typedef std::pair< Tag, std::string > TagValueKey;
-  typedef std::map< TagValueKey, std::string > DummyMapNonUIDTags;
-  typedef std::map< std::string, std::string > DummyMapUIDTags;
-  static DummyMapNonUIDTags dummyMapNonUIDTags;
-  static DummyMapUIDTags dummyMapUIDTags;
 
   bool canempty = CanEmptyTag( tag, iod );
   if( !canempty )

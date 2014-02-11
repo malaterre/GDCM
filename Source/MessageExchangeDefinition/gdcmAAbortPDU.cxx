@@ -105,6 +105,7 @@ size_t AAbortPDU::Size() const
 namespace {
 static const char *PrintSourceAsString( uint8_t source )
 {
+  // See PS 3.8-2011 Table 9-26 A-ABORT PDU FIELDS
   switch( source )
     {
   case 0x0:
@@ -114,8 +115,8 @@ static const char *PrintSourceAsString( uint8_t source )
   case 0x2:
     return "DICOM UL service-provider (initiated abort)";
     }
-  assert( 0 );
-  return NULL;
+  // Conquest DICOM 1.14.17c, return '3' as source value:
+  return "BOGUS SCP IMPLEMENTATION, REPORT UPSTREAM";
 }
 
 static const char *PrintReasonAsString( uint8_t reason )
@@ -147,6 +148,16 @@ void AAbortPDU::Print(std::ostream &os) const
   os << "PDULength: " << ItemLength << std::endl;
   os << "Source: " << PrintSourceAsString( Source ) << std::endl;
   os << "Reason: " << PrintReasonAsString( Reason ) << std::endl;
+}
+
+void AAbortPDU::SetSource(const uint8_t s)
+{
+  Source = s;
+}
+
+void AAbortPDU::SetReason(const uint8_t r)
+{
+  Reason = r;
 }
 
 } // end namespace network

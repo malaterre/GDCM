@@ -249,14 +249,14 @@ bool DumpADAC( std::istream & is )
 //  std::cout << magic << " ";
   assert( strcmp( magic, "adac01" ) == 0 );
   int c = is.get();
-  assert( c == 0 );
+  assert( c == 0 ); (void)c;
   c = is.get();
   assert( c == 'X' );
 
   uint16_t v;
   v = readint16(is);
 //  std::cout << v << std::endl;
-  assert( v == 512 ); // ??
+  assert( v == 512 ); (void)v; // ??
 
   int nel = 87;
   for (int i = 0; i <= nel; ++i )

@@ -102,7 +102,7 @@ int TestvtkGDCMMetaImageWrite(const char *filename, bool verbose)
     char digestraw[33] = {};
     bool bmhd = gdcm::Testing::ComputeFileMD5( mhdfile.c_str() , digestmhd );
     bool braw = gdcm::Testing::ComputeFileMD5( rawfile.c_str() , digestraw );
-    assert( bmhd && braw );
+    assert( bmhd && braw ); (void)bmhd; (void)braw;
     const char * mhdref = vtkGDCMTesting::GetMHDMD5FromFile(filename);
     const char * rawref = vtkGDCMTesting::GetRAWMD5FromFile(filename);
     if( !mhdref || !rawref )

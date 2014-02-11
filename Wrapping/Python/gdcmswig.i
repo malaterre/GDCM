@@ -58,9 +58,9 @@
 #include "gdcmPreamble.h"
 #include "gdcmFile.h"
 #include "gdcmBitmap.h"
+#include "gdcmIconImage.h"
 #include "gdcmPixmap.h"
 #include "gdcmImage.h"
-#include "gdcmIconImage.h"
 #include "gdcmFragment.h"
 #include "gdcmCSAHeader.h"
 #include "gdcmPDBHeader.h"
@@ -86,12 +86,15 @@
 #include "gdcmDictEntry.h"
 #include "gdcmCSAHeaderDictEntry.h"
 #include "gdcmUIDGenerator.h"
+#include "gdcmUUIDGenerator.h"
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
 #include "gdcmAttribute.h"
 #include "gdcmSubject.h"
 #include "gdcmCommand.h"
 #include "gdcmAnonymizer.h"
+#include "gdcmFileAnonymizer.h"
+#include "gdcmFileStreamer.h"
 #include "gdcmSystem.h"
 #include "gdcmTrace.h"
 #include "gdcmUIDs.h"
@@ -105,7 +108,6 @@
 #include "gdcmFiducials.h"
 #include "gdcmWaveform.h"
 #include "gdcmPersonName.h"
-#include "gdcmIconImage.h"
 #include "gdcmCurve.h"
 #include "gdcmDICOMDIR.h"
 #include "gdcmValidate.h"
@@ -149,7 +151,9 @@
 #include "gdcmJPEGCodec.h"
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
+#include "gdcmPNMCodec.h"
 #include "gdcmImageChangeTransferSyntax.h"
+#include "gdcmFileChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
 #include "gdcmSplitMosaicFilter.h"
 #include "gdcmImageChangePhotometricInterpretation.h"
@@ -163,6 +167,7 @@
 #include "gdcmSHA1.h"
 #include "gdcmBase64.h"
 #include "gdcmCryptographicMessageSyntax.h"
+#include "gdcmCryptoFactory.h"
 #include "gdcmSpacing.h"
 #include "gdcmIconImageGenerator.h"
 #include "gdcmIconImageFilter.h"
@@ -180,11 +185,11 @@
 #include "gdcmServiceClassUser.h"
 
 #include "gdcmStreamImageReader.h"
-#include "gdcmStreamImageWriter.h"
 
 #include "gdcmRegion.h"
 #include "gdcmBoxRegion.h"
 #include "gdcmImageRegionReader.h"
+#include "gdcmJSON.h"
 
 using namespace gdcm;
 %}
@@ -404,6 +409,8 @@ EXTEND_CLASS_PRINT(gdcm::Bitmap)
     self->GetBuffer(*buffer);
   }
 };
+%include "gdcmIconImage.h"
+EXTEND_CLASS_PRINT(gdcm::IconImage)
 %include "gdcmPixmap.h"
 EXTEND_CLASS_PRINT(gdcm::Pixmap)
 %typemap(out) const double *GetOrigin, const double *GetSpacing {
@@ -424,8 +431,6 @@ EXTEND_CLASS_PRINT(gdcm::Pixmap)
 }
 %include "gdcmImage.h"
 EXTEND_CLASS_PRINT(gdcm::Image)
-%include "gdcmIconImage.h"
-EXTEND_CLASS_PRINT(gdcm::IconImage)
 %include "gdcmFragment.h"
 EXTEND_CLASS_PRINT(gdcm::Fragment)
 %include "gdcmPDBElement.h"
@@ -500,6 +505,8 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 //EXTEND_CLASS_PRINT(gdcm::StringFilter)
 %include "gdcmUIDGenerator.h"
 //EXTEND_CLASS_PRINT(gdcm::UIDGenerator)
+%include "gdcmUUIDGenerator.h"
+//EXTEND_CLASS_PRINT(gdcm::UUIDGenerator)
 //%include "gdcmConstCharWrapper.h"
 //%{
 //  typedef char * PString;   // copied to wrapper code
@@ -540,7 +547,14 @@ EXTEND_CLASS_PRINT(gdcm::Scanner)
 //%feature("unref") Anonymizer "coucou $this->Delete();"
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus%5Fnn34
 %include "gdcmAnonymizer.h"
+%apply char[] { char* value_data }
+%include "gdcmFileAnonymizer.h"
+%clear char* value_data;
 
+%apply char[] { char* array }
+%template(SmartPtrFStreamer) gdcm::SmartPointer<gdcm::FileStreamer>;
+%include "gdcmFileStreamer.h"
+%clear char* array;
 
 //EXTEND_CLASS_PRINT(gdcm::Anonymizer)
 %include "gdcmSystem.h"
@@ -645,7 +659,6 @@ EXTEND_CLASS_PRINT(gdcm::DirectionCosines)
 %include "gdcmFiducials.h"
 %include "gdcmWaveform.h"
 %include "gdcmPersonName.h"
-%include "gdcmIconImage.h"
 %include "gdcmCurve.h"
 %include "gdcmDICOMDIR.h"
 %include "gdcmValidate.h"
@@ -714,7 +727,10 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmJPEGCodec.h"
 %include "gdcmJPEGLSCodec.h"
 %include "gdcmJPEG2000Codec.h"
+%include "gdcmPNMCodec.h"
 %include "gdcmImageChangeTransferSyntax.h"
+%template(SmartPtrFCTS) gdcm::SmartPointer<gdcm::FileChangeTransferSyntax>;
+%include "gdcmFileChangeTransferSyntax.h"
 %include "gdcmImageApplyLookupTable.h"
 %include "gdcmSplitMosaicFilter.h"
 %include "gdcmImageChangePhotometricInterpretation.h"
@@ -731,6 +747,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmSHA1.h"
 %include "gdcmBase64.h"
 %include "gdcmCryptographicMessageSyntax.h"
+%include "gdcmCryptoFactory.h"
 %include "gdcmSpacing.h"
 %include "gdcmIconImageGenerator.h"
 %include "gdcmIconImageFilter.h"
@@ -760,7 +777,6 @@ typedef int64_t time_t; // FIXME
 %apply char[] { char* inReadBuffer }
 %include "gdcmStreamImageReader.h"
 %clear char* inReadBuffer;
-%include "gdcmStreamImageWriter.h"
 %include "gdcmRegion.h"
 EXTEND_CLASS_PRINT(gdcm::Region)
 %include "gdcmBoxRegion.h"
@@ -768,3 +784,4 @@ EXTEND_CLASS_PRINT(gdcm::BoxRegion)
 %apply char[] { char* inreadbuffer }
 %include "gdcmImageRegionReader.h"
 %clear char* inreadbuffer;
+%include "gdcmJSON.h"

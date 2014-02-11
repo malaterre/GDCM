@@ -5,6 +5,7 @@ set(CSHARP_EXAMPLES
   SimplePrintPatientName
   ExtractOneFrame
   ExtractImageRegion
+  ExtractImageRegionWithLUT
   ManipulateFile
   RescaleImage
   ExtractEncapsulatedFile
@@ -22,7 +23,10 @@ set(CSHARP_EXAMPLES
   CompressLossyJPEG
   SendFileSCU
   MpegVideoInfo
+  BasicImageAnonymizer
   FileAnonymize
+  FileStreaming
+  FileChangeTS
   )
 
 if(BUILD_TESTING)
