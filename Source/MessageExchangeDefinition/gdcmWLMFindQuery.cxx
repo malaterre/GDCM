@@ -53,49 +53,6 @@ WLMFindQuery::ValidateQuery(bool inStrict) const
   return theReturn ;
 }
 
-bool
-WLMFindQuery::ValidDataSet( const DataSet & dataSetToValid, const DataSet & dataSetReference ) const
-{
-  bool theReturn = true ;
-  DataSet::ConstIterator itor;
-  for (itor = dataSetReference.Begin(); itor != dataSetReference.End(); itor++)
-    {
-    if ( dataSetToValid.FindDataElement( itor->GetTag() ) )
-      {
-      SmartPointer<SequenceOfItems> pSqi = dataSetToValid.GetDataElement( itor->GetTag() ).GetValueAsSQ();
-      SmartPointer<SequenceOfItems> pSqiRef = pSqi ? itor->GetValueAsSQ() : NULL ;
-      if ( pSqi && pSqiRef )
-        {
-        if( pSqi->GetNumberOfItems() < pSqiRef->GetNumberOfItems() )
-          {
-          gdcmErrorMacro( "DataSet to valid has less Items " << pSqi->GetNumberOfItems() << " for sequence : " << itor->GetTag() << " than valid one " << pSqiRef->GetNumberOfItems() );
-          theReturn = false ;
-          break ;
-          }
-        SequenceOfItems::SizeType indexOfItem ;
-        for ( indexOfItem = 1 ; indexOfItem <= pSqiRef->GetNumberOfItems(); indexOfItem++ )
-          {
-          const Item & currentReferenceItem = pSqiRef->GetItem( indexOfItem );
-          const Item & currentItemToValid = pSqi->GetItem( indexOfItem );
-          // now valid subDataSet
-          theReturn &= ValidDataSet( currentItemToValid.GetNestedDataSet(), currentReferenceItem.GetNestedDataSet() );
-          if ( !theReturn )
-            break ;
-          }
-        }
-      else // tag is found its not a sequence so it's ok
-        theReturn &= true ;
-      }
-    else
-      {
-      gdcmErrorMacro( "You must have this tag : " << itor->GetTag() << " in your query dataset. ");
-      theReturn = false ;
-      break ;
-      }
-    }
-  return theReturn ;
-}
-
 UIDs::TSName WLMFindQuery::GetAbstractSyntaxUID() const
 {
   return UIDs::ModalityWorklistInformationModelFIND;

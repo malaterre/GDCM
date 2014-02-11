@@ -22,10 +22,27 @@
 #include "gdcmMoveStudyRootQuery.h"
 #include "gdcmWLMFindQuery.h"
 
+
+#include "gdcmModalityPerformedProcedureStepCreateQuery.h"
+#include "gdcmModalityPerformedProcedureStepSetQuery.h"
+
 #include <locale>
 
 namespace gdcm
 {
+
+BaseQuery* QueryFactory::ProduceQuery( const std::string & sopInstanceUID, ENQueryType inQueryType )
+{
+  BaseQuery* theReturn = NULL;
+    switch (inQueryType)
+    {
+	case eMMPS :
+		theReturn = new ModalityPerformedProcedureStepSetQuery( sopInstanceUID );
+		break ;
+	}
+  return theReturn;
+}
+
 BaseRootQuery* QueryFactory::ProduceQuery(ERootType inRootType, EQueryType inQueryType,
  EQueryLevel inQueryLevel)
 {

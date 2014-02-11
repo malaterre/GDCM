@@ -72,6 +72,9 @@ public:
 
   /// \brief Appends an Item to the already added ones
   void AddItem(Item const &item);
+    
+  /// \brief Appends an Item to the already added ones
+  Item & AddNewUndefinedLengthItem();
 
   SizeType GetNumberOfItems() const {  return Items.size(); }
   void SetNumberOfItems(SizeType n) {  Items.resize(n); }

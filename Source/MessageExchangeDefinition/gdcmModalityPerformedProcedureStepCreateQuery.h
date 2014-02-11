@@ -11,34 +11,27 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef GDCMWLMFindQuery_H
-#define GDCMWLMFindQuery_H
+#ifndef GDCMMODALITYPERFORMEDPROCEDURESTEPCREATEQUERY_H
+#define GDCMMODALITYPERFORMEDPROCEDURESTEPCREATEQUERY_H
 
-#include "gdcmBaseRootQuery.h"
+#include "gdcmBaseQuery.h"
 
 namespace gdcm
 {
 /**
- * \brief PatientRootQuery
- * contains: the class which will produce a dataset for c-find with patient root
+ * \brief ModalityPerformedProcedureStepCreateQuery
+ * contains: the class which will produce a dataset for n-create for Modality Performed Procedure Step sop class
  */
-class GDCM_EXPORT WLMFindQuery : public BaseRootQuery
-{
+class GDCM_EXPORT ModalityPerformedProcedureStepCreateQuery : public BaseQuery{
   friend class QueryFactory;
 public:
-  WLMFindQuery();
+  ModalityPerformedProcedureStepCreateQuery( const std::string & iSopInstanceUID );
 
-  // no sense here
-  void InitializeDataSet(const EQueryLevel& inQueryLevel);
-  std::vector<Tag> GetTagListByLevel(const EQueryLevel& inQueryLevel);
-  // validate query has required tag
+  gdcm::DataSet GetRequiredDataSet() const;
   bool ValidateQuery(bool inStrict = true) const;
-
   UIDs::TSName GetAbstractSyntaxUID() const;
-protected :
-  DataSet GetValidDataSet() const;
 };
 
 } // end namespace gdcm
 
-#endif // GDCMWLMFindQuery_H
+#endif // GDCMMODALITYPERFORMEDPROCEDURESTEPCREATEQUERY_H

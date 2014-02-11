@@ -25,6 +25,14 @@ void SequenceOfItems::AddItem(Item const &item)
     }
 }
 
+Item & SequenceOfItems::AddNewUndefinedLengthItem()
+{
+	gdcm::Item itemToAdd ;
+	itemToAdd.SetVLToUndefined();
+	this->AddItem( itemToAdd );
+	return GetItem( this->GetNumberOfItems() );
+}
+
 Item &SequenceOfItems::GetItem(SizeType position)
 {
   if( position < 1 || position > Items.size() )
