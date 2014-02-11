@@ -145,8 +145,5 @@ namespace gdcm
 		validDataSet.Insert( PerformedSeriesSequence.GetAsDataElement() );
 
 		return validDataSet ;
-  }
- 
-             
-             
+  }      
 }

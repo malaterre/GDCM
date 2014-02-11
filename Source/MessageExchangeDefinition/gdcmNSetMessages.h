@@ -29,7 +29,7 @@ class ULConnection;
  * \brief CEchoRQ
  * this file defines the messages for the nset action
  */
-class CEchoRQ : public BaseNormalizedMessage {
+class NSetRQ : public BaseNormalizedMessage {
     public:
       std::vector<PresentationDataValue> ConstructPDV(const ULConnection &inConnection,
         const BaseQuery* inQuery);
