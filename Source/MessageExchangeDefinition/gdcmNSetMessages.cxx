@@ -37,65 +37,6 @@ namespace gdcm{
       std::vector<PresentationDataValue> thePDV;
       assert( 0 && "TODO" );
       return thePDV;
-      //std::vector<PresentationDataValue> thePDVs;
-      // PresentationDataValue thePDV;
-
-      // PresentationContextRQ pc( inQuery->GetAbstractSyntaxUID() );
-      // uint8_t presidx = inConnection.GetPresentationContextIDFromPresentationContext(pc);
-      // if( !presidx )
-      //   {
-      //   // try harder:
-      //   PresentationContextRQ pc2( inQuery->GetAbstractSyntaxUID(), UIDs::ExplicitVRLittleEndian);
-      //   presidx = inConnection.GetPresentationContextIDFromPresentationContext(pc2);
-      //   if( !presidx )
-      //     {
-      //     gdcmErrorMacro( "Could not find Pres Cont ID" );
-      //     return thePDVs;
-      //     }
-      //   }
-      // thePDV.SetPresentationContextID( presidx );
-
-      // thePDV.SetCommand(true);
-      // thePDV.SetLastFragment(true);
-      // //ignore incoming data set, make your own
-
-      // CommandDataSet ds;
-      // ds.Insert( pc.GetAbstractSyntax().GetAsDataElement() );
-      // {
-      // Attribute<0x0,0x100> at = { 0x0100 };
-      // ds.Insert( at.GetAsDataElement() );
-      // }
-      // {
-      // Attribute<0x0,0x110> at = { 1 };
-      // ds.Insert( at.GetAsDataElement() );
-      // }
-      // {
-      // Attribute<0x0,0x800> at = { 1 };
-      // ds.Insert( at.GetAsDataElement() );
-      // }
-      // {
-      // Attribute<0x0,0x1002> at = { 1 };
-      // ds.Insert( at.GetAsDataElement() );
-      // }
-      // {
-      // Attribute<0x0,0x1002> at = { 1 };
-      // ds.Insert( at.GetAsDataElement() );
-      // }
-      // {
-      // Attribute<0x0,0x0> at = { 0 };
-      // unsigned int glen = ds.GetLength<ImplicitDataElement>();
-      // assert( (glen % 2) == 0 );
-      // at.SetValue( glen );
-      // ds.Insert( at.GetAsDataElement() );
-      // }
-
-      // thePDV.SetDataSet(ds);
-      // thePDVs.push_back(thePDV);
-      // thePDV.SetDataSet(inQuery->GetQueryDataSet());
-      // thePDV.SetMessageHeader( 2 );
-      // thePDVs.push_back(thePDV);
-      // return thePDVs;
-
     }
 
     std::vector<PresentationDataValue>  

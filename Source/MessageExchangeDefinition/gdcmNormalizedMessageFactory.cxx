@@ -17,12 +17,11 @@
 *=========================================================================*/
 /*
 This class constructs PDataPDUs, but that have been specifically constructed for the
-Normalized DICOM services (C-Echo, C-Find, C-Get, C-Move, and C-Store).  It will also handle
+Normalized DICOM services (N-EventReport, N-Get, N-Set, N-Action, N-Create, N-Delete).  It will also handle
 parsing the incoming data to determine which of the NormalizedPDUs the incoming data is, and
 so therefore allowing the scu to determine what to do with incoming data (if acting as
 a storescp server, for instance).
 
-name and date: 4 oct 2010 mmr
 */
 
 #include "gdcmNormalizedMessageFactory.h"

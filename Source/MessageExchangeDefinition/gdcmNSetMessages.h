@@ -26,7 +26,7 @@ namespace gdcm{
 class ULConnection;
 
 /**
- * \brief CEchoRQ
+ * \brief NSetRQ
  * this file defines the messages for the nset action
  */
 class NSetRQ : public BaseNormalizedMessage {
