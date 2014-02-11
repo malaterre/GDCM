@@ -14,6 +14,7 @@
 #include "gdcmBoxRegion.h"
 
 #include <limits>
+#include <algorithm> // req C++11
 
 namespace gdcm
 {

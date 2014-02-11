@@ -21,6 +21,7 @@
 #include "gdcmSwapper.h"
 
 #include <vector>
+#include <algorithm> // req C++11
 #include <stddef.h> // ptrdiff_t fix
 #include <cstring>
 
@@ -769,7 +770,7 @@ bool RLECodec::DecodeByStreams(std::istream &is, std::ostream &os)
   // apply the PlanarConfiguration internally so that people don't get lost
   // Because GDCM internally set PlanarConfiguration == 0 by default, even if
   // the Attribute is not sent, it will still default to 0 and we will be
-  // consistant with ourselves...
+  // consistent with ourselves...
   if( GetPixelFormat().GetSamplesPerPixel() == 3 && GetPlanarConfiguration() == 0 )
     {
     RequestPlanarConfiguration = true;

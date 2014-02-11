@@ -30,7 +30,7 @@ namespace gdcm
 // -> Optional VR (Explicit Transfer Syntax)
 // -> ValueLength
 // -> Value
-// TODO: This class SHOULD be pure virtual. I dont want a user
+// TODO: This class SHOULD be pure virtual. I don't want a user
 // to shoot himself in the foot.
 
 class SequenceOfItems;

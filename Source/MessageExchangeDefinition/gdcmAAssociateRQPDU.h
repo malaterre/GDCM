@@ -49,7 +49,7 @@ public:
   void SetCallingAETitle(const char callingaetitle[16]);
   std::string GetCallingAETitle() const { return std::string(CallingAETitle,16); }
 
-  /// Check whether or not the \input title is a valid AE title
+  /// Check whether or not the \param title is a valid AE title
   static bool IsAETitleValid(const char title[16]);
 
   /// This function will initialize an AAssociateACPDU from

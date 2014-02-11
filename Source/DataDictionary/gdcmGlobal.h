@@ -65,7 +65,7 @@ public:
   /// return the singleton instance
   static Global& GetInstance();
 
-  /// Load all internal XML files, ressource path need to have been
+  /// Load all internal XML files, resource path need to have been
   /// set before calling this member function (see Append/Prepend members func)
   /// \warning not thread safe !
   bool LoadResourcesFiles();
@@ -74,12 +74,12 @@ public:
   /// \warning not thread safe !
   bool Append(const char *path);
 
-  /// Prepend path at the begining of the path list
+  /// Prepend path at the beginning of the path list
   /// \warning not thread safe !
   bool Prepend(const char *path);
 
 protected:
-  /// Locate a ressource file
+  /// Locate a resource file
   const char *Locate(const char *resfile) const;
 
 private:

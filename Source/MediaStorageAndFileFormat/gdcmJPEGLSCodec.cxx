@@ -148,32 +148,27 @@ bool JPEGLSCodec::CanCode(TransferSyntax const &ts) const
 
 bool JPEGLSCodec::DecodeByStreamsCommon(char *buffer, size_t totalLen, std::vector<unsigned char> &rgbyteOut)
 {
-    JlsParameters metadata = {};
-    if (JpegLsReadHeader(buffer, totalLen, &metadata) != OK)
-      {
-      return false;
-      }
+  const BYTE* pbyteCompressed = (const BYTE*)buffer;
+  size_t cbyteCompressed = totalLen;
 
-    // allowedlossyerror == 0 => Lossless
-    LossyFlag = metadata.allowedlossyerror!= 0;
+  JlsParameters params = {};
+  if(JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params) != OK )
+    {
+    gdcmDebugMacro( "Could not parse JPEG-LS header" );
+    return false;
+    }
 
-    const BYTE* pbyteCompressed = (const BYTE*)buffer;
-    size_t cbyteCompressed = totalLen;
+  // allowedlossyerror == 0 => Lossless
+  LossyFlag = params.allowedlossyerror!= 0;
 
-    JlsParameters params = {};
-    JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
+  rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
 
-    std::vector<BYTE> rgbyteCompressed;
-    rgbyteCompressed.resize(params.height *params.width* 4);
+  JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params);
 
-    rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);
-
-    JLS_ERROR result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params);
-
-    if (result != OK)
-      {
-      return false;
-      }
+  if (result != OK)
+    {
+    return false;
+    }
 
   return true;
 }
@@ -226,22 +221,17 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       // what if 0xd9 is never found ?
       assert( totalLen > 0 && pbyteCompressed[totalLen-1] == 0xd9 );
 
-      JlsParameters metadata = {};
-      if (JpegLsReadHeader(mybuffer, totalLen, &metadata) != OK)
+      size_t cbyteCompressed = totalLen;
+
+      JlsParameters params = {};
+      if( JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params) != OK )
         {
+        gdcmDebugMacro( "Could not parse JPEG-LS header" );
         return false;
         }
 
       // allowedlossyerror == 0 => Lossless
-      LossyFlag = metadata.allowedlossyerror!= 0;
-
-      size_t cbyteCompressed = totalLen;
-
-      JlsParameters params = {};
-      JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
-
-      std::vector<BYTE> rgbyteCompressed;
-      rgbyteCompressed.resize(params.height *params.width* 4);
+      LossyFlag = params.allowedlossyerror!= 0;
 
       std::vector<BYTE> rgbyteOut;
       rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7) / 8) * params.components);

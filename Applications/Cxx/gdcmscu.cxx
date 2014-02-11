@@ -595,7 +595,7 @@ int main(int argc, char *argv[])
 
     if( !portscp )
       {
-      std::cerr << "Need to set explicitely port number for SCP association"
+      std::cerr << "Need to set explicitly port number for SCP association"
         " --port-scp" << std::endl;
       //std::cerr << "Move failed." << std::endl;
       return 1;

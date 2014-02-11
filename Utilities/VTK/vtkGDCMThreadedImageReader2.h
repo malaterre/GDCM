@@ -20,7 +20,7 @@
 // If looking for a single threaded class see: vtkGDCMImageReader
 //
 // .SECTION Warning: Advanced users only. Do not use this class in the general case,
-// you have to understand how physicaly medium works first (sequencial reading for
+// you have to understand how physicaly medium works first (sequential reading for
 // instance) before playing with this class
 //
 // .SECTION Implementation note: when FileLowerLeft is set to on the image is not flipped

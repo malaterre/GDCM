@@ -258,7 +258,7 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
 
   if( !timeseries )
     {
-    // Check spacing is consistant:
+    // Check spacing is consistent:
     const double ZTolerance = 1e-3; // ??? FIXME
     prev = distances[0];
     for(unsigned int i = 1; i < nitems; ++i)
@@ -1257,7 +1257,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     gdcm::Attribute<0x0028,0x0009,VR::AT,VM::VM1> at;
     at.SetFromDataElement( de );
     assert( ds.FindDataElement( at.GetTag() ) );
-    if( ds.FindDataElement( at.GetTag() ) )
+    if( ds.FindDataElement( at.GetValue() ) )
       {
 /*
 $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
@@ -1290,6 +1290,12 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
         gdcmWarningMacro( "Dont know how to handle spacing for: " << de );
         sp.push_back( 1.0 );
         }
+      }
+    else
+      {
+      gdcmErrorMacro( "Tag: " << at.GetTag() << " was found to point to missing"
+        "Tag: " << at.GetValue() << " default to 1.0." );
+      sp.push_back( 1.0 );
       }
     }
   else

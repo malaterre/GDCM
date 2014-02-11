@@ -144,7 +144,7 @@ class ProcessTransformed : public ProcessLine
 {
 	typedef typename TRANSFORM::SAMPLE SAMPLE;
 
-	ProcessTransformed(const ProcessTransformed&) {}
+	ProcessTransformed(const ProcessTransformed&);
 public:
 	ProcessTransformed(void* pbyteOutput, const JlsParameters& info, TRANSFORM transform) :
 		_pbyteOutput((BYTE*)pbyteOutput),

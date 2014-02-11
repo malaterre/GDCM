@@ -18,6 +18,10 @@ endif()
 
 include(${VTK_USE_FILE})
 
+if( ${VTK_MAJOR_VERSION} GREATER 5 )
+  include(${VTK_CMAKE_DIR}/vtkMakeInstantiator.cmake)
+endif()
+
 include(CheckCXXSourceCompiles)
 set(CMAKE_REQUIRED_INCLUDES ${VTK_INCLUDE_DIRS})
 #set(CMAKE_REQUIRED_LIBRARIES vtkVolumeRendering) # can't get it to work
@@ -640,7 +644,7 @@ if(GDCM_WRAP_JAVA)
       #COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -cp ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
       # No such thing as -cp for javac only java is listed:
       # http://java.sun.com/j2se/1.5.0/docs/tooldocs/windows/classpath.html
-      COMMAND ${Java_JAVAC_EXECUTABLE} ARGS ${jflags} -source 1.5 -classpath ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
+      COMMAND ${Java_JAVAC_EXECUTABLE} ARGS ${jflags} -source 1.5 -target 1.5 -classpath ${GDCM_VTK_JAVA_JAR} "vtk/*.java"
       COMMAND ${Java_JAR_EXECUTABLE} ARGS -cvfm ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.jar ${CMAKE_CURRENT_SOURCE_DIR}/manifest.txt vtk/*.class
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
       DEPENDS ${VTKGDCM_NAME}Java

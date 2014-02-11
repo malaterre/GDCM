@@ -76,7 +76,7 @@ public:
   bool ReserveDataElement( size_t len );
 
   /// Start Private Group (multiple DataElement) Operation. Each newly added
-  /// DataElement will have a length lower than \param maxsizede.
+  /// DataElement will have a length lower than \param maxsizede .
   /// When not specified, maxsizede is set to maximum size allowed by DICOM (= 2^32).
   /// startoffset can be used to specify the very first element you want to
   /// start with (instead of the first possible). Value should be in [0x0, 0xff]

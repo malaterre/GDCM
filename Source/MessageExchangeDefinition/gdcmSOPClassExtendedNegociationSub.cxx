@@ -55,7 +55,7 @@ std::istream &SOPClassExtendedNegociationSub::Read(std::istream &is)
 
   assert( uidlength < ItemLength );
   uint16_t bloblength = (uint16_t)(ItemLength - 2 - uidlength);
-  assert( bloblength == 6 );
+  assert( bloblength == 6 ); (void)bloblength;
   SCAI.Read( is );
 
   return is;

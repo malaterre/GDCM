@@ -216,12 +216,10 @@ $ gdcmanon --dumb --remove 400,500 --remove 12,62 --remove 12,63 anonymized_reve
 \remark
 As mentionned in DICOM Sup 142, this anonymization is preferred over
 de-identification since:
-
 It is not required that the Encrypted Attributes Data Set be created; indeed,
 there may be circumstances where the Dataset is expected to be archived long
 enough that any contemporary encryption technology may be inadequate to provide
 long term protection against unauthorized recovery of identification
-\endremark
 
 \section openssl OpenSSL
 

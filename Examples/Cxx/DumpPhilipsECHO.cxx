@@ -54,7 +54,7 @@ struct hframe
 };
 
 static bool ProcessDeflate( const char *outfilename, const int nslices, const
-  int buf_size, const char *buf, const size_t len,
+  int buf_size, const char *buf, const std::streampos len,
   const char *crcbuf, const size_t crclen )
 {
   std::vector< hframe > crcheaders;
@@ -81,7 +81,7 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
   std::istringstream is;
   is.str( std::string( buf, len ) );
 
-  uint32_t totalsize;
+  std::streamoff totalsize;
   is.read( (char*)&totalsize, sizeof( totalsize ));
   assert( totalsize == len );
 
@@ -89,7 +89,7 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
   is.read( (char*)&nframes, sizeof( nframes ));
   assert( nframes == (uint32_t)nslices );
 
-  std::vector< uint32_t > offsets;
+  std::vector< std::streamoff > offsets;
   offsets.reserve( nframes );
   for( uint32_t frame = 0; frame < nframes ; ++frame )
     {
@@ -139,7 +139,7 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
       sourceLen = offsets[r+1] - offsets[r] - 16;
     // FIXME: in-memory decompression:
     int ret = uncompress (dest, &destLen, source, sourceLen);
-    assert( ret == Z_OK );
+    assert( ret == Z_OK ); (void)ret;
     assert( destLen >= (uLongf)size[0] * size[1] ); // 16bytes padding ?
     assert( header.imgsize == (uint32_t)size[0] * size[1] );
     //os.write( &outbuf[0], outbuf.size() );
@@ -155,7 +155,7 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
 }
 
 static bool ProcessNone( const char *outfilename, const int nslices, const
-  int buf_size, const char *buf, const size_t len,
+  int buf_size, const char *buf, const std::streampos len,
   const char *crcbuf, const size_t crclen )
 {
   std::vector< hframe > crcheaders;
@@ -182,7 +182,7 @@ static bool ProcessNone( const char *outfilename, const int nslices, const
   std::istringstream is;
   is.str( std::string( buf, len ) );
 
-  uint32_t totalsize;
+  std::streampos totalsize;
   is.read( (char*)&totalsize, sizeof( totalsize ));
   assert( totalsize == len );
 
@@ -236,6 +236,7 @@ static bool ProcessNone( const char *outfilename, const int nslices, const
   return true;
 }
 
+#ifndef NDEBUG
 static const char * const UDM_USD_DATATYPE_STRINGS[] = {
   "UDM_USD_DATATYPE_DIN_2D_ECHO",
   "UDM_USD_DATATYPE_DIN_2D_ECHO_CONTRAST",
@@ -282,6 +283,7 @@ static inline bool is_valid( const char * datatype_str )
     }
   return found;
 }
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -358,7 +360,7 @@ int main(int argc, char *argv[])
     Element<VR::IS,VM::VM1> elzero;
     elzero.SetFromDataElement( zero );
     const int zerocref = elzero.GetValue();
-    assert( zerocref == 0 );
+    assert( zerocref == 0 ); (void)zerocref;
 
     // (200d,3cf3) OB
     const PrivateTag tdeflate(0x200d,0x3cf3,"Philips US Imaging DD 045");
@@ -386,7 +388,7 @@ int main(int argc, char *argv[])
       if( strncmp(bv->GetPointer(), "ZLib", 4) == 0 )
         {
         if( !ProcessDeflate( outfilename, nslicesref, zallocref, bv2->GetPointer(),
-            bv2->GetLength(), bv3->GetPointer(), bv3->GetLength() ) )
+            std::streampos(bv2->GetLength()), bv3->GetPointer(), bv3->GetLength() ) )
           {
           return 1;
           }
@@ -394,7 +396,7 @@ int main(int argc, char *argv[])
       else if( strncmp(bv->GetPointer(), "None", 4) == 0 )
         {
         if( !ProcessNone( outfilename, nslicesref, zallocref, bv2->GetPointer(),
-            bv2->GetLength(), bv3->GetPointer(), bv3->GetLength() ) )
+            std::streampos(bv2->GetLength()), bv3->GetPointer(), bv3->GetLength() ) )
           {
           return 1;
           }

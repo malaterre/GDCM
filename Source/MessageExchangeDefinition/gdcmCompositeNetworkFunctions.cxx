@@ -124,7 +124,7 @@ BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
 BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
   EQueryLevel inQueryLevel, const DataSet& ds, EQueryType queryType /*= eFind*/ )
 {
-  BaseRootQuery* outQuery;
+  BaseRootQuery* outQuery = NULL;
   if( queryType == eMove )
     outQuery = QueryFactory::ProduceQuery(inRootType, eMove, inQueryLevel);
   else if( queryType == eFind )
@@ -282,6 +282,7 @@ bool CompositeNetworkFunctions::CFind( const char *remote, uint16_t portno,
       gdcm::Tag const & t = errormsg.GetValue();
       gdcmErrorMacro( "Offending Element: " << t ); (void)t;
       }
+    break;
   case 0xA700: // Refused: Out of Resources
       {
       Attribute<0x0,0x0902> errormsg;
@@ -395,6 +396,11 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
       const File &file = reader.GetFile();
       std::vector<DataSet> theDataSets;
       theDataSets = theManager.SendStore( file );
+      if( theDataSets.empty() )
+        {
+        gdcmErrorMacro( "Could not C-STORE: " << filename );
+        return false;
+        }
       assert( theDataSets.size() == 1 );
       const DataSet &ds = theDataSets[0];
       assert ( ds.FindDataElement(Tag(0x0, 0x0900)) );

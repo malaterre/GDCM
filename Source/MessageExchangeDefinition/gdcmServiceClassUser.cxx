@@ -59,7 +59,7 @@ ServiceClassUser::ServiceClassUser()
   Internals->hostname = "localhost";
   Internals->port = 104;
   Internals->portscp = 104;
-  Internals->aetitle = "GDCMSCU";
+  Internals->aetitle = GDCM_AETITLE;
   Internals->calledaetitle = "ANY-SCP";
   Internals->timeout = 10;
 }
@@ -360,6 +360,7 @@ bool ServiceClassUser::SendFind(const BaseRootQuery* query, std::vector<DataSet>
         gdcmErrorMacro( "Offending Element ??" );
         }
       }
+    break;
   case 0xA700: // Refused: Out of Resources
       {
       Attribute<0x0,0x0902> errormsg;
