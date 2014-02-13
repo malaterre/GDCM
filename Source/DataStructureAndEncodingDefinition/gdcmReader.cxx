@@ -199,16 +199,19 @@ namespace details
   {
   private:
     gdcm::DataSet & m_dataSet;
+	std::streampos & m_posDataSet ;
   public:
-    DefaultCaller(gdcm::DataSet &ds): m_dataSet(ds){}
+    DefaultCaller(gdcm::DataSet &ds, std::streampos & posDataSet): m_dataSet(ds),m_posDataSet(posDataSet){}
     template<class T1, class T2>
       void ReadCommon(std::istream & is) const
         {
+		m_posDataSet = is.tellg();
         m_dataSet.template Read<T1,T2>(is);
         }
     template<class T1, class T2>
       void ReadCommonWithLength(std::istream & is, VL & length) const
         {
+		m_posDataSet = is.tellg();
         m_dataSet.template ReadWithLength<T1,T2>(is,length);
         // manually set eofbit:
         // https://groups.google.com/forum/?fromgroups#!topic/comp.lang.c++/yTW4ESh1IL8
@@ -227,21 +230,24 @@ namespace details
     gdcm::DataSet & m_dataSet;
     const gdcm::Tag & m_tag;
     std::set<gdcm::Tag> const & m_skipTags;
+	std::streampos & m_posDataSet ;
   public:
-    ReadUpToTagCaller(gdcm::DataSet &ds,const gdcm::Tag & tag, std::set<gdcm::Tag> const & skiptags)
+    ReadUpToTagCaller(gdcm::DataSet &ds,const gdcm::Tag & tag, std::set<gdcm::Tag> const & skiptags, std::streampos & posDataSet)
     :
-    m_dataSet(ds),m_tag(tag),m_skipTags(skiptags)
+    m_dataSet(ds),m_tag(tag),m_skipTags(skiptags),m_posDataSet(posDataSet)
     {
     }
 
     template<class T1, class T2>
       void ReadCommon(std::istream & is) const
         {
+		m_posDataSet = is.tellg();
         m_dataSet.template ReadUpToTag<T1,T2>(is,m_tag,m_skipTags);
         }
     template<class T1, class T2>
       void ReadCommonWithLength(std::istream & is, VL & length) const
         {
+		m_posDataSet = is.tellg();
         m_dataSet.template ReadUpToTagWithLength<T1,T2>(is,m_tag,m_skipTags,length);
         }
     static void Check(bool , std::istream &)  {}
@@ -253,21 +259,24 @@ namespace details
     DataSet & m_dataSet;
     std::set<Tag> const & m_tags;
     bool m_readvalues;
+	std::streampos & m_posDataSet ;
   public:
-    ReadSelectedTagsCaller(DataSet &ds, std::set<Tag> const & tags, const bool readvalues)
+    ReadSelectedTagsCaller(DataSet &ds, std::set<Tag> const & tags, const bool readvalues, std::streampos & posDataSet)
       :
-    m_dataSet(ds),m_tags(tags),m_readvalues(readvalues)
+    m_dataSet(ds),m_tags(tags),m_readvalues(readvalues),m_posDataSet(posDataSet)
     {
     }
 
     template<class T1, class T2>
     void ReadCommon(std::istream & is) const
     {
+	  m_posDataSet = is.tellg();
       m_dataSet.template ReadSelectedTags<T1,T2>(is,m_tags,m_readvalues);
     }
     template<class T1, class T2>
     void ReadCommonWithLength(std::istream & is, VL & length) const
     {
+	  m_posDataSet = is.tellg();
       m_dataSet.template ReadSelectedTagsWithLength<T1,T2>(is,m_tags,length,m_readvalues);
     }
     static void Check(bool , std::istream &)  {}
@@ -302,19 +311,19 @@ namespace details
 
 bool Reader::Read()
 {
-  details::DefaultCaller caller(F->GetDataSet());
+  details::DefaultCaller caller(F->GetDataSet(), m_posDataSet);
   return InternalReadCommon(caller);
 }
 
 bool Reader::ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags)
 {
-  details::ReadUpToTagCaller caller(F->GetDataSet(),tag,skiptags);
+  details::ReadUpToTagCaller caller(F->GetDataSet(),tag,skiptags, m_posDataSet);
   return InternalReadCommon(caller);
 }
 
 bool Reader::ReadSelectedTags( std::set<Tag> const & selectedTags, bool readvalues )
 {
-  details::ReadSelectedTagsCaller caller(F->GetDataSet(), selectedTags,readvalues);
+  details::ReadSelectedTagsCaller caller(F->GetDataSet(), selectedTags, readvalues, m_posDataSet);
   return InternalReadCommon(caller);
 }
 

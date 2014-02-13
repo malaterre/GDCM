@@ -75,6 +75,7 @@ public:
 
   virtual UIDs::TSName GetAbstractSyntaxUID() const = 0;
   std::string GetSOPInstanceUID() const { return mSopInstanceUID ; }
+  void SetSOPInstanceUID( const std::string & iSopInstanceUID ) { mSopInstanceUID = iSopInstanceUID ; }
 
 
 

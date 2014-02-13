@@ -94,6 +94,8 @@ public:
   /// \warning need to call either SetFileName or SetStream first
   bool CanRead() const;
 
+  /// Set/Get DataSet StreamPosition ;
+  std::streampos GetDSStreamPosition() { return m_posDataSet ; }
 protected:
   bool ReadPreamble();
   bool ReadMetaInformation();
@@ -113,12 +115,13 @@ protected:
   //will still have to be subject to endianness swaps, if necessary.
   std::istream* GetStreamPtr() const { return Stream; }
 
-private:
+protected:
   template <typename T_Caller>
   bool InternalReadCommon(const T_Caller &caller);
   TransferSyntax GuessTransferSyntax();
   std::istream *Stream;
   std::ifstream *Ifstream;
+  std::streampos m_posDataSet ;
 };
 
 /**

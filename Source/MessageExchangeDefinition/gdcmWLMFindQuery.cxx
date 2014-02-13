@@ -87,7 +87,7 @@ DataSet WLMFindQuery::GetValidDataSet() const
   item.GetNestedDataSet().Insert( ScheduledProcedureStepStartDate.GetAsDataElement() );
   Attribute<0x40,0x3> ScheduledProcedureStepStartTime ;
   item.GetNestedDataSet().Insert( ScheduledProcedureStepStartTime.GetAsDataElement() );
-  Attribute<0x40,0x3> ScheduledPerformingPhysiciansName ;
+  Attribute<0x40,0x6> ScheduledPerformingPhysiciansName ;
   item.GetNestedDataSet().Insert( ScheduledPerformingPhysiciansName.GetAsDataElement() );
   sqItemList->AddItem( item );
   return validDataSet;

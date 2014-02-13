@@ -48,7 +48,7 @@ namespace gdcm{
       //the connection is necessary to construct the stream of PDVs that will
       //be then placed into the vector of PDUs
       static std::vector<BasePDU*> CreateCEchoPDU(const ULConnection& inConnection);
-      static std::vector<BasePDU*> CreateCStoreRQPDU(const ULConnection& inConnection, const File &file);
+      static std::vector<BasePDU*> CreateCStoreRQPDU(const ULConnection& inConnection, const File &file, bool writeDataSet = true );
       static std::vector<BasePDU*> CreateCStoreRSPPDU(const DataSet *inDataSet, const BasePDU* inPC);
       static std::vector<BasePDU*> CreateCFindPDU(const ULConnection& inConnection, const BaseRootQuery* inRootQuery);
       static std::vector<BasePDU*> CreateCMovePDU(const ULConnection& inConnection, const BaseRootQuery* inRootQuery);

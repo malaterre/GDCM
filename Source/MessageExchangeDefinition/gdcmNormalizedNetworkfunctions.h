@@ -65,7 +65,7 @@ public:
 										  const BaseQuery* query, std::vector<DataSet> &retDataSets,
 										  const char *aetitle, const char *call );
   static bool NCreate( const char *remote, uint16_t portno,
-										  const BaseQuery* query, std::vector<DataSet> &retDataSets,
+										  BaseQuery* query, std::vector<DataSet> &retDataSets,
 										  const char *aetitle, const char *call );
   static bool NDelete( const char *remote, uint16_t portno,
 										  const BaseQuery* query, std::vector<DataSet> &retDataSets,

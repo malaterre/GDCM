@@ -198,7 +198,7 @@ namespace gdcm
 	}
 	bool 
 		NormalizedNetworkFunctions::NCreate( const char *remote, uint16_t portno,
-		const BaseQuery* query, std::vector<DataSet> &retDataSets,
+		BaseQuery* query, std::vector<DataSet> &retDataSets,
 		const char *aetitle, const char *call )
 	{
 		if( !remote ) return false;
@@ -234,7 +234,7 @@ namespace gdcm
 		std::vector<DataSet> theResponses;
 		//theDataSets = theManager.SendFind( query );
 		network::ULBasicCallback theCallback;
-		theManager.SendNDelete(query, &theCallback);
+		theManager.SendNCreate(query, &theCallback);
 		theDataSets = theCallback.GetDataSets();
 		theResponses = theCallback.GetResponses();
 
@@ -260,6 +260,11 @@ namespace gdcm
 			gdcmDebugMacro( "The requested state change was performed." );
 			// Append the new DataSet to the ret one:
 			retDataSets.insert( retDataSets.end(), theDataSets.begin(), theDataSets.end() );
+			{
+				Attribute<0x0000,0x1000> sopInstanceUIDAt;
+				sopInstanceUIDAt.SetFromDataSet( ds );
+				query->SetSOPInstanceUID( sopInstanceUIDAt.GetValue() ); 
+			}
 			ret = true;
 			break;
 		case 0xB304: // The UPS is already in the requested state of CANCELED

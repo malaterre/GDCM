@@ -403,25 +403,26 @@ void ULConnectionManager::SendFind(const BaseRootQuery* inRootQuery, ULConnectio
   RunEventLoop(theEvent, mConnection, inCallback, false);
 }
 
-std::vector<DataSet> ULConnectionManager::SendStore(const File &file)
+std::vector<DataSet> ULConnectionManager::SendStore(const File &file, std::istream * pStream /*= NULL*/, std::streampos dataSetOffset/*=0*/ )
 {
   ULBasicCallback theCallback;
-  SendStore(file, &theCallback);
+  SendStore(file, &theCallback, pStream, dataSetOffset );
   return theCallback.GetResponses();
 }
 
-void ULConnectionManager::SendStore(const File & file, ULConnectionCallback* inCallback)
+void ULConnectionManager::SendStore(const File & file, ULConnectionCallback* inCallback, std::istream * pStream /*= NULL*/, std::streampos dataSetOffset/*=0*/ )
 {
   if (mConnection == NULL)
     {
     return;
     }
-  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStoreRQPDU(*mConnection, file);
+  bool writeDataSet = pStream == NULL ;
+  std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStoreRQPDU(*mConnection, file, writeDataSet);
   const DataSet* inDataSet = &file.GetDataSet();
   DataSetEvent dse( inDataSet );
   this->InvokeEvent( dse );
 
-  ULEvent theEvent(ePDATArequest, theDataPDU);
+  ULEvent theEvent(ePDATArequest, theDataPDU, pStream, dataSetOffset );
   EStateID theState = RunEventLoop(theEvent, mConnection, inCallback, false);
   assert( theState == eSta6TransferReady || theState == eStaDoesNotExist ); (void)theState;
 }
