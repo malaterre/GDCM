@@ -62,7 +62,7 @@ namespace gdcm
 		ReferencedStudySequence.SetValue( *sqItemList );
 		ScheduledStepAttributeSequenceItem.GetNestedDataSet().Insert( ReferencedStudySequence );
 		
-		gdcm::Attribute<0x0020,0x0050> AccessionNumber;
+		gdcm::Attribute<0x0008,0x0050> AccessionNumber;
 		ScheduledStepAttributeSequenceItem.GetNestedDataSet().Insert( AccessionNumber.GetAsDataElement() );
 
 		gdcm::Attribute<0x0040,0x1001> RequestedProcedureID;
@@ -93,8 +93,8 @@ namespace gdcm
 		gdcm::Attribute<0x0010,0x0040> PatientsSex ;
 		validDataSet.Insert( PatientsSex.GetAsDataElement() );
 
-		gdcm::Attribute<0x0008,0x1120> ReferencedPatientSequence ;
-		validDataSet.Insert( ReferencedPatientSequence.GetAsDataElement() );
+		gdcm::DataElement ReferencedPatientSequence( Tag(0x0008,0x1120), 0xFFFFFFFF, VR::SQ );
+		validDataSet.Insert( ReferencedPatientSequence );
 
 		gdcm::Attribute<0x0040,0x0253> PerformedProcedureStepID ;
 		validDataSet.Insert( PerformedProcedureStepID.GetAsDataElement() );
@@ -123,8 +123,8 @@ namespace gdcm
 		gdcm::Attribute<0x0040,0x0255> PerformedProcedureTypeDescription ;
 		validDataSet.Insert( PerformedProcedureTypeDescription.GetAsDataElement() );
 
-		gdcm::Attribute<0x0008,0x1032> ProcedureCodeSequence ;
-		validDataSet.Insert( ProcedureCodeSequence.GetAsDataElement() );
+		gdcm::DataElement ProcedureCodeSequence( Tag(0x0008,0x1032), 0xFFFFFFFF, VR::SQ );
+		validDataSet.Insert( ProcedureCodeSequence );
 
 		gdcm::Attribute<0x0040,0x0250> PerformedProcedureStepEndDate ;
 		validDataSet.Insert( PerformedProcedureStepEndDate.GetAsDataElement() );
@@ -138,11 +138,11 @@ namespace gdcm
 		gdcm::Attribute<0x0020,0x0010> StudyID ;
 		validDataSet.Insert( StudyID.GetAsDataElement() );
 
-		gdcm::Attribute<0x0040,0x0260> PerformedProtocolCodeSequence ;
-		validDataSet.Insert( PerformedProtocolCodeSequence.GetAsDataElement() );
+		gdcm::DataElement PerformedProtocolCodeSequence( Tag(0x0040,0x0260), 0xFFFFFFFF, VR::SQ );
+		validDataSet.Insert( PerformedProtocolCodeSequence );
 
-		gdcm::Attribute<0x0040,0x0340> PerformedSeriesSequence ;
-		validDataSet.Insert( PerformedSeriesSequence.GetAsDataElement() );
+		gdcm::DataElement PerformedSeriesSequence( Tag(0x0040,0x0340), 0xFFFFFFFF, VR::SQ );
+		validDataSet.Insert( PerformedSeriesSequence );
 
 		return validDataSet ;
   }      

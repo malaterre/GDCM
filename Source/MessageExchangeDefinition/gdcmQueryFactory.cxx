@@ -36,9 +36,12 @@ BaseQuery* QueryFactory::ProduceQuery( const std::string & sopInstanceUID, ENQue
   BaseQuery* theReturn = NULL;
     switch (inQueryType)
     {
-	case eMMPS :
+	case eCreateMMPS :
+		theReturn = new ModalityPerformedProcedureStepCreateQuery( sopInstanceUID );
+		break;
+	case eSetMMPS :
 		theReturn = new ModalityPerformedProcedureStepSetQuery( sopInstanceUID );
-		break ;
+		break;
 	}
   return theReturn;
 }

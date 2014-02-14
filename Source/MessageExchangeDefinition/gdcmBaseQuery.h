@@ -29,7 +29,8 @@ namespace gdcm
     
   enum ENQueryType
     {
-    eMMPS = 0
+    eCreateMMPS = 0,
+    eSetMMPS
     };
 /**
  * \brief BaseQuery

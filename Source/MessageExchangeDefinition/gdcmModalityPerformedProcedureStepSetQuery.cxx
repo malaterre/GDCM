@@ -39,7 +39,8 @@ namespace gdcm
     return theReturn;
   }
 
-  UIDs::TSName ModalityPerformedProcedureStepSetQuery::GetAbstractSyntaxUID() const
+  UIDs::TSName 
+  ModalityPerformedProcedureStepSetQuery::GetAbstractSyntaxUID() const
   {
     return UIDs::ModalityPerformedProcedureStepSOPClass;
   }
@@ -47,10 +48,20 @@ namespace gdcm
   gdcm::DataSet 
   ModalityPerformedProcedureStepSetQuery::GetRequiredDataSet() const
   {
-		gdcm::DataSet validDataSet ;
-		return validDataSet ;
-  }
- 
-             
-             
+    gdcm::DataSet validDataSet ;
+
+    gdcm::Attribute<0x0040,0x0252> PerformingPhysiciansName ;
+    validDataSet.Insert( PerformingPhysiciansName.GetAsDataElement() );
+
+    gdcm::Attribute<0x0020,0x000E> SeriesInstanceUID ;
+    validDataSet.Insert( SeriesInstanceUID.GetAsDataElement() );
+	
+	gdcm::DataElement ReferencedImageSequence( Tag(0x0008,0x1140), 0xFFFFFFFF, VR::SQ );
+    validDataSet.Insert( ReferencedImageSequence );
+	
+	gdcm::DataElement ReferencedNonImageCompositeSOPInstanceSequence( Tag(0x0040,0x0220), 0xFFFFFFFF, VR::SQ );
+    validDataSet.Insert( ReferencedNonImageCompositeSOPInstanceSequence );
+
+    return validDataSet ;
+  }      
 }
