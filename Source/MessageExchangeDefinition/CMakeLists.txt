@@ -57,7 +57,7 @@ set(MessageExchangeDefinition_SRCS
   gdcmNEventReportMessages.cxx
   gdcmNGetMessages.cxx
   gdcmNormalizedMessageFactory.cxx
-  gdcmNormalizedNetworkfunctions.cxx
+  gdcmNormalizedNetworkFunctions.cxx
   gdcmNSetMessages.cxx
   gdcmPDataTFPDU.cxx
   gdcmPDUFactory.cxx
