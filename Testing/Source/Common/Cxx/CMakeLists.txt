@@ -54,5 +54,5 @@ set(GDCM_Common_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmCommonTests")
 
 # Loop over files and create executables
 foreach(name ${Common_TEST_SRCS})
-  add_test(${name} ${GDCM_Common_TESTS} ${name})
+  add_test(NAME ${name} COMMAND ${GDCM_Common_TESTS} ${name})
 endforeach()

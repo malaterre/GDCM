@@ -68,7 +68,7 @@ macro(ADD_CSHARP_TEST TESTNAME FILENAME)
   endif()
 "
 )
-  add_test(${TESTNAME} ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME}.cmake)
+  add_test(NAME ${TESTNAME} COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME}.cmake)
 endmacro()
 
 # Byte compile recursively a directory (DIRNAME)
