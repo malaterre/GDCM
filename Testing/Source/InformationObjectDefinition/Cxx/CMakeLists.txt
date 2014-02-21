@@ -44,5 +44,5 @@ set(GDCM_IOD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmIODTests")
 
 # Loop over files and create executables
 foreach(name ${IOD_TEST_SRCS})
-  add_test(${name} ${GDCM_IOD_TESTS} ${name})
+  add_test(NAME ${name} COMMAND ${GDCM_IOD_TESTS} ${name})
 endforeach()

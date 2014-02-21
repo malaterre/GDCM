@@ -49,12 +49,12 @@ foreach(name ${MEXD_TEST_SRCS})
       OR ${name} STREQUAL "TestServiceClassUser3"
       )
     if(GDCM_DICOM_SERVER_AETITLE)
-      add_test(${name} ${GDCM_MEXD_TESTS} ${name} ${GDCM_DICOM_CLIENT_AETITLE}
+      add_test(NAME ${name} COMMAND ${GDCM_MEXD_TESTS} ${name} ${GDCM_DICOM_CLIENT_AETITLE}
         ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PORT}
         ${GDCM_DICOM_CLIENT_PORT} ${GDCM_DICOM_SERVER_PEER})
     endif()
   else()
-    add_test(${name} ${GDCM_MEXD_TESTS} ${name})
+    add_test(NAME ${name} COMMAND ${GDCM_MEXD_TESTS} ${name})
   endif()
 endforeach()
 

@@ -68,5 +68,5 @@ set(GDCM_VTK_GDCM_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmvtkGDCMTests")
 
 # Loop over files and create executables
 foreach(name ${VTK_GDCM_TEST_SRCS})
-  add_test(${name} ${GDCM_VTK_GDCM_TESTS} ${name})
+  add_test(NAME ${name} COMMAND ${GDCM_VTK_GDCM_TESTS} ${name})
 endforeach()
