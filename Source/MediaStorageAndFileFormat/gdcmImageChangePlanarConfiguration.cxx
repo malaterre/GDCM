@@ -52,7 +52,8 @@ bool ImageChangePlanarConfiguration::Change()
   image.GetBuffer( p );
 
   assert( len % 3 == 0 );
-  size_t framesize = dims[0] * dims[1] * 3;
+  const size_t ps = Input->GetPixelFormat().GetPixelSize();
+  const size_t framesize = dims[0] * dims[1] * ps;
   assert( framesize * dims[2] == len );
 
   char *copy = new char[len];
