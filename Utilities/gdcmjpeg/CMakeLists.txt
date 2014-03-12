@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.8.9)
+
 if(NOT JPEG_NAMESPACE)
   set(JPEG_NAMESPACE "JPEG")
   set(JPEG_STANDALONE 1)
@@ -12,7 +14,6 @@ string(TOLOWER ${JPEG_NAMESPACE} JPEG_LIBRARY_NAME)
 
 
 project(${JPEG_NAMESPACE} C)
-cmake_minimum_required(VERSION 2.6)
 
 # Do full dependency headers.
 include_regular_expression("^.*$")

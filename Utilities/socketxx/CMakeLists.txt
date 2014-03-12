@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.8.9)
+
 # http://www.linuxhacker.at/socketxx
 if(NOT SOCKETXX_NAMESPACE)
   set(SOCKETXX_NAMESPACE "SOCKETXX")
@@ -7,7 +9,6 @@ endif()
 string(TOLOWER ${SOCKETXX_NAMESPACE} SOCKETXX_LIBRARY_NAME)
 
 project(${SOCKETXX_NAMESPACE} CXX)
-cmake_minimum_required(VERSION 2.6)
 
 if(NOT SOCKETXX_INSTALL_BIN_DIR)
   set(SOCKETXX_INSTALL_BIN_DIR "bin")

@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.8.9)
+
 if(NOT GETOPT_NAMESPACE)
   set(GETOPT_NAMESPACE "GETOPT")
   set(GETOPT_STANDALONE 1)
@@ -6,7 +8,6 @@ endif()
 string(TOLOWER ${GETOPT_NAMESPACE} GETOPT_LIBRARY_NAME)
 
 project(${GETOPT_NAMESPACE} C)
-cmake_minimum_required(VERSION 2.2)
 
 #set(BUILD_SHARED_LIBS OFF)
 

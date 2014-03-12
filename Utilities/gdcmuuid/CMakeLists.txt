@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.8.9)
+
 if(NOT UUID_NAMESPACE)
   set(UUID_NAMESPACE "UUID")
   set(UUID_STANDALONE 1)
@@ -6,7 +8,6 @@ endif()
 string(TOLOWER ${UUID_NAMESPACE} UUID_LIBRARY_NAME)
 
 project(${UUID_NAMESPACE} C)
-cmake_minimum_required(VERSION 2.6)
 
 # Do full dependency headers.
 include_regular_expression("^.*$")
