@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.8.9)
+
 if(NOT EXPAT_NAMESPACE)
   set(EXPAT_NAMESPACE "EXPAT")
   set(EXPAT_STANDALONE 1)
@@ -6,7 +8,6 @@ endif()
 string(TOLOWER ${EXPAT_NAMESPACE} EXPAT_LIBRARY_NAME)
 
 project(${EXPAT_NAMESPACE} C)
-cmake_minimum_required(VERSION 2.2)
 
 set(EXPAT_MAJOR_VERSION 2)
 set(EXPAT_MINOR_VERSION 0)

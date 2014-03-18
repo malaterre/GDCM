@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.8.9)
+
 if(NOT MD5_NAMESPACE)
   set(MD5_NAMESPACE "MD5")
   set(MD5_STANDALONE 1)
@@ -6,7 +8,6 @@ endif()
 string(TOLOWER ${MD5_NAMESPACE} MD5_LIBRARY_NAME)
 
 project(${MD5_NAMESPACE} C)
-cmake_minimum_required(VERSION 2.2)
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
 endif()

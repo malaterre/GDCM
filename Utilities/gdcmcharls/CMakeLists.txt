@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.8.9)
+
 if(NOT CHARLS_NAMESPACE)
   set(CHARLS_NAMESPACE "CHARLS")
   set(CHARLS_STANDALONE 1)
@@ -6,7 +8,6 @@ endif()
 string(TOLOWER ${CHARLS_NAMESPACE} CHARLS_LIBRARY_NAME)
 
 project(${CHARLS_NAMESPACE} CXX)
-cmake_minimum_required(VERSION 2.6)
 
 #-----------------------------------------------------------------------------
 # CHARLS version number
