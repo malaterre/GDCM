@@ -39,8 +39,8 @@ if(EXISTS ${SELF_DIR}/GDCMTargets.cmake)
 else()
   if(EXISTS ${SELF_DIR}/GDCMExports.cmake)
     # This is a build tree
-    set( GDCM_INCLUDE_DIRS @GDCM_INCLUDE_PATH@)
-    set(GDCM_LIBRARY_DIRS @GDCM_LIBRARY_DIR@)
+    set( GDCM_INCLUDE_DIRS "@GDCM_INCLUDE_PATH@")
+    set(GDCM_LIBRARY_DIRS "@GDCM_LIBRARY_DIR@")
 
     include(${SELF_DIR}/GDCMExports.cmake)
 

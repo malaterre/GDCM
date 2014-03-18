@@ -132,7 +132,8 @@ bool Sorter::Sort(std::vector<std::string> const & filenames)
       }
     else
       {
-      f = NULL;
+      gdcmErrorMacro( "File could not be read: " << it->c_str() );
+      return false;
       }
     }
   //std::sort( filelist.begin(), filelist.end(), Sorter::SortFunc);
