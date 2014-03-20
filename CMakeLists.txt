@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 2.8.9)
-project(GDCM)
-#-----------------------------------------------------------------------------
-# New cmake policy thingy
-if(COMMAND CMAKE_POLICY)
-  cmake_policy(SET CMP0003 NEW)
+if(POLICY CMP0025)
+  cmake_policy(SET CMP0025 NEW)
 endif()
+if(POLICY CMP0042)
+  cmake_policy(SET CMP0042 NEW)
+endif()
+project(GDCM)
 mark_as_advanced(CMAKE_BACKWARDS_COMPATIBILITY CMAKE_BUILD_TYPE CMAKE_INSTALL_PREFIX)
 set(GDCM_CMAKE_DIR "${GDCM_SOURCE_DIR}/CMake" CACHE INTERNAL "")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${GDCM_CMAKE_DIR}")
