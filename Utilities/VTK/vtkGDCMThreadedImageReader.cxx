@@ -427,8 +427,12 @@ void vtkGDCMThreadedImageReader::ReadFiles(unsigned int nfiles, const char *file
   if( this->LoadOverlays )
     {
     vtkImageData *overlayoutput = this->GetOutput(OverlayPortNumber);
+#if (VTK_MAJOR_VERSION >= 6)
+    // allocation is done in RequestData
+#else
     overlayoutput->SetScalarTypeToUnsignedChar();
     overlayoutput->AllocateScalars();
+#endif
     overlayscalarpointer = static_cast<char*>(overlayoutput->GetScalarPointer());
     }
 
@@ -537,14 +541,23 @@ int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
-  (void)outputVector;
-  //std::cerr << "vtkGDCMThreadedImageReader::RequestData Start" << std::endl;
   //this->UpdateProgress(0.2);
 
   // Make sure the output dimension is OK, and allocate its scalars
-
   for(int i = 0; i < this->GetNumberOfOutputPorts(); ++i)
     {
+#if (VTK_MAJOR_VERSION >= 6)
+    vtkInformation* outInfo = outputVector->GetInformationObject(i);
+    vtkImageData *data = static_cast<vtkImageData *>(outInfo->Get(vtkDataObject::DATA_OBJECT()));
+    // Make sure that this output is an image
+    if (data)
+      {
+      int extent[6];
+      outInfo->Get(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), extent);
+      this->AllocateOutputData(data, outInfo, extent);
+      }
+#else
+    (void)outputVector;
     // Copy/paste from vtkImageAlgorithm::AllocateScalars. Cf. "this needs to be fixed -Ken"
     vtkStreamingDemandDrivenPipeline *sddp =
       vtkStreamingDemandDrivenPipeline::SafeDownCast(this->GetExecutive());
@@ -555,11 +568,9 @@ int vtkGDCMThreadedImageReader::RequestData(vtkInformation *vtkNotUsed(request),
       this->GetOutput(i)->SetExtent(extent);
       }
     this->GetOutput(i)->AllocateScalars();
+#endif
     }
-
   RequestDataCompat();
-
-  //std::cerr << "vtkGDCMThreadedImageReader::RequestData End" << std::endl;
   return 1;
 }
 #endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/

@@ -38,7 +38,11 @@ int TestvtkGDCMImageWriterIsLossy(int , char *[])
   std::string gdcmfile = gdcm::Testing::GetTempFilename( filename, subdir );
 
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  writer->SetInputConnection( noise->GetOutputPort() );
+#else
   writer->SetInput( noise->GetOutput() );
+#endif
   writer->SetShift( 0 );
   writer->SetScale( 1.5 );
   writer->SetLossyFlag( 1 );

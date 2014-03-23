@@ -83,7 +83,11 @@ int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
       }
 
     vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
+#if (VTK_MAJOR_VERSION >= 6)
+    writer->SetInputConnection( reader->GetOutputPort() );
+#else
     writer->SetInput( reader->GetOutput() );
+#endif
     writer->SetFileLowerLeft( reader->GetFileLowerLeft() );
     writer->SetDirectionCosines( reader->GetDirectionCosines() );
     writer->SetImageFormat( reader->GetImageFormat() );

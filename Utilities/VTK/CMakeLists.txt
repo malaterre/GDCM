@@ -47,16 +47,41 @@ include_directories(
 #endif()
 
 # List the kits from VTK that are needed by this project.
-set(vtkgdcm_LIBS
-  vtkCommon
-  vtkIO
-  vtkImaging
-)
-if(VTK_USE_RENDERING)
+if("${VTK_MAJOR_VERSION}" LESS 6)
   set(vtkgdcm_LIBS
-    ${vtkgdcm_LIBS}
-    vtkRendering
-    )
+    vtkCommon
+    vtkIO
+    vtkImaging
+  )
+  if(VTK_USE_RENDERING)
+    set(vtkgdcm_LIBS
+      ${vtkgdcm_LIBS}
+      vtkRendering
+      )
+  endif()
+else()
+  set(vtkgdcm_LIBS
+    vtkCommonCore
+    vtkImagingCore
+    vtkImagingSources
+    vtkIOImage
+    vtksys
+  )
+  set(vtkgdcm_COND_LIBS
+    vtkIOMPIImage
+    vtkInteractionStyle
+    vtkRenderingCore
+    vtkRenderingFreeType
+    vtkRenderingFreeTypeOpenGL
+    vtkRenderingOpenGL
+  )
+  foreach(TMP_LIB ${VTK_LIBRARIES})
+    foreach(TRY_LIB ${vtkgdcm_COND_LIBS})
+      if("${TMP_LIB}" STREQUAL "${TRY_LIB}")
+        set(vtkgdcm_LIBS ${vtkgdcm_LIBS} "${TRY_LIB}")
+      endif()
+    endforeach()
+  endforeach()
 endif()
 
 # Use wrapping hints for this project.

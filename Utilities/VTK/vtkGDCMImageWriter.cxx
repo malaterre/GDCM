@@ -279,14 +279,21 @@ void vtkGDCMImageWriter::Write()
     vtkErrorMacro("Write: No input supplied.");
     return;
     }
-
+#if (VTK_MAJOR_VERSION >= 6)
+#else
   input->UpdateInformation();
+#endif
 
   // Update the rest.
   this->UpdateInformation();
 
   // Get the whole extent of the input
+#if (VTK_MAJOR_VERSION >= 6)
+  vtkInformation *inInfo = this->GetInputInformation(0, 0);
+  inInfo->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->DataUpdateExtent);
+#else
   input->GetWholeExtent(this->DataUpdateExtent);
+#endif
 
   if (this->DataUpdateExtent[0] == (this->DataUpdateExtent[1] + 1) ||
       this->DataUpdateExtent[2] == (this->DataUpdateExtent[3] + 1) ||
@@ -446,10 +453,18 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 {
   //std::cerr << "Calling WriteGDCMData" << std::endl;
   assert( timeStep >= 0 );
+#if (VTK_MAJOR_VERSION >= 6)
+  vtkInformation *inInfo = this->GetInputInformation(0, timeStep);
+  int inWholeExt[6];
+  inInfo->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), inWholeExt);
+  int inExt[6];
+  inInfo->Get(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), inExt);
+#else
   int inWholeExt[6];
   data->GetWholeExtent(inWholeExt);
   int inExt[6];
   data->GetUpdateExtent(inExt);
+#endif
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 2 )
   vtkIdType inInc[3];
 #else

@@ -99,7 +99,7 @@ vtkGDCMImageReader::vtkGDCMImageReader()
 #else
   this->MedicalImageProperties = vtkMedicalImageProperties::New();
 #endif
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#if (VTK_MAJOR_VERSION > 5) || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   //this->SetNumberOfInputPorts(0);
 #else
   this->FileNames = NULL; //vtkStringArray::New();
@@ -144,7 +144,7 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
 #else
   this->MedicalImageProperties->Delete();
 #endif
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#if (VTK_MAJOR_VERSION > 5) || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
 #else
   if( this->FileNames )
     {
@@ -158,7 +158,7 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
 }
 
 //----------------------------------------------------------------------------
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#if (VTK_MAJOR_VERSION > 5) || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
 #else
 void vtkGDCMImageReader::SetFileNames(vtkStringArray *filenames)
 {
@@ -360,13 +360,13 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
   this->MedicalImageProperties->SetPatientSex( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0040), ds).c_str() );
   // For ex: DICOM (0010,0030) = 19680427
   this->MedicalImageProperties->SetPatientBirthDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0030), ds).c_str() );
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#if (VTK_MAJOR_VERSION > 5) || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0020) = 20030617
   this->MedicalImageProperties->SetStudyDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0020), ds).c_str() );
 #endif
   // For ex: DICOM (0008,0022) = 20030617
   this->MedicalImageProperties->SetAcquisitionDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0022), ds).c_str() );
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#if (VTK_MAJOR_VERSION > 5) || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
   this->MedicalImageProperties->SetStudyTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0030), ds).c_str() );
 #endif
@@ -981,10 +981,9 @@ inline unsigned long vtkImageDataGetTypeSize(T*, int a = 0,int b = 0)
 }
 
 //----------------------------------------------------------------------------
-void InPlaceYFlipImage(vtkImageData* data)
+void InPlaceYFlipImage(vtkImageData* data, const int dext[6])
 {
   unsigned long outsize = data->GetNumberOfScalarComponents();
-  int *dext = data->GetWholeExtent();
   if( dext[1] == dext[0] && dext[0] == 0 ) return;
 
   // Multiply by the number of bytes per scalar
@@ -1375,13 +1374,24 @@ int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
-  (void)outputVector;
   //this->UpdateProgress(0.2);
 
   // Make sure the output dimension is OK, and allocate its scalars
 
   for(int i = 0; i < this->GetNumberOfOutputPorts(); ++i)
     {
+#if (VTK_MAJOR_VERSION >= 6)
+    vtkInformation* outInfo = outputVector->GetInformationObject(i);
+    vtkImageData *data = static_cast<vtkImageData *>(outInfo->Get(vtkDataObject::DATA_OBJECT()));
+    // Make sure that this output is an image
+    if (data)
+      {
+      int extent[6];
+      outInfo->Get(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), extent);
+      this->AllocateOutputData(data, outInfo, extent);
+      }
+#else
+    (void)outputVector;
     // Copy/paste from vtkImageAlgorithm::AllocateScalars. Cf. "this needs to be fixed -Ken"
     vtkStreamingDemandDrivenPipeline *sddp =
       vtkStreamingDemandDrivenPipeline::SafeDownCast(this->GetExecutive());
@@ -1392,6 +1402,7 @@ int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
       this->GetOutput(i)->SetExtent(extent);
       }
     this->GetOutput(i)->AllocateScalars();
+#endif
     }
   int res = RequestDataCompat();
   return res;
@@ -1404,8 +1415,11 @@ int vtkGDCMImageReader::RequestDataCompat()
   vtkImageData *output = this->GetOutput(0);
   output->GetPointData()->GetScalars()->SetName("GDCMImage");
 
+  // The outExt is the allocated data extent
   int outExt[6];
-  output->GetUpdateExtent(outExt);
+  output->GetExtent(outExt);
+  // The dext is the whole extent (includes not-loaded data)
+  int *dext = this->GetDataExtent();
   //vtkIdType outInc[3];
   //data->GetIncrements(outInc);
   //int outSize[3];
@@ -1428,7 +1442,6 @@ int vtkGDCMImageReader::RequestDataCompat()
   else if( this->FileNames && this->FileNames->GetNumberOfValues() >= 1 )
     {
     // Load each 2D files
-    int *dext = this->GetDataExtent();
     // HACK: len is moved out of the loop so that when file > 1 start failing we can still know
     // the len of the buffer...technically all files should have the same len (not checked for now)
     unsigned long len = 0;
@@ -1455,15 +1468,20 @@ int vtkGDCMImageReader::RequestDataCompat()
   // Y-flip image
   if (!this->FileLowerLeft)
     {
-    InPlaceYFlipImage(this->GetOutput(0));
+    InPlaceYFlipImage(this->GetOutput(0), dext);
     if( this->LoadIconImage )
       {
-      InPlaceYFlipImage(this->GetOutput(ICONIMAGEPORTNUMBER));
+      int *iiext = this->IconImageDataExtent;
+      InPlaceYFlipImage(this->GetOutput(ICONIMAGEPORTNUMBER), iiext);
       }
     for( int ovidx = 0;  ovidx < this->NumberOfOverlays; ++ovidx )
       {
       assert( this->LoadOverlays );
-      InPlaceYFlipImage(this->GetOutput(OVERLAYPORTNUMBER+ovidx));
+      int oext[6];
+      this->GetDataExtent(oext);
+      oext[4] = 0;
+      oext[5] = 0;
+      InPlaceYFlipImage(this->GetOutput(OVERLAYPORTNUMBER+ovidx), oext);
       }
     }
 
