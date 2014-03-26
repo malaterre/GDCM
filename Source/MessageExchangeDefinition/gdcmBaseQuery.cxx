@@ -122,19 +122,19 @@ namespace gdcm
 
   const std::ostream &BaseQuery::WriteHelpFile(std::ostream &os)
   {
-    //mash all the query types into a vector for ease-of-use
-    std::vector<QueryBase*> theQueries;
-    std::vector<QueryBase*>::const_iterator qtor;
-
-
-    std::vector<Tag> theTags;
-    std::vector<Tag>::iterator ttor;
-
-
-    static const Global &g = Global::GetInstance();
-    static const Dicts &dicts = g.GetDicts();
-    static const Dict &pubdict = dicts.GetPublicDict();
     // TODO
+    //mash all the query types into a vector for ease-of-use
+    //std::vector<QueryBase*> theQueries;
+    //std::vector<QueryBase*>::const_iterator qtor;
+
+
+    //std::vector<Tag> theTags;
+    //std::vector<Tag>::iterator ttor;
+
+
+    //static const Global &g = Global::GetInstance();
+    //static const Dicts &dicts = g.GetDicts();
+    //static const Dict &pubdict = dicts.GetPublicDict();
     //os << "The following tags must be supported by a C-FIND/C-MOVE " << mHelpDescription << ": " << std::endl;
     //for (qtor = theQueries.begin(); qtor < theQueries.end(); qtor++){
     //  os << "Level: " << (*qtor)->GetName() << std::endl;
