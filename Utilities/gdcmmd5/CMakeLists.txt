@@ -8,9 +8,6 @@ endif()
 string(TOLOWER ${MD5_NAMESPACE} MD5_LIBRARY_NAME)
 
 project(${MD5_NAMESPACE} C)
-if(COMMAND cmake_policy)
-  cmake_policy(SET CMP0003 NEW)
-endif()
 
 # Do full dependency headers.
 include_regular_expression("^.*$")
