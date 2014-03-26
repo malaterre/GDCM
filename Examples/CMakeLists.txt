@@ -1,10 +1,5 @@
 cmake_minimum_required(VERSION 2.8.9)
 
-# Remove these policy lines when CMake 2.6 is the minimum version.
-if(COMMAND CMAKE_POLICY)
-  cmake_policy(SET CMP0003 NEW)
-endif()
-
 # Choose behavior based on whether we are building inside the GDCM tree.
 if(GDCM_BINARY_DIR)
 subdirs(Cxx)
