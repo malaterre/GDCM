@@ -159,7 +159,7 @@ namespace gdcm
 			break;			
 		case 0xC310: 
 			{
-				gdcmErrorMacro( "Refused: The UPS is not in the “IN PROGRESS” state " );
+				gdcmErrorMacro( "Refused: The UPS is not in the \"IN PROGRESS\" state " );
 			}
 			break; 
 		case 0xC301: 
@@ -303,7 +303,7 @@ namespace gdcm
 					 break; 
 		case 0xC310: 
 			{
-			gdcmErrorMacro( "Refused: The UPS is not yet in the “IN PROGRESS” state " );
+			gdcmErrorMacro( "Refused: The UPS is not yet in the \"IN PROGRESS\" state " );
 					 }
 					 break;	
 
