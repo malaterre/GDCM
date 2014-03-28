@@ -51,5 +51,4 @@ int main()
       }
     uids.insert( unique );
     }
-  return 0;
 }

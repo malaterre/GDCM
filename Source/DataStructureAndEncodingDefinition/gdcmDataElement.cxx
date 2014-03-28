@@ -172,8 +172,6 @@ namespace gdcm
     //      {
     //      gdcmWarningMacro( "Unknown exception" );
     //      }
-
-    return 0;
     }
 
 void DataElement::SetValueFieldLength( VL vl, bool readvalues )

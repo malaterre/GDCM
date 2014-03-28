@@ -90,8 +90,6 @@ bool ImageChangePhotometricInterpretation::ChangeMonochrome()
 
   bool success = true;
   return success;
-
-  return true;
 }
 
 bool ImageChangePhotometricInterpretation::Change()
