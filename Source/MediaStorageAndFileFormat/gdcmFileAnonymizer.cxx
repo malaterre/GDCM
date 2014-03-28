@@ -395,7 +395,7 @@ bool FileAnonymizer::Write()
     }
 
   // Make sure we will copy from lower offset to highest:
-  PositionEmpty pe_sort;
+  PositionEmpty pe_sort = {};
   std::sort (Internals->PositionEmptyArray.begin(),
     Internals->PositionEmptyArray.end(), pe_sort);
 
