@@ -17,9 +17,9 @@ macro(dashboard_hook_init)
     GDCM_BUILD_SHARED_LIBS:BOOL=ON
     GDCM_BUILD_APPLICATIONS:BOOL=ON
     GDCM_BUILD_EXAMPLES:BOOL=ON
-    GDCM_USE_SYSTEM_OPENSSL:BOOL=ON
+    GDCM_USE_SYSTEM_OPENSSL:BOOL=OFF
     GDCM_USE_VTK:BOOL=ON
-    VTK_DIR:PATH=C:/Dashboards/vtk-61-bin
+    VTK_DIR:PATH=C:/Dashboards/VTK-6.1.0/bin
     "
     )
 endmacro(dashboard_hook_init)
