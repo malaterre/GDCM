@@ -11,28 +11,27 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "vtkGDCMImageReader.h"
+#include "vtkGDCMImageReader2.h"
 #include "vtkMedicalImageProperties.h"
 
-#include "vtkPNGWriter.h"
-#include "vtkImageData.h"
+#include "vtkInformation.h"
+#include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkStringArray.h"
+// DEBUG
+#include "vtkImageColorViewer.h"
+#include "vtkRenderWindowInteractor.h"
 
-#include "gdcmFilename.h"
-#include "gdcmTesting.h"
 #include "gdcmSystem.h"
-#include "gdcmTrace.h"
+#include "gdcmTesting.h"
 #include "gdcmDirectory.h"
 
 static int TestvtkGDCMImageRead(const char *filename, bool verbose)
 {
-  if( verbose )
+//  if( verbose )
     std::cerr << "Reading : " << filename << std::endl;
-
-  vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
+  vtkGDCMImageReader2 *reader = vtkGDCMImageReader2::New();
   if( gdcm::System::FileIsDirectory( filename ) )
     {
-    verbose = false;
     gdcm::Directory d;
     d.Load( filename );
     gdcm::Directory::FilenamesType l = d.GetFilenames();
@@ -51,8 +50,23 @@ static int TestvtkGDCMImageRead(const char *filename, bool verbose)
     reader->SetFileName( filename );
     }
 
-  //int canread = reader->CanReadFile( filename );
-  reader->Update();
+  reader->UpdateInformation();
+  if( reader->GetErrorCode() )
+    {
+    return 1;
+    }
+  int wext[6];
+  reader->GetOutputInformation(0)->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), wext);
+  //reader->GetOutput()->Print( std::cout );
+  const int mid = (wext[5] - wext[0]) / 2;
+  wext[4] = wext[5] = mid;
+  reader->SetUpdateExtent( wext );
+  //reader->Update();
+  int ret = reader->GetExecutive()->Update();
+  if( !ret )
+    {
+    std::cerr << "Problem with: " << filename << std::endl;
+    }
 
   if( verbose )
     {
@@ -60,36 +74,25 @@ static int TestvtkGDCMImageRead(const char *filename, bool verbose)
     reader->GetMedicalImageProperties()->Print( cout );
     }
 
-  if( verbose && false )
+  if( 0 )
     {
-    // Create directory first:
-    const char subdir[] = "TestvtkGDCMImageReader";
-    std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
-    if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
-      {
-      gdcm::System::MakeDirectory( tmpdir.c_str() );
-      //return 1;
-      }
-    std::string pngfile = gdcm::Testing::GetTempFilename( filename, subdir );
+    vtkImageColorViewer *viewer = vtkImageColorViewer::New();
+    viewer->SetInputConnection( reader->GetOutputPort() );
 
-    vtkPNGWriter *writer = vtkPNGWriter::New();
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-    writer->SetInputConnection( reader->GetOutputPort() );
-#else
-    writer->SetInput( reader->GetOutput() );
-#endif
-    pngfile += ".png";
-    writer->SetFileName( pngfile.c_str() );
-    //writer->Write();
-    writer->Delete();
-    cout << "Wrote PNG output into:" << pngfile << std::endl;
+    vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
+
+    viewer->SetupInteractor( iren );
+    viewer->Render();
+
+    iren->Initialize();
+    iren->Start();
     }
 
   reader->Delete();
-  return 0;
+  return ret;
 }
 
-int TestvtkGDCMImageReader(int argc, char *argv[])
+int TestvtkGDCMImageReader2_2(int argc, char *argv[])
 {
   if( argc == 2 )
     {
@@ -97,7 +100,6 @@ int TestvtkGDCMImageReader(int argc, char *argv[])
     return TestvtkGDCMImageRead(filename, true);
     }
 
-  // else
   gdcm::Trace::DebugOff();
   gdcm::Trace::WarningOff();
   gdcm::Trace::ErrorOff();
@@ -111,4 +113,5 @@ int TestvtkGDCMImageReader(int argc, char *argv[])
     }
 
   return r;
+
 }

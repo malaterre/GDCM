@@ -32,7 +32,7 @@
  * Test to show the pipeline for
  * IPPSorter -> vtkGDCMImageReader -> vtkImageChangeInformation
  */
-int TestvtkGDCMImageReader2(int , char *[])
+int TestvtkGDCMImageReader1(int , char *[])
 {
   const char *directory = gdcm::Testing::GetDataRoot();
   std::vector<std::string> filenames;
@@ -124,7 +124,7 @@ int TestvtkGDCMImageReader2(int , char *[])
   writer->SetMedicalImageProperties( reader2->GetMedicalImageProperties() ); // nasty
   writer->SetDirectionCosines( reader2->GetDirectionCosines() );
   writer->SetImageFormat( reader2->GetImageFormat() );
-  const char subdir[] = "TestvtkGDCMImageReader2";
+  const char subdir[] = "TestvtkGDCMImageReader1";
   std::string tmpdir = gdcm::Testing::GetTempDirectory(subdir);
   if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
     {

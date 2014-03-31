@@ -33,6 +33,9 @@
 #include "vtkCommand.h"
 #include "vtkImageActor.h"
 #include "vtkImageData.h"
+#if (VTK_MAJOR_VERSION >= 6)
+#include "vtkImageMapper3D.h"
+#endif
 #include "vtkImageData.h"
 #include "vtkImageMapToWindowLevelColors2.h"
 #include "vtkInteractorStyleImage.h"
@@ -41,6 +44,10 @@
 #include "vtkRenderWindowInteractor.h"
 #include "vtkRenderer.h"
 #include "vtkPolyDataMapper.h"
+#if (VTK_MAJOR_VERSION >= 5)
+#include "vtkStreamingDemandDrivenPipeline.h"
+#include "vtkInformation.h"
+#endif
 
 vtkCxxRevisionMacro(vtkImageColorViewer, "$Revision: 1.3 $")
 vtkStandardNewMacro(vtkImageColorViewer)
@@ -215,11 +222,20 @@ int* vtkImageColorViewer::GetSize()
 //----------------------------------------------------------------------------
 void vtkImageColorViewer::GetSliceRange(int &min, int &max)
 {
+#if (VTK_MAJOR_VERSION >= 6)
+  vtkAlgorithm *input = this->GetInputAlgorithm();
+#else
   vtkImageData *input = this->GetInput();
+#endif
   if (input)
     {
     input->UpdateInformation();
+#if (VTK_MAJOR_VERSION >= 6)
+    int *w_ext = input->GetOutputInformation(0)->Get(
+      vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
+#else
     int *w_ext = input->GetWholeExtent();
+#endif
     min = w_ext[this->SliceOrientation * 2];
     max = w_ext[this->SliceOrientation * 2 + 1];
     }
@@ -228,11 +244,21 @@ void vtkImageColorViewer::GetSliceRange(int &min, int &max)
 //----------------------------------------------------------------------------
 int* vtkImageColorViewer::GetSliceRange()
 {
+#if (VTK_MAJOR_VERSION >= 6)
+  vtkAlgorithm *input = this->GetInputAlgorithm();
+#else
   vtkImageData *input = this->GetInput();
+#endif
   if (input)
     {
     input->UpdateInformation();
+#if (VTK_MAJOR_VERSION >= 6)
+    return input->GetOutputInformation(0)->Get(
+      vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT()) +
+      this->SliceOrientation * 2;
+#else
     return input->GetWholeExtent() + this->SliceOrientation * 2;
+#endif
     }
   return NULL;
 }
@@ -359,14 +385,24 @@ void vtkImageColorViewer::UpdateOrientation()
 //----------------------------------------------------------------------------
 void vtkImageColorViewer::UpdateDisplayExtent()
 {
+#if (VTK_MAJOR_VERSION >= 6)
+  vtkAlgorithm *input = this->GetInputAlgorithm();
+#else
   vtkImageData *input = this->GetInput();
+#endif
   if (!input || !this->ImageActor)
     {
     return;
     }
 
   input->UpdateInformation();
+#if (VTK_MAJOR_VERSION >= 6)
+  vtkInformation* outInfo = input->GetOutputInformation(0);
+  int *w_ext = outInfo->Get(
+    vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
+#else
   int *w_ext = input->GetWholeExtent();
+#endif
 
   // Is the slice in range ? If not, fix it
 
@@ -416,7 +452,11 @@ void vtkImageColorViewer::UpdateDisplayExtent()
         double spos = (double)bounds[this->SliceOrientation * 2];
         double cpos = (double)cam->GetPosition()[this->SliceOrientation];
         double range = fabs(spos - cpos);
+#if (VTK_MAJOR_VERSION >= 6)
+        double *spacing = outInfo->Get(vtkDataObject::SPACING());
+#else
         double *spacing = input->GetSpacing();
+#endif
         double avg_spacing =
           ((double)spacing[0] + (double)spacing[1] + (double)spacing[2]) / 3.0;
         cam->SetClippingRange(
@@ -499,10 +539,19 @@ public:
 
       if (event == vtkCommand::ResetWindowLevelEvent)
         {
+#if (VTK_MAJOR_VERSION >= 6)
+        this->IV->GetInputAlgorithm()->UpdateInformation();
+        vtkStreamingDemandDrivenPipeline::SetUpdateExtent(
+          this->IV->GetInputInformation(),
+          vtkStreamingDemandDrivenPipeline::GetWholeExtent(
+            this->IV->GetInputInformation()));
+        this->IV->GetInputAlgorithm()->Update();
+#else
         this->IV->GetInput()->UpdateInformation();
         this->IV->GetInput()->SetUpdateExtent
           (this->IV->GetInput()->GetWholeExtent());
         this->IV->GetInput()->Update();
+#endif
         double *range = this->IV->GetInput()->GetScalarRange();
         this->IV->SetColorWindow(range[1] - range[0]);
         this->IV->SetColorLevel(0.5 * (range[1] + range[0]));
@@ -629,7 +678,12 @@ void vtkImageColorViewer::InstallPipeline()
 
   if (this->ImageActor && this->WindowLevel)
     {
+#if (VTK_MAJOR_VERSION >= 6)
+    this->ImageActor->GetMapper()->SetInputConnection(
+      this->WindowLevel->GetOutputPort());
+#else
     this->ImageActor->SetInput(this->WindowLevel->GetOutput());
+#endif
     }
 }
 
@@ -638,7 +692,11 @@ void vtkImageColorViewer::UnInstallPipeline()
 {
   if (this->ImageActor)
     {
+#if (VTK_MAJOR_VERSION >= 6)
+    this->ImageActor->GetMapper()->SetInputConnection(NULL);
+#else
     this->ImageActor->SetInput(NULL);
+#endif
     }
 
   if (this->Renderer && this->ImageActor)
@@ -665,11 +723,20 @@ void vtkImageColorViewer::Render()
     {
     // Initialize the size if not set yet
 
+#if (VTK_MAJOR_VERSION >= 6)
+    vtkAlgorithm *input = this->GetInputAlgorithm();
+#else
     vtkImageData *input = this->GetInput();
-    if (this->RenderWindow->GetSize()[0] == 0 && input)
+#endif
+    if (input)
       {
       input->UpdateInformation();
+#if (VTK_MAJOR_VERSION >= 6)
+      int *w_ext = this->GetInputInformation()->Get(
+        vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT());
+#else
       int *w_ext = input->GetWholeExtent();
+#endif
       int xs = 0, ys = 0;
 
       switch (this->SliceOrientation)
@@ -692,8 +759,11 @@ void vtkImageColorViewer::Render()
         }
 
       // if it would be smaller than 150 by 100 then limit to 150 by 100
-      this->RenderWindow->SetSize(
-        xs < 150 ? 150 : xs, ys < 100 ? 100 : ys);
+      if (this->RenderWindow->GetSize()[0] == 0)
+        {
+        this->RenderWindow->SetSize(
+          xs < 150 ? 150 : xs, ys < 100 ? 100 : ys);
+        }
 
       if (this->Renderer)
         {
@@ -729,17 +799,36 @@ int vtkImageColorViewer::GetOffScreenRendering()
 }
 
 //----------------------------------------------------------------------------
+#if (VTK_MAJOR_VERSION >= 6)
+void vtkImageColorViewer::SetInputData(vtkImageData *in)
+{
+  this->WindowLevel->SetInputData(in);
+  this->UpdateDisplayExtent();
+}
+#else
 void vtkImageColorViewer::SetInput(vtkImageData *in)
 {
   this->WindowLevel->SetInput(in);
   this->UpdateDisplayExtent();
 }
+#endif
 //----------------------------------------------------------------------------
 vtkImageData* vtkImageColorViewer::GetInput()
 {
   return vtkImageData::SafeDownCast(this->WindowLevel->GetInput());
 }
-
+//----------------------------------------------------------------------------
+#if (VTK_MAJOR_VERSION >= 6)
+vtkInformation* vtkImageColorViewer::GetInputInformation()
+{
+  return this->WindowLevel->GetInputInformation();
+}
+//----------------------------------------------------------------------------
+vtkAlgorithm* vtkImageColorViewer::GetInputAlgorithm()
+{
+  return this->WindowLevel->GetInputAlgorithm();
+}
+#endif
 //----------------------------------------------------------------------------
 void vtkImageColorViewer::SetInputConnection(vtkAlgorithmOutput* input)
 {
@@ -774,8 +863,13 @@ void vtkImageColorViewer::AddInput(vtkImageData * input)
   renderer->SetLayer(1);
   OverlayImageActor->SetOpacity(0.5);
   vtkImageMapToWindowLevelColors2 *windowLevel     = vtkImageMapToWindowLevelColors2::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  windowLevel->SetInputData(input);
+  OverlayImageActor->SetInputData(windowLevel->GetOutput());
+#else
   windowLevel->SetInput(input);
   OverlayImageActor->SetInput(windowLevel->GetOutput());
+#endif
   renderer->AddViewProp(OverlayImageActor);
   OverlayImageActor->SetVisibility(1);
 
@@ -793,7 +887,11 @@ void vtkImageColorViewer::AddInputConnection(vtkAlgorithmOutput* input)
   OverlayImageActor->SetOpacity(0.5);
   vtkImageMapToWindowLevelColors2 *windowLevel     = vtkImageMapToWindowLevelColors2::New();
   windowLevel->SetInputConnection(input);
+#if (VTK_MAJOR_VERSION >= 6)
+  OverlayImageActor->SetInputData(windowLevel->GetOutput());
+#else
   OverlayImageActor->SetInput(windowLevel->GetOutput());
+#endif
   renderer->AddViewProp(OverlayImageActor);
   OverlayImageActor->SetVisibility(1);
 

@@ -73,7 +73,11 @@ int main(int argc, char *argv[])
   writer->SetFileNames( filenames );
   filenames->Delete();
   writer->SetFileDimensionality( 2 );
+#if (VTK_MAJOR_VERSION >= 6)
+  writer->SetInputConnection( reader->GetOutputPort() );
+#else
   writer->SetInput( reader->GetOutput() );
+#endif
   writer->SetImageFormat( reader->GetImageFormat() );
   writer->Write();
 

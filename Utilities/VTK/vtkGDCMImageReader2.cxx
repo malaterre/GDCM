@@ -11,7 +11,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "vtkGDCMImageReader.h"
+#include "vtkGDCMImageReader2.h"
 
 #include "vtkObjectFactory.h"
 #include "vtkImageData.h"
@@ -26,19 +26,16 @@
 #include "vtkPointData.h"
 #include "vtkLookupTable.h"
 #include "vtkWindowLevelLookupTable.h"
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #include "vtkLookupTable16.h"
 #include "vtkInformationVector.h"
 #include "vtkInformation.h"
 #include "vtkDemandDrivenPipeline.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
-#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 #include "vtkMatrix4x4.h"
 #include "vtkUnsignedCharArray.h"
-//#include "vtkUnsignedShortArray.h"
 #include "vtkBitArray.h"
 
-#include "gdcmImageReader.h"
+#include "gdcmImageRegionReader.h"
 #include "gdcmDataElement.h"
 #include "gdcmByteValue.h"
 #include "gdcmSwapper.h"
@@ -48,13 +45,14 @@
 #include "gdcmTrace.h"
 #include "gdcmImageChangePlanarConfiguration.h"
 #include "gdcmDirectoryHelper.h"
+#include "gdcmBoxRegion.h"
 
 #include <sstream>
 
-vtkCxxRevisionMacro(vtkGDCMImageReader, "$Revision: 1.1 $")
-vtkStandardNewMacro(vtkGDCMImageReader)
+vtkCxxRevisionMacro(vtkGDCMImageReader2, "$Revision: 1.1 $")
+vtkStandardNewMacro(vtkGDCMImageReader2)
 
-inline bool vtkGDCMImageReader_IsCharTypeSigned()
+inline bool vtkGDCMImageReader2_IsCharTypeSigned()
 {
 #ifndef VTK_TYPE_CHAR_IS_SIGNED
   unsigned char uc = 255;
@@ -72,38 +70,14 @@ inline bool vtkGDCMImageReader_IsCharTypeSigned()
 #define ICONIMAGEPORTNUMBER 1
 #define OVERLAYPORTNUMBER   2
 
-vtkCxxSetObjectMacro(vtkGDCMImageReader,Curve,vtkPolyData)
-vtkCxxSetObjectMacro(vtkGDCMImageReader,MedicalImageProperties,vtkMedicalImageProperties)
+vtkCxxSetObjectMacro(vtkGDCMImageReader2,Curve,vtkPolyData)
+vtkCxxSetObjectMacro(vtkGDCMImageReader2,MedicalImageProperties,vtkMedicalImageProperties)
 
 //----------------------------------------------------------------------------
-vtkGDCMImageReader::vtkGDCMImageReader()
+vtkGDCMImageReader2::vtkGDCMImageReader2()
 {
-  // vtkDataArray has an internal vtkLookupTable why not used it ?
-  // vtkMedicalImageProperties is in the parent class
-  //this->FileLowerLeft = 1;
   this->DirectionCosines = vtkMatrix4x4::New();
   this->DirectionCosines->Identity();
-  //this->DirectionCosines->SetElement(0,0,1); // x0
-  //this->DirectionCosines->SetElement(1,0,0); // x1
-  //this->DirectionCosines->SetElement(2,0,0); // x2
-  //this->DirectionCosines->SetElement(3,0,0); //
-  //this->DirectionCosines->SetElement(0,1,0); // y0
-  //this->DirectionCosines->SetElement(1,1,1); // y1
-  //this->DirectionCosines->SetElement(2,1,0); // y2
-  //this->DirectionCosines->SetElement(3,1,0); //
-  //this->DirectionCosines->SetElement(0,2,0); // y0
-  //this->DirectionCosines->SetElement(1,2,0); // y1
-  //this->DirectionCosines->SetElement(2,2,1); // y2
-  //this->DirectionCosines->SetElement(3,2,0); //
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-#else
-  this->MedicalImageProperties = vtkMedicalImageProperties::New();
-#endif
-#if (VTK_MAJOR_VERSION > 5) || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
-  //this->SetNumberOfInputPorts(0);
-#else
-  this->FileNames = NULL; //vtkStringArray::New();
-#endif
   this->LoadOverlays = 1;
   this->LoadIconImage = 1;
   this->NumberOfOverlays = 0;
@@ -125,32 +99,15 @@ vtkGDCMImageReader::vtkGDCMImageReader()
   this->PlanarConfiguration = 0;
   this->LossyFlag = 0;
 
-  // DirectionCosine was added after 5.2
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 2 )
   this->MedicalImageProperties->SetDirectionCosine(1,0,0,0,1,0);
-#endif
   this->SetImageOrientationPatient(1,0,0,0,1,0);
-
-  //  this->SetMedicalImageProperties( vtkGDCMMedicalImageProperties::New() );
   this->ForceRescale = 0;
 }
 
 //----------------------------------------------------------------------------
-vtkGDCMImageReader::~vtkGDCMImageReader()
+vtkGDCMImageReader2::~vtkGDCMImageReader2()
 {
-  //delete this->Internals;
   this->DirectionCosines->Delete();
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-#else
-  this->MedicalImageProperties->Delete();
-#endif
-#if (VTK_MAJOR_VERSION > 5) || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
-#else
-  if( this->FileNames )
-    {
-    this->FileNames->Delete();
-    }
-#endif
   if( this->Curve )
     {
     this->Curve->Delete();
@@ -158,156 +115,7 @@ vtkGDCMImageReader::~vtkGDCMImageReader()
 }
 
 //----------------------------------------------------------------------------
-#if (VTK_MAJOR_VERSION > 5) || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
-#else
-void vtkGDCMImageReader::SetFileNames(vtkStringArray *filenames)
-{
-  if (filenames == this->FileNames)
-    {
-    return;
-    }
-  if (this->FileNames)
-    {
-    this->FileNames->Delete();
-    this->FileNames = 0;
-    }
-  if (filenames)
-    {
-    this->FileNames = filenames;
-    this->FileNames->Register(this);
-    if (this->FileNames->GetNumberOfValues() > 0)
-      {
-      this->DataExtent[4] = 0;
-      this->DataExtent[5] = this->FileNames->GetNumberOfValues() - 1;
-      }
-    if (this->FilePrefix)
-      {
-      delete [] this->FilePrefix;
-      this->FilePrefix = NULL;
-      }
-    if (this->FileName)
-      {
-      delete [] this->FileName;
-      this->FileName = NULL;
-      }
-    }
-
-  this->Modified();
-}
-#endif
-
-//----------------------------------------------------------------------------
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-#else
-void vtkGDCMImageReader::ExecuteInformation()
-{
-  //std::cerr << "ExecuteInformation" << std::endl;
-
-  // FIXME: I think it only apply to VTK 4.2...
-  vtkImageData *output = this->GetOutput();
-  output->SetUpdateExtentToWholeExtent(); // pipeline is not reexecuting properly without that...
-
-  int res = RequestInformationCompat();
-  if( !res )
-    {
-    vtkErrorMacro( "ExecuteInformation failed" );
-    this->SetErrorCode(vtkErrorCode::FileFormatError);
-    return;
-    }
-
-  int numvol = 1;
-  if( this->LoadIconImage )
-    {
-    numvol = 2;
-    }
-  if( this->LoadOverlays )
-    {
-    // If not icon found, we still need to be associated to port #2:
-    numvol = 3;
-    }
-  this->SetNumberOfOutputs(numvol);
-
-  // vtkImageReader2::ExecuteInformation only allocate first output
-  this->vtkImageReader2::ExecuteInformation();
-  // Let's do the other ones ourselves:
-  for (int i=1; i<numvol; i++)
-    {
-    if (!this->Outputs[i])
-      {
-      vtkImageData * img = vtkImageData::New();
-      this->SetNthOutput(i, img);
-      img->Delete();
-      }
-    vtkImageData *output = this->GetOutput(i);
-    switch(i)
-      {
-    case 0:
-      output->SetWholeExtent(this->DataExtent);
-      output->SetSpacing(this->DataSpacing);
-#ifdef GDCMV2_0_COMPATIBILITY
-      output->SetOrigin(this->DataOrigin);
-#endif
-
-      output->SetScalarType(this->DataScalarType);
-      output->SetNumberOfScalarComponents(this->NumberOfScalarComponents);
-      break;
-    case ICONIMAGEPORTNUMBER:
-      output->SetWholeExtent(this->IconImageDataExtent);
-      output->SetScalarType( this->IconDataScalarType );
-      output->SetNumberOfScalarComponents( this->IconNumberOfScalarComponents );
-      break;
-    //case OVERLAYPORTNUMBER:
-    default:
-      output->SetWholeExtent(this->DataExtent[0],this->DataExtent[1],
-        this->DataExtent[2],this->DataExtent[3],
-        0,0
-      );
-      //output->SetSpacing(this->DataSpacing);
-      //output->SetOrigin(this->DataOrigin);
-      output->SetScalarType(VTK_UNSIGNED_CHAR);
-      output->SetNumberOfScalarComponents(1);
-      break;
-      }
-
-    }
-}
-
-//----------------------------------------------------------------------------
-void vtkGDCMImageReader::ExecuteData(vtkDataObject *output)
-{
-  //std::cerr << "ExecuteData" << std::endl;
-  // In VTK 4.2 AllocateOutputData is reexecuting ExecuteInformation which is bad !
-  //vtkImageData *data = this->AllocateOutputData(output);
-  vtkImageData *res = vtkImageData::SafeDownCast(output);
-  res->SetExtent(res->GetUpdateExtent());
-  res->AllocateScalars();
-
-  if( this->LoadIconImage )
-    {
-    vtkImageData *res = vtkImageData::SafeDownCast(this->Outputs[ICONIMAGEPORTNUMBER]);
-    res->SetUpdateExtentToWholeExtent();
-
-    res->SetExtent(res->GetUpdateExtent());
-    res->AllocateScalars();
-    }
-  if( this->LoadOverlays )
-    {
-    vtkImageData *res = vtkImageData::SafeDownCast(this->Outputs[OVERLAYPORTNUMBER]);
-    res->SetUpdateExtentToWholeExtent();
-
-    res->SetExtent(res->GetUpdateExtent());
-    res->AllocateScalars();
-    }
-  //int * updateExtent = data->GetUpdateExtent();
-  //std::cout << "UpdateExtent:" << updateExtent[4] << " " << updateExtent[5] << std::endl;
-  RequestDataCompat();
-
-}
-
-#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
-
-//----------------------------------------------------------------------------
-int vtkGDCMImageReader::CanReadFile(const char* fname)
+int vtkGDCMImageReader2::CanReadFile(const char* fname)
 {
   gdcm::ImageReader reader;
   reader.SetFileName( fname );
@@ -320,8 +128,7 @@ int vtkGDCMImageReader::CanReadFile(const char* fname)
 }
 
 //----------------------------------------------------------------------------
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-int vtkGDCMImageReader::ProcessRequest(vtkInformation* request,
+int vtkGDCMImageReader2::ProcessRequest(vtkInformation* request,
                                  vtkInformationVector** inputVector,
                                  vtkInformationVector* outputVector)
 {
@@ -339,13 +146,9 @@ int vtkGDCMImageReader::ProcessRequest(vtkInformation* request,
 
   return this->Superclass::ProcessRequest(request, inputVector, outputVector);
 }
-#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
-
-
-
 
 //----------------------------------------------------------------------------
-void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &reader)
+void vtkGDCMImageReader2::FillMedicalImageInformation(const gdcm::ImageReader &reader)
 {
   const gdcm::File &file = reader.GetFile();
   const gdcm::DataSet &ds = file.GetDataSet();
@@ -361,16 +164,12 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
   this->MedicalImageProperties->SetPatientSex( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0040), ds).c_str() );
   // For ex: DICOM (0010,0030) = 19680427
   this->MedicalImageProperties->SetPatientBirthDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0030), ds).c_str() );
-#if (VTK_MAJOR_VERSION > 5) || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0020) = 20030617
   this->MedicalImageProperties->SetStudyDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0020), ds).c_str() );
-#endif
   // For ex: DICOM (0008,0022) = 20030617
   this->MedicalImageProperties->SetAcquisitionDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0022), ds).c_str() );
-#if (VTK_MAJOR_VERSION > 5) || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
   this->MedicalImageProperties->SetStudyTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0030), ds).c_str() );
-#endif
   // For ex: DICOM (0008,0032) = 162552.0705 or 230012, or 0012
   this->MedicalImageProperties->SetAcquisitionTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0032), ds).c_str() );
   // For ex: DICOM (0008,0023) = 20030617
@@ -431,7 +230,6 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
     const gdcm::ByteValue *bvww = windowwidth.GetByteValue();
     if( bvwc && bvww ) // Can be Type 2
       {
-      //gdcm::Attributes<0x0028,0x1050> at;
       gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elwc;
       std::stringstream ss1;
       std::string swc = std::string( bvwc->GetPointer(), bvwc->GetLength() );
@@ -447,7 +245,6 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
       gdcm::Element<gdcm::VR::DS,gdcm::VM::VM1_n> elww;
       elww.SetLength( count * vrsize );
       elww.Read( ss2 );
-      //assert( elww.GetLength() == elwc.GetLength() );
       for(unsigned int i = 0; i < elwc.GetLength(); ++i)
         {
         this->MedicalImageProperties->AddWindowLevelPreset( elww.GetValue(i), elwc.GetValue(i) );
@@ -483,21 +280,6 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
       }
     }
 
-#if 0
-  // gdcmData/JDDICOM_Sample4.dcm
-  // -> (0008,0060) CS [DM  Digital microscopy]                 #  24, 1 Modality
-  gdcm::MediaStorage ms1 = gdcm::MediaStorage::SecondaryCaptureImageStorage;
-  ms1.GuessFromModality( this->MedicalImageProperties->GetModality(), this->FileDimensionality );
-  gdcm::MediaStorage ms2;
-  ms2.SetFromFile( reader.GetFile() );
-  if( ms2 != ms1 && ms2 != gdcm::MediaStorage::SecondaryCaptureImageStorage )
-    {
-    vtkWarningMacro( "SHOULD NOT HAPPEN. Unrecognized Modality: " << this->MedicalImageProperties->GetModality()
-      << " Will be set instead to the known one: " << ms2.GetModality() )
-    this->MedicalImageProperties->SetModality( ms2.GetModality() );
-    }
-#endif
-
   // Add more info:
   vtkGDCMMedicalImageProperties *gdcmmip =
     dynamic_cast<vtkGDCMMedicalImageProperties*>( this->MedicalImageProperties );
@@ -508,12 +290,10 @@ void vtkGDCMImageReader::FillMedicalImageInformation(const gdcm::ImageReader &re
 }
 
 //----------------------------------------------------------------------------
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
+int vtkGDCMImageReader2::RequestInformation(vtkInformation *request,
                                       vtkInformationVector **inputVector,
                                       vtkInformationVector *outputVector)
 {
-  (void)request;(void)inputVector;
   int res = RequestInformationCompat();
   if( !res )
     {
@@ -551,9 +331,6 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
       outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->DataExtent, 6);
       //outInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), this->DataExtent, 6);
       outInfo->Set(vtkDataObject::SPACING(), this->DataSpacing, 3);
-#ifdef GDCMV2_0_COMPATIBILITY
-      outInfo->Set(vtkDataObject::ORIGIN(), this->DataOrigin, 3);
-#endif
       vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
       break;
     // Icon Image
@@ -573,10 +350,8 @@ int vtkGDCMImageReader::RequestInformation(vtkInformation *request,
       }
     }
 
-  //return res;
   return 1;
 }
-#endif
 
 static gdcm::PixelFormat::ScalarType
 ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
@@ -629,7 +404,6 @@ ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
       r.SetSlope( scale );
       r.SetPixelFormat( pixeltype );
       outputpt2 = r.ComputeInterceptSlopePixelType();
-      //std::cout << "Found: " << outputpt << std::endl;
       pixeltypes.insert( outputpt2 );
       }
     if( pixeltypes.size() == 1 )
@@ -666,14 +440,12 @@ ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
     {
     assert( 0 ); // I do not think this is possible
     }
-  //gdcmAssertMacro( outputpt >= pixeltype_ref );
-  //(void)pixeltype_ref;
 
   return outputpt;
 }
 
 //----------------------------------------------------------------------------
-int vtkGDCMImageReader::RequestInformationCompat()
+int vtkGDCMImageReader2::RequestInformationCompat()
 {
   // FIXME, need to implement the other modes too:
   if( this->ApplyLookupTable || this->ApplyYBRToRGB || this->ApplyInverseVideo )
@@ -711,9 +483,15 @@ int vtkGDCMImageReader::RequestInformationCompat()
     vtkErrorMacro( "You did not specify any filenames" );
     return 0;
     }
+#if 0
+  gdcm::ImageRegionReader reader;
+  reader.SetFileName( filename );
+  if( !reader.ReadInformation() )
+#else
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )
+#endif
     {
     vtkErrorMacro( "ImageReader failed on " << filename );
     return 0;
@@ -736,7 +514,6 @@ int vtkGDCMImageReader::RequestInformationCompat()
     if ( this->FileNames && this->FileNames->GetNumberOfValues() > 1 )
       {
       this->DataExtent[4] = 0;
-      //this->DataExtent[5] = this->FileNames->GetNumberOfValues() - 1;
       }
     else
       {
@@ -790,42 +567,11 @@ int vtkGDCMImageReader::RequestInformationCompat()
     this->DirectionCosines->SetElement(1,2, dircosz[1]);
     this->DirectionCosines->SetElement(2,2, dircosz[2]);
     this->DirectionCosines->SetElement(3,2, 0);
-    //std::cout << "Det: " << this->DirectionCosines->Determinant() << std::endl;
 
     for(int i=0;i<6;++i)
       this->ImageOrientationPatient[i] = dircos[i];
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 2 )
     this->MedicalImageProperties->SetDirectionCosine( this->ImageOrientationPatient );
-#endif
     }
-  // Apply transform:
-#ifdef GDCMV2_0_COMPATIBILITY
-  if( dircos && origin )
-    {
-    if( this->FileLowerLeft )
-      {
-      // Since we are not doing the VTK Y-flipping operation, Origin and Image Position (Patient)
-      // are the same:
-      this->DataOrigin[0] = origin[0];
-      this->DataOrigin[1] = origin[1];
-      this->DataOrigin[2] = origin[2];
-      }
-    else
-      {
-      // We are doing the Y-flip:
-      // translate Image Position (Patient) along the Y-vector of the Image Orientation (Patient):
-      // Step 1: Compute norm of translation vector:
-      // Because position is in the center of the pixel, we need to substract 1 to the dimY:
-      assert( dims[1] >=1 );
-      double norm = (dims[1] - 1) * this->DataSpacing[1];
-      // Step 2: translate:
-      this->DataOrigin[0] = origin[0] + norm * dircos[3+0];
-      this->DataOrigin[1] = origin[1] + norm * dircos[3+1];
-      this->DataOrigin[2] = origin[2] + norm * dircos[3+2];
-      }
-    }
-  // Need to set the rest to 0 ???
-#endif
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   this->Shift = image.GetIntercept();
@@ -841,20 +587,6 @@ int vtkGDCMImageReader::RequestInformationCompat()
     // assert( outputpt == pixeltype );
     }
 
-  // Compute output pixel format when Rescaling:
-//  if( this->Shift != 0 || this->Scale != 1. )
-//    {
-//    gdcm::Rescaler r;
-//    r.SetIntercept( this->Shift );
-//    r.SetSlope( this->Scale );
-//    r.SetPixelFormat( pixeltype );
-//    outputpt = r.ComputeInterceptSlopePixelType();
-//    assert( pixeltype <= outputpt );
-//    assert( pixeltype.GetSamplesPerPixel() == 1 && image.GetPhotometricInterpretation().GetSamplesPerPixel() == 1 );
-//    assert( image.GetPhotometricInterpretation() != gdcm::PhotometricInterpretation::PALETTE_COLOR );
-//    }
-  //if( pixeltype != outputpt ) assert( Shift != 0. || Scale != 1 );
-
   this->ForceRescale = 0; // always reset this thing
   // gdcmData/DCMTK_JPEGExt_12Bits.dcm
   if( pixeltype != outputpt && pixeltype.GetBitsAllocated() != 12 )
@@ -865,15 +597,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
   switch( outputpt )
     {
   case gdcm::PixelFormat::INT8:
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
     this->DataScalarType = VTK_SIGNED_CHAR;
-#else
-    if( !vtkGDCMImageReader_IsCharTypeSigned() )
-      {
-      vtkErrorMacro( "Output Pixel Type will be incorrect, go get a newer VTK version" );
-      }
-    this->DataScalarType = VTK_CHAR;
-#endif
     break;
   case gdcm::PixelFormat::UINT8:
     this->DataScalarType = VTK_UNSIGNED_CHAR;
@@ -931,11 +655,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     switch(iconpixelformat)
       {
     case gdcm::PixelFormat::INT8:
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
       this->IconDataScalarType = VTK_SIGNED_CHAR;
-#else
-      this->IconDataScalarType = VTK_CHAR;
-#endif
       break;
     case gdcm::PixelFormat::UINT8:
       this->IconDataScalarType = VTK_UNSIGNED_CHAR;
@@ -968,9 +688,6 @@ int vtkGDCMImageReader::RequestInformationCompat()
     this->NumberOfOverlays = (int)numoverlays;
     }
 
-//  return this->Superclass::RequestInformation(
-//    request, inputVector, outputVector);
-
   return 1;
 }
 
@@ -983,7 +700,7 @@ inline unsigned long vtkImageDataGetTypeSize(T*, int a = 0,int b = 0)
 }
 
 //----------------------------------------------------------------------------
-static void InPlaceYFlipImage(vtkImageData* data, const int dext[6])
+static void InPlaceYFlipImage2(vtkImageData* data, const int dext[6])
 {
   unsigned long outsize = data->GetNumberOfScalarComponents();
   if( dext[1] == dext[0] && dext[0] == 0 ) return;
@@ -991,17 +708,10 @@ static void InPlaceYFlipImage(vtkImageData* data, const int dext[6])
   // Multiply by the number of bytes per scalar
   switch (data->GetScalarType())
     {
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
     case VTK_BIT: { outsize /= 8; }; break;
     vtkTemplateMacro(
       outsize *= vtkImageDataGetTypeSize(static_cast<VTK_TT*>(0))
     );
-#else
-    case VTK_BIT: { outsize /= 8; }; break;
-    vtkTemplateMacro3(
-      outsize *= vtkImageDataGetTypeSize, static_cast<VTK_TT*>(0), 0, 0
-    );
-#endif
     default:
       //vtkErrorMacro("do not support scalar type: " << data->GetScalarType() );
       assert(0);
@@ -1016,7 +726,7 @@ static void InPlaceYFlipImage(vtkImageData* data, const int dext[6])
   for(int j = dext[4]; j <= dext[5]; ++j)
     {
     char *start = pointer;
-    assert( start == ref + j * outsize * (dext[3] - dext[2] + 1) ); (void)ref;
+/*    assert( start == ref + j * outsize * (dext[3] - dext[2] + 1) ); (void)ref; */
     // Swap two-lines at a time
     // when Rows is odd number (359) then dext[3] == 178
     // so we should avoid copying the line right in the center of the image
@@ -1041,21 +751,32 @@ static void InPlaceYFlipImage(vtkImageData* data, const int dext[6])
 }
 
 //----------------------------------------------------------------------------
-int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsigned long &outlen)
+int vtkGDCMImageReader2::LoadSingleFile(const char *filename, char *pointer, unsigned long &outlen)
 {
   int *dext = this->GetDataExtent();
   vtkImageData *data = this->GetOutput(0);
-  //bool filelowerleft = this->FileLowerLeft ? true : false;
 
-  //char * pointer = static_cast<char*>(data->GetScalarPointer());
+  int outExt[6];
+  data->GetExtent(outExt);
 
-  gdcm::ImageReader reader;
+  gdcm::ImageRegionReader reader;
   reader.SetFileName( filename );
-  if( !reader.Read() )
+  if( !reader.ReadInformation() )
     {
     vtkErrorMacro( "ImageReader failed: " << filename );
     return 0;
     }
+
+#if 0
+  // TODO could check compat:
+  std::vector<unsigned int> dims =
+    gdcm::ImageHelper::GetDimensionsValue(reader.GetFile());
+#endif
+
+  gdcm::BoxRegion box;
+  box.SetDomain(outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
+  reader.SetRegion( box );
+
   gdcm::Image &image = reader.GetImage();
   this->LossyFlag = image.IsLossy();
   //VTK does not cope with Planar Configuration, so let's schew the work to please it
@@ -1065,25 +786,30 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   //assert( this->PlanarConfiguration == 0 || this->PlanarConfiguration == 1 );
   if( image.GetPlanarConfiguration() == 1 )
     {
+#if 0
     gdcm::ImageChangePlanarConfiguration icpc;
     icpc.SetInput( image );
     icpc.SetPlanarConfiguration( 0 );
     icpc.Change();
     image = icpc.GetOutput();
+#else
+    vtkErrorMacro( "ImageReader failed: " << filename );
+    return 0;
+#endif
     }
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   assert( image.GetNumberOfDimensions() == 2 || image.GetNumberOfDimensions() == 3 );
-  /*const*/ unsigned long len = image.GetBufferLength();
+  /* unsigned long len = image.GetBufferLength(); */
+  unsigned long len = reader.ComputeBufferLength();
   outlen = len;
   unsigned long overlaylen = 0;
-  //image.GetBuffer(pointer);
   // HACK: Make sure that Shift/Scale are the one from the file:
   this->Shift = image.GetIntercept();
   this->Scale = image.GetSlope();
 
   if( (this->Scale != 1.0 || this->Shift != 0.0) || this->ForceRescale )
-  {
+    {
     assert( pixeltype.GetSamplesPerPixel() == 1 );
     gdcm::Rescaler r;
     r.SetIntercept( Shift ); // FIXME
@@ -1091,57 +817,57 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     gdcm::PixelFormat::ScalarType targetpixeltype = gdcm::PixelFormat::UNKNOWN;
     // r.SetTargetPixelType( gdcm::PixelFormat::FLOAT64 );
     int scalarType = data->GetScalarType();
-   switch( scalarType )
-    {
-  case VTK_CHAR:
-    if( vtkGDCMImageReader_IsCharTypeSigned() )
+    switch( scalarType )
+      {
+    case VTK_CHAR:
+      if( vtkGDCMImageReader2_IsCharTypeSigned() )
+        targetpixeltype = gdcm::PixelFormat::INT8;
+      else
+        targetpixeltype = gdcm::PixelFormat::UINT8;
+      break;
+    case VTK_SIGNED_CHAR:
       targetpixeltype = gdcm::PixelFormat::INT8;
-    else
+      break;
+    case VTK_UNSIGNED_CHAR:
       targetpixeltype = gdcm::PixelFormat::UINT8;
-    break;
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-  case VTK_SIGNED_CHAR:
-    targetpixeltype = gdcm::PixelFormat::INT8;
-    break;
-#endif
-  case VTK_UNSIGNED_CHAR:
-    targetpixeltype = gdcm::PixelFormat::UINT8;
-    break;
-  case VTK_SHORT:
-    targetpixeltype = gdcm::PixelFormat::INT16;
-    break;
-  case VTK_UNSIGNED_SHORT:
-    targetpixeltype = gdcm::PixelFormat::UINT16;
-    break;
-  case VTK_INT:
-    targetpixeltype = gdcm::PixelFormat::INT32;
-    break;
-  case VTK_UNSIGNED_INT:
-    targetpixeltype = gdcm::PixelFormat::UINT32;
-    break;
-  case VTK_FLOAT:
-    targetpixeltype = gdcm::PixelFormat::FLOAT32;
-    break;
-  case VTK_DOUBLE:
-    targetpixeltype = gdcm::PixelFormat::FLOAT64;
-    break;
-  case VTK_BIT:
-    targetpixeltype = gdcm::PixelFormat::SINGLEBIT;
-    break;
-  default:
-    vtkErrorMacro( "Do not support this Pixel Type: " << scalarType );
-    assert( 0 );
-    return 0;
-    }
+      break;
+    case VTK_SHORT:
+      targetpixeltype = gdcm::PixelFormat::INT16;
+      break;
+    case VTK_UNSIGNED_SHORT:
+      targetpixeltype = gdcm::PixelFormat::UINT16;
+      break;
+    case VTK_INT:
+      targetpixeltype = gdcm::PixelFormat::INT32;
+      break;
+    case VTK_UNSIGNED_INT:
+      targetpixeltype = gdcm::PixelFormat::UINT32;
+      break;
+    case VTK_FLOAT:
+      targetpixeltype = gdcm::PixelFormat::FLOAT32;
+      break;
+    case VTK_DOUBLE:
+      targetpixeltype = gdcm::PixelFormat::FLOAT64;
+      break;
+    case VTK_BIT:
+      targetpixeltype = gdcm::PixelFormat::SINGLEBIT;
+      break;
+    default:
+      vtkErrorMacro( "Do not support this Pixel Type: " << scalarType );
+      assert( 0 );
+      return 0;
+      }
     r.SetTargetPixelType( targetpixeltype );
 
     r.SetUseTargetPixelType(true);
     r.SetPixelFormat( pixeltype );
     char * copy = new char[len];
-    //memcpy(copy, pointer, len);
-    image.GetBuffer(copy);
+    /*image.GetBuffer(copy);*/
+    bool b = reader.ReadIntoBuffer(copy, len);
+    assert( b );
     if( !r.Rescale(pointer,copy,len) )
       {
+      delete[] copy;
       vtkErrorMacro( "Could not Rescale" );
       // problem with gdcmData/3E768EB7.dcm
       return 0;
@@ -1150,10 +876,12 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     // WARNING: sizeof(Real World Value) != sizeof(Stored Pixel)
     outlen = data->GetScalarSize() * data->GetNumberOfPoints() / data->GetDimensions()[2];
     assert( data->GetNumberOfScalarComponents() == 1 );
-  }
+    }
   else
     {
-    image.GetBuffer(pointer);
+    /*  image.GetBuffer(pointer); */
+    bool b = reader.ReadIntoBuffer(pointer, len);
+    assert( b );
     }
 
   // Do the Icon Image:
@@ -1191,7 +919,6 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   if( numcurves )
     {
     const gdcm::Curve& curve = image.GetCurve();
-    //curve.Print( std::cout );
     vtkPoints * pts = vtkPoints::New();
     pts->SetNumberOfPoints( curve.GetNumberOfPoints() );
     curve.GetAsPoints( (float*)pts->GetVoidPointer(0) );
@@ -1216,8 +943,6 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     {
     size_t numoverlays = image.GetNumberOfOverlays();
     long overlayoutsize = (dext[1] - dext[0] + 1);
-    //this->NumberOfOverlays = numoverlays;
-    //if( numoverlays )
     if( !this->LoadOverlays ) assert( this->NumberOfOverlays == 0 );
     for( int ovidx = 0;  ovidx < this->NumberOfOverlays; ++ovidx )
       {
@@ -1246,9 +971,7 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
       assert( vtkimage->GetScalarType() == VTK_UNSIGNED_CHAR );
       char * overlaypointer = static_cast<char*>(vtkimage->GetScalarPointer());
       assert( overlaypointer );
-      //assert( image->GetPointData()->GetScalars() != 0 );
 
-      //memset(overlaypointer,0,overlaylen); // FIXME: can be optimized
       if( !ov1.GetUnpackBuffer( overlaypointer, overlaylen ) )
         {
         vtkErrorMacro( "Problem in GetUnpackBuffer" );
@@ -1257,7 +980,6 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     if( numoverlays ) assert( (unsigned long)overlayoutsize * ( dext[3] - dext[2] + 1 ) == overlaylen );
     }
 
-  //const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   // Do the LUT
   if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::PALETTE_COLOR )
     {
@@ -1279,7 +1001,6 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
       }
     else
       {
-#if (VTK_MAJOR_VERSION >= 5)
       assert( lut.GetBitSample() == 16 );
       vtkLookupTable16 *vtklut = vtkLookupTable16::New();
       vtklut->SetNumberOfTableValues(256*256);
@@ -1292,9 +1013,6 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
       vtklut->SetRange(0,256*256-1);
       data->GetPointData()->GetScalars()->SetLookupTable( vtklut );
       vtklut->Delete();
-#else
-      vtkWarningMacro( "Unhandled" );
-#endif
       }
     }
   else if ( image.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1 )
@@ -1364,25 +1082,23 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
     outsize = pixeltype.GetPixelSize()*(dext[1] - dext[0] + 1);
     }
 
-  if( this->FileName) assert( (unsigned long)outsize * (dext[3] - dext[2]+1) * (dext[5]-dext[4]+1) == len );
+  if( this->FileName )
+    {
+    assert( (unsigned long)outsize * (outExt[3] - outExt[2]+1) * (outExt[5] - outExt[4]+1) == len );
+    }
 
   return 1; // success
 }
 
 
 //----------------------------------------------------------------------------
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
+int vtkGDCMImageReader2::RequestData(vtkInformation *vtkNotUsed(request),
                                 vtkInformationVector **vtkNotUsed(inputVector),
                                 vtkInformationVector *outputVector)
 {
-  //this->UpdateProgress(0.2);
-
   // Make sure the output dimension is OK, and allocate its scalars
-
   for(int i = 0; i < this->GetNumberOfOutputPorts(); ++i)
     {
-#if (VTK_MAJOR_VERSION >= 6)
     vtkInformation* outInfo = outputVector->GetInformationObject(i);
     vtkImageData *data = static_cast<vtkImageData *>(outInfo->Get(vtkDataObject::DATA_OBJECT()));
     // Make sure that this output is an image
@@ -1392,27 +1108,13 @@ int vtkGDCMImageReader::RequestData(vtkInformation *vtkNotUsed(request),
       outInfo->Get(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), extent);
       this->AllocateOutputData(data, outInfo, extent);
       }
-#else
-    (void)outputVector;
-    // Copy/paste from vtkImageAlgorithm::AllocateScalars. Cf. "this needs to be fixed -Ken"
-    vtkStreamingDemandDrivenPipeline *sddp =
-      vtkStreamingDemandDrivenPipeline::SafeDownCast(this->GetExecutive());
-    if (sddp)
-      {
-      int extent[6];
-      sddp->GetOutputInformation(i)->Get(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(),extent);
-      this->GetOutput(i)->SetExtent(extent);
-      }
-    this->GetOutput(i)->AllocateScalars();
-#endif
     }
   int res = RequestDataCompat();
   return res;
 }
-#endif
 
 //----------------------------------------------------------------------------
-int vtkGDCMImageReader::RequestDataCompat()
+int vtkGDCMImageReader2::RequestDataCompat()
 {
   vtkImageData *output = this->GetOutput(0);
   output->GetPointData()->GetScalars()->SetName("GDCMImage");
@@ -1422,12 +1124,6 @@ int vtkGDCMImageReader::RequestDataCompat()
   output->GetExtent(outExt);
   // The dext is the whole extent (includes not-loaded data)
   int *dext = this->GetDataExtent();
-  //vtkIdType outInc[3];
-  //data->GetIncrements(outInc);
-  //int outSize[3];
-  //data->GetDimensions(outSize);
-
-  //void *outPtr = data->GetScalarPointerForExtent(outExt);
 
   char * pointer = static_cast<char*>(output->GetScalarPointerForExtent(outExt));
   if( this->FileName )
@@ -1447,11 +1143,12 @@ int vtkGDCMImageReader::RequestDataCompat()
     // HACK: len is moved out of the loop so that when file > 1 start failing we can still know
     // the len of the buffer...technically all files should have the same len (not checked for now)
     unsigned long len = 0;
-    for(int j = dext[4]; !this->AbortExecute && j <= dext[5]; ++j)
+    for(int j = outExt[4]; !this->AbortExecute && j <= outExt[5]; ++j)
       {
       assert( j >= 0 && j <= this->FileNames->GetNumberOfValues() );
       const char *filename = this->FileNames->GetValue( j );
       int load = this->LoadSingleFile( filename, pointer, len );
+      vtkDebugMacro( "LoadSingleFile: " << filename );
       if( !load )
         {
         // hum... we could not read this file within the series, let's just fill
@@ -1460,7 +1157,7 @@ int vtkGDCMImageReader::RequestDataCompat()
         }
       assert( len );
       pointer += len;
-      this->UpdateProgress( (double)(j - dext[4] ) / ( dext[5] - dext[4] ));
+      this->UpdateProgress( (double)(j - outExt[4] ) / ( outExt[5] - outExt[4] ));
       }
     }
   else
@@ -1470,11 +1167,11 @@ int vtkGDCMImageReader::RequestDataCompat()
   // Y-flip image
   if (!this->FileLowerLeft)
     {
-    InPlaceYFlipImage(this->GetOutput(0), dext);
+    InPlaceYFlipImage2(this->GetOutput(0), outExt);
     if( this->LoadIconImage )
       {
       int *iiext = this->IconImageDataExtent;
-      InPlaceYFlipImage(this->GetOutput(ICONIMAGEPORTNUMBER), iiext);
+      InPlaceYFlipImage2(this->GetOutput(ICONIMAGEPORTNUMBER), iiext);
       }
     for( int ovidx = 0;  ovidx < this->NumberOfOverlays; ++ovidx )
       {
@@ -1483,7 +1180,7 @@ int vtkGDCMImageReader::RequestDataCompat()
       this->GetDataExtent(oext);
       oext[4] = 0;
       oext[5] = 0;
-      InPlaceYFlipImage(this->GetOutput(OVERLAYPORTNUMBER+ovidx), oext);
+      InPlaceYFlipImage2(this->GetOutput(OVERLAYPORTNUMBER+ovidx), oext);
       }
     }
 
@@ -1491,24 +1188,24 @@ int vtkGDCMImageReader::RequestDataCompat()
 }
 
 //----------------------------------------------------------------------------
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-vtkAlgorithmOutput* vtkGDCMImageReader::GetOverlayPort(int index)
+vtkAlgorithmOutput* vtkGDCMImageReader2::GetOverlayPort(int index)
 {
   if( index >= 0 && index < this->NumberOfOverlays)
     return this->GetOutputPort(index+OVERLAYPORTNUMBER);
   return NULL;
 }
-vtkAlgorithmOutput* vtkGDCMImageReader::GetIconImagePort()
+
+//----------------------------------------------------------------------------
+vtkAlgorithmOutput* vtkGDCMImageReader2::GetIconImagePort()
 {
   const int index = 0;
   if( index >= 0 && index < this->NumberOfIconImages)
     return this->GetOutputPort(index+ICONIMAGEPORTNUMBER);
   return NULL;
 }
-#endif
 
 //----------------------------------------------------------------------------
-vtkImageData* vtkGDCMImageReader::GetOverlay(int i)
+vtkImageData* vtkGDCMImageReader2::GetOverlay(int i)
 {
   if( i >= 0 && i < this->NumberOfOverlays)
     return this->GetOutput(i+OVERLAYPORTNUMBER);
@@ -1516,7 +1213,7 @@ vtkImageData* vtkGDCMImageReader::GetOverlay(int i)
 }
 
 //----------------------------------------------------------------------------
-vtkImageData* vtkGDCMImageReader::GetIconImage()
+vtkImageData* vtkGDCMImageReader2::GetIconImage()
 {
   const int i = 0;
   if( i >= 0 && i < this->NumberOfIconImages)
@@ -1525,7 +1222,7 @@ vtkImageData* vtkGDCMImageReader::GetIconImage()
 }
 
 //----------------------------------------------------------------------------
-void vtkGDCMImageReader::PrintSelf(ostream& os, vtkIndent indent)
+void vtkGDCMImageReader2::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
 }

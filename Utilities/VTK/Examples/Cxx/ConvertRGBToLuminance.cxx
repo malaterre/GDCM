@@ -33,12 +33,20 @@ int main(int, char *[])
   //reader->GetOutput()->Print( std::cout );
 
   vtkImageLuminance *luminance = vtkImageLuminance::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  luminance->SetInputConnection( reader->GetOutputPort() );
+#else
   luminance->SetInput( reader->GetOutput() );
+#endif
 
 
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
   writer->SetFileName( "/tmp/bla.dcm" );
+#if (VTK_MAJOR_VERSION >= 6)
+  writer->SetInputConnection( luminance->GetOutputPort() );
+#else
   writer->SetInput( luminance->GetOutput() );
+#endif
   //writer->SetImageFormat( reader->GetImageFormat() ); // Do NOT pass image format
   writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
   writer->SetDirectionCosines( reader->GetDirectionCosines() );

@@ -197,7 +197,11 @@ public:
   const vtkFloatingPointType *spacing = _reader->GetOutput()->GetSpacing();
 
   vtkImageChangeInformation *v16 = vtkImageChangeInformation::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  v16->SetInputConnection( _reader->GetOutputPort() );
+#else
   v16->SetInput( _reader->GetOutput() );
+#endif
   v16->SetOutputSpacing( spacing[0], spacing[1], ippzspacing );
   v16->Update();
 
@@ -370,7 +374,11 @@ public:
         // Try to make sure the extents of the reslice are updated.
         // PROBLEM:  It doesn't seem to work when changing the orientation.
         imageData=vtkImageData::SafeDownCast(_reslice->GetOutput());
+#if (VTK_MAJOR_VERSION >= 6)
+        assert(0);
+#else
         imageData->UpdateInformation();
+#endif
 
         // Let vtkImageViewer2 handle the slice limits.
         _imageViewer->SetSlice(slice);
@@ -443,7 +451,11 @@ public:
 
         // Compute the cut plane position to the input coordinate system.
         imageData=vtkImageData::SafeDownCast(_reslice->GetInput());
+#if (VTK_MAJOR_VERSION >= 6)
+        assert(0);
+#else
         imageData->UpdateInformation();
+#endif
         imageData->GetSpacing(spacing);
         imageData->GetOrigin(origin);
 
@@ -503,7 +515,11 @@ public:
         // PROBLEM:  The whole extent does not seem to be set in time
         // for the first render.  This results in an error because the
         // slice is positioned outside the old bounds.
+#if (VTK_MAJOR_VERSION >= 6)
+        _imageViewer->SetInputData(NULL);
+#else
         _imageViewer->SetInput(NULL);
+#endif
         _imageViewer->SetInputConnection(_reslice->GetOutputPort());
 
         _imageViewer->GetRenderer()->ResetCameraClippingRange();

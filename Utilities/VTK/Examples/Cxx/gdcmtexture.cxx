@@ -51,7 +51,11 @@ int main( int argc, char *argv[] )
 
   // Texture
   vtkTexture* texture = vtkTexture::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  texture->SetInputData(ima);
+#else
   texture->SetInput(ima);
+#endif
   texture->InterpolateOn();
   texture->SetLookupTable(table);
 
@@ -63,7 +67,11 @@ int main( int argc, char *argv[] )
 
   // PolyDataMapper
   vtkPolyDataMapper *planeMapper = vtkPolyDataMapper::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  planeMapper->SetInputConnection(plane->GetOutputPort());
+#else
   planeMapper->SetInput(plane->GetOutput());
+#endif
 
   // Actor
   vtkActor* planeActor = vtkActor::New();

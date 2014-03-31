@@ -17,7 +17,7 @@ endif()
 set(GDCM_VTK_APPS
   gdcm2vtk
   )
-if(VTK_USE_RENDERING)
+if(VTK_USE_RENDERING OR vtkRenderingCore_LOADED)
   set(GDCM_VTK_APPS
     ${GDCM_VTK_APPS}
     gdcmviewer # vtkImageViewer2
@@ -31,14 +31,18 @@ foreach(app ${GDCM_VTK_APPS})
     set_target_properties(${app} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
   endif()
   target_link_libraries(${app} ${VTKGDCM_NAME})
-  target_link_libraries(${app} vtkCommon vtkFiltering vtkIO vtkImaging)
   target_link_libraries(${app} gdcmDSED gdcmMSFF gdcmCommon)
-  if(VTK_USE_RENDERING)
-    target_link_libraries(${app} vtkRendering)
-
-  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
-    target_link_libraries(${app} vtkWidgets)
-  endif()
+  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 6.0 )
+    target_link_libraries(${app} vtkCommon vtkFiltering vtkIO vtkImaging)
+    if(VTK_USE_RENDERING)
+      target_link_libraries(${app} vtkRendering)
+    endif()
+    if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
+      target_link_libraries(${app} vtkWidgets)
+    endif()
+  else()
+    # >= 6.0
+    target_link_libraries(${app} ${VTK_LIBRARIES} vtkIOXML)
   endif()
   if(WIN32 AND NOT CYGWIN)
     target_link_libraries(${app} gdcmgetopt)

@@ -11,7 +11,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "vtkGDCMImageReader.h"
+#include "vtkGDCMImageReader2.h"
 #include "vtkMedicalImageProperties.h"
 
 #include "vtkPNGWriter.h"
@@ -29,7 +29,7 @@ static int TestvtkGDCMImageRead(const char *filename, bool verbose)
   if( verbose )
     std::cerr << "Reading : " << filename << std::endl;
 
-  vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
+  vtkGDCMImageReader2 *reader = vtkGDCMImageReader2::New();
   if( gdcm::System::FileIsDirectory( filename ) )
     {
     verbose = false;
@@ -63,7 +63,7 @@ static int TestvtkGDCMImageRead(const char *filename, bool verbose)
   if( verbose && false )
     {
     // Create directory first:
-    const char subdir[] = "TestvtkGDCMImageReader";
+    const char subdir[] = "TestvtkGDCMImageReader2_1";
     std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
     if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
       {
@@ -73,11 +73,7 @@ static int TestvtkGDCMImageRead(const char *filename, bool verbose)
     std::string pngfile = gdcm::Testing::GetTempFilename( filename, subdir );
 
     vtkPNGWriter *writer = vtkPNGWriter::New();
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
     writer->SetInputConnection( reader->GetOutputPort() );
-#else
-    writer->SetInput( reader->GetOutput() );
-#endif
     pngfile += ".png";
     writer->SetFileName( pngfile.c_str() );
     //writer->Write();
@@ -89,7 +85,7 @@ static int TestvtkGDCMImageRead(const char *filename, bool verbose)
   return 0;
 }
 
-int TestvtkGDCMImageReader(int argc, char *argv[])
+int TestvtkGDCMImageReader2_1(int argc, char *argv[])
 {
   if( argc == 2 )
     {

@@ -213,7 +213,11 @@ public:
           vtkPNGWriter * writer = vtkPNGWriter::New();
           vtkWindowToImageFilter * w2i = vtkWindowToImageFilter::New();
           w2i->SetInput( rwi->GetRenderWindow() );
+#if (VTK_MAJOR_VERSION >= 6)
+          writer->SetInputConnection( w2i->GetOutputPort() );
+#else
           writer->SetInput( w2i->GetOutput() );
+#endif
           writer->SetFileName( "snapshot.png" );
           writer->Write();
           writer->Delete();
@@ -440,7 +444,11 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
       {
       vtkLookupTable *lut = reader->GetIconImage()->GetPointData()->GetScalars()->GetLookupTable();
       vtkImageMapToColors *map = vtkImageMapToColors::New ();
+#if (VTK_MAJOR_VERSION >= 6)
+      map->SetInputData(reader->GetIconImage());
+#else
       map->SetInput (reader->GetIconImage());
+#endif
       map->SetLookupTable ( lut );
       //FIXME there is no way to know the type of LUT the icon is using:
       //if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
@@ -521,7 +529,11 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     if( lut->IsA( "vtkLookupTable16" ) )
       {
       vtkImageMapToColors16 *map = vtkImageMapToColors16::New ();
+#if (VTK_MAJOR_VERSION >= 6)
+      map->SetInputConnection (reader->GetOutputPort());
+#else
       map->SetInput (reader->GetOutput());
+#endif
       map->SetLookupTable (reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
       if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
         {
@@ -533,14 +545,22 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
         }
       map->Update();
       map->GetOutput()->GetScalarRange(range);
+#if (VTK_MAJOR_VERSION >= 6)
+      viewer->SetInputConnection( map->GetOutputPort() );
+#else
       viewer->SetInput( map->GetOutput() );
+#endif
       map->Delete();
       }
     else
 #endif
       {
       vtkImageMapToColors *map = vtkImageMapToColors::New ();
+#if (VTK_MAJOR_VERSION >= 6)
+      map->SetInputConnection (reader->GetOutputPort());
+#else
       map->SetInput (reader->GetOutput());
+#endif
       map->SetLookupTable (reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
       if( reader->GetImageFormat() == VTK_LOOKUP_TABLE )
         {
@@ -552,7 +572,11 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
         }
       map->Update();
       map->GetOutput()->GetScalarRange(range);
+#if (VTK_MAJOR_VERSION >= 6)
+      viewer->SetInputConnection( map->GetOutputPort() );
+#else
       viewer->SetInput( map->GetOutput() );
+#endif
       map->Delete();
       }
     }
@@ -560,10 +584,18 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     {
 #if VTK_MAJOR_VERSION >= 5
     vtkImageYBRToRGB *filter = vtkImageYBRToRGB::New();
+#if (VTK_MAJOR_VERSION >= 6)
+    filter->SetInputConnection( reader->GetOutputPort() );
+#else
     filter->SetInput( reader->GetOutput() );
+#endif
     filter->Update();
     filter->GetOutput()->GetScalarRange(range);
+#if (VTK_MAJOR_VERSION >= 6)
+    viewer->SetInputConnection( filter->GetOutputPort() );
+#else
     viewer->SetInput( filter->GetOutput() );
+#endif
     filter->Delete();
 #else
     std::cerr << "Not implemented" << std::endl;
@@ -586,7 +618,11 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   if( reader->GetCurve() )
     {
     vtkPolyDataMapper2D * rectMapper = vtkPolyDataMapper2D::New();
+#if (VTK_MAJOR_VERSION >= 6)
+    rectMapper->SetInputData( reader->GetCurve() );
+#else
     rectMapper->SetInput( reader->GetCurve() );
+#endif
 
     vtkActor2D * rectActor = vtkActor2D::New();
     rectActor->SetMapper( rectMapper );

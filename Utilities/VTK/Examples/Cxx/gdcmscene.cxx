@@ -59,11 +59,19 @@ int main(int argc, char *argv[])
   int n = reader->GetNumberOfOutputPorts();
   for(int i = 0; i < n; ++i)
     {
+#if (VTK_MAJOR_VERSION >= 6)
+    append->AddInputConnection( reader->GetOutputPort(i) );
+#else
     append->AddInput( reader->GetOutput(i) );
+#endif
     }
 
   vtkPolyDataWriter * writer = vtkPolyDataWriter::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  writer->SetInputConnection( reader->GetOutputPort() );
+#else
   writer->SetInput( reader->GetOutput() );
+#endif
   writer->SetFileName( "rtstruct.vtk" );
   //writer->Write();
 
@@ -71,7 +79,11 @@ int main(int argc, char *argv[])
   vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
   //vtkPolyDataMapper2D* cubeMapper = vtkPolyDataMapper2D::New();
       //cubeMapper->SetInput( reader->GetOutput() );
+#if (VTK_MAJOR_VERSION >= 6)
+      cubeMapper->SetInputConnection( append->GetOutputPort() );
+#else
       cubeMapper->SetInput( append->GetOutput() );
+#endif
       cubeMapper->SetScalarRange(0,7);
   vtkActor *cubeActor = vtkActor::New();
   //vtkActor2D* cubeActor = vtkActor2D::New();

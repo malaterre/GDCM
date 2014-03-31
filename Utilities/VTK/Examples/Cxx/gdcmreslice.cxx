@@ -42,13 +42,21 @@ int main( int argc, char *argv[] )
   reader->Update();
 
   vtkImageFlip *flip = vtkImageFlip::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  flip->SetInputConnection(reader->GetOutputPort());
+#else
   flip->SetInput(reader->GetOutput());
+#endif
   flip->SetFilteredAxis(0);
   flip->Update();
 
   vtkImageReslice *reslice = vtkImageReslice::New();
   //reslice->SetInput(reader->GetOutput());
+#if (VTK_MAJOR_VERSION >= 6)
+  reslice->SetInputConnection(flip->GetOutputPort());
+#else
   reslice->SetInput(flip->GetOutput());
+#endif
   //reslice->SetResliceAxesDirectionCosines()
   reader->GetDirectionCosines()->Print(std::cout);
   vtkMatrix4x4 *invert = vtkMatrix4x4::New();
@@ -71,7 +79,11 @@ int main( int argc, char *argv[] )
 
   // Texture
   vtkTexture* texture = vtkTexture::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  texture->SetInputData(ima);
+#else
   texture->SetInput(ima);
+#endif
   texture->InterpolateOn();
   texture->SetLookupTable(table);
 
@@ -80,7 +92,11 @@ int main( int argc, char *argv[] )
 
   // PolyDataMapper
   vtkPolyDataMapper *planeMapper = vtkPolyDataMapper::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  planeMapper->SetInputConnection(plane->GetOutputPort());
+#else
   planeMapper->SetInput(plane->GetOutput());
+#endif
 
   // Actor
   vtkActor* planeActor = vtkActor::New();

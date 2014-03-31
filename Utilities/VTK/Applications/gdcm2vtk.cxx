@@ -504,7 +504,11 @@ int main(int argc, char *argv[])
       vtkStructuredPointsWriter * writer = vtkStructuredPointsWriter::New();
       writer->SetFileName( outfilename );
       writer->SetFileTypeToBinary();
+#if (VTK_MAJOR_VERSION >= 6)
+      writer->SetInputData( imgdata );
+#else
       writer->SetInput( imgdata );
+#endif
       writer->Write();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
       if( writer->GetErrorCode() )
@@ -520,7 +524,11 @@ int main(int argc, char *argv[])
       {
       vtkBMPWriter * writer = vtkBMPWriter::New();
       writer->SetFileName( outfilename );
+#if (VTK_MAJOR_VERSION >= 6)
+      writer->SetInputData( imgdata );
+#else
       writer->SetInput( imgdata );
+#endif
       writer->Write();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
       if( writer->GetErrorCode() )
@@ -538,7 +546,11 @@ int main(int argc, char *argv[])
       {
       vtkPNMWriter * writer = vtkPNMWriter::New();
       writer->SetFileName( outfilename );
+#if (VTK_MAJOR_VERSION >= 6)
+      writer->SetInputData( imgdata );
+#else
       writer->SetInput( imgdata );
+#endif
       writer->Write();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
       if( writer->GetErrorCode() )
@@ -554,7 +566,11 @@ int main(int argc, char *argv[])
       {
       vtkPNGWriter * writer = vtkPNGWriter::New();
       writer->SetFileName( outfilename );
+#if (VTK_MAJOR_VERSION >= 6)
+      writer->SetInputData( imgdata );
+#else
       writer->SetInput( imgdata );
+#endif
       writer->Write();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
       if( writer->GetErrorCode() )
@@ -571,7 +587,11 @@ int main(int argc, char *argv[])
       {
       vtkTIFFWriter * writer = vtkTIFFWriter::New();
       writer->SetFileName( outfilename );
+#if (VTK_MAJOR_VERSION >= 6)
+      writer->SetInputData( imgdata );
+#else
       writer->SetInput( imgdata );
+#endif
       writer->Write();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
       if( writer->GetErrorCode() )
@@ -588,7 +608,11 @@ int main(int argc, char *argv[])
       vtkXMLImageDataWriter * writer = vtkXMLImageDataWriter::New();
       writer->SetFileName( outfilename );
       writer->SetDataModeToBinary();
+#if (VTK_MAJOR_VERSION >= 6)
+      writer->SetInputData( imgdata );
+#else
       writer->SetInput( imgdata );
+#endif
       writer->Write();
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
       if( writer->GetErrorCode() )
@@ -612,7 +636,11 @@ int main(int argc, char *argv[])
       // One cannot set the patient name to store (see vtkMetaImageReader::GetPatientName ...)
       vtkMetaImageWriter * writer = vtkMetaImageWriter::New();
       writer->SetFileName( outfilename );
+#if (VTK_MAJOR_VERSION >= 6)
+      writer->SetInputData( imgdata );
+#else
       writer->SetInput( imgdata );
+#endif
       //writer->SetInput( cast->GetOutput() );
       writer->SetCompression( compress );
       //writer->FileLowerLeftOff(); // not used in the implementation
@@ -702,15 +730,27 @@ int main(int argc, char *argv[])
       std::cout << "alpha channel will be lost " << imgreader->GetOutput()->GetNumberOfScalarComponents() << std::endl;
       }
     vtkImageExtractComponents *extract = vtkImageExtractComponents::New();
+#if (VTK_MAJOR_VERSION >= 6)
+    extract->SetInputConnection( imgreader->GetOutputPort() );
+#else
     extract->SetInput( imgreader->GetOutput() );
+#endif
     extract->SetComponents( 0,1,2 );
+#if (VTK_MAJOR_VERSION >= 6)
+    writer->SetInputConnection( extract->GetOutputPort() );
+#else
     writer->SetInput( extract->GetOutput() );
+#endif
     extract->Delete();
     }
   else
     {
     //writer->SetInput( imgreader->GetOutput() );
+#if (VTK_MAJOR_VERSION >= 6)
+    writer->SetInputData( imgdata );
+#else
     writer->SetInput( imgdata );
+#endif
 
 #if 0
     vtkImageRGBToYBR * rgb2ybr = vtkImageRGBToYBR::New();

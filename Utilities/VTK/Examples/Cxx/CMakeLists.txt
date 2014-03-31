@@ -9,7 +9,7 @@ if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
     GenerateRTSTRUCT
     offscreenimage
   )
-  if(VTK_USE_RENDERING)
+  if(VTK_USE_RENDERING OR vtkRenderingCore_LOADED)
     set(GDCM_VTK_APPS
       ${GDCM_VTK_APPS}
       gdcmorthoplanes
@@ -31,7 +31,7 @@ if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
       MagnifyFile
       )
     if(GDCM_DATA_EXTRA_ROOT)
-      if(VTK_USE_RENDERING)
+      if(VTK_USE_RENDERING OR vtkRenderingCore_LOADED)
         set(GDCM_VTK_APPS
           ${GDCM_VTK_APPS}
           reslicesphere
@@ -50,9 +50,13 @@ foreach(app ${GDCM_VTK_APPS})
     # gdcmTesting is in Common:
     target_link_libraries(${app} gdcmCommon)
   endif()
-  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
-    if(VTK_USE_RENDERING)
-      target_link_libraries(${app} vtkWidgets vtkVolumeRendering)
+  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 6.0 )
+    target_link_libraries(${app} ${VTK_LIBRARIES})
+  else()
+    if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
+      if(VTK_USE_RENDERING)
+        target_link_libraries(${app} vtkWidgets vtkVolumeRendering)
+      endif()
     endif()
   endif()
 endforeach()
@@ -60,7 +64,12 @@ endforeach()
 if(GDCM_HAVE_PTHREAD_H)
 # Dev only: I dont need to install that one:
   add_executable(threadgdcm threadgdcm.cxx)
-  target_link_libraries(threadgdcm gdcmMSFF pthread vtkIO)
+  target_link_libraries(threadgdcm gdcmMSFF pthread )
+  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 6.0 )
+    target_link_libraries(threadgdcm ${VTK_LIBRARIES})
+  else()
+    target_link_libraries(threadgdcm vtkIO)
+  endif()
 endif()
 
 #add_executable(gdcm2vtk gdcm2vtk.cxx)
