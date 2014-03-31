@@ -854,6 +854,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x00e1,0x0030,"ELSCINT1",VR::UI,VM::VM1,"?",false },
   {0x00e1,0x0031,"ELSCINT1",VR::CS,VM::VM1,"?",false },
   {0x00e1,0x0032,"ELSCINT1",VR::US,VM::VM2,"?",false },
+  {0x00e1,0x0036,"ELSCINT1",VR::CS,VM::VM1,"?YES/NO?",false },
   {0x00e1,0x0037,"ELSCINT1",VR::DS,VM::VM1,"ELSCINT1_TOTAL_SAVING_DOSE",false },
   {0x00e1,0x0039,"ELSCINT1",VR::SQ,VM::VM1,"?",false },
   {0x00e1,0x003e,"ELSCINT1",VR::IS,VM::VM1,"Private (00E1,103E)",false },
@@ -975,6 +976,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x01f7,0x0077,"ELSCINT1",VR::OW,VM::VM1,"?",false },
   {0x01f7,0x007f,"ELSCINT1",VR::OW,VM::VM1,"?",false },
   {0x01f7,0x008b,"ELSCINT1",VR::OW,VM::VM1,"?",false },
+  {0x01f7,0x0091,"ELSCINT1",VR::OW,VM::VM1,"?",false },
   {0x01f7,0x0095,"ELSCINT1",VR::OW,VM::VM1,"?",false },
   {0x01f9,0x0001,"ELSCINT1",VR::LO,VM::VM1,"SP Filter (private)",false },
   {0x01f9,0x0004,"ELSCINT1",VR::IS,VM::VM1,"Adaptive Filter (private)",false },
@@ -4644,6 +4646,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x4001,0x001c,"Philips Imaging DD 070",VR::SQ,VM::VM1,"?",false },
   {0x4001,0x001d,"Philips Imaging DD 070",VR::LT,VM::VM1,"?",false },
   {0x4007,0x0048,"Philips Imaging DD 073",VR::FL,VM::VM1,"?",false },
+  {0x1001,0x0003,"Philips Imaging DD 124",VR::LO,VM::VM1,"?",false }, /* MR Import Filter 3/21/2014 1:57:35 PM */
   {0x2001,0x0000,"Philips Imaging DD 129",VR::SQ,VM::VM1,"?",false },
   {0x2001,0x0001,"Philips Imaging DD 129",VR::SQ,VM::VM1,"?",false },
   {0x2005,0x0000,"PHILIPS MR IMAGING DD 001",VR::FL,VM::VM1,"?",false },
