@@ -38,9 +38,9 @@ CMAKE_INSTALL_PREFIX:PATH=/tmp/tomate-gdcm
 GDCM_WRAP_PYTHON:BOOL=ON
 # cant get python/cmake stuff working:
 # hardcode for now:
-PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python2.6
-PYTHON_INCLUDE_DIR:PATH=/usr/include/python2.6
-PYTHON_LIBRARY:FILEPATH=/usr/lib/libpython2.6.so
+PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python2.7
+PYTHON_INCLUDE_DIR:PATH=/usr/include/python2.7
+PYTHON_LIBRARY:FILEPATH=/usr/lib/libpython2.7.so
 GDCM_WRAP_JAVA:BOOL=ON
 GDCM_WRAP_CSHARP:BOOL=OFF
 GDCM_USE_SYSTEM_OPENSSL:BOOL=ON
