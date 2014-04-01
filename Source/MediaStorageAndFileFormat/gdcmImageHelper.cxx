@@ -919,6 +919,8 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   case MediaStorage::PETImageStorage:
   case MediaStorage::GeneralElectricMagneticResonanceImageStorage:
   case MediaStorage::PhilipsPrivateMRSyntheticImageStorage:
+  case MediaStorage::VLPhotographicImageStorage: // VL Image IOD
+  case MediaStorage::VLMicroscopicImageStorage:
     // (0028,0030) DS [2.0\2.0]                                #   8, 2 PixelSpacing
     t = Tag(0x0028,0x0030);
     break;
