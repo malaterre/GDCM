@@ -6,7 +6,7 @@ set(CTEST_BUILD_CONFIGURATION Debug)
 set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
 set(CTEST_DASHBOARD_ROOT "/local/mmalater")
 set(dashboard_root_name "MyTests")
-SET(CTEST_BUILD_FLAGS "-j16")
+SET(CTEST_BUILD_FLAGS "-j2")
 set(dashboard_source_name "gdcm")
 set(dashboard_binary_name "gdcm-nightly-snap")
 set(dashboard_do_memcheck FALSE)
@@ -39,11 +39,9 @@ GDCM_WRAP_JAVA:BOOL=ON
 #CMAKE_OVERRIDE_COMPILER_MISMATCH:BOOL=ON
 GDCM_BUILD_SHARED_LIBS:BOOL=ON
 GDCM_BUILD_APPLICATIONS:BOOL=ON
-# problem with ld.gold...
 GDCM_USE_VTK:BOOL=OFF
 GDCM_DOCUMENTATION:BOOL=OFF
 GDCM_VTK_DOCUMENTATION:BOOL=OFF
-#MAKECOMMAND:STRING=/usr/bin/make -j8
 GDCM_DATA_EXTRA_ROOT:PATH=$ENV{HOME}/Creatis/gdcmDataExtra
 #GDCM_PIXEL_SPACING_DATA_ROOT:PATH=${CTEST_GDCM_PIXEL_SPACING_DATA_ROOT}
 # secret option:

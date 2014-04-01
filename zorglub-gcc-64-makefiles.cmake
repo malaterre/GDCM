@@ -4,9 +4,8 @@ set(CTEST_SITE "zorglub")
 set(CTEST_BUILD_NAME "Linux-gcc-GIT")
 set(CTEST_BUILD_CONFIGURATION Debug)
 set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
-#set(CTEST_DASHBOARD_ROOT "/local/mmalater")
 set(dashboard_root_name "MyTests")
-SET(CTEST_BUILD_FLAGS "-j16")
+SET(CTEST_BUILD_FLAGS "-j2")
 set(dashboard_source_name "gdcm")
 set(dashboard_binary_name "gdcm-nightly")
 set(dashboard_do_memcheck FALSE)
@@ -36,10 +35,8 @@ GDCM_TEST_DCMTK:BOOL=ON
 GDCM_TEST_BOOTSTRAP:BOOL=ON
 GDCM_BUILD_APPLICATIONS:BOOL=ON
 GDCM_USE_VTK:BOOL=ON
-#VTK_DIR:PATH=${CTEST_DASHBOARD_ROOT}/VTK56-gcc
 GDCM_DOCUMENTATION:BOOL=OFF
 GDCM_VTK_DOCUMENTATION:BOOL=ON
-#MAKECOMMAND:STRING=/usr/bin/make -j8
 #GDCM_PIXEL_SPACING_DATA_ROOT:PATH=${CTEST_GDCM_PIXEL_SPACING_DATA_ROOT}
 
 # Temp fix for:
