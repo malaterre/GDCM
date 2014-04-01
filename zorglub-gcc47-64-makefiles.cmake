@@ -6,14 +6,14 @@ set(CTEST_BUILD_CONFIGURATION Debug)
 set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
 #set(CTEST_DASHBOARD_ROOT "/local/mmalater")
 set(dashboard_root_name "MyTests")
-SET(CTEST_BUILD_FLAGS "-j16")
+SET(CTEST_BUILD_FLAGS "-j2")
 set(dashboard_source_name "gdcm")
-set(dashboard_binary_name "gdcm-gcc43-nightly")
+set(dashboard_binary_name "gdcm-gcc47-nightly")
 set(dashboard_do_memcheck FALSE)
 set(dashboard_do_coverage FALSE)
 
-SET(ENV{CC} "gcc-4.4")
-SET(ENV{CXX} "g++-4.4")
+SET(ENV{CC} "gcc-4.7")
+SET(ENV{CXX} "g++-4.7")
 #SET(ENV{GDCM_DATA_ROOT} "$ENV{HOME}/Creatis/gdcmData")
 #SET(CTEST_GDCM_PIXEL_SPACING_DATA_ROOT "$ENV{HOME}/Dashboards/Theralys/pixelspacingtestimages")
 SET(ENV{CXXFLAGS} "-g -O0 -Wall -W -Wextra -Wshadow -Wunused -Wno-system-headers -Wno-deprecated -Woverloaded-virtual -Wwrite-strings -Wsign-promo -Wabi -D_GLIBCXX_DEBUG -fvisibility=hidden")
@@ -38,12 +38,12 @@ GDCM_USE_VTK:BOOL=ON
 #VTK_DIR:PATH=${CTEST_DASHBOARD_ROOT}/VTK56-gcc
 GDCM_DOCUMENTATION:BOOL=OFF
 GDCM_VTK_DOCUMENTATION:BOOL=ON
-MAKECOMMAND:STRING=/usr/bin/make -j8
+MAKECOMMAND:STRING=/usr/bin/make -j2
 GDCM_DATA_EXTRA_ROOT:PATH=$ENV{HOME}/Creatis/gdcmDataExtra
 #GDCM_PIXEL_SPACING_DATA_ROOT:PATH=${CTEST_GDCM_PIXEL_SPACING_DATA_ROOT}
 CMAKE_OVERRIDE_COMPILER_MISMATCH:BOOL=ON
 
-CMAKE_INSTALL_PREFIX:PATH=/tmp/local43
+CMAKE_INSTALL_PREFIX:PATH=/tmp/local47
 # secret option
 #GDCM_TESTING_USE_LC_NUMERIC:BOOL=ON
 GDCM_USE_SYSTEM_LIBXML2:BOOL=ON
