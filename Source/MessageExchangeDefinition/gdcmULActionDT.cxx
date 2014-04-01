@@ -189,7 +189,6 @@ EStateID ULActionDT1::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
     if (dataPDU == NULL)
       {
       throw Exception("Data sending event PDU malformed.");
-      return eStaDoesNotExist;
       }
     dataPDU->Write(*inConnection.GetProtocol());
       Progress += progresstick;

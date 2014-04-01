@@ -567,7 +567,6 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
   if( !t.Read<SwapperNoOp>(is) )
     {
     throw Exception( "Cannot read very first tag" );
-    return is;
     }
   if( t.GetGroup() == 0x0002 )
     {

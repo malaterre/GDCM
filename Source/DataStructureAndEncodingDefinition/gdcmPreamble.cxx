@@ -48,7 +48,6 @@ std::istream &Preamble::Read(std::istream &is)
   throw Exception( "Not a DICOM V3 file (No Preamble)" );
 
   // \postcondition we are after the Preamble (or at beg of file if none)
-  return is;
 }
 
 void Preamble::Valid()
