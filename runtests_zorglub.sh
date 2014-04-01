@@ -17,4 +17,5 @@ done
 
 echo "Stopping dcmqrscp"
 
-termscu --aetitle GDCMDASH --call GDCM_STORE $HOSTNAME 5678
+HOSTIP=`hostname -I`
+termscu --aetitle GDCMDASH --call GDCM_STORE $HOSTIP 5678
