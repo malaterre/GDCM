@@ -43,6 +43,8 @@ macro(install_library library)
       LIBRARY DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT Libraries ${NAMELINK_SKIP}
       ARCHIVE DESTINATION ${GDCM_INSTALL_LIB_DIR} COMPONENT DebugDevel
       )
+    # need recent cmake: http://cmake.org/gitweb?p=cmake.git;a=commitdiff;h=cbe7e8fa
+    #export(EXPORT ${GDCM_TARGETS_NAME} APPEND FILE "${CMAKE_CURRENT_BINARY_DIR}/foo.cmake")
     #Development
     if(NAMELINK_ONLY)
       install(TARGETS ${library}

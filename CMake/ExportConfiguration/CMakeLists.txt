@@ -104,6 +104,27 @@ endif()
 ##  )
 #endif()
 
+set(targets
+  gdcmCommon
+  gdcmDICT
+  gdcmDSED
+  gdcmIOD
+  gdcmMSFF
+  gdcmMEXD
+  gdcmjpeg8
+  gdcmjpeg12
+  gdcmjpeg16
+  gdcmexpat
+  gdcmopenjpeg
+  gdcmcharls
+  gdcmmd5
+  gdcmzlib
+  gdcmuuid
+  socketxx
+  vtkgdcm
+  php_vtkgdcm
+  vtkgdcmsharpglue
+  )
 file(WRITE ${GDCM_BINARY_DIR}/GDCMExports.cmake "")
 foreach(target ${targets})
   if(TARGET ${target})
