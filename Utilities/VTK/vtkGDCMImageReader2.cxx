@@ -52,7 +52,7 @@
 vtkCxxRevisionMacro(vtkGDCMImageReader2, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageReader2)
 
-inline bool vtkGDCMImageReader2_IsCharTypeSigned()
+static inline bool vtkGDCMImageReader2_IsCharTypeSigned()
 {
 #ifndef VTK_TYPE_CHAR_IS_SIGNED
   unsigned char uc = 255;
@@ -331,6 +331,9 @@ int vtkGDCMImageReader2::RequestInformation(vtkInformation *request,
       outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), this->DataExtent, 6);
       //outInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), this->DataExtent, 6);
       outInfo->Set(vtkDataObject::SPACING(), this->DataSpacing, 3);
+#ifdef GDCMV2_0_COMPATIBILITY
+      outInfo->Set(vtkDataObject::ORIGIN(), this->DataOrigin, 3);
+#endif
       vtkDataObject::SetPointDataActiveScalarInfo(outInfo, this->DataScalarType, this->NumberOfScalarComponents);
       break;
     // Icon Image
@@ -530,9 +533,7 @@ int vtkGDCMImageReader2::RequestInformationCompat()
     }
   gdcm::MediaStorage ms;
   ms.SetFromFile( reader.GetFile() );
-  assert( gdcm::MediaStorage::IsImage( ms ) || ms == gdcm::MediaStorage::MRSpectroscopyStorage );
-  // There is no point in adding world info to a SC object since noone but GDCM can use this info...
-  //if( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+  assert( gdcm::MediaStorage::IsImage( ms ) );
 
   const double *spacing = image.GetSpacing();
   if( spacing )
@@ -572,12 +573,39 @@ int vtkGDCMImageReader2::RequestInformationCompat()
       this->ImageOrientationPatient[i] = dircos[i];
     this->MedicalImageProperties->SetDirectionCosine( this->ImageOrientationPatient );
     }
+  // Apply transform:
+#ifdef GDCMV2_0_COMPATIBILITY
+  if( dircos && origin )
+    {
+    if( this->FileLowerLeft )
+      {
+      // Since we are not doing the VTK Y-flipping operation, Origin and Image Position (Patient)
+      // are the same:
+      this->DataOrigin[0] = origin[0];
+      this->DataOrigin[1] = origin[1];
+      this->DataOrigin[2] = origin[2];
+      }
+    else
+      {
+      // We are doing the Y-flip:
+      // translate Image Position (Patient) along the Y-vector of the Image Orientation (Patient):
+      // Step 1: Compute norm of translation vector:
+      // Because position is in the center of the pixel, we need to substract 1 to the dimY:
+      assert( dims[1] >=1 );
+      double norm = (dims[1] - 1) * this->DataSpacing[1];
+      // Step 2: translate:
+      this->DataOrigin[0] = origin[0] + norm * dircos[3+0];
+      this->DataOrigin[1] = origin[1] + norm * dircos[3+1];
+      this->DataOrigin[2] = origin[2] + norm * dircos[3+2];
+      }
+    }
+  // Need to set the rest to 0 ???
+#endif
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();
   this->Shift = image.GetIntercept();
   this->Scale = image.GetSlope();
 
-  //gdcm::PixelFormat::ScalarType outputpt = pixeltype;
   gdcm::PixelFormat::ScalarType outputpt =
     ComputePixelTypeFromFiles(this->FileName, this->FileNames, image);
   if( this->FileName )
@@ -693,7 +721,7 @@ int vtkGDCMImageReader2::RequestInformationCompat()
 
 //----------------------------------------------------------------------------
 template <class T>
-inline unsigned long vtkImageDataGetTypeSize(T*, int a = 0,int b = 0)
+static inline unsigned long vtkImageDataGetTypeSize(T*, int a = 0, int b = 0)
 {
   (void)a;(void)b;
   return sizeof(T);
@@ -763,7 +791,7 @@ int vtkGDCMImageReader2::LoadSingleFile(const char *filename, char *pointer, uns
   reader.SetFileName( filename );
   if( !reader.ReadInformation() )
     {
-    vtkErrorMacro( "ImageReader failed: " << filename );
+    vtkErrorMacro( "ImageRegionReader failed: " << filename );
     return 0;
     }
 
@@ -786,16 +814,8 @@ int vtkGDCMImageReader2::LoadSingleFile(const char *filename, char *pointer, uns
   //assert( this->PlanarConfiguration == 0 || this->PlanarConfiguration == 1 );
   if( image.GetPlanarConfiguration() == 1 )
     {
-#if 0
-    gdcm::ImageChangePlanarConfiguration icpc;
-    icpc.SetInput( image );
-    icpc.SetPlanarConfiguration( 0 );
-    icpc.Change();
-    image = icpc.GetOutput();
-#else
-    vtkErrorMacro( "ImageReader failed: " << filename );
+    vtkErrorMacro( "vtkGDCMImageReader2 does not handle Planar Configuration: " << filename );
     return 0;
-#endif
     }
 
   const gdcm::PixelFormat &pixeltype = image.GetPixelFormat();

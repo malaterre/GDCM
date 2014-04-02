@@ -54,7 +54,7 @@
 vtkCxxRevisionMacro(vtkGDCMImageReader, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageReader)
 
-inline bool vtkGDCMImageReader_IsCharTypeSigned()
+static inline bool vtkGDCMImageReader_IsCharTypeSigned()
 {
 #ifndef VTK_TYPE_CHAR_IS_SIGNED
   unsigned char uc = 255;
@@ -976,7 +976,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
 
 //----------------------------------------------------------------------------
 template <class T>
-inline unsigned long vtkImageDataGetTypeSize(T*, int a = 0,int b = 0)
+static inline unsigned long vtkImageDataGetTypeSize(T*, int a = 0,int b = 0)
 {
   (void)a;(void)b;
   return sizeof(T);
