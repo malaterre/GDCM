@@ -500,11 +500,13 @@ int main(int argc, char *argv[])
       const std::string & outfn = ss.str();
       w.SetFileName( outfn.c_str() );
       gdcm::TransferSyntax outts;
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
       if( ts == gdcm::TransferSyntax::WeirdPapryus )
         {
         outts = gdcm::TransferSyntax::ImplicitVRLittleEndian;
         }
       else
+#endif
         {
         outts = ts;
         }
