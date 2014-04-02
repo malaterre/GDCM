@@ -132,7 +132,48 @@ bool ImageRegionReader::ReadInformation()
     }
 
   // populate Image meta data
-  return ReadImageInternal(ms, false);
+  if( !ReadImageInternal(ms, false) )
+    {
+    return false;
+    }
+  // FIXME Copy/paste from ImageReader::ReadImage
+  Image& pixeldata = GetImage();
+
+  // 4 1/2 Let's do Pixel Spacing
+  std::vector<double> spacing = ImageHelper::GetSpacingValue(*F);
+  // FIXME: Only SC is allowed not to have spacing:
+  if( !spacing.empty() )
+    {
+    assert( spacing.size() >= pixeldata.GetNumberOfDimensions() ); // In MR, you can have a Z spacing, but store a 2D image
+    pixeldata.SetSpacing( &spacing[0] );
+    if( spacing.size() > pixeldata.GetNumberOfDimensions() ) // FIXME HACK
+      {
+      pixeldata.SetSpacing(pixeldata.GetNumberOfDimensions(), spacing[pixeldata.GetNumberOfDimensions()] );
+      }
+    }
+  // 4 2/3 Let's do Origin
+  std::vector<double> origin = ImageHelper::GetOriginValue(*F);
+  if( !origin.empty() )
+    {
+    pixeldata.SetOrigin( &origin[0] );
+    if( origin.size() > pixeldata.GetNumberOfDimensions() ) // FIXME HACK
+      {
+      pixeldata.SetOrigin(pixeldata.GetNumberOfDimensions(), origin[pixeldata.GetNumberOfDimensions()] );
+      }
+    }
+
+  std::vector<double> dircos = ImageHelper::GetDirectionCosinesValue(*F);
+  if( !dircos.empty() )
+    {
+    pixeldata.SetDirectionCosines( &dircos[0] );
+    }
+
+  // Do the Rescale Intercept & Slope
+  std::vector<double> is = ImageHelper::GetRescaleInterceptSlopeValue(*F);
+  pixeldata.SetIntercept( is[0] );
+  pixeldata.SetSlope( is[1] );
+
+  return true;
 }
 
 bool ImageRegionReader::ReadRAWIntoBuffer(char *buffer, size_t buflen)

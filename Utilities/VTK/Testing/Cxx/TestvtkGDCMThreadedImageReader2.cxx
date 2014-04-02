@@ -191,7 +191,11 @@ int TestvtkGDCMThreadedImageRead2(const char *filename, bool verbose = false)
   if( reader->GetNumberOfOverlays() )
     {
     vtkPNGWriter *writer = vtkPNGWriter::New();
+#if (VTK_MAJOR_VERSION >= 6)
+    writer->SetInputConnection( reader->GetOutputPort(1) );
+#else
     writer->SetInput( reader->GetOutput(1) );
+#endif
     const char subdir[] = "TestvtkGDCMThreadedImageReader2";
     // Create directory first:
     std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );

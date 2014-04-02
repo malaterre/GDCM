@@ -116,6 +116,32 @@ void ReadFiles(size_t nfiles, const char *filenames[])
   vtkImageData *output = vtkImageData::New();
   output->SetDimensions(dims[0], dims[1], (int)nfiles);
 
+#if (VTK_MAJOR_VERSION >= 6)
+  int numscal = pixeltype.GetSamplesPerPixel();
+  switch( pixeltype )
+    {
+  case gdcm::PixelFormat::INT8:
+    output->AllocateScalars( VTK_SIGNED_CHAR, numscal );
+    break;
+  case gdcm::PixelFormat::UINT8:
+    output->AllocateScalars( VTK_UNSIGNED_CHAR, numscal );
+    break;
+  case gdcm::PixelFormat::INT16:
+    output->AllocateScalars( VTK_SHORT, numscal );
+    break;
+  case gdcm::PixelFormat::UINT16:
+    output->AllocateScalars( VTK_UNSIGNED_SHORT, numscal );
+    break;
+  case gdcm::PixelFormat::INT32:
+    output->AllocateScalars( VTK_INT, numscal );
+    break;
+  case gdcm::PixelFormat::UINT32:
+    output->AllocateScalars( VTK_UNSIGNED_INT, numscal );
+    break;
+  default:
+    assert(0);
+    }
+#else
   switch( pixeltype )
     {
   case gdcm::PixelFormat::INT8:
@@ -143,10 +169,9 @@ void ReadFiles(size_t nfiles, const char *filenames[])
   default:
     assert(0);
     }
-
   output->SetNumberOfScalarComponents ( pixeltype.GetSamplesPerPixel() );
-
   output->AllocateScalars();
+#endif
   char * scalarpointer = static_cast<char*>(output->GetScalarPointer());
 
   const unsigned int nthreads = 4;
@@ -200,7 +225,11 @@ void ReadFiles(size_t nfiles, const char *filenames[])
 
   // For some reason writing down the file is painfully slow...
   vtkStructuredPointsWriter *writer = vtkStructuredPointsWriter::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  writer->SetInputData( output );
+#else
   writer->SetInput( output );
+#endif
   writer->SetFileName( "/tmp/threadgdcm.vtk" );
   writer->SetFileTypeToBinary();
   //writer->Write();

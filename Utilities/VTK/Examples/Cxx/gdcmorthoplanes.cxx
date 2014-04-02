@@ -205,7 +205,11 @@ int main( int argc, char *argv[] )
   const vtkFloatingPointType *spacing = reader->GetOutput()->GetSpacing();
 
   vtkImageChangeInformation *v16 = vtkImageChangeInformation::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  v16->SetInputConnection( reader->GetOutputPort() );
+#else
   v16->SetInput( reader->GetOutput() );
+#endif
   v16->SetOutputSpacing( spacing[0], spacing[1], ippzspacing );
   v16->Update();
 
@@ -258,7 +262,11 @@ int main( int argc, char *argv[] )
     planeWidgetX->SetTexturePlaneProperty(ipwProp);
     planeWidgetX->TextureInterpolateOff();
     planeWidgetX->SetResliceInterpolateToNearestNeighbour();
+#if (VTK_MAJOR_VERSION >= 6)
+    planeWidgetX->SetInputConnection(v16->GetOutputPort());
+#else
     planeWidgetX->SetInput(v16->GetOutput());
+#endif
     planeWidgetX->SetPlaneOrientationToXAxes();
     //planeWidgetX->SetSliceIndex(32);
     planeWidgetX->DisplayTextOn();
@@ -274,7 +282,11 @@ int main( int argc, char *argv[] )
     planeWidgetY->SetTexturePlaneProperty(ipwProp);
     planeWidgetY->TextureInterpolateOn();
     planeWidgetY->SetResliceInterpolateToLinear();
+#if (VTK_MAJOR_VERSION >= 6)
+    planeWidgetY->SetInputConnection(v16->GetOutputPort());
+#else
     planeWidgetY->SetInput(v16->GetOutput());
+#endif
     planeWidgetY->SetPlaneOrientationToYAxes();
     //planeWidgetY->SetSlicePosition(102.4);
     planeWidgetY->SetLookupTable( planeWidgetX->GetLookupTable());
@@ -290,7 +302,11 @@ int main( int argc, char *argv[] )
     planeWidgetZ->SetTexturePlaneProperty(ipwProp);
     planeWidgetZ->TextureInterpolateOn();
     planeWidgetZ->SetResliceInterpolateToCubic();
+#if (VTK_MAJOR_VERSION >= 6)
+    planeWidgetZ->SetInputConnection(v16->GetOutputPort());
+#else
     planeWidgetZ->SetInput(v16->GetOutput());
+#endif
     planeWidgetZ->SetPlaneOrientationToZAxes();
     //planeWidgetZ->SetSliceIndex(25);
     planeWidgetZ->SetLookupTable( planeWidgetX->GetLookupTable());
@@ -321,12 +337,20 @@ int main( int argc, char *argv[] )
     colorMap->PassAlphaToOutputOff();
     colorMap->SetActiveComponent(0);
     colorMap->SetOutputFormatToLuminance();
+#if (VTK_MAJOR_VERSION >= 6)
+    colorMap->SetInputData(planeWidgetZ->GetResliceOutput());
+#else
     colorMap->SetInput(planeWidgetZ->GetResliceOutput());
+#endif
     colorMap->SetLookupTable(planeWidgetX->GetLookupTable());
 
   vtkImageActor* imageActor = vtkImageActor::New();
     imageActor->PickableOff();
+#if (VTK_MAJOR_VERSION >= 6)
+    imageActor->SetInputData(colorMap->GetOutput());
+#else
     imageActor->SetInput(colorMap->GetOutput());
+#endif
 
   // Add the actors
   //

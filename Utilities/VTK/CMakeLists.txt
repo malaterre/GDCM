@@ -19,12 +19,13 @@ endif()
 include(${VTK_USE_FILE})
 
 if( ${VTK_MAJOR_VERSION} GREATER 5 )
-  include(${VTK_CMAKE_DIR}/vtkMakeInstantiator.cmake)
+  list(APPEND vtkgdcm_SRCS
+    vtkGDCMImageReader2.cxx
+  )
 endif()
 
 include(CheckCXXSourceCompiles)
 set(CMAKE_REQUIRED_INCLUDES ${VTK_INCLUDE_DIRS})
-#set(CMAKE_REQUIRED_LIBRARIES vtkVolumeRendering) # can't get it to work
 CHECK_CXX_SOURCE_COMPILES(
   "\#include <vtkSmartVolumeMapper.h>\nint main() { vtkSmartVolumeMapper* p; return 0;}"
   VTK_HAS_SMARTVOLUMEMAPPER)
@@ -47,16 +48,41 @@ include_directories(
 #endif()
 
 # List the kits from VTK that are needed by this project.
-set(vtkgdcm_LIBS
-  vtkCommon
-  vtkIO
-  vtkImaging
-)
-if(VTK_USE_RENDERING)
+if("${VTK_MAJOR_VERSION}" LESS 6)
   set(vtkgdcm_LIBS
-    ${vtkgdcm_LIBS}
-    vtkRendering
-    )
+    vtkCommon
+    vtkIO
+    vtkImaging
+  )
+  if(VTK_USE_RENDERING)
+    set(vtkgdcm_LIBS
+      ${vtkgdcm_LIBS}
+      vtkRendering
+      )
+  endif()
+else()
+  set(vtkgdcm_LIBS
+    vtkCommonCore
+    vtkImagingCore
+    vtkImagingSources
+    vtkIOImage
+    vtksys
+  )
+  set(vtkgdcm_COND_LIBS
+    vtkIOMPIImage
+    vtkInteractionStyle
+    vtkRenderingCore
+    vtkRenderingFreeType
+    vtkRenderingFreeTypeOpenGL
+    vtkRenderingOpenGL
+  )
+  foreach(TMP_LIB ${VTK_LIBRARIES})
+    foreach(TRY_LIB ${vtkgdcm_COND_LIBS})
+      if("${TMP_LIB}" STREQUAL "${TRY_LIB}")
+        set(vtkgdcm_LIBS ${vtkgdcm_LIBS} "${TRY_LIB}")
+      endif()
+    endforeach()
+  endforeach()
 endif()
 
 # Use wrapping hints for this project.
@@ -97,10 +123,11 @@ else()
     ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageMapToColors16.cxx
     #${CMAKE_CURRENT_SOURCE_DIR}/vtkImagePlanarComponentsToComponents.cxx
   )
-  if(VTK_USE_RENDERING)
-  set(vtkgdcm_SRCS ${vtkgdcm_SRCS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageColorViewer.cxx
-    )
+
+  if(VTK_USE_RENDERING OR vtkRenderingCore_LOADED)
+    set(vtkgdcm_SRCS ${vtkgdcm_SRCS}
+      ${CMAKE_CURRENT_SOURCE_DIR}/vtkImageColorViewer.cxx
+      )
   endif()
 
   #if(GDCM_HAVE_PTHREAD_H)
@@ -109,15 +136,17 @@ else()
     )
   #endif()
 
-  set(VTK_USE_INSTANTIATOR_NEW 1)
-  VTK_MAKE_INSTANTIATOR3(
-    "${VTKGDCM_NAME}Instantiator"
-    vtkgdcmInstantiator_SRCS
-    "${vtkgdcm_SRCS}"
-    "" #"VTK_${VTKGDCM_NAME}_EXPORT"
-    ${PROJECT_BINARY_DIR}
-    "" #"${VTKGDCM_NAME}Configure.h"
-  )
+  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 6.0 )
+    set(VTK_USE_INSTANTIATOR_NEW 1)
+    VTK_MAKE_INSTANTIATOR3(
+      "${VTKGDCM_NAME}Instantiator"
+      vtkgdcmInstantiator_SRCS
+      "${vtkgdcm_SRCS}"
+      "" #"VTK_${VTKGDCM_NAME}_EXPORT"
+      ${PROJECT_BINARY_DIR}
+      "" #"${VTKGDCM_NAME}Configure.h"
+    )
+  endif()
 endif()
 
 #Hum... not sure why this is needed.

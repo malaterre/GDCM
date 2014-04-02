@@ -19,11 +19,20 @@ if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
   )
 endif()
 
+if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 6.0 )
+  set(VTK_GDCM_TEST_SRCS
+    ${VTK_GDCM_TEST_SRCS}
+    TestvtkGDCMImageReader2_1
+    TestvtkGDCMImageReader2_2
+    TestvtkGDCMMetaImageWriter2
+  )
+endif()
+
 # Need gdcmData
 if(GDCM_DATA_ROOT)
   set(VTK_GDCM_TEST_SRCS
     ${VTK_GDCM_TEST_SRCS}
-    TestvtkGDCMImageReader2
+    TestvtkGDCMImageReader1
     )
 endif()
 # Need gdcmDataExtra
@@ -58,9 +67,14 @@ target_link_libraries(gdcmvtkGDCMTests ${VTKGDCM_NAME} gdcmMSFF)
 if(VTK_USE_RENDERING)
   if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     target_link_libraries(gdcmvtkGDCMTests vtkRendering)
-  else()
+  elseif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 6.0 )
     target_link_libraries(gdcmvtkGDCMTests vtkVolumeRendering)
   endif()
+endif()
+# VTK 6.0 does not set VTK_USE_RENDERING anymore ?
+if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 6.0 )
+  target_link_libraries(gdcmvtkGDCMTests ${vtkgdcm_LIBS})
+  target_link_libraries(gdcmvtkGDCMTests vtkIOLegacy vtkCommonCore)
 endif()
 
 # Need full path to executable:

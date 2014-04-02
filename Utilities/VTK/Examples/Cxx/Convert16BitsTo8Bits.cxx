@@ -34,13 +34,21 @@ int main(int, char *[])
   //reader->GetOutput()->Print( std::cout );
 
   vtkImageCast *cast = vtkImageCast::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  cast->SetInputConnection( reader->GetOutputPort() );
+#else
   cast->SetInput( reader->GetOutput() );
+#endif
   cast->SetOutputScalarTypeToUnsignedChar();
 
 
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
   writer->SetFileName( "/tmp/cast.dcm" );
+#if (VTK_MAJOR_VERSION >= 6)
+  writer->SetInputConnection( cast->GetOutputPort() );
+#else
   writer->SetInput( cast->GetOutput() );
+#endif
   writer->SetImageFormat( reader->GetImageFormat() );
   writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
   writer->SetDirectionCosines( reader->GetDirectionCosines() );

@@ -358,6 +358,7 @@ protected:
 
 //BTX
   friend class vtkGDCMImageReader;
+  friend class vtkGDCMImageReader2;
   friend class vtkGDCMImageWriter;
   void PushBackFile(gdcm::File const &f);
   gdcm::File const & GetFile(unsigned int t);

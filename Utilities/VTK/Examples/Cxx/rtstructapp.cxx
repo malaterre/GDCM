@@ -55,7 +55,11 @@ int main(int argc, char *argv[])
   writer->SetNumberOfInputPorts( reader->GetNumberOfOutputPorts() );
   writer->SetFileName( outfilename );
   for(int num = 0; num < reader->GetNumberOfOutputPorts(); ++num )
+#if (VTK_MAJOR_VERSION >= 6)
+    writer->SetInputConnection( num, reader->GetOutputPort(num) );
+#else
     writer->SetInput( num, reader->GetOutput(num) );
+#endif
   //doesn't look like the medical properties are actually written out
   writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
   writer->SetRTStructSetProperties( reader->GetRTStructSetProperties() );
@@ -71,12 +75,20 @@ int main(int argc, char *argv[])
  int n = reader->GetNumberOfOutputPorts();
  for(int i = 0; i < n; ++i)
    {
+#if (VTK_MAJOR_VERSION >= 6)
+   append->AddInputConnection( reader->GetOutputPort(i) );
+#else
    append->AddInput( reader->GetOutput(i) );
+#endif
    }
 
   // Now we'll look at it.
   vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  cubeMapper->SetInputConnection( append->GetOutputPort());
+#else
   cubeMapper->SetInput( append->GetOutput());
+#endif
   cubeMapper->SetScalarRange(0,7);
   vtkActor *cubeActor = vtkActor::New();
   cubeActor->SetMapper(cubeMapper);

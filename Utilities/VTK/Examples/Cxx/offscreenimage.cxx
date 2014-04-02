@@ -41,7 +41,11 @@ int main(int argc, char *argv[])
   renWin->AddRenderer(renderer);
 
   vtkImageMapToWindowLevelColors *windowlevel = vtkImageMapToWindowLevelColors::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  windowlevel->SetInputConnection( reader->GetOutputPort() );
+#else
   windowlevel->SetInput( reader->GetOutput() );
+#endif
   unsigned int n = prop->GetNumberOfWindowLevelPresets();
   if( n )
     {
@@ -52,7 +56,11 @@ int main(int argc, char *argv[])
     }
 
   vtkImageActor *actor = vtkImageActor::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  actor->SetInputData( windowlevel->GetOutput() );
+#else
   actor->SetInput( windowlevel->GetOutput() );
+#endif
 
   renderer->AddActor( actor );
 
@@ -62,7 +70,11 @@ int main(int argc, char *argv[])
   w2if->SetInput ( renWin );
 
   vtkPNGWriter *wr = vtkPNGWriter::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  wr->SetInputConnection( w2if->GetOutputPort() );
+#else
   wr->SetInput( w2if->GetOutput() );
+#endif
   wr->SetFileName ( "offscreenimage.png" );
   wr->Write();
 

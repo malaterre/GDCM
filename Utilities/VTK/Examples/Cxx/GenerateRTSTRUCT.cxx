@@ -44,7 +44,11 @@ void ShowOrgan(vtkPolyData* inData)
 {
   // Now we'll look at it.
   vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  cubeMapper->SetInputData( inData );
+#else
   cubeMapper->SetInput( inData );
+#endif
   cubeMapper->SetScalarRange(0,7);
   vtkActor *cubeActor = vtkActor::New();
   cubeActor->SetMapper(cubeMapper);
@@ -148,7 +152,11 @@ int main(int argc, char *argv[])
     //this code is added at the beginning to ensure that the blank organs are read
     //and preserved as individual organs.
     vtkPolyData* blank = vtkPolyData::New();
+#if (VTK_MAJOR_VERSION >= 6)
+    writer->SetInputData(0, blank);
+#else
     writer->SetInput(0, blank);
+#endif
     roiNames->InsertValue(0, "blank");
     roiAlgorithms->InsertValue(0, "blank");
     roiTypes->InsertValue(0, "ORGAN");
@@ -159,8 +167,13 @@ int main(int argc, char *argv[])
     //being read properly.  Multiple organs with the same name could cause some strangenesses.
     for (int i = 1; i < numMasks; ++i)
       {
+#if (VTK_MAJOR_VERSION >= 6)
+      writer->SetInputConnection(i, reader->GetOutputPort(i-1));
+      append->AddInputConnection(reader->GetOutputPort(i-1));
+#else
       writer->SetInput(i, reader->GetOutput(i-1));
       append->AddInput(reader->GetOutput(i-1));
+#endif
       std::string theString = reader->GetRTStructSetProperties()->GetStructureSetROIName(i-1);
       roiNames->InsertValue(i, theString);
       theString = reader->GetRTStructSetProperties()->GetStructureSetROIGenerationAlgorithm(i-1);

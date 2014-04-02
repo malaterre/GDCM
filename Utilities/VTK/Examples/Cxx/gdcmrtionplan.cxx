@@ -162,17 +162,32 @@ int main(int argc, char *argv[])
     img->Initialize();
     img->SetDimensions( at2.GetValue(), at1.GetValue(), 1 );
     //imgb->SetExtent(1, xdim, 1, ydim, 1, zdim);
+#if (VTK_MAJOR_VERSION >= 6)
+    assert(0);
+#else
     img->SetScalarTypeToDouble();
+#endif
     img->SetSpacing( at3.GetValue(1), at3.GetValue(0), 1); // FIXME image is upside down
     img->SetOrigin( at4.GetValue(0), at4.GetValue(1), 1);
+#if (VTK_MAJOR_VERSION >= 6)
+    assert(0);
+#else
     img->SetNumberOfScalarComponents(1);
+#endif
     img->GetPointData()->SetScalars(d);
 
+#if (VTK_MAJOR_VERSION >= 6)
+#else
     img->Update();
+#endif
     img->Print(std::cout);
 
     vtkXMLImageDataWriter *writeb= vtkXMLImageDataWriter::New();
+#if (VTK_MAJOR_VERSION >= 6)
+    writeb->SetInputData( img );
+#else
     writeb->SetInput( img );
+#endif
     writeb->SetFileName( outfilename );
     writeb->Write( );
 /*
@@ -252,7 +267,10 @@ int main(int argc, char *argv[])
     polys->Delete();
     //output->GetCellData()->SetScalars(scalars);
     //scalars->Delete();
+#if (VTK_MAJOR_VERSION >= 6)
+#else
     output->Update();
+#endif
     output->Print( std::cout );
 
 
@@ -263,7 +281,11 @@ int main(int argc, char *argv[])
    vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
 
    vtkImageColorViewer *viewer = vtkImageColorViewer::New();
+#if (VTK_MAJOR_VERSION >= 6)
+   viewer->SetInputData(img);
+#else
    viewer->SetInput(img);
+#endif
    viewer->SetupInteractor(iren);
    viewer->SetSize(600, 600);
    viewer->GetRenderer()->ResetCameraClippingRange();
@@ -272,7 +294,11 @@ int main(int argc, char *argv[])
 
   vtkPolyDataMapper *cubeMapper = vtkPolyDataMapper::New();
   //vtkPolyDataMapper2D* cubeMapper = vtkPolyDataMapper2D::New();
+#if (VTK_MAJOR_VERSION >= 6)
+      cubeMapper->SetInputData( output );
+#else
       cubeMapper->SetInput( output );
+#endif
       cubeMapper->SetScalarRange(0,7);
   vtkActor *cubeActor = vtkActor::New();
   //vtkActor2D* cubeActor = vtkActor2D::New();
@@ -283,7 +309,11 @@ int main(int argc, char *argv[])
 viewer->GetRenderer()->AddActor( cubeActor );
 
     vtkXMLPolyDataWriter *writec= vtkXMLPolyDataWriter::New();
+#if (VTK_MAJOR_VERSION >= 6)
+    writec->SetInputData( output );
+#else
     writec->SetInput( output );
+#endif
     writec->SetFileName( outfilename2 );
     writec->Write( );
 

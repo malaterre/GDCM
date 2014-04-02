@@ -32,7 +32,7 @@
  * Test to show the pipeline for
  * IPPSorter -> vtkGDCMImageReader -> vtkImageChangeInformation
  */
-int TestvtkGDCMImageReader2(int , char *[])
+int TestvtkGDCMImageReader1(int , char *[])
 {
   const char *directory = gdcm::Testing::GetDataRoot();
   std::vector<std::string> filenames;
@@ -97,7 +97,11 @@ int TestvtkGDCMImageReader2(int , char *[])
   // You need to use this class to preserve spacing
   // across pipeline re-execution
   vtkImageChangeInformation *change = vtkImageChangeInformation::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  change->SetInputConnection( reader2->GetOutputPort() );
+#else
   change->SetInput( reader2->GetOutput() );
+#endif
   change->SetOutputSpacing( spacing2[0], spacing2[1], ippzspacing );
   change->Update();
 
@@ -110,13 +114,17 @@ int TestvtkGDCMImageReader2(int , char *[])
 
   // Ok Let's try to write this volume back to disk:
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  writer->SetInputData( change->GetOutput() );
+#else
   writer->SetInput( change->GetOutput() );
+#endif
   writer->SetFileDimensionality( 2 );
   //writer->SetFileLowerLeft( reader2->GetFileLowerLeft() ); // TODO
   writer->SetMedicalImageProperties( reader2->GetMedicalImageProperties() ); // nasty
   writer->SetDirectionCosines( reader2->GetDirectionCosines() );
   writer->SetImageFormat( reader2->GetImageFormat() );
-  const char subdir[] = "TestvtkGDCMImageReader2";
+  const char subdir[] = "TestvtkGDCMImageReader1";
   std::string tmpdir = gdcm::Testing::GetTempDirectory(subdir);
   if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
     {

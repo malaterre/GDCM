@@ -36,11 +36,19 @@ int main(int, char *[])
   //reader->GetOutput()->Print( std::cout );
 
   vtkImageCast *cast = vtkImageCast::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  cast->SetInputConnection( reader->GetOutputPort() );
+#else
   cast->SetInput( reader->GetOutput() );
+#endif
   cast->SetOutputScalarTypeToUnsignedShort();
 
   vtkImageMagnify *magnify = vtkImageMagnify::New();
+#if (VTK_MAJOR_VERSION >= 6)
+  magnify->SetInputConnection( cast->GetOutputPort() );
+#else
   magnify->SetInput( cast->GetOutput() );
+#endif
   magnify->SetInterpolate( 1 );
   magnify->SetInterpolate( 0 );
   int factor = 100;
@@ -48,7 +56,11 @@ int main(int, char *[])
 
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
   writer->SetFileName( "/tmp/bla.dcm" );
+#if (VTK_MAJOR_VERSION >= 6)
+  writer->SetInputConnection( magnify->GetOutputPort() );
+#else
   writer->SetInput( magnify->GetOutput() );
+#endif
   writer->SetImageFormat( reader->GetImageFormat() );
   writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
   writer->SetDirectionCosines( reader->GetDirectionCosines() );

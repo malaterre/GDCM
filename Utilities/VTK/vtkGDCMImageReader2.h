@@ -11,9 +11,9 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-// .NAME vtkGDCMImageReader - read DICOM Image files (Pixel Data)
+// .NAME vtkGDCMImageReader2 - read DICOM Image files (Pixel Data)
 // .SECTION Description
-// vtkGDCMImageReader is a source object that reads some DICOM files
+// vtkGDCMImageReader2 is a source object that reads some DICOM files
 // this reader is single threaded.
 // .SECTION Implementation note: when FileLowerLeft is set to on the image is not flipped
 // upside down as VTK would expect, use this option only if you know what you are doing.
@@ -42,7 +42,7 @@
 // as specified in the Image Orientation (Patient) tag. When Z-spacing is 0, this means the multi-frame object
 // contains image which do not represent uniform volume.
 // .SECTION Warning
-// When using vtkGDCMPolyDataReader in conjonction with vtkGDCMImageReader
+// When using vtkGDCMPolyDataReader in conjonction with vtkGDCMImageReader2
 // it is *required* that FileLowerLeft is set to ON as coordinate system
 // would be inconsistent in between the two data structures.
 // .SECTION Color Space mapping:
@@ -61,20 +61,12 @@
 // vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMPolyDataReader vtkGDCMImageWriter
 // vtkDICOMImageReader
 
-#ifndef VTKGDCMIMAGEREADER_H
-#define VTKGDCMIMAGEREADER_H
+#ifndef VTKGDCMIMAGEREADER2_H
+#define VTKGDCMIMAGEREADER2_H
 
 #include "vtkMedicalImageReader2.h"
 #include "vtkImageData.h"
 
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-#else
-class vtkMedicalImageProperties;
-#endif
-#if (VTK_MAJOR_VERSION > 5) || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
-#else
-class vtkStringArray;
-#endif
 class vtkPolyData;
 
 // vtkSystemIncludes.h defines:
@@ -99,11 +91,11 @@ class vtkPolyData;
 namespace gdcm { class ImageReader; }
 //ETX
 class vtkMatrix4x4;
-class VTK_EXPORT vtkGDCMImageReader : public vtkMedicalImageReader2
+class VTK_EXPORT vtkGDCMImageReader2 : public vtkMedicalImageReader2
 {
 public:
-  static vtkGDCMImageReader *New();
-  vtkTypeRevisionMacro(vtkGDCMImageReader,vtkMedicalImageReader2);
+  static vtkGDCMImageReader2 *New();
+  vtkTypeRevisionMacro(vtkGDCMImageReader2,vtkMedicalImageReader2);
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description: is the given file name a DICOM file containing an image ?
@@ -129,19 +121,7 @@ public:
   // This is a read-only data member
   vtkGetObjectMacro(DirectionCosines, vtkMatrix4x4);
 
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-#else
-  // Description:
-  // Get the medical image properties object
-  vtkGetObjectMacro(MedicalImageProperties, vtkMedicalImageProperties);
-#endif
   virtual void SetMedicalImageProperties(vtkMedicalImageProperties *pd);
-
-#if (VTK_MAJOR_VERSION > 5) || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
-#else
-  virtual void SetFileNames(vtkStringArray*);
-  vtkGetObjectMacro(FileNames, vtkStringArray);
-#endif
 
   // Description:
   // Specifically request to load the overlay into the gdcm-VTK layer (gdcm always loads them when found).
@@ -176,13 +156,8 @@ public:
   // Get Overlay/IconImage
   // Remember to ALWAYS use those methods in your code, as the internal number for the output port
   // is not garantee to remain the same, as features are added to the reader
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-//FIXME: Need to get rid of BTX/ETX if only the Python Wrapper of VTK 4.2 would let me
-//BTX
   vtkAlgorithmOutput* GetOverlayPort(int index);
   vtkAlgorithmOutput* GetIconImagePort();
-//ETX
-#endif
   vtkImageData* GetOverlay(int i);
   vtkImageData* GetIconImage();
 
@@ -235,8 +210,8 @@ public:
   vtkGetMacro(Scale,double);
 
 protected:
-  vtkGDCMImageReader();
-  ~vtkGDCMImageReader();
+  vtkGDCMImageReader2();
+  ~vtkGDCMImageReader2();
 
   vtkSetVector6Macro(ImageOrientationPatient,double);
 
@@ -246,7 +221,6 @@ protected:
   int RequestInformationCompat();
   int RequestDataCompat();
 
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
   int ProcessRequest(vtkInformation* request,
                                  vtkInformationVector** inputVector,
                                  vtkInformationVector* outputVector);
@@ -256,23 +230,8 @@ protected:
   int RequestData(vtkInformation *request,
                   vtkInformationVector **inputVector,
                   vtkInformationVector *outputVector);
-#else /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
-  void ExecuteInformation();
-  void ExecuteData(vtkDataObject *out);
-#endif /*(VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )*/
 
 protected:
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
-#else
-  // Description:
-  // Medical Image properties
-  vtkMedicalImageProperties *MedicalImageProperties;
-#endif
-#if (VTK_MAJOR_VERSION > 5) || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
-#else
-  vtkStringArray *FileNames;
-#endif
-
   vtkMatrix4x4 *DirectionCosines;
   int LoadOverlays;
   int NumberOfOverlays;
@@ -310,7 +269,7 @@ protected:
   vtkGetStringMacro(FilePattern);
 
 private:
-  vtkGDCMImageReader(const vtkGDCMImageReader&);  // Not implemented.
-  void operator=(const vtkGDCMImageReader&);  // Not implemented.
+  vtkGDCMImageReader2(const vtkGDCMImageReader2&);  // Not implemented.
+  void operator=(const vtkGDCMImageReader2&);  // Not implemented.
 };
 #endif

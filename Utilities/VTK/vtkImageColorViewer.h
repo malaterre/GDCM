@@ -55,10 +55,12 @@
 
 #include "vtkObject.h"
 
+class vtkAlgorithm;
 class vtkAlgorithmOutput;
 class vtkImageActor;
 class vtkImageData;
 class vtkImageMapToWindowLevelColors2;
+class vtkInformation;
 class vtkInteractorStyleImage;
 class vtkRenderWindow;
 class vtkRenderer;
@@ -82,7 +84,11 @@ public:
 
   // Description:
   // Set/Get the input image to the viewer.
+#if (VTK_MAJOR_VERSION >= 6)
+  virtual void SetInputData(vtkImageData *in);
+#else
   virtual void SetInput(vtkImageData *in);
+#endif
   virtual vtkImageData *GetInput();
   virtual void SetInputConnection(vtkAlgorithmOutput* input);
   virtual void AddInputConnection(vtkAlgorithmOutput* input);
@@ -227,6 +233,13 @@ protected:
   int Slice;
 
   virtual void UpdateOrientation();
+
+#if (VTK_MAJOR_VERSION >= 6)
+  vtkAlgorithm* GetInputAlgorithm();
+  vtkInformation* GetInputInformation();
+#endif
+
+  friend class vtkImageColorViewerCallback;
 
 private:
   vtkImageColorViewer(const vtkImageColorViewer&);  // Not implemented.

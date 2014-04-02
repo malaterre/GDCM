@@ -45,9 +45,14 @@ int main(int argc, char *argv[])
     }
 
   vtkImageData *copy = vtkImageData::New();
-  copy->SetScalarType( VTK_UNSIGNED_CHAR );
+  // http://www.vtk.org/Wiki/VTK/VTK_6_Migration/Changes_to_Scalars_Manipulation_Functions#AllocateScalars.28.29
   copy->SetExtent( reader->GetOutput()->GetExtent() );
+#if (VTK_MAJOR_VERSION >= 6)
+  copy->AllocateScalars(VTK_UNSIGNED_CHAR, 3);
+#else
+  copy->SetScalarType( VTK_UNSIGNED_CHAR );
   copy->AllocateScalars();
+#endif
 
   //uarray->Print( std::cout );
   //copy->GetPointData()->GetScalars()->Print( std::cout );
@@ -57,7 +62,11 @@ int main(int argc, char *argv[])
   vtkGDCMImageWriter *writer = vtkGDCMImageWriter::New();
   writer->SetFileName( outfilename );
   //writer->SetInput( cast->GetOutput() );
+#if (VTK_MAJOR_VERSION >= 6)
+  writer->SetInputData( copy );
+#else
   writer->SetInput( copy );
+#endif
   writer->SetImageFormat( reader->GetImageFormat() );
   writer->SetMedicalImageProperties( reader->GetMedicalImageProperties() );
   writer->SetDirectionCosines( reader->GetDirectionCosines() );

@@ -11,7 +11,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "vtkGDCMImageReader.h"
+#include "vtkGDCMImageReader2.h"
 #include "vtkGDCMTesting.h"
 #include "vtkMedicalImageProperties.h"
 
@@ -32,7 +32,7 @@ static int TestvtkGDCMMetaImageWrite(const char *filename, bool verbose)
   if( verbose )
     std::cerr << "Reading : " << filename << std::endl;
 
-  vtkGDCMImageReader *reader = vtkGDCMImageReader::New();
+  vtkGDCMImageReader2 * reader = vtkGDCMImageReader2::New();
   reader->FileLowerLeftOn();
   reader->DebugOff();
 
@@ -78,7 +78,7 @@ static int TestvtkGDCMMetaImageWrite(const char *filename, bool verbose)
 //  if( verbose )
     {
     // Create directory first:
-    const char subdir[] = "TestvtkGDCMMetaImageWriter";
+    const char subdir[] = "TestvtkGDCMMetaImageWriter2";
     std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
     if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
       {
@@ -130,7 +130,7 @@ static int TestvtkGDCMMetaImageWrite(const char *filename, bool verbose)
   return 0;
 }
 
-int TestvtkGDCMMetaImageWriter(int argc, char *argv[])
+int TestvtkGDCMMetaImageWriter2(int argc, char *argv[])
 {
   if( argc == 2 )
     {
