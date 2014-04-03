@@ -119,7 +119,7 @@ bool ImageChangePhotometricInterpretation::Change()
      */
 
     }
-  else if( PI == PhotometricInterpretation::MONOCHROME1 || PhotometricInterpretation::MONOCHROME2 )
+  else if( PI == PhotometricInterpretation::MONOCHROME1 || PI == PhotometricInterpretation::MONOCHROME2 )
     {
     return ChangeMonochrome();
     }
