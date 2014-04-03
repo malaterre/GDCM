@@ -74,7 +74,7 @@ GDCM_BUILD_EXAMPLES:BOOL=OFF
 GDCM_BUILD_SHARED_LIBS:BOOL=ON
 GDCM_BUILD_TESTING:BOOL=OFF
 GDCM_DOCUMENTATION:BOOL=ON
-GDCM_PDF_DOCUMENTATION:BOOL=ON
+GDCM_PDF_DOCUMENTATION:BOOL=OFF
 GDCM_USE_VTK:BOOL=OFF
 GDCM_USE_JPEGLS:BOOL=ON
 GDCM_USE_PVRG:BOOL=ON
@@ -87,6 +87,7 @@ GDCM_USE_SYSTEM_ZLIB:BOOL=OFF
 GDCM_WRAP_CSHARP:BOOL=ON
 GDCM_WRAP_JAVA:BOOL=ON
 GDCM_WRAP_PYTHON:BOOL=ON
+Python_ADDITIONAL_VERSIONS:STRING=2.7
 CPACK_SOURCE_ZIP:BOOL=ON
 EOT
 
@@ -114,19 +115,12 @@ cpack -G TBZ2 --config CPackSourceConfig.cmake
 check_exit_value $? "cpack did not return properly" || exit 1
 
 # Let's start doing the VTK documentation then:
-cmake -DGDCM_VTK_DOCUMENTATION:BOOL=ON -DGDCM_USE_VTK:BOOL=ON -DVTK_DIR:PATH=/home/mathieu/Kitware/vtk-5.10-gcc .
+cmake -DGDCM_VTK_DOCUMENTATION:BOOL=ON -DGDCM_USE_VTK:BOOL=ON -DVTK_DIR:PATH=/home/mathieu/Kitware/VTK5.10.1-gcc .
 check_exit_value $? "cmake did not return properly" || exit 1
 #make -j4
 make rebuild_cache
 make vtkgdcmDoxygenDoc
 check_exit_value $? "vtkgdcmDoxygenDoc did not return properly" || exit 1
-
-rsync -av -r Utilities/doxygen/html malat,gdcm@web.sourceforge.net:htdocs/$dirversion
-check_exit_value $? "rsync recursive html did not return properly" || exit 1
-rsync -av Utilities/doxygen/gdcm-$version-doc.tar.gz malat,gdcm@web.sourceforge.net:htdocs/$dirversion
-check_exit_value $? "rsync tarball did not return properly" || exit 1
-rsync -av Utilities/doxygen/latex/gdcm-$version.pdf malat,gdcm@web.sourceforge.net:htdocs/$dirversion
-check_exit_value $? "rsync pdf did not return properly" || exit 1
 
 # Warning need to create /manually/ the subfolder:
 # https://sourceforge.net/project/admin/explorer.php?group_id=137895
@@ -142,8 +136,16 @@ rsync -e ssh gdcm-$version.tar.gz                       "malat,gdcm@frs.sourcefo
 check_exit_value $? "rsync did not return properly" || exit 1
 rsync -e ssh gdcm-$version.tar.bz2                      "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
 check_exit_value $? "rsync did not return properly" || exit 1
-rsync -e ssh Utilities/doxygen/latex/gdcm-$version.pdf  "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
-check_exit_value $? "rsync did not return properly" || exit 1
 rsync -e ssh Utilities/doxygen/gdcm-$version-doc.tar.gz "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
 check_exit_value $? "rsync did not return properly" || exit 1
 
+rsync -av -r Utilities/doxygen/html malat,gdcm@web.sourceforge.net:htdocs/$dirversion
+check_exit_value $? "rsync recursive html did not return properly" || exit 1
+rsync -av Utilities/doxygen/gdcm-$version-doc.tar.gz malat,gdcm@web.sourceforge.net:htdocs/$dirversion
+check_exit_value $? "rsync tarball did not return properly" || exit 1
+# This need to be done last, sometime we cannot generated PDF, see #318
+rsync -av Utilities/doxygen/latex/gdcm-$version.pdf malat,gdcm@web.sourceforge.net:htdocs/$dirversion
+check_exit_value $? "rsync pdf did not return properly" || exit 1
+# same comment:
+rsync -e ssh Utilities/doxygen/latex/gdcm-$version.pdf  "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
+check_exit_value $? "rsync did not return properly" || exit 1
