@@ -30,10 +30,8 @@ SET(CTEST_COVERAGE_COMMAND              "/usr/bin/gcov")
 macro(dashboard_hook_init)
   set( dashboard_cache "
 GDCM_WRAP_PYTHON:BOOL=ON
-PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python2.7
-PYTHON_INCLUDE_DIR:PATH=/usr/include/python2.7
-PYTHON_INCLUDE_DIR2:PATH=/usr/include/python2.7
-PYTHON_LIBRARY:FILEPATH=/usr/lib/libpython2.7.so
+# VTK ON => 2.7
+Python_ADDITIONAL_VERSIONS:STRING=2.7
 GDCM_WRAP_CSHARP:BOOL=OFF
 GDCM_WRAP_JAVA:BOOL=ON
 GDCM_BUILD_SHARED_LIBS:BOOL=ON
