@@ -194,22 +194,24 @@ static bool AddStudyDateTime(gdcm::DataSet &ds, const char *filename )
   const size_t datelen = 8;
   int res = gdcm::System::GetCurrentDateTime(date);
   if( !res ) return false;
-    {
-    gdcm::DataElement de( gdcm::Tag(0x0008,0x0020) );
-    // Do not copy the whole cstring:
-    de.SetByteValue( date, datelen );
-    de.SetVR( gdcm::Attribute<0x0008,0x0020>::GetVR() );
-    ds.Insert( de );
-    }
+
+  {
+  gdcm::DataElement de( gdcm::Tag(0x0008,0x0020) );
+  // Do not copy the whole cstring:
+  de.SetByteValue( date, datelen );
+  de.SetVR( gdcm::Attribute<0x0008,0x0020>::GetVR() );
+  ds.Insert( de );
+  }
+
   // StudyTime
   const size_t timelen = 6; // get rid of milliseconds
-    {
-    gdcm::DataElement de( gdcm::Tag(0x0008,0x0030) );
-    // Do not copy the whole cstring:
-    de.SetByteValue( date+datelen, timelen );
-    de.SetVR( gdcm::Attribute<0x0008,0x0030>::GetVR() );
-    ds.Insert( de );
-    }
+  {
+  gdcm::DataElement de( gdcm::Tag(0x0008,0x0030) );
+  // Do not copy the whole cstring:
+  de.SetByteValue( date+datelen, timelen );
+  de.SetVR( gdcm::Attribute<0x0008,0x0030>::GetVR() );
+  ds.Insert( de );
+  }
   return AddContentDateTime(ds, filename);
 }
 
