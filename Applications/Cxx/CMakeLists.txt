@@ -79,12 +79,13 @@ if(GDCM_USE_SYSTEM_POPPLER)
     list(APPEND libpoppler_flags -DLIBPOPPLER_PDFDOC_HAS_PDFVERSION)
   endif()
   if(libpoppler_flags)
+    string(REPLACE ";" " " libpoppler_flags_string "${libpoppler_flags}")
     set_source_files_properties(
       ${CMAKE_CURRENT_SOURCE_DIR}/gdcminfo.cxx
-      PROPERTIES COMPILE_FLAGS ${libpoppler_flags})
+      PROPERTIES COMPILE_FLAGS "${libpoppler_flags_string}")
     set_source_files_properties(
       ${CMAKE_CURRENT_SOURCE_DIR}/gdcmpdf.cxx
-      PROPERTIES COMPILE_FLAGS ${libpoppler_flags})
+      PROPERTIES COMPILE_FLAGS "${libpoppler_flags_string}")
   endif()
   include_directories(${POPPLER_INCLUDE_DIRS})
   set(GDCM_EXECUTABLE_NAME
