@@ -471,7 +471,11 @@ static int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs
         moddate      = getInfoDate(  info.getDict(), "ModDate"       );
         info.free();
         }
+#ifdef LIBPOPPLER_CATALOG_HAS_STRUCTTREEROOT
+      const char *tagged = doc->getStructTreeRoot() ? "yes" : "no";
+#else
       const char *tagged = doc->getStructTreeRoot()->isDict() ? "yes" : "no";
+#endif
       int pages = doc->getNumPages();
       const char *encrypted = doc->isEncrypted() ? "yes" : "no";
       //  printf("yes (print:%s copy:%s change:%s addNotes:%s)\n",
