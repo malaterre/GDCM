@@ -78,13 +78,20 @@ if(GDCM_USE_SYSTEM_POPPLER)
   if(LIBPOPPLER_PDFDOC_HAS_PDFVERSION)
     list(APPEND libpoppler_flags -DLIBPOPPLER_PDFDOC_HAS_PDFVERSION)
   endif()
+  CHECK_CXX_SOURCE_COMPILES(
+    "\#include <poppler/PDFDoc.h>\n#include <poppler/StructTreeRoot.h>\nint main() { Catalog c(NULL); c.getStructTreeRoot()->getDoc(); return 0;}"
+    LIBPOPPLER_CATALOG_HAS_STRUCTTREEROOT)
+  if(LIBPOPPLER_CATALOG_HAS_STRUCTTREEROOT)
+    list(APPEND libpoppler_flags -DLIBPOPPLER_CATALOG_HAS_STRUCTTREEROOT)
+  endif()
   if(libpoppler_flags)
+    string(REPLACE ";" " " libpoppler_flags_string "${libpoppler_flags}")
     set_source_files_properties(
       ${CMAKE_CURRENT_SOURCE_DIR}/gdcminfo.cxx
-      PROPERTIES COMPILE_FLAGS ${libpoppler_flags})
+      PROPERTIES COMPILE_FLAGS "${libpoppler_flags_string}")
     set_source_files_properties(
       ${CMAKE_CURRENT_SOURCE_DIR}/gdcmpdf.cxx
-      PROPERTIES COMPILE_FLAGS ${libpoppler_flags})
+      PROPERTIES COMPILE_FLAGS "${libpoppler_flags_string}")
   endif()
   include_directories(${POPPLER_INCLUDE_DIRS})
   set(GDCM_EXECUTABLE_NAME

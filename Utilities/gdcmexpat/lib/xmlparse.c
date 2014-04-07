@@ -4917,7 +4917,7 @@ appendAttributeValue(XML_Parser parser, const ENCODING *enc, XML_Bool isCdata,
         if (!entity->textPtr) {
           if (enc == encoding)
             eventPtr = ptr;
-              return XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF;
+          return XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF;
         }
         else {
           enum XML_Error result;
