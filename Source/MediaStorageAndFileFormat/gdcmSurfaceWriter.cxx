@@ -583,6 +583,77 @@ bool SurfaceWriter::PrepareWrite()
 
           pointIndexListDS0.Replace( typedPointIndexListDE );
         }
+
+        //*****   Add empty values in unused but required tags (Type 2)   *****//
+
+        DataElement emptyOWDE;
+        emptyOWDE.SetVLToUndefined();
+        emptyOWDE.SetVR( VR::OW );
+        SmartPointer<ByteValue> emptyValueOW = new ByteValue;
+        emptyOWDE.SetValue(*emptyValueOW);
+
+        // Vertex Point Index List ( Type 2 )
+        Tag vertexPointIndexListTag(0x0066, 0x0025);
+        if( !surfaceMeshPrimitivesDS.FindDataElement( vertexPointIndexListTag ) )
+        {
+          emptyOWDE.SetTag( vertexPointIndexListTag );
+          surfaceMeshPrimitivesDS.Insert( emptyOWDE );
+        }
+
+        // Edge Point Index List ( Type 2 )
+        Tag edgePointIndexListTag(0x0066, 0x0024);
+        if( !surfaceMeshPrimitivesDS.FindDataElement( edgePointIndexListTag ) )
+        {
+          emptyOWDE.SetTag( edgePointIndexListTag );
+          surfaceMeshPrimitivesDS.Insert( emptyOWDE );
+        }
+
+        // Triangle Point Index List ( Type 2 )
+        Tag trianglePointIndexListTag(0x0066, 0x0023);
+        if( !surfaceMeshPrimitivesDS.FindDataElement( trianglePointIndexListTag ) )
+        {
+          emptyOWDE.SetTag( trianglePointIndexListTag );
+          surfaceMeshPrimitivesDS.Insert( emptyOWDE );
+        }
+
+        DataElement emptySQDE;
+        emptySQDE.SetVLToUndefined();
+        emptySQDE.SetVR( VR::SQ );
+        SmartPointer<SequenceOfItems> emptySequenceSQ = new SequenceOfItems;
+        emptySQDE.SetValue(*emptySequenceSQ);
+
+        // Triangle Strip Sequence ( Type 2 )
+        Tag triangleStripSequenceTag(0x0066, 0x0026);
+        if( !surfaceMeshPrimitivesDS.FindDataElement( triangleStripSequenceTag ) )
+        {
+          emptySQDE.SetTag( triangleStripSequenceTag );
+          surfaceMeshPrimitivesDS.Insert( emptySQDE );
+        }
+
+        // Triangle Fan Sequence ( Type 2 )
+        Tag triangleFanSequenceTag(0x0066, 0x0027);
+        if( !surfaceMeshPrimitivesDS.FindDataElement( triangleFanSequenceTag ) )
+        {
+          emptySQDE.SetTag( triangleFanSequenceTag );
+          surfaceMeshPrimitivesDS.Insert( emptySQDE );
+        }
+
+        // Line Sequence ( Type 2 )
+        Tag lineSequenceTag(0x0066, 0x0028);
+        if( !surfaceMeshPrimitivesDS.FindDataElement( lineSequenceTag ) )
+        {
+          emptySQDE.SetTag( lineSequenceTag );
+          surfaceMeshPrimitivesDS.Insert( emptySQDE );
+        }
+
+        // Facet Sequence ( Type 2 )
+        Tag facetSequenceTag(0x0066, 0x0034);
+        if( !surfaceMeshPrimitivesDS.FindDataElement( facetSequenceTag ) )
+        {
+          emptySQDE.SetTag( facetSequenceTag );
+          surfaceMeshPrimitivesDS.Insert( emptySQDE );
+        }
+
       }
       ++numSurface;
     }
