@@ -14,6 +14,8 @@
 #ifndef GDCMTAGTOVR_H
 #define GDCMTAGTOVR_H
 
+#include "gdcmVR.h"
+
 namespace gdcm 
 {
   class Tag;
