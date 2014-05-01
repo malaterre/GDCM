@@ -34,6 +34,10 @@
 #include <pthread.h>
 #include <unistd.h> // sysconf
 
+#ifdef _WIN32
+#include <windows.h> // SYSTEM_INFO (mingw)
+#endif
+
 #ifdef __APPLE__
 // For some reason sysconf + _SC_NPROCESSORS_ONLN is documented on macosx tiger, but it does not compile
 #include <sys/types.h>
