@@ -35,10 +35,13 @@
 #   dashboard_no_clean        = True to skip build tree wipeout
 #   CTEST_UPDATE_COMMAND      = path to svn command-line client
 #   CTEST_BUILD_FLAGS         = build tool arguments (ex: -j2)
+#   CTEST_BUILD_TARGET        = A specific target to be built (instead of all)
 #   CTEST_DASHBOARD_ROOT      = Where to put source and build trees
 #   CTEST_TEST_CTEST          = Whether to run long CTestTest* tests
 #   CTEST_TEST_TIMEOUT        = Per-test timeout length
+#   CTEST_COVERAGE_ARGS       = ctest_coverage command args
 #   CTEST_TEST_ARGS           = ctest_test args (ex: PARALLEL_LEVEL 4)
+#   CTEST_MEMCHECK_ARGS       = ctest_memcheck args (defaults to CTEST_TEST_ARGS)
 #   CMAKE_MAKE_PROGRAM        = Path to "make" tool to use
 #
 # Options to configure builds from experimental git repository:
@@ -66,6 +69,24 @@
 #   set(ENV{CXX} /path/to/cxx)  # C++ compiler
 #   set(ENV{FC}  /path/to/fc)   # Fortran compiler (optional)
 #   set(ENV{LD_LIBRARY_PATH} /path/to/vendor/lib) # (if necessary)
+
+#==========================================================================
+#
+#   Copyright Insight Software Consortium
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#          http://www.apache.org/licenses/LICENSE-2.0.txt
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+#==========================================================================*/
 
 cmake_minimum_required(VERSION 2.8.2 FATAL_ERROR)
 
@@ -99,12 +120,14 @@ if(NOT DEFINED CTEST_CONFIGURATION_TYPE)
 endif()
 
 # Choose CTest reporting mode.
-if(NOT "${CTEST_CMAKE_GENERATOR}" MATCHES "Make")
-  # Launchers work only with Makefile generators.
-  set(CTEST_USE_LAUNCHERS 0)
-elseif(NOT DEFINED CTEST_USE_LAUNCHERS)
-  # The setting is ignored by CTest < 2.8 so we need no version test.
-  set(CTEST_USE_LAUNCHERS 1)
+if(NOT DEFINED CTEST_USE_LAUNCHERS)
+  if(NOT "${CTEST_CMAKE_GENERATOR}" MATCHES "Make")
+    # Launchers work only with Makefile generators.
+    set(CTEST_USE_LAUNCHERS 0)
+  elseif(NOT DEFINED CTEST_USE_LAUNCHERS)
+    # The setting is ignored by CTest < 2.8 so we need no version test.
+    set(CTEST_USE_LAUNCHERS 1)
+  endif()
 endif()
 
 # Configure testing.
@@ -160,6 +183,10 @@ if(NOT DEFINED CTEST_BINARY_DIRECTORY)
   else()
     set(CTEST_BINARY_DIRECTORY ${CTEST_SOURCE_DIRECTORY}-build)
   endif()
+endif()
+
+if(NOT DEFINED CTEST_MEMCHECK_ARGS)
+  set(CTEST_MEMCHECK_ARGS ${CTEST_TEST_ARGS})
 endif()
 
 # Delete source tree if it is incompatible with current VCS.
@@ -259,6 +286,10 @@ foreach(v
     CTEST_CHECKOUT_COMMAND
     CTEST_SCRIPT_DIRECTORY
     CTEST_USE_LAUNCHERS
+    CTEST_TEST_TIMEOUT
+    CTEST_COVERAGE_ARGS
+    CTEST_TEST_ARGS
+    CTEST_MEMCHECK_ARGS
     )
   set(vars "${vars}  ${v}=[${${v}}]\n")
 endforeach(v)
@@ -348,6 +379,9 @@ while(NOT dashboard_done)
     dashboard_hook_start()
   endif()
   ctest_start(${dashboard_model})
+  if(COMMAND dashboard_hook_started)
+    dashboard_hook_started()
+  endif()
 
   # Always build if the tree is fresh.
   set(dashboard_fresh 0)
@@ -386,13 +420,13 @@ while(NOT dashboard_done)
       if(COMMAND dashboard_hook_coverage)
         dashboard_hook_coverage()
       endif()
-      ctest_coverage()
+      ctest_coverage(${CTEST_COVERAGE_ARGS})
     endif()
     if(dashboard_do_memcheck)
       if(COMMAND dashboard_hook_memcheck)
         dashboard_hook_memcheck()
       endif()
-      ctest_memcheck()
+      ctest_memcheck(${CTEST_MEMCHECK_ARGS})
     endif()
     if(COMMAND dashboard_hook_submit)
       dashboard_hook_submit()
