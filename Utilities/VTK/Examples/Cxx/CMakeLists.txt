@@ -5,6 +5,7 @@ include_directories(
 
 if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
   set(GDCM_VTK_APPS
+    Compute3DSpacing
     ConvertSingleBitTo8Bits
     GenerateRTSTRUCT
     offscreenimage
