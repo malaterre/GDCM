@@ -801,8 +801,13 @@ int vtkGDCMImageReader2::LoadSingleFile(const char *filename, char *pointer, uns
     gdcm::ImageHelper::GetDimensionsValue(reader.GetFile());
 #endif
 
+  const bool assume2d = this->FileNames && this->FileNames->GetNumberOfValues() >= 1;
+
   gdcm::BoxRegion box;
-  box.SetDomain(outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
+  if( assume2d )
+    box.SetDomain(outExt[0], outExt[1], outExt[2], outExt[3], 0, 0);
+  else
+    box.SetDomain(outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
   reader.SetRegion( box );
 
   gdcm::Image &image = reader.GetImage();
