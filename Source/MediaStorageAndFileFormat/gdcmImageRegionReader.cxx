@@ -233,8 +233,12 @@ bool ImageRegionReader::ReadRAWIntoBuffer(char *buffer, size_t buflen)
         {
         return false;
         }
-      memcpy(&(buffer[((z-zmin)*rowsize*colsize +
-            (y-ymin)*rowsize)*bytesPerPixel]),
+#if 0
+      const char * check = &(buffer[((z-zmin)*rowsize*colsize + (y-ymin)*rowsize)*bytesPerPixel]);
+      assert( check >= buffer && check < buffer + buflen );
+      assert( check + rowsize*bytesPerPixel <= buffer + buflen );
+#endif
+      memcpy(&(buffer[((z-zmin)*rowsize*colsize + (y-ymin)*rowsize)*bytesPerPixel]),
         tmpBuffer2, rowsize*bytesPerPixel);
       }
     }
