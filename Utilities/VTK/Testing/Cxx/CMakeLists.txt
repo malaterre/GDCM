@@ -24,6 +24,7 @@ if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 6.0 )
     ${VTK_GDCM_TEST_SRCS}
     TestvtkGDCMImageReader2_1
     TestvtkGDCMImageReader2_2
+    TestvtkGDCMImageReader2_3
     TestvtkGDCMMetaImageWriter2
   )
 endif()
