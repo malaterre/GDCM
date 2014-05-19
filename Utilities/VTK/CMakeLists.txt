@@ -66,6 +66,7 @@ else()
     vtkImagingCore
     vtkImagingSources
     vtkIOImage
+    vtkIOLegacy
     vtksys
   )
   set(vtkgdcm_COND_LIBS
