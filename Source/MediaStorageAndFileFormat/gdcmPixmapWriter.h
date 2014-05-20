@@ -62,7 +62,7 @@ protected:
 
 /**
  * \example StandardizeFiles.cs
- * This is a C++ example on how to use gdcm::PixmapWriter
+ * This is a C++ example on how to use PixmapWriter
  */
 
 } // end namespace gdcm

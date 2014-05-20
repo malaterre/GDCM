@@ -38,7 +38,7 @@ class StringFilter;
  * DICOM Attribute.
  *
  * This filter is dealing with both VRASCII and VRBINARY element, thanks to the
- * help of gdcm::StringFilter
+ * help of StringFilter
  *
  * \warning IMPORTANT In case of file where tags are not ordered (illegal as
  * per DICOM specification), the output will be missing information
@@ -201,7 +201,7 @@ private:
 
 /**
  * \example ScanDirectory.cs
- * This is a C# example on how to use gdcm::Scanner
+ * This is a C# example on how to use Scanner
  */
 
 } // end namespace gdcm

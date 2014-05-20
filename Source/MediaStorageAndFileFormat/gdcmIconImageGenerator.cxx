@@ -579,7 +579,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
       {
       //assert( I->GetPixelFormat().GetPixelRepresentation() == 0 );
       std::string s = ss.str();
-      gdcm::Rescaler r;
+      Rescaler r;
       r.SetPixelFormat( I->GetPixelFormat() );
       //r.SetPixelFormat( PixelFormat::UINT16 );
 
@@ -805,7 +805,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
       assert( I->GetPixelFormat() == PixelFormat::UINT16 );
       assert( I->GetPixelFormat().GetPixelRepresentation() == 0 );
       std::string s = is.str();
-      gdcm::Rescaler r;
+      Rescaler r;
       r.SetPixelFormat( I->GetPixelFormat() );
       //r.SetPixelFormat( PixelFormat::UINT16 );
 
@@ -859,7 +859,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
     char *buffer2 = &vbuffer2[0];
     pixeldata.SetByteValue( buffer2, (uint32_t)vbuffer2.size() );
 
-    gdcm::Rescaler r;
+    Rescaler r;
     r.SetPixelFormat( I->GetPixelFormat() );
 
     // FIXME: This is not accurate. We should either:

@@ -54,17 +54,17 @@ void SplitMosaicFilter::SetImage(const Image& image)
 
 bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
 {
-  gdcm::CSAHeader csa;
-  gdcm::DataSet& ds = GetFile().GetDataSet();
+  CSAHeader csa;
+  DataSet& ds = GetFile().GetDataSet();
 
-  const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
+  const PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
   if( !csa.LoadFromDataElement( ds.GetDataElement( t1 ) ) )
     {
     return false;
     }
 
   std::vector<unsigned int> colrow =
-    gdcm::ImageHelper::GetDimensionsValue( GetFile() );
+    ImageHelper::GetDimensionsValue( GetFile() );
   dims[0] = colrow[0];
   dims[1] = colrow[1];
 
@@ -72,10 +72,10 @@ bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
   int numberOfImagesInMosaic = 0;
   if( csa.FindCSAElementByName( "NumberOfImagesInMosaic" ) )
     {
-    const gdcm::CSAElement &csael4 = csa.GetCSAElementByName( "NumberOfImagesInMosaic" );
+    const CSAElement &csael4 = csa.GetCSAElementByName( "NumberOfImagesInMosaic" );
     if( !csael4.IsEmpty() )
       {
-        gdcm::Element<gdcm::VR::IS, gdcm::VM::VM1> el4 = {{ 0 }};
+        Element<VR::IS, VM::VM1> el4 = {{ 0 }};
       el4.Set( csael4.GetValue() );
       numberOfImagesInMosaic = el4.GetValue();
       }
@@ -93,7 +93,7 @@ bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
 bool SplitMosaicFilter::Split()
 {
   bool success = true;
-  gdcm::DataSet& ds = GetFile().GetDataSet();
+  DataSet& ds = GetFile().GetDataSet();
 
   unsigned int dims[3] = {0,0,0};
   if( ! ComputeMOSAICDimensions( dims ) )
@@ -102,7 +102,7 @@ bool SplitMosaicFilter::Split()
     }
   unsigned int div = (unsigned int )ceil(sqrt( (double)dims[2]) );
 
-  const gdcm::Image &inputimage = GetImage();
+  const Image &inputimage = GetImage();
   if( inputimage.GetPixelFormat() != PixelFormat::UINT16 )
     {
     gdcmDebugMacro( "Expecting UINT16 PixelFormat" );
@@ -112,7 +112,7 @@ bool SplitMosaicFilter::Split()
   std::vector<char> buf;
   buf.resize(l);
   inputimage.GetBuffer( &buf[0] );
-  gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
+  DataElement pixeldata( Tag(0x7fe0,0x0010) );
 
   std::vector<char> outbuf;
   outbuf.resize(l);
@@ -125,44 +125,44 @@ bool SplitMosaicFilter::Split()
   VL::Type outbufSize = (VL::Type)outbuf.size();
   pixeldata.SetByteValue( &outbuf[0], outbufSize );
 
-  gdcm::Image &image = GetImage();
+  Image &image = GetImage();
 
   image.SetNumberOfDimensions( 3 );
   image.SetDimension(0, dims[0] );
   image.SetDimension(1, dims[1] );
   image.SetDimension(2, dims[2] );
 
-  gdcm::PhotometricInterpretation pi;
-  pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+  PhotometricInterpretation pi;
+  pi = PhotometricInterpretation::MONOCHROME2;
 
   image.SetDataElement( pixeldata );
 
   // Second part need to fix the Media Storage, now that this is not a single slice anymore
-  gdcm::MediaStorage ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+  MediaStorage ms = MediaStorage::SecondaryCaptureImageStorage;
   ms.SetFromFile( GetFile() );
 
-  if( ms == gdcm::MediaStorage::MRImageStorage )
+  if( ms == MediaStorage::MRImageStorage )
     {
     // Ok make it a MediaStorage::EnhancedMRImageStorage
-//    ms = gdcm::MediaStorage::EnhancedMRImageStorage;
+//    ms = MediaStorage::EnhancedMRImageStorage;
 //
 //    // Remove old MRImageStorage attribute then:
-//    ds.Remove( gdcm::Tag(0x0020,0x0032) ); // Image Position (Patient)
-//    ds.Remove( gdcm::Tag(0x0020,0x0037) ); // Image Orientation (Patient)
-//    ds.Remove( gdcm::Tag(0x0028,0x1052) ); // Rescale Intercept
-//    ds.Remove( gdcm::Tag(0x0028,0x1053) ); // Rescale Slope
-//    ds.Remove( gdcm::Tag(0x0028,0x1054) ); // Rescale Type
+//    ds.Remove( Tag(0x0020,0x0032) ); // Image Position (Patient)
+//    ds.Remove( Tag(0x0020,0x0037) ); // Image Orientation (Patient)
+//    ds.Remove( Tag(0x0028,0x1052) ); // Rescale Intercept
+//    ds.Remove( Tag(0x0028,0x1053) ); // Rescale Slope
+//    ds.Remove( Tag(0x0028,0x1054) ); // Rescale Type
     }
   else
     {
     gdcmDebugMacro( "Expecting MRImageStorage" );
     return false;
     }
-  gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016) );
-  const char* msstr = gdcm::MediaStorage::GetMSString(ms);
+  DataElement de( Tag(0x0008, 0x0016) );
+  const char* msstr = MediaStorage::GetMSString(ms);
   VL::Type strlenMsstr = (VL::Type)strlen(msstr);
   de.SetByteValue( msstr, strlenMsstr );
-  de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
+  de.SetVR( Attribute<0x0008, 0x0016>::GetVR() );
   ds.Replace( de );
 
   return success;

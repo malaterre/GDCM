@@ -323,8 +323,8 @@ bool PixmapWriter::PrepareWrite()
     }
 
   // Overlay Data 60xx
-  gdcm::SequenceOfItems::SizeType nOv = PixelData->GetNumberOfOverlays();
-  for(gdcm::SequenceOfItems::SizeType ovidx = 0; ovidx < nOv; ++ovidx )
+  SequenceOfItems::SizeType nOv = PixelData->GetNumberOfOverlays();
+  for(SequenceOfItems::SizeType ovidx = 0; ovidx < nOv; ++ovidx )
     {
     // (6000,0010) US 484                                      #   2, 1 OverlayRows
     // (6000,0011) US 484                                      #   2, 1 OverlayColumns

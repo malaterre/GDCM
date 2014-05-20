@@ -103,11 +103,19 @@ void Overlay::Update(const DataElement & de)
 {
 /*
   8.1.2 Overlay data encoding of related data elements
-    Encoded Overlay Planes always have a bit depth of 1, and are encoded separately from the Pixel Data in Overlay Data (60xx,3000). The following two Data Elements shall define the Overlay Plane structure:
-    ¿ Overlay Bits Allocated (60xx,0100)
-    ¿ Overlay Bit Position (60xx,0102)
-    Notes: 1. There is no Data Element analogous to Bits Stored (0028,0101) since Overlay Planes always have a bit depth of 1.
-    2. Restrictions on the allowed values for these Data Elements are defined in PS 3.3. Formerly overlay data stored in unused bits of Pixel Data (7FE0,0010) was described, and these attributes had meaningful values but this usage has been retired. See PS 3.5 2004. For overlays encoded in Overlay Data Element (60xx,3000), Overlay Bits Allocated (60xx,0100) is always 1 and Overlay Bit Position (60xx,0102) is always 0.
+    Encoded Overlay Planes always have a bit depth of 1, and are encoded
+    separately from the Pixel Data in Overlay Data (60xx,3000). The following two
+    Data Elements shall define the Overlay Plane structure:
+    - Overlay Bits Allocated (60xx,0100)
+    - Overlay Bit Position (60xx,0102)
+    Notes: 1. There is no Data Element analogous to Bits Stored (0028,0101)
+    since Overlay Planes always have a bit depth of 1.
+    2. Restrictions on the allowed values for these Data Elements are defined
+    in PS 3.3. Formerly overlay data stored in unused bits of Pixel Data
+    (7FE0,0010) was described, and these attributes had meaningful values but this
+    usage has been retired. See PS 3.5 2004. For overlays encoded in Overlay Data
+    Element (60xx,3000), Overlay Bits Allocated (60xx,0100) is always 1 and Overlay
+    Bit Position (60xx,0102) is always 0.
 */
 
   assert( de.GetTag().IsPublic() );

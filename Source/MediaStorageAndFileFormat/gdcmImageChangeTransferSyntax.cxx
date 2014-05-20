@@ -205,7 +205,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap 
     if ( !output.GetPhotometricInterpretation().IsSameColorSpace( codec->GetPhotometricInterpretation() ) )
       {
       // HACK
-      //gdcm::Image *i = (gdcm::Image*)this;
+      //Image *i = (Image*)this;
       //i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
       assert(0);
       }
@@ -328,7 +328,7 @@ bool ImageChangeTransferSyntax::Change()
     if( !Force ) return false;
     // When force option is set but no specific TransferSyntax has been set, only inspect the
     // encapsulated stream...
-    // See gdcm::ImageReader::Read
+    // See ImageReader::Read
     if( Input->GetTransferSyntax().IsEncapsulated() && Input->GetTransferSyntax() != TransferSyntax::RLELossless )
       {
       Output = Input;
@@ -359,8 +359,8 @@ bool ImageChangeTransferSyntax::Change()
     || Force )
     {
     // In memory decompression:
-    gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
-    gdcm::ByteValue *bv0 = new gdcm::ByteValue();
+    DataElement pixeldata( Tag(0x7fe0,0x0010) );
+    ByteValue *bv0 = new ByteValue();
     uint32_t len0 = (uint32_t)Input->GetBufferLength();
     bv0->SetLength( len0 );
     bool b = Input->GetBuffer( (char*)bv0->GetPointer() );
@@ -385,7 +385,7 @@ bool ImageChangeTransferSyntax::Change()
       }
 
     // same goes for icon
-    gdcm::DataElement iconpixeldata( gdcm::Tag(0x7fe0,0x0010) );
+    DataElement iconpixeldata( Tag(0x7fe0,0x0010) );
     Bitmap &bitmap = *Input;
     if( Pixmap *pixmap = dynamic_cast<Pixmap*>( &bitmap ) )
       {
@@ -395,7 +395,7 @@ bool ImageChangeTransferSyntax::Change()
       if( !pixmap->GetIconImage().IsEmpty() )
         {
         // same goes for icon
-        gdcm::ByteValue *bv = new gdcm::ByteValue();
+        ByteValue *bv = new ByteValue();
         uint32_t len = (uint32_t)pixmap->GetIconImage().GetBufferLength();
         bv->SetLength( len );
         bool bb = pixmap->GetIconImage().GetBuffer( (char*)bv->GetPointer() );

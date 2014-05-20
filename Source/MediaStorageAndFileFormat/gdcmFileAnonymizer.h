@@ -30,7 +30,7 @@ class FileAnonymizerInternals;
  * file and will use the Value Length to skip over any information.
  *
  * It will not load the DICOM dataset taken from SetInputFileName() into memory
- * and should consume much less memory than gdcm::Anonymizer.
+ * and should consume much less memory than Anonymizer.
  *
  * \warning: Each time you call Replace() with a value. This value will copied,
  * and stored in memory.  The behavior is not ideal for extremely large data

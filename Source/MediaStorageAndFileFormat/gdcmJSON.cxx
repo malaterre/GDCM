@@ -606,7 +606,7 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
     if( jvaluetype == json_type_array )
       {
       // Create a Sequence
-      gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems;
+      SmartPointer<SequenceOfItems> sq = new SequenceOfItems;
       sq->SetLengthToUndefined();
 
       int sqlen = json_object_array_length ( jvalue );
@@ -618,9 +618,9 @@ static void ProcessJSONElement( const char *tag_str, json_object * obj, DataElem
         //const char * dummy = json_object_to_json_string ( jitem );
 
         // Create an item
-        gdcm::Item item;
+        Item item;
         item.SetVLToUndefined();
-        gdcm::DataSet &nds = item.GetNestedDataSet();
+        DataSet &nds = item.GetNestedDataSet();
 
 #ifdef JSON_C_VERSION
         json_object_iterator it;

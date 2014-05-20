@@ -303,7 +303,7 @@ public:
 
       if( ds.FindDataElement( t ) )
         {
-        const gdcm::DataElement & de = ds.GetDataElement( t );
+        const DataElement & de = ds.GetDataElement( t );
         // Here is the actual trick:
         if( !de.IsEmpty() )
           {

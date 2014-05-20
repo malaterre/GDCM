@@ -202,10 +202,10 @@ bool RAWCodec::DecodeByStreams(std::istream &is, std::ostream &os)
 
 bool RAWCodec::GetHeaderInfo(std::istream &, TransferSyntax &ts)
 {
-  ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
+  ts = TransferSyntax::ExplicitVRLittleEndian;
   if( NeedByteSwap )
     {
-    ts = gdcm::TransferSyntax::ImplicitVRBigEndianPrivateGE;
+    ts = TransferSyntax::ImplicitVRBigEndianPrivateGE;
     }
   return true;
 }

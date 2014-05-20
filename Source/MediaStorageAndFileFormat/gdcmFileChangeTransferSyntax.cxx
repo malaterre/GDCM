@@ -212,7 +212,7 @@ bool FileChangeTransferSyntax::InitializeCopy()
         }
       is.clear(); // important
       Internals->PixelDataPos = is.tellg();
-      gdcm::File & file = reader.GetFile();
+      File & file = reader.GetFile();
       const DataSet & ds = file.GetDataSet();
       if( ds.FindDataElement( Tag(0x7fe0,0x0010) ) )
         {
@@ -220,7 +220,7 @@ bool FileChangeTransferSyntax::InitializeCopy()
         gdcmAssertAlwaysMacro( "Impossible happen"); (void)de;
         return false;
         }
-      gdcm::FileMetaInformation & fmi = file.GetHeader();
+      FileMetaInformation & fmi = file.GetHeader();
       const TransferSyntax &ts = fmi.GetDataSetTransferSyntax();
       if( ts.IsEncapsulated() )
         {

@@ -301,7 +301,7 @@ A.4.4 JPEG 2000 image compression
   Syntaxes, each frame shall be encoded separately. Each fragment shall contain encoded data from a
   single frame.
   Note: That is, the processes defined in ISO/IEC 15444-1 shall be applied on a per-frame basis. The proposal
-  for encapsulation of multiple frames in a non-DICOM manner in so-called ¿Motion-JPEG¿ or ¿M-JPEG¿
+  for encapsulation of multiple frames in a non-DICOM manner in so-called 'Motion-JPEG' or 'M-JPEG'
   defined in 15444-3 is not used.
 */
 bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
@@ -1503,7 +1503,7 @@ bool JPEG2000Codec::DecodeExtent(
     size_t buf_size = 0;
 
     const Tag seqDelItem(0xfffe,0xe0dd);
-    gdcm::Fragment frag;
+    Fragment frag;
     while( frag.ReadPreValue<SwapperNoOp>(is) && frag.GetTag() != seqDelItem )
       {
       size_t fraglen = frag.GetVL();
@@ -1543,7 +1543,7 @@ bool JPEG2000Codec::DecodeExtent(
   else if ( NumberOfDimensions == 3 )
     {
     const Tag seqDelItem(0xfffe,0xe0dd);
-    gdcm::Fragment frag;
+    Fragment frag;
     std::streamoff thestart = is.tellg();
     unsigned int numfrags = 0;
     std::vector< size_t > offsets;

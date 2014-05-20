@@ -23,7 +23,7 @@ class IconImageGeneratorInternals;
 /**
  * \brief IconImageGenerator
  * This filter will generate a valid Icon from the Pixel Data element (an
- * instance of gdcm::Pixmap).
+ * instance of Pixmap).
  * To generate a valid Icon, one is only allowed the following Photometric
  * Interpretation:
  * - MONOCHROME1

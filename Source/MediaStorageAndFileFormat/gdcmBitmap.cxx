@@ -349,7 +349,7 @@ bool Bitmap::TryRAWCodec(char *buffer, bool &lossyflag) const
 #if 0
     if ( GetPixelFormat() != codec.GetPixelFormat() )
       {
-      gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+      Bitmap *i = (Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
 #endif
@@ -378,7 +378,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       if( !sf ) return false;
       const Fragment &frag = sf->GetFragment(0);
       const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
-      gdcm::PixelFormat pf = GetPixelFormat(); // gdcm::PixelFormat::UINT8;
+      PixelFormat pf = GetPixelFormat(); // PixelFormat::UINT8;
       codec.SetPixelFormat( pf );
 
       std::stringstream ss;
@@ -392,7 +392,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
 #if 0
       if( codec.GetPixelFormat() != GetPixelFormat() )
         {
-        gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+        Bitmap *i = (Bitmap*)this;
         i->SetPixelFormat( codec.GetPixelFormat() );
         }
 #endif
@@ -422,7 +422,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
     // Did PI change or not ?
     if ( GetPlanarConfiguration() != codec.GetPlanarConfiguration() )
       {
-      gdcm::Bitmap *i = (gdcm::Bitmap*)this; (void)i;
+      Bitmap *i = (Bitmap*)this; (void)i;
       //i->SetPlanarConfiguration( codec.GetPlanarConfiguration() );
       }
     // I cannot re-activate the following since I would loose the palette color information
@@ -431,7 +431,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
     //  {
     //  // HACK
     //  // YBRisGray.dcm
-    //  gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+    //  Bitmap *i = (Bitmap*)this;
     //  i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
     //  }
 #if 1
@@ -443,14 +443,14 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
 //      assert( GetPixelFormat().GetBitsStored() ==
 //        codec.GetPixelFormat().GetBitsStored() );
       assert( GetPixelFormat().GetBitsAllocated() == 12 );
-      gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+      Bitmap *i = (Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
 #endif
     //if ( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
     //|| GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL )
     //  {
-    //  gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+    //  Bitmap *i = (Bitmap*)this;
     //  i->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
     //  }
     const ByteValue *outbv = out.GetByteValue();
@@ -499,7 +499,7 @@ bool Bitmap::TryJPEGCodec2(std::ostream &os) const
     if ( GetPhotometricInterpretation() != codec.GetPhotometricInterpretation() )
       {
       // HACK
-      //gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+      //Bitmap *i = (Bitmap*)this;
       //i->SetPhotometricInterpretation( codec.GetPhotometricInterpretation() );
       }
     const ByteValue *outbv = out.GetByteValue();
@@ -538,7 +538,7 @@ bool Bitmap::TryPVRGCodec(char *buffer, bool &lossyflag) const
     assert( r );
     if ( GetPlanarConfiguration() != codec.GetPlanarConfiguration() )
       {
-      gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+      Bitmap *i = (Bitmap*)this;
       i->PlanarConfiguration = codec.GetPlanarConfiguration();
       }
     const ByteValue *outbv = out.GetByteValue();
@@ -623,7 +623,7 @@ bool Bitmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
 // therefore -rightfully- declared as 16 bits...
       if( codec.GetPixelFormat() != GetPixelFormat() )
         {
-        gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+        Bitmap *i = (Bitmap*)this;
         i->SetPixelFormat( codec.GetPixelFormat() );
         }
 #endif
@@ -715,7 +715,7 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
         {
         // Because J2K support the full spectrum I do not see any issue
         // with the following:
-        gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+        Bitmap *i = (Bitmap*)this;
         i->SetPixelFormat( codec.GetPixelFormat() );
         }
 #else
@@ -731,7 +731,7 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
             {
             if( cpf.GetBitsStored() < pf.GetBitsStored() )
               {
-              gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+              Bitmap *i = (Bitmap*)this;
               gdcmWarningMacro( "Encapsulated stream has fewer bits actually stored on disk. correcting." );
               i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
               }
@@ -775,7 +775,7 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
 #if 0
     if( codec.GetPixelFormat() != GetPixelFormat() )
       {
-      gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+      Bitmap *i = (Bitmap*)this;
       i->SetPixelFormat( codec.GetPixelFormat() );
       }
 #else
@@ -791,7 +791,7 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
             {
             if( cpf.GetBitsStored() < pf.GetBitsStored() )
               {
-              gdcm::Bitmap *i = (gdcm::Bitmap*)this;
+              Bitmap *i = (Bitmap*)this;
               gdcmWarningMacro( "Encapsulated stream has fewer bits actually stored on disk. correcting." );
               i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
               }

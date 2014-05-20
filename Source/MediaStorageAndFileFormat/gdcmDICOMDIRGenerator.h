@@ -50,7 +50,7 @@ class DICOMDIRGeneratorInternal;
  *
  * \bug:
  * There is a current limitation of not handling Referenced SOP Class UID /
- * Referenced SOP Instance UID simply because the gdcm::Scanner does not allow us
+ * Referenced SOP Instance UID simply because the Scanner does not allow us
  * See PS 3.11 / Table D.3-2 STD-GEN Additional DICOMDIR Keys
  */
 class GDCM_EXPORT DICOMDIRGenerator
@@ -103,7 +103,7 @@ private:
 
 /**
  * \example GenerateDICOMDIR.cs
- * This is a C# example on how to use gdcm::DICOMDIRGenerator
+ * This is a C# example on how to use DICOMDIRGenerator
  */
 
 } // end namespace gdcm

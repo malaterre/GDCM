@@ -667,7 +667,7 @@ bool RLECodec::DecodeExtent(
 
   // skip
   std::stringstream os;
-  gdcm::Fragment frag;
+  Fragment frag;
   for( unsigned int z = 0; z < zmin; ++z )
     {
     frag.ReadPreValue<SwapperNoOp>(is);

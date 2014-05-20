@@ -84,7 +84,7 @@ private:
 
 /**
  * \example StandardizeFiles.cs
- * This is a C++ example on how to use gdcm::ImageChangeTransferSyntax
+ * This is a C++ example on how to use ImageChangeTransferSyntax
  */
 
 } // end namespace gdcm

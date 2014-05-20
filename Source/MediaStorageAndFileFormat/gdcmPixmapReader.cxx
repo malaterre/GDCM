@@ -1002,7 +1002,7 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
     if( dims[0] == 0 || dims[1] == 0 )
       {
       // Pseudo-declared JPEG SC image storage. Let's fix col/row/pf/pi
-      gdcm::JPEGCodec jpeg;
+      JPEGCodec jpeg;
       if( jpeg.CanDecode( PixelData->GetTransferSyntax() ) )
         {
         std::stringstream ss;
@@ -1018,9 +1018,9 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
         sqf->WriteBuffer( ss );
         //std::string s( bv->GetPointer(), bv->GetLength() );
         //is.str( s );
-        gdcm::PixelFormat jpegpf ( gdcm::PixelFormat::UINT8 ); // usual guess...
+        PixelFormat jpegpf ( PixelFormat::UINT8 ); // usual guess...
         jpeg.SetPixelFormat( jpegpf );
-        gdcm::TransferSyntax ts;
+        TransferSyntax ts;
         bool b = jpeg.GetHeaderInfo( ss, ts );
         if( b )
           {

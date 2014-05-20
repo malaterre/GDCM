@@ -207,7 +207,7 @@ bool PhotometricInterpretation::IsSameColorSpace( PhotometricInterpretation cons
 //  // A.8.5.4 Multi-frame True Color SC Image IOD Content Constraints
 //  if( PIField == RGB )
 //    {
-//    if( ts == gdcm::TransferSyntax::
+//    if( ts == TransferSyntax::
 //    }
 //  return PIField;
 //}

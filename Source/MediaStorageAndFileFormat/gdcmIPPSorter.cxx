@@ -121,7 +121,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   // calculate the slice normal from IOP:
   double normal[3];
 
-  gdcm::DirectionCosines dc;
+  DirectionCosines dc;
   dc.SetFromString( dircos );
   if( !dc.IsValid() ) return false;
   dc.Cross( normal );

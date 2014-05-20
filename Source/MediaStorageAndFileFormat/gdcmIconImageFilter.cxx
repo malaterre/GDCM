@@ -321,7 +321,7 @@ void IconImageFilter::ExtractIconImages()
       const ByteValue *bv = de.GetByteValue();
       assert( bv );
       is.str( std::string( bv->GetPointer(), bv->GetLength() ) );
-      gdcm::TransferSyntax jpegts;
+      TransferSyntax jpegts;
       JPEGCodec jpeg;
       jpeg.SetPixelFormat( pf1 ); // important to initialize
       bool b = jpeg.GetHeaderInfo( is, jpegts );
@@ -484,10 +484,10 @@ void IconImageFilter::ExtractVeproIconImages()
 {
   const DataSet &rootds = F->GetDataSet();
 
-  const gdcm::PrivateTag ticon1(0x55,0x0030,"VEPRO VIF 3.0 DATA");
-  const gdcm::PrivateTag ticon2(0x55,0x0030,"VEPRO VIM 5.0 DATA");
+  const PrivateTag ticon1(0x55,0x0030,"VEPRO VIF 3.0 DATA");
+  const PrivateTag ticon2(0x55,0x0030,"VEPRO VIM 5.0 DATA");
 
-  const gdcm::ByteValue * bv = NULL;
+  const ByteValue * bv = NULL;
   // Prefer VIF over VIM ?
   if( rootds.FindDataElement( ticon1 ) )
     {

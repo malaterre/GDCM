@@ -74,7 +74,7 @@ public:
   static std::string GetFrameOfReference(const std::vector<DataSet>& inDS);
 
   //both the image and polydata readers use these functions to get std::strings
-  static std::string GetStringValueFromTag(const gdcm::Tag& t, const gdcm::DataSet& ds);
+  static std::string GetStringValueFromTag(const Tag& t, const DataSet& ds);
 };
 
 }

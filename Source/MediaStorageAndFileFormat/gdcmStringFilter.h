@@ -55,7 +55,7 @@ public:
   // Use this one
   std::string FromString(const Tag&t, const char * value, size_t len);
 
-  //typedef std::map<Tag, gdcm::ConstCharWrapper> StringSet;
+  //typedef std::map<Tag, ConstCharWrapper> StringSet;
 
   /// Set/Get File
   void SetFile(const File& f) { F = f; }

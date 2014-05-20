@@ -87,7 +87,7 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
     }
   os << "\n";
 
-  const gdcm::ByteValue *bv = out.GetByteValue();
+  const ByteValue *bv = out.GetByteValue();
   // FIXME: PNM Codec cannot handle encapsulated syntax... sigh
   if(!bv)
     {
@@ -101,7 +101,7 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
     std::stringstream is;
     is.write( bv->GetPointer(), bv->GetLength() );
 
-    const gdcm::LookupTable &lut = this->GetLUT();
+    const LookupTable &lut = this->GetLUT();
     lut.Decode(is, os);
     }
   else
@@ -125,15 +125,15 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
 
 bool PNMCodec::Read(const char *filename, DataElement &out) const
 {
-  size_t len = gdcm::System::FileSize(filename);
+  size_t len = System::FileSize(filename);
   std::ifstream is(filename, std::ios::binary);
   std::string type, str;
   std::getline(is,type);
-  gdcm::PhotometricInterpretation pi;
+  PhotometricInterpretation pi;
   if( type == "P5" )
-    pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+    pi = PhotometricInterpretation::MONOCHROME2;
   else if( type == "P6" )
-    pi = gdcm::PhotometricInterpretation::RGB;
+    pi = PhotometricInterpretation::RGB;
   else
     {
     std::cerr << "Unhandled PGM type: " << type << std::endl;
@@ -163,32 +163,32 @@ bool PNMCodec::Read(const char *filename, DataElement &out) const
     std::cerr << "Problem computing length" << std::endl;
     return false;
     }
-  gdcm::PixelFormat pf;
+  PixelFormat pf;
   switch(maxval)
     {
   case 255:
-    pf = gdcm::PixelFormat::UINT8;
+    pf = PixelFormat::UINT8;
     break;
   case 1023:
-    pf = gdcm::PixelFormat::UINT16;
+    pf = PixelFormat::UINT16;
     pf.SetBitsStored( 10 );
     break;
   case 4095:
-    pf = gdcm::PixelFormat::UINT16;
+    pf = PixelFormat::UINT16;
     pf.SetBitsStored( 12 );
     break;
   case 32767:
-    pf = gdcm::PixelFormat::UINT16;
+    pf = PixelFormat::UINT16;
     pf.SetBitsStored( 15 );
     break;
   case 65535:
-    pf = gdcm::PixelFormat::UINT16;
+    pf = PixelFormat::UINT16;
     break;
   default:
     std::cerr << "Unhandled max val: " << maxval << std::endl;
     return false;
     }
-  if( pi == gdcm::PhotometricInterpretation::RGB )
+  if( pi == PhotometricInterpretation::RGB )
     {
     pf.SetSamplesPerPixel( 3 );
     }
@@ -201,7 +201,7 @@ bool PNMCodec::Read(const char *filename, DataElement &out) const
   is.read(buf, len);
   if( !is.eof() ) return false;
 
-  out.SetTag( gdcm::Tag(0x7fe0,0x0010) );
+  out.SetTag( Tag(0x7fe0,0x0010) );
   VL::Type pdLenSize = (VL::Type)pdlen;
   out.SetByteValue( buf, pdLenSize );
   delete[] buf;
@@ -220,11 +220,11 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 
   std::string type, str;
   std::getline(is,type);
-  gdcm::PhotometricInterpretation pi;
+  PhotometricInterpretation pi;
   if( type == "P5" )
-    pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+    pi = PhotometricInterpretation::MONOCHROME2;
   else if( type == "P6" ) // P3 => ASCII
-    pi = gdcm::PhotometricInterpretation::RGB;
+    pi = PhotometricInterpretation::RGB;
   else
     {
     std::cerr << "Unhandled PGM type: " << type << std::endl;
@@ -258,41 +258,41 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     std::cerr << "expected: " << m * dims[0] * dims[1] << std::endl;
     return false;
     }
-  gdcm::PixelFormat pf;
+  PixelFormat pf;
   switch(maxval)
     {
   case 255:
-    pf = gdcm::PixelFormat::UINT8;
+    pf = PixelFormat::UINT8;
     break;
   case 1023:
-    pf = gdcm::PixelFormat::UINT16;
+    pf = PixelFormat::UINT16;
     pf.SetBitsStored( 10 );
     break;
   case 4095:
-    pf = gdcm::PixelFormat::UINT16;
+    pf = PixelFormat::UINT16;
     pf.SetBitsStored( 12 );
     break;
   case 32767:
-    pf = gdcm::PixelFormat::UINT16;
+    pf = PixelFormat::UINT16;
     pf.SetBitsStored( 15 );
     break;
   case 65535:
-    pf = gdcm::PixelFormat::UINT16;
+    pf = PixelFormat::UINT16;
     break;
   default:
     std::cerr << "Unhandled max val: " << maxval << std::endl;
     return false;
     }
-  if( pi == gdcm::PhotometricInterpretation::RGB )
+  if( pi == PhotometricInterpretation::RGB )
     {
     pf.SetSamplesPerPixel( 3 );
     }
   //if ( maxval * 8 != bpp ) return 1;
 
-  //image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian ); // PGM are big endian
-  //image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian ); // PGM are big endian
-  //image.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRBigEndianPrivateGE ); // PGM are big endian
-  ts = gdcm::TransferSyntax::ImplicitVRBigEndianPrivateGE;
+  //image.SetTransferSyntax( TransferSyntax::ExplicitVRBigEndian ); // PGM are big endian
+  //image.SetTransferSyntax( TransferSyntax::ExplicitVRLittleEndian ); // PGM are big endian
+  //image.SetTransferSyntax( TransferSyntax::ImplicitVRBigEndianPrivateGE ); // PGM are big endian
+  ts = TransferSyntax::ImplicitVRBigEndianPrivateGE;
 
   SetPhotometricInterpretation( pi );
   SetPixelFormat( pf );

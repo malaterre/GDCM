@@ -55,7 +55,7 @@ class CryptographicMessageSyntax;
  * 2. smart mode
  * this mode implements the Basic Application Level Confidentiality Profile
  * (DICOM PS 3.15-2008) In this case, it is extremely important to use the same
- * gdcm::Anonymizer class when anonymizing a FileSet. Once the gdcm::Anonymizer
+ * Anonymizer class when anonymizing a FileSet. Once the Anonymizer
  * is destroyed its memory of known (already processed) UIDs will be lost.
  * which will make the anonymizer behaves incorrectly for attributes such as
  * Series UID Study UID where user want some consistency.  When attribute is
@@ -165,7 +165,7 @@ private:
 /**
  * \example ManipulateFile.cs
  * \example ClinicalTrialIdentificationWorkflow.cs
- * This is a C# example on how to use gdcm::Anonymizer
+ * This is a C# example on how to use Anonymizer
  */
 
 } // end namespace gdcm

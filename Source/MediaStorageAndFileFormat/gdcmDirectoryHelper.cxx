@@ -12,11 +12,11 @@ namespace gdcm{
 //that is, the MR images, the CT Images, whatever.  Just have to be sure to give the proper
 //SOP Class UID.
 //returns an empty vector if nothing's there or if something goes wrong.
-gdcm::Directory::FilenamesType DirectoryHelper::GetSeriesUIDsBySOPClassUID(const std::string& inDirectory,
+Directory::FilenamesType DirectoryHelper::GetSeriesUIDsBySOPClassUID(const std::string& inDirectory,
                                                                        const std::string& inSOPClassUID)
 {
-  gdcm::Scanner theScanner;
-  gdcm::Directory theDir;
+  Scanner theScanner;
+  Directory theDir;
   theScanner.AddTag(Tag(0x0008, 0x0016));//SOP Class UID
   theScanner.AddTag(Tag(0x0020, 0x000e));//Series UID
   Directory::FilenamesType theReturn;
@@ -51,19 +51,19 @@ gdcm::Directory::FilenamesType DirectoryHelper::GetSeriesUIDsBySOPClassUID(const
 
 
 //given the name of a directory, return the list of CT Image UIDs
-gdcm::Directory::FilenamesType DirectoryHelper::GetCTImageSeriesUIDs(const std::string& inDirectory)
+Directory::FilenamesType DirectoryHelper::GetCTImageSeriesUIDs(const std::string& inDirectory)
 {
   return GetSeriesUIDsBySOPClassUID(inDirectory, "1.2.840.10008.5.1.4.1.1.2");
 }
 
 //given the name of a directory, return the list of CT Image UIDs
-gdcm::Directory::FilenamesType DirectoryHelper::GetMRImageSeriesUIDs(const std::string& inDirectory)
+Directory::FilenamesType DirectoryHelper::GetMRImageSeriesUIDs(const std::string& inDirectory)
 {
   return GetSeriesUIDsBySOPClassUID(inDirectory, "1.2.840.10008.5.1.4.1.1.4");
 }
 
 //given the name of a directory, return the list of CT Image UIDs
-gdcm::Directory::FilenamesType DirectoryHelper::GetRTStructSeriesUIDs(const std::string& inDirectory)
+Directory::FilenamesType DirectoryHelper::GetRTStructSeriesUIDs(const std::string& inDirectory)
 {
   return GetSeriesUIDsBySOPClassUID(inDirectory, "1.2.840.10008.5.1.4.1.1.481.3");
 }
@@ -72,8 +72,8 @@ gdcm::Directory::FilenamesType DirectoryHelper::GetRTStructSeriesUIDs(const std:
 Directory::FilenamesType DirectoryHelper::GetFilenamesFromSeriesUIDs(const std::string& inDirectory,
                                                                      const std::string& inSeriesUID)
 {
-  gdcm::Scanner theScanner;
-  gdcm::Directory theDir;
+  Scanner theScanner;
+  Directory theDir;
   theScanner.AddTag(Tag(0x0020, 0x000e));//Series UID
   Directory::FilenamesType theReturn;
 
@@ -93,9 +93,9 @@ Directory::FilenamesType DirectoryHelper::GetFilenamesFromSeriesUIDs(const std::
         theSeriesUID = theSeriesUID.substr( 0, endpos+1 );
       if (inSeriesUID == theSeriesUID)
       {
-	    gdcm::Directory::FilenamesType theFilenames = 
+	    Directory::FilenamesType theFilenames =
 		    theScanner.GetAllFilenamesFromTagToValue(Tag(0x0020, 0x000e), theSeriesValues[i].c_str());
-		  gdcm::Directory::FilenamesType::const_iterator citor;
+		  Directory::FilenamesType::const_iterator citor;
 		  for (citor = theFilenames.begin(); citor < theFilenames.end(); citor++)
         {
 		    theReturn.push_back(*citor);
@@ -120,8 +120,8 @@ Directory::FilenamesType DirectoryHelper::GetFilenamesFromSeriesUIDs(const std::
 std::vector<DataSet> DirectoryHelper::LoadImageFromFiles(const std::string& inDirectory,
                                                            const std::string& inSeriesUID)
 {
-  gdcm::Scanner theScanner;
-  gdcm::Directory theDir;
+  Scanner theScanner;
+  Directory theDir;
   theScanner.AddTag(Tag(0x0020, 0x000e));//Series UID
   std::vector<DataSet> theReturn;
   std::vector<DataSet> blank;//returned in case of an error
@@ -172,15 +172,15 @@ std::string DirectoryHelper::RetrieveSOPInstanceUIDFromZPosition(double inZPos,
                                                 const std::vector<DataSet>& inDS)
 {
   std::vector<DataSet>::const_iterator itor;
-  gdcm::Tag thePosition(0x0020, 0x0032);
-  gdcm::Tag theSOPInstanceUID(0x0008, 0x0018);
+  Tag thePosition(0x0020, 0x0032);
+  Tag theSOPInstanceUID(0x0008, 0x0018);
   std::string blank;//return only if there's a problem
   for (itor = inDS.begin(); itor != inDS.end(); itor++)
     {
     if (itor->FindDataElement(thePosition))
       {
       DataElement de = itor->GetDataElement(thePosition);
-      gdcm::Attribute<0x0020,0x0032> at;
+      Attribute<0x0020,0x0032> at;
       at.SetFromDataElement( de );
       if (fabs(at.GetValue(2) - inZPos)<0.01)
         {
@@ -200,7 +200,7 @@ std::string DirectoryHelper::RetrieveSOPInstanceUIDFromIndex(int inIndex,
                                                                const std::vector<DataSet>& inDS)
 {
 
-  gdcm::Tag theSOPInstanceUID(0x0008, 0x0018);
+  Tag theSOPInstanceUID(0x0008, 0x0018);
   std::string blank;//return only if there's a problem
   if (inDS[inIndex].FindDataElement(theSOPInstanceUID)){
     DataElement de = inDS[inIndex].GetDataElement(theSOPInstanceUID);
@@ -216,7 +216,7 @@ std::string DirectoryHelper::RetrieveSOPInstanceUIDFromIndex(int inIndex,
 //so, retrieve this once at the start of writing.
 std::string DirectoryHelper::GetSOPClassUID(const std::vector<DataSet>& inDS)
 {
-  gdcm::Tag theSOPClassUID(0x0008, 0x0016);
+  Tag theSOPClassUID(0x0008, 0x0016);
   std::string blank;//return only if there's a problem
   if (inDS[0].FindDataElement(theSOPClassUID)){
     DataElement de = inDS[0].GetDataElement(theSOPClassUID);
@@ -231,7 +231,7 @@ std::string DirectoryHelper::GetSOPClassUID(const std::vector<DataSet>& inDS)
 //retrieve the frame of reference from the set of datasets
 std::string DirectoryHelper::GetFrameOfReference(const std::vector<DataSet>& inDS){
 
-  gdcm::Tag theSOPClassUID(0x0020, 0x0052);
+  Tag theSOPClassUID(0x0020, 0x0052);
   std::string blank;//return only if there's a problem
   if (inDS[0].FindDataElement(theSOPClassUID)){
     DataElement de = inDS[0].GetDataElement(theSOPClassUID);
@@ -246,14 +246,14 @@ std::string DirectoryHelper::GetFrameOfReference(const std::vector<DataSet>& inD
 
 //----------------------------------------------------------------------------
 //used by the vtkGDCMImageReader and vtkGDCMPolyDataReader. Could be used elsewhere, I suppose.
-std::string DirectoryHelper::GetStringValueFromTag(const gdcm::Tag& t, const gdcm::DataSet& ds)
+std::string DirectoryHelper::GetStringValueFromTag(const Tag& t, const DataSet& ds)
 {
   std::string buffer;
 
   if( ds.FindDataElement( t ) )
     {
-    const gdcm::DataElement& de = ds.GetDataElement( t );
-    const gdcm::ByteValue *bv = de.GetByteValue();
+    const DataElement& de = ds.GetDataElement( t );
+    const ByteValue *bv = de.GetByteValue();
     if( bv ) // Can be Type 2
       {
       buffer = std::string( bv->GetPointer(), bv->GetLength() );
