@@ -954,7 +954,7 @@ public:
 //template<>
 //class Attribute<VR::AS> : public Attribute<VR::AS, VRToLength<VR::AS>::Length >
 
-// only 0010 1010 AS 1 Patient’s Age
+// only 0010 1010 AS 1 Patient's Age
 template<>
 class Attribute<VR::AS, VM::VM5>
 {
