@@ -29,7 +29,7 @@ bool ImageApplyLookupTable::Apply()
     gdcmDebugMacro( "Image is not palettized" );
     return false;
     }
-  const gdcm::LookupTable &lut = image.GetLUT();
+  const LookupTable &lut = image.GetLUT();
   int bitsample = lut.GetBitSample();
   if( !bitsample ) return false;
 
@@ -63,7 +63,7 @@ bool ImageApplyLookupTable::Apply()
   Output->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
   Output->GetPixelFormat().SetSamplesPerPixel( 3 );
   Output->SetPlanarConfiguration( 0 ); // FIXME OT-PAL-8-face.dcm has a PlanarConfiguration while being PALETTE COLOR...
-  const gdcm::TransferSyntax &ts = image.GetTransferSyntax();
+  const TransferSyntax &ts = image.GetTransferSyntax();
   //assert( ts == TransferSyntax::RLELossless );
   if( ts.IsExplicit() )
     {

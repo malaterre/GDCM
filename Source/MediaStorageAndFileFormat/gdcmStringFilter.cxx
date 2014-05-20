@@ -107,9 +107,9 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
   DataSet const &ds, std::string &retvalue ) const
 {
   //std::pair<std::string, std::string> ret;
-  static gdcm::Global &g = gdcm::Global::GetInstance();
-  static const gdcm::Dicts &dicts = g.GetDicts();
-  static const gdcm::Dict &pubdict = dicts.GetPublicDict();
+  static Global &g = Global::GetInstance();
+  static const Dicts &dicts = g.GetDicts();
+  static const Dict &pubdict = dicts.GetPublicDict();
 
   char *query = strdup( query_const.c_str() );
   const char delim[] = "/";
@@ -120,9 +120,9 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
   int j;
 
   //bool dicomnativemodel = false;//unused
-  const gdcm::DataSet *curds = NULL;
-  const gdcm::DataElement *curde = NULL;
-  gdcm::Tag t;
+  const DataSet *curds = NULL;
+  const DataElement *curde = NULL;
+  Tag t;
   int state = 0;
   SmartPointer<SequenceOfItems> sqi;
   for (j = 1, str1 = query; state >= 0 ; j++, str1 = NULL)
@@ -158,7 +158,7 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
         }
       assert( subtokens[1] == "keyword" );
       const char *k = subtokens[2].c_str();
-      /*const gdcm::DictEntry &dictentry = */pubdict.GetDictEntryByKeyword(k, t);
+      /*const DictEntry &dictentry = */pubdict.GetDictEntryByKeyword(k, t);
       if( !curds->FindDataElement( t ) )
         {
         state = -1;
@@ -177,7 +177,7 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
         state = -1;
         break;
         }
-      gdcm::Item const &item = sqi->GetItem( atoi( subtokens[2].c_str() ) );
+      Item const &item = sqi->GetItem( atoi( subtokens[2].c_str() ) );
       curds = &item.GetNestedDataSet();
       }
     else if( subtokens[0] == "Value" )
@@ -187,7 +187,7 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
       state = 2;
       assert( subtokens[1] == "number" );
 #if !defined(NDEBUG)
-      const gdcm::ByteValue * const bv = curde->GetByteValue(); (void)bv;
+      const ByteValue * const bv = curde->GetByteValue(); (void)bv;
       assert( bv );
       //bv->Print( std::cout << std::endl );
 #endif

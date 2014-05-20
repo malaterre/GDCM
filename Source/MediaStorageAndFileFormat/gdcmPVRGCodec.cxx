@@ -73,7 +73,7 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
   return false;
 #else
   // First thing create a jpegls file from the fragment:
-  const gdcm::SequenceOfFragments *sf = in.GetSequenceOfFragments();
+  const SequenceOfFragments *sf = in.GetSequenceOfFragments();
   if(!sf)
     {
     gdcmDebugMacro( "Could not find SequenceOfFragments" );
@@ -83,7 +83,7 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
 #ifdef GDCM_USE_SYSTEM_PVRG
   std::string pvrg_command = GDCM_PVRG_JPEG_EXECUTABLE;
 #else
-  gdcm::Filename fn( System::GetCurrentProcessFileName() );
+  Filename fn( System::GetCurrentProcessFileName() );
   std::string executable_path = fn.GetPath();
 
   std::string pvrg_command = executable_path + "/gdcmjpeg";
@@ -137,7 +137,7 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
     os << ".";
     os << file; // dont ask
     const std::string altfile = os.str();
-    const size_t len = gdcm::System::FileSize(altfile.c_str());
+    const size_t len = System::FileSize(altfile.c_str());
     if( !len )
       {
       gdcmDebugMacro( "Output file was really empty: " << altfile );
@@ -150,7 +150,7 @@ bool PVRGCodec::Decode(DataElement const &in, DataElement &out)
     std::string buf;
     buf.resize( len );
     is.read(&buf[0], len);
-    out.SetTag( gdcm::Tag(0x7fe0,0x0010) );
+    out.SetTag( Tag(0x7fe0,0x0010) );
 
     if ( PF.GetBitsAllocated() == 16 )
       {

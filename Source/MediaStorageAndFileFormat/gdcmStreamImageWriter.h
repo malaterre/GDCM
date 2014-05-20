@@ -30,7 +30,7 @@ class MediaStorage;
 class RAWCodec;
 /**
  * \brief StreamImageReader
- * \note its role is to convert the DICOM DataSet into a gdcm::Image
+ * \note its role is to convert the DICOM DataSet into a Image
  * representation via an ITK streaming (ie, multithreaded) interface
  * Image is different from Pixmap has it has a position and a direction in
  * Space.

@@ -24,7 +24,7 @@ class ByteValue;
 class MediaStorage;
 /**
  * \brief PixmapReader
- * \note its role is to convert the DICOM DataSet into a gdcm::Pixmap
+ * \note its role is to convert the DICOM DataSet into a Pixmap
  * representation
  * By default it is also loading the lookup table and overlay when found as
  * they impact the rendering or the image
@@ -65,7 +65,7 @@ protected:
 
 /**
  * \example StandardizeFiles.cs
- * This is a C++ example on how to use gdcm::PixmapReader
+ * This is a C++ example on how to use PixmapReader
  */
 
 } // end namespace gdcm

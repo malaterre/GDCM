@@ -57,7 +57,7 @@ bool PGXCodec::Write(const char *filename, const DataElement &out) const
   size_t num_images = zdim * nsamples;
   fg.SetNumberOfFilenames(num_images);
   if( !fg.Generate() ) return false;
-  const gdcm::ByteValue *bv = out.GetByteValue();
+  const ByteValue *bv = out.GetByteValue();
   if(!bv)
     {
     gdcmErrorMacro( "PGX Codec does not handle compress syntax."

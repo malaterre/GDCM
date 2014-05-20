@@ -242,7 +242,7 @@ bool StreamImageWriter::WriteImageSubregionRAW(char* inWriteBuffer, const std::s
   bool needbyteswap = (ts == TransferSyntax::ImplicitVRBigEndianPrivateGE);
 
   RAWCodec theCodec;
-  if( !theCodec.CanDecode(ts) || ts == gdcm::TransferSyntax::ExplicitVRBigEndian)
+  if( !theCodec.CanDecode(ts) || ts == TransferSyntax::ExplicitVRBigEndian)
     {
     gdcmErrorMacro( "Only RAW for now" );
     return false;

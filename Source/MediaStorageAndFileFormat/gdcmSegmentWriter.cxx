@@ -391,7 +391,7 @@ bool SegmentWriter::PrepareWrite()
 //          surfaceSourceSQ = segmentsRefDS.GetDataElement( Tag(0x0066, 0x002E) ).GetValueAsSQ();
 //          surfaceSourceSQ->SetLengthToUndefined();
 
-          //NOTE: If surfaces are derived from image, include ‘Image SOP Instance Reference Macro’ PS 3.3 Table C.10-3.
+          //NOTE: If surfaces are derived from image, include 'Image SOP Instance Reference Macro' PS 3.3 Table C.10-3.
           //      How to know it?
         }
       }

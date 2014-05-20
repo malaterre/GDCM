@@ -42,7 +42,7 @@ public:
   Sorter();
   virtual ~Sorter();
 
-  /// Typically the output of gdcm::Directory::GetFilenames()
+  /// Typically the output of Directory::GetFilenames()
   virtual bool Sort(std::vector<std::string> const & filenames);
 
   /// Return the list of filenames as sorted by the specific algorithm used.

@@ -70,7 +70,7 @@ bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<
   if( !subds2.FindDataElement(tps) ) return false;
   const DataElement &de = subds2.GetDataElement( tps );
   //assert( bv );
-  gdcm::Attribute<0x0020,0x0032> at;
+  Attribute<0x0020,0x0032> at;
   at.SetFromDataElement( de );
   //at.Print( std::cout );
   ori.push_back( at.GetValue(0) );
@@ -103,7 +103,7 @@ bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, st
   if( !subds2.FindDataElement(tps) ) return false;
   const DataElement &de = subds2.GetDataElement( tps );
   //assert( bv );
-  gdcm::Attribute<0x0020,0x0037> at;
+  Attribute<0x0020,0x0037> at;
   at.SetFromDataElement( de );
   dircos.push_back( at.GetValue(0) );
   dircos.push_back( at.GetValue(1) );
@@ -138,7 +138,7 @@ bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std:
     if( !subds2.FindDataElement(tps) ) return false;
     const DataElement &de = subds2.GetDataElement( tps );
     //assert( bv );
-    gdcm::Attribute<0x0028,0x1052> at;
+    Attribute<0x0028,0x1052> at;
     at.SetFromDataElement( de );
     //at.Print( std::cout );
     intslope.push_back( at.GetValue() );
@@ -149,7 +149,7 @@ bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std:
     if( !subds2.FindDataElement(tps) ) return false;
     const DataElement &de = subds2.GetDataElement( tps );
     //assert( bv );
-    gdcm::Attribute<0x0028,0x1053> at;
+    Attribute<0x0028,0x1053> at;
     at.SetFromDataElement( de );
     //at.Print( std::cout );
     intslope.push_back( at.GetValue() );
@@ -202,9 +202,9 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
 
   // For each item
   std::vector<double> distances;
-  gdcm::SequenceOfItems::SizeType nitems = sqi->GetNumberOfItems();
+  SequenceOfItems::SizeType nitems = sqi->GetNumberOfItems();
   std::vector<double> dircos_subds2; dircos_subds2.resize(6);
-  for(gdcm::SequenceOfItems::SizeType i0 = 1; i0 <= nitems; ++i0)
+  for(SequenceOfItems::SizeType i0 = 1; i0 <= nitems; ++i0)
     {
     const Item &item = sqi->GetItem(i0);
     const DataSet & subds = item.GetNestedDataSet();
@@ -307,7 +307,7 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
   if( !subds2.FindDataElement(tps) ) return false;
   const DataElement &de = subds2.GetDataElement( tps );
   //assert( bv );
-  gdcm::Attribute<0x0028,0x0030> at;
+  Attribute<0x0028,0x0030> at;
   at.SetFromDataElement( de );
   //at.Print( std::cout );
   sp.push_back( at.GetValue(1) );
@@ -322,7 +322,7 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
   const Tag tst(0x0018,0x0050);
   if( !subds2.FindDataElement(tst) ) return false;
   const DataElement &de2 = subds2.GetDataElement( tst );
-  gdcm::Attribute<0x0018,0x0050> at2;
+  Attribute<0x0018,0x0050> at2;
   at2.SetFromDataElement( de2 );
   //at2.Print( std::cout );
   sp.push_back( at2.GetValue(0) );
@@ -370,8 +370,8 @@ bool GetUltraSoundSpacingValueFromSequence(const DataSet& ds, std::vector<double
   const DataSet & subds = item.GetNestedDataSet();
   //  (0018,602c) FD 0.002                                    #   8, 1 PhysicalDeltaX
   //  (0018,602e) FD 0.002                                    #   8, 1 PhysicalDeltaY
-  gdcm::Attribute<0x0018,0x602c> at1;
-  gdcm::Attribute<0x0018,0x602e> at2;
+  Attribute<0x0018,0x602c> at1;
+  Attribute<0x0018,0x602e> at2;
   const DataElement &de1 = subds.GetDataElement( at1.GetTag() );
   at1.SetFromDataElement( de1 );
   assert( at1.GetNumberOfValues() == 1 );
@@ -1256,7 +1256,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
   else if( ds.FindDataElement( Tag(0x0028,0x0009) ) ) // Frame Increment Pointer
     {
     const DataElement& de = ds.GetDataElement( Tag(0x0028,0x0009) );
-    gdcm::Attribute<0x0028,0x0009,VR::AT,VM::VM1> at;
+    Attribute<0x0028,0x0009,VR::AT,VM::VM1> at;
     at.SetFromDataElement( de );
     assert( ds.FindDataElement( at.GetTag() ) );
     if( ds.FindDataElement( at.GetValue() ) )
@@ -1588,7 +1588,7 @@ void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag co
     Item &item2 = sqi->GetItem(1);
     DataSet &subds2 = item2.GetNestedDataSet();
 
-    //gdcm::Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
+    //Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
     //ipp.SetValue( origin[0], 0);
     //ipp.SetValue( origin[1], 1);
     //ipp.SetValue( origin[2], 2);
@@ -1637,7 +1637,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
 
     const Tag tfgs(0x5200,0x9230);
 
-    gdcm::Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
+    Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
     double zspacing = image.GetSpacing(2);
     unsigned int dimz = image.GetDimension(2);
     const double *cosines = image.GetDirectionCosines();
@@ -1666,7 +1666,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
     }
 
   // Image Position (Patient)
-  gdcm::Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
+  Attribute<0x0020,0x0032> ipp = {{0,0,0}}; // default value
   ipp.SetValue( origin[0], 0);
   ipp.SetValue( origin[1], 1);
   ipp.SetValue( origin[2], 2);
@@ -1701,7 +1701,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
     }
 
   // Image Orientation (Patient)
-  gdcm::Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
+  Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
 
   assert( dircos.size() == 6 );
   DirectionCosines dc( &dircos[0] );

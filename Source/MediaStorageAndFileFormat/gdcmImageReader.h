@@ -23,7 +23,7 @@ namespace gdcm
 class MediaStorage;
 /**
  * \brief ImageReader
- * \note its role is to convert the DICOM DataSet into a gdcm::Image
+ * \note its role is to convert the DICOM DataSet into a Image
  * representation
  * Image is different from Pixmap has it has a position and a direction in
  * Space.

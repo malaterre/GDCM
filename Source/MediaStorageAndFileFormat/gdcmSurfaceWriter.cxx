@@ -199,8 +199,8 @@ bool SurfaceWriter::PrepareWrite()
             processingAlgoIdSQ->AddItem(item);
           }
 
-          ::gdcm::Item &    processingAlgoIdItem  = processingAlgoIdSQ->GetItem(1);
-          ::gdcm::DataSet & processingAlgoIdDS    = processingAlgoIdItem.GetNestedDataSet();
+          Item &    processingAlgoIdItem  = processingAlgoIdSQ->GetItem(1);
+          DataSet & processingAlgoIdDS    = processingAlgoIdItem.GetNestedDataSet();
 
           //*****   Algorithm Family Code Sequence    *****//
           //See: PS.3.3 Table 8.8-1 and PS 3.16 Context ID 7162
@@ -233,8 +233,8 @@ bool SurfaceWriter::PrepareWrite()
               algoFamilyCodeSQ->AddItem(item);
             }
 
-            ::gdcm::Item &    algoFamilyCodeItem  = algoFamilyCodeSQ->GetItem(1);
-            ::gdcm::DataSet & algoFamilyCodeDS    = algoFamilyCodeItem.GetNestedDataSet();
+            Item &    algoFamilyCodeItem  = algoFamilyCodeSQ->GetItem(1);
+            DataSet & algoFamilyCodeDS    = algoFamilyCodeItem.GetNestedDataSet();
 
             //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
             {
@@ -697,8 +697,8 @@ bool SurfaceWriter::PrepareWrite()
           segmentsAlgoIdSQ->AddItem(item);
         }
 
-        ::gdcm::Item &    segmentsAlgoIdItem  = segmentsAlgoIdSQ->GetItem(1);
-        ::gdcm::DataSet & segmentsAlgoIdDS    = segmentsAlgoIdItem.GetNestedDataSet();
+        Item &    segmentsAlgoIdItem  = segmentsAlgoIdSQ->GetItem(1);
+        DataSet & segmentsAlgoIdDS    = segmentsAlgoIdItem.GetNestedDataSet();
 
         //*****   Algorithm Family Code Sequence    *****//
         //See: PS.3.3 Table 8.8-1 and PS 3.16 Context ID 7162
@@ -732,8 +732,8 @@ bool SurfaceWriter::PrepareWrite()
             algoFamilyCodeSQ->AddItem(item);
           }
 
-          ::gdcm::Item &    algoFamilyCodeItem  = algoFamilyCodeSQ->GetItem(1);
-          ::gdcm::DataSet & algoFamilyCodeDS    = algoFamilyCodeItem.GetNestedDataSet();
+          Item &    algoFamilyCodeItem  = algoFamilyCodeSQ->GetItem(1);
+          DataSet & algoFamilyCodeDS    = algoFamilyCodeItem.GetNestedDataSet();
 
           //*****   CODE SEQUENCE MACRO ATTRIBUTES   *****//
           {

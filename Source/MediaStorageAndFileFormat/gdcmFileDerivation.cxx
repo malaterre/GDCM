@@ -79,7 +79,7 @@ DCM 113064 T2* Map
 DCM 113065 T2 Map
 DCM 113066 Time Course of Signal
 DCM 113067 Temperature encoded
-DCM 113068 Student¿s T-Test
+DCM 113068 Student's T-Test
 DCM 113069 Time To Peak map
 DCM 113070 Velocity encoded
 DCM 113071 Z-Score Map
@@ -104,7 +104,7 @@ namespace gdcm
 Annex D DICOM Controlled Terminology Definitions (Normative)
 This Annex specifies the meanings of codes defined in DICOM, either explicitly or by reference to another
 part of DICOM or an external reference document or standard.
-DICOM Code Definitions (Coding Scheme Designator ¿DCM¿ Coding Scheme Version ¿01¿)
+DICOM Code Definitions (Coding Scheme Designator 'DCM' Coding Scheme Version '01')
 */
 
 struct CodeDefinition
@@ -234,11 +234,11 @@ void FileDerivation::SetPurposeOfReferenceCodeSequenceCodeValue(unsigned int cod
 
 bool FileDerivation::AddReference(const char *referencedsopclassuid, const char *referencedsopinstanceuid)
 {
-  if( !gdcm::UIDGenerator::IsValid(referencedsopclassuid) )
+  if( !UIDGenerator::IsValid(referencedsopclassuid) )
     {
     return false;
     }
-  if( !gdcm::UIDGenerator::IsValid(referencedsopinstanceuid) )
+  if( !UIDGenerator::IsValid(referencedsopinstanceuid) )
     {
     return false;
     }
@@ -362,10 +362,10 @@ bool FileDerivation::AddSourceImageSequence()
     (0008,1155) UI [1.2.840.1136190195280574824680000700.3.0.1.19970424140438] #  58, 1 ReferencedSOPInstanceUID
      */
       {
-      gdcm::Attribute<0x8,0x1150> sopinstanceuid;
+      Attribute<0x8,0x1150> sopinstanceuid;
       sopinstanceuid.SetValue( it->first );
       subds.Replace( sopinstanceuid.GetAsDataElement() );
-      gdcm::Attribute<0x8,0x1155> sopclassuid;
+      Attribute<0x8,0x1155> sopclassuid;
       sopclassuid.SetValue( it->second );
       subds.Replace( sopclassuid.GetAsDataElement() );
       }
@@ -456,12 +456,12 @@ bool FileDerivation::Derive()
   DataSet &ds = file.GetDataSet();
     {
     // (0008,0008) CS [ORIGINAL\SECONDARY]                     #  18, 2 ImageType
-    gdcm::Attribute<0x0008,0x0008> at3;
-    static const gdcm::CSComp values[] = {"DERIVED","SECONDARY"};
+    Attribute<0x0008,0x0008> at3;
+    static const CSComp values[] = {"DERIVED","SECONDARY"};
     at3.SetValues( values, 2, true ); // true => copy data !
     if( ds.FindDataElement( at3.GetTag() ) )
       {
-      const gdcm::DataElement &de = ds.GetDataElement( at3.GetTag() );
+      const DataElement &de = ds.GetDataElement( at3.GetTag() );
       if( !de.IsEmpty() )
         at3.SetFromDataElement( de );
       // Make sure that value #1 is at least 'DERIVED', so override in all cases:

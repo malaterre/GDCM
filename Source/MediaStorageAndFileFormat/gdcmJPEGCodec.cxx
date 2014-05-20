@@ -469,7 +469,7 @@ bool JPEGCodec::DecodeExtent(
     size_t buf_size = 0;
 
     const Tag seqDelItem(0xfffe,0xe0dd);
-    gdcm::Fragment frag;
+    Fragment frag;
     unsigned int nfrags = 0;
     try
       {
@@ -563,7 +563,7 @@ bool JPEGCodec::DecodeExtent(
   else if ( NumberOfDimensions == 3 )
     {
     const Tag seqDelItem(0xfffe,0xe0dd);
-    gdcm::Fragment frag;
+    Fragment frag;
     std::streamoff thestart = is.tellg();
     unsigned int numfrags = 0;
     std::vector< size_t > offsets;

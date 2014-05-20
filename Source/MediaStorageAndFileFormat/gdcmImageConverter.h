@@ -24,9 +24,9 @@ class Image;
 /**
  * \brief Image Converter
  * \note
- * This is the class used to convert from on gdcm::Image to another
+ * This is the class used to convert from on Image to another
  * This is typically used to convert let say YBR JPEG compressed
- * gdcm::Image to a RAW RGB gdcm::Image. So that the buffer can be directly
+ * Image to a RAW RGB Image. So that the buffer can be directly
  * pass to third party application.
  * This filter is application level and not integrated directly in GDCM
  */

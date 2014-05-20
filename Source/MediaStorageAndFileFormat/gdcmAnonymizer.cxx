@@ -293,8 +293,8 @@ static bool Anonymizer_RemoveRetired(File const &file, DataSet &ds)
         SmartPointer<SequenceOfItems> sq = de.GetValueAsSQ();
         if( sq )
           {
-          gdcm::SequenceOfItems::SizeType n = sq->GetNumberOfItems();
-          for( gdcm::SequenceOfItems::SizeType i = 1; i <= n; i++) // item starts at 1, not 0
+          SequenceOfItems::SizeType n = sq->GetNumberOfItems();
+          for( SequenceOfItems::SizeType i = 1; i <= n; i++) // item starts at 1, not 0
             {
             Item &item = sq->GetItem( i );
             DataSet &nested = item.GetNestedDataSet();
@@ -339,8 +339,8 @@ static bool Anonymizer_RemoveGroupLength(File const &file, DataSet &ds)
         SmartPointer<SequenceOfItems> sq = de.GetValueAsSQ();
         if( sq )
           {
-          gdcm::SequenceOfItems::SizeType n = sq->GetNumberOfItems();
-          for( gdcm::SequenceOfItems::SizeType i = 1; i <= n; i++) // item starts at 1, not 0
+          SequenceOfItems::SizeType n = sq->GetNumberOfItems();
+          for( SequenceOfItems::SizeType i = 1; i <= n; i++) // item starts at 1, not 0
             {
             Item &item = sq->GetItem( i );
             DataSet &nested = item.GetNestedDataSet();
@@ -385,8 +385,8 @@ static bool Anonymizer_RemovePrivateTags(File const &file, DataSet &ds)
         SmartPointer<SequenceOfItems> sq = de.GetValueAsSQ();
         if( sq )
           {
-          gdcm::SequenceOfItems::SizeType n = sq->GetNumberOfItems();
-          for( gdcm::SequenceOfItems::SizeType i = 1; i <= n; i++) // item starts at 1, not 0
+          SequenceOfItems::SizeType n = sq->GetNumberOfItems();
+          for( SequenceOfItems::SizeType i = 1; i <= n; i++) // item starts at 1, not 0
             {
             Item &item = sq->GetItem( i );
             DataSet &nested = item.GetNestedDataSet();
@@ -414,7 +414,7 @@ bool Anonymizer::RemovePrivateTags()
  * In order to implement the dummy 'memory' we use a static std::map
  * this works great but we cannot be thread safe.
  * In order to be thread safe, we would need to externalize this map generation
- * maybe using a gdcm::Scanner do the operation once (Scanner is doing) the merging
+ * maybe using a Scanner do the operation once (Scanner is doing) the merging
  * automatically...
  * this is left as an exercise for the reader :)
  */
@@ -456,8 +456,8 @@ bool Anonymizer::CheckIfSequenceContainsAttributeToAnonymize(File const &file, S
   if( found ) return true;
 
   // now look into sub-sequence:
-  gdcm::SequenceOfItems::SizeType n = sqi->GetNumberOfItems();
-  for( gdcm::SequenceOfItems::SizeType i = 1; i <= n; i++) // item starts at 1, not 0
+  SequenceOfItems::SizeType n = sqi->GetNumberOfItems();
+  for( SequenceOfItems::SizeType i = 1; i <= n; i++) // item starts at 1, not 0
     {
     Item &item = sqi->GetItem( i );
     DataSet &nested = item.GetNestedDataSet();
@@ -850,7 +850,7 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
     if ( IsVRUI( tag ) )
       {
       std::string UIDToAnonymize = "";
-      gdcm::UIDGenerator uid;
+      UIDGenerator uid;
 
       if( !copy.IsEmpty() )
         {
@@ -957,8 +957,8 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
       assert( sqi->IsUndefinedLength() );
       //de.GetVL().SetToUndefined();
       //sqi->SetLengthToUndefined();
-      gdcm::SequenceOfItems::SizeType n = sqi->GetNumberOfItems();
-      for( gdcm::SequenceOfItems::SizeType i = 1; i <= n; ++i )
+      SequenceOfItems::SizeType n = sqi->GetNumberOfItems();
+      for( SequenceOfItems::SizeType i = 1; i <= n; ++i )
         {
         Item &item = sqi->GetItem( i );
         DataSet &nested = item.GetNestedDataSet();
@@ -1104,7 +1104,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   // of the encrypted one ?
   if( !nds2.FindDataElement( Tag(0x8,0x18) ) )
     {
-    gdcm::MediaStorage ms;
+    MediaStorage ms;
     ms.SetFromFile( *F );
     if( ms != MediaStorage::MediaStorageDirectoryStorage )
       {
