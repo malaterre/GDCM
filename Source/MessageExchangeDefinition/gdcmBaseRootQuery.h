@@ -73,7 +73,6 @@ protected:
   QuerySeries mSeries;
   QueryImage mImage;
 
-  DataSet mDataSet;
   friend class QueryFactory;
   BaseRootQuery();
 

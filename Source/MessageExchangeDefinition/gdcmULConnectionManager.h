@@ -68,7 +68,7 @@ namespace gdcm {
 
     public:
       ULConnectionManager();
-      ~ULConnectionManager();
+      virtual ~ULConnectionManager();
 
       // NOTE: (MM) The following two functions are difficults to use, therefore marking
       // them as internal for now.
