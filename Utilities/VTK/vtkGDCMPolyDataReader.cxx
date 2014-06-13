@@ -76,13 +76,13 @@ void vtkGDCMPolyDataReader::FillMedicalImageInformation(const gdcm::Reader &read
   this->MedicalImageProperties->SetPatientSex( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0040), ds).c_str() );
   // For ex: DICOM (0010,0030) = 19680427
   this->MedicalImageProperties->SetPatientBirthDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0010,0x0030), ds).c_str() );
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#if VTK_MAJOR_VERSION >= 6 || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0020) = 20030617
   this->MedicalImageProperties->SetStudyDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0020), ds).c_str() );
 #endif
   // For ex: DICOM (0008,0022) = 20030617
   this->MedicalImageProperties->SetAcquisitionDate( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0022), ds).c_str() );
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#if VTK_MAJOR_VERSION >= 6 || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
   // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
   this->MedicalImageProperties->SetStudyTime( gdcm::DirectoryHelper::GetStringValueFromTag( gdcm::Tag(0x0008,0x0030), ds).c_str() );
 #endif

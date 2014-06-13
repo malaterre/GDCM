@@ -879,14 +879,14 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     SetStringValueFromTag( this->MedicalImageProperties->GetPatientSex(), gdcm::Tag(0x0010,0x0040), ano);
     // For ex: DICOM (0010,0030) = 19680427
     SetStringValueFromTag( this->MedicalImageProperties->GetPatientBirthDate(), gdcm::Tag(0x0010,0x0030), ano);
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#if VTK_MAJOR_VERSION >= 6 || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
     // For ex: DICOM (0008,0020) = 20030617
     if( vtkMedicalImageProperties::GetDateAsFields( this->MedicalImageProperties->GetStudyDate(), year, month, day ) )
       SetStringValueFromTag( this->MedicalImageProperties->GetStudyDate(), gdcm::Tag(0x0008,0x0020), ano);
 #endif
     // For ex: DICOM (0008,0022) = 20030617
     SetStringValueFromTag( this->MedicalImageProperties->GetAcquisitionDate(), gdcm::Tag(0x0008,0x0022), ano);
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#if VTK_MAJOR_VERSION >= 6 || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
     // For ex: DICOM (0008,0030) = 162552.0705 or 230012, or 0012
 #if 0
     int hour, minute, second;
@@ -985,7 +985,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
         ds.Insert( de );
         }
       }
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
+#if VTK_MAJOR_VERSION >= 6 || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 0 )
     // User defined value
     // Remap any user defined value from the DICOM name to the DICOM tag
     unsigned int nvalues = this->MedicalImageProperties->GetNumberOfUserDefinedValues();
@@ -1130,7 +1130,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     {
     iop[i+3] = dircos->GetElement(i,1);
     }
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 2 )
+#if VTK_MAJOR_VERSION >= 6 || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 2 )
    const double *iop_mip = this->MedicalImageProperties->GetDirectionCosine();
    if( iop[0] != iop_mip[0]
     || iop[1] != iop_mip[1]
