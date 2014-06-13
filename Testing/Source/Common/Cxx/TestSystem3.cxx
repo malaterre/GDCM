@@ -47,12 +47,14 @@ int TestSystem3(int, char *[])
 {
   std::vector< std::string > v;
   char *string = strdup( isostr );
+  if(!string) return 1;
+  char *copy = string;
   while ((token = gdcm::System::StrSep(&string, delim)) != NULL)
     {
     //printf("token=%s\n", token);
     v.push_back( token );
     }
-  free( string );
+  free( copy );
   if( v.size() != 3 ) return 1;
   if( v[0] != "" ) return 1;
   if( v[1] != "ISO 2022 IR 13" ) return 1;
