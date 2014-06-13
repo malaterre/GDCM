@@ -5,7 +5,7 @@
 \section synopsis SYNOPSIS
 
 \verbatim
-gdcmdiff [options] file-in bitmap-out
+gdcm2pnm [options] file-in bitmap-out
 \endverbatim
 
 \section description DESCRIPTION
