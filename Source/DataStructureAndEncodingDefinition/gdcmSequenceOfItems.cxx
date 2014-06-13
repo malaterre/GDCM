@@ -25,6 +25,22 @@ void SequenceOfItems::AddItem(Item const &item)
     }
 }
 
+void SequenceOfItems::Clear()
+{
+  Items.clear();
+  assert( SequenceLengthField.IsUndefined() );
+}
+
+bool SequenceOfItems::RemoveItemByIndex( const SizeType position )
+{
+  if( position < 1 || position > Items.size() )
+    {
+    return false;
+    }
+  Items.erase (Items.begin() + position);
+  return true;
+}
+
 Item &SequenceOfItems::GetItem(SizeType position)
 {
   if( position < 1 || position > Items.size() )
