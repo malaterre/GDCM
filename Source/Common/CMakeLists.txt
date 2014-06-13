@@ -20,7 +20,14 @@ mark_as_advanced(
 
 CHECK_INCLUDE_FILE_CONCAT("sys/time.h"     GDCM_HAVE_SYS_TIME_H)
 CHECK_INCLUDE_FILE_CONCAT("winsock.h"       GDCM_HAVE_WINSOCK_H)
-CHECK_INCLUDE_FILE_CONCAT("byteswap.h"       GDCM_HAVE_BYTESWAP_H)
+CHECK_INCLUDE_FILE_CONCAT("byteswap.h"       GDCM_HAVE_BYTESWAP_FILE_H)
+# see bug #324
+if(GDCM_HAVE_BYTESWAP_FILE_H)
+  include(CheckCXXSourceCompiles)
+  CHECK_CXX_SOURCE_COMPILES(
+    "\#include <byteswap.h>\nint main() { return bswap_32( 42 ); }"
+    GDCM_HAVE_BYTESWAP_H)
+endif()
 CHECK_INCLUDE_FILE("rpc.h"       GDCM_HAVE_RPC_H)
 CHECK_INCLUDE_FILE("langinfo.h"       GDCM_HAVE_LANGINFO_H)
 
