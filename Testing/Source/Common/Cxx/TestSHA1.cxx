@@ -225,6 +225,8 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "94cadb9e79e0d04f3c212cf6fa069b3cf3f09a76"  , "NM-PAL-16-PixRep1.dcm" },
 { "156463350047cada3ec091396695d3f3ef660c9a"  , "MEDILABInvalidCP246_EVRLESQasUN.dcm" },
 { "9775e8206011b9d5cedfcba16946060cb047f826"  , "JPEGInvalidSecondFrag.dcm" },
+{ "d17a34f8ae066048442ab5b110d43c412472ea7e"  , "SC16BitsAllocated_8BitsStoredJ2K.dcm" },
+{ "71517fce6c32625f1051b72085cfceeee58bd164"  , "SC16BitsAllocated_8BitsStoredJPEG.dcm" },
 
 { NULL, NULL}
 };
