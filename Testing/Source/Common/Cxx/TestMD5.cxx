@@ -226,6 +226,8 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "58ab110be40303952e05d50e64823192"  , "NM-PAL-16-PixRep1.dcm" },
 { "deb7e4ee592efca5d475aaa6fab06459"  , "MEDILABInvalidCP246_EVRLESQasUN.dcm" },
 { "52f727de4f831ff2bae850fdd8b1413a"  , "JPEGInvalidSecondFrag.dcm" },
+{ "027faefc8031768dad1afc100f7aee27"  , "SC16BitsAllocated_8BitsStoredJ2K.dcm" },
+{ "f7c4fbb93b0347101e21e36f223b4d46"  , "SC16BitsAllocated_8BitsStoredJPEG.dcm" },
 
 { NULL, NULL}
 };
