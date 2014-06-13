@@ -207,7 +207,7 @@ bool FileChangeTransferSyntax::InitializeCopy()
       reader.SetStream( is );
       if( !reader.ReadInformation() )
         {
-        gdcmDebugMacro("ImageRegionReader::ReadInformation failed" );
+        gdcmDebugMacro( "ImageRegionReader::ReadInformation failed" );
         return false;
         }
       is.clear(); // important
@@ -227,12 +227,14 @@ bool FileChangeTransferSyntax::InitializeCopy()
         gdcmDebugMacro( "Dont know how to handle encapsulated TS: " << ts );
         return false;
         }
-      if(ts == TransferSyntax::ImplicitVRBigEndianPrivateGE || ts == TransferSyntax::ExplicitVRBigEndian )
+      if( ts == TransferSyntax::ImplicitVRBigEndianPrivateGE
+       || ts == TransferSyntax::ExplicitVRBigEndian )
         {
         gdcmDebugMacro( "Dont know how to handle TS: " << ts );
         return false;
         }
-      Internals->Needbyteswap = (ts == TransferSyntax::ImplicitVRBigEndianPrivateGE || ts == TransferSyntax::ExplicitVRBigEndian );
+      Internals->Needbyteswap = (ts == TransferSyntax::ImplicitVRBigEndianPrivateGE
+        || ts == TransferSyntax::ExplicitVRBigEndian );
       Internals->Dims = ImageHelper::GetDimensionsValue(file);
       Internals->PF = ImageHelper::GetPixelFormatValue(file);
       Internals->PI = ImageHelper::GetPhotometricInterpretationValue(file);

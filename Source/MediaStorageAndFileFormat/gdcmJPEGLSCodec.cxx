@@ -121,7 +121,6 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     ts = TransferSyntax::JPEGLSNearLossless;
     }
 
-
   return true;
 #endif
 }
