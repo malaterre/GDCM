@@ -236,6 +236,8 @@ static const char * const gdcmMediaStorageDataFiles[][2] = {
 { "JPEGInvalidSecondFrag.dcm", "1.2.840.10008.5.1.4.1.1.2" },
 { "ELSCINT1_PMSCT_RLE1_priv.dcm", "1.2.840.10008.5.1.4.1.1.2" },
 { "unreadable.dcm", "1.2.840.10008.5.1.4.1.1.2" },
+{ "SC16BitsAllocated_8BitsStoredJPEG.dcm" , "1.2.840.10008.5.1.4.1.1.7" },
+{ "SC16BitsAllocated_8BitsStoredJ2K.dcm" , "1.2.840.10008.5.1.4.1.1.7" },
 
 /* Stopping condition */
 { 0 ,0 }
