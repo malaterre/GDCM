@@ -150,7 +150,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap 
   // that can be both lossy and lossless:
   if( ts.IsLossy() )
     {
-    assert( !ts.IsLossless() );
+    //assert( !ts.IsLossless() ); // I cannot do since since Try* functions are called with all TS, I could be receiving a JPEGLS TS...
     jpgcodec.SetLossless( false );
     }
 

@@ -68,13 +68,19 @@ public:
 
   template <typename TDE>
   VL ComputeLength() const;
-  void Clear() {}
+
+  /// remove all items within the sequence
+  void Clear();
 
   /// \brief Appends an Item to the already added ones
   void AddItem(Item const &item);
     
   /// \brief Appends an Item to the already added ones
   Item & AddNewUndefinedLengthItem();
+
+  /// Remove an Item as specified by its index, if index > size, false is returned
+  /// Index starts at 1 not 0
+  bool RemoveItemByIndex( const SizeType index );
 
   SizeType GetNumberOfItems() const {  return Items.size(); }
   void SetNumberOfItems(SizeType n) {  Items.resize(n); }

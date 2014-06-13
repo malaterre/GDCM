@@ -1148,7 +1148,7 @@ int vtkGDCMImageReader2::RequestDataCompat()
   int outExt[6];
   output->GetExtent(outExt);
   // The dext is the whole extent (includes not-loaded data)
-  int *dext = this->GetDataExtent();
+  int *dext = this->GetDataExtent(); (void)dext;
 
   char * pointer = static_cast<char*>(output->GetScalarPointerForExtent(outExt));
   if( this->FileName )

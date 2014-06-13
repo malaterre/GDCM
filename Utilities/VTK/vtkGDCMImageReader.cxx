@@ -794,7 +794,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
 
     for(int i=0;i<6;++i)
       this->ImageOrientationPatient[i] = dircos[i];
-#if ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 2 )
+#if VTK_MAJOR_VERSION >= 6 || ( VTK_MAJOR_VERSION == 5 && VTK_MINOR_VERSION > 2 )
     this->MedicalImageProperties->SetDirectionCosine( this->ImageOrientationPatient );
 #endif
     }

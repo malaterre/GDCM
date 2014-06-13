@@ -36,7 +36,7 @@ else()
   set(CMAKE_CSHARP_INTERPRETER ${MONO_EXECUTABLE})
 endif()
 
-set(DESIRED_CSHARP_COMPILER_VERSION 2 CACHE STRING "Pick a version for C# compiler to use: 1, 2 or 3")
+set(DESIRED_CSHARP_COMPILER_VERSION 2 CACHE STRING "Pick a version for C# compiler to use: 1, 2, 3 or 4")
 mark_as_advanced(DESIRED_CSHARP_COMPILER_VERSION)
 
 # default to v1:

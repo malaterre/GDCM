@@ -121,6 +121,8 @@ public:
   static char *StrTokR(char *ptr, const char *sep, char **end);
 
   /// strsep
+  /// param stringp is passed by pointer, it may be modified, you'll need to
+  /// make a copy, in case you want to free the memory pointed at
   static char *StrSep(char **stringp, const char *delim);
 
   /// return `locale charmap`
