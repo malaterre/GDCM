@@ -1606,8 +1606,9 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
 
   if( ms == MediaStorage::SecondaryCaptureImageStorage )
     {
-    Tag ipp(0x0020,0x0032);
-    ds.Remove( ipp );
+    // https://sourceforge.net/p/gdcm/bugs/322/
+    // default behavior is simply to pass
+    return;
     }
 
   // FIXME Hardcoded
@@ -1682,8 +1683,8 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
 
   if( ms == MediaStorage::SecondaryCaptureImageStorage )
     {
-    Tag iop(0x0020,0x0037);
-    ds.Remove( iop );
+    // https://sourceforge.net/p/gdcm/bugs/322/
+    // default behavior is simply to pass
     return;
     }
 
