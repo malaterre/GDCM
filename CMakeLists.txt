@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 2.8.9)
+if(POLICY CMP0022)
+  cmake_policy(SET CMP0022 OLD)
+endif()
 if(POLICY CMP0025)
   cmake_policy(SET CMP0025 NEW)
 endif()
@@ -141,6 +144,7 @@ if(GDCM_STANDALONE)
   find_path(GDCM_DATA_ROOT test.acr
     ${GDCM_SOURCE_DIR}/Testing/Data
     $ENV{GDCM_DATA_ROOT}
+    NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
     )
   mark_as_advanced(GDCM_DATA_ROOT)
 # You can define a path where you extra the famous D. Clunie spacing dataset
@@ -161,6 +165,7 @@ if(GDCM_STANDALONE)
     ${GDCM_SOURCE_DIR}/../gdcmDataExtra
     $ENV{GDCM_DATA_EXTRA_ROOT}
     $ENV{PUB_DICT_PATH}/../../gdcmDataExtra
+    NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH
     )
   mark_as_advanced(GDCM_DATA_EXTRA_ROOT)
 endif()

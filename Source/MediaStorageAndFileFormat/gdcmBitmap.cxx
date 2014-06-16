@@ -738,6 +738,13 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
             }
           }
         }
+      else
+        {
+        // SC16BitsAllocated_8BitsStoredJ2K.dcm
+        gdcmWarningMacro( "Bits Allocated are different. This is pretty bad using info from codestream" );
+        Bitmap *i = (Bitmap*)this;
+        i->SetPixelFormat( codec.GetPixelFormat() );
+        }
 #endif
 
       return true;

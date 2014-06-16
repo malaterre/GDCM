@@ -2,7 +2,7 @@
 # Usage:
 #
 #  $ sudo apt-get install mingw-w64
-#  $ cmake ../gdcm -DCMAKE_TOOLCHAIN_FILE=../gdcm/CMake/Toolchain-mingw64.cmake
+#  $ cmake -DCMAKE_TOOLCHAIN_FILE=../gdcm/CMake/Toolchain-mingw64.cmake ../gdcm
 #
 #
 #  Copyright (c) 2006-2011 Mathieu Malaterre <mathieu.malaterre@gmail.com>

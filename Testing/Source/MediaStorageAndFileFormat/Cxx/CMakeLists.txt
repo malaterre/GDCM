@@ -170,15 +170,12 @@ create_test_sourcelist(MSFFTests gdcmMSFFTests.cxx ${MSFF_TEST_SRCS}
 add_executable(gdcmMSFFTests ${MSFFTests})
 target_link_libraries(gdcmMSFFTests gdcmMSFF)
 if(GDCM_HAVE_PTHREAD_H)
-target_link_libraries(gdcmMSFFTests pthread)
+  target_link_libraries(gdcmMSFFTests pthread)
 endif()
-
-#Don't understand why I need that ??
-set(GDCM_MSFF_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMSFFTests")
 
 # Loop over files and create executables
 foreach(name ${MSFF_TEST_SRCS})
-  add_test(NAME ${name} COMMAND ${GDCM_MSFF_TESTS} ${name})
+  add_test(NAME ${name} COMMAND gdcmMSFFTests ${name})
 endforeach()
 if(GDCM_DATA_ROOT)
   set_tests_properties(TestDICOMDIRGenerator2 PROPERTIES WILL_FAIL ON)

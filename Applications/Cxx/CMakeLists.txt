@@ -170,7 +170,7 @@ endif()
 #if(BUILD_TESTING)
 #  if(GDCM_DATA_ROOT)
 #    file(MAKE_DIRECTORY ${GDCM_TEMP_DIRECTORY}/gdcmanon-gdcmdata)
-#    add_test(gdcmanon-gdcmdata ${EXECUTABLE_OUTPUT_PATH}/gdcmanon
+#    add_test(NAME gdcmanon-gdcmdata COMMAND gdcmanon
 #      --continue  # skip LIBIDO-16-ACR_NEMA-Volume.dcm
 #      --certificate ${GDCM_SOURCE_DIR}/Testing/Source/Data/certificate.pem
 #      ${GDCM_DATA_ROOT}
@@ -191,18 +191,18 @@ if(BUILD_TESTING)
   # Port: 5678
   # AE Title: CONQUESTSRV1
   #since these servers have no guaranteed uptime, these tests should be changed to some other, known-to-be-up server
-  #add_test(gdcmscu-echo-CONQUEST ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --echo --call CONQUESTSRV1 joe.bwh.harvard.edu 5678)
-  add_test(NAME gdcmscu-echo-dicomserver COMMAND ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --echo www.dicomserver.co.uk 11112)
+  #add_test(NAME gdcmscu-echo-CONQUEST COMMAND gdcmscu --echo --call CONQUESTSRV1 joe.bwh.harvard.edu 5678)
+  add_test(NAME gdcmscu-echo-dicomserver COMMAND gdcmscu --echo www.dicomserver.co.uk 11112)
   if(GDCM_DATA_ROOT)
     # CR-MONO1-10-chest.dcm gets rejected by www.dicomserver.co.uk:
     # Tag 0x0,0x902 reported as Incorrect VM (1) - Minimum value is 2 : 'Array of N Elements' (error 42752)
     # CR-MONO1-10-chest.dcm gets rejected by mi2b2.slicer.org
     # Tag 0x0,0x902 reported as Acceptance of objects without Patient ID is disabled (error 43264)
-    #add_test(gdcmscu-store-CONQUEST ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --store --call CONQUESTSRV1 joe.bwh.harvard.edu 11112 ${GDCM_DATA_ROOT}/SIEMENS_MAGNETOM-12-MONO2-FileSeq1.dcm)
-    add_test(NAME gdcmscu-store-dicomserver COMMAND ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --store www.dicomserver.co.uk 11112 ${GDCM_DATA_ROOT}/SIEMENS_MAGNETOM-12-MONO2-FileSeq1.dcm)
+    #add_test(NAME gdcmscu-store-CONQUEST COMMAND gdcmscu --store --call CONQUESTSRV1 joe.bwh.harvard.edu 11112 ${GDCM_DATA_ROOT}/SIEMENS_MAGNETOM-12-MONO2-FileSeq1.dcm)
+    add_test(NAME gdcmscu-store-dicomserver COMMAND gdcmscu --store www.dicomserver.co.uk 11112 ${GDCM_DATA_ROOT}/SIEMENS_MAGNETOM-12-MONO2-FileSeq1.dcm)
   endif()
-  #add_test(gdcmscu-find-CONQUEST ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --find --patient --call CONQUESTSRV1 joe.bwh.harvard.edu 11112 --patientroot -k 10,10=X*)
-  add_test(NAME gdcmscu-find-dicomserver COMMAND ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --find --patient www.dicomserver.co.uk 11112 --patientroot -k 10,20=*)
+  #add_test(NAME gdcmscu-find-CONQUEST COMMAND gdcmscu --find --patient --call CONQUESTSRV1 joe.bwh.harvard.edu 11112 --patientroot -k 10,10=X*)
+  add_test(NAME gdcmscu-find-dicomserver COMMAND gdcmscu --find --patient www.dicomserver.co.uk 11112 --patientroot -k 10,20=*)
 
   if(GDCM_DICOM_SERVER_AETITLE)
   if(GDCM_DATA_ROOT)
@@ -212,11 +212,11 @@ if(BUILD_TESTING)
       012345.002.050.dcm    # JPEG Lossless, Non-Hierarchical, First-Order Prediction
       )
     foreach(cstorefile ${CSTORE_DATA_FILES})
-    add_test(NAME gdcmscu-echo-${cstorefile} COMMAND ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --echo  --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT})
-    add_test(NAME gdcmscu-store-${cstorefile} COMMAND ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --store --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} ${GDCM_DATA_ROOT}/${cstorefile})
-    add_test(NAME gdcmscu-find-${cstorefile} COMMAND ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --find --patient --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} --patientroot -k 10,10=A* -k 10,20)
-    add_test(NAME gdcmscu-move1-${cstorefile} COMMAND ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --move  --patient --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} -o ${CMAKE_CURRENT_BINARY_DIR} --patientroot -k 10,10=Anonymized --port-scp ${GDCM_DICOM_CLIENT_PORT})
-    add_test(NAME gdcmscu-move2-${cstorefile} COMMAND ${EXECUTABLE_OUTPUT_PATH}/gdcmscu --move  --patient --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} -o ${CMAKE_CURRENT_BINARY_DIR} --patientroot -k 10,10=X* --port-scp ${GDCM_DICOM_CLIENT_PORT})
+    add_test(NAME gdcmscu-echo-${cstorefile} COMMAND gdcmscu --echo  --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT})
+    add_test(NAME gdcmscu-store-${cstorefile} COMMAND gdcmscu --store --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} ${GDCM_DATA_ROOT}/${cstorefile})
+    add_test(NAME gdcmscu-find-${cstorefile} COMMAND gdcmscu --find --patient --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} --patientroot -k 10,10=A* -k 10,20)
+    add_test(NAME gdcmscu-move1-${cstorefile} COMMAND gdcmscu --move  --patient --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} -o ${CMAKE_CURRENT_BINARY_DIR} --patientroot -k 10,10=Anonymized --port-scp ${GDCM_DICOM_CLIENT_PORT})
+    add_test(NAME gdcmscu-move2-${cstorefile} COMMAND gdcmscu --move  --patient --aetitle ${GDCM_DICOM_CLIENT_AETITLE} --call ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PEER} ${GDCM_DICOM_SERVER_PORT} -o ${CMAKE_CURRENT_BINARY_DIR} --patientroot -k 10,10=X* --port-scp ${GDCM_DICOM_CLIENT_PORT})
     endforeach()
   endif()
   endif()
