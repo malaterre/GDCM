@@ -38,9 +38,6 @@ create_test_sourcelist(MEXDTests gdcmMEXDTests.cxx ${MEXD_TEST_SRCS}
 add_executable(gdcmMEXDTests ${MEXDTests})
 target_link_libraries(gdcmMEXDTests gdcmMEXD gdcmMSFF gdcmDSED gdcmDICT gdcmCommon)
 
-#Don't understand why I need that ??
-set(GDCM_MEXD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmMEXDTests")
-
 # Loop over files and create executables
 foreach(name ${MEXD_TEST_SRCS})
   if(${name} STREQUAL "TestSCUFunctions"
@@ -49,12 +46,12 @@ foreach(name ${MEXD_TEST_SRCS})
       OR ${name} STREQUAL "TestServiceClassUser3"
       )
     if(GDCM_DICOM_SERVER_AETITLE)
-      add_test(NAME ${name} COMMAND ${GDCM_MEXD_TESTS} ${name} ${GDCM_DICOM_CLIENT_AETITLE}
+      add_test(NAME ${name} COMMAND gdcmMEXDTests ${name} ${GDCM_DICOM_CLIENT_AETITLE}
         ${GDCM_DICOM_SERVER_AETITLE} ${GDCM_DICOM_SERVER_PORT}
         ${GDCM_DICOM_CLIENT_PORT} ${GDCM_DICOM_SERVER_PEER})
     endif()
   else()
-    add_test(NAME ${name} COMMAND ${GDCM_MEXD_TESTS} ${name})
+    add_test(NAME ${name} COMMAND gdcmMEXDTests ${name})
   endif()
 endforeach()
 

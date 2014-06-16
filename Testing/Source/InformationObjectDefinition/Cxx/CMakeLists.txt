@@ -39,10 +39,7 @@ create_test_sourcelist(IODTests gdcmIODTests.cxx ${IOD_TEST_SRCS}
 add_executable(gdcmIODTests ${IODTests})
 target_link_libraries(gdcmIODTests gdcmIOD gdcmMSFF)
 
-#Don't understand why I need that ??
-set(GDCM_IOD_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmIODTests")
-
 # Loop over files and create executables
 foreach(name ${IOD_TEST_SRCS})
-  add_test(NAME ${name} COMMAND ${GDCM_IOD_TESTS} ${name})
+  add_test(NAME ${name} COMMAND gdcmIODTests ${name})
 endforeach()

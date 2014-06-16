@@ -115,12 +115,9 @@ if(CMAKE_COMPILER_IS_GNUCXX AND MINGW)
   set_target_properties( gdcmDSEDTests PROPERTIES LINK_FLAGS "-Wl,--allow-multiple-definition")
 endif()
 
-#Don't understand why I need that ??
-set(GDCM_DSED_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmDSEDTests")
-
 # Loop over files and create executables
 foreach(name ${DSED_TEST_SRCS})
-  add_test(NAME ${name} COMMAND ${GDCM_DSED_TESTS} ${name})
+  add_test(NAME ${name} COMMAND gdcmDSEDTests ${name})
 endforeach()
 
 # FIXME
