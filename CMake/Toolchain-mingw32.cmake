@@ -1,7 +1,11 @@
 # http://www.cmake.org/Wiki/CmakeMingw
 # Usage:
 #
-#  $ cmake ../gdcm -DCMAKE_TOOLCHAIN_FILE=../gdcm/CMake/Toolchain-mingw32.cmake
+# mingw32 does not seems to be updated in Debian, switch to mingw-w64 target
+# i686 instead:
+#
+#  $ sudo apt-get install g++-mingw-w64-i686
+#  $ cmake -DCMAKE_TOOLCHAIN_FILE=../gdcm/CMake/Toolchain-mingw32.cmake ../gdcm
 #
 #
 #  Copyright (c) 2006-2011 Mathieu Malaterre <mathieu.malaterre@gmail.com>
@@ -15,12 +19,12 @@
 set(CMAKE_SYSTEM_NAME Windows)
 
 # which compilers to use for C and C++
-set(CMAKE_C_COMPILER i586-mingw32msvc-gcc)
-set(CMAKE_CXX_COMPILER i586-mingw32msvc-g++)
-set(CMAKE_RC_COMPILER i586-mingw32msvc-windres)
+set(CMAKE_C_COMPILER i686-w64-mingw32-gcc)
+set(CMAKE_CXX_COMPILER i686-w64-mingw32-g++)
+set(CMAKE_RC_COMPILER i686-w64-mingw32-windres)
 
 # here is the target environment located
-set(CMAKE_FIND_ROOT_PATH  /usr/i586-mingw32msvc)
+set(CMAKE_FIND_ROOT_PATH  /usr/i686-w64-mingw32)
 
 # adjust the default behaviour of the FIND_XXX() commands:
 # search headers and libraries in the target environment, search
