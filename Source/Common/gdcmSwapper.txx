@@ -49,6 +49,29 @@
 #define bswap_32(X) swap32(X)
 #define bswap_64(X) swap64(X)
 
+#elif defined(__MINGW32__)
+
+// https://www.gnu.org/software/gnulib/manual/html_node/bswap_005f16.html
+// -> This function is missing on some platforms: Mac OS X 10.5, FreeBSD 6.0,
+// NetBSD 5.0, OpenBSD 3.8, Minix 3.1.8, AIX 5.1, HP-UX 11, IRIX 6.5, OSF/1
+// 5.1, Solaris 11 2011-11, Cygwin, mingw, MSVC 9, Interix 3.5, BeOS.
+//#pragma message ("Fallback on defaults functions for bswap_*")
+
+# define bswap_16(x) ((((x) & 0x00FF) << 8) | \
+                      (((x) & 0xFF00) >> 8))
+# define bswap_32(x) ((((x) & 0x000000FF) << 24) | \
+                      (((x) & 0x0000FF00) << 8) | \
+                      (((x) & 0x00FF0000) << 8) | \
+                      (((x) & 0xFF000000) >> 24))
+# define bswap_64(x) ((((x) & 0x00000000000000FFULL) << 56) | \
+                      (((x) & 0x000000000000FF00ULL) << 40) | \
+                      (((x) & 0x0000000000FF0000ULL) << 24) | \
+                      (((x) & 0x00000000FF000000ULL) << 8) | \
+                      (((x) & 0x000000FF00000000ULL) >> 8) | \
+                      (((x) & 0x0000FF0000000000ULL) >> 24) | \
+                      (((x) & 0x00FF000000000000ULL) >> 40) | \
+                      (((x) & 0xFF00000000000000ULL) >> 56))
+
 #endif
 
 #include "gdcmTag.h"
