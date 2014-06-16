@@ -26,6 +26,8 @@ struct StreamOffset
 #endif
 
 static const StreamOffset gdcmSelectedTagsOffsetDataFiles[] = {
+{ "SC16BitsAllocated_8BitsStoredJ2K.dcm", 752},
+{ "SC16BitsAllocated_8BitsStoredJPEG.dcm", 946},
 { "CT-MONO2-12-lomb-an2.acr",1222 },
 { "LIBIDO-8-ACR_NEMA-Lena_128_128.acr",174 },
 { "MR-MONO2-12-an2.acr",1858 },
