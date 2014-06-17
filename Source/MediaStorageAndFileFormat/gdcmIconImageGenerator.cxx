@@ -104,7 +104,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus)?oldid=12754
 */
 
-  const unsigned int NUM_DIMENSIONS = 3;
+  const int NUM_DIMENSIONS = 3;
 
   struct Point
     {
@@ -115,12 +115,12 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
     {
     Point minCorner, maxCorner;
     Point* points;
-    size_t pointsLength;
+    int pointsLength;
   public:
-    Block(Point* points, size_t pointsLength);
+    Block(Point* points, int pointsLength);
     Point * getPoints();
-    size_t numPoints() const;
-    size_t longestSideIndex() const;
+    int numPoints() const;
+    int longestSideIndex() const;
     int longestSideLength() const;
     bool operator<(const Block& rhs) const;
     void shrink();
@@ -138,11 +138,12 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
 
   //std::list<Point> medianCut(Point* image, int numPoints, unsigned int desiredSize);
 
-  Block::Block(Point* pts, size_t ptslen)
+  Block::Block(Point* pts, int ptslen)
     {
+    assert( ptslen > 0 );
     this->points = pts;
     this->pointsLength = ptslen;
-    for(size_t i=0; i < NUM_DIMENSIONS; i++)
+    for(int i=0; i < NUM_DIMENSIONS; i++)
       {
       minCorner.x[i] = std::numeric_limits<unsigned char>::min();
       maxCorner.x[i] = std::numeric_limits<unsigned char>::max();
@@ -154,16 +155,16 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
     return points;
     }
 
-  size_t Block::numPoints() const
+  int Block::numPoints() const
     {
     return pointsLength;
     }
 
-  size_t Block::longestSideIndex() const
+  int Block::longestSideIndex() const
     {
     int m = maxCorner.x[0] - minCorner.x[0];
-    size_t maxIndex = 0;
-    for(size_t i=1; i < NUM_DIMENSIONS; i++)
+    int maxIndex = 0;
+    for(int i=1; i < NUM_DIMENSIONS; i++)
       {
       int diff = maxCorner.x[i] - minCorner.x[i];
       if (diff > m)
@@ -188,7 +189,7 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
 
   void Block::shrink()
     {
-    size_t i,j;
+    int i,j;
     for(j=0; j<NUM_DIMENSIONS; j++)
       {
       minCorner.x[j] = maxCorner.x[j] = points[0].x[j];
@@ -206,15 +207,25 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
   std::list<Point> medianCut(DataElement const &PixelData, int numPoints, unsigned int desiredSize,
     std::vector<unsigned char> & outputimage )
     {
-    //Point* points = (Point*)malloc(sizeof(Point) * numPoints);
+    assert( numPoints > 0 );
+    //Point* Points = (Point*)malloc(sizeof(Point) * numPoints);
     Point* Points = new Point[numPoints];
+    assert( Points );
     const ByteValue *bv = PixelData.GetByteValue();
-    const char *inbuffer = bv->GetPointer();
+    assert( bv );
+    const unsigned char *inbuffer = (unsigned char*)bv->GetPointer();
+    assert( inbuffer );
     size_t bvlen = bv->GetLength(); (void)bvlen;
     assert( bvlen == (size_t) numPoints * 3 ); // only 8bits RGB please
     for(int i = 0; i < numPoints; i++)
       {
+#if 0
       memcpy(&Points[i], inbuffer + 3 * i, 3);
+#else
+      Points[i].x[0] = inbuffer[ 3 * i + 0 ];
+      Points[i].x[1] = inbuffer[ 3 * i + 1 ];
+      Points[i].x[2] = inbuffer[ 3 * i + 2 ];
+#endif
       }
     Point* image = Points;
 
@@ -224,7 +235,7 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
     initialBlock.shrink();
 
     blockQueue.push(initialBlock);
-    while (blockQueue.size() < desiredSize && blockQueue.top().numPoints() > 1)
+    while (blockQueue.size() < desiredSize /*&& blockQueue.top().numPoints() > 1*/ )
       {
       Block longestBlock = blockQueue.top();
 
@@ -259,19 +270,19 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
       blockQueue.pop();
       Point * points = block.getPoints();
 
-      int sum[NUM_DIMENSIONS] = {0};
-      for(size_t i=0; i < block.numPoints(); i++)
+      int sum[NUM_DIMENSIONS] = {0,0,0};
+      for(int i=0; i < block.numPoints(); i++)
         {
-        for(size_t j=0; j < NUM_DIMENSIONS; j++)
+        for(int j=0; j < NUM_DIMENSIONS; j++)
           {
           sum[j] += points[i].x[j];
           }
         }
 
       Point averagePoint;
-      for(size_t j=0; j < NUM_DIMENSIONS; j++)
+      for(int j=0; j < NUM_DIMENSIONS; j++)
         {
-        averagePoint.x[j] = (unsigned char)(sum[j] / block.numPoints());
+        averagePoint.x[j] = sum[j] / block.numPoints();
         }
 
       result.push_back(averagePoint);
@@ -282,7 +293,7 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
 
       for(int i = 0; i < numPoints; i++)
         {
-        const char *currentcolor = inbuffer + 3 * i;
+        const unsigned char *currentcolor = inbuffer + 3 * i;
         for(size_t j = 0; j < block.numPoints(); j++)
           {
           assert( currentcolor < inbuffer + bvlen );
