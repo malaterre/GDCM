@@ -409,6 +409,8 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 0, "NM-PAL-16-PixRep1.dcm" },
 { 0, "MEDILABInvalidCP246_EVRLESQasUN.dcm" },
 { 0, "JPEGInvalidSecondFrag.dcm" },
+{ 0, "SC16BitsAllocated_8BitsStoredJ2K.dcm" },
+{ 0, "SC16BitsAllocated_8BitsStoredJPEG.dcm" },
 { 0, NULL }
 };
 
