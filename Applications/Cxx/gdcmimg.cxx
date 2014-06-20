@@ -948,6 +948,10 @@ int main (int argc, char *argv[])
         {
         writer.GetPixmap().SetPhotometricInterpretation( refpi );
         }
+      // HACK
+      if( endian && lsb_msb == "LSB" )
+        writer.GetPixmap().SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );
