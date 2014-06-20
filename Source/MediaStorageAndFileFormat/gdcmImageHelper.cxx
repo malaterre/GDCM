@@ -1884,6 +1884,11 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
   if( ms == MediaStorage::RTDoseStorage )
     {
+    if( img.GetIntercept() != 0 )
+      {
+      gdcmErrorMacro( "Cannot have an intercept value for RTDOSE, only Scaling allowed" );
+      return;
+      }
     Attribute<0x3004,0x00e> at2;
     at2.SetValue( img.GetSlope() );
     ds.Replace( at2.GetAsDataElement() );
