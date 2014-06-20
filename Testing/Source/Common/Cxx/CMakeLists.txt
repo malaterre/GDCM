@@ -23,6 +23,7 @@ set(Common_TEST_SRCS
   TestTypes
   TestUnpacker12Bits
   TestBase64
+  TestLog2
   )
 
 if(GDCM_DATA_ROOT)

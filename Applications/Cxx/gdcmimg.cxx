@@ -935,7 +935,7 @@ int main (int argc, char *argv[])
       // Let's handle the case where user really wants to specify the data:
       gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
       if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign ) ) return 1;
-
+      pnm.SetPixelFormat( pf );
       gdcm::PixmapWriter writer;
       if( !Populate( writer, pnm, filenames ) ) return 1;
       // populate will guess pixel format and photometric inter from file, need
