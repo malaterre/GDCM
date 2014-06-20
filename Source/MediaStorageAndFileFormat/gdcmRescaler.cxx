@@ -287,8 +287,17 @@ void Rescaler::InverseRescaleFunctionIntoBestFit(char *out, const TIn *in, size_
 
 bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
 {
+  bool fastpath = true;
+  switch(PF)
+    {
+  case PixelFormat::FLOAT32:
+  case PixelFormat::FLOAT64:
+    fastpath = false;
+    break;
+    }
+
   // fast path:
-  if( Slope == 1 && Intercept == 0 )
+  if( fastpath && (Slope == 1 && Intercept == 0) )
     {
     memcpy(out,in,n);
     return true;
@@ -334,7 +343,8 @@ bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
     break;
     }
 
-  return true;}
+  return true;
+}
 
 bool Rescaler::Rescale(char *out, const char *in, size_t n)
 {
