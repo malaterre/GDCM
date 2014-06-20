@@ -520,6 +520,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   //this->FileDimensionality
   int scalarType = data->GetScalarType();
   gdcm::PixelFormat pixeltype = gdcm::PixelFormat::UNKNOWN;
+  bool forcerescale = false;
   switch( scalarType )
     {
   case VTK_BIT:
@@ -563,6 +564,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     will be doing unsigned short anyway...
     */
     pixeltype = gdcm::PixelFormat::FLOAT32;
+    forcerescale = true;
     break;
   case VTK_DOUBLE:
     if( this->Shift == (int)this->Shift && this->Scale == (int)this->Scale )
@@ -576,6 +578,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
     will be doing unsigned short anyway...
     */
     pixeltype = gdcm::PixelFormat::FLOAT64;
+    forcerescale = true;
     break;
   default:
     vtkErrorMacro( "Do not support this Pixel Type: " << scalarType );
@@ -641,7 +644,10 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 
   // store in a safe place the 'raw' pixeltype from vtk
   gdcm::PixelFormat savepixeltype = pixeltype;
-  if( this->Shift == 0 && this->Scale == 1 )
+  // fast path, when (shift,scale) is (0,1) we do not need no rescale function
+  // at all. Pay attention in some case users really wants to store floating
+  // point values anyway, be nice with them
+  if( !forcerescale && (this->Shift == 0 && this->Scale == 1) )
     {
     //assert( pixeltype == outputpt );
     }
@@ -767,7 +773,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   bool rescaled = false;
   char * copy = NULL;
   // Whenever shift / scale is needed... do it !
-  if( this->Shift != 0 || this->Scale != 1 )
+  if( this->Shift != 0 || this->Scale != 1 || forcerescale )
     {
     assert( this->PlanarConfiguration == 0 );
     // rescale from float to unsigned short
