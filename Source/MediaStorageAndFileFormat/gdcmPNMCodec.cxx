@@ -211,6 +211,17 @@ bool PNMCodec::Read(const char *filename, DataElement &out) const
   return true;
 }
 
+static inline int log2( int n )
+{
+  int bits = 0;
+  while (n > 0)
+    {
+    bits++;
+    n >>= 1;
+    }
+  return bits;
+}
+
 bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 {
   is.seekg( 0, std::ios::end );
@@ -258,7 +269,8 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     std::cerr << "expected: " << m * dims[0] * dims[1] << std::endl;
     return false;
     }
-  PixelFormat pf;
+  PixelFormat pf = GetPixelFormat();
+#if 0
   switch(maxval)
     {
   case 255:
@@ -283,6 +295,30 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
     std::cerr << "Unhandled max val: " << maxval << std::endl;
     return false;
     }
+#else
+  const int nbits = log2( maxval );
+  // handle case where nbits = 0 also:
+  if( nbits > 0 && nbits <= 8 )
+    {
+    pf.SetBitsAllocated( 8 );
+    pf.SetBitsStored( (unsigned short)nbits );
+    }
+  else if( nbits > 8 && nbits <= 16 )
+    {
+    pf.SetBitsAllocated( 16 );
+    pf.SetBitsStored( (unsigned short)nbits );
+    }
+  else if( nbits > 16 && nbits <= 32 )
+    {
+    pf.SetBitsAllocated( 32 );
+    pf.SetBitsStored( (unsigned short)nbits );
+    }
+  else
+    {
+    std::cerr << "Unhandled max val: " << maxval << std::endl;
+    return false;
+    }
+#endif
   if( pi == PhotometricInterpretation::RGB )
     {
     pf.SetSamplesPerPixel( 3 );
