@@ -217,6 +217,10 @@ bool ImageWriter::Write()
     {
     assert( pf.GetSamplesPerPixel() == 1 );
     ImageHelper::SetRescaleInterceptSlopeValue(GetFile(), pixeldata);
+    if( ms == MediaStorage::RTDoseStorage && pixeldata.GetIntercept() != 0 )
+      {
+      return false;
+      }
     }
   else
     {
