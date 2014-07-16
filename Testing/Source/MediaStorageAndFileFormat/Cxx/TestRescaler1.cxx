@@ -16,7 +16,7 @@
 
 #include <stdlib.h> // atof
 
-int TestRescaler(int, char *[])
+int TestRescaler1(int, char *[])
 {
   gdcm::Rescaler ir;
 
