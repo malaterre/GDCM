@@ -50,6 +50,8 @@ public class ExtractImageRegion
     UIntArrayType dims = ImageHelper.GetDimensionsValue(f);
     PixelFormat pf = ImageHelper.GetPixelFormatValue (f);
     int pixelsize = pf.GetPixelSize();
+    PhotometricInterpretation pi = ImageHelper.GetPhotometricInterpretationValue(f);
+    Console.WriteLine( pi.toString() );
 
     // buffer to get the pixels
     byte[] buffer = new byte[ dims[0] * dims[1] * pixelsize ];
