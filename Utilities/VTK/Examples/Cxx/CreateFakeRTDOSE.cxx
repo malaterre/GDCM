@@ -40,8 +40,8 @@ int main(int, char *[])
   image->SetOrigin(-350.684,350.0,890.76);
   image->SetSpacing(5.4688,-5.4688,-3.27);
 #if VTK_MAJOR_VERSION <= 5
-  imageData->SetNumberOfScalarComponents(1);
-  imageData->SetScalarTypeToDouble();
+  image->SetNumberOfScalarComponents(1);
+  image->SetScalarTypeToDouble();
 #else
   image->AllocateScalars(VTK_DOUBLE ,1);
 #endif
