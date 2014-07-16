@@ -71,18 +71,19 @@ Tag DataSet::ComputeDataElement(const PrivateTag & t) const
     {
     //assert( it->GetTag().GetOwner() );
     const ByteValue * bv = it->GetByteValue();
-    assert( bv );
-    //std::cout << std::string(bv->GetPointer(), bv->GetLength() ) << std::endl;
-    //if( strcmp( bv->GetPointer(), refowner ) == 0 )
-    std::string tmp(bv->GetPointer(),bv->GetLength());
-    // trim trailing whitespaces:
-    tmp.erase(tmp.find_last_not_of(' ') + 1);
-    assert( tmp.size() == 0 || tmp[ tmp.size() - 1 ] != ' ' ); // FIXME
-    if( System::StrCaseCmp( tmp.c_str(), refowner ) == 0 )
+    if( bv )
       {
-      // found !
-      found = true;
-      break;
+      //if( strcmp( bv->GetPointer(), refowner ) == 0 )
+      std::string tmp(bv->GetPointer(),bv->GetLength());
+      // trim trailing whitespaces:
+      tmp.erase(tmp.find_last_not_of(' ') + 1);
+      assert( tmp.size() == 0 || tmp[ tmp.size() - 1 ] != ' ' ); // FIXME
+      if( System::StrCaseCmp( tmp.c_str(), refowner ) == 0 )
+        {
+        // found !
+        found = true;
+        break;
+        }
       }
     ++it;
     }

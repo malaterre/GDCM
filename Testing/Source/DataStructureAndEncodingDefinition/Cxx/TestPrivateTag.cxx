@@ -12,6 +12,7 @@
 
 =========================================================================*/
 #include "gdcmPrivateTag.h"
+#include "gdcmDataSet.h"
 
 int TestPrivateTag(int , char * [])
 {
@@ -88,6 +89,16 @@ int TestPrivateTag(int , char * [])
   if( nospaces != spaces ) return 1;
   spaces.SetOwner("    Philips MR Imaging DD 001    ");
   if( nospaces != spaces ) return 1;
+
+    {
+    // hand-craft Dataset fragment
+    gdcm::DataSet ds;
+    gdcm::DataElement de(gdcm::Tag(0x0029,0x0011), 0,gdcm::VR::LO);
+    ds.Insert(de);
+    // get private tag
+    gdcm::PrivateTag pt(0x0029, 0x0023, "Titi");
+    ds.GetDataElement(pt);
+    }
 
   return 0;
 }
