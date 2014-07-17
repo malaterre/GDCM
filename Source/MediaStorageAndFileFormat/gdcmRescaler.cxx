@@ -15,6 +15,7 @@
 #include <limits>
 #include <stdlib.h> // abort
 #include <string.h> // memcpy
+#include <math.h> // floor
 
 namespace gdcm
 {
@@ -72,6 +73,12 @@ struct FImpl
     }
 };
 
+template < typename T >
+static inline T round(const double d)
+{
+  return (T)floor(d + 0.5);
+}
+
 template<typename TOut>
 struct FImpl<TOut, float>
 {
@@ -85,7 +92,7 @@ struct FImpl<TOut, float>
       // well known trick of adding 0.5 after a floating point type operation to properly find the
       // closest integer that will represent the transformation
       // TOut in this case is integer type, while input is floating point type
-      out[i] = (TOut)(((double)in[i] - intercept) / slope + 0.5);
+      out[i] = round<TOut>(((double)in[i] - intercept) / slope);
       //assert( out[i] == (TOut)(((double)in[i] - intercept) / slope ) );
       }
     }
@@ -103,7 +110,7 @@ struct FImpl<TOut, double>
       // well known trick of adding 0.5 after a floating point type operation to properly find the
       // closest integer that will represent the transformation
       // TOut in this case is integer type, while input is floating point type
-      out[i] = (TOut)(((double)in[i] - intercept) / slope + 0.5);
+      out[i] = round<TOut>(((double)in[i] - intercept) / slope);
       //assert( out[i] == (TOut)(((double)in[i] - intercept) / slope ) );
       }
     }
@@ -294,6 +301,8 @@ bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
   case PixelFormat::FLOAT64:
     fastpath = false;
     break;
+  default:
+    ;
     }
 
   // fast path:
@@ -416,6 +425,10 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
    */
   int64_t min = (int64_t)dmin;
   int64_t max = (int64_t)dmax;
+
+  int log2min = 0;
+  int log2max = 0;
+
   if( min >= 0 ) // unsigned
     {
     if( max <= std::numeric_limits<uint8_t>::max() )
@@ -425,13 +438,6 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
     else if( max <= std::numeric_limits<uint16_t>::max() )
       {
       st = PixelFormat::UINT16;
-      assert( st.GetBitsAllocated() == 16 );
-      // FIXME
-      if( max <= 4096 )
-        {
-        st.SetBitsStored( 12 );
-        st.SetHighBit( 11 );
-        }
       }
     else if( max <= std::numeric_limits<uint32_t>::max() )
       {
@@ -441,6 +447,10 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
       {
       assert(0);
       }
+    int64_t max2 = max; // make a copy
+    while (max2 >>= 1) ++log2max;
+    // need + 1 in case max == 4095 => 12bits stored required
+    st.SetBitsStored( (unsigned short)(log2max + 1) );
     }
   else
     {
@@ -463,6 +473,14 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
       {
       assert(0);
       }
+    assert( min < 0 );
+    int64_t min2 = -min; // make a copy
+    int64_t max2 = max; // make a copy
+    while (min2 >>= 1) ++log2min;
+    while (max2 >>= 1) ++log2max;
+    const int64_t bs = std::max( log2min, log2max ) + 1;
+    assert( bs <= st.GetBitsAllocated() );
+    st.SetBitsStored( (unsigned short)bs );
     }
   // postcondition:
   assert( min >= PixelFormat(st).GetMin() );
