@@ -582,7 +582,7 @@ static gdcm::PixelFormat::ScalarType
 ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
   gdcm::Image const & imageref)
 {
-  gdcm::PixelFormat::ScalarType outputpt ;
+  gdcm::PixelFormat::ScalarType outputpt;
   outputpt = gdcm::PixelFormat::UNKNOWN;
   // there is a very subtle bug here. Let's imagine we have a collection of files
   // they can all have different Rescale Slope / Intercept. In this case we should:

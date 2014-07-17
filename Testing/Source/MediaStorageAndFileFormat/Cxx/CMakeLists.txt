@@ -45,7 +45,8 @@ set(MSFF_TEST_SRCS
   TestImageChangePlanarConfiguration
   TestCoder
   TestDecoder
-  TestRescaler
+  TestRescaler1
+  TestRescaler2
   TestDumper
   TestDictPrinter
   TestApplicationEntity

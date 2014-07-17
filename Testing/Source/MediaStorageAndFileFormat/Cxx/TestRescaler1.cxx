@@ -16,7 +16,19 @@
 
 #include <stdlib.h> // atof
 
-int TestRescaler(int, char *[])
+static bool check_roundtrip(const gdcm::PixelFormat & pf )
+{
+  gdcm::Rescaler r;
+  r.SetIntercept( 0. );
+  r.SetSlope( 1. );
+  r.SetPixelFormat( pf );
+  r.SetMinMaxForPixelType(pf.GetMin(),pf.GetMax());
+  const gdcm::PixelFormat outputpt = r.ComputePixelTypeFromMinMax();
+  if( outputpt != pf ) return false;
+  return true;
+}
+
+int TestRescaler1(int, char *[])
 {
   gdcm::Rescaler ir;
 
@@ -132,6 +144,15 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
     return 1;
     }
 }
+
+// ComputePixelTypeFromMinMax()
+{
+  if( !check_roundtrip(gdcm::PixelFormat(1,16,12,11,0) ) ) return 1;
+  if( !check_roundtrip(gdcm::PixelFormat(1,16,12,11,1) ) ) return 1;
+  if( !check_roundtrip(gdcm::PixelFormat(1,8,8,7,0) ) ) return 1;
+  if( !check_roundtrip(gdcm::PixelFormat(1,8,8,7,1) ) ) return 1;
+}
+
 
   return 0;
 }
