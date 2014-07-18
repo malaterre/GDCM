@@ -69,6 +69,7 @@ set(DSED_TEST_SRCS
   TestAttribute8
   TestPDBHeader
   TestSequenceOfItems2
+  TestSequenceOfItems3
   )
 endif()
 if(GDCM_DATA_EXTRA_ROOT)
