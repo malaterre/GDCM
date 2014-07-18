@@ -94,11 +94,18 @@ namespace gdcm
             ss.str(s);
             Tag item;
             item.Read<SwapperNoOp>(ss);
-            assert( item == itemPMSStart );
-            ss.seekg(-4,std::ios::cur);
-            sqi->Read<ExplicitDataElement,SwapperDoOp>( ss, true );
-            gdcmWarningMacro(ex.what());
-            (void)ex;  //to avoid unreferenced variable warning on release
+            if( item == itemPMSStart )
+              {
+              ss.seekg(-4,std::ios::cur);
+              sqi->Read<ExplicitDataElement,SwapperDoOp>( ss, true );
+              gdcmWarningMacro(ex.what());
+              (void)ex;  //to avoid unreferenced variable warning on release
+              }
+            else
+              {
+              delete sqi;
+              sqi = NULL;
+              }
             }
           return sqi;
           }
@@ -145,7 +152,7 @@ namespace gdcm
                 {
                 gdcmErrorMacro( "Could not read SQ. Giving up" );
                 gdcmErrorMacro(ex2.what()); (void)ex2;
-                throw "Could not decode this SQ";
+                delete sqi;
                 return NULL;
                 }
               }
