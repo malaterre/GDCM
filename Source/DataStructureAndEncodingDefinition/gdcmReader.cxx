@@ -691,6 +691,11 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
         caller.template ReadCommon<ExplicitImplicitDataElement,SwapperNoOp>(is);
         // This file can only be rewritten as implicit...
         }
+      else
+        {
+        gdcmDebugMacro( "No way this is DICOM" );
+        success = false;
+        }
       }
 #else
     gdcmDebugMacro( ex.what() );
