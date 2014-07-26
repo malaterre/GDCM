@@ -16,7 +16,7 @@
 int TestTagKeywords(int, char *[])
 {
   gdcm::Keywords::FileMetaInformationVersion at1;
-
+  (void)at1;
   if( at1.GetTag() != gdcm::Tag( 0x2, 0x1 ) ) return 1;
   return 0;
 }

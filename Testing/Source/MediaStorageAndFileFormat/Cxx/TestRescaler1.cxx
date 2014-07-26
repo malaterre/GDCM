@@ -22,7 +22,7 @@ static bool check_roundtrip(const gdcm::PixelFormat & pf )
   r.SetIntercept( 0. );
   r.SetSlope( 1. );
   r.SetPixelFormat( pf );
-  r.SetMinMaxForPixelType(pf.GetMin(),pf.GetMax());
+  r.SetMinMaxForPixelType((double)pf.GetMin(),(double)pf.GetMax());
   const gdcm::PixelFormat outputpt = r.ComputePixelTypeFromMinMax();
   if( outputpt != pf ) return false;
   return true;
