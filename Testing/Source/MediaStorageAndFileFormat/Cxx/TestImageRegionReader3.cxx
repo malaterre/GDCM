@@ -84,7 +84,8 @@ static int TestImageRegionRead(const char* filename, bool verbose = false)
       vbuffer.resize( zlen );
       char* buffer = &vbuffer[0];
       b = reader.ReadIntoBuffer(buffer, zlen);
-      assert( zlen ); assert( b ); (void)b;
+      if( !b ) return 1;
+      assert( zlen );
       of.write( buffer, zlen );
       }
     }
