@@ -283,7 +283,7 @@ bool ImageRegionReader::ReadRLEIntoBuffer(char *buffer, size_t buflen)
   assert( xmax >= xmin );
   assert( ymax >= ymin );
 
-  theCodec.DecodeExtent(
+  bool ret = theCodec.DecodeExtent(
     buffer,
     xmin, xmax,
     ymin, ymax,
@@ -291,7 +291,7 @@ bool ImageRegionReader::ReadRLEIntoBuffer(char *buffer, size_t buflen)
     *theStream
   );
 
-  return true;
+  return ret;
 }
 
 bool ImageRegionReader::ReadJPEG2000IntoBuffer(char *buffer, size_t buflen)
@@ -332,7 +332,7 @@ bool ImageRegionReader::ReadJPEG2000IntoBuffer(char *buffer, size_t buflen)
   assert( xmax >= xmin );
   assert( ymax >= ymin );
 
-  theCodec.DecodeExtent(
+  bool ret = theCodec.DecodeExtent(
     buffer,
     xmin, xmax,
     ymin, ymax,
@@ -340,7 +340,7 @@ bool ImageRegionReader::ReadJPEG2000IntoBuffer(char *buffer, size_t buflen)
     *theStream
   );
 
-  return true;
+  return ret;
 }
 
 bool ImageRegionReader::ReadJPEGIntoBuffer(char *buffer, size_t buflen)
@@ -382,7 +382,7 @@ bool ImageRegionReader::ReadJPEGIntoBuffer(char *buffer, size_t buflen)
   assert( xmax >= xmin );
   assert( ymax >= ymin );
 
-  theCodec.DecodeExtent(
+  bool ret = theCodec.DecodeExtent(
     buffer,
     xmin, xmax,
     ymin, ymax,
@@ -390,7 +390,7 @@ bool ImageRegionReader::ReadJPEGIntoBuffer(char *buffer, size_t buflen)
     *theStream
   );
 
-  return true;
+  return ret;
 }
 
 bool ImageRegionReader::ReadJPEGLSIntoBuffer(char *buffer, size_t buflen)
@@ -431,7 +431,7 @@ bool ImageRegionReader::ReadJPEGLSIntoBuffer(char *buffer, size_t buflen)
   assert( xmax >= xmin );
   assert( ymax >= ymin );
 
-  theCodec.DecodeExtent(
+  bool ret = theCodec.DecodeExtent(
     buffer,
     xmin, xmax,
     ymin, ymax,
@@ -439,8 +439,9 @@ bool ImageRegionReader::ReadJPEGLSIntoBuffer(char *buffer, size_t buflen)
     *theStream
   );
 
-  return true;
+  return ret;
 }
+
 bool ImageRegionReader::ReadIntoBuffer(char *buffer, size_t buflen)
 {
   size_t thelen = ComputeBufferLength();

@@ -535,7 +535,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
   //assert( image );
   bResult = bResult && (image != 00);
   bResult = bResult && opj_end_decompress(dinfo,cio);
-  if (!image)
+  if (!image || !check_comp_valid(image) )
     {
     opj_destroy_codec(dinfo);
     opj_stream_destroy(cio);
@@ -644,6 +644,12 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     //assert( comp->prec >= PF.GetBitsStored());
     if( comp->prec != PF.GetBitsStored() )
       {
+      if( comp->prec <= 8 )
+        PF.SetBitsAllocated( 8 );
+      else if( comp->prec <= 16 )
+        PF.SetBitsAllocated( 16 );
+      else if( comp->prec <= 32 )
+        PF.SetBitsAllocated( 32 );
       PF.SetBitsStored( (unsigned short)comp->prec );
       PF.SetHighBit( (unsigned short)(comp->prec - 1) ); // ??
       }
@@ -1130,6 +1136,34 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   return b;
 }
 
+static inline bool check_comp_valid( opj_image_t *image )
+{
+  int compno = 0;
+  opj_image_comp_t *comp = &image->comps[compno];
+  if( comp->prec > 32 ) // I doubt openjpeg will reach here.
+    return false;
+
+  bool invalid = false;
+  if( image->numcomps == 3 )
+    {
+    opj_image_comp_t *comp1 = &image->comps[1];
+    opj_image_comp_t *comp2 = &image->comps[2];
+#if OPENJPEG_MAJOR_VERSION == 1
+    if( comp->bpp  != comp1->bpp  ) invalid = true;
+    if( comp->bpp  != comp2->bpp  ) invalid = true;
+#endif // OPENJPEG_MAJOR_VERSION == 1
+    if( comp->prec != comp1->prec ) invalid = true;
+    if( comp->prec != comp2->prec ) invalid = true;
+    if( comp->sgnd != comp1->sgnd ) invalid = true;
+    if( comp->sgnd != comp2->sgnd ) invalid = true;
+    if( comp->h != comp1->h ) invalid = true;
+    if( comp->h != comp2->h ) invalid = true;
+    if( comp->w != comp1->w ) invalid = true;
+    if( comp->w != comp2->w ) invalid = true;
+    }
+  return !invalid;
+}
+
 bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, TransferSyntax &ts)
 {
   opj_dparameters_t parameters;  /* decompression parameters */
@@ -1291,28 +1325,10 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   int compno = 0;
   opj_image_comp_t *comp = &image->comps[compno];
 
-  if( image->numcomps == 3 )
+  if( !check_comp_valid( image ) )
     {
-    opj_image_comp_t *comp1 = &image->comps[1];
-    opj_image_comp_t *comp2 = &image->comps[2];
-    bool invalid = false;
-#if OPENJPEG_MAJOR_VERSION == 1
-    if( comp->bpp  != comp1->bpp  ) invalid = true;
-    if( comp->bpp  != comp2->bpp  ) invalid = true;
-#endif // OPENJPEG_MAJOR_VERSION == 1
-    if( comp->prec != comp1->prec ) invalid = true;
-    if( comp->prec != comp2->prec ) invalid = true;
-    if( comp->sgnd != comp1->sgnd ) invalid = true;
-    if( comp->sgnd != comp2->sgnd ) invalid = true;
-    if( comp->h != comp1->h ) invalid = true;
-    if( comp->h != comp2->h ) invalid = true;
-    if( comp->w != comp1->w ) invalid = true;
-    if( comp->w != comp2->w ) invalid = true;
-    if( invalid )
-      {
-      gdcmErrorMacro( "Invalid test failed" );
-      return false;
-      }
+    gdcmErrorMacro( "Invalid test failed" );
+    return false;
     }
 
   this->Dimensions[0] = comp->w;
@@ -1491,7 +1507,8 @@ bool JPEG2000Codec::DecodeExtent(
   bot.Read<SwapperNoOp>( is );
 
   const unsigned int * dimensions = this->GetDimensions();
-  const PixelFormat & pf = this->GetPixelFormat();
+  // retrieve pixel format *after* DecodeByStreamsCommon !
+  const PixelFormat pf = this->GetPixelFormat(); // make a copy !
   assert( pf.GetBitsAllocated() % 8 == 0 );
   assert( pf != PixelFormat::SINGLEBIT );
   assert( pf != PixelFormat::UINT12 && pf != PixelFormat::INT12 );
@@ -1521,6 +1538,10 @@ bool JPEG2000Codec::DecodeExtent(
 
     std::pair<char*,size_t> raw_len = this->DecodeByStreamsCommon(dummy_buffer, buf_size);
     if( !raw_len.first || !raw_len.second ) return false;
+    // check pixel format *after* DecodeByStreamsCommon !
+    const PixelFormat & pf2 = this->GetPixelFormat();
+    // SC16BitsAllocated_8BitsStoredJ2K.dcm
+    if( pf != pf2 ) return false;
 
     char *raw = raw_len.first;
     const unsigned int rowsize = xmax - xmin + 1;
@@ -1577,6 +1598,9 @@ bool JPEG2000Codec::DecodeExtent(
       /* free the memory containing the code-stream */
       delete[] dummy_buffer;
       if( !raw_len.first || !raw_len.second ) return false;
+      // check pixel format *after* DecodeByStreamsCommon !
+      const PixelFormat & pf2 = this->GetPixelFormat();
+      if( pf != pf2 ) return false;
 
       char *raw = raw_len.first;
       const unsigned int rowsize = xmax - xmin + 1;

@@ -579,7 +579,7 @@ int main (int argc, char *argv[])
             {
             assert( strcmp(s, "offset") == 0 );
             poffset = 1;
-            start_pos = atoll(optarg);
+            start_pos = (size_t)atoll(optarg);
             }
           //printf (" with arg %s", optarg);
           }
