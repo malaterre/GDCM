@@ -38,7 +38,12 @@ public:
   /// Allow user to pass in there own dicts
   void SetDicts(const Dicts &dicts);
 
-  /// Convert to string the ByteValue contained in a DataElement
+  /// Convert to string the ByteValue contained in a DataElement. The
+  /// DataElement must be coming from the actual DataSet associated with File
+  /// (see SetFile).
+  std::string ToString(const DataElement& de) const;
+
+  /// Directly from a Tag:
   std::string ToString(const Tag& t) const;
 
   //std::string ToMime64(const Tag& t) const;
@@ -47,6 +52,8 @@ public:
   /// the returned elements are:
   /// pair.first : the name as found in the dictionary of DataElement
   /// pari.second : the value encoded into a string (US,UL...) are properly converted
+  std::pair<std::string, std::string> ToStringPair(const DataElement& de) const;
+  /// Directly from a Tag:
   std::pair<std::string, std::string> ToStringPair(const Tag& t) const;
 
   /// DEPRECATED: NEVER USE IT
@@ -72,6 +79,7 @@ protected:
   bool ExecuteQuery(std::string const &query, DataSet const &ds, std::string & value) const;
 
 private:
+  std::pair<std::string, std::string> ToStringPairInternal(const DataElement& de, DataSet const &ds) const;
   SmartPointer<File> F;
 };
 

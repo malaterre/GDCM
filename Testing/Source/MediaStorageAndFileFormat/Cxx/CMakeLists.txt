@@ -50,7 +50,8 @@ set(MSFF_TEST_SRCS
   TestDumper
   TestDictPrinter
   TestApplicationEntity
-  TestStringFilter
+  TestStringFilter1
+  TestStringFilter2
   TestUIDGenerator
   TestUUIDGenerator
   #TestUIDGenerator3
