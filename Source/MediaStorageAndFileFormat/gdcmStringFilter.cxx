@@ -43,6 +43,11 @@ std::string StringFilter::ToString(const Tag& t) const
   return ToStringPair(t).second;
 }
 
+std::string StringFilter::ToString(const DataElement& de) const
+{
+  return ToStringPair(de).second;
+}
+
 /*
 std::string StringFilter::ToMIME64(const Tag& t) const
 {
@@ -86,6 +91,21 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t) con
     {
     const DataSet &ds = GetFile().GetDataSet();
     return ToStringPair(t, ds);
+    }
+}
+
+std::pair<std::string, std::string> StringFilter::ToStringPair(const DataElement& de) const
+{
+  const Tag & t = de.GetTag();
+  if( t.GetGroup() == 0x2 )
+    {
+    const FileMetaInformation &header = GetFile().GetHeader();
+    return ToStringPairInternal(de, header);
+    }
+  else
+    {
+    const DataSet &ds = GetFile().GetDataSet();
+    return ToStringPairInternal(de, ds);
     }
 }
 
@@ -313,17 +333,30 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
 std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t, DataSet const &ds) const
 {
   std::pair<std::string, std::string> ret;
+  if( !ds.FindDataElement(t) )
+    {
+    gdcmDebugMacro( "DataSet does not contains tag:" );
+    return ret;
+    }
+  const DataElement &de = ds.GetDataElement( t );
+  ret = ToStringPairInternal( de, ds );
+  return ret;
+}
+
+std::pair<std::string, std::string> StringFilter::ToStringPairInternal(const DataElement& de, DataSet const &ds) const
+{
+  std::pair<std::string, std::string> ret;
   const Global &g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
-  if( ds.IsEmpty() || !ds.FindDataElement(t) )
+  if( ds.IsEmpty() )
     {
     gdcmDebugMacro( "DataSet is empty or does not contains tag:" );
     return ret;
     }
-  const DataElement &de = ds.GetDataElement( t );
   //assert( de.GetTag().IsPublic() );
   std::string strowner;
   const char *owner = 0;
+  const Tag &t = de.GetTag();
   if( t.IsPrivate() && !t.IsPrivateCreator() )
     {
     strowner = ds.GetPrivateCreator(t);

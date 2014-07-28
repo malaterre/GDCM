@@ -17,7 +17,7 @@
 #include "gdcmTesting.h"
 #include "gdcmTrace.h"
 
-int TestStringFilt(const char *filename)
+static int TestStringFilt(const char *filename)
 {
   gdcm::StringFilter sf;
   gdcm::Reader r;
@@ -60,7 +60,7 @@ int TestStringFilt(const char *filename)
   return ret;
 }
 
-int TestStringFilter(int argc, char *argv[])
+int TestStringFilter1(int argc, char *argv[])
 {
   if( argc == 2 )
     {
