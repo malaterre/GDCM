@@ -55,6 +55,7 @@ set(EXAMPLES_SRCS
   GetSequenceUltrasound
   ReadAndPrintAttributes
   ChangeSequenceUltrasound
+  ChangePrivateTags
   LargeVRDSExplicit
   ExtractEncryptedContent
   ReadAndDumpDICOMDIR
