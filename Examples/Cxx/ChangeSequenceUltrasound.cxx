@@ -24,8 +24,9 @@
 
 int main(int argc, char* argv[] )
 {
-  if( argc < 0 )
+  if( argc < 3 )
     {
+    std::cerr << argv[0] << " input.dcm output.dcm" << std::endl;
     return 1;
     }
   const char *filename = argv[1];
