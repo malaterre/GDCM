@@ -881,6 +881,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
     ms == MediaStorage::RTDoseStorage
   )
     {
+    // TODO. Should I check FrameIncrementPointer ? (0028,0009) AT (3004,000c)
     Attribute<0x3004,0x000e> gridscaling = { 0 };
     gridscaling.SetFromDataSet( ds );
     interceptslope[0] = 0;
@@ -1892,6 +1893,11 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     Attribute<0x3004,0x00e> at2;
     at2.SetValue( img.GetSlope() );
     ds.Replace( at2.GetAsDataElement() );
+
+    Attribute<0x0028,0x0009> framePointer;
+    framePointer.SetNumberOfValues(1);
+    framePointer.SetValue( Tag(0x3004,0x000C) );
+    ds.Replace( framePointer.GetAsDataElement() );
 
     return;
     }
