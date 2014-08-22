@@ -13,6 +13,7 @@
 =========================================================================*/
 #include "gdcmRescaler.h"
 #include <limits>
+#include <algorithm> // std::max
 #include <stdlib.h> // abort
 #include <string.h> // memcpy
 #include <math.h> // floor
