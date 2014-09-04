@@ -910,9 +910,13 @@ int main (int argc, char *argv[])
       dims[1] = size[1];
       rle.SetDimensions( dims );
       gdcm::PixelFormat pf = gdcm::PixelFormat::UINT8;
-      if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign ) ) return 1;
+      if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign, spp, pixelspp ) ) return 1;
       rle.SetPixelFormat( pf );
       gdcm::PhotometricInterpretation pi = refpi;
+      if( spp )
+        {
+        if( pixelspp == 3 ) pi = gdcm::PhotometricInterpretation::RGB;
+        }
       rle.SetPhotometricInterpretation( pi );
 
       if( !Populate( writer, rle, filenames ) ) return 1;
