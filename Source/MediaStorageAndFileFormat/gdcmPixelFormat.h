@@ -22,6 +22,8 @@
 namespace gdcm
 {
 
+class TransferSyntax;
+
 /**
  * \brief PixelFormat
  * \note
@@ -194,6 +196,7 @@ public:
       PixelRepresentation != pf.PixelRepresentation;
     }
 
+  bool IsCompatible(const TransferSyntax & ts ) const;
 protected:
   /// When image with 24/24/23 was read, need to validate
   bool Validate();

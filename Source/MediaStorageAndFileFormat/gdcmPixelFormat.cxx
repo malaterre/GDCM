@@ -13,6 +13,8 @@
 =========================================================================*/
 #include "gdcmPixelFormat.h"
 #include "gdcmTrace.h"
+#include "gdcmTransferSyntax.h"
+
 #include <stdlib.h>
 
 namespace gdcm
@@ -308,6 +310,13 @@ void PixelFormat::Print(std::ostream &os) const
   os << "HighBit            :" << HighBit             << "\n";
   os << "PixelRepresentation:" << PixelRepresentation << "\n";
   os << "ScalarType found   :" << GetScalarTypeAsString() << "\n";
+}
+
+bool PixelFormat::IsCompatible(const TransferSyntax & ts ) const
+{
+  if( ts == TransferSyntax::JPEGBaselineProcess1 && BitsAllocated != 8 ) return false;
+  // FIXME are we missing any ?
+  return false;
 }
 
 } // end namespace gdcm

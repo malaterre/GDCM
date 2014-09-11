@@ -441,7 +441,7 @@ void LookupTable::Decode(std::istream &is, std::ostream &os) const
     while( !is.eof() )
       {
       is.read( (char*)(&idx), 1);
-      if( is.eof() ) break;
+      if( is.eof() || !is.good() ) break;
       if( IncompleteLUT )
         {
         assert( idx < Internal->Length[RED] );
@@ -463,7 +463,7 @@ void LookupTable::Decode(std::istream &is, std::ostream &os) const
       unsigned short idx;
       unsigned short rgb[3];
       is.read( (char*)(&idx), 2);
-      if( is.eof() ) break;
+      if( is.eof() || !is.good() ) break;
       if( IncompleteLUT )
         {
         assert( idx < Internal->Length[RED] );

@@ -292,17 +292,14 @@ Scanner::GetAllFilenamesFromTagToValue(Tag const &t, const char *valueref) const
   Directory::FilenamesType theReturn;
   if( valueref )
     {
-    size_t len = strlen( valueref );
-    if( len && valueref[ len - 1 ] == ' ' )
-      {
-      --len;
-      }
+    const std::string valueref_str = String<>::Trim( valueref );
     Directory::FilenamesType::const_iterator file = Filenames.begin();
     for(; file != Filenames.end(); ++file)
       {
       const char *filename = file->c_str();
       const char * value = GetValue(filename, t);
-      if( value && strncmp(value, valueref, len ) == 0 )
+      const std::string value_str = String<>::Trim( value );
+      if( value_str == valueref_str )
         {
         theReturn.push_back( filename );
         }
