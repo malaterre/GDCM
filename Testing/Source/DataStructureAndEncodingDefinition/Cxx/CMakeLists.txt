@@ -13,7 +13,7 @@ set(DSED_TEST_SRCS
   TestPreamble
   TestReader
   TestReader4
-  TestReaderUpToTag
+  TestReaderUpToTag1
   TestReaderUpToTag2
   TestReaderSelectedTags
   TestReaderSelectedPrivateGroups

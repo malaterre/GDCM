@@ -174,7 +174,7 @@ static const char * const printmd5[][2] = {
 { "071b840050588d14fde61646e058e1c6" , "PHILIPS_Brilliance_ExtraBytesInOverlay.dcm" } ,
 { "308e32440ff9db54a01aa6aa7ed9d361" , "PHILIPS_GDCM12xBug2.dcm" } ,
 { "396d76f4143e544782ac23df3394b542" , "PHILIPS_GDCM12xBug.dcm" } ,
-{ "aa4e366280c194b4012083851d30e5dc" , "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm" } ,
+{ "c38ad661c6a14f8bd88b304755e7ba7b" , "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm" } ,
 { "e0a690636c608f312ca550908d4b551f" , "PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm" } ,
 { "03d88060c3bd820b96840599c0099470" , "PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm" } ,
 { "211eee5dbca0899f762c788acc1fb3c2" , "PHILIPS_Intera-16-MONO2-Uncompress.dcm" } ,
@@ -301,7 +301,7 @@ int TestPrint(const char *filename, bool verbose= false)
 }
 
 
-int TestPrinter(int argc, char *argv[])
+int TestPrinter1(int argc, char *argv[])
 {
   if( argc == 2 )
     {

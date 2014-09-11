@@ -96,8 +96,8 @@ int TestPrivateTag(int , char * [])
     gdcm::DataElement de(gdcm::Tag(0x0029,0x0011), 0,gdcm::VR::LO);
     ds.Insert(de);
     // get private tag
-    gdcm::PrivateTag pt(0x0029, 0x0023, "Titi");
-    ds.GetDataElement(pt);
+    gdcm::PrivateTag pt0(0x0029, 0x0023, "Titi");
+    ds.GetDataElement(pt0);
     }
 
   return 0;

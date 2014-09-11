@@ -16,12 +16,12 @@
 
 typedef gdcm::String<'\\',64> CSComp;
 
-void Print(CSComp v)
+static void Print(CSComp v)
 {
   std::cout << v << std::endl;
 }
 
-int TestString(int , char *[])
+int TestString1(int , char *[])
 {
 {
   gdcm::String<'\\'> s = "coucou";

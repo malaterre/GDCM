@@ -33,6 +33,7 @@ int TestReadSelectedTags(const char* filename, bool verbose = false)
   selectedtags.insert ( pixeldatagl );
   if ( !reader.ReadSelectedTags( selectedtags ) )
     {
+    if( verbose )
     std::cerr << "TestReadSelectedTags : Failed to read: " << filename << std::endl;
     return 1;
     }
@@ -44,7 +45,8 @@ int TestReadSelectedTags(const char* filename, bool verbose = false)
   std::streamoff refoffset = gdcm::Testing::GetSelectedTagsOffsetFromFile(filename);
   if( refoffset != outStreamOffset )
     {
-    std::cerr << filename << ": " << outStreamOffset << " should be " << refoffset << std::endl;
+    if( verbose || refoffset ) // when stored
+      std::cerr << filename << ": " << outStreamOffset << " should be " << refoffset << std::endl;
     return 1;
     }
   size_t filesize = gdcm::System::FileSize(filename);

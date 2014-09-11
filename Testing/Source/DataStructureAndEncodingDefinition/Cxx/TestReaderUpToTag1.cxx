@@ -34,7 +34,8 @@ static int TestReadUpToTag(const char* filename, bool verbose = false)
   skiptags.insert( pixeldata );
   if ( !reader.ReadUpToTag( pixeldata, skiptags) )
     {
-    std::cerr << "TestReadError: Failed to read: " << filename << std::endl;
+    if( verbose )
+      std::cerr << "TestReadError: Failed to read: " << filename << std::endl;
     return 1;
     }
   is.clear();
@@ -49,7 +50,7 @@ static int TestReadUpToTag(const char* filename, bool verbose = false)
   if(verbose)
     std::cout << "{ \"" << filename << "\"," << outStreamOffset << " }," << std::endl;
   std::streamoff refoffset = gdcm::Testing::GetStreamOffsetFromFile(filename);
-  if( refoffset != outStreamOffset )
+  if( refoffset != outStreamOffset && (refoffset || verbose) )
     {
     std::cerr << filename << ": " << outStreamOffset << " should be " << refoffset << std::endl;
     return 1;
@@ -88,7 +89,7 @@ static int TestReadUpToTagExtra()
   return r;
 }
 
-int TestReaderUpToTag(int argc, char *argv[])
+int TestReaderUpToTag1(int argc, char *argv[])
 {
   if( argc == 2 )
     {

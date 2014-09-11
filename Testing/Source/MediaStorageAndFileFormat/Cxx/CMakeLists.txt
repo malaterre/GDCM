@@ -60,7 +60,7 @@ set(MSFF_TEST_SRCS
   TestUUIDGenerator
   #TestUIDGenerator3
   TestXMLPrinter
-  TestPrinter
+  TestPrinter1
   TestPrint
   TestSorter
   TestImageReader

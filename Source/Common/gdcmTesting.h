@@ -79,6 +79,11 @@ public :
   /// -1 if not found
   static std::streamoff GetSelectedTagsOffsetFromFile(const char *filepath);
 
+  /// Return the offset just after private attribute (0009,0010,"GEMS_IDEN_01") if found.
+  /// Otherwise the offset of the next attribute
+  /// -1 if not found
+  static std::streamoff GetSelectedPrivateGroupOffsetFromFile(const char *filepath);
+
   /// Return the lossy flag of the given filename
   /// -1 -> Error
   ///  0 -> Lossless
