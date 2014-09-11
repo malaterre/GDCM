@@ -38,7 +38,9 @@ int TestReadSelectedPrivateGroups(const char* filename, bool verbose = false)
 
   gdcm::File & file = reader.GetFile();
   gdcm::DataSet & ds = file.GetDataSet();
-  std::cout << ds << std::endl;
+  if( verbose )
+    std::cout << ds << std::endl;
+  const bool found = ds.FindDataElement(group9);
 
   std::streamoff outStreamOffset = is.tellg();
 
@@ -47,7 +49,7 @@ int TestReadSelectedPrivateGroups(const char* filename, bool verbose = false)
   std::streamoff refoffset = gdcm::Testing::GetSelectedTagsOffsetFromFile(filename);
   if( refoffset != outStreamOffset )
     {
-    std::cerr << filename << ": " << outStreamOffset << " should be " << refoffset << std::endl;
+    std::cerr << filename << ": " << outStreamOffset << " should be " << refoffset << " found: " << found << std::endl;
     return 1;
     }
   is.close();

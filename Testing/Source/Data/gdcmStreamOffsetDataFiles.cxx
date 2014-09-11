@@ -225,6 +225,8 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "lena512_rot90.j2k.dcm", 768 },
 { "ELSCINT1_PMSCT_RLE1_priv.dcm", 298002 },
 { "unreadable.dcm", 249230 },
+{ "SC16BitsAllocated_8BitsStoredJ2K.dcm", 764 },
+{ "SC16BitsAllocated_8BitsStoredJPEG.dcm", 958 },
 
 
 /* Stopping condition */
