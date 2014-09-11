@@ -218,9 +218,8 @@ public:
       if( sep == ' ' ) length--; // FIXME
       }
 #else
-  while( _is >> std::ws >> data[length] >> std::ws >> backslash )
+  while( _is >> std::ws >> data[length++] >> std::ws >> backslash )
     {
-    length++;
     }
 #endif
     }
