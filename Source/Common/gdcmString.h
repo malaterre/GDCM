@@ -121,7 +121,7 @@ inline std::istream& operator>>(std::istream &is, String<TDelimiter,TMaxLength,T
     std::getline(is, ms, TDelimiter);
     // no such thing as std::get where the delim char would be left, so I need to manually add it back...
     // hopefully this is the right thing to do (no overhead)
-    is.putback( TDelimiter );
+    if( !is.eof() ) is.putback( TDelimiter );
     }
   return is;
 }

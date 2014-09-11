@@ -10,7 +10,7 @@ set(Common_TEST_SRCS
   TestSystem3
   TestSwapper
   TestByteSwap
-  TestString
+  TestString1
   TestString2
   TestTerminal
   TestFilenameGenerator
