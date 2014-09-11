@@ -18,14 +18,17 @@
 #include "gdcmReader.h"
 #include "gdcmFilename.h"
 
-static int TestFileAnonymize2(const char *filename, bool verbose = false)
+#include <vector>
+
+// in-place replace checking
+static int TestFileAnonymize4(const char *filename, bool verbose = false)
 {
   using namespace gdcm;
   if( verbose )
     std::cout << "Processing: " << filename << std::endl;
 
   // Create directory first:
-  const char subdir[] = "TestFileAnonymize2";
+  const char subdir[] = "TestFileAnonymize4";
   std::string tmpdir = Testing::GetTempDirectory( subdir );
   if( !System::FileIsDirectory( tmpdir.c_str() ) )
     {
@@ -33,13 +36,15 @@ static int TestFileAnonymize2(const char *filename, bool verbose = false)
     //return 1;
     }
   std::string outfilename = Testing::GetTempFilename( filename, subdir );
+  if( verbose )
+    std::cout << "Generating: " << outfilename << std::endl;
 
   const gdcm::Tag t1(0x0018,0x5100);
   const gdcm::Tag t2(0x0018,0x1312);
   const gdcm::Tag t3(0x0018,0x1313);
   const gdcm::Tag t4(0x0018,0x1317);
-  const gdcm::Tag t5(0x0008,0x2112);
-  const gdcm::Tag t6(0x0008,0x9215);
+  //const gdcm::Tag t5(0x0008,0x2112); // SQ
+  //const gdcm::Tag t6(0x0008,0x9215); // SQ
   const gdcm::Tag t7(0x0018,0x1020);
   const gdcm::Tag t8(0x0004,0x1130); // Test DICOMDIR !
   const gdcm::Tag t9(0x0008,0x0000); // Earliest possible Data Element
@@ -51,8 +56,6 @@ static int TestFileAnonymize2(const char *filename, bool verbose = false)
   tags.push_back( t2 );
   tags.push_back( t3 );
   tags.push_back( t4 );
-  tags.push_back( t5 );
-  tags.push_back( t6 );
   tags.push_back( t7 );
   tags.push_back( t8 );
   tags.push_back( t9 );
@@ -60,18 +63,59 @@ static int TestFileAnonymize2(const char *filename, bool verbose = false)
   // precondition, remove the file if present:
   System::RemoveFile(outfilename.c_str());
 
-  gdcm::FileAnonymizer fa;
-  fa.SetInputFileName( filename );
-  fa.SetOutputFileName( outfilename.c_str() );
-  for( std::vector<gdcm::Tag>::const_iterator it = tags.begin();
-    it != tags.end(); ++it )
     {
-    fa.Empty( *it );
+    gdcm::FileAnonymizer fa;
+    fa.SetInputFileName( filename );
+    fa.SetOutputFileName( outfilename.c_str() );
+    for( std::vector<gdcm::Tag>::const_iterator it = tags.begin();
+      it != tags.end(); ++it )
+      {
+      fa.Replace( *it, "TOTO" );
+      }
+    if( !fa.Write() )
+      {
+      std::cerr << "Failed to write (1): " << outfilename << std::endl;
+      return 1;
+      }
     }
-  if( !fa.Write() )
+
     {
-    std::cerr << "Failed to write: " << outfilename << std::endl;
-    return 1;
+    // Read back and check:
+    gdcm::Reader r;
+    r.SetFileName( outfilename.c_str() );
+    if( !r.Read() )
+      {
+      gdcm::Filename fn( filename );
+      std::cerr << "Failed to read: " << outfilename << std::endl;
+      if( strcmp(fn.GetName(), "SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm") == 0
+        || strcmp(fn.GetName(), "DMCPACS_ExplicitImplicit_BogusIOP.dcm") == 0
+        || strcmp(fn.GetName(), "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm") == 0 )
+        {
+        return 0;
+        }
+      return 1;
+      }
+    }
+
+    {
+    gdcm::FileAnonymizer fa;
+    fa.SetInputFileName( outfilename.c_str() );
+    fa.SetOutputFileName( outfilename.c_str() );
+    for( std::vector<gdcm::Tag>::const_iterator it = tags.begin();
+      it != tags.end(); ++it )
+      {
+      fa.Replace( *it, "TATA" );
+      }
+    if( !fa.Write() )
+      {
+      gdcm::Filename fn( filename );
+      std::cerr << "Failed to write (2): " << outfilename << std::endl;
+      if( strcmp(fn.GetName(), "JPEGInvalidSecondFrag.dcm") == 0 )
+        {
+        }
+      else
+        return 1;
+      }
     }
 
   // Read back and check:
@@ -79,16 +123,10 @@ static int TestFileAnonymize2(const char *filename, bool verbose = false)
   r.SetFileName( outfilename.c_str() );
   if( !r.Read() )
     {
-    gdcm::Filename fn( filename );
-    std::cerr << "Failed to read: " << outfilename << std::endl;
-    if( strcmp(fn.GetName(), "SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm") == 0
-      || strcmp(fn.GetName(), "DMCPACS_ExplicitImplicit_BogusIOP.dcm") == 0
-      || strcmp(fn.GetName(), "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm") == 0 )
-      {
-      return 0;
-      }
+    std::cerr << "Failed to read (2): " << outfilename << std::endl;
     return 1;
     }
+
   const File &f = r.GetFile();
   gdcm::MediaStorage ms;
   ms.SetFromFile( f );
@@ -109,7 +147,7 @@ static int TestFileAnonymize2(const char *filename, bool verbose = false)
         }
       }
     const gdcm::DataElement & de = ds.GetDataElement( t );
-    if( de.GetVL() != 0 )
+    if( de.GetVL() != 4 )
       {
       if( iserror )
         {
@@ -119,15 +157,16 @@ static int TestFileAnonymize2(const char *filename, bool verbose = false)
       }
     }
 
+
   return 0;
 }
 
-int TestFileAnonymizer2(int argc, char *argv[])
+int TestFileAnonymizer4(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestFileAnonymize2(filename, true);
+    return TestFileAnonymize4(filename, true);
     }
 
   // else
@@ -139,7 +178,7 @@ int TestFileAnonymizer2(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestFileAnonymize2( filename );
+    r += TestFileAnonymize4( filename );
     ++i;
     }
 

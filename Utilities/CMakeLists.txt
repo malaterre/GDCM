@@ -141,3 +141,5 @@ if(NOT GDCM_USE_SYSTEM_SOCKETXX)
   set(SOCKETXX_INSTALL_INCLUDE_DIR  ${GDCM_INSTALL_INCLUDE_DIR}/socketxx)
   subdirs(socketxx)
 endif()
+
+add_subdirectory(gdcmrle)

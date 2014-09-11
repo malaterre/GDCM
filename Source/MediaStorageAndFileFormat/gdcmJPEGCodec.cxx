@@ -27,7 +27,7 @@
 namespace gdcm
 {
 
-JPEGCodec::JPEGCodec():BitSample(0),Lossless(true),Quality(100)
+JPEGCodec::JPEGCodec():BitSample(0)/*,Lossless(true)*/,Quality(100)
 {
   Internal = NULL;
 }
@@ -50,12 +50,12 @@ double JPEGCodec::GetQuality() const
 
 void JPEGCodec::SetLossless(bool l)
 {
-  Lossless = l;
+  LossyFlag = !l;
 }
 
 bool JPEGCodec::GetLossless() const
 {
-  return Lossless;
+  return !LossyFlag;
 }
 
 bool JPEGCodec::CanDecode(TransferSyntax const &ts) const
@@ -136,6 +136,8 @@ void JPEGCodec::SetBitSample(int bit)
     Internal->SetDimensions( this->GetDimensions() );
     Internal->SetPlanarConfiguration( this->GetPlanarConfiguration() );
     Internal->SetPhotometricInterpretation( this->GetPhotometricInterpretation() );
+    Internal->SetLossless( this->GetLossless() );
+    Internal->SetQuality( this->GetQuality() );
     Internal->ImageCodec::SetPixelFormat( this->ImageCodec::GetPixelFormat() );
     //Internal->SetNeedOverlayCleanup( this->AreOverlaysInPixelData() );
     }
@@ -642,8 +644,8 @@ ImageCodec * JPEGCodec::Clone() const
   assert( copy->PF == PF );
   //copy->SetupJPEGBitCodec( BitSample );
   copy->SetPixelFormat( GetPixelFormat() );
-  assert( copy->BitSample == BitSample );
-  copy->Lossless = Lossless;
+  assert( copy->BitSample == BitSample || BitSample == 0 );
+  //copy->Lossless = Lossless;
   copy->Quality = Quality;
 
   return copy;
@@ -654,6 +656,35 @@ bool JPEGCodec::EncodeBuffer( std::ostream & out,
 {
   assert( Internal );
   return Internal->EncodeBuffer(out, inbuffer, inlen);
+}
+
+bool JPEGCodec::StartEncode( std::ostream & )
+{
+  return true;
+}
+bool JPEGCodec::IsRowEncoder()
+{
+  return true;
+}
+bool JPEGCodec::IsFrameEncoder()
+{
+  assert(0);
+  return false;
+}
+bool JPEGCodec::AppendRowEncode( std::ostream & os, const char * data, size_t datalen)
+{
+  return EncodeBuffer(os, data, datalen );
+}
+// TODO: technically the frame encoder could use the row encoder when present
+// this could reduce code duplication
+bool JPEGCodec::AppendFrameEncode( std::ostream & , const char * , size_t )
+{
+  assert(0);
+  return false;
+}
+bool JPEGCodec::StopEncode( std::ostream & )
+{
+  return true;
 }
 
 } // end namespace gdcm

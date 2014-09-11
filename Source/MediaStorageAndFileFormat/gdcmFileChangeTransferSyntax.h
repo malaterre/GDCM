@@ -63,6 +63,7 @@ public:
 
 private:
   bool InitializeCopy();
+  bool UpdateCompressionLevel(double level);
   FileChangeTransferSyntaxInternals *Internals;
 };
 

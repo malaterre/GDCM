@@ -3,6 +3,9 @@
 set(MSFF_TEST_SRCS
   TestAnonymizer
   TestFileChangeTransferSyntax1
+  TestFileChangeTransferSyntax2
+  TestFileChangeTransferSyntax3
+  TestFileChangeTransferSyntax4
   TestFileStreamer1
   TestFileStreamer2
   TestFileStreamer3
@@ -12,6 +15,7 @@ set(MSFF_TEST_SRCS
   TestFileAnonymizer1
   TestFileAnonymizer2
   TestFileAnonymizer3
+  TestFileAnonymizer4
   TestIconImageFilter
   TestIconImageGenerator
   TestIconImageGenerator2

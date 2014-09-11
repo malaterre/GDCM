@@ -602,4 +602,35 @@ void ImageCodec::SetDimensions(const std::vector<unsigned int> & d)
     }
 }
 
+bool ImageCodec::StartEncode( std::ostream & )
+{
+  assert(0);
+  return false;
+}
+bool ImageCodec::IsRowEncoder()
+{
+  return false;
+}
+bool ImageCodec::IsFrameEncoder()
+{
+  return false;
+}
+bool ImageCodec::AppendRowEncode( std::ostream & , const char * , size_t )
+{
+  assert(0);
+  return false;
+}
+// TODO: technically the frame encoder could use the row encoder when present
+// this could reduce code duplication
+bool ImageCodec::AppendFrameEncode( std::ostream & , const char * , size_t )
+{
+  assert(0);
+  return false;
+}
+bool ImageCodec::StopEncode( std::ostream & )
+{
+  assert(0);
+  return false;
+}
+
 } // end namespace gdcm

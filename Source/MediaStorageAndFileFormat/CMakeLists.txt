@@ -101,6 +101,12 @@ else ()
   )
 endif()
 
+  list(APPEND MSFF_SRCS
+    ${GDCM_SOURCE_DIR}/Utilities/gdcmrle/rle.cxx
+    ${GDCM_SOURCE_DIR}/Utilities/gdcmrle/info.cxx
+    ${GDCM_SOURCE_DIR}/Utilities/gdcmrle/io.cxx
+  )
+
 # Do the proper thing when building static...if only there was configured
 # headers or def files instead
 if(NOT BUILD_SHARED_LIBS)
@@ -215,6 +221,8 @@ endif()
 if(GDCM_USE_SYSTEM_JSON)
 target_link_libraries(gdcmMSFF ${JSON_LIBRARIES})
 endif()
+# handling of static lib within shared is a mess:
+#target_link_libraries(gdcmMSFF gdcmrle)
 
 # libs
 install_library(gdcmMSFF)

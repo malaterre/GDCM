@@ -59,6 +59,9 @@ static int TestFileAnonymize3(const char *filename, bool verbose = false)
   tags.push_back( t8 );
   tags.push_back( t9 );
 
+  // precondition, remove the file if present:
+  System::RemoveFile(outfilename.c_str());
+
   gdcm::FileAnonymizer fa;
   fa.SetInputFileName( filename );
   fa.SetOutputFileName( outfilename.c_str() );

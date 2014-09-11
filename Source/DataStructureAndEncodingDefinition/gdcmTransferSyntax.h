@@ -116,11 +116,11 @@ public:
 
   bool IsEncapsulated() const;
 
-  /** Return if the transfer syntax algorithm is a lossy algorithm */
+  /** Return true if the transfer syntax algorithm is a lossy algorithm */
   bool IsLossy() const;
-  /** Return if the transfer syntax algorithm is a lossless algorithm */
+  /** Return true if the transfer syntax algorithm is a lossless algorithm */
   bool IsLossless() const;
-  /** return if TransFer Syntax Allow storing of Lossy Pixel Data */
+  /** return true if TransFer Syntax Allow storing of Lossy Pixel Data */
   bool CanStoreLossy() const;
 
   const char *GetString() const { return TransferSyntax::GetTSString(TSField); }
