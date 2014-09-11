@@ -1261,7 +1261,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
    * Basicaly you need to have point_transform = 0, but you can pick whichever predictor [1...7] you want
    * TODO: is there a way to pick the right predictor (best compression/fastest ?)
    */
-  if( Lossless )
+  if( !LossyFlag )
     {
     jpeg_simple_lossless (&cinfo, 1, 0);
     //jpeg_simple_lossless (&cinfo, 7, 0);
@@ -1270,7 +1270,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
   /* Now you can set any non-default parameters you wish to.
    * Here we just illustrate the use of quality (quantization table) scaling:
    */
-  if( Lossless )
+  if( !LossyFlag )
     {
     assert( Quality == 100 );
     }
@@ -1480,7 +1480,7 @@ bool JPEGBITSCodec::EncodeBuffer(std::ostream &os, const char *data, size_t data
    */
   if( Internals->StateSuspension == 0 )
     {
-    if( Lossless )
+    if( !LossyFlag )
       {
       jpeg_simple_lossless (&cinfo, 1, 0);
       //jpeg_simple_lossless (&cinfo, 7, 0);
@@ -1490,7 +1490,7 @@ bool JPEGBITSCodec::EncodeBuffer(std::ostream &os, const char *data, size_t data
   /* Now you can set any non-default parameters you wish to.
    * Here we just illustrate the use of quality (quantization table) scaling:
    */
-  if( Lossless )
+  if( !LossyFlag )
     {
     assert( Quality == 100 );
     }

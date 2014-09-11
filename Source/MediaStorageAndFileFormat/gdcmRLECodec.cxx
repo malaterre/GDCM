@@ -25,6 +25,8 @@
 #include <stddef.h> // ptrdiff_t fix
 #include <cstring>
 
+#include <gdcmrle/rle.h>
+
 namespace gdcm
 {
 
@@ -842,7 +844,127 @@ bool RLECodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 
 ImageCodec * RLECodec::Clone() const
 {
-  return NULL;
+  return new RLECodec;
+}
+
+bool RLECodec::StartEncode( std::ostream & )
+{
+  return true;
+}
+bool RLECodec::IsRowEncoder()
+{
+  return false;
+}
+
+bool RLECodec::IsFrameEncoder()
+{
+  return true;
+}
+
+class memsrc : public ::rle::source
+{
+public:
+  memsrc( const char * data, size_t datalen ):ptr(data),cur(data),len(datalen)
+    {
+    }
+  int read( char * out, int l )
+    {
+    memcpy( out, cur, l );
+    cur += l;
+    assert( cur <= ptr + len );
+    return l;
+    }
+  streampos_t tell()
+    {
+    assert( cur <= ptr + len );
+    return (streampos_t)(cur - ptr);
+    }
+  bool seek(streampos_t pos)
+    {
+    cur = ptr + pos;
+    assert( cur <= ptr + len && cur >= ptr );
+    return true;
+    }
+  bool eof()
+    {
+    assert( cur <= ptr + len );
+    return cur == ptr + len;
+    }
+  memsrc * clone()
+    {
+    memsrc * ret = new memsrc( ptr, len );
+    return ret;
+    }
+private:
+  const char * ptr;
+  const char * cur;
+  size_t len;
+};
+
+bool RLECodec::AppendRowEncode( std::ostream & os, const char * data, size_t datalen)
+{
+  assert(0);
+  return false;
+}
+
+class streamdest : public rle::dest
+{
+public:
+  streamdest( std::ostream & os ):stream(os)
+  {
+  start = os.tellp();
+  }
+  int write( const char * in, int len )
+    {
+    stream.write(in, len );
+    return len;
+    }
+  bool seek( streampos_t abs_pos )
+    {
+    stream.seekp( abs_pos + start );
+    return true;
+    }
+private:
+  std::ostream & stream;
+  std::streampos start;
+};
+
+bool RLECodec::AppendFrameEncode( std::ostream & out, const char * data, size_t datalen )
+{
+  const PixelFormat & pf = this->GetPixelFormat();
+  rle::pixel_info pi((unsigned char)pf.GetSamplesPerPixel(), (unsigned char)(pf.GetBitsAllocated()));
+
+  const unsigned int * dimensions = this->GetDimensions();
+  rle::image_info ii(dimensions[0], dimensions[1], pi);
+  const int h = dimensions[1];
+
+  memsrc src( data, datalen );
+  rle::rle_encoder re(src, ii);
+
+  streamdest fd( out );
+
+  if( !re.write_header( fd ) )
+    {
+    gdcmErrorMacro( "could not write header" );
+    return false;
+    }
+
+  for( int y = 0; y < h; ++y )
+    {
+    const int ret = re.encode_row( fd );
+    if( ret < 0 )
+      {
+      gdcmErrorMacro( "problem at row: " << y );
+      return false;
+      }
+    }
+
+  return true;
+}
+
+bool RLECodec::StopEncode( std::ostream & )
+{
+  return true;
 }
 
 } // end namespace gdcm

@@ -37,11 +37,10 @@
  * do the proper computation.
  *
  * Step 5.
- * We compress this gigantic file, into [JPEG Lossless, Non-Hierarchical,
- * First-Order Prediction (Process 14 [Selection Value 1])]
+ * We compress this gigantic file, into [JPEG Baseline (Process 1): Default Transfer Syntax for Lossy JPEG 8 Bit Image Compression]
  *
  * Usage:
- * $ mono bin/FileChangeTS.exe small.dcm big.dcm raw.data merge.dcm jpeg.dcm
+ * $ bin/FileChangeTSLossy.exe small.dcm big.dcm raw.data merge.dcm jpeg.dcm
  */
 using System;
 using System.IO;
@@ -162,8 +161,13 @@ public class FileChangeTS
       // SimpleSubjectWatcher:
       FileChangeTransferSyntax fcts = sfcts.__ref__();
       SimpleSubjectWatcher watcher = new SimpleSubjectWatcher(fcts, "FileChangeTransferSyntax");
-      gdcm.TransferSyntax ts = new TransferSyntax( TransferSyntax.TSType.JPEGLosslessProcess14_1 );
+      gdcm.TransferSyntax ts = new TransferSyntax( TransferSyntax.TSType.JPEGBaselineProcess1 );
       fcts.SetTransferSyntax( ts );
+      ImageCodec ic = fcts.GetCodec();
+      JPEGCodec jpeg = JPEGCodec.Cast( ic );
+      jpeg.SetLossless( false );
+      jpeg.SetQuality( 50 ); // poor quality !
+
       fcts.SetInputFileName( rawdicom );
       fcts.SetOutputFileName( jpegdicom );
       fcts.Change();

@@ -21,14 +21,14 @@
 #include "gdcmImageChangePlanarConfiguration.h"
 #include "gdcmByteSwap.h"
 
-static int TestFileChangeTransferSyntax1Func(const char *filename, bool verbose = false)
+static int TestFileChangeTransferSyntax4Func(const char *filename, bool verbose = false)
 {
   using namespace gdcm;
   if( verbose )
     std::cout << "Processing: " << filename << std::endl;
 
   // Create directory first:
-  const char subdir[] = "TestFileChangeTransferSyntax1";
+  const char subdir[] = "TestFileChangeTransferSyntax4";
   std::string tmpdir = Testing::GetTempDirectory( subdir );
   if( !System::FileIsDirectory( tmpdir.c_str() ) )
     {
@@ -39,7 +39,7 @@ static int TestFileChangeTransferSyntax1Func(const char *filename, bool verbose 
   if( verbose )
     std::cout << "Generating: " << outfilename << std::endl;
 
-  const gdcm::TransferSyntax ts( TransferSyntax::JPEGLosslessProcess14_1 );
+  const gdcm::TransferSyntax ts( TransferSyntax::RLELossless );
 
   gdcm::FileChangeTransferSyntax fcts;
   fcts.SetTransferSyntax( ts );
@@ -183,12 +183,12 @@ static int TestFileChangeTransferSyntax1Func(const char *filename, bool verbose 
   return res;
 }
 
-int TestFileChangeTransferSyntax1(int argc, char *argv[])
+int TestFileChangeTransferSyntax4(int argc, char *argv[])
 {
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return TestFileChangeTransferSyntax1Func(filename, true);
+    return TestFileChangeTransferSyntax4Func(filename, true);
     }
 
   // else
@@ -200,7 +200,7 @@ int TestFileChangeTransferSyntax1(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    r += TestFileChangeTransferSyntax1Func( filename );
+    r += TestFileChangeTransferSyntax4Func( filename );
     ++i;
     }
 

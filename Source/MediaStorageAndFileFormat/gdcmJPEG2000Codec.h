@@ -68,8 +68,17 @@ protected:
   );
 
   bool DecodeByStreams(std::istream &is, std::ostream &os);
+
+  bool StartEncode( std::ostream & );
+  bool IsRowEncoder();
+  bool IsFrameEncoder();
+  bool AppendRowEncode( std::ostream & out, const char * data, size_t datalen );
+  bool AppendFrameEncode( std::ostream & out, const char * data, size_t datalen );
+  bool StopEncode( std::ostream & );
+
 private:
   std::pair<char *, size_t> DecodeByStreamsCommon(char *dummy_buffer, size_t buf_size);
+  bool CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & complen, const char * indata, size_t inlen );
   bool GetHeaderInfo(const char * dummy_buffer, size_t len, TransferSyntax &ts);
   JPEG2000Internals *Internals;
 };

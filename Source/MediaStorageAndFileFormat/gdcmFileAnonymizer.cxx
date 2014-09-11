@@ -40,6 +40,11 @@ struct PositionEmpty
   DataElement DE;
   bool operator() (const PositionEmpty & i, const PositionEmpty & j)
     {
+    if( i.BeginPos == j.BeginPos )
+      {
+      return i.DE.GetTag() < j.DE.GetTag();
+      }
+    // else
     return (int)i.BeginPos < (int)j.BeginPos;
     }
 };
@@ -112,6 +117,14 @@ void FileAnonymizer::SetOutputFileName(const char *filename_native)
     Internals->OutputFilename = filename_native;
 }
 
+// portable way to check for existence (actually: accessibility):
+static inline bool file_exist(const char *filename)
+{
+  std::ifstream infile(filename, std::ios::binary);
+  return infile.good();
+}
+
+
 bool FileAnonymizer::ComputeReplaceTagPosition()
 {
 /*
@@ -126,6 +139,7 @@ bool FileAnonymizer::ComputeReplaceTagPosition()
   assert( !Internals->InputFilename.empty() );
   const char *filename = Internals->InputFilename.c_str();
   assert( filename );
+  const bool inplace = file_exist(Internals->OutputFilename.c_str());
 
   std::map<Tag, std::string>::reverse_iterator rit = Internals->ReplaceTags.rbegin();
   for ( ; rit != Internals->ReplaceTags.rend(); rit++ )
@@ -171,6 +185,11 @@ bool FileAnonymizer::ComputeReplaceTagPosition()
         }
       else
         {
+        if( inplace && valuereplace.size() != de.GetVL() )
+          {
+          gdcmErrorMacro( "inplace mode requires same length attribute" ); // TODO we could allow smaller size (and pad with space...)
+          return false;
+          }
         assert( !de.GetVL().IsUndefined() );
         pe.BeginPos -= de.GetVL();
         pe.BeginPos -= 2 * de.GetVR().GetLength(); // (VR+) VL
@@ -183,6 +202,11 @@ bool FileAnonymizer::ComputeReplaceTagPosition()
       }
     else
       {
+      if( inplace )
+        {
+        gdcmErrorMacro( "inplace mode requires existing tag (cannot insert). Tag: " << t );
+        return false;
+        }
       // We need to insert an Empty Data Element !
       //FIXME, for some public element we could do something nicer than VR:UN
       pe.DE.SetVR( VR::UN );
@@ -190,7 +214,7 @@ bool FileAnonymizer::ComputeReplaceTagPosition()
       assert( pe.DE.GetVL() == valuereplace.size() );
       }
 
-    // We need to push_back outside of if() since Action:Empty
+    // We need to push_back outside of if() since Action:Replace
     // on a missing tag, means insert it !
     Internals->PositionEmptyArray.push_back( pe );
 
@@ -204,6 +228,12 @@ bool FileAnonymizer::ComputeRemoveTagPosition()
   assert( !Internals->InputFilename.empty() );
   const char *filename = Internals->InputFilename.c_str();
   assert( filename );
+  const bool inplace = file_exist(Internals->OutputFilename.c_str());
+  if( inplace && !Internals->RemoveTags.empty())
+    {
+    gdcmErrorMacro( "inplace mode requires existing tag (cannot remove)" );
+    return false;
+    }
 
   std::set<Tag>::reverse_iterator rit = Internals->RemoveTags.rbegin();
   for ( ; rit != Internals->RemoveTags.rend(); rit++ )
@@ -283,6 +313,12 @@ bool FileAnonymizer::ComputeEmptyTagPosition()
   assert( !Internals->InputFilename.empty() );
   const char *filename = Internals->InputFilename.c_str();
   assert( filename );
+  const bool inplace = file_exist(Internals->OutputFilename.c_str());
+  if( inplace && !Internals->EmptyTags.empty())
+    {
+    gdcmErrorMacro( "inplace mode requires existing tag (cannot empty)" );
+    return false;
+    }
 
   std::set<Tag>::reverse_iterator rit = Internals->EmptyTags.rbegin();
   for ( ; rit != Internals->EmptyTags.rend(); rit++ )
@@ -395,17 +431,32 @@ bool FileAnonymizer::Write()
     }
 
   // Make sure we will copy from lower offset to highest:
+  // need to loop from the end. Sometimes a replace operation will have *exact*
+  // same file offset for multiple attributes. In which case we need to insert
+  // first the last attribute, and at the end the first attribute
   PositionEmpty pe_sort = {};
   std::sort (Internals->PositionEmptyArray.begin(),
     Internals->PositionEmptyArray.end(), pe_sort);
 
   // Step 2. Copy & skip proper portion
-  std::ofstream of( outfilename, std::ios::binary );
+  std::ios::openmode om;
+  const bool inplace = file_exist(outfilename);
+  if( inplace )
+    {
+    // overwrite:
+    om = std::ofstream::in | std::ofstream::out | std::ios::binary;
+    }
+  else
+    {
+    // create
+    om = std::ofstream::out | std::ios::binary;
+    }
+  std::fstream of( outfilename, om );
   std::ifstream is( filename, std::ios::binary );
-  std::vector<PositionEmpty>::const_iterator it =
-    Internals->PositionEmptyArray.begin();
   std::streampos prev = 0;
   const TransferSyntax &ts = Internals->TS;
+  std::vector<PositionEmpty>::const_iterator it =
+    Internals->PositionEmptyArray.begin();
   for( ; it != Internals->PositionEmptyArray.end(); ++it )
     {
     const PositionEmpty & pe = *it;
@@ -429,6 +480,7 @@ bool FileAnonymizer::Write()
         }
       if( action == EMPTY )
         {
+        assert( !inplace );
         // Create a 0 Value Length (VR+Tag was copied in previous loop)
         for( int i = 0; i < vrlen; ++i)
           {

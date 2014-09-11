@@ -73,10 +73,18 @@ protected:
     std::istream & is
   );
 
+  bool StartEncode( std::ostream & );
+  bool IsRowEncoder();
+  bool IsFrameEncoder();
+  bool AppendRowEncode( std::ostream & out, const char * data, size_t datalen );
+  bool AppendFrameEncode( std::ostream & out, const char * data, size_t datalen );
+  bool StopEncode( std::ostream & );
+
 private:
   bool DecodeByStreamsCommon(char *buffer, size_t totalLen, std::vector<unsigned char> &rgbyteOut);
+  bool CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & complen, const char * indata, size_t inlen );
+
   unsigned long BufferLength;
-  bool Lossless;
   int LossyError;
 };
 

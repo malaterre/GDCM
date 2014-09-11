@@ -101,6 +101,23 @@ public:
   void SetNumberOfDimensions(unsigned int dim);
   unsigned int GetNumberOfDimensions() const;
 
+
+protected:
+  // Streaming (write) API:
+  /// This is a high level API to encode in a streaming fashion. Each plugin
+  /// will handle differently the caching mecanism so that a limited memory is
+  /// used when compressing dataset.
+  /// Codec will fall into two categories:
+  /// - Full row encoder: only a single scanline (row) of data is needed to be loaded at a time;
+  /// - Full frame encoder (default): a complete frame (row x col) is needed to be loaded at a time
+  friend class FileChangeTransferSyntax;
+  virtual bool StartEncode( std::ostream & os );
+  virtual bool IsRowEncoder();
+  virtual bool IsFrameEncoder();
+  virtual bool AppendRowEncode( std::ostream & out, const char * data, size_t datalen );
+  virtual bool AppendFrameEncode( std::ostream & out, const char * data, size_t datalen );
+  virtual bool StopEncode( std::ostream & os);
+
 protected:
   bool RequestPlanarConfiguration;
   bool RequestPaddedCompositePixelCode;

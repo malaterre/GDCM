@@ -65,6 +65,15 @@ public:
     {
     Length = l;
     }
+
+protected:
+  bool StartEncode( std::ostream & );
+  bool IsRowEncoder();
+  bool IsFrameEncoder();
+  bool AppendRowEncode( std::ostream & out, const char * data, size_t datalen );
+  bool AppendFrameEncode( std::ostream & out, const char * data, size_t datalen );
+  bool StopEncode( std::ostream & );
+
 private:
   bool DecodeByStreamsCommon(std::istream &is, std::ostream &os);
   RLEInternals *Internals;

@@ -41,6 +41,8 @@ class FileAnonymizerInternals;
  * \li This class will NOT work with unordered attributes in a DICOM File,
  * \li This class does neither recompute nor update the Group Length element,
  * \li This class currently does not update the File Meta Information header.
+ * \li Only strict inplace Replace operation is supported when input and output
+ *     file are the same.
  */
 class GDCM_EXPORT FileAnonymizer : public Subject
 {
@@ -78,7 +80,6 @@ private:
   bool ComputeRemoveTagPosition();
   bool ComputeReplaceTagPosition();
   FileAnonymizerInternals *Internals;
-
 };
 
 } // end namespace gdcm

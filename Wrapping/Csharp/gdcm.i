@@ -194,6 +194,7 @@ public class";
 #include "gdcmDecoder.h"
 #include "gdcmCodec.h"
 #include "gdcmImageCodec.h"
+#include "gdcmRLECodec.h"
 #include "gdcmJPEGCodec.h"
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
@@ -773,9 +774,30 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 //%include "gdcmCodec.h"
 %feature("director") ImageCodec;
 %include "gdcmImageCodec.h"
+%include "gdcmRLECodec.h"
+%extend gdcm::RLECodec {
+  static RLECodec *Cast(ImageCodec *ic) {
+    return dynamic_cast<RLECodec*>(ic);
+  }
+};
 %include "gdcmJPEGCodec.h"
+%extend gdcm::JPEGCodec {
+  static JPEGCodec *Cast(ImageCodec *ic) {
+    return dynamic_cast<JPEGCodec*>(ic);
+  }
+};
 %include "gdcmJPEGLSCodec.h"
+%extend gdcm::JPEGLSCodec {
+  static JPEGLSCodec *Cast(ImageCodec *ic) {
+    return dynamic_cast<JPEGLSCodec*>(ic);
+  }
+};
 %include "gdcmJPEG2000Codec.h"
+%extend gdcm::JPEG2000Codec {
+  static JPEG2000Codec *Cast(ImageCodec *ic) {
+    return dynamic_cast<JPEG2000Codec*>(ic);
+  }
+};
 %include "gdcmPNMCodec.h"
 %include "gdcmImageChangeTransferSyntax.h"
 %template(SmartPtrFCTS) gdcm::SmartPointer<gdcm::FileChangeTransferSyntax>;

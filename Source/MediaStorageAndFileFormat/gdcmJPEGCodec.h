@@ -80,6 +80,13 @@ protected:
   bool DecodeByStreams(std::istream &is, std::ostream &os);
   bool IsValid(PhotometricInterpretation const &pi);
 
+  bool StartEncode( std::ostream & );
+  bool IsRowEncoder();
+  bool IsFrameEncoder();
+  bool AppendRowEncode( std::ostream & out, const char * data, size_t datalen );
+  bool AppendFrameEncode( std::ostream & out, const char * data, size_t datalen );
+  bool StopEncode( std::ostream & );
+
 protected:
   // Internal method called by SetPixelFormat
   // Instantiate the right jpeg codec (8, 12 or 16)
@@ -89,7 +96,7 @@ protected:
 
 protected:
   int BitSample;
-  bool Lossless;
+  //bool Lossless;
   int Quality;
 
 private:

@@ -1,6 +1,4 @@
-#add_executable(ManipulateFile ManipulateFile.cs)
-#target_link_libraries(ManipulateFile gdcm-sharp)
-
+# C# examples
 set(CSHARP_EXAMPLES
   SimplePrintPatientName
   ExtractOneFrame
@@ -27,11 +25,11 @@ set(CSHARP_EXAMPLES
   FileAnonymize
   FileStreaming
   FileChangeTS
+  FileChangeTSLossy
   )
 
 if(BUILD_TESTING)
-  set(CSHARP_EXAMPLES
-    ${CSHARP_EXAMPLES}
+  list(APPEND CSHARP_EXAMPLES
     BasicAnonymizer
     ClinicalTrialIdentificationWorkflow
     )
@@ -44,28 +42,24 @@ set_source_files_properties(${GDCM_LIBRARY_DIR}/gdcm-sharp.dll PROPERTIES GENERA
 # Make sure the source is generated before the executable builds.
 foreach(example ${CSHARP_EXAMPLES})
   file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs result)
-# WORKING_DIRECTORY is set to the src dir because of a strange issue with CSC compiler on Win32 system:
-# http://groups.google.com/group/microsoft.public.dotnet.languages.csharp/browse_thread/thread/9d3ac7eb9f7f56be
   add_custom_command(
     OUTPUT ${GDCM_EXECUTABLE_DIR}/${example}.exe
-    #COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "${CSC_PLATFORM_FLAG}" "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${result}
-    #WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DEPENDS #${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
-            ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
+    COMMAND ${CMAKE_CSHARP_COMPILER} "${CSC_PLATFORM_FLAG}" "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/${example}.exe" ${result}
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
     COMMENT "Create ${example}.exe"
   )
   add_custom_target(gdcm_sharp_${example} DEPENDS ${GDCM_EXECUTABLE_DIR}/${example}.exe)
+  # Make sure the gdcm-sharp.dll is generated before the exampls builds.
   add_dependencies(gdcm_sharp_${example} GDCMCSharp)
 
-  set(DEP ${DEP} ${GDCM_EXECUTABLE_DIR}/${example}.exe)
+  list(APPEND DEP ${GDCM_EXECUTABLE_DIR}/${example}.exe)
 endforeach()
 
 add_custom_target(GDCMExampleCSharp ALL
   DEPENDS ${DEP}
   COMMENT "building examples"
 )
-add_dependencies(GDCMExampleCSharp  GDCMCSharp)
+add_dependencies(GDCMExampleCSharp GDCMCSharp)
 
 if(BUILD_TESTING)
 if(GDCM_DATA_ROOT)
