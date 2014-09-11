@@ -61,7 +61,7 @@ int TestScannerExtra()
   return 0;
 }
 
-int TestScanner(int argc, char *argv[])
+int TestScanner1(int argc, char *argv[])
 {
   gdcm::Trace::WarningOff();
   gdcm::Trace::ErrorOff();
