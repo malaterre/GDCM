@@ -155,9 +155,10 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap 
     }
 
   ImageCodec *codec = &jpgcodec;
-  if( UserCodec && UserCodec->CanCode( ts ) )
+  JPEGCodec *usercodec = dynamic_cast<JPEGCodec*>(UserCodec);
+  if( usercodec && usercodec->CanCode( ts ) )
     {
-    codec = UserCodec;
+    codec = usercodec;
     }
 
   if( codec->CanCode( ts ) )
@@ -172,6 +173,12 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap 
     codec->SetPhotometricInterpretation( input.GetPhotometricInterpretation() );
     codec->SetPixelFormat( input.GetPixelFormat() );
     codec->SetNeedOverlayCleanup( input.AreOverlaysInPixelData() );
+    // let's check we are not trying to compress 16bits with JPEG/Lossy/8bits
+    if( !input.GetPixelFormat().IsCompatible( ts ) )
+      {
+      gdcmErrorMacro("Pixel Format incompatible with TS" );
+      return false;
+      }
     DataElement out;
     //bool r = codec.Code(input.GetDataElement(), out);
     bool r = codec->Code(pixelde, out);
@@ -220,18 +227,25 @@ bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde, Bitma
   //assert( len == pixelde.GetByteValue()->GetLength() );
   const TransferSyntax &ts = GetTransferSyntax();
 
-  JPEGLSCodec codec;
-  if( codec.CanCode( ts ) )
+  JPEGLSCodec jlscodec;
+  ImageCodec *codec = &jlscodec;
+  JPEGLSCodec *usercodec = dynamic_cast<JPEGLSCodec*>(UserCodec);
+  if( usercodec && usercodec->CanCode( ts ) )
     {
-    codec.SetDimensions( input.GetDimensions() );
-    codec.SetPixelFormat( input.GetPixelFormat() );
+    codec = usercodec;
+    }
+
+  if( codec->CanCode( ts ) )
+    {
+    codec->SetDimensions( input.GetDimensions() );
+    codec->SetPixelFormat( input.GetPixelFormat() );
     //codec.SetNumberOfDimensions( input.GetNumberOfDimensions() );
-    codec.SetPlanarConfiguration( input.GetPlanarConfiguration() );
-    codec.SetPhotometricInterpretation( input.GetPhotometricInterpretation() );
-    codec.SetNeedOverlayCleanup( input.AreOverlaysInPixelData() );
+    codec->SetPlanarConfiguration( input.GetPlanarConfiguration() );
+    codec->SetPhotometricInterpretation( input.GetPhotometricInterpretation() );
+    codec->SetNeedOverlayCleanup( input.AreOverlaysInPixelData() );
     DataElement out;
     //bool r = codec.Code(input.GetDataElement(), out);
-    bool r = codec.Code(pixelde, out);
+    bool r = codec->Code(pixelde, out);
     if(!r) return false;
     output.SetPlanarConfiguration( 0 );
 
@@ -251,9 +265,10 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Bit
 
   JPEG2000Codec j2kcodec;
   ImageCodec *codec = &j2kcodec;
-  if( UserCodec && UserCodec->CanCode( ts ) )
+  JPEG2000Codec *usercodec = dynamic_cast<JPEG2000Codec*>(UserCodec);
+  if( usercodec && usercodec->CanCode( ts ) )
     {
-    codec = UserCodec;
+    codec = usercodec;
     }
 
   if( codec->CanCode( ts ) )

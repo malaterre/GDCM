@@ -1280,7 +1280,7 @@ int main (int argc, char *argv[])
     if( lossy )
       {
       if(!quiet)
-      PrintLossyWarning();
+        PrintLossyWarning();
       if( !gdcm::derives( reader.GetFile(), change.PixmapToPixmapFilter::GetOutput() ) )
         {
         std::cerr << "Failed to derives: " << filename << std::endl;
