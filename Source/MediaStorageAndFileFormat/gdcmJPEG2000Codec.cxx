@@ -1561,7 +1561,16 @@ bool JPEG2000Codec::DecodeExtent(
     // check pixel format *after* DecodeByStreamsCommon !
     const PixelFormat & pf2 = this->GetPixelFormat();
     // SC16BitsAllocated_8BitsStoredJ2K.dcm
-    if( pf != pf2 ) return false;
+    if( pf.GetSamplesPerPixel() != pf2.GetSamplesPerPixel()
+     || pf.GetBitsAllocated() != pf2.GetBitsAllocated()
+/*
+     || pf.GetPixelRepresentation() != pf2.GetPixelRepresentation() // TODO, we are a bit too agressive here
+*/
+    )
+      {
+      gdcmErrorMacro( "Invalid PixelFormat found (mismatch DICOM vs J2K)" );
+      return false;
+      }
 
     char *raw = raw_len.first;
     const unsigned int rowsize = xmax - xmin + 1;
