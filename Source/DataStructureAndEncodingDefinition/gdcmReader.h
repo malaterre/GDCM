@@ -119,6 +119,11 @@ private:
   TransferSyntax GuessTransferSyntax();
   std::istream *Stream;
   std::ifstream *Ifstream;
+
+private:
+  // Disable copy
+  Reader(const Reader&);
+  Reader& operator=(const Reader&);
 };
 
 /**
