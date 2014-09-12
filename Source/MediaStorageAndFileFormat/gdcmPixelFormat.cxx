@@ -316,7 +316,7 @@ bool PixelFormat::IsCompatible(const TransferSyntax & ts ) const
 {
   if( ts == TransferSyntax::JPEGBaselineProcess1 && BitsAllocated != 8 ) return false;
   // FIXME are we missing any ?
-  return false;
+  return true;
 }
 
 } // end namespace gdcm
