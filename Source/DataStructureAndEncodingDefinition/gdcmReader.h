@@ -122,6 +122,11 @@ protected:
   std::istream *Stream;
   std::ifstream *Ifstream;
   std::streampos m_posDataSet ;
+
+private:
+  // Disable copy
+  Reader(const Reader&);
+  Reader& operator=(const Reader&);
 };
 
 /**
