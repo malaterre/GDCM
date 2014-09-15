@@ -149,14 +149,14 @@ public:
   /// Replace a dataelement with another one
   void Replace(const DataElement& de) {
     if( DES.find(de) != DES.end() ) DES.erase(de);
-    Insert(de);
+    DES.insert(de);
   }
   /// Only replace a DICOM attribute when it is missing or empty
   void ReplaceEmpty(const DataElement& de) {
     ConstIterator it = DES.find(de);
     if( it != DES.end() && it->IsEmpty() )
       DES.erase(de);
-    Insert(de);
+    DES.insert(de);
   }
   /// Completely remove a dataelement from the dataset
   SizeType Remove(const Tag& tag) {
