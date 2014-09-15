@@ -1926,7 +1926,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     else
       {
       // In case user decide to override the default:
-      ds.Insert( at3.GetAsDataElement() );
+      ds.ReplaceEmpty( at3.GetAsDataElement() );
       }
     }
 }
