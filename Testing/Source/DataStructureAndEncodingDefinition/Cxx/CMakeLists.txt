@@ -30,7 +30,7 @@ set(DSED_TEST_SRCS
   TestDS
   TestVRLT
   TestVRUI
-  TestElement
+  TestElement1
   #TestExplicitDataElement
   TestFileMetaInformation
   TestFile
@@ -53,6 +53,7 @@ set(DSED_TEST_SRCS
   TestElement2
   TestElement4
   TestElement5
+  TestElement6
   )
 if(GDCM_TESTING_USE_LC_NUMERIC)
 # The test expect to be able to set fr as locale only turn if user

@@ -56,6 +56,7 @@ set(MSFF_TEST_SRCS
   TestApplicationEntity
   TestStringFilter1
   TestStringFilter2
+  TestStringFilter3
   TestUIDGenerator
   TestUUIDGenerator
   #TestUIDGenerator3

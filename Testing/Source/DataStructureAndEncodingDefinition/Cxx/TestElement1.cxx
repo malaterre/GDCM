@@ -189,7 +189,7 @@ int TestUSVM3()
 }
 }
 
-int TestElement(int , char *[])
+int TestElement1(int , char *[])
 {
   int r = 0;
   r += gdcm::TestFL();
