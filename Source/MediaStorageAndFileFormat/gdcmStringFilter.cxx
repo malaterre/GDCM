@@ -469,6 +469,7 @@ std::pair<std::string, std::string> StringFilter::ToStringPairInternal(const Dat
   return ret;
 }
 
+#if !defined(GDCM_LEGACY_REMOVE)
 std::string StringFilter::FromString(const Tag&t, const char * value, VL const & vl)
 {
   (void)t;
@@ -477,6 +478,7 @@ std::string StringFilter::FromString(const Tag&t, const char * value, VL const &
   assert(0 && "TODO");
   return "";
 }
+#endif
 
 #define FromStringFilterCase(type) \
   case VR::type: \
@@ -493,8 +495,9 @@ std::string StringFilter::FromString(const Tag&t, const char * value, VL const &
       } \
     break
 
-size_t count_backslash(const char *s, size_t len)
+static inline size_t count_backslash(const char *s, size_t len)
 {
+  assert( s );
   size_t c = 0;
   for(size_t i = 0; i < len; ++i, ++s)
     {
@@ -570,11 +573,6 @@ std::string StringFilter::FromString(const Tag&t, const char * value, size_t len
 #endif
     }
 
-  //if( vl != vm.GetLength() * vr.GetSizeof() )
-  //  {
-  //  assert(0);
-  //  }
-
   std::istringstream is;
   is.str( s );
   std::ostringstream os;
@@ -599,4 +597,4 @@ std::string StringFilter::FromString(const Tag&t, const char * value, size_t len
   return os.str();
 }
 
-}
+} // end namespace gdcm
