@@ -469,7 +469,7 @@ bool PixmapWriter::PrepareWrite()
     else
       {
       assert( ds.FindDataElement( at1.GetTag() ) );
-      assert( ds.FindDataElement( at3.GetTag() ) );
+      //assert( ds.FindDataElement( at3.GetTag() ) );
       at1.Set( ds );
       assert( atoi(at1.GetValue().c_str()) == 1 );
       }
