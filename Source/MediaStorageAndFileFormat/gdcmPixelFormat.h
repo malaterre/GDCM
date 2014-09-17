@@ -34,6 +34,13 @@ class TransferSyntax;
  * - BitsStored : 8
  * - HighBit : 7
  * - PixelRepresentation : 0
+ *
+ * Fundamentally PixelFormat is very close to what DICOM allows. It will be
+ * very hard to extend this class for the upcoming DICOM standard where
+ * Floating 32 and 64bits will be allowed.
+ *
+ * It is also very hard for this class to fully support 64bits integer type
+ * (see GetMin / GetMax signature restricted to 64bits signed).
  */
 class GDCM_EXPORT PixelFormat
 {
@@ -50,6 +57,8 @@ public:
     INT16,
     UINT32,  // For some DICOM files (RT or SC)
     INT32,   //                        "   "
+    UINT64,  // Needed when input is 32bits + intercept/slope (incomplete support)
+    INT64,   //                        "   "
     FLOAT16, // sure why not...
     FLOAT32, // good ol' 'float'
     FLOAT64, // aka 'double'

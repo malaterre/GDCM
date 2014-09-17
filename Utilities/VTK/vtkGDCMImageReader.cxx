@@ -909,8 +909,8 @@ int vtkGDCMImageReader::RequestInformationCompat()
     break;
   default:
     this->SetErrorCode(vtkErrorCode::FileFormatError);
-    vtkErrorMacro( "Do not support this Pixel Type: " << (int)pixeltype.GetScalarType()
-      << " with " << (int)outputpt  );
+    vtkErrorMacro( "Do not support this Pixel Type: " << pixeltype.GetScalarTypeAsString()
+      << " with " << gdcm::PixelFormat(outputpt).GetScalarTypeAsString()  );
     return 0;
     }
   this->NumberOfScalarComponents = pixeltype.GetSamplesPerPixel();
