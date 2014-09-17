@@ -23,6 +23,7 @@ int TestPixelFormat(int , char *[])
     return 1;
     }
   pf.SetScalarType( gdcm::PixelFormat::UINT32 );
+  //pf.SetScalarType( gdcm::PixelFormat::UINT64 );
   static const int64_t values[][2] = {
      { 0LL,255LL },
      { 0LL,4095LL },
@@ -32,6 +33,7 @@ int TestPixelFormat(int , char *[])
      { -2048LL,2047LL },
      { -32768LL,32767LL },
      { -2147483648LL,2147483647LL },
+//     { -2147483648LL,2147483647LL }
   };
   static const size_t n = sizeof( values ) / sizeof( *values );
   size_t c = 0;
@@ -62,6 +64,13 @@ int TestPixelFormat(int , char *[])
     std::cerr << pf.GetMin() << "," << pf.GetMax() << std::endl;
     return 1;
     }
+//  ++c;
+//  pf.SetBitsStored( 64 );
+//  if( pf.GetMin() != values[c][0] || pf.GetMax() != values[c][1] )
+//    {
+//    std::cerr << pf.GetMin() << "," << pf.GetMax() << std::endl;
+//    return 1;
+//    }
 
   pf.SetPixelRepresentation( 1 );
 
@@ -93,6 +102,13 @@ int TestPixelFormat(int , char *[])
     std::cerr << pf.GetMin() << "," << pf.GetMax() << std::endl;
     return 1;
     }
+//  ++c;
+//  pf.SetBitsStored( 64 );
+//  if( pf.GetMin() != values[c][0] || pf.GetMax() != values[c][1] )
+//    {
+//    std::cerr << pf.GetMin() << "," << pf.GetMax() << std::endl;
+//    return 1;
+//    }
   ++c;
   if ( c != n ) return 1;
 
