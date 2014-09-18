@@ -94,6 +94,10 @@ public:
   /// \warning need to call either SetFileName or SetStream first
   bool CanRead() const;
 
+  /// For wrapped language. return type is compatible with System::FileSize return type
+  /// Use native std::streampos / std::streamoff directly from the stream from C++
+  size_t GetStreamCurrentPosition() const;
+
 protected:
   bool ReadPreamble();
   bool ReadMetaInformation();

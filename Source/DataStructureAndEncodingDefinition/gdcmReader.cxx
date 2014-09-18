@@ -1009,5 +1009,10 @@ void Reader::SetFileName(const char *filename)
     }
 }
 
+size_t Reader::GetStreamCurrentPosition() const
+{
+  return GetStreamPtr()->tellg();
+}
+
 
 } // end namespace gdcm

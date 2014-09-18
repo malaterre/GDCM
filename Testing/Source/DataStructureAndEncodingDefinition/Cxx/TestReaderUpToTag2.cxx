@@ -44,6 +44,7 @@ static int TestReadUpToTag2(const char* filename, bool verbose = false)
   //commenting out for warning avoidance
   //const gdcm::FileMetaInformation &h = reader.GetFile().GetHeader();
   const gdcm::DataSet &ds = reader.GetFile().GetDataSet();
+  //std::cout << ds << std::endl;
   if( ds.FindDataElement( pixeldata ) )
     {
     std::cerr << "Found Pixel Data for: " << filename << std::endl;
