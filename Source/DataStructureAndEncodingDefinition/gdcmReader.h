@@ -96,6 +96,11 @@ public:
 
   /// Set/Get DataSet StreamPosition ;
   std::streampos GetDSStreamPosition() { return m_posDataSet ; }
+
+  /// For wrapped language. return type is compatible with System::FileSize return type
+  /// Use native std::streampos / std::streamoff directly from the stream from C++
+  size_t GetStreamCurrentPosition() const;
+
 protected:
   bool ReadPreamble();
   bool ReadMetaInformation();
