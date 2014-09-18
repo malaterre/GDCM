@@ -37,12 +37,22 @@ public class ExtractImageRegion
     {
     string filename = args[0];
 
+    uint file_size = gdcm.PosixEmulation.FileSize(filename);
+
     // instantiate the reader:
     gdcm.ImageRegionReader reader = new gdcm.ImageRegionReader();
     reader.SetFileName( filename );
 
     // pull DICOM info:
     if (!reader.ReadInformation()) return 1;
+
+    // store current offset:
+    uint cur_pos = reader.GetStreamCurrentPosition();
+
+    uint remaining = file_size - cur_pos;
+
+    Console.WriteLine("Remaining bytes to read (Pixel Data): " + remaining.ToString() );
+
     // Get file infos
     gdcm.File f = reader.GetFile();
 
