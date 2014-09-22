@@ -102,5 +102,70 @@ int TestImageHelper(int, char *[])
 
 }
 
+  // SC family
+  //ms = gdcm::MediaStorage::SecondaryCaptureImageStorage;
+  gdcm::PixelFormat pf;
+  gdcm::PhotometricInterpretation pi = gdcm::PhotometricInterpretation::MONOCHROME2;
+  gdcm::MediaStorage ms;
+  ms = gdcm::ImageHelper::ComputeMediaStorageFromModality( "OT", 2 );
+  if( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+    {
+    std::cerr << "SecondaryCaptureImageStorage 1" << std::endl;
+    return 1;
+    }
+  ms = gdcm::ImageHelper::ComputeMediaStorageFromModality( "OT", 2, pf );
+  if( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+    {
+    std::cerr << "SecondaryCaptureImageStorage 2" << std::endl;
+    return 1;
+    }
+  ms = gdcm::ImageHelper::ComputeMediaStorageFromModality( "OT", 2, pf, pi );
+  if( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+    {
+    std::cerr << "SecondaryCaptureImageStorage 3" << std::endl;
+    return 1;
+    }
+  ms = gdcm::ImageHelper::ComputeMediaStorageFromModality( "OT", 3, pf, pi );
+  if( ms != gdcm::MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage )
+    {
+    std::cerr << "MultiframeGrayscaleByteSecondaryCaptureImageStorage" << std::endl;
+    return 1;
+    }
+  pf.SetBitsAllocated( 1 );
+  ms = gdcm::ImageHelper::ComputeMediaStorageFromModality( "OT", 3, pf, pi );
+  if( ms != gdcm::MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage )
+    {
+    std::cerr << "MultiframeSingleBitSecondaryCaptureImageStorage" << std::endl;
+    return 1;
+    }
+  pf.SetBitsAllocated( 16 );
+  ms = gdcm::ImageHelper::ComputeMediaStorageFromModality( "OT", 3, pf, pi );
+  if( ms != gdcm::MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage )
+    {
+    std::cerr << "MultiframeGrayscaleWordSecondaryCaptureImageStorage" << std::endl;
+    return 1;
+    }
+  pf.SetBitsAllocated( 8 );
+  pf.SetSamplesPerPixel( 3 );
+  pi = gdcm::PhotometricInterpretation::RGB;
+  ms = gdcm::ImageHelper::ComputeMediaStorageFromModality( "OT", 3, pf, pi );
+  if( ms != gdcm::MediaStorage::MultiframeTrueColorSecondaryCaptureImageStorage )
+    {
+    std::cerr << "MultiframeTrueColorSecondaryCaptureImageStorage" << std::endl;
+    return 1;
+    }
+  ms = gdcm::ImageHelper::ComputeMediaStorageFromModality( "OT", 3, pf, pi, -1024, 1 );
+  if( ms != gdcm::MediaStorage::MS_END )
+    {
+    std::cerr << "MultiframeTrueColorSecondaryCaptureImageStorage 2" << std::endl;
+    return 1;
+    }
+  ms = gdcm::ImageHelper::ComputeMediaStorageFromModality( "OT", 3, pf, pi, 0, 2 );
+  if( ms != gdcm::MediaStorage::MS_END )
+    {
+    std::cerr << "MultiframeTrueColorSecondaryCaptureImageStorage 3" << std::endl;
+    return 1;
+    }
+
   return 0;
 }
