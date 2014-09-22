@@ -313,7 +313,10 @@ if(${CMAKE_VERSION} VERSION_LESS 2.8.2)
 endif()
 
 # Avoid non-ascii characters in tool output.
-set(ENV{LC_ALL} C)
+set(ENV{LC_ALL} "C")
+#SET(ENV{LC_MESSAGES}    "en_US" )
+# GDCM is locale dependant
+set(ENV{LANG} "C")
 
 # Helper macro to write the initial cache.
 macro(write_cache)
