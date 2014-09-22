@@ -1012,98 +1012,15 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 #endif
     }
 
-
-  if( this->FileDimensionality != 2 && (
-      ms == gdcm::MediaStorage::SecondaryCaptureImageStorage ||
-      ms == gdcm::MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage
-  ) )
+  ms = gdcm::ImageHelper::ComputeMediaStorageFromModality(
+    this->MedicalImageProperties->GetModality(), this->FileDimensionality,
+    pixeltype, pi, this->Shift, this->Scale );
+  if( ms == gdcm::MediaStorage::MS_END )
     {
-    // A.8.3.4 Multi-frame Grayscale Byte SC Image IOD Content Constraints
-/*
-- Samples per Pixel (0028,0002) shall be 1
-- Photometric Interpretation (0028,0004) shall be MONOCHROME2
-- Bits Allocated (0028,0100) shall be 8
-- Bits Stored (0028,0101) shall be 8
-- High Bit (0028,0102) shall be 7
-- Pixel Representation (0028,0103) shall be 0
-- Planar Configuration (0028,0006) shall not be present
-*/
-    if( this->FileDimensionality == 3 &&
-      pixeltype.GetSamplesPerPixel() == 1 &&
-      pi == gdcm::PhotometricInterpretation::MONOCHROME2 &&
-      pixeltype.GetBitsAllocated() == 8 &&
-      pixeltype.GetBitsStored() == 8 &&
-      pixeltype.GetHighBit() == 7 &&
-      pixeltype.GetPixelRepresentation() == 0
-      // image.GetPlanarConfiguration()
-    )
-      {
-      ms = gdcm::MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage;
-      if( this->Shift != 0 || this->Scale != 1 )
-        {
-        // Table C.8-25b SC MULTI-FRAME IMAGE MODULE ATTRIBUTES
-        // Note: This specifies an identity Modality LUT transformation.
-        vtkErrorMacro( "Cannot have shift/scale" );
-        return 0;
-        }
-      }
-    else if( this->FileDimensionality == 3 &&
-      pixeltype.GetSamplesPerPixel() == 1 &&
-      pi == gdcm::PhotometricInterpretation::MONOCHROME2 &&
-      pixeltype.GetBitsAllocated() == 1 &&
-      pixeltype.GetBitsStored() == 1 &&
-      pixeltype.GetHighBit() == 0 &&
-      pixeltype.GetPixelRepresentation() == 0
-      // image.GetPlanarConfiguration()
-    )
-      {
-      ms = gdcm::MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage;
-      if( this->Shift != 0 || this->Scale != 1 )
-        {
-        vtkErrorMacro( "Cannot have shift/scale" );
-        return 0;
-        }
-      }
-    else if( this->FileDimensionality == 3 &&
-      pixeltype.GetSamplesPerPixel() == 1 &&
-      pi == gdcm::PhotometricInterpretation::MONOCHROME2 &&
-      pixeltype.GetBitsAllocated() == 16 &&
-      pixeltype.GetBitsStored() <= 16 && pixeltype.GetBitsStored() >= 9 &&
-      pixeltype.GetHighBit() == pixeltype.GetBitsStored() - 1 &&
-      pixeltype.GetPixelRepresentation() == 0
-      // image.GetPlanarConfiguration()
-    )
-      {
-      ms = gdcm::MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage;
-      if( this->Shift != 0 || this->Scale != 1 )
-        {
-        vtkErrorMacro( "Cannot have shift/scale" );
-        return 0;
-        }
-      }
-    else if( this->FileDimensionality == 3 &&
-      pixeltype.GetSamplesPerPixel() == 3 &&
-      pi == gdcm::PhotometricInterpretation::RGB &&
-      pixeltype.GetBitsAllocated() == 8 &&
-      pixeltype.GetBitsStored() == 8 &&
-      pixeltype.GetHighBit() == 7 &&
-      pixeltype.GetPixelRepresentation() == 0
-      // image.GetPlanarConfiguration()
-    )
-      {
-      ms = gdcm::MediaStorage::MultiframeTrueColorSecondaryCaptureImageStorage;
-      if( this->Shift != 0 || this->Scale != 1 )
-        {
-        vtkErrorMacro( "Cannot have shift/scale" );
-        return 0;
-        }
-      }
-    else
-      {
-      vtkErrorMacro( "Cannot handle Multi Frame image in SecondaryCaptureImageStorage" );
-      return 0;
-      }
+    vtkErrorMacro( "Incompatible MediaStorage" );
+    return 0;
     }
+
 
   // FIXME: new Secondary object handle multi frames...
   assert( gdcm::MediaStorage::IsImage( ms ) );

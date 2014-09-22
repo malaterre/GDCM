@@ -132,6 +132,7 @@ public:
     return Length == bv.Length && Internal == bv.Internal;
     }
 
+  void Append(ByteValue const & bv);
 
   void Clear() {
     Internal.clear();

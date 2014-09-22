@@ -286,5 +286,13 @@ namespace gdcm
     os << std::dec;
     }
    
+  void ByteValue::Append(ByteValue const & bv)
+    {
+    //Internal.resize( Length + bv.Length );
+    Internal.insert( Internal.end(), bv.Internal.begin(), bv.Internal.end());
+    Length += bv.Length;
+    // post condition
+    assert( Internal.size() % 2 == 0 && Internal.size() == Length );
+    }
    
 }

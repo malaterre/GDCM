@@ -328,7 +328,11 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   //image.SetTransferSyntax( TransferSyntax::ExplicitVRBigEndian ); // PGM are big endian
   //image.SetTransferSyntax( TransferSyntax::ExplicitVRLittleEndian ); // PGM are big endian
   //image.SetTransferSyntax( TransferSyntax::ImplicitVRBigEndianPrivateGE ); // PGM are big endian
-  ts = TransferSyntax::ImplicitVRBigEndianPrivateGE;
+  if( pf.GetBitsAllocated() == 8 )
+    //ts = TransferSyntax::ImplicitVRLittleEndian; // nicer to handle than private GE
+    ts = TransferSyntax::ExplicitVRLittleEndian; // nicer to handle than private GE
+  else
+    ts = TransferSyntax::ImplicitVRBigEndianPrivateGE;
 
   SetPhotometricInterpretation( pi );
   SetPixelFormat( pf );

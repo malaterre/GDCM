@@ -2209,4 +2209,104 @@ const ByteValue* ImageHelper::GetPointerFromElement(Tag const &tag, const File& 
   return 0;
 }
 
+MediaStorage ImageHelper::ComputeMediaStorageFromModality(const char *modality,
+  unsigned int dimension, PixelFormat const & pixeltype,
+  PhotometricInterpretation const & pi,
+  double intercept , double slope
+  )
+{
+  MediaStorage ms = MediaStorage::SecondaryCaptureImageStorage;
+  ms.GuessFromModality(modality, dimension );
+
+  // refine for SC family
+  if( dimension != 2 &&
+    (ms == MediaStorage::SecondaryCaptureImageStorage // dim 2
+  || ms == MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage ) // dim 3
+  )
+    {
+    // A.8.3.4 Multi-frame Grayscale Byte SC Image IOD Content Constraints
+/*
+- Samples per Pixel (0028,0002) shall be 1
+- Photometric Interpretation (0028,0004) shall be MONOCHROME2
+- Bits Allocated (0028,0100) shall be 8
+- Bits Stored (0028,0101) shall be 8
+- High Bit (0028,0102) shall be 7
+- Pixel Representation (0028,0103) shall be 0
+- Planar Configuration (0028,0006) shall not be present
+*/
+    if( dimension == 3 &&
+      pixeltype.GetSamplesPerPixel() == 1 &&
+      pi == PhotometricInterpretation::MONOCHROME2 &&
+      pixeltype.GetBitsAllocated() == 8 &&
+      pixeltype.GetBitsStored() == 8 &&
+      pixeltype.GetHighBit() == 7 &&
+      pixeltype.GetPixelRepresentation() == 0
+    )
+      {
+      ms = MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage;
+      if( intercept != 0 || slope != 1 )
+        {
+        // Table C.8-25b SC MULTI-FRAME IMAGE MODULE ATTRIBUTES
+        // Note: This specifies an identity Modality LUT transformation.
+        gdcmErrorMacro( "Cannot have shift/scale" );
+        return MediaStorage::MS_END;
+        }
+      }
+    else if( dimension == 3 &&
+      pixeltype.GetSamplesPerPixel() == 1 &&
+      pi == PhotometricInterpretation::MONOCHROME2 &&
+      pixeltype.GetBitsAllocated() == 1 &&
+      pixeltype.GetBitsStored() == 1 &&
+      pixeltype.GetHighBit() == 0 &&
+      pixeltype.GetPixelRepresentation() == 0
+    )
+      {
+      ms = MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage;
+      if( intercept != 0 || slope != 1 )
+        {
+        gdcmDebugMacro( "Cannot have shift/scale" );
+        return MediaStorage::MS_END;
+        }
+      }
+    else if( dimension == 3 &&
+      pixeltype.GetSamplesPerPixel() == 1 &&
+      pi == PhotometricInterpretation::MONOCHROME2 &&
+      pixeltype.GetBitsAllocated() == 16 &&
+      pixeltype.GetBitsStored() <= 16 && pixeltype.GetBitsStored() >= 9 &&
+      pixeltype.GetHighBit() == pixeltype.GetBitsStored() - 1 &&
+      pixeltype.GetPixelRepresentation() == 0
+    )
+      {
+      ms = MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage;
+      if( intercept != 0 || slope != 1 )
+        {
+        gdcmDebugMacro( "Cannot have shift/scale" );
+        return MediaStorage::MS_END;
+        }
+      }
+    else if( dimension == 3 &&
+      pixeltype.GetSamplesPerPixel() == 3 &&
+      pi == PhotometricInterpretation::RGB &&
+      pixeltype.GetBitsAllocated() == 8 &&
+      pixeltype.GetBitsStored() == 8 &&
+      pixeltype.GetHighBit() == 7 &&
+      pixeltype.GetPixelRepresentation() == 0
+    )
+      {
+      ms = MediaStorage::MultiframeTrueColorSecondaryCaptureImageStorage;
+      if( intercept != 0 || slope != 1 )
+        {
+        gdcmDebugMacro( "Cannot have shift/scale" );
+        return MediaStorage::MS_END;
+        }
+      }
+    else
+      {
+      gdcmDebugMacro( "Cannot handle Multi Frame image in SecondaryCaptureImageStorage" );
+      return MediaStorage::MS_END;
+      }
+    }
+  return ms;
 }
+
+} // end namespace gdcm
