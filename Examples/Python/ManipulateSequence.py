@@ -25,7 +25,7 @@ This is a dummy example on how to modify a value set in a nested-nested dataset
 
 WARNING:
 Do not use as-is in production, this is just an example
-This example works in an undefined length Item only (you need to explicitely recompute the length otherwise)
+This example works in an undefined length Item only (you need to explicitly recompute the length otherwise)
 """
 
 import sys

@@ -218,7 +218,7 @@ public class ClinicalTrialIdentificationWorkflow
     //SimpleSubjectWatcher watcher = new SimpleSubjectWatcher(ano, "Anonymizer");
     MyWatcher watcher = new MyWatcher(ano);
 
-    // Explicitely specify the Cryptographic Message Syntax to use:
+    // Explicitly specify the Cryptographic Message Syntax to use:
     ano.SetCryptographicMessageSyntax( cms );
 
     // Process all filenames:

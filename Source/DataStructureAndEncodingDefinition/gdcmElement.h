@@ -378,7 +378,7 @@ public:
 };
 
 // For particular case for ASCII string
-// WARNING: This template explicitely instanciates a particular
+// WARNING: This template explicitly instanciates a particular
 // EncodingImplementation THEREFORE it is required to be declared after the
 // EncodingImplementation is needs (doh!)
 #if 0

@@ -345,13 +345,13 @@ bool FileChangeTransferSyntax::InitializeCopy()
       const TransferSyntax &ts = fmi.GetDataSetTransferSyntax();
       if( ts.IsEncapsulated() )
         {
-        gdcmDebugMacro( "Dont know how to handle encapsulated TS: " << ts );
+        gdcmDebugMacro( "Don't know how to handle encapsulated TS: " << ts );
         return false;
         }
       if( ts == TransferSyntax::ImplicitVRBigEndianPrivateGE
        || ts == TransferSyntax::ExplicitVRBigEndian )
         {
-        gdcmDebugMacro( "Dont know how to handle TS: " << ts );
+        gdcmDebugMacro( "Don't know how to handle TS: " << ts );
         return false;
         }
       Internals->Needbyteswap = (ts == TransferSyntax::ImplicitVRBigEndianPrivateGE
@@ -362,7 +362,7 @@ bool FileChangeTransferSyntax::InitializeCopy()
       Internals->PC = ImageHelper::GetPlanarConfigurationValue(file);
       if( Internals->PC )
         {
-        gdcmDebugMacro( "Dont know how to handle Planar Configuration" );
+        gdcmDebugMacro( "Don't know how to handle Planar Configuration" );
         return false;
         }
       is.close();

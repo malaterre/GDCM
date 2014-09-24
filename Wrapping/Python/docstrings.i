@@ -2790,7 +2790,7 @@ Set Tag Use with cautious (need to match Part 6) ";
 %feature("docstring")  gdcm::DataElement::SetValue "void
 gdcm::DataElement::SetValue(Value const &vl)
 
-WARNING:  you need to set the ValueLengthField explicitely ";
+WARNING:  you need to set the ValueLengthField explicitly ";
 
 %feature("docstring")  gdcm::DataElement::SetVL "void
 gdcm::DataElement::SetVL(const VL &vl)
@@ -4918,7 +4918,7 @@ Append path at the end of the path list WARNING:  not thread safe ! ";
 %feature("docstring")  gdcm::Global::GetDefs "Defs const&
 gdcm::Global::GetDefs() const
 
-retrieve the default/internal (Part 3) You need to explicitely call
+retrieve the default/internal (Part 3) You need to explicitly call
 LoadResourcesFiles before ";
 
 %feature("docstring")  gdcm::Global::GetDicts "Dicts const&
@@ -5056,7 +5056,7 @@ C++ includes: gdcmIconImageGenerator.h ";
 
 %feature("docstring")  gdcm::IconImageGenerator::AutoPixelMinMax "void gdcm::IconImageGenerator::AutoPixelMinMax(bool b)
 
-Instead of explicitely specifying the min/max value for the rescale
+Instead of explicitly specifying the min/max value for the rescale
 operation, let the internal mechanism compute the min/max of icon and
 rescale to best appropriate. ";
 

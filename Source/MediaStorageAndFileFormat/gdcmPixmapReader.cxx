@@ -1012,7 +1012,7 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
         if( !sqf )
           {
           // TODO: It would be nice to recognize file such as JPEGDefinedLengthSequenceOfFragments.dcm
-          gdcmDebugMacro( "File is declared as JPEG compressed but does not contains Fragmens explicitely." );
+          gdcmDebugMacro( "File is declared as JPEG compressed but does not contains Fragmens explicitly." );
           return false;
           }
         sqf->WriteBuffer( ss );

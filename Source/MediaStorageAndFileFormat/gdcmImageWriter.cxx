@@ -325,7 +325,7 @@ bool ImageWriter::Write()
     ds.Remove( Tag(0x0028, 0x1202) );
     ds.Remove( Tag(0x0028, 0x1203) );
 
-    // Dont' forget the segmented one:
+    // Don't forget the segmented one:
     ds.Remove( Tag(0x0028, 0x1221) );
     ds.Remove( Tag(0x0028, 0x1222) );
     ds.Remove( Tag(0x0028, 0x1223) );

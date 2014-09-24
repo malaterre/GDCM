@@ -5,7 +5,7 @@
 #  MONO_EXECUTABLE - the path to the swig executable
 #  MONO_VERSION   - the version number of the swig executable
 #
-# All informations are collected from the MONO_EXECUTABLE so the
+# All information are collected from the MONO_EXECUTABLE so the
 # version to be found can be changed from the command line by
 # means of setting MONO_EXECUTABLE
 #

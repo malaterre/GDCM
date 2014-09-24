@@ -44,24 +44,24 @@ public :
   Trace();
   ~Trace();
 
-  /// Explicitely set the ostream for gdcm::Trace to report to
+  /// Explicitly set the ostream for gdcm::Trace to report to
   /// This will set the DebugStream, WarningStream and ErrorStream at once:
   static void SetStream(std::ostream &os);
   static std::ostream &GetStream();
 
-  /// Explicitely set the stream which receive Debug messages:
+  /// Explicitly set the stream which receive Debug messages:
   static void SetDebugStream(std::ostream &os);
   static std::ostream &GetDebugStream();
 
-  /// Explicitely set the stream which receive Warning messages:
+  /// Explicitly set the stream which receive Warning messages:
   static void SetWarningStream(std::ostream &os);
   static std::ostream &GetWarningStream();
 
-  /// Explicitely set the stream which receive Error messages:
+  /// Explicitly set the stream which receive Error messages:
   static void SetErrorStream(std::ostream &os);
   static std::ostream &GetErrorStream();
 
-  /// Explicitely set the filename for gdcm::Trace to report to
+  /// Explicitly set the filename for gdcm::Trace to report to
   /// The file will be created (it will not append to existing file)
   static void SetStreamToFile( const char *filename );
 

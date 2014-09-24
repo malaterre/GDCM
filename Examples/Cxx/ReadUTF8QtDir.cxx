@@ -90,7 +90,7 @@ static int scanFolderQt(QDir const &dir, QStringList& files)
       continue;
     }
     // Convert back from the internal representation to 8bits
-    // toLocal8Bit() returns by copy. Need to store explicitely the QByteArray
+    // toLocal8Bit() returns by copy. Need to store explicitly the QByteArray
     QByteArray str = file.absoluteFilePath().toLocal8Bit();
     const char *ba_str1 = str.constData();
     res += TestBothFuncs("QString", ba_str1);

@@ -1180,7 +1180,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
               {
               raisedEvent = eEventDoesNotExist;
               theState = eStaDoesNotExist;
-              } // explicitely declare fall-through for some picky compiler
+              } // explicitly declare fall-through for some picky compiler
             case eAABORTRequest:
               waitingForEvent = false;
               inWhichConnection->StopProtocol();

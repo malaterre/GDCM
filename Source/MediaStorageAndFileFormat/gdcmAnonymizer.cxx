@@ -203,7 +203,7 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
         }
       else
         {
-        gdcmWarningMacro( "You need to explicitely specify the length for this type of vr: " << dictentry.GetVR() );
+        gdcmWarningMacro( "You need to explicitly specify the length for this type of vr: " << dictentry.GetVR() );
         ret = false;
         }
 #if 0

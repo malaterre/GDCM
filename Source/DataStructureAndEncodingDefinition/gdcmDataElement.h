@@ -93,7 +93,7 @@ public:
   /// Set/Get Value (bytes array, SQ of items, SQ of fragments):
   Value const &GetValue() const { return *ValueField; }
   Value &GetValue() { return *ValueField; }
-  /// \warning you need to set the ValueLengthField explicitely
+  /// \warning you need to set the ValueLengthField explicitly
   void SetValue(Value const & vl) {
     //assert( ValueField == 0 );
     ValueField = vl;
