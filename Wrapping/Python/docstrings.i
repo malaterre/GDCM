@@ -1585,6 +1585,9 @@ WARNING:  casting to uint32_t ";
 
 %feature("docstring")  gdcm::ByteValue::~ByteValue "gdcm::ByteValue::~ByteValue() ";
 
+%feature("docstring")  gdcm::ByteValue::Append "void
+gdcm::ByteValue::Append(ByteValue const &bv) ";
+
 %feature("docstring")  gdcm::ByteValue::Clear "void
 gdcm::ByteValue::Clear() ";
 
@@ -14265,10 +14268,10 @@ gdcm::terminal::setmode(Mode m) ";
 // File: namespacestd.xml
 
 
-// File: gdcm2pnm_8man.xml
+// File: gdcm2pnm_8dox.xml
 
 
-// File: gdcm2vtk_8man.xml
+// File: gdcm2vtk_8dox.xml
 
 
 // File: gdcmAAbortPDU_8h.xml
@@ -14286,7 +14289,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmAbstractSyntax_8h.xml
 
 
-// File: gdcmanon_8man.xml
+// File: gdcmanon_8dox.xml
 
 
 // File: gdcmAnonymizeEvent_8h.xml
@@ -14397,7 +14400,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmConstCharWrapper_8h.xml
 
 
-// File: gdcmconv_8man.xml
+// File: gdcmconv_8dox.xml
 
 
 // File: gdcmCP246ExplicitDataElement_8h.xml
@@ -14478,7 +14481,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmDicts_8h.xml
 
 
-// File: gdcmdiff_8man.xml
+// File: gdcmdiff_8dox.xml
 
 
 // File: gdcmDIMSE_8h.xml
@@ -14496,7 +14499,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmDummyValueGenerator_8h.xml
 
 
-// File: gdcmdump_8man.xml
+// File: gdcmdump_8dox.xml
 
 
 // File: gdcmDumper_8h.xml
@@ -14568,7 +14571,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmFragment_8h.xml
 
 
-// File: gdcmgendir_8man.xml
+// File: gdcmgendir_8dox.xml
 
 
 // File: gdcmGlobal_8h.xml
@@ -14625,7 +14628,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmImageWriter_8h.xml
 
 
-// File: gdcmimg_8man.xml
+// File: gdcmimg_8dox.xml
 
 
 // File: gdcmImplementationClassUIDSub_8h.xml
@@ -14640,7 +14643,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmImplicitDataElement_8h.xml
 
 
-// File: gdcminfo_8man.xml
+// File: gdcminfo_8dox.xml
 
 
 // File: gdcmIOD_8h.xml
@@ -14757,7 +14760,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmOverlay_8h.xml
 
 
-// File: gdcmpap3_8man.xml
+// File: gdcmpap3_8dox.xml
 
 
 // File: gdcmParseException_8h.xml
@@ -14778,7 +14781,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmPDBHeader_8h.xml
 
 
-// File: gdcmpdf_8man.xml
+// File: gdcmpdf_8dox.xml
 
 
 // File: gdcmPDFCodec_8h.xml
@@ -14865,7 +14868,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmQueryStudy_8h.xml
 
 
-// File: gdcmraw_8man.xml
+// File: gdcmraw_8dox.xml
 
 
 // File: gdcmRAWCodec_8h.xml
@@ -14886,13 +14889,13 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmRoleSelectionSub_8h.xml
 
 
+// File: gdcmscanner_8dox.xml
+
+
 // File: gdcmScanner_8h.xml
 
 
-// File: gdcmscanner_8man.xml
-
-
-// File: gdcmscu_8man.xml
+// File: gdcmscu_8dox.xml
 
 
 // File: gdcmSegment_8h.xml
@@ -15015,7 +15018,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmTagToVR_8h.xml
 
 
-// File: gdcmtar_8man.xml
+// File: gdcmtar_8dox.xml
 
 
 // File: gdcmTerminal_8h.xml
@@ -15117,7 +15120,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmVersion_8h.xml
 
 
-// File: gdcmviewer_8man.xml
+// File: gdcmviewer_8dox.xml
 
 
 // File: gdcmVL_8h.xml
@@ -15141,7 +15144,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmWriter_8h.xml
 
 
-// File: gdcmxml_8man.xml
+// File: gdcmxml_8dox.xml
 
 
 // File: gdcmXMLDictReader_8h.xml
@@ -15270,46 +15273,40 @@ gdcm::terminal::setmode(Mode m) ";
 // File: bug.xml
 
 
-// File: dir_041d54874d9fecec94d9cb4ae010b51e.xml
+// File: dir_48be02fb937e08881437e02515417ab2.xml
 
 
-// File: dir_8021392154ea27d3da33100afd5b42a1.xml
+// File: dir_dbdfee04788ce02e68d05e06d5e6d98f.xml
 
 
-// File: dir_83a82e6a2bc4a0f6429532cb237ca746.xml
+// File: dir_422e8974cbd0b7203ed9c70ede735192.xml
 
 
-// File: dir_b5e10a75694ce79ed5246996df6ac852.xml
+// File: dir_fc2dbd93ff698b14d78f486017ee822b.xml
 
 
-// File: dir_9760e222fce508c3b7270d68e6523d76.xml
+// File: dir_63e84970519399936bea68aa0151439e.xml
 
 
-// File: dir_90174c188c639015dd869d1a853f914f.xml
+// File: dir_a3a231e2bd7f702d85036607d7d87964.xml
 
 
-// File: dir_79920bb97f218edbefcc84a8dd00511f.xml
+// File: dir_bfc3201f3b82d7ccf14c524caa3c389b.xml
 
 
-// File: dir_aceed280bd27dc60f64c2cb4efae4f90.xml
+// File: dir_9a6580727919559370fc2250dcaca6b8.xml
 
 
-// File: dir_5aab2906425e8d9a7aa9fea4f8d0a2fa.xml
+// File: dir_087222ad62d2f517f4e0198672951648.xml
 
 
-// File: dir_5daaa9a41ac240f7de3019ff61b11839.xml
+// File: dir_2a74275ceded0a5f3b0fb2e9bd792825.xml
 
 
-// File: dir_b138abe427a068e1da5116454e79caa4.xml
+// File: dir_acafdc7d686494cf0735517ddc7a7669.xml
 
 
-// File: dir_6b1a62c3f439db8dff4e3363f340e91f.xml
-
-
-// File: dir_776c231028699256e0cc13f46def7474.xml
-
-
-// File: dir_6285418b2babf39982c6f35dbd05cbb5.xml
+// File: dir_d2ab22b73e3ee89be3a207288d7a9056.xml
 
 
 // File: AWTMedical3_8java-example.xml
