@@ -12,7 +12,7 @@
 #
 
 macro(install_swig_module module_name module_type)
-  # The following trick permits installion of module to the right destination:
+  # The following trick permits installation of module to the right destination:
   # binary path for dll (on windows)
   # library for non-dll platform
   if(WIN32)

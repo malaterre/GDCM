@@ -20,7 +20,7 @@ if(GDCM_DOCUMENTATION)
     "${GDCM_SOURCE_DIR}/Source/*.h"
     "${GDCM_SOURCE_DIR}/Wrapping/*.h"
     "${GDCM_SOURCE_DIR}/Utilities/VTK/*.h"
-    "${GDCM_SOURCE_DIR}/Utilities/doxygen/man/*.man"
+    "${GDCM_SOURCE_DIR}/Utilities/doxygen/man/*.dox"
   )
   list(REMOVE_ITEM headerfiles
     "${GDCM_SOURCE_DIR}/Source/DataDictionary/gdcmTagKeywords.h"
