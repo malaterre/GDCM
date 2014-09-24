@@ -1674,7 +1674,7 @@ Set Tag Use with cautious (need to match Part 6)
 %csmethodmodifiers  gdcm::DataElement::SetValue " /** void
 gdcm::DataElement::SetValue(Value const &vl)
 
-WARNING:  you need to set the ValueLengthField explicitely
+WARNING:  you need to set the ValueLengthField explicitly
 
 */ public";
 
@@ -3355,7 +3355,7 @@ Append path at the end of the path list WARNING:  not thread safe !
 %csmethodmodifiers  gdcm::Global::GetDefs " /** Defs const&
 gdcm::Global::GetDefs() const
 
-retrieve the default/internal (Part 3) You need to explicitely call
+retrieve the default/internal (Part 3) You need to explicitly call
 LoadResourcesFiles before
 
 */ public";

@@ -90,12 +90,12 @@ public:
                   int num, int total);
 
   // Description:
-  // Explicitely set the Rescale Intercept (0028,1052)
+  // Explicitly set the Rescale Intercept (0028,1052)
   vtkSetMacro(Shift,double);
   vtkGetMacro(Shift,double);
 
   // Description:
-  // Explicitely get/set the Rescale Slope (0028,1053)
+  // Explicitly get/set the Rescale Slope (0028,1053)
   vtkSetMacro(Scale,double);
   vtkGetMacro(Scale,double);
 

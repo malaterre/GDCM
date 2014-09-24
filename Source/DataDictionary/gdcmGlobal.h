@@ -59,7 +59,7 @@ public:
   Dicts &GetDicts();
 
   /// retrieve the default/internal (Part 3)
-  /// You need to explicitely call LoadResourcesFiles before
+  /// You need to explicitly call LoadResourcesFiles before
   Defs const &GetDefs() const;
 
   /// return the singleton instance

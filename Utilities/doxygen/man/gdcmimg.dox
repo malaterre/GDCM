@@ -161,7 +161,7 @@ $ dd skip=108 bs=1 if=input.raw of=output.raw
 \endverbatim
 
 .raw and .rawl extension are equivalent. You need to explicitly specify the
-endianess manually:
+endianness manually:
 
 \verbatim
 $ gdcmimg --endian MSB --size 512,512 --depth 16 -i input.raw -o output.dcm
@@ -212,7 +212,7 @@ $ gdcmimg -i input.j2k -o output.dcm
 
 the image will be a Secondary Capture.
 
-All Pixel informations (Bits Stored/Allocated...) will be derived from the
+All Pixel information (Bits Stored/Allocated...) will be derived from the
 image itself, and not from the command line options.
 
 \subsection sopclassuid Specifying a SOP Class UID

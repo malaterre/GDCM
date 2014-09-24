@@ -41,7 +41,7 @@ def TestModifyFields(filename):
   # let's insert a new dataelement
   # <entry group="0012" element="0062" vr="CS" vm="1" name="Patient Identity Removed"/>
   pir = gdcm.DataElement( gdcm.Tag(0x0012,0x0062) )
-  pir.SetVR( gdcm.VR( gdcm.VR.CS ) ) # specify the VR explicitely
+  pir.SetVR( gdcm.VR( gdcm.VR.CS ) ) # specify the VR explicitly
   yes = "YES"
   pir.SetByteValue( yes, gdcm.VL(len(yes)) )
   ds.Insert( pir )

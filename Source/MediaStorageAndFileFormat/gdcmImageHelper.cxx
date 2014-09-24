@@ -1290,7 +1290,7 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
         }
       else
         {
-        gdcmWarningMacro( "Dont know how to handle spacing for: " << de );
+        gdcmWarningMacro( "Don't know how to handle spacing for: " << de );
         sp.push_back( 1.0 );
         }
       }

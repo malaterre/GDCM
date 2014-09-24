@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
       if( const gdcm::ByteValue *bv = duplicate.GetByteValue() )
         {
         // Warning: when doing : duplicate = de, only the pointer to the ByteValue is passed
-        // (to avoid large memory duplicate). We need to explicitely duplicate the bytevalue ourselves:
+        // (to avoid large memory duplicate). We need to explicitly duplicate the bytevalue ourselves:
         gdcm::ByteValue *dupbv = new gdcm::ByteValue( bv->GetPointer(),
           bv->GetLength() );
         // Let's recognize the duplicated ASCII-type elements:

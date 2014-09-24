@@ -719,7 +719,7 @@ std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
     else
       {
       MetaInformationTS = TransferSyntax::Implicit;
-      gdcmWarningMacro( "File Meta Information is implicit. VR will be explicitely added" );
+      gdcmWarningMacro( "File Meta Information is implicit. VR will be explicitly added" );
       // Ok this might be an implicit encoded Meta File Information header...
       // GE_DLX-8-MONO2-PrivateSyntax.dcm
       is.seekg(-6, std::ios::cur); // Seek back
