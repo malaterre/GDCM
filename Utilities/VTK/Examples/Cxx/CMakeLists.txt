@@ -6,6 +6,7 @@ include_directories(
 if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
   set(GDCM_VTK_APPS
     CreateFakeRTDOSE
+    CreateFakePET
     ConvertSingleBitTo8Bits
     GenerateRTSTRUCT
     offscreenimage

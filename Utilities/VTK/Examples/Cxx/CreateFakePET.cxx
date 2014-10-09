@@ -52,12 +52,12 @@ int main(int, char *[])
   if( !b )
     {
     std::cerr << "FilenameGenerator::Generate() failed" << std::endl;
-    exit(0);
+    return 1;
     }
   if( !fg.GetNumberOfFilenames() )
     {
     std::cerr << "FilenameGenerator::Generate() failed somehow..." << std::endl;
-    exit(0);
+    return 1;
     }
 
   vtkStringArray *filenames = vtkStringArray::New();
@@ -65,7 +65,6 @@ int main(int, char *[])
     {
     filenames->InsertNextValue( fg.GetFilename(i) );
     }
-
 
   vtkImageData *image = vtkImageData::New();
   image->SetDimensions(xSize,ySize,zSize);
@@ -108,17 +107,12 @@ int main(int, char *[])
   writer->SetInput( image );
 #endif
   writer->GetMedicalImageProperties()->SetSliceThickness("1.5");
-  //writer->GetMedicalImageProperties()->AddUserDefinedValue( "Dose Units", "GY");
-  //writer->GetMedicalImageProperties()->AddUserDefinedValue( "Dose Summation Type", "PLAN");
-  //writer->GetMedicalImageProperties()->AddUserDefinedValue( "Dose Type", "PHYSICAL");
-  //writer->GetMedicalImageProperties()->AddUserDefinedValue( "Frame of Reference UID", "1.3.12.2.1107.5.6.1.68100.30270111041215391275000000001");
   writer->GetMedicalImageProperties()->SetModality( "PT" );
   writer->SetScale( 0.0042 ); // why not
   writer->Write();
 
   image->Delete();
   writer->Delete();
-
 
   return 0;
 }
