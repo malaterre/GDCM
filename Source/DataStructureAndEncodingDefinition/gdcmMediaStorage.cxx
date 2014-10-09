@@ -135,6 +135,7 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.77.1.5.1", // OphthalmicPhotography8BitImageStorage
   "1.2.840.10008.5.1.4.1.1.77.1.5.4", // OphthalmicTomographyImageStorage
   "1.2.840.10008.5.1.4.1.1.77.1.2",   // VL Microscopic Image Storage
+  "1.2.840.10008.5.1.4.1.1.130", // Enhanced PET Image Storage
   0
 };
 
@@ -312,6 +313,7 @@ static const MSModalityType MSModalityTypes[] = {
   {"OP", 2, 0},// OphthalmicPhotography8BitImageStorage
   {"OPT", 3, 0},// OphthalmicTomographyImageStorage
   {"GM", 3, 0},// VLMicroscopicImageStorage
+  {"PT", 3, 0},//PETImageStorage,
 
   {NULL, 0, 0} //MS_END
 };
