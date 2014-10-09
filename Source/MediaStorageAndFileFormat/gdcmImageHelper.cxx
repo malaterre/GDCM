@@ -1616,6 +1616,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
   if( ms != MediaStorage::CTImageStorage
    && ms != MediaStorage::MRImageStorage
    && ms != MediaStorage::RTDoseStorage
+   && ms != MediaStorage::PETImageStorage
    //&& ms != MediaStorage::ComputedRadiographyImageStorage
    && ms != MediaStorage::SegmentationStorage
    && ms != MediaStorage::EnhancedMRImageStorage
@@ -1693,6 +1694,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
   if( ms != MediaStorage::CTImageStorage
    && ms != MediaStorage::MRImageStorage
    && ms != MediaStorage::RTDoseStorage
+   && ms != MediaStorage::PETImageStorage
    //&& ms != MediaStorage::ComputedRadiographyImageStorage
    && ms != MediaStorage::SegmentationStorage
    && ms != MediaStorage::EnhancedMRImageStorage
