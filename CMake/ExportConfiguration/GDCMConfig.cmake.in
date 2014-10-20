@@ -18,7 +18,12 @@ set(GDCM_CMAKE_DIR "@GDCM_CMAKE_DIR_CONFIG@")
 
 # The configuration options.
 set(GDCM_BUILD_SHARED_LIBS "@GDCM_BUILD_SHARED_LIBS@")
-set(GDCM_USE_VTK "@GDCM_USE_VTK@")
+
+if(NOT GDCM_SKIP_USE_VTK)
+  set(GDCM_USE_VTK "@GDCM_USE_VTK@")
+else()
+  set(GDCM_USE_VTK "OFF")
+endif()
 
 # The "use" file.
 set(GDCM_USE_FILE "@GDCM_USE_FILE_CONFIG@")
