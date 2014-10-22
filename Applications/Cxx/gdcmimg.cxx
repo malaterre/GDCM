@@ -1007,6 +1007,7 @@ int main (int argc, char *argv[])
       || gdcm::System::StrCaseCmp(inputextension,".j2k") == 0
       || gdcm::System::StrCaseCmp(inputextension,".j2c") == 0
       || gdcm::System::StrCaseCmp(inputextension,".jpx") == 0
+      || gdcm::System::StrCaseCmp(inputextension,".jpf") == 0
       || gdcm::System::StrCaseCmp(inputextension,".jpc") == 0 )
       {
       /*
