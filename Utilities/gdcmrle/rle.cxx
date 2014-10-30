@@ -16,6 +16,7 @@
 #include "io.h"
 
 #include <vector>
+#include <algorithm> // req C++11
 #include <cstring> // memcpy
 #include <cassert>
 #include <stdint.h> // uint32_t
