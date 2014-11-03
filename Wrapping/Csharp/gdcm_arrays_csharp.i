@@ -60,7 +60,7 @@
 
 %typemap(ctype)   CTYPE INPUT[] "CTYPE*"
 %typemap(cstype)  CTYPE INPUT[] "CSTYPE[]"
-%typemap(imtype, inattributes="[In, MarshalAs(UnmanagedType.LPArray)]") CTYPE INPUT[] "CSTYPE[]"
+%typemap(imtype, inattributes="[In, global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPArray)]") CTYPE INPUT[] "CSTYPE[]"
 %typemap(csin)    CTYPE INPUT[] "$csinput"
 
 %typemap(in)      CTYPE INPUT[] "$1 = $input;"
@@ -71,7 +71,7 @@
 
 %typemap(ctype)   CTYPE OUTPUT[] "CTYPE*"
 %typemap(cstype)  CTYPE OUTPUT[] "CSTYPE[]"
-%typemap(imtype, inattributes="[Out, MarshalAs(UnmanagedType.LPArray)]") CTYPE OUTPUT[] "CSTYPE[]"
+%typemap(imtype, inattributes="[Out, global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPArray)]") CTYPE OUTPUT[] "CSTYPE[]"
 %typemap(csin)    CTYPE OUTPUT[] "$csinput"
 
 %typemap(in)      CTYPE OUTPUT[] "$1 = $input;"
@@ -82,7 +82,7 @@
 
 %typemap(ctype)   CTYPE INOUT[] "CTYPE*"
 %typemap(cstype)  CTYPE INOUT[] "CSTYPE[]"
-%typemap(imtype, inattributes="[In, Out, MarshalAs(UnmanagedType.LPArray)]") CTYPE INOUT[] "CSTYPE[]"
+%typemap(imtype, inattributes="[In, Out, global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPArray)]") CTYPE INOUT[] "CSTYPE[]"
 %typemap(csin)    CTYPE INOUT[] "$csinput"
 
 %typemap(in)      CTYPE INOUT[] "$1 = $input;"
