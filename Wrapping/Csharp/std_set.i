@@ -39,7 +39,7 @@
 /* V is the C++ value type */
 %define SWIG_STD_SET_INTERNAL(V)
 
-%typemap(csinterfaces) std::set< V > "IDisposable \n#if SWIG_DOTNET_3\n    , System.Collections.Generic.ISet<$typemap(cstype, V)>\n#endif\n";
+%typemap(csinterfaces) std::set< V > "global::System.IDisposable \n#if SWIG_DOTNET_3\n    , global::System.Collections.Generic.ISet<$typemap(cstype, V)>\n#endif\n";
 %typemap(cscode) std::set<K, T > %{
 
   public $typemap(cstype, V) this[$typemap(cstype, V) key] {
