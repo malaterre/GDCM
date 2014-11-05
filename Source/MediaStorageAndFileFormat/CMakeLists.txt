@@ -44,6 +44,7 @@ set(MSFF_SRCS
   gdcmUIDGenerator.cxx
   gdcmUUIDGenerator.cxx
   gdcmPrinter.cxx
+  gdcmPrinterJSON.cxx
   gdcmDictPrinter.cxx
   gdcmXMLPrinter.cxx
   gdcmScanner.cxx

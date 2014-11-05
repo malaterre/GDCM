@@ -15,6 +15,7 @@
 
 #include <algorithm> // req C++11
 #include <cstring> // memcpy
+#include <math.h>
 
 namespace gdcm
 {
@@ -266,6 +267,103 @@ namespace gdcm
       }
     os << "</Value>\n";
     }
+
+  void ByteValue::PrintASCIIJSON(std::ostream &os) const
+    {
+    //VL length = std::min(maxlength, Length);
+    // Special case for VR::UI, do not print the trailing \0
+
+    /*if(Length && Internal[Length-1] == 0 )
+      {
+      Length = Length - 1;
+      }
+     */
+    // Check for non printable characters
+    std::string s = "";
+    bool isvector = false;
+
+    std::vector<char>::const_iterator it = Internal.begin();
+    for(; it != (Internal.begin() + Length); ++it)
+      {
+      const char &c = *it;
+      if ( c == '\\' )
+        {
+        isvector = true;
+        }
+
+      if(c == '\0'){
+        break;
+      }else if(c < 32 || c > 126){
+          s += " ";
+      }else if(c == '\"'){
+          s += "\\\"";
+      }else{
+        s += c;
+      }
+    }
+
+    if(isvector){
+        std::vector< std::string > vect;
+        int start = 0;
+        int next = s.find("\\");
+        while(next != -1){
+            vect.push_back(s.substr(start, next-start));
+            start = next + 1;
+            next = s.find("\\", start);
+            if(next == -1){
+                vect.push_back(s.substr(start));
+            }
+        }
+        std::string res = "";
+        for(int i = 0; i< vect.size(); i++){
+            if(isFloat(vect[i])){
+                res+=vect[i];
+            }else{
+                res+= "\"" + vect[i] + "\"";
+            }
+            if(i < vect.size() - 1)
+                res += ",";
+        }
+        if(vect.size() == 1){
+            os<<res;
+        }else{
+            os<<"["<<res<<"]";
+        }
+    }else{
+        try{
+            if(isFloat(s)){
+                double v = atof(s.c_str());
+                if(ceil(v) == v && floor(v) == v){
+                    int t = (int)v;
+                    os<<t;
+                }else{
+                    os<<std::setprecision( 6 )<<v;
+                }
+
+            }else{
+                os<<"\""<<s<<"\"";
+            }
+
+        }catch(Exception* e){
+            os<<"\""<<s<<"\"";
+        }
+
+    }
+
+  }
+
+bool ByteValue::isFloat( std::string& s ) const {
+    //Delete all empty spaces from end
+    s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+    //Delete all empty spaces from begin
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
+    std::istringstream iss(s);
+    float f;
+    iss >> std::noskipws >> f; // noskipws considers leading whitespace invalid
+    // Check the entire string was consumed and if either failbit or badbit is set
+    return iss.eof() && !iss.fail();
+}
+
 
   void ByteValue::PrintHexXML(std::ostream &os ) const
     {
