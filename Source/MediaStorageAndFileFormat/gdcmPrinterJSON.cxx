@@ -863,7 +863,9 @@ void PrinterJSON::Print(std::ostream& os)
   else if (PrintStyle == CONDENSED_STYLE )
     DumpDataSetJSON(meta, os);
 
-  os<<",\n";
+  if(meta.Begin() != meta.End()){
+    os<<",\n";
+  }
   //os << "\n# Dicom-Data-Set\n";
   //os << "# Used TransferSyntax: ";
   //const TransferSyntax &metats = meta.GetDataSetTransferSyntax();
