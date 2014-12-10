@@ -64,6 +64,7 @@ bool ImageChangePhotometricInterpretation::ChangeMonochrome()
 
   //ImageCodec ic;
   RAWCodec ic;
+  ic.SetPixelFormat(image.GetPixelFormat());
   std::ostringstream os;
   ic.DoInvertMonochrome( is, os );
 
