@@ -37,6 +37,10 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x3001,0x0001,"Philips3D",VR::UL,VM::VM1,"Number of Time Phases",false },
+  {0x3001,0x0002,"Philips3D",VR::US,VM::VM1,"Physical Units Z Direction",false },
+  {0x3001,0x0003,"Philips3D",VR::FD,VM::VM1,"Physical Delta Z",false },
+  {0x3001,0x0004,"Philips3D",VR::UI,VM::VM1,"?UID?",false },
   {0x6301,0x0001,"KRETZ_PRIVATE",VR::IS,VM::VM1,"?",false },
   {0x6301,0x0002,"KRETZ_PRIVATE",VR::IS,VM::VM1,"?",false },
   {0x0029,0x0000,"VOLCANO-PCDE 1.0",VR::DS,VM::VM1,"Pullback Rate",false },
