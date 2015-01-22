@@ -569,7 +569,8 @@ bool DoOverlays(const DataSet& ds, Pixmap& pixeldata)
       if( obp < pf.GetBitsStored() )
         {
         pixeldata.RemoveOverlay( ov );
-        gdcmWarningMacro( "Invalid BitPosition: " << obp << " for overlay #" << ov << " removing it." );
+        gdcmWarningMacro( "Invalid BitPosition: " << obp << " for overlay #" <<
+          ov << " removing it." );
         }
       }
     }
