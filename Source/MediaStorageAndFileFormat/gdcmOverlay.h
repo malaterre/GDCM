@@ -124,6 +124,7 @@ public:
   bool GetUnpackBuffer(char *buffer, size_t len) const;
 
   Overlay(Overlay const &ov);
+  Overlay &operator=(Overlay const &ov);
 
 private:
   OverlayInternal *Internal;

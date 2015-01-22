@@ -99,6 +99,13 @@ Overlay::Overlay(Overlay const &ov):Object(ov)
   *Internal = *ov.Internal;
 }
 
+Overlay & Overlay::operator=(Overlay const &ov)
+{
+  assert( Internal );
+  *Internal = *ov.Internal;
+  return *this;
+}
+
 void Overlay::Update(const DataElement & de)
 {
 /*
