@@ -391,6 +391,34 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
   return false;
 }
 
+static inline bool check_comp_valid(opj_image_t *image)
+{
+    int compno = 0;
+    opj_image_comp_t *comp = &image->comps[compno];
+    if (comp->prec > 32) // I doubt openjpeg will reach here.
+        return false;
+
+    bool invalid = false;
+    if (image->numcomps == 3)
+    {
+        opj_image_comp_t *comp1 = &image->comps[1];
+        opj_image_comp_t *comp2 = &image->comps[2];
+#if OPENJPEG_MAJOR_VERSION == 1
+        if (comp->bpp != comp1->bpp) invalid = true;
+        if (comp->bpp != comp2->bpp) invalid = true;
+#endif // OPENJPEG_MAJOR_VERSION == 1
+        if (comp->prec != comp1->prec) invalid = true;
+        if (comp->prec != comp2->prec) invalid = true;
+        if (comp->sgnd != comp1->sgnd) invalid = true;
+        if (comp->sgnd != comp2->sgnd) invalid = true;
+        if (comp->h != comp1->h) invalid = true;
+        if (comp->h != comp2->h) invalid = true;
+        if (comp->w != comp1->w) invalid = true;
+        if (comp->w != comp2->w) invalid = true;
+    }
+    return !invalid;
+}
+
 std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffer, size_t buf_size)
 {
   opj_dparameters_t parameters;  /* decompression parameters */
@@ -1016,7 +1044,7 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
 
   myfile mysrc;
   myfile *fsrc = &mysrc;
-  char *buffer_j2k = new char[image_len]; // overallocated
+  char *buffer_j2k = new char[inputlength]; // overallocated
   fsrc->mem = fsrc->cur = buffer_j2k;
   fsrc->len = 0;
 
@@ -1154,34 +1182,6 @@ bool JPEG2000Codec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   bool b = GetHeaderInfo( dummy_buffer, (size_t)buf_size, ts );
   delete[] dummy_buffer;
   return b;
-}
-
-static inline bool check_comp_valid( opj_image_t *image )
-{
-  int compno = 0;
-  opj_image_comp_t *comp = &image->comps[compno];
-  if( comp->prec > 32 ) // I doubt openjpeg will reach here.
-    return false;
-
-  bool invalid = false;
-  if( image->numcomps == 3 )
-    {
-    opj_image_comp_t *comp1 = &image->comps[1];
-    opj_image_comp_t *comp2 = &image->comps[2];
-#if OPENJPEG_MAJOR_VERSION == 1
-    if( comp->bpp  != comp1->bpp  ) invalid = true;
-    if( comp->bpp  != comp2->bpp  ) invalid = true;
-#endif // OPENJPEG_MAJOR_VERSION == 1
-    if( comp->prec != comp1->prec ) invalid = true;
-    if( comp->prec != comp2->prec ) invalid = true;
-    if( comp->sgnd != comp1->sgnd ) invalid = true;
-    if( comp->sgnd != comp2->sgnd ) invalid = true;
-    if( comp->h != comp1->h ) invalid = true;
-    if( comp->h != comp2->h ) invalid = true;
-    if( comp->w != comp1->w ) invalid = true;
-    if( comp->w != comp2->w ) invalid = true;
-    }
-  return !invalid;
 }
 
 bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, TransferSyntax &ts)
