@@ -68,7 +68,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="do-element" select="1"/>
             <xsl:with-param name="group" select="@group"/>
             <xsl:with-param name="element" select="$element"/>
-            <!--xsl:with-param name="owner" select="@owner"/-->
+            <xsl:with-param name="owner" select="@owner"/>
             <xsl:with-param name="vr" select="@vr"/>
             <xsl:with-param name="vm" select="@vm"/>
             <xsl:with-param name="retired" select="@retired"/>
@@ -81,7 +81,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="do-group" select="1"/>
             <xsl:with-param name="group" select="$group"/>
             <xsl:with-param name="element" select="@element"/>
-            <!--xsl:with-param name="owner" select="@owner"/-->
+            <xsl:with-param name="owner" select="@owner"/>
             <xsl:with-param name="vr" select="@vr"/>
             <xsl:with-param name="vm" select="@vm"/>
             <xsl:with-param name="retired" select="@retired"/>
@@ -93,7 +93,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
             <xsl:with-param name="count" select="255"/>
             <xsl:with-param name="group" select="@group"/>
             <xsl:with-param name="element" select="@element"/>
-            <!--xsl:with-param name="owner" select="@owner"/-->
+            <xsl:with-param name="owner" select="@owner"/>
             <xsl:with-param name="vr" select="@vr"/>
             <xsl:with-param name="vm" select="@vm"/>
             <xsl:with-param name="retired" select="@retired"/>

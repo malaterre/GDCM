@@ -17,6 +17,7 @@
 #include "gdcmReader.h"
 #include "gdcmPrivateTag.h"
 #include "gdcmPrinter.h"
+#include "gdcmDictPrinter.h"
 
 #include <iostream>
 #include <fstream>
@@ -41,8 +42,10 @@ bool DumpToshibaDTI( const char * input, size_t len )
     return false;
 
   //std::cout << reader.GetFile().GetDataSet() << std::endl;
+  //gdcm::DictPrinter p;
   gdcm::Printer p;
   p.SetFile( reader.GetFile() );
+  p.SetColor( true );
   p.Print( std::cout );
 
   return true;
