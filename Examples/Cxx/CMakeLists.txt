@@ -40,6 +40,7 @@ set(EXAMPLES_SRCS
   ExtractIconFromFile
   CreateJPIPDataSet
   DumpADAC
+  DumpToshibaDTI
   DumpImageHeaderInfo
   ReadMultiTimesException
   pmsct_rgb1
