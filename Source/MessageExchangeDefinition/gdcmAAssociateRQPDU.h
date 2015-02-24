@@ -80,7 +80,7 @@ public:
   PresentationContextArrayType const &GetPresentationContexts() { return PresContext; }
 
   const PresentationContextRQ *GetPresentationContextByID(uint8_t i) const;
-  const PresentationContextRQ *GetPresentationContextByAbstractSyntax(AbstractSyntax const & as ) const;
+  const PresentationContextRQ *GetPresentationContextByAbstractSyntax(AbstractSyntax const & absyn ) const;
   bool IsLastFragment() const { return true; }
 
   const UserInformation & GetUserInformation() const { return UserInfo; }
