@@ -611,8 +611,19 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
     }
   else if( t.GetElement() == 0x0010 ) // Hum, is it a private creator ?
     {
-    is.seekg(-4, std::ios::cur); // Seek back
-    DataSetTS = TransferSyntax::ImplicitVRLittleEndian;
+    char vr_str[3];
+    is.read(vr_str, 2);
+    vr_str[2] = '\0';
+    VR::VRType vr = VR::GetVRType(vr_str);
+    if( vr != VR::VR_END )
+      {
+      DataSetTS = TransferSyntax::ExplicitVRLittleEndian;
+      }
+    else
+      {
+      DataSetTS = TransferSyntax::ImplicitVRLittleEndian;
+      }
+    is.seekg(-6, std::ios::cur); // Seek back
     }
   else
     {
