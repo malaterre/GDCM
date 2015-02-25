@@ -80,7 +80,7 @@ public:
   /// Not implemented for now. GDCM internally uses Implicit Little Endian
   void SetDefaultTransferSyntax( const TransferSyntax &ts );
 protected:
-  bool AddPresentationContext( const char *as, const char *ts );
+  bool AddPresentationContext( const char *absyn, const char *ts );
   const char *GetDefaultTransferSyntax() const;
 
 private:

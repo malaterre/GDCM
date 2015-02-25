@@ -37,7 +37,7 @@ public:
   PresentationContext( UIDs::TSName asname,
     UIDs::TSName tsname = UIDs::ImplicitVRLittleEndianDefaultTransferSyntaxforDICOM );
 
-  void SetAbstractSyntax( const char *as ) { AbstractSyntax = as; }
+  void SetAbstractSyntax( const char *absyn ) { AbstractSyntax = absyn; }
   const char *GetAbstractSyntax() const { return AbstractSyntax.c_str(); }
 
   void AddTransferSyntax( const char *tsstr );
