@@ -19,7 +19,7 @@
 #include "gdcmSmartPointer.h"
 #include "gdcmParseException.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 // Implementation detail:
@@ -234,6 +234,6 @@ inline std::ostream &operator<<(std::ostream &os, const Fragment &val)
   return os;
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif //GDCMFRAGMENT_H

@@ -16,9 +16,42 @@
 #include <algorithm> // req C++11
 #include <cstring> // memcpy
 
-namespace gdcm
+namespace gdcm_ns
 {
 
+  void ByteValue::SetLength(VL vl) {
+    VL l(vl);
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+    // CompressedLossy.dcm
+    if( l.IsUndefined() ) throw Exception( "Impossible" );
+    if ( l.IsOdd() ) {
+      gdcmDebugMacro(
+        "BUGGY HEADER: Your dicom contain odd length value field." );
+      ++l;
+      }
+#else
+    assert( !l.IsUndefined() && !l.IsOdd() );
+#endif
+    // I cannot use reserve for now. I need to implement:
+    // STL - vector<> and istream
+    // http://groups.google.com/group/comp.lang.c++/msg/37ec052ed8283e74
+//#define SHORT_READ_HACK
+    try
+      {
+#ifdef SHORT_READ_HACK
+    if( l <= 0xff )
+#endif
+      Internal.resize(l);
+      //Internal.reserve(l);
+      }
+    catch(...)
+      {
+      //throw Exception("Impossible to allocate: " << l << " bytes." );
+      throw Exception("Impossible to allocate" );
+      }
+    // Keep the exact length
+    Length = vl;
+  }
   void ByteValue::PrintASCII(std::ostream &os, VL maxlength ) const {
     VL length = std::min(maxlength, Length);
     // Special case for VR::UI, do not print the trailing \0
@@ -295,4 +328,4 @@ namespace gdcm
     assert( Internal.size() % 2 == 0 && Internal.size() == Length );
     }
    
-}
+} // end namespace gdcm_ns

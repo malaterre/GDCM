@@ -23,7 +23,7 @@
 #include "gdcmValueIO.h"
 #include "gdcmSwapper.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 //-----------------------------------------------------------------------------
 template <typename TSwap>
@@ -557,6 +557,6 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
 
 
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif // GDCMEXPLICITDATAELEMENT_TXX

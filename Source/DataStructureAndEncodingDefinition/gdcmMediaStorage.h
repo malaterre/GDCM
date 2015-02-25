@@ -16,11 +16,13 @@
 
 #include "gdcmTransferSyntax.h"
 
-namespace gdcm
+namespace gdcm { class Tag; }
+namespace gdcm_ns
 {
-
+#if !defined(SWIGPYTHON) && !defined(SWIGCSHARP) && !defined(SWIGJAVA) && !defined(SWIGPHP)
+using namespace gdcm;
+#endif
 class DataSet;
-class Tag;
 class FileMetaInformation;
 class File;
 
@@ -205,6 +207,6 @@ inline std::ostream &operator<<(std::ostream &_os, const MediaStorage &ms)
 
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif // GDCMMEDIASTORAGE_H

@@ -16,10 +16,12 @@
 
 #include "gdcmObject.h"
 
-namespace gdcm
+namespace gdcm { class VL; }
+namespace gdcm_ns
 {
-
-class VL;
+#if !defined(SWIGPYTHON) && !defined(SWIGCSHARP) && !defined(SWIGJAVA) && !defined(SWIGPHP)
+using namespace gdcm;
+#endif
 /**
  * \brief Class to represent the value of a Data Element.
  * \note
@@ -44,8 +46,7 @@ protected:
   virtual void SetLengthOnly(VL l);
 };
 
-
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #include "gdcmValue.txx"
 

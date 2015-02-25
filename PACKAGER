@@ -48,3 +48,9 @@ Examples:
 GDCM comes with some examples for user, but setting the following:
 GDCM_BUILD_EXAMPLES:BOOL=ON
 will not do anything since there is no install rule for examples...
+
+The library attempts to provide a clean API, therefore it is highly suggested that you compile GDCM using:
+
+$ CFLAGS=-fvisibility=hidden CXXFLAGS=-fvisibility=hidden cmake /path/to/gdcm/sources
+
+This make sure that on UNIX, the API is actually identical at what is found on Windows.

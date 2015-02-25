@@ -16,7 +16,7 @@
 
 #include "gdcmDataElement.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 /**
  * \brief Class to read/write a DataElement as Explicit Data Element
@@ -43,7 +43,7 @@ public:
   const std::ostream &Write(std::ostream &os) const;
 };
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #include "gdcmExplicitDataElement.txx"
 

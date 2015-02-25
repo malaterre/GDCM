@@ -14,8 +14,8 @@
 #ifndef GDCMVALUE_TXX
 #define GDCMVALUE_TXX
 
-namespace gdcm
+namespace gdcm_ns
 {
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif // GDCMVALUE_TXX

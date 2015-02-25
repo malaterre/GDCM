@@ -22,7 +22,7 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmByteValue.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
   template <typename TDE, typename TSwap, typename TType>
@@ -71,6 +71,6 @@ namespace gdcm
     return os;
   }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif // GDCMVALUEIO_TXX

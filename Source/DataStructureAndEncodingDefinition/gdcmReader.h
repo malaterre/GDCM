@@ -18,7 +18,7 @@
 
 #include <fstream>
 
-namespace gdcm
+namespace gdcm_ns
 {
   class StreamImageReader;
 /**
@@ -53,10 +53,7 @@ namespace gdcm
 class GDCM_EXPORT Reader
 {
 public:
-  Reader():F(new File){
-    Stream = NULL;
-    Ifstream = NULL;
-  }
+  Reader();
   virtual ~Reader();
 
   /// Main function to read a file
@@ -135,7 +132,7 @@ protected:
  * This is a C++ example on how to use gdcm::Reader
  */
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 
 #endif //GDCMREADER_H

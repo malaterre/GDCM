@@ -13,9 +13,12 @@
 =========================================================================*/
 #include "gdcmFile.h"
 
-
-namespace gdcm
+namespace gdcm_ns
 {
+
+// Keep cstor and dstor here to keep API minimal (see dllexport issue with gdcmstrict::)
+File::File() {}
+File::~File() {}
 
 std::istream &File::Read(std::istream &is)
 {
@@ -29,4 +32,4 @@ std::ostream const &File::Write(std::ostream &os) const
   return os;
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns

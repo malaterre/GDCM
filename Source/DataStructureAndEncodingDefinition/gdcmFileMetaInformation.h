@@ -21,7 +21,7 @@
 #include "gdcmTransferSyntax.h"
 #include "gdcmExplicitDataElement.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 /**
  * \brief Class to represent a File Meta Information
@@ -41,7 +41,8 @@ class GDCM_EXPORT FileMetaInformation : public DataSet
 {
 public:
   // FIXME: TransferSyntax::TS_END -> TransferSyntax::ImplicitDataElement
-  FileMetaInformation():DataSetTS(TransferSyntax::TS_END),MetaInformationTS(TransferSyntax::Unknown),DataSetMS(MediaStorage::MS_END) {}
+  FileMetaInformation();
+  ~FileMetaInformation();
 
   friend std::ostream &operator<<(std::ostream &_os, const FileMetaInformation &_val);
 
@@ -143,6 +144,6 @@ inline std::ostream& operator<<(std::ostream &os, const FileMetaInformation &val
   return os;
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif //GDCMFILEMETAINFORMATION_H

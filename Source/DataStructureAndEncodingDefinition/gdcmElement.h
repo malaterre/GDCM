@@ -29,7 +29,7 @@
 #include <cmath>
 #include <cstring>
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 // Forward declaration
@@ -736,6 +736,6 @@ template <>
 class Element<VR::OW, VM::VM1> : public Element<VR::OW, VM::VM1_n> {};
 
 
-} // namespace gdcm
+} // namespace gdcm_ns
 
 #endif //GDCMELEMENT_H

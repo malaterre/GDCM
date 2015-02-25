@@ -16,7 +16,7 @@
 
 #include "gdcmDataElement.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 /**
@@ -47,7 +47,7 @@ public:
   const std::ostream &Write(std::ostream& os) const;
 };
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #include "gdcmImplicitDataElement.txx"
 

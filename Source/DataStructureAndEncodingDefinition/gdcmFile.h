@@ -18,7 +18,7 @@
 #include "gdcmDataSet.h"
 #include "gdcmFileMetaInformation.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 /**
@@ -33,7 +33,8 @@ namespace gdcm
 class GDCM_EXPORT File : public Object
 {
 public:
-  File() {};
+  File();
+  ~File();
 
   friend std::ostream &operator<<(std::ostream &os, const File &val);
 
@@ -74,6 +75,6 @@ inline std::ostream& operator<<(std::ostream &os, const File &val)
   return os;
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif //GDCMFILE_H

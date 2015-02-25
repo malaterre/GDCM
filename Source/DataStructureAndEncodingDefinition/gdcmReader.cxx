@@ -32,8 +32,14 @@
 #endif
 
 
-namespace gdcm
+namespace gdcm_ns
 {
+
+Reader::Reader():F(new File)
+{
+  Stream = NULL;
+  Ifstream = NULL;
+}
 
 Reader::~Reader()
 {
@@ -198,10 +204,10 @@ namespace details
   class DefaultCaller
   {
   private:
-    gdcm::DataSet & m_dataSet;
+    DataSet & m_dataSet;
 	std::streampos & m_posDataSet ;
   public:
-    DefaultCaller(gdcm::DataSet &ds, std::streampos & posDataSet): m_dataSet(ds),m_posDataSet(posDataSet){}
+    DefaultCaller(DataSet &ds, std::streampos & posDataSet): m_dataSet(ds),m_posDataSet(posDataSet){}
     template<class T1, class T2>
       void ReadCommon(std::istream & is) const
         {
@@ -227,12 +233,12 @@ namespace details
   class ReadUpToTagCaller
   {
   private:
-    gdcm::DataSet & m_dataSet;
-    const gdcm::Tag & m_tag;
-    std::set<gdcm::Tag> const & m_skipTags;
+    DataSet & m_dataSet;
+    const Tag & m_tag;
+    std::set<Tag> const & m_skipTags;
 	std::streampos & m_posDataSet ;
   public:
-    ReadUpToTagCaller(gdcm::DataSet &ds,const gdcm::Tag & tag, std::set<gdcm::Tag> const & skiptags, std::streampos & posDataSet)
+    ReadUpToTagCaller(DataSet &ds,const Tag & tag, std::set<Tag> const & skiptags, std::streampos & posDataSet)
     :
     m_dataSet(ds),m_tag(tag),m_skipTags(skiptags),m_posDataSet(posDataSet)
     {
@@ -1024,4 +1030,4 @@ size_t Reader::GetStreamCurrentPosition() const
 }
 
 
-} // end namespace gdcm
+} // end namespace gdcm_ns

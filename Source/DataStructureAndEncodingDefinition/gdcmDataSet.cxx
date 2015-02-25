@@ -14,7 +14,7 @@
 #include "gdcmDataSet.h"
 #include "gdcmPrivateTag.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 DataElement DataSet::DEEnd = DataElement( Tag(0xffff,0xffff) );
 
@@ -153,4 +153,4 @@ MediaStorage DataSet::GetMediaStorage() const
   return ms;
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns

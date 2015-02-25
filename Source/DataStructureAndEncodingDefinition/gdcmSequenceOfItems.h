@@ -21,7 +21,7 @@
 #include <vector>
 #include <cstring> // strcmp
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 /**
@@ -255,7 +255,7 @@ public:
   ItemVector Items;
 };
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #include "gdcmSequenceOfItems.txx"
 

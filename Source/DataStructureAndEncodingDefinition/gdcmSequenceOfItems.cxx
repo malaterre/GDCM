@@ -13,7 +13,7 @@
 =========================================================================*/
 #include "gdcmSequenceOfItems.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 void SequenceOfItems::AddItem(Item const &item)
@@ -84,4 +84,4 @@ bool SequenceOfItems::FindDataElement(const Tag &t) const
   return found;
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns

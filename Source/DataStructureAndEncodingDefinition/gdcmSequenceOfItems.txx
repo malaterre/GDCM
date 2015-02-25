@@ -14,7 +14,7 @@
 #ifndef GDCMSEQUENCEOFITEMS_TXX
 #define GDCMSEQUENCEOFITEMS_TXX
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 template <typename TDE>
@@ -37,6 +37,6 @@ VL SequenceOfItems::ComputeLength() const
   return length;
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif // GDCMSEQUENCEOFITEMS_TXX

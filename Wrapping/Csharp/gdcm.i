@@ -80,6 +80,7 @@ public class";
 #include "gdcmSwapCode.h"
 #include "gdcmEvent.h"
 #include "gdcmProgressEvent.h"
+#include "gdcmFileNameEvent.h"
 #include "gdcmAnonymizeEvent.h"
 #include "gdcmDirectory.h"
 #ifdef GDCM_BUILD_TESTING
@@ -136,6 +137,7 @@ public class";
 #include "gdcmUUIDGenerator.h"
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
+#include "gdcmStrictScanner.h"
 #include "gdcmAttribute.h"
 #include "gdcmSubject.h"
 #include "gdcmCommand.h"
@@ -318,6 +320,12 @@ EXTEND_CLASS_PRINT(gdcm::PrivateTag)
     return dynamic_cast<ProgressEvent*>(event);
   }
 };
+%include "gdcmFileNameEvent.h"
+%extend gdcm::FileNameEvent {
+  static FileNameEvent *Cast(Event *event) {
+    return dynamic_cast<FileNameEvent*>(event);
+  }
+};
 //%feature("director") AnonymizeEvent;
 %include "gdcmAnonymizeEvent.h"
 %extend gdcm::AnonymizeEvent {
@@ -423,10 +431,8 @@ EXTEND_CLASS_PRINT(gdcm::DataElement)
 
 %include "gdcmItem.h"
 EXTEND_CLASS_PRINT(gdcm::Item)
-/*
- The following line is very important it properly convert :
-SWIGTYPE_p_std__vectorT_int_t__size_type -> uint
-*/
+// The following line is very important it properly convert :
+// SWIGTYPE_p_std__vectorT_int_t__size_type -> uint
 %template() std::vector< gdcm::Item >;
 %include "gdcmSequenceOfItems.h"
 EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
@@ -594,6 +600,9 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 %template(SmartPtrScan) gdcm::SmartPointer<gdcm::Scanner>;
 %include "gdcmScanner.h"
 EXTEND_CLASS_PRINT(gdcm::Scanner)
+%template(SmartPtrStrictScan) gdcm::SmartPointer<gdcm::StrictScanner>;
+%include "gdcmStrictScanner.h"
+EXTEND_CLASS_PRINT(gdcm::StrictScanner)
 
 %template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
 //%ignore gdcm::Anonymizer::Anonymizer;

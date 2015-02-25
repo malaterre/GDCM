@@ -13,7 +13,7 @@
 =========================================================================*/
 #include "gdcmFragment.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 VL Fragment::GetLength() const
@@ -34,4 +34,4 @@ VL Fragment::ComputeLength() const
     + bv->ComputeLength() /*ValueLengthField*/;
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns

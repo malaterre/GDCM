@@ -24,7 +24,7 @@
 
 #include "gdcmTag.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 const char FileMetaInformation::GDCM_FILE_META_INFORMATION_VERSION[] = "\0\1";
@@ -53,6 +53,10 @@ const char * FileMetaInformation::GetGDCMSourceApplicationEntityTitle()
 {
   return GDCM_SOURCE_APPLICATION_ENTITY_TITLE;
 }
+
+// Keep cstor and dstor here to keep API minimal (see dllexport issue with gdcmstrict::)
+FileMetaInformation::FileMetaInformation():DataSetTS(TransferSyntax::TS_END),MetaInformationTS(TransferSyntax::Unknown),DataSetMS(MediaStorage::MS_END) {}
+FileMetaInformation::~FileMetaInformation() {}
 
 void FileMetaInformation::SetImplementationClassUID(const char * imp)
 {
@@ -140,7 +144,7 @@ void FileMetaInformation::FillFromDataSet(DataSet const &ds)
     {
     if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) || ds.GetDataElement( Tag(0x0008,0x0016) ).IsEmpty()  )
       {
-      gdcm::MediaStorage ms;
+      MediaStorage ms;
       ms.SetFromModality(ds);
       const char *msstr = ms.GetString();
       if( msstr )
@@ -900,4 +904,4 @@ std::ostream &FileMetaInformation::Write(std::ostream &os) const
   return os;
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns

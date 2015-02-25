@@ -130,10 +130,15 @@
 
 #cmakedefine GDCM_FORCE_BIGENDIAN_EMULATION
 
+#ifndef GDCM_OVERRIDE_BROKEN_IMPLEMENTATION
 /* To Remove code that support broken DICOM implementation and therefore
  * add some over head. Turn Off at your own risk
  */
 #cmakedefine GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+#endif
+#ifndef gdcm_ns
+#define gdcm_ns gdcm
+#endif
 
 #define GDCM_PVRG_JPEG_EXECUTABLE "@PVRGJPEG_EXECUTABLE@"
 #define GDCM_KAKADU_EXPAND_EXECUTABLE "@KDU_EXPAND_EXECUTABLE@"

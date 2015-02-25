@@ -20,7 +20,7 @@
 
 #include <cstring>
 
-namespace gdcm
+namespace gdcm_ns
 {
   template <typename TDE, typename TSwap>
   std::istream &DataSet::ReadNested(std::istream &is) {
@@ -493,6 +493,6 @@ namespace gdcm
       }
     return os;
   }
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif // GDCMDATASET_TXX

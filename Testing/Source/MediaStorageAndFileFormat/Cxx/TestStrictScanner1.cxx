@@ -11,7 +11,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmScanner.h"
+#include "gdcmStrictScanner.h"
 #include "gdcmDirectory.h"
 #include "gdcmSystem.h"
 #include "gdcmTesting.h"
@@ -38,7 +38,7 @@ static int TestScannerExtra()
   unsigned int nfiles = d.Load( extradataroot, true ); // no recursion
   std::cout << "done retrieving file list. " << nfiles << " files found." <<  std::endl;
 
-  gdcm::Scanner s;
+  gdcm::StrictScanner s;
   const gdcm::Tag t1(0x0020,0x000d); // Study Instance UID
   const gdcm::Tag t2(0x0020,0x000e); // Series Instance UID
   const gdcm::Tag t3(0x0010,0x0010); // Patient's Name
@@ -61,7 +61,7 @@ static int TestScannerExtra()
   return 0;
 }
 
-int TestScanner1(int argc, char *argv[])
+int TestStrictScanner1(int argc, char *argv[])
 {
   gdcm::Trace::WarningOff();
   gdcm::Trace::ErrorOff();
@@ -82,7 +82,7 @@ int TestScanner1(int argc, char *argv[])
 //  d.Print( std::cout );
   std::cout << "done retrieving file list. " << nfiles << " files found." <<  std::endl;
 
-  gdcm::Scanner s;
+  gdcm::StrictScanner s;
   const gdcm::Tag t1(0x0020,0x000d); // Study Instance UID
   const gdcm::Tag t2(0x0020,0x000e); // Series Instance UID
   const gdcm::Tag t3(0x0010,0x0010); // Patient's Name
@@ -153,7 +153,7 @@ int TestScanner1(int argc, char *argv[])
     }
 
   // Let's get the value for tag t1 in first file:
-  gdcm::Scanner::MappingType const &mt = s.GetMappings();
+  gdcm::StrictScanner::MappingType const &mt = s.GetMappings();
   std::string sfilename;
   sfilename = gdcm::Testing::GetDataRoot();
   sfilename+= "/test.acr";
@@ -162,7 +162,7 @@ int TestScanner1(int argc, char *argv[])
   const char *filename = sfilename.c_str();
   // The following breaks with Papyrus file: PET-cardio-Multiframe-Papyrus.dcm
   unsigned int i = 0;
-  gdcm::Scanner::MappingType::const_iterator it = mt.find(filename);
+  gdcm::StrictScanner::MappingType::const_iterator it = mt.find(filename);
   assert( it != mt.end() );
   while( it == mt.end() )
     {
@@ -175,9 +175,9 @@ int TestScanner1(int argc, char *argv[])
     it = mt.find(filename);
     }
   std::cout << "Mapping for " << filename << " is :" << std::endl;
-  const gdcm::Scanner::TagToValue &tv = it->second;
+  const gdcm::StrictScanner::TagToValue &tv = it->second;
   //const std::string &filename = d.GetFilenames()[0];
-  gdcm::Scanner::TagToValue::const_iterator it2 = tv.find( t5 );
+  gdcm::StrictScanner::TagToValue::const_iterator it2 = tv.find( t5 );
   if( it2 == tv.end() || t5 != it2->first )
     {
     std::cerr << "Could not find tag:" << t5 << std::endl;

@@ -1,36 +1,63 @@
 # Define the srcs for Data Structure and Encoding Definitions
 # DSED
-set(DSED_SRCS
-  gdcmTag.cxx
-  gdcmTagToVR.cxx
-  gdcmPrivateTag.cxx
-  gdcmCodeString.cxx
+
+# dual compilation (namespace gdcm_ns), all the following either directly
+# reference code using GDCM_SUPPORT_BROKEN_IMPLEMENTATION or indirectly
+set(DSED2_SRCS
   gdcmByteValue.cxx
-  gdcmValue.cxx
-  gdcmFileSet.cxx
+  gdcmDataElement.cxx
   gdcmDataSet.cxx
-  gdcmByteSwapFilter.cxx
-  gdcmUNExplicitImplicitDataElement.cxx
   gdcmExplicitDataElement.cxx
-  gdcmFileMetaInformation.cxx
+  gdcmFile.cxx # FileMeta is class member
+  gdcmFileMetaInformation.cxx # subclass of DataSet
   gdcmFragment.cxx
   gdcmImplicitDataElement.cxx
   gdcmItem.cxx
+  gdcmMediaStorage.cxx # SetFromModality takes a DataSet
+  gdcmPrivateTag.cxx
   gdcmReader.cxx
+  gdcmSequenceOfFragments.cxx
+  gdcmSequenceOfItems.cxx
+  gdcmValue.cxx # friend decl
+  )
+# need to prepare duplicate files to help cmake handle setting compile
+# definitions (cmake cannot handle duplicate source file in same target).
+# this trick allows us to avoid a static compilation which may not be portable
+foreach(src ${DSED2_SRCS})
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/${src}
+    ${CMAKE_CURRENT_SOURCE_DIR}/strict_${src}
+    COPYONLY
+    )
+  list(APPEND DSED3_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/strict_${src}
+    )
+  set_property(
+    SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/strict_${src}
+    PROPERTY COMPILE_DEFINITIONS "GDCM_OVERRIDE_BROKEN_IMPLEMENTATION" "gdcm_ns=gdcmstrict"
+    )
+endforeach()
+
+# the following source code do not need a duplicate compilation to handle
+# GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+set(DSED_SRCS
+  ${DSED2_SRCS}
+  gdcmReader.strict.cxx # hook to call gdcmstrict API
+  gdcmTag.cxx
+  gdcmTagToVR.cxx
+  gdcmCodeString.cxx
+  gdcmFileSet.cxx
+  gdcmByteSwapFilter.cxx
+  gdcmUNExplicitImplicitDataElement.cxx
   gdcmWriter.cxx
   #gdcmParser.cxx
   gdcmCSAHeader.cxx
   gdcmPDBHeader.cxx
-  gdcmSequenceOfFragments.cxx
-  gdcmSequenceOfItems.cxx
   gdcmTransferSyntax.cxx
-  gdcmMediaStorage.cxx
   gdcmVM.cxx
   gdcmVR.cxx
-  gdcmFile.cxx
   gdcmPreamble.cxx
   gdcmParseException.cxx
-  gdcmDataElement.cxx
   gdcmUNExplicitDataElement.cxx
   gdcmCP246ExplicitDataElement.cxx
   gdcmExplicitImplicitDataElement.cxx
@@ -56,8 +83,7 @@ if(NOT GDCM_USE_SYSTEM_ZLIB)
     )
 endif()
 
-
-add_library(gdcmDSED ${DSED_SRCS})
+add_library(gdcmDSED ${DSED_SRCS} ${DSED3_SRCS})
 target_link_libraries(gdcmDSED gdcmCommon)
 # zlib stuff are actually included (template) so we need to link them here.
 target_link_libraries(gdcmDSED ${GDCM_ZLIB_LIBRARIES})

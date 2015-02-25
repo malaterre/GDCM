@@ -20,7 +20,7 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmCodeString.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 static const char *MSStrings[] = {
@@ -603,4 +603,4 @@ bool MediaStorage::SetFromFile(File const &file)
   return true;
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns

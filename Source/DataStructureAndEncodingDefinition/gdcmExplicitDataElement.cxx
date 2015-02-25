@@ -15,7 +15,7 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmSequenceOfFragments.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 //-----------------------------------------------------------------------------
@@ -62,4 +62,4 @@ VL ExplicitDataElement::GetLength() const
 }
 
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
