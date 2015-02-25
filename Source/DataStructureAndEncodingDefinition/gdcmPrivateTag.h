@@ -26,7 +26,7 @@
 #include <string.h> // strlen
 #include <ctype.h> // tolower
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 /**
@@ -76,6 +76,6 @@ inline std::ostream& operator<<(std::ostream &os, const PrivateTag &val)
   return os;
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif //GDCMPRIVATETAG_H

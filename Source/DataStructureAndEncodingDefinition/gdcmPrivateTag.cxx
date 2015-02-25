@@ -18,7 +18,7 @@
 #include <stdio.h> // sscanf
 #include <limits> // numeric_limits
 
-namespace gdcm
+namespace gdcm_ns
 {
   bool PrivateTag::ReadFromCommaSeparatedString(const char *str)
     {
@@ -91,4 +91,4 @@ DataElement PrivateTag::GetAsDataElement() const
   return de;
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns

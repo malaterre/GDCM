@@ -16,7 +16,7 @@
 
 #include "gdcmTypes.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 /**
  * \brief Class to dispatch template calls
@@ -30,7 +30,7 @@ public:
   static const std::ostream &Write(std::ostream &os, const Value& v);
 };
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #include "gdcmValueIO.txx"
 

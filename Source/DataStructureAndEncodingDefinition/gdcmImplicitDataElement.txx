@@ -21,7 +21,7 @@
 #include "gdcmTagToVR.h"
 #endif
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 //-----------------------------------------------------------------------------
@@ -578,7 +578,7 @@ const std::ostream &ImplicitDataElement::Write(std::ostream &os) const
 }
 
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 
 #endif // GDCMIMPLICITDATAELEMENT_TXX

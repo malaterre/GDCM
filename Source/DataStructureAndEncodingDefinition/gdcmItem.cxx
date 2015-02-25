@@ -15,7 +15,7 @@
 
 #include <assert.h>
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 

@@ -11,7 +11,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmScanner.h"
+#include "gdcmStrictScanner.h"
 #include "gdcmReader.h"
 #include "gdcmGlobal.h"
 #include "gdcmDicts.h"
@@ -27,28 +27,28 @@ namespace gdcm
 {
 
 
-Scanner::~Scanner()
+StrictScanner::~StrictScanner()
 {
 }
 
-void Scanner::ClearTags()
+void StrictScanner::ClearTags()
 {
   Tags.clear();
 }
 
-void Scanner::ClearSkipTags()
+void StrictScanner::ClearSkipTags()
 {
   SkipTags.clear();
 }
 
-void Scanner::AddSkipTag( Tag const & t )
+void StrictScanner::AddSkipTag( Tag const & t )
 {
   SkipTags.insert( t );
   assert(0); // This is NOT implemented for now
 }
 
 // Warning: API is passing a public tag (no way to specify private tag)
-void Scanner::AddPrivateTag( PrivateTag const & t )
+void StrictScanner::AddPrivateTag( PrivateTag const & t )
 {
   static const Global &g = GlobalInstance;
   static const Dicts &dicts = g.GetDicts();
@@ -71,7 +71,7 @@ void Scanner::AddPrivateTag( PrivateTag const & t )
     }
 }
 
-void Scanner::AddTag( Tag const & t )
+void StrictScanner::AddTag( Tag const & t )
 {
   static const Global &g = GlobalInstance;
   static const Dicts &dicts = g.GetDicts();
@@ -93,7 +93,10 @@ void Scanner::AddTag( Tag const & t )
     }
 }
 
-bool Scanner::Scan( Directory::FilenamesType const & filenames )
+// see gdcmReader.strict.cxx
+bool StrictReadUpToTag( const char * filename, Tag const & last, std::set<Tag> const & skiptags );
+
+bool StrictScanner::Scan( Directory::FilenamesType const & filenames )
 {
   this->InvokeEvent( StartEvent() );
 
@@ -134,6 +137,11 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
       const char *filename = it->c_str();
       assert( filename );
       reader.SetFileName( filename );
+      // Pass #1, just check if the file is valid (up to the tag)
+      const bool strict = StrictReadUpToTag( filename, last, SkipTags );
+      if( strict )
+      {
+      // Pass #2, syntax is ok, retrieve data now:
       bool read = false;
       try
         {
@@ -153,8 +161,9 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
         {
         // Keep the mapping:
         sf.SetFile( reader.GetFile() );
-        Scanner::ProcessPublicTag(sf, filename);
-        //Scanner::ProcessPrivateTag(sf, filename);
+        StrictScanner::ProcessPublicTag(sf, filename);
+        //StrictScanner::ProcessPrivateTag(sf, filename);
+        }
         }
       // Update progress
       Progress += progresstick;
@@ -171,7 +180,7 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
   return true;
 }
 
-void Scanner::Print( std::ostream & os ) const
+void StrictScanner::Print( std::ostream & os ) const
 {
   os << "Values:\n";
   for(ValuesType::const_iterator it = Values.begin() ; it != Values.end();
@@ -203,7 +212,7 @@ void Scanner::Print( std::ostream & os ) const
     }
 }
 
-Scanner::TagToValue const & Scanner::GetMapping(const char *filename) const
+StrictScanner::TagToValue const & StrictScanner::GetMapping(const char *filename) const
 {
 //  assert( Mappings.find(filename) != Mappings.end() );
   assert( filename && *filename );
@@ -212,7 +221,7 @@ Scanner::TagToValue const & Scanner::GetMapping(const char *filename) const
   return Mappings.find("")->second; // dummy file could not be found
 }
 
-bool Scanner::IsKey( const char * filename ) const
+bool StrictScanner::IsKey( const char * filename ) const
 {
 /*
   // std::find on contiguous array will operate in 0(n) which is way too slow, assume user is not too dumb...
@@ -230,7 +239,7 @@ bool Scanner::IsKey( const char * filename ) const
 }
 
 
-Directory::FilenamesType Scanner::GetKeys() const
+Directory::FilenamesType StrictScanner::GetKeys() const
 {
   Directory::FilenamesType keys;
 
@@ -248,7 +257,7 @@ Directory::FilenamesType Scanner::GetKeys() const
 }
 
 
-const char* Scanner::GetValue(const char *filename, Tag const &t) const
+const char* StrictScanner::GetValue(const char *filename, Tag const &t) const
 {
   // \precondition
   assert( Tags.find( t ) != Tags.end() );
@@ -260,7 +269,7 @@ const char* Scanner::GetValue(const char *filename, Tag const &t) const
   return NULL;
 }
 
-const char *Scanner::GetFilenameFromTagToValue(Tag const &t, const char *valueref) const
+const char *StrictScanner::GetFilenameFromTagToValue(Tag const &t, const char *valueref) const
 {
   const char *filenameref = 0;
   if( valueref )
@@ -288,7 +297,7 @@ const char *Scanner::GetFilenameFromTagToValue(Tag const &t, const char *valuere
 /// Will loop over all files and return a vector of std::strings of filenames
 /// where value match the reference value 'valueref'
 Directory::FilenamesType
-Scanner::GetAllFilenamesFromTagToValue(Tag const &t, const char *valueref) const
+StrictScanner::GetAllFilenamesFromTagToValue(Tag const &t, const char *valueref) const
 {
   Directory::FilenamesType theReturn;
   if( valueref )
@@ -310,12 +319,12 @@ Scanner::GetAllFilenamesFromTagToValue(Tag const &t, const char *valueref) const
 
 }
 
-Scanner::TagToValue const & Scanner::GetMappingFromTagToValue(Tag const &t, const char *valueref) const
+StrictScanner::TagToValue const & StrictScanner::GetMappingFromTagToValue(Tag const &t, const char *valueref) const
 {
   return GetMapping( GetFilenameFromTagToValue(t, valueref) );
 }
 
-Scanner::ValuesType Scanner::GetValues(Tag const &t) const
+StrictScanner::ValuesType StrictScanner::GetValues(Tag const &t) const
 {
   ValuesType vt;
   Directory::FilenamesType::const_iterator file = Filenames.begin();
@@ -332,7 +341,7 @@ Scanner::ValuesType Scanner::GetValues(Tag const &t) const
 }
 
 
-Directory::FilenamesType Scanner::GetOrderedValues(Tag const &t) const
+Directory::FilenamesType StrictScanner::GetOrderedValues(Tag const &t) const
 {
   Directory::FilenamesType theReturn;
   Directory::FilenamesType::const_iterator file = Filenames.begin();
@@ -351,7 +360,7 @@ Directory::FilenamesType Scanner::GetOrderedValues(Tag const &t) const
   return theReturn;
 }
 
-void Scanner::ProcessPublicTag(StringFilter &sf, const char *filename)
+void StrictScanner::ProcessPublicTag(StringFilter &sf, const char *filename)
 {
   assert( filename );
   TagToValue &mapping = Mappings[filename];

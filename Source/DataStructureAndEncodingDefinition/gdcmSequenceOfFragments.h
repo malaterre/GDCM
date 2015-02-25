@@ -19,7 +19,7 @@
 #include "gdcmFragment.h"
 #include "gdcmBasicOffsetTable.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
   // FIXME gdcmSequenceOfItems and gdcmSequenceOfFragments
@@ -328,6 +328,6 @@ private:
  * This is a C# example on how to use gdcm::SequenceOfFragments
  */
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif //GDCMSEQUENCEOFFRAGMENTS_H

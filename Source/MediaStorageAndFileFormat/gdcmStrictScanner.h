@@ -11,8 +11,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef GDCMSCANNER_H
-#define GDCMSCANNER_H
+#ifndef GDCMSTRICTSCANNER_H
+#define GDCMSTRICTSCANNER_H
 
 #include "gdcmDirectory.h"
 #include "gdcmSubject.h"
@@ -31,7 +31,7 @@ namespace gdcm
 class StringFilter;
 
 /**
- * \brief Scanner
+ * \brief StrictScanner
  * This filter is meant for quickly browsing a FileSet (a set of files on
  * disk). Special consideration are taken so as to read the mimimum amount of
  * information in each file in order to retrieve the user specified set of
@@ -52,12 +52,12 @@ class StringFilter;
  * \li StartEvent
  * \li EndEvent
  */
-class GDCM_EXPORT Scanner : public Subject
+class GDCM_EXPORT StrictScanner : public Subject
 {
-  friend std::ostream& operator<<(std::ostream &_os, const Scanner &s);
+  friend std::ostream& operator<<(std::ostream &_os, const StrictScanner &s);
 public:
-  Scanner():Values(),Filenames(),Mappings() {}
-  ~Scanner();
+  StrictScanner():Values(),Filenames(),Mappings() {}
+  ~StrictScanner();
 
   /// struct to map a filename to a value
   /// Implementation note:
@@ -152,7 +152,7 @@ public:
   const char* GetValue(const char *filename, Tag const &t) const;
 
   /// for wrapped language: instanciate a reference counted object
-  static SmartPointer<Scanner> New() { return new Scanner; }
+  static SmartPointer<StrictScanner> New() { return new StrictScanner; }
 
 protected:
   void ProcessPublicTag(StringFilter &sf, const char *filename);
@@ -172,38 +172,12 @@ private:
   double Progress;
 };
 //-----------------------------------------------------------------------------
-inline std::ostream& operator<<(std::ostream &os, const Scanner &s)
+inline std::ostream& operator<<(std::ostream &os, const StrictScanner &s)
 {
   s.Print( os );
   return os;
 }
 
-#if defined(SWIGPYTHON) || defined(SWIGCSHARP) || defined(SWIGJAVA) || defined(SWIGPHP)
-/*
- * HACK: I need this temp class to be able to manipulate a std::map from python,
- * swig does not support wrapping of simple class like std::map...
- */
-class SWIGTagToValue
-{
-public:
-  SWIGTagToValue(Scanner::TagToValue const &t2v):Internal(t2v),it(t2v.begin()) {}
-  const Scanner::TagToValueValueType& GetCurrent() const { return *it; }
-  const Tag& GetCurrentTag() const { return it->first; }
-  const char *GetCurrentValue() const { return it->second; }
-  void Start() { it = Internal.begin(); }
-  bool IsAtEnd() const { return it == Internal.end(); }
-  void Next() { ++it; }
-private:
-  const Scanner::TagToValue& Internal;
-  Scanner::TagToValue::const_iterator it;
-};
-#endif /* SWIG */
-
-/**
- * \example ScanDirectory.cs
- * This is a C# example on how to use Scanner
- */
-
 } // end namespace gdcm
 
-#endif //GDCMSCANNER_H
+#endif //GDCMSTRICTSCANNER_H

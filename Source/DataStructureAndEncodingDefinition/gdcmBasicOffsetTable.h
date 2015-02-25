@@ -17,7 +17,7 @@
 
 #include "gdcmFragment.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 /**
  * \brief Class to represent a BasicOffsetTable
@@ -121,6 +121,6 @@ inline std::ostream &operator<<(std::ostream &os, const BasicOffsetTable &val)
 }
 
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif //GDCMBASICOFFSETTABLE_H

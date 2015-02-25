@@ -22,10 +22,11 @@
 #include <iterator>
 #include <iomanip>
 
-//#include <stdlib.h> // abort
-
-namespace gdcm
+namespace gdcm_ns
 {
+#if !defined(SWIGPYTHON) && !defined(SWIGCSHARP) && !defined(SWIGJAVA) && !defined(SWIGPHP)
+using namespace gdcm;
+#endif
 /**
  * \brief Class to represent binary value (array of bytes)
  * \note
@@ -77,39 +78,7 @@ public:
 
   VL ComputeLength() const { return Length + Length % 2; }
   // Does a reallocation
-  void SetLength(VL vl) {
-    VL l(vl);
-#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-    // CompressedLossy.dcm
-    if( l.IsUndefined() ) throw Exception( "Impossible" );
-    if ( l.IsOdd() ) {
-      gdcmDebugMacro(
-        "BUGGY HEADER: Your dicom contain odd length value field." );
-      ++l;
-      }
-#else
-    assert( !l.IsUndefined() && !l.IsOdd() );
-#endif
-    // I cannot use reserve for now. I need to implement:
-    // STL - vector<> and istream
-    // http://groups.google.com/group/comp.lang.c++/msg/37ec052ed8283e74
-//#define SHORT_READ_HACK
-    try
-      {
-#ifdef SHORT_READ_HACK
-    if( l <= 0xff )
-#endif
-      Internal.resize(l);
-      //Internal.reserve(l);
-      }
-    catch(...)
-      {
-      //throw Exception("Impossible to allocate: " << l << " bytes." );
-      throw Exception("Impossible to allocate" );
-      }
-    // Keep the exact length
-    Length = vl;
-  }
+  void SetLength(VL vl);
 
   operator const std::vector<char>& () const { return Internal; }
 
@@ -267,6 +236,6 @@ private:
   VL Length;
 };
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif //GDCMBYTEVALUE_H

@@ -13,7 +13,7 @@
 =========================================================================*/
 #include "gdcmParseException.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 } // end namespace gdcm

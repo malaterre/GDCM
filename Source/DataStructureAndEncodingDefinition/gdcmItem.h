@@ -24,7 +24,7 @@
 #include "gdcmByteSwapFilter.h"
 #endif
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 class DataSet;
@@ -322,7 +322,7 @@ inline std::ostream& operator<<(std::ostream& os, const Item &val)
 }
 
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #include "gdcmItem.txx"
 

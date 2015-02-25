@@ -35,6 +35,11 @@
   #endif
 #endif
 
+#if defined(GDCM_OVERRIDE_BROKEN_IMPLEMENTATION) && !defined(GDCM_FORCE_EXPORT)
+#undef GDCM_EXPORT
+#define GDCM_EXPORT
+#endif
+
 // In VTK 4.2 vtkWrapPython does not like anything other than VTK_*EXPORT
 // [ 86%] Generating vtkGDCMImageReaderPython.cxx
 // syntax error

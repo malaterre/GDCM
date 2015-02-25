@@ -16,7 +16,7 @@
 
 #include "gdcmItem.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 template <typename TDE>
@@ -52,6 +52,6 @@ VL Item::GetLength() const
     }
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif // GDCMITEM_TXX

@@ -11,16 +11,15 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #include "gdcmValue.h"
 #include "gdcmVL.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
-  void Value::SetLengthOnly(VL l)
-    {
-    SetLength( l );
-    }
+void Value::SetLengthOnly(VL l)
+{
+  SetLength( l );
+}
 
-} // end namespace gdcm
+} // end namespace gdcm_ns

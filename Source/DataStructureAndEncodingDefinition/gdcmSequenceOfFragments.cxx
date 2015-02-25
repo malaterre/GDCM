@@ -15,7 +15,7 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmByteValue.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 void SequenceOfFragments::Clear()
@@ -146,4 +146,4 @@ bool SequenceOfFragments::FillFragmentWithJPEG( Fragment & frag, std::istream & 
   return true;
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns

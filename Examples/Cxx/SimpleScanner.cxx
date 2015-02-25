@@ -26,7 +26,7 @@
  * ./SimpleScanner gdcmData/012345.002.050.dcm
  */
 
-#include "gdcmScanner.h"
+#include "gdcmStrictScanner.h"
 #include "gdcmSimpleSubjectWatcher.h"
 #include "gdcmFileNameEvent.h"
 
@@ -53,8 +53,8 @@ int main(int argc, char *argv[])
   const char filename_invalid[] = "this is a file that may not exist on this disk.dcm";
 
 
-  gdcm::SmartPointer<gdcm::Scanner> sp = new gdcm::Scanner;
-  gdcm::Scanner &s = *sp;
+  gdcm::SmartPointer<gdcm::StrictScanner> sp = new gdcm::StrictScanner;
+  gdcm::StrictScanner &s = *sp;
   //gdcm::SimpleSubjectWatcher w(&s, "TestFileName" );
   MyFileWatcher w(&s, "TestFileName" );
 
@@ -62,10 +62,12 @@ int main(int argc, char *argv[])
     gdcm::Tag(0x8,0x50),
     gdcm::Tag(0x8,0x51),
     gdcm::Tag(0x8,0x60),
+    gdcm::Tag(0x8,0x80),
   };
   s.AddTag( tag_array[0] );
   s.AddTag( tag_array[1] );
   s.AddTag( tag_array[2] );
+  s.AddTag( tag_array[3] );
 
   gdcm::Directory::FilenamesType filenames;
   filenames.push_back( filename );
@@ -79,22 +81,25 @@ int main(int argc, char *argv[])
   //s.Print( std::cout );
 
 
-  if( s.IsKey( filename ) )
+  gdcm::Directory::FilenamesType::const_iterator it = filenames.begin();
+  for( ; it != filenames.end(); ++it )
     {
-    std::cout << "INFO:" << filename << " is a proper Key for the Scanner (this is a DICOM file)" << std::endl;
+    if( s.IsKey( it->c_str() ) )
+      {
+      std::cout << "INFO:" << it->c_str() << " is a proper Key for the Scanner (this is a DICOM file)" << std::endl;
+      }
+    else
+      {
+      std::cout << "INFO:" << it->c_str() << " is not a proper Key for the Scanner (this is either not a DICOM file or file does not exist)" << std::endl;
+      }
     }
 
-  if( !s.IsKey( filename_invalid ) )
-    {
-    std::cout << "INFO:" << filename_invalid << " is not a proper Key for the Scanner (this is either not a DICOM file or file does not exist)" << std::endl;
-    }
-
-  gdcm::Scanner::TagToValue const &ttv = s.GetMapping(filename);
+  gdcm::StrictScanner::TagToValue const &ttv = s.GetMapping(filename);
 
   const gdcm::Tag *ptag = tag_array;
   for( ; ptag != tag_array + 3; ++ptag )
     {
-    gdcm::Scanner::TagToValue::const_iterator it = ttv.find( *ptag );
+    gdcm::StrictScanner::TagToValue::const_iterator it = ttv.find( *ptag );
     if( it != ttv.end() )
       {
       std::cout << *ptag << " was properly found in this file" << std::endl;

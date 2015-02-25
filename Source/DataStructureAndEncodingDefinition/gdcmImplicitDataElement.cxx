@@ -16,7 +16,7 @@
 #include "gdcmByteValue.h"
 #include "gdcmSequenceOfItems.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 VL ImplicitDataElement::GetLength() const
@@ -59,4 +59,4 @@ VL ImplicitDataElement::GetLength() const
     }
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns

@@ -22,7 +22,7 @@
 
 #include <set>
 
-namespace gdcm
+namespace gdcm_ns
 {
 // Data Element
 // Contains multiple fields:
@@ -272,6 +272,6 @@ inline bool operator!=(const DataElement& lhs, const DataElement& rhs)
   return ! ( lhs == rhs );
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #endif //GDCMDATAELEMENT_H

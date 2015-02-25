@@ -20,7 +20,7 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmTrace.h"
 
-namespace gdcm
+namespace gdcm_ns
 {
   void DataElement::SetVLToUndefined() {
     assert( VRField == VR::SQ || VRField == VR::INVALID
@@ -189,4 +189,4 @@ void DataElement::SetValueFieldLength( VL vl, bool readvalues )
     ValueField->SetLengthOnly(vl); // do not perform realloc
 }
 
-} // end namespace gdcm
+} // end namespace gdcm_ns

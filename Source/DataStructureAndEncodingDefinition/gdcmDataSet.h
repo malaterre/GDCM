@@ -23,7 +23,7 @@
 #include <set>
 #include <iterator>
 
-namespace gdcm
+namespace gdcm_ns
 {
 class GDCM_EXPORT DataElementException : public std::exception {};
 
@@ -309,7 +309,7 @@ inline std::ostream& operator<<(std::ostream &os, const DataSet &val)
   return os;
 }
 
-#if defined(SWIGPYTHON) || defined(SWIGCSHARP) || defined(SWIGJAVA)
+#if defined(SWIGPYTHON) || defined(SWIGCSHARP) || defined(SWIGJAVA) || defined(SWIGPHP)
 /*
  * HACK: I need this temp class to be able to manipulate a std::set from python,
  * swig does not support wrapping of simple class like std::set...
@@ -333,7 +333,7 @@ private:
  * This is a C# example on how to use gdcm::SWIGDataSet
  */
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 #include "gdcmDataSet.txx"
 

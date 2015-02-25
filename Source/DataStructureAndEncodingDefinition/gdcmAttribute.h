@@ -27,7 +27,7 @@
 #include <vector>
 #include <sstream>
 
-namespace gdcm
+namespace gdcm_ns
 {
 
 struct void_;
@@ -1045,6 +1045,6 @@ public:
  * This is a C++ example on how to use gdcm::Attribute
  */
 
-} // namespace gdcm
+} // namespace gdcm_ns
 
 #endif //GDCMATTRIBUTE_H

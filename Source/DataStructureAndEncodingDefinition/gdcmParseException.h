@@ -27,7 +27,7 @@
 # endif
 #endif
 
-namespace gdcm
+namespace gdcm_ns
 {
 /**
  * \brief ParseException Standard exception handling object.
@@ -78,7 +78,7 @@ private:
   DataElement LastElement;
 };
 
-} // end namespace gdcm
+} // end namespace gdcm_ns
 
 // Undo warning suppression.
 #if defined(__clang__) && defined(__has_warning)
