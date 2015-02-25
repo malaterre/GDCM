@@ -88,7 +88,7 @@
 <entry group="0019" element="0028" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
 <entry group="0019" element="0029" vr="SH" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0019" element="0029" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
-<entry group="0019" element="002a" vr="DS" vm="3" name="?" owner="PMTF INFORMATION DATA^12"/>
+<entry group="0019" element="002a" vr="DS" vm="3" name="?" owner="PMTF INFORMATION DATA^10"/> <!-- MM FIX -->
 <entry group="0019" element="002a" vr="FL" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
 <entry group="0019" element="002a" vr="TM" vm="1" name="?" owner="PMTF INFORMATION DATA^12"/>
 <entry group="0019" element="002b" vr="FL" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
