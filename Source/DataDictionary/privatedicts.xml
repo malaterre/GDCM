@@ -142,7 +142,9 @@
 <entry group="0019" element="0046" vr="FL" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
 <entry group="0019" element="0046" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0019" element="0047" vr="FL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="0019" element="0048" vr="LT" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
 <entry group="0019" element="0048" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="0019" element="0049" vr="LT" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
 <entry group="0019" element="0049" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0019" element="004b" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0019" element="004c" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
@@ -236,14 +238,18 @@
 <entry group="0019" element="0092" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0019" element="0092" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
 <entry group="0019" element="0093" vr="FL" vm="3" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="0019" element="0093" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^12"/>
 <entry group="0019" element="0094" vr="FL" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
 <entry group="0019" element="0094" vr="UI" vm="1" name="?" owner="PMTF INFORMATION DATA^12"/>
 <entry group="0019" element="0095" vr="UI" vm="1" name="?" owner="PMTF INFORMATION DATA^12"/>
 <entry group="0019" element="0096" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0019" element="0098" vr="FL" vm="3" name="?" owner="PMTF INFORMATION DATA^12"/>
+<entry group="0019" element="0099" vr="LO" vm="1" name="?" owner="PMTF INFORMATION DATA^12"/>
+<entry group="0019" element="009a" vr="DS" vm="1" name="?" owner="PMTF INFORMATION DATA^12"/>
 <entry group="0019" element="009a" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
 <entry group="0019" element="009b" vr="FL" vm="3" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0019" element="009b" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
+<entry group="0019" element="009c" vr="DS" vm="1" name="?" owner="PMTF INFORMATION DATA^12"/>
 <entry group="0019" element="009c" vr="FL" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
 <entry group="0019" element="009c" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0019" element="009d" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
@@ -289,6 +295,7 @@
 <entry group="0019" element="00b1" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0019" element="00b1" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
 <entry group="0019" element="00b2" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
+<entry group="0019" element="00b3" vr="FD" vm="1" name="?" owner="PMTF INFORMATION DATA^12"/>
 <entry group="0019" element="00b3" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^11"/>
 <entry group="0019" element="00b4" vr="LO" vm="1" name="?" owner="PMTF INFORMATION DATA^12"/>
 <entry group="0019" element="00b4" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
@@ -372,6 +379,7 @@
 <entry group="0019" element="00f0" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0019" element="00f0" vr="SL" vm="1-n" name="?" owner="PMTF INFORMATION DATA^11"/>
 <entry group="0019" element="00f1" vr="FL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="0019" element="00f1" vr="SL" vm="3" name="?" owner="PMTF INFORMATION DATA^11"/>
 <entry group="0019" element="00f2" vr="FL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0019" element="00f2" vr="FL" vm="3" name="?" owner="PMTF INFORMATION DATA^11"/>
 <entry group="0019" element="00f3" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
@@ -410,25 +418,51 @@
 <entry group="0021" element="000d" vr="FL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0021" element="000f" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0021" element="0012" vr="DS" vm="3" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="0021" element="0014" vr="SQ" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0021" element="0015" vr="FL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0021" element="0016" vr="FL" vm="2" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="0021" element="0018" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="0021" element="001a" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="0021" element="001d" vr="IS" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0021" element="001f" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="0029" element="0001" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0029" element="0005" vr="SQ" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0029" element="0006" vr="FL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0029" element="0007" vr="FL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="0029" element="001c" vr="FL" vm="2" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0029" element="0021" vr="SL" vm="3" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0029" element="004e" vr="SL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0029" element="0050" vr="LO" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0029" element="0051" vr="LO" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="0029" element="0052" vr="LO" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0029" element="0054" vr="LO" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0029" element="0067" vr="FD" vm="4" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="0029" element="0068" vr="SS" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="0029" element="0089" vr="LO" vm="1" name="?" owner="PMTF INFORMATION DATA"/>
 <entry group="e201" element="0002" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="e301" element="0000" vr="SH" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e401" element="0000" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e401" element="0001" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e401" element="0002" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e401" element="0003" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e401" element="0004" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e401" element="0005" vr="OB" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="e401" element="0008" vr="FL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e401" element="0012" vr="FL" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e401" element="0013" vr="OB" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e401" element="0020" vr="SQ" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e401" element="0021" vr="SQ" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e401" element="0022" vr="LO" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e401" element="0023" vr="SH" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e401" element="0024" vr="OB" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e403" element="0000" vr="SH" vm="1" name="?" owner="PMTF INFORMATION DATA^13"/>
+<entry group="e403" element="0000" vr="SQ" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="e403" element="0001" vr="OB" vm="1" name="?" owner="PMTF INFORMATION DATA^13"/>
+<entry group="e403" element="0002" vr="OB" vm="1" name="?" owner="PMTF INFORMATION DATA^13"/>
+<entry group="e403" element="0003" vr="OB" vm="1" name="?" owner="PMTF INFORMATION DATA^13"/>
 <entry group="ee01" element="0000" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
 <entry group="ee01" element="0001" vr="OB" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
-  <entry group="ee01" element="0002" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
+<entry group="ee01" element="0002" vr="US" vm="1" name="?" owner="PMTF INFORMATION DATA^10"/>
   <entry group="0009" element="0001" vr="SQ" vm="1" name="DICOMUTILS_PROCESSING_METHODS" owner="DicomUtils 20100512"/>
   <entry owner="1.2.840.113663.1" group="0029" element="xx00" vr="US" vm="1" name="?"/>
   <entry owner="1.2.840.113663.1" group="0029" element="xx01" vr="US" vm="1" name="?"/>
