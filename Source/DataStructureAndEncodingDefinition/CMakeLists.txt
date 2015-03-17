@@ -26,14 +26,14 @@ set(DSED2_SRCS
 foreach(src ${DSED2_SRCS})
   configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/${src}
-    ${CMAKE_CURRENT_SOURCE_DIR}/strict_${src}
+    ${CMAKE_CURRENT_BINARY_DIR}/strict_${src}
     COPYONLY
     )
   list(APPEND DSED3_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/strict_${src}
+    ${CMAKE_CURRENT_BINARY_DIR}/strict_${src}
     )
   set_property(
-    SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/strict_${src}
+    SOURCE ${CMAKE_CURRENT_BINARY_DIR}/strict_${src}
     PROPERTY COMPILE_DEFINITIONS "GDCM_OVERRIDE_BROKEN_IMPLEMENTATION" "gdcm_ns=gdcmstrict"
     )
 endforeach()
