@@ -84,10 +84,10 @@ macro(ADD_JAVA_TEST TESTNAME FILENAME)
 
   # Pass the output back to ctest
   if(import_output)
-    message(STATUS "\${import_output}")
+    message(STATUS \"\${import_output}\")
   endif()
   if(import_res)
-    message(SEND_ERROR "\${import_res}")
+    message(SEND_ERROR \"\${import_res}\")
   endif()
 "
 )
