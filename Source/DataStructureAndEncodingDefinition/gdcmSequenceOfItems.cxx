@@ -27,7 +27,7 @@ void SequenceOfItems::AddItem(Item const &item)
 
 Item & SequenceOfItems::AddNewUndefinedLengthItem()
 {
-	gdcm::Item itemToAdd ;
+	Item itemToAdd ;
 	itemToAdd.SetVLToUndefined();
 	this->AddItem( itemToAdd );
 	return GetItem( this->GetNumberOfItems() );
