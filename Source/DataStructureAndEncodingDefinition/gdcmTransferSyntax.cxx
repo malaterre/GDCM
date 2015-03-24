@@ -76,6 +76,12 @@ static const char *TSStrings[] = {
   "1.3.46.670589.33.1.4.1",
   // JPIP Referenced
   "1.2.840.10008.1.2.4.94",
+  // MPEG2 Main Profile @ High Level
+  "1.2.840.10008.1.2.4.101",
+  // MPEG-4 AVC/H.264 High Profile / Level 4.1
+  "1.2.840.10008.1.2.4.102",
+  // MPEG-4 AVC/H.264 BD-compatible High Profile / Level 4.1
+  "1.2.840.10008.1.2.4.103",
   // Unknown
   "Unknown Transfer Syntax", // Pretty sure we never use this case...
   0 // Compilers have no obligation to finish by NULL, do it ourself
@@ -154,7 +160,10 @@ bool TransferSyntax::IsLossy() const
     TSField == JPEG2000 ||
     TSField == JPEG2000Part2 ||
     TSField == JPIPReferenced ||
-    TSField == MPEG2MainProfile
+    TSField == MPEG2MainProfile ||
+    TSField == MPEG2MainProfileHighLevel ||
+    TSField == MPEG4AVCH264HighProfileLevel4_1 ||
+    TSField == MPEG4AVCH264BDcompatibleHighProfileLevel4_1
   )
     {
     return true;
@@ -200,7 +209,10 @@ bool TransferSyntax::IsLossless() const
     // TSField == JPEG2000 || -> can be lossy & lossless
     // TSField == JPEG2000Part2 || -> can be lossy & lossless
     // TSField == JPIPReferenced || -> can be lossy & lossless
-    TSField == MPEG2MainProfile
+    TSField == MPEG2MainProfile ||
+    TSField == MPEG2MainProfileHighLevel ||
+    TSField == MPEG4AVCH264HighProfileLevel4_1 ||
+    TSField == MPEG4AVCH264BDcompatibleHighProfileLevel4_1
   )
     {
     return false;
@@ -284,6 +296,9 @@ bool TransferSyntax::IsEncapsulated() const
   case JPIPReferenced:
   case RLELossless:
   case MPEG2MainProfile:
+  case MPEG2MainProfileHighLevel:
+  case MPEG4AVCH264HighProfileLevel4_1:
+  case MPEG4AVCH264BDcompatibleHighProfileLevel4_1:
   //case ImplicitVRBigEndianACRNEMA:
   //case WeirdPapryus:
     ret = true;

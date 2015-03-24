@@ -85,6 +85,9 @@ public:
 #endif
     CT_private_ELE,
     JPIPReferenced,
+    MPEG2MainProfileHighLevel,
+    MPEG4AVCH264HighProfileLevel4_1,
+    MPEG4AVCH264BDcompatibleHighProfileLevel4_1,
     TS_END
   } TSType;
 
