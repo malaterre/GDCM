@@ -331,7 +331,10 @@ uid_1_2_840_10008_15_0_4_8 = 268, // dicomTransferCapability
 uid_1_2_840_10008_5_1_4_1_1_77_1_6, // VL Whole Slide Microscopy Image Storage
 uid_1_2_840_10008_5_1_4_1_1_6_2, // EnhancedUSVolumeStorage
 uid_1_2_840_10008_5_1_4_1_1_66_5, // Surface Segmentation Storage
-uid_1_2_840_10008_5_1_4_1_1_13_1_3 // Breast Tomosynthesis Image Storage
+uid_1_2_840_10008_5_1_4_1_1_13_1_3, // Breast Tomosynthesis Image Storage
+uid_1_2_840_10008_1_2_4_101, // MPEG2 Main Profile @ High Level
+uid_1_2_840_10008_1_2_4_102, // MPEG-4 AVC/H.264 High Profile / Level 4.1
+uid_1_2_840_10008_1_2_4_103  // MPEG-4 AVC/H.264 BD-compatible High Profile / Level 4.1
 
 } TSType;
   typedef enum {

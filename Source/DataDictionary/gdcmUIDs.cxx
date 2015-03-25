@@ -359,6 +359,9 @@ DICOM_Conformance_Statement_MR_R2.6.pdf
 {"1.2.840.113619.5.2", "Implicit VR Big Endian DLX (G.E Private)"},
 /*DICOM_Conformance_Statement_GEMINI_R3.5_R3.6.pdf */
 {"1.3.46.670589.33.1.4.1","CT-private-ELE"},
+{"1.2.840.10008.1.2.4.101","MPEG2 Main Profile @ High Level"},
+{"1.2.840.10008.1.2.4.102","MPEG-4 AVC/H.264 High Profile / Level 4.1"},
+{"1.2.840.10008.1.2.4.103","MPEG-4 AVC/H.264 BD-compatible High Profile / Level 4.1"},
 { 0, 0 }
 };
 
