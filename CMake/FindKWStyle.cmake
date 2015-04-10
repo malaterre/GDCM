@@ -1,6 +1,6 @@
 #
 # this module looks for KWStyle
-# http://public.kitware.com/KWStyle
+# https://kitware.github.io/KWStyle/
 #
 #
 #  Copyright (c) 2009-2011 Mathieu Malaterre <mathieu.malaterre@gmail.com>
