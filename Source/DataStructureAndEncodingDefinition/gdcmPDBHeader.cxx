@@ -289,27 +289,33 @@ void PDBHeader::Print(std::ostream &os) const
 
 const PDBElement &PDBHeader::GetPDBElementByName(const char *name)
 {
-  std::vector<PDBElement>::const_iterator it = InternalPDBDataSet.begin();
-  for(; it != InternalPDBDataSet.end(); ++it)
+  if( !IsXML )
     {
-    const char *itname = it->GetName();
-    if( strcmp(name, itname) == 0 )
+    std::vector<PDBElement>::const_iterator it = InternalPDBDataSet.begin();
+    for(; it != InternalPDBDataSet.end(); ++it)
       {
-      return *it;
+      const char *itname = it->GetName();
+      if( strcmp(name, itname) == 0 )
+        {
+        return *it;
+        }
       }
     }
-    return GetPDBEEnd();
+  return GetPDBEEnd();
 }
 
 bool PDBHeader::FindPDBElementByName(const char *name)
 {
-  std::vector<PDBElement>::const_iterator it = InternalPDBDataSet.begin();
-  for(; it != InternalPDBDataSet.end(); ++it)
+  if( !IsXML )
     {
-    const char *itname = it->GetName();
-    if( strcmp(name, itname) == 0 )
+    std::vector<PDBElement>::const_iterator it = InternalPDBDataSet.begin();
+    for(; it != InternalPDBDataSet.end(); ++it)
       {
-      return true;
+      const char *itname = it->GetName();
+      if( strcmp(name, itname) == 0 )
+        {
+        return true;
+        }
       }
     }
   return false;
