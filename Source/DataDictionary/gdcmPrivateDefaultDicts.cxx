@@ -3167,6 +3167,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0043,0x00a3,"GEMS_PARM_01",VR::CS,VM::VM1,"ASL Contrast technique",false },
   {0x0043,0x00a4,"GEMS_PARM_01",VR::LO,VM::VM1,"Detailed text for ASL labeling technique",false },
   {0x0043,0x00a5,"GEMS_PARM_01",VR::IS,VM::VM1,"Duration of the label or control pulse",false },
+  {0x0043,0x00aa,"GEMS_PARM_01",VR::LO,VM::VM1_n,"Additional Filtering Parameters",false },
   {0x0051,0x000a,"GEMS_PARM_01",VR::SL,VM::VM1,"Store level of Functional Image",false },
   {0x0051,0x000b,"GEMS_PARM_01",VR::FL,VM::VM1,"Store B-Value with Functional Image",false },
   {0x2001,0x0010,"GEMS_PARM_01",VR::UI,VM::VM1,"DICOM Implementation UID",false },
@@ -4255,6 +4256,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0029,0x0001,"MITRA PRESENTATION 1.0",VR::UN,VM::VM1,"?",false },
   {0x0029,0x0002,"MITRA PRESENTATION 1.0",VR::UN,VM::VM1,"?",false },
   {0x0029,0x0003,"MITRA PRESENTATION 1.0",VR::LO,VM::VM1,"?",false },*/
+/*  {0x0029,0x0010,"MITRA PRESENTATION 1.0",VR::US,VM::VM1,"?",false },*/
   {0x0009,0x0048,"MMCPrivate",VR::LO,VM::VM1,"?",false },
   {0x0009,0x004e,"MMCPrivate",VR::LO,VM::VM1,"?",false },
   {0x0011,0x0001,"MMCPrivate",VR::LO,VM::VM1,"?",false },
