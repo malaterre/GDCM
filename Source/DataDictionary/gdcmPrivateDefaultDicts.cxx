@@ -37,6 +37,10 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x7501,0x0001,"CoActiv_PvtTags",VR::LO,VM::VM1,"?",false },
+  {0x7501,0x0002,"CoActiv_PvtTags",VR::LO,VM::VM1,"?IP Adress?",false },
+  {0x7501,0x0003,"CoActiv_PvtTags",VR::UI,VM::VM1,"?Transfer Syntax UID?",false },
+  {0x7501,0x0004,"CoActiv_PvtTags",VR::LO,VM::VM1,"?Transfer Syntax Name?",false },
   {0x0009,0x0002,"PMTF INFORMATION DATA^10",VR::SH,VM::VM1,"?",false },
   {0x0011,0x0003,"PMTF INFORMATION DATA^10",VR::US,VM::VM1,"?",false },
   {0x0011,0x0004,"PMTF INFORMATION DATA^10",VR::SQ,VM::VM1,"?",false },
