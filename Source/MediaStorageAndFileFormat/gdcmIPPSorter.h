@@ -73,7 +73,7 @@ public:
   /// "0.999081\\0.0426952\\0.00369272\\-0.0419025\\0.955059\\0.293439",
   /// We need an API to define the tolerance which is allowed. Internally
   /// the cross vector of each direction cosines is computed. The tolerance
-  /// then define the the distance in between 1. to the dot product of those
+  /// then define the distance in between 1.0 to the dot product of those
   /// cross vectors. In a perfect world this dot product is of course 1.0 which
   /// imply a DirectionCosines tolerance of exactly 0.0 (default).
   void SetDirectionCosinesTolerance(double tol) { DirCosTolerance = tol; }
