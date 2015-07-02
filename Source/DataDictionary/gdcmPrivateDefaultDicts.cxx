@@ -5318,7 +5318,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x0086,"PHILIPS MR IMAGING DD 001",VR::SS,VM::VM1,"?",false },
   {0x2005,0x009e,"PHILIPS MR IMAGING DD 001",VR::SQ,VM::VM1,"?",false },
   {0x2005,0x009f,"PHILIPS MR IMAGING DD 001",VR::CS,VM::VM1,"?",false },
-  {0x2005,0x00a0,"PHILIPS MR IMAGING DD 001",VR::FL,VM::VM1,"?",false },
+  {0x2005,0x00a0,"PHILIPS MR IMAGING DD 001",VR::FL,VM::VM1,"?Philips Temporal Position Identifier?",false },
   {0x2005,0x00a1,"PHILIPS MR IMAGING DD 001",VR::CS,VM::VM1,"Syncra Scan Type",false },
   {0x2005,0x00a2,"PHILIPS MR IMAGING DD 001",VR::CS,VM::VM1,"?",false },
   {0x2005,0x00a3,"PHILIPS MR IMAGING DD 001",VR::IS,VM::VM1,"?",false },
