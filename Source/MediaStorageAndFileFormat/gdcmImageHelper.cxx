@@ -415,6 +415,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::OphthalmicTomographyImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
@@ -533,6 +534,7 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
     const Tag t1(0x5200,0x9229);
@@ -839,6 +841,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
     const Tag t1(0x5200,0x9229);
@@ -1067,6 +1070,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
 
   if( ms == MediaStorage::EnhancedCTImageStorage
     || ms == MediaStorage::EnhancedMRImageStorage
+    || ms == MediaStorage::EnhancedPETImageStorage
     || ms == MediaStorage::OphthalmicTomographyImageStorage
     || ms == MediaStorage::SegmentationStorage )
     {
@@ -1333,6 +1337,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
 /*
@@ -1620,6 +1625,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
    //&& ms != MediaStorage::ComputedRadiographyImageStorage
    && ms != MediaStorage::SegmentationStorage
    && ms != MediaStorage::EnhancedMRImageStorage
+   && ms != MediaStorage::EnhancedPETImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage )
     {
     // FIXME: should I remove the ipp tag ???
@@ -1628,6 +1634,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
 /*
@@ -1698,6 +1705,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
    //&& ms != MediaStorage::ComputedRadiographyImageStorage
    && ms != MediaStorage::SegmentationStorage
    && ms != MediaStorage::EnhancedMRImageStorage
+   && ms != MediaStorage::EnhancedPETImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage )
     {
     // FIXME: should I remove the iop tag ???
@@ -1725,6 +1733,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
 /*
@@ -1807,6 +1816,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
    && ms != MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage
+   && ms != MediaStorage::EnhancedPETImageStorage
    && ms != MediaStorage::SegmentationStorage )
     {
     if( img.GetIntercept() != 0. || img.GetSlope() != 1. )
@@ -1819,6 +1829,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
   if( ms == MediaStorage::SegmentationStorage ) return; // seg storage cannot have rescale slope
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::EnhancedPETImageStorage
   )
     {
 /*

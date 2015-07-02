@@ -84,6 +84,7 @@ int main(int, char *[])
   writer->GetMedicalImageProperties()->AddUserDefinedValue( "Dose Type", "PHYSICAL");
   writer->GetMedicalImageProperties()->AddUserDefinedValue( "Frame of Reference UID", "1.3.12.2.1107.5.6.1.68100.30270111041215391275000000001");
   writer->GetMedicalImageProperties()->SetModality( "RTDOSE" );
+  //writer->GetMedicalImageProperties()->SetModality( "PT" ); // debug
   writer->SetScale( 0.0042 ); // why not
   writer->Write();
 
