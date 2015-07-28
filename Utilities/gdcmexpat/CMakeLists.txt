@@ -46,4 +46,3 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/expat_mangle.h.in
 # for expat_config.h
 include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
 subdirs(lib)
-
