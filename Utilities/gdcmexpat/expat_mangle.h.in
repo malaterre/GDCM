@@ -11,15 +11,15 @@
  *
  * The following command was used to obtain the symbol list:
  *
- * nm lib@MANGLE_PREFIX@.a |grep " [TR] "
+ * $ nm lib@MANGLE_PREFIX@.a | grep " [TRD] " | awk '{ print "#define "$3" @MANGLE_PREFIX@_"$3 }'
  */
 
-#define asParser @MANGLE_PREFIX@_asParser 
 #define XML_DefaultCurrent @MANGLE_PREFIX@_XML_DefaultCurrent
 #define XML_ErrorString @MANGLE_PREFIX@_XML_ErrorString
 #define XML_ExpatVersion @MANGLE_PREFIX@_XML_ExpatVersion
 #define XML_ExpatVersionInfo @MANGLE_PREFIX@_XML_ExpatVersionInfo
 #define XML_ExternalEntityParserCreate @MANGLE_PREFIX@_XML_ExternalEntityParserCreate
+#define XML_FreeContentModel @MANGLE_PREFIX@_XML_FreeContentModel
 #define XML_GetBase @MANGLE_PREFIX@_XML_GetBase
 #define XML_GetBuffer @MANGLE_PREFIX@_XML_GetBuffer
 #define XML_GetCurrentByteCount @MANGLE_PREFIX@_XML_GetCurrentByteCount
@@ -27,15 +27,22 @@
 #define XML_GetCurrentColumnNumber @MANGLE_PREFIX@_XML_GetCurrentColumnNumber
 #define XML_GetCurrentLineNumber @MANGLE_PREFIX@_XML_GetCurrentLineNumber
 #define XML_GetErrorCode @MANGLE_PREFIX@_XML_GetErrorCode
+#define XML_GetFeatureList @MANGLE_PREFIX@_XML_GetFeatureList
 #define XML_GetIdAttributeIndex @MANGLE_PREFIX@_XML_GetIdAttributeIndex
 #define XML_GetInputContext @MANGLE_PREFIX@_XML_GetInputContext
+#define XML_GetParsingStatus @MANGLE_PREFIX@_XML_GetParsingStatus
 #define XML_GetSpecifiedAttributeCount @MANGLE_PREFIX@_XML_GetSpecifiedAttributeCount
+#define XML_MemFree @MANGLE_PREFIX@_XML_MemFree
+#define XML_MemMalloc @MANGLE_PREFIX@_XML_MemMalloc
+#define XML_MemRealloc @MANGLE_PREFIX@_XML_MemRealloc
 #define XML_Parse @MANGLE_PREFIX@_XML_Parse
 #define XML_ParseBuffer @MANGLE_PREFIX@_XML_ParseBuffer
 #define XML_ParserCreate @MANGLE_PREFIX@_XML_ParserCreate
-#define XML_ParserCreateNS @MANGLE_PREFIX@_XML_ParserCreateNS
 #define XML_ParserCreate_MM @MANGLE_PREFIX@_XML_ParserCreate_MM
+#define XML_ParserCreateNS @MANGLE_PREFIX@_XML_ParserCreateNS
 #define XML_ParserFree @MANGLE_PREFIX@_XML_ParserFree
+#define XML_ParserReset @MANGLE_PREFIX@_XML_ParserReset
+#define XML_ResumeParser @MANGLE_PREFIX@_XML_ResumeParser
 #define XML_SetAttlistDeclHandler @MANGLE_PREFIX@_XML_SetAttlistDeclHandler
 #define XML_SetBase @MANGLE_PREFIX@_XML_SetBase
 #define XML_SetCdataSectionHandler @MANGLE_PREFIX@_XML_SetCdataSectionHandler
@@ -55,11 +62,12 @@
 #define XML_SetExternalEntityRefHandler @MANGLE_PREFIX@_XML_SetExternalEntityRefHandler
 #define XML_SetExternalEntityRefHandlerArg @MANGLE_PREFIX@_XML_SetExternalEntityRefHandlerArg
 #define XML_SetNamespaceDeclHandler @MANGLE_PREFIX@_XML_SetNamespaceDeclHandler
-#define XML_SetNotStandaloneHandler @MANGLE_PREFIX@_XML_SetNotStandaloneHandler
 #define XML_SetNotationDeclHandler @MANGLE_PREFIX@_XML_SetNotationDeclHandler
+#define XML_SetNotStandaloneHandler @MANGLE_PREFIX@_XML_SetNotStandaloneHandler
 #define XML_SetParamEntityParsing @MANGLE_PREFIX@_XML_SetParamEntityParsing
 #define XML_SetProcessingInstructionHandler @MANGLE_PREFIX@_XML_SetProcessingInstructionHandler
 #define XML_SetReturnNSTriplet @MANGLE_PREFIX@_XML_SetReturnNSTriplet
+#define XML_SetSkippedEntityHandler @MANGLE_PREFIX@_XML_SetSkippedEntityHandler
 #define XML_SetStartCdataSectionHandler @MANGLE_PREFIX@_XML_SetStartCdataSectionHandler
 #define XML_SetStartDoctypeDeclHandler @MANGLE_PREFIX@_XML_SetStartDoctypeDeclHandler
 #define XML_SetStartElementHandler @MANGLE_PREFIX@_XML_SetStartElementHandler
@@ -68,22 +76,18 @@
 #define XML_SetUnparsedEntityDeclHandler @MANGLE_PREFIX@_XML_SetUnparsedEntityDeclHandler
 #define XML_SetUserData @MANGLE_PREFIX@_XML_SetUserData
 #define XML_SetXmlDeclHandler @MANGLE_PREFIX@_XML_SetXmlDeclHandler
+#define XML_StopParser @MANGLE_PREFIX@_XML_StopParser
+#define XML_UseForeignDTD @MANGLE_PREFIX@_XML_UseForeignDTD
 #define XML_UseParserAsHandlerArg @MANGLE_PREFIX@_XML_UseParserAsHandlerArg
 #define XmlGetUtf16InternalEncoding @MANGLE_PREFIX@_XmlGetUtf16InternalEncoding
-#define XmlGetUtf16InternalEncodingNS @MANGLE_PREFIX@_XmlGetUtf16InternalEncodingNS
 #define XmlGetUtf8InternalEncoding @MANGLE_PREFIX@_XmlGetUtf8InternalEncoding
-#define XmlGetUtf8InternalEncodingNS @MANGLE_PREFIX@_XmlGetUtf8InternalEncodingNS
 #define XmlInitEncoding @MANGLE_PREFIX@_XmlInitEncoding
-#define XmlInitEncodingNS @MANGLE_PREFIX@_XmlInitEncodingNS
 #define XmlInitUnknownEncoding @MANGLE_PREFIX@_XmlInitUnknownEncoding
-#define XmlInitUnknownEncodingNS @MANGLE_PREFIX@_XmlInitUnknownEncodingNS
 #define XmlParseXmlDecl @MANGLE_PREFIX@_XmlParseXmlDecl
-#define XmlParseXmlDeclNS @MANGLE_PREFIX@_XmlParseXmlDeclNS
 #define XmlSizeOfUnknownEncoding @MANGLE_PREFIX@_XmlSizeOfUnknownEncoding
 #define XmlUtf16Encode @MANGLE_PREFIX@_XmlUtf16Encode
 #define XmlUtf8Encode @MANGLE_PREFIX@_XmlUtf8Encode
 #define XmlPrologStateInit @MANGLE_PREFIX@_XmlPrologStateInit
-#define XmlPrologStateInitExternalEntity @MANGLE_PREFIX@_XmlPrologStateInitExternalEntity
 
 #endif
 

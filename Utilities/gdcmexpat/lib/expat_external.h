@@ -5,6 +5,9 @@
 #ifndef Expat_External_INCLUDED
 #define Expat_External_INCLUDED 1
 
+/* GDCM mangling */
+#include "expat_mangle.h"
+
 /* External API definitions */
 
 #if defined(_MSC_EXTENSIONS) && !defined(__BEOS__) && !defined(__CYGWIN__)
