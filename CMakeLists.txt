@@ -199,7 +199,7 @@ endif()
 #-----------------------------------------------------------------------------
 # Build the main lib...
 if(NOT GDCM_HAVE_STDINT_H)
-  if(MSVC)
+  if( MSVC OR "x${CMAKE_CXX_COMPILER_ID}x" MATCHES "Intel" )
     include_directories(
       "${GDCM_SOURCE_DIR}/Utilities/C99"
       )
