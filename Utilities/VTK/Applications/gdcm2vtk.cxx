@@ -28,6 +28,7 @@
 #include "vtkPNGWriter.h"
 #include "vtkPNMWriter.h"
 #include "vtkBMPWriter.h"
+#include "vtkImageChangeInformation.h"
 #if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
 #include "vtkMetaImageReader.h"
 #include "vtkXMLImageDataReader.h"
@@ -59,6 +60,7 @@
 #include "gdcmSystem.h"
 #include "gdcmUIDGenerator.h"
 #include "gdcmDirectory.h"
+#include "gdcmIPPSorter.h"
 
 #include <getopt.h>
 
@@ -87,11 +89,12 @@ void PrintHelp()
   std::cout << "     --lower-left       set lower left." << std::endl;
   std::cout << "     --shift            set shift." << std::endl;
   std::cout << "     --scale            set scale." << std::endl;
-  std::cout << "     --compress         set compressoin (MetaIO)." << std::endl;
+  std::cout << "     --compress         set compression (MetaIO)." << std::endl;
   std::cout << "  -T --study-uid        Study UID." << std::endl;
   std::cout << "  -S --series-uid       Series UID." << std::endl;
   std::cout << "     --root-uid         Root UID." << std::endl;
   std::cout << "     --imageformat      Image Format [1-8] (aka PhotometricInterpretation)." << std::endl;
+  std::cout << "     --ipp-sort         When input is directory, sort instances using IOP/IPP."<< std::endl;
   std::cout << "Compression Types (lossless):" << std::endl;
   std::cout << "  -J --jpeg                           Compress image in jpeg." << std::endl;
   std::cout << "  -K --j2k                            Compress image in j2k." << std::endl;
@@ -106,6 +109,14 @@ void PrintHelp()
   std::cout << "  -v --version    print version." << std::endl;
   std::cout << "Env var:" << std::endl;
   std::cout << "  GDCM_ROOT_UID Root UID" << std::endl;
+}
+
+static inline void copy_files( const std::vector<std::string> & files, vtkStringArray * names )
+{
+  for( gdcm::Directory::FilenamesType::const_iterator it = files.begin(); it != files.end(); ++it )
+    {
+    names->InsertNextValue( it->c_str() );
+    }
 }
 
 int main(int argc, char *argv[])
@@ -132,6 +143,7 @@ int main(int argc, char *argv[])
   int rle = 0;
   int usevtkdicom = 0;
   int compress = 0;
+  int ippsort = 0;
   int lowerleft = 0;
   int oshift = 0;
   int oscale = 0;
@@ -172,6 +184,7 @@ int main(int argc, char *argv[])
         {"shift", 1, &oshift, 1}, //
         {"scale", 1, &oscale, 1}, //
         {"imageformat", 1, &oimageformat, 1}, //
+        {"ipp-sort", 0, &ippsort, 1}, // use IPP sorting
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -349,6 +362,7 @@ int main(int argc, char *argv[])
 
   int recursive = 0;
   const char *outfilename = NULL;
+  double ippzspacing;
   vtkStringArray *names = vtkStringArray::New();
     {
     // Is it a single directory ? If so loop over all files contained in it:
@@ -360,10 +374,29 @@ int main(int argc, char *argv[])
       gdcm::Directory d;
       d.Load(filenames[0].c_str(), recursive);
       gdcm::Directory::FilenamesType const &files = d.GetFilenames();
-      for( gdcm::Directory::FilenamesType::const_iterator it = files.begin(); it != files.end(); ++it )
-        {
-        names->InsertNextValue( it->c_str() );
-        }
+      if( ippsort )
+      {
+        gdcm::IPPSorter s;
+        s.SetComputeZSpacing( true );
+        s.SetZSpacingTolerance( 1e-1 );
+        bool b = s.Sort( files );
+        if( !b )
+          {
+          std::cerr << "Failed to sort files" << std::endl;
+          return 1;
+          }
+        std::cout << "Sorting succeeded:" << std::endl;
+        s.Print( std::cout );
+    
+        std::cout << "Found z-spacing:" << std::endl;
+        std::cout << s.GetZSpacing() << std::endl;
+        ippzspacing = s.GetZSpacing();
+    
+        const std::vector<std::string> & sorted = s.GetFilenames();
+        copy_files( sorted, names );
+      }
+      else
+        copy_files( files, names );
       outfilename = filenames[1].c_str();
       }
     else // list of files passed directly on the cmd line:
@@ -455,6 +488,7 @@ int main(int argc, char *argv[])
   imgfactory->Delete();
 
   vtkImageData *imgdata = NULL;
+  vtkImageChangeInformation *v16 = vtkImageChangeInformation::New();
   std::string image_comments;
   if( imgreader )
     {
@@ -462,7 +496,7 @@ int main(int argc, char *argv[])
     if( names->GetNumberOfValues() == 1 )
       imgreader->SetFileName( names->GetValue(0) );
     else
-    imgreader->SetFileNames(names);
+      imgreader->SetFileNames(names);
     imgreader->Update();
     if( imgreader->GetErrorCode() )
       {
@@ -470,6 +504,18 @@ int main(int argc, char *argv[])
       return 1;
       }
     imgdata = imgreader->GetOutput();
+    if( ippsort )
+    {
+      const vtkFloatingPointType *spacing = imgreader->GetOutput()->GetSpacing();
+#if (VTK_MAJOR_VERSION >= 6)
+      v16->SetInputConnection( imgreader->GetOutputPort() );
+#else
+      v16->SetInput( imgreader->GetOutput() );
+#endif
+      v16->SetOutputSpacing( spacing[0], spacing[1], ippzspacing );
+      v16->Update();
+      imgdata = v16->GetOutput();
+    }
     if( verbose )
       std::cout << "imgreader classname: " << imgreader->GetClassName() << std::endl;
     }
