@@ -885,11 +885,12 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
     if( ds.FindDataElement( trwvms ) )
     {
       SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( trwvms ).GetValueAsSQ();
-      assert( sqi );
+      if( sqi )
+      {
       const Tag trwvlutd(0x0040,0x9212); // Real World Value LUT Data
       if( ds.FindDataElement( trwvlutd ) )
       {
-        assert(0); // Not supported ???
+        gdcmAssertAlwaysMacro(0); // Not supported !
       }
       //const Tag trwvi(0x0040,0x9224); // Real World Value Intercept
       //const Tag trwvs(0x0040,0x9225); // Real World Value Slope
@@ -899,6 +900,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       at2.SetFromDataSet( ds );
       interceptslope[0] = at1.GetValue();
       interceptslope[1] = at2.GetValue();
+      }
     }
   }
   else if (
