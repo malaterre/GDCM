@@ -687,6 +687,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "dbf83984984741c98205d77a947b442c" , "SC16BitsAllocated_8BitsStoredJ2K.dcm" },
 { "c164a73ba18ab4e88977921ffc7c3a65" , "SC16BitsAllocated_8BitsStoredJPEG.dcm" },
 
+{ "4a5d8549791432b29948dd8ff63e2534" , "SIEMENS_SYNGO-12-MONO2-LUTWrongLength512.dcm" },
+
 
 /* Stopping condition */
 { 0 ,0 }

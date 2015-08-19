@@ -906,7 +906,11 @@ int vtkGDCMImageReader2::LoadSingleFile(const char *filename, char *pointer, uns
     {
     /*  image.GetBuffer(pointer); */
     bool b = reader.ReadIntoBuffer(pointer, len);
-    assert( b );
+    if( !b )
+    {
+      vtkErrorMacro( "Could not ReadIntoBuffer" );
+      return 0;
+    }
     }
 
   // Do the Icon Image:

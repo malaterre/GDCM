@@ -219,6 +219,7 @@ static const StreamOffset gdcmSelectedPrivateGroupOffsetDataFiles[] = {
 { "D_CLUNIE_RG1_JPLL.dcm",1084 },
 { "XA-MONO2-8-12x-catheter.dcm",644 },
 { "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm",1314},
+{ "SIEMENS_SYNGO-12-MONO2-LUTWrongLength512.dcm", 1596 },
 { "00191113.dcm",536 },
 { "dicomdir_With_embedded_icons",7125212 },
 { "dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents",37218 },

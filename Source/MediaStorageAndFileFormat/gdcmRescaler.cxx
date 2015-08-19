@@ -451,11 +451,17 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
       assert(0);
       }
     assert( min < 0 );
+#if 0
     int64_t min2 = -min; // make a copy
     int64_t max2 = max; // make a copy
     while (min2 >>= 1) ++log2min;
     while (max2 >>= 1) ++log2max;
-    const int64_t bs = std::max( log2min, log2max ) + 1;
+    const int64_t bs = std::max( log2min, log2max ) + 1 + 1 /* 2 complement */;
+#else
+    int64_t max2 = max - min; // make a copy
+    while (max2 >>= 1) ++log2max;
+    const int64_t bs = log2max + 1;
+#endif
     assert( bs <= st.GetBitsAllocated() );
     st.SetBitsStored( (unsigned short)bs );
     }

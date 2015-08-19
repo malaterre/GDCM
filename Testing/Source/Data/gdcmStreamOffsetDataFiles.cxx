@@ -227,6 +227,7 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "unreadable.dcm", 249230 },
 { "SC16BitsAllocated_8BitsStoredJ2K.dcm", 764 },
 { "SC16BitsAllocated_8BitsStoredJPEG.dcm", 958 },
+{ "SIEMENS_SYNGO-12-MONO2-LUTWrongLength512.dcm", 48726 },
 
 
 /* Stopping condition */

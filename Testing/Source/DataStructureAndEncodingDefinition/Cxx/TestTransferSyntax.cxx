@@ -35,9 +35,14 @@ static const int losslylosslessarray[][3] = {
     { 0, 1, 0 }, //    RLELossless,
     { 1, 0, 1 }, //    MPEG2MainProfile,
     { 0, 1, 1 }, //    ImplicitVRBigEndianACRNEMA,
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     { 0, 1, 1 }, //    WeirdPapryus,
+#endif
     { 0, 1, 1 }, //    CT_private_ELE,
     { 1, 1, 1 }, //    JPIPReferenced
+    { 1, 0, 1 }, //    MPEG2MainProfileHighLevel
+    { 1, 0, 1 }, //    MPEG4AVCH264HighProfileLevel4_1
+    { 1, 0, 1 }, //    MPEG4AVCH264BDcompatibleHighProfileLevel4_1
 };
 
 static int TestTransferSyntaxAll()
