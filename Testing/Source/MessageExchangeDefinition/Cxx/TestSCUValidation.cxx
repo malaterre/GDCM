@@ -25,12 +25,12 @@
 #include "gdcmQueryFactory.h"
 #include "gdcmGlobal.h"
 
-const char *AETitle = "ANY";
-const char *PeerAETitle = "ANY";
-const char *ComputerName = "87.106.65.167"; // www.dicomserver.co.uk
-int port = 11112;
+static const char AETitle[] = "ANY";
+static const char PeerAETitle[] = "ANY";
+static const char ComputerName[] = "213.165.94.158"; // www.dicomserver.co.uk
+static int port = 11112;
 
-gdcm::network::ULConnectionManager *GetConnectionManager(gdcm::BaseRootQuery* theQuery)
+static gdcm::network::ULConnectionManager *GetConnectionManager(gdcm::BaseRootQuery* theQuery)
 {
   gdcm::PresentationContextGenerator generator;
   if( !generator.GenerateFromUID( theQuery->GetAbstractSyntaxUID() ) )
@@ -49,7 +49,7 @@ gdcm::network::ULConnectionManager *GetConnectionManager(gdcm::BaseRootQuery* th
   return theManager;
 }
 
-std::vector<gdcm::DataSet> GetPatientInfo(bool validateQuery, bool inStrictQuery)
+static std::vector<gdcm::DataSet> GetPatientInfo(bool validateQuery, bool inStrictQuery)
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::BaseRootQuery* theQuery =
@@ -68,7 +68,7 @@ std::vector<gdcm::DataSet> GetPatientInfo(bool validateQuery, bool inStrictQuery
   return theDataSets;
 }
 
-std::vector<gdcm::DataSet> GetStudyInfo(const char *patientID, bool validateQuery, bool inStrictQuery)
+static std::vector<gdcm::DataSet> GetStudyInfo(const char *patientID, bool validateQuery, bool inStrictQuery)
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::BaseRootQuery* theQuery =
@@ -89,7 +89,7 @@ std::vector<gdcm::DataSet> GetStudyInfo(const char *patientID, bool validateQuer
   return theDataSets;
 }
 
-std::vector<gdcm::DataSet> GetSeriesInfo(const char *patientID, const char *studyInstanceUID, bool validateQuery, bool inStrictQuery)
+static std::vector<gdcm::DataSet> GetSeriesInfo(const char *patientID, const char *studyInstanceUID, bool validateQuery, bool inStrictQuery)
 {
   std::vector<gdcm::DataSet> theDataSets;
   gdcm::BaseRootQuery* theQuery =
@@ -108,7 +108,7 @@ std::vector<gdcm::DataSet> GetSeriesInfo(const char *patientID, const char *stud
   return theDataSets;
 }
 
-std::vector<gdcm::DataSet> GetImageInfo(const char *patientID,
+static std::vector<gdcm::DataSet> GetImageInfo(const char *patientID,
                const char *studyInstanceUID, const char *seriesInstanceUID, bool validateQuery, bool inStrictQuery)
 {
   std::vector<gdcm::DataSet> theDataSets;
@@ -129,7 +129,7 @@ std::vector<gdcm::DataSet> GetImageInfo(const char *patientID,
   return theDataSets;
 }
 
-void PrintDataSets(std::vector<gdcm::DataSet> theDataSets)
+static void PrintDataSets(std::vector<gdcm::DataSet> theDataSets)
 {
   std::vector<gdcm::DataSet>::iterator itor;
   for (itor = theDataSets.begin(); itor < theDataSets.end(); itor++)
@@ -139,6 +139,8 @@ void PrintDataSets(std::vector<gdcm::DataSet> theDataSets)
 
 int TestSCUValidation(int , char *[])
 {
+  try
+  {
   //set this to true to use a strict interpretation of the DICOM standard for query validation
   bool theUseStrictQueries = false;
 
@@ -198,6 +200,11 @@ int TestSCUValidation(int , char *[])
     "1.2.826.0.1.3680043.4.1.19990124221049.2",
     "1.2.826.0.1.3680043.4.1.19990124221049.3", false, theUseStrictQueries);
   PrintDataSets(theDataSets);
+  }
+  catch( std::exception & e )
+  {
+    return 1;
+  }
 
   //I want the Following things to do in CFind Query.
   // 1. Reterive the Study Level Information for the known Patient.
