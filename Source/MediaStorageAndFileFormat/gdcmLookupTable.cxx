@@ -140,7 +140,7 @@ void LookupTable::SetLUT(LookupTableType type, const unsigned char *array,
       if( Internal->Length[type]*mult == length
           || Internal->Length[type]*mult + 1 == length )
       {
-        assert( mult2 == 1 );
+        assert( mult2 == 1 || mult2 == 2 );
         unsigned int offset = 0;
         if( mult == 2 )
         {
