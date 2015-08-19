@@ -222,6 +222,7 @@ static const StreamOffset gdcmSelectedTagsOffsetDataFiles[] = {
 { "lena512_rot90.j2k.dcm",756 },
 { "ELSCINT1_PMSCT_RLE1_priv.dcm",298002 },
 { "00191113.dcm",922 },
+{ "SIEMENS_SYNGO-12-MONO2-LUTWrongLength512.dcm", 48714 },
 { "dicomdir_Acusson_WithPrivate_WithSR",3826 },
 { "dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents",37218 },
 { "dicomdir_Pms_With_heavy_embedded_sequence",3003414 },

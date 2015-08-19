@@ -227,6 +227,7 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "9775e8206011b9d5cedfcba16946060cb047f826"  , "JPEGInvalidSecondFrag.dcm" },
 { "d17a34f8ae066048442ab5b110d43c412472ea7e"  , "SC16BitsAllocated_8BitsStoredJ2K.dcm" },
 { "71517fce6c32625f1051b72085cfceeee58bd164"  , "SC16BitsAllocated_8BitsStoredJPEG.dcm" },
+{ "0d19e4a98265afc3c782db02bc64bd32124ed2f6"  , "SIEMENS_SYNGO-12-MONO2-LUTWrongLength512.dcm" },
 
 { NULL, NULL}
 };

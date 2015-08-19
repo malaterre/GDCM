@@ -36,6 +36,7 @@ static const char * const iconimagearray[][2] = {
   { "61b2bf04c18a0f67b7e720e07804dcdd" , "KODAK_CompressedIcon.dcm" },
   { "620f0b67a91f7f74151bc5be745b7110" , "MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm" },
   { "938f6ea0bea13ff5c45c7934e603caac" , "US-GE-4AICL142.dcm" },
+  { "9c145bbfd00e867d5f9f6efe9651a71e" , "SIEMENS_SYNGO-12-MONO2-LUTWrongLength512.dcm" },
 
   // VEPRO VIF
   { "ea4673b2aa72f477188bac340e115f4c" , "PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm" },
