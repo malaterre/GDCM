@@ -403,7 +403,6 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
   int64_t min = (int64_t)dmin;
   int64_t max = (int64_t)dmax;
 
-  int log2min = 0;
   int log2max = 0;
 
   if( min >= 0 ) // unsigned
@@ -452,6 +451,7 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
       }
     assert( min < 0 );
 #if 0
+    int log2min = 0;
     int64_t min2 = -min; // make a copy
     int64_t max2 = max; // make a copy
     while (min2 >>= 1) ++log2min;
