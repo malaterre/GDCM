@@ -51,7 +51,6 @@ macro(ADD_PYTHON_TEST TESTNAME FILENAME)
   message(\"${pyenv}\")
   execute_process(
     COMMAND ${PYTHON_EXECUTABLE} ${loc} ${wo_semicolumn}
-    #WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
     RESULT_VARIABLE import_res
     OUTPUT_VARIABLE import_output
     ERROR_VARIABLE  import_output
