@@ -201,7 +201,7 @@ int TestSCUValidation(int , char *[])
     "1.2.826.0.1.3680043.4.1.19990124221049.3", false, theUseStrictQueries);
   PrintDataSets(theDataSets);
   }
-  catch( std::exception & e )
+  catch( std::exception & )
   {
     return 1;
   }
