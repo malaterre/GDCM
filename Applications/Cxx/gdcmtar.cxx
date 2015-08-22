@@ -20,6 +20,7 @@
  */
 
 #include "gdcmReader.h"
+#include "gdcmCSAHeader.h"
 #include "gdcmVersion.h"
 #include "gdcmImageReader.h"
 #include "gdcmDataElement.h"
@@ -95,6 +96,7 @@ namespace gdcm {
   const Tag T2(0x0020,0x000e); // Series Instance UID
   const Tag T3(0x0020,0x0052); // Frame of Reference UID
   const Tag T4(0x0020,0x0037); // Image Orientation (Patient)
+  const Tag T5(0x0008,0x0008); // Image Type
 
 class DiscriminateVolume
 {
@@ -124,34 +126,116 @@ private:
   return theReturn;
 }
 
-void ProcessAIOP(Scanner const & , Directory::FilenamesType const & subset, const char *iopval)
+class frame_diff /* */
+{
+public:
+  bool operator<(const frame_diff &rhs) const
+    {
+    return true;
+    }
+};
+
+static frame_diff get_frame_diff( const char* filename )
+{
+  frame_diff ret;
+  gdcm::Reader reader;
+  reader.SetFileName( filename );
+
+  gdcm::Tag dummy(0x7fe0,0x0000);
+  std::set<gdcm::Tag> skiptags;
+  skiptags.insert( dummy );
+  if ( !reader.ReadUpToTag( dummy, skiptags) )
+    {
+    assert(0);
+    }
+
+  gdcm::CSAHeader csa;
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+
+  const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
+  //const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
+  //const gdcm::PrivateTag &t3 = csa.GetCSADataInfo();
+
+  //bool found = false;
+  if( ds.FindDataElement( t1 ) )
+    {
+    csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
+    assert( csa.GetFormat() == gdcm::CSAHeader::SV10
+      || csa.GetFormat() == gdcm::CSAHeader::NOMAGIC );
+    // SIEMENS / Diffusion
+    const CSAElement &bvalue  = csa.GetCSAElementByName( "B_value" );
+    const CSAElement &bmatrix = csa.GetCSAElementByName( "B_matrix" );
+    const CSAElement &dgd = csa.GetCSAElementByName( "DiffusionGradientDirection" );
+    //assert(0);
+    }
+  else
+    {
+    assert(0);
+    }
+
+  return ret;
+}
+
+void ProcessAIOP(Scanner const & s, Directory::FilenamesType const & subset, const char *iopval)
 {
   if( debuggdcmtar )
-  std::cout << "IOP: " << iopval << std::endl;
-  IPPSorter ipp;
-  ipp.SetComputeZSpacing( true );
-  ipp.SetZSpacingTolerance( 1e-3 ); // ??
-  bool b = ipp.Sort( subset );
-  if( !b )
+    std::cout << "IOP: " << iopval << std::endl;
+
+  bool is_diffusion = false;
+  gdcm::Scanner::ValuesType imagetypes = s.GetValues(gdcm::T5);
+  if( imagetypes.size() == 1 )
     {
-    // If you reach here this means you need one more parameter to discriminiat this
-    // series. Eg. T1 / T2 intertwinted. Multiple Echo (0018,0081)
-    if( debuggdcmtar )
-      {
-      std::cerr << "Failed to sort: " << subset.begin()->c_str() << std::endl;
-      for(
-        Directory::FilenamesType::const_iterator file = subset.begin();
-        file != subset.end(); ++file)
-        {
-        std::cerr << *file << std::endl;
-        }
-      }
-    UnsortedFiles.push_back( subset );
-    return ;
+    const std::string & imagetype = *imagetypes.begin();
+    //gdcm::Attribute<0x0008, 0x0008> at;
+    //at.SetValue( imagetype );
+    std::string::size_type pos = imagetype.find( "DIFFUSION" );
+    is_diffusion = (pos != std::string::npos);
     }
-  if( debuggdcmtar )
-  ipp.Print( std::cout );
-  SortedFiles.push_back( ipp.GetFilenames() );
+
+  if( is_diffusion )
+    {
+    std::multimap<frame_diff, std::string> mm;
+    for( Directory::FilenamesType::const_iterator file = subset.begin();
+      file != subset.end(); ++file)
+      {
+      //std::cerr << *file << std::endl;
+      mm.insert( std::make_pair(get_frame_diff( file->c_str() ), file->c_str()) );
+      }
+    //assert(0);
+    for( std::multimap<frame_diff, std::string>::const_iterator it = mm.begin();
+      it != mm.end(); ++it )
+      {
+      std::cerr << it->second << std::endl;
+      }
+      SortedFiles.push_back( subset );
+    }
+  else
+    {
+    IPPSorter ipp;
+    ipp.SetComputeZSpacing( true );
+    ipp.SetZSpacingTolerance( 1e-3 ); // ??
+    bool b = ipp.Sort( subset );
+    if( !b )
+      {
+      // If you reach here this means you need one more parameter to discriminate this
+      // series. Eg. T1 / T2 intertwined. Multiple Echo (0018,0081)
+      if( debuggdcmtar )
+        {
+        std::cerr << "Failed to sort: " << subset.begin()->c_str() << std::endl;
+        for(
+          Directory::FilenamesType::const_iterator file = subset.begin();
+          file != subset.end(); ++file)
+          {
+          std::cerr << *file << std::endl;
+          }
+        }
+      UnsortedFiles.push_back( subset );
+      return ;
+      }
+    if( debuggdcmtar )
+      ipp.Print( std::cout );
+    SortedFiles.push_back( ipp.GetFilenames() );
+    }
 }
 
 void ProcessAFrameOfRef(Scanner const & s, Directory::FilenamesType const & subset, const char * frameuid)
@@ -180,7 +264,7 @@ void ProcessAFrameOfRef(Scanner const & s, Directory::FilenamesType const & subs
     }
 
   if( debuggdcmtar )
-  std::cout << "Frame of Ref: " << frameuid << std::endl;
+    std::cout << "Frame of Ref: " << frameuid << std::endl;
   if ( n == 1 )
     {
     ProcessAIOP(s, files, iopset.begin()->c_str() );
@@ -189,7 +273,7 @@ void ProcessAFrameOfRef(Scanner const & s, Directory::FilenamesType const & subs
     {
     const char *f = files.begin()->c_str();
     if( debuggdcmtar )
-    std::cerr << "More than one IOP: " << f << std::endl;
+      std::cerr << "More than one IOP: " << f << std::endl;
     // Make sure that there is actually 'n' different IOP
     gdcm::DirectionCosines ref;
     gdcm::DirectionCosines dc;
@@ -291,7 +375,6 @@ void Print( std::ostream & os )
       os << *file << std::endl;
       }
     }
-
 }
 
   std::vector< Directory::FilenamesType > const & GetSortedFiles() const { return SortedFiles; }
@@ -306,7 +389,6 @@ void ProcessIntoVolume( Scanner const & s )
     {
     ProcessAStudy( s, it->c_str() );
     }
-
 }
 
 };
@@ -347,6 +429,16 @@ static bool ConcatenateImages(Image &im1, Image const &im2)
   return true;
 }
 
+static void InsertIfExist( DataSet &enhds, const DataSet &ds, const Tag & t )
+{
+  if( ds.FindDataElement( t ) )
+    {
+    assert( !enhds.FindDataElement( t ) );
+    enhds.Insert( ds.GetDataElement( t ) );
+    }
+}
+
+
 } // namespace gdcm
 
 
@@ -367,6 +459,7 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
   s.AddTag( gdcm::T2 );
   s.AddTag( gdcm::T3 );
   s.AddTag( gdcm::T4 );
+  s.AddTag( gdcm::T5 );
   bool b = s.Scan( d.GetFilenames() );
   if( !b )
     {
@@ -463,6 +556,150 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
     ++file;
     ++count;
 
+    // insert Enhanced MR Image Storage
+    if( false )
+      {
+      gdcm::DataSet & enhds = im0.GetFile().GetDataSet();
+      gdcm::DataSet & ds = reader0.GetFile().GetDataSet();
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0005) ); // SpecificCharacterSet
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0008) ); // ImageType
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0012) ); // InstanceCreationDate
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0013) ); // InstanceCreationTime
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0020) ); // StudyDate
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0021) ); // StudyTime
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0022) ); // AcquisitionDate
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0023) ); // ContentDate
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0030) ); // StudyTime
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0031) ); // SeriesTime
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0032) ); // AcquisitionTime
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0033) ); // ContentTime
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0050) ); // AccessionNumber
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0070) ); // Manufacturer
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0080) ); // InstitutionName
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0081) ); // InstitutionAddress
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x0090) ); // ReferringPhysicianName
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x1010) ); // StationName
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x1030) ); // StudyDescription
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x103e) ); // SeriesDescription
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x1040) ); // InstitutionalDepartme
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x1050) ); // PerformingPhysicianNa
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x8,0x1090) ); // ManufacturerModelName
+
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0010,0x0010)); // PatientName
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0010,0x0020)); //
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0010,0x0030)); //
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0010,0x0040)); //
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0010,0x1010)); //
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0010,0x1030)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0020)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0021)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0022)); //
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0023)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0024)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0025)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0050)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0080)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0081)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0083)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0084)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0085)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0086)); //
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0087)); //
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0088)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0089)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0091)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0093)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0094)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x0095)); //
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x1000)); //
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x1020)); //
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x1030)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x1251)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x1310)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x1312)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x1314)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x1315)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x1316)); //
+      //gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x1318)); //
+      gdcm::InsertIfExist( enhds, ds, gdcm::Tag(0x0018,0x5100)); //
+
+        {
+        gdcm::SmartPointer<gdcm::SequenceOfItems> sqi1 = new gdcm::SequenceOfItems;
+
+/*
+(5200,9229) SQ (Sequence with undefined length)                   # u/l,1 Shared Functional Groups Sequence
+  (fffe,e000) na (Item with undefined length)
+    (0018,9006) SQ (Sequence with undefined length)               # u/l,1 MR Imaging Modifier Sequence
+      (fffe,e000) na (Item with undefined length)
+        (0018,0095) DS [109 ]                                     # 4,1 Pixel Bandwidth
+        (0018,9020) CS [NONE]                                     # 4,1 Magnetization Transfer
+        (0018,9022) CS [NO]                                       # 2,1 Blood Signal Nulling
+        (0018,9028) CS [NONE]                                     # 4,1 Tagging
+        (0018,9098) FD 63.8799                                    # 8,1-2 Transmitter Frequency
+*/
+        gdcm::Item item0;
+        gdcm::DataSet &subds0 = item0.GetNestedDataSet();
+
+          {
+        gdcm::SmartPointer<gdcm::SequenceOfItems> sqi0 = new gdcm::SequenceOfItems;
+          const gdcm::Tag sisq0(0x0018,0x9006);
+          gdcm::DataElement de0( sisq0 );
+          de0.SetVR( gdcm::VR::SQ );
+          de0.SetValue( *sqi0 );
+          subds0.Insert( de0 );
+
+          gdcm::Item item1;
+          gdcm::DataSet &subds1 = item1.GetNestedDataSet();
+          gdcm::InsertIfExist( subds1, ds, gdcm::Tag(0x0018,0x0095)); //
+          gdcm::InsertIfExist( subds1, ds, gdcm::Tag(0x0018,0x9020)); //
+          gdcm::InsertIfExist( subds1, ds, gdcm::Tag(0x0018,0x9022)); //
+          gdcm::InsertIfExist( subds1, ds, gdcm::Tag(0x0018,0x9028)); //
+          gdcm::InsertIfExist( subds1, ds, gdcm::Tag(0x0018,0x9098)); //
+          sqi0->AddItem( item1 );
+          }
+
+/*
+    (0018,9042) SQ (Sequence with undefined length)               # u/l,1 MR Receive Coil Sequence
+      (fffe,e000) na (Item with undefined length)
+        (0018,1250) SH [MULTI COIL]                               # 10,1 Receive Coil Name
+        (0018,9041) LO (no value)                                 # 0,1 Receive Coil Manufacturer Name
+        (0018,9043) CS [MULTICOIL ]                               # 10,1 Receive Coil Type
+        (0018,9044) CS [NO]                                       # 2,1 Quadrature Receive Coil
+        (0018,9045) SQ (Sequence with undefined length)           # u/l,1 Multi-Coil Definition Sequence
+          (fffe,e000) na (Item with undefined length)
+            (0018,9047) SH [MULTI ELEMENT ]                       # 14,1 Multi-Coil Element Name
+            (0018,9048) CS [YES ]                                 # 4,1 Multi-Coil Element Used
+          (fffe,e00d)
+        (fffe,e0dd)
+      (fffe,e00d)
+*/
+          {
+        gdcm::SmartPointer<gdcm::SequenceOfItems> sqi0 = new gdcm::SequenceOfItems;
+          const gdcm::Tag sisq0(0x0018,0x9042);
+          gdcm::DataElement de0( sisq0 );
+          de0.SetVR( gdcm::VR::SQ );
+          de0.SetValue( *sqi0 );
+          subds0.Insert( de0 );
+
+          gdcm::Item item1;
+          gdcm::DataSet &subds1 = item1.GetNestedDataSet();
+          gdcm::InsertIfExist( subds1, ds, gdcm::Tag(0x0018,0x1250)); //
+          gdcm::InsertIfExist( subds1, ds, gdcm::Tag(0x0018,0x9041)); //
+          gdcm::InsertIfExist( subds1, ds, gdcm::Tag(0x0018,0x9043)); //
+          gdcm::InsertIfExist( subds1, ds, gdcm::Tag(0x0018,0x9044)); //
+          //gdcm::InsertIfExist( subds1, ds, gdcm::Tag(0x0018,0x9045)); //
+          sqi0->AddItem( item1 );
+          }
+
+        sqi1->AddItem( item0 );
+        const gdcm::Tag sisq1(0x5200,0x9229);
+        gdcm::DataElement de1( sisq1 );
+        de1.SetVR( gdcm::VR::SQ );
+        de1.SetValue( *sqi1 );
+        enhds.Insert( de1 );
+        }
+      }
+
     for( ; file != files.end(); ++file, ++count )
       {
       gdcm::ImageReader reader;
@@ -486,6 +723,14 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
       if( !ConcatenateImages(currentim, im) )
         {
         assert( 0 );
+        }
+
+      // check consistency 
+      if( false )
+        {
+        gdcm::DataSet & enhds = im0.GetFile().GetDataSet();
+        gdcm::DataSet & ds = reader.GetFile().GetDataSet();
+        // TODO
         }
       }
 
