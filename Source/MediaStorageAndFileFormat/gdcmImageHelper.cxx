@@ -883,25 +883,29 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
   {
     const Tag trwvms(0x0040,0x9096); // Real World Value Mapping Sequence
     if( ds.FindDataElement( trwvms ) )
-    {
+      {
       SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( trwvms ).GetValueAsSQ();
       if( sqi )
-      {
-      const Tag trwvlutd(0x0040,0x9212); // Real World Value LUT Data
-      if( ds.FindDataElement( trwvlutd ) )
-      {
-        gdcmAssertAlwaysMacro(0); // Not supported !
+        {
+        const Tag trwvlutd(0x0040,0x9212); // Real World Value LUT Data
+        if( ds.FindDataElement( trwvlutd ) )
+          {
+          gdcmAssertAlwaysMacro(0); // Not supported !
+          }
+        // dont know how to handle multiples:
+        gdcmAssertAlwaysMacro( sqi->GetNumberOfItems() == 1 );
+        const Item &item = sqi->GetItem(1);
+        const DataSet & subds = item.GetNestedDataSet();
+        //const Tag trwvi(0x0040,0x9224); // Real World Value Intercept
+        //const Tag trwvs(0x0040,0x9225); // Real World Value Slope
+        Attribute<0x0040,0x9224> at1 = {0};
+        at1.SetFromDataSet( subds );
+        Attribute<0x0040,0x9225> at2 = {1};
+        at2.SetFromDataSet( subds );
+        interceptslope[0] = at1.GetValue();
+        interceptslope[1] = at2.GetValue();
+        }
       }
-      //const Tag trwvi(0x0040,0x9224); // Real World Value Intercept
-      //const Tag trwvs(0x0040,0x9225); // Real World Value Slope
-      Attribute<0x0040,0x9224> at1 = {0};
-      at1.SetFromDataSet( ds );
-      Attribute<0x0040,0x9225> at2 = {1};
-      at2.SetFromDataSet( ds );
-      interceptslope[0] = at1.GetValue();
-      interceptslope[1] = at2.GetValue();
-      }
-    }
   }
   else if (
     ms == MediaStorage::RTDoseStorage
