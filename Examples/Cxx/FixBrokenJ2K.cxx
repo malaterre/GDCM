@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
   const char *ptr = bv->GetPointer();
   size_t len = bv->GetLength();
 
-  const char sig[] = "\x00\x00\x00\x00\x6A\x70\x32\x63";
+  static const unsigned char sig[] = {0,0,0,0,0x6A,0x70,0x32,0x63};
   if( memcmp(ptr, sig, sizeof(sig)) != 0 )
     {
     std::cerr << "magic random signature not found" << std::endl;
