@@ -174,10 +174,6 @@ Attribute<0x0028,0x0004> piat;
       ds.Replace( bluedesc.GetAsDataElement() );
       }
 
-    //ds.Remove( Tag(0x0028, 0x1221) );
-    //ds.Remove( Tag(0x0028, 0x1222) );
-    //ds.Remove( Tag(0x0028, 0x1223) );
-
 
  {
   // Pixel Data
@@ -320,6 +316,27 @@ bool PixmapWriter::PrepareWrite()
     Attribute<0x0028, 0x0006> planarconf;
     planarconf.SetValue( (uint16_t)PixelData->GetPlanarConfiguration() );
     ds.Replace( planarconf.GetAsDataElement() );
+    }
+
+  // Cleanup LUT here since cant be done within gdcm::ImageApplyLookupTable
+  if( pi == PhotometricInterpretation::RGB )
+    {
+    // usual tags:
+    ds.Remove( Tag(0x0028, 0x1101) );
+    ds.Remove( Tag(0x0028, 0x1102) );
+    ds.Remove( Tag(0x0028, 0x1103) );
+
+    ds.Remove( Tag(0x0028, 0x1201) );
+    ds.Remove( Tag(0x0028, 0x1202) );
+    ds.Remove( Tag(0x0028, 0x1203) );
+
+    // Don't forget the segmented one:
+    ds.Remove( Tag(0x0028, 0x1221) );
+    ds.Remove( Tag(0x0028, 0x1222) );
+    ds.Remove( Tag(0x0028, 0x1223) );
+
+    // PaletteColorLookupTableUID ??
+    ds.Remove( Tag(0x0028, 0x1199) );
     }
 
   // Overlay Data 60xx
