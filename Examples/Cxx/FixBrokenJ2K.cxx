@@ -31,6 +31,11 @@
  * It's a software from http://rentgenprom.ru/ , shipped with universal digital radiographic units
  * "ProScan-2000". The Ukrainian manufacturer developed own digital radiographic unit and it is
  * compatible with software from "ProScan-2000".
+ * Information found in DICOM file is:
+ * 
+ * (0008,0070) LO [ZAO "Renthenprom" (JSC Rentgenprom) ]             # 36,1 Manufacturer
+ * (0018,1020) LO [2.13.1.7]                                         # 8,1-n Software Version(s)
+ *
  */
 int main(int argc, char *argv[])
 {
