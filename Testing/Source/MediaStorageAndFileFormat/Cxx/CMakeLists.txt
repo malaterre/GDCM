@@ -46,6 +46,7 @@ set(MSFF_TEST_SRCS
   TestImageChangeTransferSyntax6
   TestImageChangeTransferSyntax7
   TestImageApplyLookupTable
+  TestFileDecompressLookupTable
   TestImageChangePlanarConfiguration
   TestCoder
   TestDecoder
