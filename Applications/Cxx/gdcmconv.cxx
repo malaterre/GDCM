@@ -80,6 +80,7 @@
 #include "gdcmImage.h"
 #include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmImageApplyLookupTable.h"
+#include "gdcmFileDecompressLookupTable.h"
 #include "gdcmImageFragmentSplitter.h"
 #include "gdcmImageChangePlanarConfiguration.h"
 #include "gdcmImageChangePhotometricInterpretation.h"
@@ -140,6 +141,7 @@ static void PrintHelp()
   std::cout << "     --remove-retired      Remove retired tags." << std::endl;
   std::cout << "Image only Options:" << std::endl;
   std::cout << "  -l --apply-lut                      Apply LUT (non-standard, advanced user only)." << std::endl;
+  std::cout << "     --decompress-lut                 Decompress LUT (linearied segmented LUT)." << std::endl;
   std::cout << "  -P --photometric-interpretation %s  Change Photometric Interpretation (when possible)." << std::endl;
   std::cout << "  -w --raw                            Decompress image." << std::endl;
   std::cout << "  -d --deflated                       Compress using deflated (gzip)." << std::endl;
@@ -436,6 +438,7 @@ int main (int argc, char *argv[])
   int implicit = 0;
   int quiet = 0;
   int lut = 0;
+  int decompress_lut = 0;
   int raw = 0;
   int deflated = 0;
   int rootuid = 0;
@@ -530,6 +533,7 @@ int main (int argc, char *argv[])
         {"remove-retired", 0, &removeretired, 1}, //
         {"photometric-interpretation", 1, &photometricinterpretation, 1}, //
         {"with-private-dict", 0, &changeprivatetags, 1}, //
+        {"decompress-lut", 0, &decompress_lut, 1}, // linearized segmented LUT
 // j2k :
         {"rate", 1, &rate, 1}, //
         {"quality", 1, &quality, 1}, // will also work for regular jpeg compressor
@@ -1063,6 +1067,36 @@ int main (int argc, char *argv[])
       return 1;
       }
     }
+  else if( decompress_lut )
+  {
+    gdcm::PixmapReader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "Could not read (pixmap): " << filename << std::endl;
+      return 1;
+      }
+    const gdcm::Pixmap &image = reader.GetPixmap();
+
+    gdcm::FileDecompressLookupTable lutfilt;
+    lutfilt.SetFile( reader.GetFile() );
+    lutfilt.SetPixmap( image );
+    bool b = lutfilt.Change();
+    if( !b )
+      {
+      std::cerr << "Could not decompress LUT: " << filename << std::endl;
+      return 1;
+      }
+    gdcm::PixmapWriter writer;
+    writer.SetFileName( outfilename.c_str() );
+    writer.SetFile( reader.GetFile() );
+    writer.SetPixmap( lutfilt.GetPixmap() );
+    if( !writer.Write() )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
+  }
   else if( lut )
     {
     gdcm::PixmapReader reader;

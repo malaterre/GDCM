@@ -942,7 +942,7 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
         }
       else
         {
-        assert(0);
+        gdcmAssertAlwaysMacro(0);
         }
       }
     if( ! lut->Initialized() ) return false;
