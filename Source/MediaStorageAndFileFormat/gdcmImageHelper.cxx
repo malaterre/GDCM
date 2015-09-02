@@ -1942,37 +1942,50 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     return;
     }
 
-  // Question: should I always insert them ?
-  // Answer: not always, let's discard MR if (1,0):
-  if( ms == MediaStorage::MRImageStorage && img.GetIntercept() == 0. && img.GetSlope() == 1. )
+  if( ms == MediaStorage::MRImageStorage )
     {
+    SmartPointer<SequenceOfItems> sq = new SequenceOfItems;
+    Item it;
+    DataSet & subds = it.GetNestedDataSet();
+    Attribute<0x0040,0x9224> at1 = {0};
+    at1.SetValue( img.GetIntercept() );
+    Attribute<0x0040,0x9225> at2 = {1};
+    at2.SetValue( img.GetSlope() );
+    subds.Insert( at1.GetAsDataElement() );
+    subds.Insert( at2.GetAsDataElement() );
+    sq->AddItem( it );
+    const Tag trwvms(0x0040,0x9096); // Real World Value Mapping Sequence
+    DataElement de( trwvms );
+    de.SetVR( VR::SQ );
+    de.SetValue(*sq);
+    ds.Insert( de );
+
+    ds.Remove( Tag(0x28,0x1052) );
+    ds.Remove( Tag(0x28,0x1053) );
+    ds.Remove( Tag(0x28,0x1054) );
     }
   else
-    {
-      if( (ms == MediaStorage::MRImageStorage && ForceRescaleInterceptSlope)
-          || ms != MediaStorage::MRImageStorage )
-      {
-        Attribute<0x0028,0x1052> at1;
-        at1.SetValue( img.GetIntercept() );
-        ds.Replace( at1.GetAsDataElement() );
-        Attribute<0x0028,0x1053> at2;
-        at2.SetValue( img.GetSlope() );
-        ds.Replace( at2.GetAsDataElement() );
+  {
+    Attribute<0x0028,0x1052> at1;
+    at1.SetValue( img.GetIntercept() );
+    ds.Replace( at1.GetAsDataElement() );
+    Attribute<0x0028,0x1053> at2;
+    at2.SetValue( img.GetSlope() );
+    ds.Replace( at2.GetAsDataElement() );
 
-        Attribute<0x0028,0x1054> at3; // Rescale Type
-        at3.SetValue( "US" ); // FIXME
-        if( ms == MediaStorage::SecondaryCaptureImageStorage )
-        {
-          // As per 3-2009, US is the only valid enumerated value:
-          ds.Replace( at3.GetAsDataElement() );
-        }
-        else
-        {
-          // In case user decide to override the default:
-          ds.ReplaceEmpty( at3.GetAsDataElement() );
-        }
-      }
+    Attribute<0x0028,0x1054> at3; // Rescale Type
+    at3.SetValue( "US" ); // FIXME
+    if( ms == MediaStorage::SecondaryCaptureImageStorage )
+    {
+      // As per 3-2009, US is the only valid enumerated value:
+      ds.Replace( at3.GetAsDataElement() );
     }
+    else
+    {
+      // In case user decide to override the default:
+      ds.ReplaceEmpty( at3.GetAsDataElement() );
+    }
+  }
 }
 
 bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<double> & imageposition, std::vector<double> & spacing)

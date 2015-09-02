@@ -35,6 +35,7 @@ set(MSFF_TEST_SRCS
   TestOrientation
   TestIconImage
   TestImageHelper
+  TestImageHelper2
   TestImageToImageFilter
   TestImageChangeTransferSyntax1
   #TestImageChangePhotometricInterpretation

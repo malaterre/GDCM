@@ -20,10 +20,36 @@
 #include "gdcmAttribute.h"
 #include "gdcmDirectionCosines.h"
 
+/*
+ * Let's check this is easy with GDCM to handle the new
+ * Real World Value Mapping Sequence mechanism
+ */
 int TestImageHelper2(int, char *[])
 {
   static const char *filenames[] = {
+    "D_CLUNIE_MR2_JPLL.dcm",
+    "D_CLUNIE_MR2_JPLY.dcm",
     "D_CLUNIE_MR2_RLE.dcm",
+    "D_CLUNIE_MR4_JPLL.dcm",
+    "D_CLUNIE_MR4_JPLY.dcm",
+    "D_CLUNIE_MR4_RLE.dcm",
+    "MR-MONO2-12-shoulder.dcm",
+    "MR_Philips-Intera_BreaksNOSHADOW.dcm",
+    "MR_Philips_Intera_No_PrivateSequenceImplicitVR.dcm",
+    "MR_Philips_Intera_PrivateSequenceExplicitVR_in_SQ_2001_e05f_item_wrong_lgt_use_NOSHADOWSEQ.dcm",
+    "MR_Philips_Intera_SwitchIndianess_noLgtSQItem_in_trueLgtSeq.dcm",
+    "PHILIPS_GDCM12xBug.dcm",
+    "PHILIPS_GDCM12xBug2.dcm",
+    "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm",
+    "PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm",
+    "PHILIPS_Gyroscan-8-MONO2-Odd_Sequence.dcm",
+    "PHILIPS_Intera-16-MONO2-Uncompress.dcm",
+    "PhilipsInteraSeqTermInvLen.dcm",
+    "SIEMENS_MOSAIC_12BitsStored-16BitsJPEG.dcm",
+    "THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm",
+    "gdcm-MR-PHILIPS-16-Multi-Seq.dcm",
+    "gdcm-MR-PHILIPS-16-NonSquarePixels.dcm",
+    "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm", // need PVRG option
   };
 
   const unsigned int nfiles = sizeof(filenames)/sizeof(*filenames);
@@ -36,56 +62,61 @@ int TestImageHelper2(int, char *[])
   std::string sroot = root;
   sroot += "/";
 
+  gdcm::Trace::WarningOff();
   for(unsigned int i = 0; i < nfiles; ++i)
-    {
+  {
     const char * filename = filenames[i];
     std::string fullpath = sroot + filename;
 
-  gdcm::ImageHelper::SetForceRescaleInterceptSlope(true);
+    gdcm::ImageHelper::SetForceRescaleInterceptSlope(true);
     gdcm::ImageReader r;
     r.SetFileName( fullpath.c_str() );
     if( !r.Read() )
-      {
-        return 1;
-      }
-  gdcm::ImageHelper::SetForceRescaleInterceptSlope(false);
-    gdcm::Image & img = r.GetImage();
-    std::cout << img.GetIntercept() << std::endl;
-    std::cout << img.GetSlope() << std::endl;
-    gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
-    const gdcm::Tag trwvms(0x0040,0x9096); // Real World Value Mapping Sequence
-    gdcm::DataElement de( trwvms );
-    de.SetVR( gdcm::VR::SQ );
-    de.SetValue(*sq);
-
-    gdcm::DataSet & ds = r.GetFile().GetDataSet();
-    ds.Insert( de );
-
-    ds.Remove( gdcm::Tag(0x28,0x1052) );
-    ds.Remove( gdcm::Tag(0x28,0x1053) );
-    ds.Remove( gdcm::Tag(0x28,0x1054) );
-  // Create directory first:
-  const char subdir[] = "TestImageHelper2";
-  std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
-  if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
     {
-    gdcm::System::MakeDirectory( tmpdir.c_str() );
-    //return 1;
+      return 1;
     }
-  std::string outfilename = gdcm::Testing::GetTempFilename( filename, subdir );
-
-  gdcm::ImageWriter writer;
-  writer.SetFileName( outfilename.c_str() );
-  writer.SetFile( r.GetFile() );
-  writer.SetImage( r.GetImage() );
-  if( !writer.Write() )
+    gdcm::ImageHelper::SetForceRescaleInterceptSlope(false);
+    gdcm::Image & img = r.GetImage();
+    //std::cout << img.GetIntercept() << std::endl;
+    //std::cout << img.GetSlope() << std::endl;
+    // Create directory first:
+    const char subdir[] = "TestImageHelper2";
+    std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );
+    if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ) )
     {
-    std::cerr << "Failed to write: " << outfilename << std::endl;
+      gdcm::System::MakeDirectory( tmpdir.c_str() );
+      //return 1;
+    }
+    std::string outfilename = gdcm::Testing::GetTempFilename( filename, subdir );
+
+    gdcm::ImageWriter writer;
+    writer.SetFileName( outfilename.c_str() );
+    writer.SetFile( r.GetFile() );
+    writer.SetImage( r.GetImage() );
+    if( !writer.Write() )
+    {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+    }
+
+    gdcm::ImageReader r2;
+    r2.SetFileName( outfilename.c_str() );
+    if( !r2.Read() )
+    {
+      return 1;
+    }
+    gdcm::Image & img2 = r2.GetImage();
+    if( img.GetIntercept() != img2.GetIntercept() )
+    {
+      std::cerr << img2.GetIntercept() << std::endl;
+      return 1;
+    }
+    if( img.GetSlope() != img2.GetSlope() )
+    {
+    std::cout << img2.GetSlope() << std::endl;
     return 1;
     }
-
-
-    }
+  }
 
   return 0;
 }
