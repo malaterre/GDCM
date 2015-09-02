@@ -43,7 +43,7 @@ if(NOT DEFINED GDCM_ALLOW_INSOURCE_BUILD)
 endif()
 #----------------------------------------------------------------------------
 set(GDCM_MAJOR_VERSION 2)
-set(GDCM_MINOR_VERSION 5)
+set(GDCM_MINOR_VERSION 6)
 set(GDCM_BUILD_VERSION 0)
 set(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
