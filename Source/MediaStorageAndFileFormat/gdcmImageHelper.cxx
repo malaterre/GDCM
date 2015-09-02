@@ -1949,24 +1949,28 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     }
   else
     {
-    Attribute<0x0028,0x1052> at1;
-    at1.SetValue( img.GetIntercept() );
-    ds.Replace( at1.GetAsDataElement() );
-    Attribute<0x0028,0x1053> at2;
-    at2.SetValue( img.GetSlope() );
-    ds.Replace( at2.GetAsDataElement() );
+      if( (ms == MediaStorage::MRImageStorage && ForceRescaleInterceptSlope)
+          || ms != MediaStorage::MRImageStorage )
+      {
+        Attribute<0x0028,0x1052> at1;
+        at1.SetValue( img.GetIntercept() );
+        ds.Replace( at1.GetAsDataElement() );
+        Attribute<0x0028,0x1053> at2;
+        at2.SetValue( img.GetSlope() );
+        ds.Replace( at2.GetAsDataElement() );
 
-    Attribute<0x0028,0x1054> at3; // Rescale Type
-    at3.SetValue( "US" ); // FIXME
-    if( ms == MediaStorage::SecondaryCaptureImageStorage )
-      {
-      // As per 3-2009, US is the only valid enumerated value:
-      ds.Replace( at3.GetAsDataElement() );
-      }
-    else
-      {
-      // In case user decide to override the default:
-      ds.ReplaceEmpty( at3.GetAsDataElement() );
+        Attribute<0x0028,0x1054> at3; // Rescale Type
+        at3.SetValue( "US" ); // FIXME
+        if( ms == MediaStorage::SecondaryCaptureImageStorage )
+        {
+          // As per 3-2009, US is the only valid enumerated value:
+          ds.Replace( at3.GetAsDataElement() );
+        }
+        else
+        {
+          // In case user decide to override the default:
+          ds.ReplaceEmpty( at3.GetAsDataElement() );
+        }
       }
     }
 }
