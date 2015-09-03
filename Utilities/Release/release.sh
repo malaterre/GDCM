@@ -19,7 +19,7 @@ echo ""
 
 major=2
 minor=4
-patch=5
+patch=6
 dirversion="$major.$minor"
 version="$major.$minor.$patch"
 version2="$major-$minor-$patch"
