@@ -82,7 +82,7 @@ void FileMetaInformation::SetImplementationVersionName(const char * version)
   if( version )
     {
     // Simply override the value since we cannot have more than 16bytes...
-    assert( strlen(version) <= 16 );
+    gdcmAssertAlwaysMacro( strlen(version) <= 16 );
     //ImplementationVersionName = GetGDCMImplementationVersionName();
     //ImplementationVersionName += "-";
     //ImplementationVersionName += version;
