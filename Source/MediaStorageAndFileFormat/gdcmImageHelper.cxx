@@ -1998,6 +1998,11 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
       // As per 3-2009, US is the only valid enumerated value:
       ds.Replace( at3.GetAsDataElement() );
     }
+    else if( ms == MediaStorage::PETImageStorage )
+    {
+      // not there anyway:
+      ds.Remove( at3.GetTag() );
+    }
     else
     {
       // In case user decide to override the default:
