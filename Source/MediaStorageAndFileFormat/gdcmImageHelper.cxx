@@ -1962,6 +1962,8 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     (0040,9224) FD 0                                              # 8,1 Real World Value Intercept
     (0040,9225) FD 1e-06                                          # 8,1 Real World Value Slope
 */
+    if( img.GetIntercept() != 0.0 || img.GetSlope() != 1.0 )
+    {
     SmartPointer<SequenceOfItems> sq = new SequenceOfItems;
     Item it;
     DataSet & subds = it.GetNestedDataSet();
@@ -1977,6 +1979,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     de.SetVR( VR::SQ );
     de.SetValue(*sq);
     ds.Replace( de );
+    }
 
     ds.Remove( Tag(0x28,0x1052) );
     ds.Remove( Tag(0x28,0x1053) );
@@ -2044,7 +2047,8 @@ bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<doubl
 //useful for the stream image reader, which fills in necessary image information
 //distinctly from the reader-style data input
 //code is borrowed from gdcmPixmapReader::ReadImage(MediaStorage const &ms)
-PhotometricInterpretation ImageHelper::GetPhotometricInterpretationValue(File const& f){
+PhotometricInterpretation ImageHelper::GetPhotometricInterpretationValue(File const& f)
+{
   // 5. Photometric Interpretation
   // D 0028|0004 [CS] [Photometric Interpretation] [MONOCHROME2 ]
   PixelFormat pf = GetPixelFormatValue(f);
@@ -2073,7 +2077,7 @@ PhotometricInterpretation ImageHelper::GetPhotometricInterpretationValue(File co
       }
     else if( pf.GetSamplesPerPixel() == 4 )
       {
-      gdcmWarningMacro( "No PhotometricInterpretation found, default to RGB" );
+      gdcmWarningMacro( "No PhotometricInterpretation found, default to ARGB" );
       pi = PhotometricInterpretation::ARGB;
       }
     }
@@ -2110,7 +2114,8 @@ PhotometricInterpretation ImageHelper::GetPhotometricInterpretationValue(File co
 }
 //returns the configuration of colors in a plane, either RGB RGB RGB or RRR GGG BBB
 //code is borrowed from gdcmPixmapReader::ReadImage(MediaStorage const &ms)
-unsigned int ImageHelper::GetPlanarConfigurationValue(const File& f){
+unsigned int ImageHelper::GetPlanarConfigurationValue(const File& f)
+{
   // 4. Planar Configuration
   // D 0028|0006 [US] [Planar Configuration] [1]
   const Tag planarconfiguration = Tag(0x0028, 0x0006);
@@ -2137,8 +2142,8 @@ unsigned int ImageHelper::GetPlanarConfigurationValue(const File& f){
 }
 
   //returns the lookup table of an image file
-SmartPointer<LookupTable> ImageHelper::GetLUT(File const& f){
-
+SmartPointer<LookupTable> ImageHelper::GetLUT(File const& f)
+{
   DataSet const & ds = f.GetDataSet();
   PixelFormat pf = GetPixelFormatValue(f);
   PhotometricInterpretation pi = GetPhotometricInterpretationValue(f);
@@ -2278,8 +2283,8 @@ SmartPointer<LookupTable> ImageHelper::GetLUT(File const& f){
 }
 
 
-const ByteValue* ImageHelper::GetPointerFromElement(Tag const &tag, const File& inF) {
-
+const ByteValue* ImageHelper::GetPointerFromElement(Tag const &tag, const File& inF)
+{
   const DataSet &ds = inF.GetDataSet();
   if( ds.FindDataElement( tag ) )
     {
