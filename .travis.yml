@@ -9,7 +9,7 @@ before_install:
 script:
   - mkdir build
   - cd build
-  - cmake -G "Unix Makefiles" -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=Release -DBUILDNAME:STRING=${TRAVIS_OS_NAME}-${TRAVIS_BRANCH} ..
+  - cmake -G "Unix Makefiles" -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DCMAKE_BUILD_TYPE:STRING=Debug -DBUILDNAME:STRING=${TRAVIS_OS_NAME}-${TRAVIS_BRANCH} ..
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalBuild -V
   - ctest -D ExperimentalTest -j2 || true
