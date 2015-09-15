@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 2.8.7)
 
 project(WXGDCM)
 # wxWidgets stuff changed a lot within the 2.4.2 to 2.4.3
