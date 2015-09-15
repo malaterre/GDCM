@@ -51,6 +51,7 @@ include_directories(
 if("${VTK_MAJOR_VERSION}" LESS 6)
   set(vtkgdcm_LIBS
     vtkCommon
+    vtkFiltering
     vtkIO
     vtkImaging
   )
@@ -67,7 +68,7 @@ else()
     vtkImagingSources
     vtkIOImage
     vtkIOLegacy
-    vtksys
+    #vtksys
   )
   set(vtkgdcm_COND_LIBS
     vtkIOMPIImage
@@ -740,7 +741,7 @@ if(GDCM_WRAP_PYTHON)
     # do not set the version on the Python module:
     #set_target_properties(${VTKGDCM_NAME}Python PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
     target_link_libraries(${VTKGDCM_NAME}PythonD ${VTKGDCM_NAME} ${PYTHON_LIBRARY})
-    foreach(c ${vtkgdcm_LIBS} vtkFiltering)
+    foreach(c ${vtkgdcm_LIBS})
       target_link_libraries(${VTKGDCM_NAME}PythonD ${c}Python${DEXTENSION})
     endforeach()
     if(TARGET vtkPythonCore)
