@@ -65,6 +65,7 @@ create_test_sourcelist(vtkGDCMTests gdcmvtkGDCMTests.cxx ${VTK_GDCM_TEST_SRCS}
   )
 add_executable(gdcmvtkGDCMTests ${vtkGDCMTests})
 target_link_libraries(gdcmvtkGDCMTests ${VTKGDCM_NAME} gdcmMSFF)
+target_link_libraries(gdcmvtkGDCMTests vtksys)
 if(VTK_USE_RENDERING)
   if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     target_link_libraries(gdcmvtkGDCMTests vtkRendering)
