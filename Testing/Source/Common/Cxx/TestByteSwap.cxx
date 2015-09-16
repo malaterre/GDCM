@@ -39,9 +39,9 @@ int myfunc()
     }
 
   gdcm::ByteSwap<uint32_t>::SwapFromSwapCodeIntoSystem(vl, gdcm::SwapCode::BigEndian);
-  std::cout << std::hex << "vl: " << vl << std::endl;
   if( vl != 0x4000000 )
     {
+    std::cerr << std::hex << "vl: " << vl << std::endl;
     return 1;
     }
 
@@ -61,10 +61,11 @@ int TestByteSwap(int , char *[])
     }
   if( sc == gdcm::SwapCode::Unknown )
     {
+    std::cerr << "unk" << std::endl;
     return 1;
     }
 
-  std::cout << "sc: " << sc << std::endl;
+  //std::cout << "sc: " << sc << std::endl;
 
   uint16_t t = 0x1234;
   gdcm::ByteSwap<uint16_t>::SwapFromSwapCodeIntoSystem(t, sc);
@@ -138,6 +139,7 @@ int TestByteSwap(int , char *[])
     gdcm::SwapCode::BigEndian,2);
    if ( array[0] != 0x3412 )
      {
+     std::cerr << std::hex << "array: " << array[0] << std::endl;
      return 1;
      }
 
