@@ -74,10 +74,17 @@ struct FImpl
     }
 };
 
+// http://stackoverflow.com/questions/485525/round-for-float-in-c
+// http://en.cppreference.com/w/c/numeric/math/round
 template < typename T >
-static inline T round(const double d)
+static inline T round_impl(const double d)
 {
-  return (T)floor(d + 0.5);
+#ifdef GDCM_HAVE_LROUND
+  // round() is C99, std::round() is C++11
+  return (T)lround(d);
+#else
+  return (T)((d > 0.0) ? floor(d + 0.5) : ceil(d - 0.5));
+#endif
 }
 
 template<typename TOut>
@@ -93,7 +100,7 @@ struct FImpl<TOut, float>
       // well known trick of adding 0.5 after a floating point type operation to properly find the
       // closest integer that will represent the transformation
       // TOut in this case is integer type, while input is floating point type
-      out[i] = round<TOut>(((double)in[i] - intercept) / slope);
+      out[i] = round_impl<TOut>(((double)in[i] - intercept) / slope);
       //assert( out[i] == (TOut)(((double)in[i] - intercept) / slope ) );
       }
     }
@@ -111,7 +118,7 @@ struct FImpl<TOut, double>
       // well known trick of adding 0.5 after a floating point type operation to properly find the
       // closest integer that will represent the transformation
       // TOut in this case is integer type, while input is floating point type
-      out[i] = round<TOut>(((double)in[i] - intercept) / slope);
+      out[i] = round_impl<TOut>(((double)in[i] - intercept) / slope);
       //assert( out[i] == (TOut)(((double)in[i] - intercept) / slope ) );
       }
     }
