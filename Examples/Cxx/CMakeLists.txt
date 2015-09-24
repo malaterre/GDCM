@@ -33,6 +33,7 @@ endif()
 
 set(EXAMPLES_SRCS
   MakeTemplate
+  DeriveSeries
   FixOrientation
   DumpGEMSMovieGroup
   QIDO-RS
