@@ -55,7 +55,11 @@ public:
 
   /// UNSUPPORTED FOR NOW
   bool AddSelect( Tag const &tag, const char *value );
-  void SetTagsToRead( std::set<Tag> tags );
+
+  /// Specify a set of tags to be read in during the sort procedure.
+  /// By default this set is empty, in which case the entire image,
+  /// including pixel data, is read in.
+  void SetTagsToRead( std::set<Tag> const & tags );
 
   /// Set the sort function which compares one dataset to the other
   typedef bool (*SortFunction)(DataSet const &, DataSet const &);

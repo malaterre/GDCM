@@ -34,7 +34,7 @@ Sorter::~Sorter()
 {
 }
 
-void Sorter::SetTagsToRead( std::set<Tag> tags )
+void Sorter::SetTagsToRead( std::set<Tag> const & tags )
 {
   TagsToRead = tags;
 }
