@@ -20,6 +20,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <set>
 
 namespace gdcm
 {
@@ -54,6 +55,7 @@ public:
 
   /// UNSUPPORTED FOR NOW
   bool AddSelect( Tag const &tag, const char *value );
+  void SetTagsToRead( std::set<Tag> tags );
 
   /// Set the sort function which compares one dataset to the other
   typedef bool (*SortFunction)(DataSet const &, DataSet const &);
@@ -66,6 +68,7 @@ protected:
   typedef std::map<Tag,std::string> SelectionMap;
   std::map<Tag,std::string> Selection;
   SortFunction SortFunc;
+  std::set<Tag> TagsToRead;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const Sorter &s)
