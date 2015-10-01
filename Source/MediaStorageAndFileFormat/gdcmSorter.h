@@ -20,6 +20,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <set>
 
 namespace gdcm
 {
@@ -55,6 +56,11 @@ public:
   /// UNSUPPORTED FOR NOW
   bool AddSelect( Tag const &tag, const char *value );
 
+  /// Specify a set of tags to be read in during the sort procedure.
+  /// By default this set is empty, in which case the entire image,
+  /// including pixel data, is read in.
+  void SetTagsToRead( std::set<Tag> const & tags );
+
   /// Set the sort function which compares one dataset to the other
   typedef bool (*SortFunction)(DataSet const &, DataSet const &);
   void SetSortFunction( SortFunction f );
@@ -66,6 +72,7 @@ protected:
   typedef std::map<Tag,std::string> SelectionMap;
   std::map<Tag,std::string> Selection;
   SortFunction SortFunc;
+  std::set<Tag> TagsToRead;
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const Sorter &s)
