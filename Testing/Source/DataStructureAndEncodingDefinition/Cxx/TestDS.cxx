@@ -94,67 +94,67 @@ std::string to_string ( Float data ) {
     */
 
     if ( in << std::dec << std::setprecision((int)digits) << data )
-        return ( in.str() );
+        return in.str();
     else
         throw "Impossible Conversion"; // should not happen ...
 }
 
 
 
-bool checkerror(double d, std::string s)
+static bool checkerror(double d, std::string s)
 {
-	double theConverted = atof(s.c_str());
-    double error = fabs(d - theConverted);
+  double theConverted = atof(s.c_str());
+  double error = fabs(d - theConverted);
 
-    int Log = (int)log10(fabs(d));
-    int eo = ( Log - 14 );
+  int Log = (int)log10(fabs(d));
+  int eo = ( Log - 14 );
 
-    if ( Log <= -1 && Log >= -4 )
-        eo = -13;
+  if ( Log <= -1 && Log >= -4 )
+    eo = -13;
 #ifdef ALWAYS_3_DIGITS_IN_EXPONENT
-    else if ( Log >= 15 )
-        eo = ( Log - 9);
+  else if ( Log >= 15 )
+    eo = ( Log - 9);
 #else
-    else if ( Log >= 99 )
-        eo = ( Log - 9 );
-    else if ( Log >= 15 )
-        eo = ( Log - 10);
+  else if ( Log >= 99 )
+    eo = ( Log - 9 );
+  else if ( Log >= 15 )
+    eo = ( Log - 10);
 #endif
 
-    if (d<0)
-        eo += 1;
+  if (d<0)
+    eo += 1;
 
 
-    //if (error > pow(10., eo) )
-	//pow will underflow at 10^-308, so errors lower than -308 will appear to be
-	//larger than pow(10., eo), because the 'pow' result will be 0 in vs2010
-	if (log10(error) > eo)
-    {
-        std::cout << "ERROR: Absoulte Error is too large (error = " << error << ", should be < " << pow(10., eo) << ")" << std::endl;
-        return true;
-    }
-//    else if (error != 0.0) std::cout << "OK (error = " << error << ", is < " << pow(10, eo) << ")" << std::endl;
+  //if (error > pow(10., eo) )
+  //pow will underflow at 10^-308, so errors lower than -308 will appear to be
+  //larger than pow(10., eo), because the 'pow' result will be 0 in vs2010
+  if (log10(error) > eo)
+  {
+    std::cout << "ERROR: Absoulte Error is too large (error = " << error << ", should be < " << pow(10., eo) << ")" << std::endl;
+    return true;
+  }
+  //    else if (error != 0.0) std::cout << "OK (error = " << error << ", is < " << pow(10, eo) << ")" << std::endl;
 
-    return false;
+  return false;
 }
 
-bool checkerror(double d, std::string s, bool se)
+static bool checkerror(double d, std::string s, bool se)
 {
-    double error = fabs(d - atof( s.c_str() ));
-    bool has_error = (error != 0);
+  double error = fabs(d - atof( s.c_str() ));
+  bool has_error = (error != 0);
 
-    if (has_error)
-    {
-       std::cout << "\tError is: " << error;
-    }
-    std::cout << std::endl;
+  if (has_error)
+  {
+    std::cout << "\tError is: " << error;
+  }
+  std::cout << std::endl;
 
-    if( has_error != se )
-    {
-        std::cout << "ERROR: has_error = " << has_error << " (should be " << se << ")" << std::endl;
-        return true;
-    }
-    return checkerror(d,s);
+  if( has_error != se )
+  {
+    std::cout << "ERROR: has_error = " << has_error << " (should be " << se << ")" << std::endl;
+    return true;
+  }
+  return checkerror(d,s);
 }
 
 
@@ -165,26 +165,26 @@ bool checkerror(double d, std::string s, bool se)
  sz = size expected
  se = true if there should be an error
 */
-bool singleTestDS(double d, int sz, bool se = false)
+static bool singleTestDS(double d, int sz, bool se = false)
 {
-    bool fail = false;
-    std::cout << "           -|----------------|-" << std::endl;
-    std::string s = to_string<double>( d );
-    std::cout << "  Result:    " << s << std::flush;
+  bool fail = false;
+  std::cout << "           -|----------------|-" << std::endl;
+  std::string s = to_string<double>( d );
+  std::cout << "  Result:    " << s << std::flush;
 
-    if ( checkerror(d, s, se) )
-        fail = true;
+  if ( checkerror(d, s, se) )
+    fail = true;
 
-    assert(sz >= 0);
-    if( s.size() != (unsigned int)sz )
-    {
-        std::cout << "ERROR: Size = " << s.size() << " (should be " << sz << ")" << std::endl;
-        fail = true;
-    }
+  assert(sz >= 0);
+  if( s.size() != (unsigned int)sz )
+  {
+    std::cout << "ERROR: Size = " << s.size() << " (should be " << sz << ")" << std::endl;
+    fail = true;
+  }
 
-    std::cout << std::endl;
+  std::cout << std::endl;
 
-    return fail;
+  return fail;
 }
 
 
