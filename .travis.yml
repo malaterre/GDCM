@@ -7,9 +7,10 @@ compiler:
   - clang
   - gcc
 matrix:
+  fast_finish: true
   exclude:
     - os: osx
-    - compiler: gcc
+      compiler: gcc
 
 before_install:
   - cmake --version
