@@ -53,7 +53,7 @@ build_script:
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalBuild -V
   #  NUMBER_OF_PROCESSORS=2
-  - ctest -D ExperimentalTest -j2 -C %configuration%
+  #- ctest -D ExperimentalTest -j2 -C %configuration%
   - ctest -D ExperimentalSubmit
 
 #build:
