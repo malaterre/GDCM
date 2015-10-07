@@ -29,6 +29,7 @@ install:
   # Fetch submodules
   - dir
   - cd gdcm
+  - dir
   - git status
   - git submodule update --init --recursive
   - cd ..
