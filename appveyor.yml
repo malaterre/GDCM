@@ -27,7 +27,9 @@ init:
 install:
   - cd c:\projects
   # Fetch submodules
+  - dir
   - cd gdcm
+  - git status
   - git submodule update --init --recursive
   - cd ..
 
