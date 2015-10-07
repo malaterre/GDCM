@@ -7,7 +7,10 @@ environment:
 # Operating system (build VM template)
 os: Visual Studio 2015
 
-platform: x64
+platform:
+  - x86
+  - x64
+  - ARM
 
 # scripts that are called at very beginning, before repo cloning
 init:
