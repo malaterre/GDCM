@@ -16,7 +16,6 @@ init:
   # Print environment info
   - set
   - msbuild /version
-  - cl
   - cmake --version
   - python --version
   - java -version
