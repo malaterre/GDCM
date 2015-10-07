@@ -1,8 +1,12 @@
 version: 2.7.0.{build}
 
+configuration: RelWithDebInfo
+
 environment:
   matrix:
-  - config: RelWithDebInfo
+  - VS_GEN: "Visual Studio 14 2015"
+  - VS_GEN: "Visual Studio 14 2015 Win64"
+  - VS_GEN: "Visual Studio 14 2015 ARM"
 
 # Operating system (build VM template)
 os: Visual Studio 2015
@@ -37,14 +41,14 @@ build_script:
   - cd c:\projects\gdcm
   - mkdir build
   - cd build
-  - echo %config%
-  - cmake -Wno-dev -G "Visual Studio 14 Win64" -DCMAKE_BUILD_TYPE=%config% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%config% ..
+  - echo %configuration%
+  - cmake -Wno-dev -G %VS_GEN% -DCMAKE_BUILD_TYPE=%configuration% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%configuration% ..
   # msbuild /m => parallel
   #- msbuild gdcm.sln /m /p:Configuration=%config% /toolsversion:14.0 /p:Platform=x64 /p:PlatformToolset=v140
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalBuild -V
   #  NUMBER_OF_PROCESSORS=2
-  - ctest -D ExperimentalTest -j2 -C %config%
+  - ctest -D ExperimentalTest -j2 -C %configuration%
   - ctest -D ExperimentalSubmit
 
 #build:
