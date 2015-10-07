@@ -11,14 +11,39 @@ os: Visual Studio 2015
 
 platform: x64
 
-install:
+# scripts that are called at very beginning, before repo cloning
+init:
+  # Print environment info
   - set
+  - msbuild /version
+  - cl
   - cmake --version
+  - python --version
+  - java -version
 
-before_build:
-  - cmake -H. -BBuild/VS -G "Visual Studio %VS_VERSION%" -DCMAKE_GENERATOR_PLATFORM=%VS_PLATFORM% -Wno-dev
+#- call "c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+#- cl
 
-build:
-  project: Build\VS\GDCM.sln
-  parallel: true
-  verbosity: minimal
+# scripts that run after cloning repository
+install:
+  - cd c:\projects
+  # Fetch submodules
+  - cd gdcm
+  - git submodule update --init --recursive
+  - cd ..
+
+#before_build:
+#  - cmake -H. -BBuild/VS -G "Visual Studio %VS_VERSION%" -DCMAKE_GENERATOR_PLATFORM=%VS_PLATFORM% -Wno-dev
+
+build_script:
+  - cd c:\projects\gdcm
+  - mkdir build
+  - cd build
+  - echo %config%
+  - cmake .. -G "Visual Studio 14 Win64" -DCMAKE_BUILD_TYPE=%config%
+  - msbuild gdcm.sln /p:Configuration=%config% /toolsversion:14.0 /p:Platform=x64 /p:PlatformToolset=v140
+
+#build:
+#  project: Build\VS\GDCM.sln
+#  parallel: true
+#  verbosity: minimal
