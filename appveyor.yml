@@ -42,7 +42,7 @@ build_script:
   - mkdir build
   - cd build
   - echo %config%
-  - cmake .. -G "Visual Studio 14 Win64" -DCMAKE_BUILD_TYPE=%config%
+  - cmake .. -G "Visual Studio 14 Win64" -DCMAKE_BUILD_TYPE=%config% -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON
   - msbuild gdcm.sln /p:Configuration=%config% /toolsversion:14.0 /p:Platform=x64 /p:PlatformToolset=v140
 
 #build:
