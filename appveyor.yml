@@ -4,9 +4,9 @@ configuration: RelWithDebInfo
 
 environment:
   matrix:
-  - VS_GEN: "Visual Studio 14 2015"
-  - VS_GEN: "Visual Studio 14 2015 Win64"
-  - VS_GEN: "Visual Studio 14 2015 ARM"
+  - VS_GEN: Visual Studio 14 2015
+  - VS_GEN: Visual Studio 14 2015 Win64
+  - VS_GEN: Visual Studio 14 2015 ARM
 
 # Operating system (build VM template)
 os: Visual Studio 2015
@@ -33,6 +33,9 @@ init:
 #  - cd c:\projects\gdcm
 #  # Fetch submodules
 #  - git submodule update --init --recursive
+install:
+    - choco install swig
+    - swig --version
 
 #before_build:
 #  - cmake -H. -BBuild/VS -G "Visual Studio %VS_VERSION%" -DCMAKE_GENERATOR_PLATFORM=%VS_PLATFORM% -Wno-dev
@@ -42,7 +45,7 @@ build_script:
   - mkdir build
   - cd build
   - echo %configuration%
-  - cmake -Wno-dev -G %VS_GEN% -DCMAKE_BUILD_TYPE=%configuration% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%configuration% ..
+  - cmake -Wno-dev -G"%VS_GEN%" -DCMAKE_BUILD_TYPE=%configuration% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%configuration% ..
   # msbuild /m => parallel
   #- msbuild gdcm.sln /m /p:Configuration=%config% /toolsversion:14.0 /p:Platform=x64 /p:PlatformToolset=v140
   - ctest -D ExperimentalStart
