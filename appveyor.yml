@@ -42,8 +42,14 @@ build_script:
   - mkdir build
   - cd build
   - echo %config%
-  - cmake .. -G "Visual Studio 14 Win64" -DCMAKE_BUILD_TYPE=%config% -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON
-  - msbuild gdcm.sln /p:Configuration=%config% /toolsversion:14.0 /p:Platform=x64 /p:PlatformToolset=v140
+  - cmake -G "Visual Studio 14 Win64" -DCMAKE_BUILD_TYPE=%config% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%config% ..
+  # msbuild /m => parallel
+  #- msbuild gdcm.sln /m /p:Configuration=%config% /toolsversion:14.0 /p:Platform=x64 /p:PlatformToolset=v140
+  - ctest -D ExperimentalStart
+  - ctest -D ExperimentalBuild -V
+  #  NUMBER_OF_PROCESSORS=2
+  - ctest -D ExperimentalTest -j2
+  - ctest -D ExperimentalSubmit
 
 #build:
 #  project: Build\VS\GDCM.sln
