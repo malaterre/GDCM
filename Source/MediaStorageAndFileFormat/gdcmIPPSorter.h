@@ -37,7 +37,8 @@ namespace gdcm
  * http://gdcm.sourceforge.net/wiki/index.php/Imager_Pixel_Spacing
  *
  * \bug There are currently a couple of bugs in this implementation:
- * \li Gantry Tilt is not considered
+ * \li Gantry Tilt is not considered (always an error)
+ * \li Application programmer should only sort valid DataSet (eg. MRImageStorage, CTImageStorage, PETImageStorage)
  */
 class GDCM_EXPORT IPPSorter : public Sorter
 {
