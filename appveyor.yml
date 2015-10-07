@@ -4,8 +4,6 @@ environment:
   matrix:
   - config: RelWithDebInfo
 
-#shallow_clone: true
-
 # Operating system (build VM template)
 os: Visual Studio 2015
 
@@ -25,14 +23,9 @@ init:
 
 # scripts that run after cloning repository
 install:
-  - cd c:\projects
+  - cd c:\projects\gdcm
   # Fetch submodules
-  - dir
-  - cd gdcm
-  - dir
-  - git status
   - git submodule update --init --recursive
-  - cd ..
 
 #before_build:
 #  - cmake -H. -BBuild/VS -G "Visual Studio %VS_VERSION%" -DCMAKE_GENERATOR_PLATFORM=%VS_PLATFORM% -Wno-dev
@@ -42,13 +35,13 @@ build_script:
   - mkdir build
   - cd build
   - echo %config%
-  - cmake -G "Visual Studio 14 Win64" -DCMAKE_BUILD_TYPE=%config% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%config% ..
+  - cmake -Wno-dev -G "Visual Studio 14 Win64" -DCMAKE_BUILD_TYPE=%config% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%config% ..
   # msbuild /m => parallel
   #- msbuild gdcm.sln /m /p:Configuration=%config% /toolsversion:14.0 /p:Platform=x64 /p:PlatformToolset=v140
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalBuild -V
   #  NUMBER_OF_PROCESSORS=2
-  - ctest -D ExperimentalTest -j2
+  - ctest -D ExperimentalTest -j2 -C %config%
   - ctest -D ExperimentalSubmit
 
 #build:
