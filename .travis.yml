@@ -29,8 +29,8 @@ matrix:
     - compiler: clang
       os: osx
       env:
-        - CFLAGS="-Wall -Wextra -m64 -fsanitize=address,undefined"
-        - CXXFLAGS="-Wall -Wextra -m64 -fsanitize=address,undefined"
+        - CFLAGS="-Wall -Wextra" # -m64 -fsanitize=address,undefined
+        - CXXFLAGS="-Wall -Wextra" # -m64 -fsanitize=address,undefined
         - B_NAME=fsanitize
 
 before_install:
