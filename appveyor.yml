@@ -20,6 +20,7 @@ os: Visual Studio 2015
 branches:
   except:
   - coverity_scan
+skip_tags: true
 #platform: ARM
 #  - x86
 #  - x64
@@ -58,3 +59,6 @@ build_script:
   - ctest -D ExperimentalBuild -j2 -C %CONFIG%
   - ctest -D ExperimentalTest -j2 -C %CONFIG% || true
   - ctest -D ExperimentalSubmit -C %CONFIG%
+
+test: off
+deploy: off
