@@ -17,7 +17,9 @@ matrix:
 
 # Operating system (build VM template)
 os: Visual Studio 2015
-
+branches:
+  except:
+  - coverity_scan
 #platform: ARM
 #  - x86
 #  - x64
