@@ -19,16 +19,19 @@ matrix:
         - CFLAGS="-Wall -Wextra -m64"
         - CXXFLAGS="-Wall -Wextra -m64"
         - CMAKE_EXTRA="-DGDCM_USE_SYSTEM_OPENSSL:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=OFF -DGDCM_WRAP_CSHARP:BOOL=OFF -DGDCM_WRAP_JAVA:BOOL=OFF -DGDCM_WRAP_PHP:BOOL=OFF -DGDCM_USE_SYSTEM_EXPAT:BOOL=ON -DGDCM_USE_SYSTEM_JSON:BOOL=OFF -DGDCM_USE_SYSTEM_LIBXML2:BOOL=ON -DGDCM_USE_SYSTEM_OPENJPEG:BOOL=OFF -DGDCM_USE_SYSTEM_POPPLER:BOOL=OFF -DGDCM_USE_SYSTEM_UUID:BOOL=OFF -DGDCM_USE_SYSTEM_ZLIB:BOOL=ON"
+        - B_NAME=system
     - compiler: clang
       os: linux
       env:
-        - CFLAGS=-Wall -Wextra -m64
-        - CXXFLAGS=-Wall -Wextra -m64
+        - CFLAGS="-Wall -Wextra -m64 -fsanitize=address,undefined"
+        - CXXFLAGS="-Wall -Wextra -m64 -fsanitize=address,undefined"
+        - B_NAME=fsanitize
     - compiler: clang
       os: osx
       env:
-        - CFLAGS=-Wall -Wextra -m64
-        - CXXFLAGS=-Wall -Wextra -m64
+        - CFLAGS="-Wall -Wextra -m64 -fsanitize=address,undefined"
+        - CXXFLAGS="-Wall -Wextra -m64 -fsanitize=address,undefined"
+        - B_NAME=fsanitize
 
 before_install:
   #- env
@@ -39,7 +42,7 @@ before_install:
 install: true
 before_script: true
 script:
-  - cmake -Wno-dev -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=None -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=${TRAVIS_OS_NAME}-${TRAVIS_BRANCH} ${CMAKE_EXTRA} .
+  - cmake -Wno-dev -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=None -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=${TRAVIS_OS_NAME}-${TRAVIS_BRANCH}-${B_NAME} ${CMAKE_EXTRA} .
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalBuild -j2
   - ctest -D ExperimentalTest -j2 || true
