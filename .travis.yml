@@ -13,10 +13,10 @@ matrix:
   include:
     - compiler: gcc
       os: linux
-      cmake_extra: -DGDCM_USE_SYSTEM_OPENSSL:BOOL=ON
       env:
         - CFLAGS=-Wall -Wextra -m64
         - CXXFLAGS=-Wall -Wextra -m64
+        - CMAKE_EXTRA=-DGDCM_USE_SYSTEM_OPENSSL:BOOL=ON
     - compiler: clang
       os: linux
       env:
@@ -37,7 +37,7 @@ before_install:
 install: true
 before_script: true
 script:
-  - cmake -Wno-dev -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=None -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=${TRAVIS_OS_NAME}-${TRAVIS_BRANCH} ${cmake_extra} .
+  - cmake -Wno-dev -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=None -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=${TRAVIS_OS_NAME}-${TRAVIS_BRANCH} ${CMAKE_EXTRA} .
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalBuild -j2
   - ctest -D ExperimentalTest -j2 || true
