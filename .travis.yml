@@ -1,5 +1,10 @@
 language: cpp
 sudo: false
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "ClIqhtIIfQPhil8GH9bnJg70rvJfuYs7Z2Aq2SrdwQsIFNvvfFD5pVxQiaYbZI3nxNclggQ50BmGB96e6jLxbbd/xlIOjcU19W2nzyP6LGkXFHDHm8FwhqqDNpfYvirAOfqgjqf7khRe3ajF33jhrLrhb5QOO5640N93pdChu1sAvI0LZv8JFIUcN7A7To3+WYc7H4CK3U8B2V8nzqcBSHDZNBGAdeVdmldwrlBtQeWBg5wJAEzzUHn0x+kltqvuoPYi2ShpaUkEfHeUWYhOT1uoyXNRAqHXiM1jhiw3JCkqaf7sUKLzyx0ozjTnYntNMggtBzavKjuYg6RhdlNdNbdsi2nxrycCOyCZcF+d4limq+yDMqoP7g/DnPag7XFgjkG/ThULPu+pEK/6nV1NqGNWFu1CqgAwPW7hGbIUADPsMEb+Bz2L2KUof2wU1cdvGK4fzsM9Qpdipbagghn4b5eGtvyBzYzoCS02AKrYfimhcm8bVmlfaMVgd6PnJ19Y1+ADCWwStwaQL2S6udh66JVGNszY/kYSmZKn51RQQDkubmGpywzeNdn7gM9u8QR9s2Lsq0GaSdptcLOPmVNSg6mQJThbMRHM/H2UrSyo7/GLr28sNNbYNweGPevsnrRJPUdG2ENWVw5rg1sD1cLm8rLlD4H2f/b97X9NCl4bLxY="
 os:
   - linux
   - osx
@@ -23,3 +28,13 @@ script:
   - ctest -D ExperimentalBuild
   - ctest -D ExperimentalTest -j2 || true
   - ctest -D ExperimentalSubmit || true
+
+addons:
+  coverity_scan:
+    project:
+      name: "malaterre/GDCM"
+      description: "Grassroots DICOM"
+    notification_email: mathieu.malaterre@gmail.com
+    build_command_prepend: cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON ..
+    build_command: cmake --build .
+    branch_pattern: coverity_scan
