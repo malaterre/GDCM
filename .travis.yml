@@ -1,33 +1,56 @@
 language: cpp
+# Use the faster container-based infrastructure.
 sudo: false
 env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
    #   via the "travis encrypt" command using the project repo's public key
    - secure: "ClIqhtIIfQPhil8GH9bnJg70rvJfuYs7Z2Aq2SrdwQsIFNvvfFD5pVxQiaYbZI3nxNclggQ50BmGB96e6jLxbbd/xlIOjcU19W2nzyP6LGkXFHDHm8FwhqqDNpfYvirAOfqgjqf7khRe3ajF33jhrLrhb5QOO5640N93pdChu1sAvI0LZv8JFIUcN7A7To3+WYc7H4CK3U8B2V8nzqcBSHDZNBGAdeVdmldwrlBtQeWBg5wJAEzzUHn0x+kltqvuoPYi2ShpaUkEfHeUWYhOT1uoyXNRAqHXiM1jhiw3JCkqaf7sUKLzyx0ozjTnYntNMggtBzavKjuYg6RhdlNdNbdsi2nxrycCOyCZcF+d4limq+yDMqoP7g/DnPag7XFgjkG/ThULPu+pEK/6nV1NqGNWFu1CqgAwPW7hGbIUADPsMEb+Bz2L2KUof2wU1cdvGK4fzsM9Qpdipbagghn4b5eGtvyBzYzoCS02AKrYfimhcm8bVmlfaMVgd6PnJ19Y1+ADCWwStwaQL2S6udh66JVGNszY/kYSmZKn51RQQDkubmGpywzeNdn7gM9u8QR9s2Lsq0GaSdptcLOPmVNSg6mQJThbMRHM/H2UrSyo7/GLr28sNNbYNweGPevsnrRJPUdG2ENWVw5rg1sD1cLm8rLlD4H2f/b97X9NCl4bLxY="
-os:
-  - linux
-  - osx
-compiler:
-  - clang
-  - gcc
+
 matrix:
   fast_finish: true
-  exclude:
-    - os: osx
-      compiler: gcc
+  include:
+    - compiler: gcc
+      os: linux
+      env:
+        - CFLAGS=-m32
+        - CXXFLAGS=-m32
+    - compiler: gcc
+      os: linux
+      env:
+        - CFLAGS=-m64
+        - CXXFLAGS=-m64
+    - compiler: clang
+      os: linux
+      env:
+        - CFLAGS=-m32
+        - CXXFLAGS=-m32
+    - compiler: clang
+      os: linux
+      env:
+        - CFLAGS=-m64
+        - CXXFLAGS=-m64
+    - compiler: clang
+      os: osx
+      env:
+        - CFLAGS=-m64
+        - CXXFLAGS=-m64
 
 before_install:
   - cmake --version
-
+  - mv Testing/Data Testing/Data.old
+install: true
+before_script: true
 script:
-  - mkdir build
-  - cd build
-  - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=${TRAVIS_OS_NAME}-${TRAVIS_BRANCH} ..
+  - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=${TRAVIS_OS_NAME}-${TRAVIS_BRANCH} .
   - ctest -D ExperimentalStart
-  - ctest -D ExperimentalBuild
+  - ctest -D ExperimentalBuild -j2
   - ctest -D ExperimentalTest -j2 || true
   - ctest -D ExperimentalSubmit || true
+
+after_success: true
+after_failure: true
+after_script: true
 
 addons:
   coverity_scan:
