@@ -54,5 +54,5 @@ build_script:
   # Do not run Test=Update/Configure, only Start/Build/Test/Submit (TODO: Coverage)
   - ctest -D ExperimentalStart -C %CONFIG%
   - ctest -D ExperimentalBuild -j2 -C %CONFIG%
-  - ctest -D ExperimentalTest -j2 -C %CONFIG%
+  - ctest -D ExperimentalTest -j2 -C %CONFIG% || true
   - ctest -D ExperimentalSubmit -C %CONFIG%
