@@ -1,12 +1,21 @@
 version: 2.7.0.{build}
 
-configuration: RelWithDebInfo
+#configuration: RelWithDebInfo
 
 environment:
   matrix:
   - VS_GEN: Visual Studio 14 2015
+    CONFIG: RelWithDebInfo
+    B_NAME: Win32
   - VS_GEN: Visual Studio 14 2015 Win64
+    CONFIG: Release
+    B_NAME: Win64
   - VS_GEN: Visual Studio 14 2015 ARM
+    CONFIG: Debug
+    B_NAME: ARM
+
+matrix:
+  fast_finish: true
 
 # Operating system (build VM template)
 os: Visual Studio 2015
@@ -41,7 +50,7 @@ install:
 #  - cmake -H. -BBuild/VS -G "Visual Studio %VS_VERSION%" -DCMAKE_GENERATOR_PLATFORM=%VS_PLATFORM% -Wno-dev
 
 before_build:
-  - cmake -Wno-dev -G"%VS_GEN%" -DCMAKE_BUILD_TYPE=%configuration% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%configuration% -DGDCM_WRAP_CSHARP:BOOL=ON -DGDCM_WRAP_JAVA:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_USE_PVRG:BOOL=ON .
+  - cmake -Wno-dev -G"%VS_GEN%" -DCMAKE_BUILD_TYPE=%CONFIG% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%B_NAME% -DGDCM_WRAP_CSHARP:BOOL=ON -DGDCM_WRAP_JAVA:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_USE_PVRG:BOOL=ON .
 
 build_script:
   #- cd c:\projects\gdcm
@@ -53,7 +62,7 @@ build_script:
   - ctest -D ExperimentalStart
   - ctest -D ExperimentalBuild -V
   #  NUMBER_OF_PROCESSORS=2
-  #- ctest -D ExperimentalTest -j2 -C %configuration%
+  - ctest -D ExperimentalTest -j2 #-C %configuration%
   - ctest -D ExperimentalSubmit
 
 #build:
