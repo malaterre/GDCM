@@ -699,13 +699,13 @@ bool RLECodec::DecodeExtent(
 
     // handle DICOM padding
     std::streampos end = is.tellg();
-    size_t numberOfReadBytes = end - start;
+    size_t numberOfReadBytes = (size_t)(end - start);
     if( numberOfReadBytes > frag.GetVL() )
       {
       // Special handling for ALOKA_SSD-8-MONO2-RLE-SQ.dcm
       size_t diff = numberOfReadBytes - frag.GetVL();
       assert( diff == 1 );
-      os.seekp( -diff, std::ios::cur );
+      os.seekp( 0 - (int)diff, std::ios::cur );
       os.put( 0 );
       end = (size_t)end - 1;
       }

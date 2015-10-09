@@ -21,7 +21,9 @@
 #include <map>
 #include <algorithm> // sort
 
+#ifdef _MSC_VER
 #pragma warning (disable : 4068 ) /* disable unknown pragma warnings */
+#endif
 
 namespace gdcm
 {
