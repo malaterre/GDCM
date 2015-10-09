@@ -412,7 +412,6 @@ bool FileAnonymizer::ComputeEmptyTagPosition()
 
   return true;
 }
-
 bool FileAnonymizer::Write()
 {
   if( Internals->OutputFilename.empty() ) return false;
@@ -434,7 +433,11 @@ bool FileAnonymizer::Write()
   // need to loop from the end. Sometimes a replace operation will have *exact*
   // same file offset for multiple attributes. In which case we need to insert
   // first the last attribute, and at the end the first attribute
+#pragma GCC diagnostic push
+// See : POD value-init, see GCC #36750
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
   PositionEmpty pe_sort = {};
+#pragma GCC diagnostic pop
   std::sort (Internals->PositionEmptyArray.begin(),
     Internals->PositionEmptyArray.end(), pe_sort);
 
