@@ -32,6 +32,7 @@ public class FCTS_RLE
       RLECodec rle = RLECodec.Cast( ic );
       // need to call at least one member func to check not NULL:
       long val = rle.GetBufferLength();
+      System.Console.WriteLine( val ); // use val to remove a warning
 
       fcts.SetInputFileName( filename );
       fcts.SetOutputFileName( outfilename );

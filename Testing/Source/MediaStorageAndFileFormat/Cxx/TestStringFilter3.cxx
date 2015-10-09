@@ -16,7 +16,7 @@
 #include "gdcmSmartPointer.h"
 
 // reproduce a bug with multi value binary attribute
-int TestStringFilter3(int argc, char *argv[])
+int TestStringFilter3(int , char *[])
 {
   gdcm::SmartPointer<gdcm::File> f = new gdcm::File;
   gdcm::DataSet & ds = f->GetDataSet();

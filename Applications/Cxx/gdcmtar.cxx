@@ -131,6 +131,7 @@ class frame_diff /* */
 public:
   bool operator<(const frame_diff &rhs) const
     {
+    (void)rhs;
     return true;
     }
 };
