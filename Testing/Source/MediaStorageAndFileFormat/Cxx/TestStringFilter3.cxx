@@ -23,7 +23,7 @@ int TestStringFilter3(int , char *[])
 
   // (0020,0032) DS [-85.000000\ 21.600000\108.699997] # 32,3 Image Position (Patient)
     {
-    gdcm::Attribute<0x20,0x32> at = { -85, 21.6, 108.699997 };
+    gdcm::Attribute<0x20,0x32> at = {{ -85, 21.6, 108.699997 }};
     gdcm::DataElement de = at.GetAsDataElement();
     const gdcm::ByteValue * bv = de.GetByteValue();
     const std::string ref( bv->GetPointer(), bv->GetLength() );
@@ -42,7 +42,7 @@ int TestStringFilter3(int , char *[])
 
   // (0018,1310) US 0\256\256\0                                        # 8,4 Acquisition Matrix
     {
-    gdcm::Attribute<0x18,0x1310> at = { 0, 256, 256, 0 };
+    gdcm::Attribute<0x18,0x1310> at = {{ 0, 256, 256, 0 }};
     gdcm::DataElement de = at.GetAsDataElement();
     const gdcm::ByteValue * bv = de.GetByteValue();
     const std::string ref( bv->GetPointer(), bv->GetLength() );
