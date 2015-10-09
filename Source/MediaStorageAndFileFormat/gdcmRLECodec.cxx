@@ -919,6 +919,7 @@ private:
 
 bool RLECodec::AppendRowEncode( std::ostream & os, const char * data, size_t datalen)
 {
+  (void)os; (void)data; (void)datalen;
   assert(0);
   return false;
 }
