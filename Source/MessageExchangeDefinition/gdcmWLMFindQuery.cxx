@@ -26,6 +26,7 @@ WLMFindQuery::WLMFindQuery()
 void WLMFindQuery::InitializeDataSet(const EQueryLevel& inQueryLevel)
 {
   // no level so no tags to add
+  (void)inQueryLevel;
 }
 
   std::vector<Tag> 
@@ -33,6 +34,7 @@ WLMFindQuery::GetTagListByLevel(const EQueryLevel& inQueryLevel)
 {
   // no level so no tags
   std::vector<Tag> tags ;
+  (void)inQueryLevel;
   return tags;
 }
 
@@ -40,6 +42,7 @@ bool
 WLMFindQuery::ValidateQuery(bool inStrict) const
 {
   //if it's empty, it's not useful
+  (void)inStrict;
   const DataSet &ds = GetQueryDataSet();
   if (ds.Size() == 0) return false;
 

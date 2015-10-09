@@ -74,6 +74,7 @@ namespace gdcm
 		const BaseQuery* query, std::vector<DataSet> &retDataSets,
 		const char *aetitle, const char *call )
 	{
+    (void)remote; (void)portno; (void)query; (void)retDataSets; (void)aetitle; (void)call;
 		return false ;
 	}
 	bool 
@@ -81,6 +82,7 @@ namespace gdcm
 		const BaseQuery* query, std::vector<DataSet> &retDataSets,
 		const char *aetitle, const char *call )
 	{
+    (void)remote; (void)portno; (void)query; (void)retDataSets; (void)aetitle; (void)call;
 		return false ;
 	}
 	bool 
@@ -189,6 +191,7 @@ namespace gdcm
 		const BaseQuery* query, std::vector<DataSet> &retDataSets,
 		const char *aetitle, const char *call )
 	{
+    (void)remote; (void)portno; (void)query; (void)retDataSets; (void)aetitle; (void)call;
 		return false ;
 	}
 	bool 
@@ -320,6 +323,7 @@ namespace gdcm
 		const BaseQuery* query, std::vector<DataSet> &retDataSets,
 		const char *aetitle, const char *call )
 	{
+    (void)remote; (void)portno; (void)query; (void)retDataSets; (void)aetitle; (void)call;
 		return false ;
 	}
 } // end namespace gdcm
