@@ -212,7 +212,7 @@ bool CAPICryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const
     goto err;
     }
     
-  if(! CryptMsgUpdate(hMsg, (BYTE*)array, len, TRUE))
+  if(! CryptMsgUpdate(hMsg, (BYTE*)array, (DWORD)len, TRUE))
     {
     gdcmErrorMacro( "MsgUpdate failed with error 0x" << std::hex << GetLastError() );
     goto err;
