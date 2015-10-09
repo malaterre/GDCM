@@ -35,7 +35,6 @@ set(MSFF_TEST_SRCS
   TestOrientation
   TestIconImage
   TestImageHelper
-  TestImageHelper2
   TestImageToImageFilter
   TestImageChangeTransferSyntax1
   #TestImageChangePhotometricInterpretation
@@ -108,6 +107,7 @@ if(GDCM_DATA_ROOT)
     TestStrictScanner2
     TestScanner1
     TestScanner2
+    TestImageHelper2
     TestPrinter2
     TestIPPSorter
     TestIPPSorter2
