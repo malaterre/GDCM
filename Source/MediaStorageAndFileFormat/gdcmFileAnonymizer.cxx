@@ -435,7 +435,10 @@ bool FileAnonymizer::Write()
   // first the last attribute, and at the end the first attribute
 #pragma GCC diagnostic push
 // See : POD value-init, see GCC #36750
+/* Test for GCC < 5.1.1 */
+#if GCC_VERSION < 50101
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#endif
   PositionEmpty pe_sort = {};
 #pragma GCC diagnostic pop
   std::sort (Internals->PositionEmptyArray.begin(),

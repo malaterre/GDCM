@@ -83,7 +83,7 @@ bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
     const ByteValue * bv = de.GetByteValue();
     if( bv )
     {
-      Element<VR::US, VM::VM1> el1 = {};
+      Element<VR::US, VM::VM1> el1 = {0};
       std::istringstream is;
       is.str( std::string( bv->GetPointer(), bv->GetLength() ) );
       el1.Read( is );

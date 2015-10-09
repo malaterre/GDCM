@@ -294,7 +294,7 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
       for(int i = 0; i < numPoints; i++)
         {
         const unsigned char *currentcolor = inbuffer + 3 * i;
-        for(size_t j = 0; j < block.numPoints(); j++)
+        for(size_t j = 0; j < (size_t)block.numPoints(); j++)
           {
           assert( currentcolor < inbuffer + bvlen );
           assert( currentcolor + 3 <= inbuffer + bvlen );
