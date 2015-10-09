@@ -19,10 +19,11 @@
 
 int TestElement6(int , char *[])
 {
-  gdcm::Attribute<0x18,0x1310> at = { 0, 256, 256, 0 };
+  gdcm::Attribute<0x18,0x1310> at = {{ 0, 256, 256, 0 }};
   gdcm::DataElement de = at.GetAsDataElement();
 
   const gdcm::Tag & t = at.GetTag();
+  (void)t;
   const gdcm::VM vm = gdcm::VM::VM4;
 
   // mimic string filter behavior:
@@ -33,7 +34,6 @@ int TestElement6(int , char *[])
   std::istringstream is;
   std::ostringstream os;
 
-  gdcm::VR vr = gdcm::VR::US;
   std::string s(value,value+len);
   is.str( s );
 
