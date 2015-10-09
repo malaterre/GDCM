@@ -173,7 +173,7 @@ bool CAPICryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const
     return false;
     }
 
-  if(! CryptEncryptMessage(&EncryptParams, certifList.size(), (PCCERT_CONTEXT *)&certifList[0], (BYTE *)array, len, (BYTE *)output, (DWORD *)&outlen) )
+  if(! CryptEncryptMessage(&EncryptParams, certifList.size(), (PCCERT_CONTEXT *)&certifList[0], (BYTE *)array, (DWORD)len, (BYTE *)output, (DWORD *)&outlen) )
     {
     DWORD dwResult = GetLastError();
     gdcmErrorMacro( "Couldn't encrypt message. CryptEncryptMessage failed with error 0x" << std::hex << dwResult );
