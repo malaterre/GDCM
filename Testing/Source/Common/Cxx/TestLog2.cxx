@@ -24,7 +24,7 @@ static inline int log2( int n )
   return bits;
 }
 
-int TestLog2(int argc, char *argv[])
+int TestLog2(int , char *[])
 {
   int v;
   v = log2(255);

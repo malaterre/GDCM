@@ -165,8 +165,11 @@ static frame_diff get_frame_diff( const char* filename )
       || csa.GetFormat() == gdcm::CSAHeader::NOMAGIC );
     // SIEMENS / Diffusion
     const CSAElement &bvalue  = csa.GetCSAElementByName( "B_value" );
+    (void)bvalue;
     const CSAElement &bmatrix = csa.GetCSAElementByName( "B_matrix" );
+    (void)bmatrix;
     const CSAElement &dgd = csa.GetCSAElementByName( "DiffusionGradientDirection" );
+    (void)dgd;
     //assert(0);
     }
   else
