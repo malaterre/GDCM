@@ -29,7 +29,7 @@
 namespace gdcm
 {
 
-bool MD5::Compute(const char *buffer, unsigned long buf_len, char digest_str[33])
+bool MD5::Compute(const char *buffer, size_t buf_len, char digest_str[33])
 {
   if( !buffer || !buf_len )
     {
