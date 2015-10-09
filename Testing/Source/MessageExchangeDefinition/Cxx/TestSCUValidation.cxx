@@ -49,6 +49,7 @@ static gdcm::network::ULConnectionManager *GetConnectionManager(gdcm::BaseRootQu
   return theManager;
 }
 
+#if 0
 static std::vector<gdcm::DataSet> GetPatientInfo(bool validateQuery, bool inStrictQuery)
 {
   std::vector<gdcm::DataSet> theDataSets;
@@ -67,6 +68,7 @@ static std::vector<gdcm::DataSet> GetPatientInfo(bool validateQuery, bool inStri
   theDataSets  = theManager->SendFind( theQuery );
   return theDataSets;
 }
+#endif
 
 static std::vector<gdcm::DataSet> GetStudyInfo(const char *patientID, bool validateQuery, bool inStrictQuery)
 {

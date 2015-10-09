@@ -17,6 +17,7 @@
 
 int main(int argc, char *argv[])
 {
+  if( argc < 3 ) return 1;
   const char* filename = argv[1];
   const char* outfilename = argv[2];
 
