@@ -173,7 +173,7 @@ bool CAPICryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const
     return false;
     }
 
-  if(! CryptEncryptMessage(&EncryptParams, certifList.size(), (PCCERT_CONTEXT *)&certifList[0], (BYTE *)array, (DWORD)len, (BYTE *)output, (DWORD *)&outlen) )
+  if(! CryptEncryptMessage(&EncryptParams, (DWORD)certifList.size(), (PCCERT_CONTEXT *)&certifList[0], (BYTE *)array, (DWORD)len, (BYTE *)output, (DWORD *)&outlen) )
     {
     DWORD dwResult = GetLastError();
     gdcmErrorMacro( "Couldn't encrypt message. CryptEncryptMessage failed with error 0x" << std::hex << dwResult );
@@ -489,20 +489,16 @@ bool CAPICryptographicMessageSyntax::LoadFile(const char * filename, BYTE* & buf
     }
   fseek(f, 0L, SEEK_END);
   long sz = ftell(f);
-  //fseek(f, 0L, SEEK_SET);
   rewind(f);
-  /*if (bufLen < sz)
-    {
-    printf("Buffer too small to load the file: %d < %d\n", bufLen, sz);
-    return false;
-    }
-    */
+
   buffer = new BYTE[sz];
+  if( !buffer ) return false;
   bufLen = sz;
 
   while (sz)
     {
-    sz -= fread(buffer + bufLen - sz, sizeof(BYTE), sz, f);
+    size_t l = fread(buffer + bufLen - sz, sizeof(BYTE), sz, f);
+    sz -= (long)l;
     }
 
   return true;
