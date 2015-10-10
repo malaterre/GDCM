@@ -24,6 +24,12 @@
 #ifdef _MSC_VER
 #pragma warning (disable : 4068 ) /* disable unknown pragma warnings */
 #endif
+// See : POD value-init, see GCC #36750
+/* Test for GCC < 5.1.1 */
+/* GCC 4.2 reports: error: #pragma GCC diagnostic not allowed inside functions */
+#if GCC_VERSION < 50101
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#endif
 
 namespace gdcm
 {
@@ -437,14 +443,7 @@ bool FileAnonymizer::Write()
   // need to loop from the end. Sometimes a replace operation will have *exact*
   // same file offset for multiple attributes. In which case we need to insert
   // first the last attribute, and at the end the first attribute
-#pragma GCC diagnostic push
-// See : POD value-init, see GCC #36750
-/* Test for GCC < 5.1.1 */
-#if GCC_VERSION < 50101
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-#endif
   PositionEmpty pe_sort = {};
-#pragma GCC diagnostic pop
   std::sort (Internals->PositionEmptyArray.begin(),
     Internals->PositionEmptyArray.end(), pe_sort);
 
