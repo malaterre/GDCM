@@ -161,13 +161,11 @@ bool PhotometricInterpretation::IsLossless() const
   case YBR_FULL:
   case YBR_RCT:
     return true;
-    break;
   case YBR_FULL_422:
   case YBR_PARTIAL_422:
   case YBR_PARTIAL_420:
   case YBR_ICT:
     return false;
-    break;
   default:
     assert(0);
     return false;
