@@ -81,8 +81,8 @@ int main(int argc, char *argv[])
   //s.Print( std::cout );
 
 
-  gdcm::Directory::FilenamesType::const_iterator it = filenames.begin();
-  for( ; it != filenames.end(); ++it )
+  for(gdcm::Directory::FilenamesType::const_iterator it = filenames.begin();
+    it != filenames.end(); ++it )
     {
     if( s.IsKey( it->c_str() ) )
       {
