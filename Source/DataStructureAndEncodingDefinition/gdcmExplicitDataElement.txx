@@ -422,8 +422,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       {
       const VR un = VR::UN;
       un.Write(os);
-      Value* v = &*ValueField;
-      if( dynamic_cast<const SequenceOfItems*>(v) )
+      if( ValueField && dynamic_cast<const SequenceOfItems*>(&*ValueField) )
         {
         VL vl = 0xFFFFFFFF;
         assert( vl.IsUndefined() );
