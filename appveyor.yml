@@ -21,15 +21,11 @@ branches:
   except:
   - coverity_scan
 skip_tags: true
-#platform: ARM
-#  - x86
-#  - x64
-#  - ARM
 
 # scripts that are called at very beginning, before repo cloning
 init:
   # Print environment info
-  - set
+  #- set
   - msbuild /version
   - cmake --version
   - python --version
@@ -42,7 +38,7 @@ init:
 # scripts that run after cloning repository
 install:
   # Fetch submodules
-  #- git submodule update --init --recursive
+  - git submodule update --init --recursive
   - choco install swig
   - swig -version
 
