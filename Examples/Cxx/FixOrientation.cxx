@@ -45,6 +45,7 @@ int main(int argc, char* argv[] )
   gdcm::File & f = reader.GetFile();
   gdcm::DataSet & ds = f.GetDataSet();
   at1.SetFromDataSet( ds );
+#if 0
   at2.SetFromDataSet( ds );
   const double * iop = at2.GetValues();
   if( !std::equal(iop, iop + 6, axial ) )
@@ -55,12 +56,14 @@ int main(int argc, char* argv[] )
   }
   at2.SetValues( sagittal );
   ds.Replace( at2.GetAsDataElement() );
+#endif
 
   // for sagittal: swap element 0 & 2
   const double tmp0 = at1.GetValue(0);
   const double tmp2 = at1.GetValue(2);
-  at1.SetValue(tmp2, 0);
-  at1.SetValue(tmp0, 2);
+  //at1.SetValue(tmp2, 0);
+  //at1.SetValue(tmp0, 2);
+  at1.SetValue( - tmp0 );
   ds.Replace( at1.GetAsDataElement() );
 
   gdcm::Writer writer;
