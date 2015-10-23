@@ -881,6 +881,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
     }
   else if ( ms == MediaStorage::MRImageStorage )
   {
+#if 0
     const Tag trwvms(0x0040,0x9096); // Real World Value Mapping Sequence
     if( ds.FindDataElement( trwvms ) )
       {
@@ -906,6 +907,13 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
         interceptslope[1] = at2.GetValue();
         }
       }
+#else
+    std::vector<double> dummy(2);
+    if( GetRescaleInterceptSlopeValueFromDataSet(ds, dummy) )
+    {
+    gdcmDebugMacro( "FIXME (Philips) MR Image Storage: [" << dummy[0] << "," << dummy[1] );
+    }
+#endif
   }
   else if (
     ms == MediaStorage::RTDoseStorage
@@ -1944,6 +1952,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
   if( ms == MediaStorage::MRImageStorage )
     {
+#if 0
 /*
  * http://dicom.nema.org/medical/dicom/current/output/chtml/part03/sect_C.7.6.16.2.html#table_C.7.6.16-12b
 (0040,9096) SQ (Sequence with undefined length)                   # u/l,1 Real World Value Mapping Sequence
@@ -1984,6 +1993,25 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     ds.Remove( Tag(0x28,0x1052) );
     ds.Remove( Tag(0x28,0x1053) );
     ds.Remove( Tag(0x28,0x1054) );
+#else
+    if( img.GetIntercept() != 0.0 || img.GetSlope() != 1.0 )
+    {
+	    if( ForceRescaleInterceptSlope )
+	    {
+		    gdcmDebugMacro( "FIXME (Philips) MR Image Storage: [" << img.GetIntercept() << "," << img.GetSlope() );
+    Attribute<0x0028,0x1052> at1;
+    at1.SetValue( img.GetIntercept() );
+    ds.Replace( at1.GetAsDataElement() );
+    Attribute<0x0028,0x1053> at2;
+    at2.SetValue( img.GetSlope() );
+    ds.Replace( at2.GetAsDataElement() );
+
+    Attribute<0x0028,0x1054> at3; // Rescale Type
+    at3.SetValue( "US" ); // Compatible with Enhanced MR Image Storage
+    ds.Replace( at3.GetAsDataElement() );
+	    }
+    }
+#endif
     }
   else
   {

@@ -19,9 +19,6 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-# Need python interpreter:
-#find_package(PythonInterp REQUIRED)
-#mark_as_advanced(PYTHON_EXECUTABLE)
 # UseCSharp.cmake
 
 macro(ADD_CSHARP_TEST TESTNAME FILENAME)
@@ -49,11 +46,9 @@ macro(ADD_CSHARP_TEST TESTNAME FILENAME)
 "
   set(ENV{LD_LIBRARY_PATH} ${pyenv})
   set(ENV{MONO_PATH} ${pyenv})
-  #message(\"pyenv: ${pyenv}\")
-  #message( \"wo_semicolumn: ${wo_semicolumn}\" )
+  message(\"${pyenv}\")
   execute_process(
     COMMAND ${CMAKE_CSHARP_INTERPRETER} ${loc} ${wo_semicolumn}
-    #WORKING_DIRECTORY @LIBRARY_OUTPUT_PATH@
     RESULT_VARIABLE import_res
     OUTPUT_VARIABLE import_output
     ERROR_VARIABLE  import_output
@@ -70,14 +65,3 @@ macro(ADD_CSHARP_TEST TESTNAME FILENAME)
 )
   add_test(NAME ${TESTNAME} COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME}.cmake)
 endmacro()
-
-# Byte compile recursively a directory (DIRNAME)
-#macro(ADD_PYTHON_COMPILEALL_TEST DIRNAME)
-#  # First get the path:
-#  get_filename_component(temp_path "${PYTHON_LIBRARIES}" PATH)
-#  # Find the python script:
-#  get_filename_component(PYTHON_COMPILE_ALL_PY "${temp_path}/../compileall.py" ABSOLUTE)
-#  # add test, use DIRNAME to create uniq name for the test:
-#  add_test(COMPILE_ALL-${DIRNAME} ${PYTHON_EXECUTABLE} "${PYTHON_COMPILE_ALL_PY}" -q ${DIRNAME})
-#endmacro()
-#

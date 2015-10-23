@@ -37,6 +37,7 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x3129,0x0010,"RamSoft Race Identifier",VR::LO,VM::VM1,"?",false },
   {0x7501,0x0001,"CoActiv_PvtTags",VR::LO,VM::VM1,"?",false },
   {0x7501,0x0002,"CoActiv_PvtTags",VR::LO,VM::VM1,"?IP Adress?",false },
   {0x7501,0x0003,"CoActiv_PvtTags",VR::UI,VM::VM1,"?Transfer Syntax UID?",false },
@@ -5246,6 +5247,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2001,0x003e,"Philips Imaging DD 002",VR::SS,VM::VM1,"?",false },
   {0x2001,0x003f,"Philips Imaging DD 002",VR::SS,VM::VM1,"?",false },
   {0x2001,0x0040,"Philips Imaging DD 002",VR::SS,VM::VM1,"?",false },
+  {0x2001,0x006b,"Philips Imaging DD 002",VR::OB,VM::VM1,"?",false },
   {0x4007,0x0000,"Philips Imaging DD 065",VR::CS,VM::VM1,"?",false },
   {0x4001,0x0000,"Philips Imaging DD 067",VR::SQ,VM::VM1,"?",false },
   {0x4001,0x0001,"Philips Imaging DD 067",VR::CS,VM::VM1,"?",false },
@@ -5671,6 +5673,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x0001,"Philips MR Imaging DD 005",VR::UL,VM::VM1,"?",false },
   {0x2005,0x0002,"Philips MR Imaging DD 005",VR::SQ,VM::VM1,"?",false },
   {0x2005,0x0003,"Philips MR Imaging DD 005",VR::UL,VM::VM1,"?",false },
+  {0x2005,0x0004,"Philips MR Imaging DD 005",VR::SS,VM::VM1,"?",false },
   {0x2005,0x0006,"Philips MR Imaging DD 005",VR::SS,VM::VM1,"?",false },
   {0x2005,0x0007,"Philips MR Imaging DD 005",VR::SS,VM::VM1,"?",false },
   {0x2005,0x0009,"Philips MR Imaging DD 005",VR::DS,VM::VM1,"Rescale Intercept Philips",false },
@@ -5702,6 +5705,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x0026,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"?",false },
   {0x2005,0x0027,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"?",false },
   {0x2005,0x0028,"Philips MR Imaging DD 005",VR::SL,VM::VM1,"?",false },
+  {0x2005,0x0029,"Philips MR Imaging DD 005",VR::OB,VM::VM1,"?",false },
   {0x2005,0x002a,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"?",false },
   {0x2005,0x002b,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"?",false },
   {0x2005,0x002c,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"?",false },
@@ -5740,6 +5744,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x004f,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"?",false },
   {0x2005,0x0050,"Philips MR Imaging DD 005",VR::SS,VM::VM1,"?",false },
   {0x2005,0x0055,"Philips MR Imaging DD 005",VR::FD,VM::VM3,"?",false },
+  {0x2005,0x0092,"Philips MR Imaging DD 005",VR::OB,VM::VM1,"?",false },
   {0x7043,0x0000,"Philips NM Private Group",VR::SH,VM::VM1,"?",false },
   {0x0511,0x0000,"Philips PET Private Group",VR::US,VM::VM1,"?",false },
   {0x0511,0x0001,"Philips PET Private Group",VR::US,VM::VM1,"?",false },
