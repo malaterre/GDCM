@@ -30,6 +30,7 @@
 #include "gdcmMD5.h"
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
+#include "gdcmImageHelper.h"
 
 #ifdef GDCM_USE_SYSTEM_POPPLER
 #include <poppler/poppler-config.h>
@@ -316,6 +317,9 @@ static void PrintHelp()
   //std::cout << "     --media-storage-uid   return media storage uid only." << std::endl;
   //std::cout << "     --media-storage-name  return media storage name only (when possible)." << std::endl;
 //  std::cout << "  -b --check-big-endian   check if file is ." << std::endl;
+  std::cout << "     --force-rescale    force rescale." << std::endl;
+  std::cout << "     --force-spacing    force spacing." << std::endl;
+
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning   print warning info." << std::endl;
@@ -537,6 +541,9 @@ int main(int argc, char *argv[])
   int c;
   std::string filename;
   std::string xmlpath;
+  int forcerescale = 0;
+  int forcespacing = 0;
+
   int resourcespath = 0;
   int verbose = 0;
   int warning = 0;
@@ -554,6 +561,8 @@ int main(int argc, char *argv[])
         {"resources-path", 0, &resourcespath, 1},
         {"md5sum", 0, &md5sum, 1},
         {"check-compression", 0, &checkcompression, 1},
+        {"force-rescale", 0, &forcerescale, 1},
+        {"force-spacing", 0, &forcespacing, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -673,6 +682,9 @@ int main(int argc, char *argv[])
     PrintHelp();
     return 0;
     }
+
+  gdcm::ImageHelper::SetForceRescaleInterceptSlope(forcerescale);
+  gdcm::ImageHelper::SetForcePixelSpacing(forcespacing);
 
   if( filename.empty() )
     {
