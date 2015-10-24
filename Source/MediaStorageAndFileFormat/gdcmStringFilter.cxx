@@ -495,6 +495,7 @@ std::string StringFilter::FromString(const Tag&t, const char * value, VL const &
       } \
     break
 
+#if 0
 static inline size_t count_backslash(const char *s, size_t len)
 {
   assert( s );
@@ -508,6 +509,7 @@ static inline size_t count_backslash(const char *s, size_t len)
     }
   return c;
 }
+#endif
 
 std::string StringFilter::FromString(const Tag&t, const char * value, size_t len)
 {

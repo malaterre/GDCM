@@ -1017,7 +1017,7 @@ void Reader::SetFileName(const char *filename)
 
 size_t Reader::GetStreamCurrentPosition() const
 {
-  return GetStreamPtr()->tellg();
+  return static_cast<size_t>(GetStreamPtr()->tellg());
 }
 
 
