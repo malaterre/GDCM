@@ -27,6 +27,7 @@ namespace gdcm{
       const ULConnection &inConnection, const BaseQuery* inQuery)
     {
       std::vector<PresentationDataValue> thePDV;
+      (void)inConnection; (void)inQuery;
       assert( 0 && "TODO" );
       return thePDV;
     }

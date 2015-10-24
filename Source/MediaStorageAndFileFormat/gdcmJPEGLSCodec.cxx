@@ -22,6 +22,10 @@
 // CharLS includes
 #include "gdcm_charls.h"
 
+#if GCC_VERSION < 50101
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#endif
+
 namespace gdcm
 {
 
