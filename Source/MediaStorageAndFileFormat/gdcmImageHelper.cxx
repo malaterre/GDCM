@@ -908,11 +908,38 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
         }
       }
 #else
-    std::vector<double> dummy(2);
-    if( GetRescaleInterceptSlopeValueFromDataSet(ds, dummy) )
-    {
-    gdcmDebugMacro( "FIXME (Philips) MR Image Storage: [" << dummy[0] << "," << dummy[1] );
-    }
+    // See the long thread at:
+    // https://groups.google.com/d/msg/comp.protocols.dicom/M4kdqcrs50Y/_TSx0EjtAQAJ
+    // in particular this paper:
+    // Errors in Quantitative Image Analysis due to Platform-Dependent Image Scaling
+    // http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3998685/
+    const PrivateTag tpriv_rescaleintercept( 0x2005,0x09,"Philips MR Imaging DD 005" );
+    const PrivateTag tpriv_rescaleslope( 0x2005,0x0a,"Philips MR Imaging DD 005" );
+    if( ds.FindDataElement( tpriv_rescaleintercept ) && ds.FindDataElement( tpriv_rescaleslope ) )
+      {
+      // The following will work out of the box for Philips whether or not
+      // "Combine MR Rescaling" was set:
+      // PMS DICOM CS states that Modality LUT for MR Image Storage is to be
+      // used for image processing. VOI LUT are always recomputed, so output
+      // from GDCM may not look right for display (sorry!)
+      const DataElement &priv_rescaleintercept = ds.GetDataElement( tpriv_rescaleintercept );
+      const DataElement &priv_rescaleslope = ds.GetDataElement( tpriv_rescaleslope );
+      Element<VR::DS,VM::VM1> el_ri = { 0 };
+      el_ri.SetFromDataElement( priv_rescaleintercept );
+      Element<VR::DS,VM::VM1> el_rs = { 0 };
+      el_rs.SetFromDataElement( priv_rescaleslope );
+      interceptslope[0] = el_ri.GetValue();
+      interceptslope[1] = el_rs.GetValue();
+      }
+    else
+      {
+      std::vector<double> dummy(2);
+      if( GetRescaleInterceptSlopeValueFromDataSet(ds, dummy) )
+        {
+        // for everyone else, read your DCS, and set: ForceRescaleInterceptSlope = true if needed
+        gdcmWarningMacro( "Modality LUT found for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
+        }
+      }
 #endif
   }
   else if (
