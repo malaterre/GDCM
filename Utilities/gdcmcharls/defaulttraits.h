@@ -6,6 +6,8 @@
 #ifndef CHARLS_DEFAULTTRAITS
 #define CHARLS_DEFAULTTRAITS
 
+#include <cmath>
+
 // Default traits that support all JPEG LS parameters: custom limit, near, maxval (not power of 2)
 
 // This traits class is used to initialize a coder/decoder.
@@ -63,7 +65,7 @@ public:
 	}
 
 	inlinehint bool IsNear(LONG lhs, LONG rhs) const
-		{ return abs(lhs-rhs) <=NEAR; }
+		{ return std::abs(lhs-rhs) <=NEAR; }
 
 	bool IsNear(Triplet<SAMPLE> lhs, Triplet<SAMPLE> rhs) const
 	{

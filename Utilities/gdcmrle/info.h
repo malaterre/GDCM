@@ -69,6 +69,9 @@ public:
 
   /// return the planar configuration
   bool get_planar_configuration() const { return planarconfiguration; }
+
+  /// unused for now
+  bool is_little_endian() const { return littleendian; }
 private:
   int width;
   int height;
