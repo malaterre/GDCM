@@ -62,33 +62,36 @@ int TestVM(int, char *[])
   unsigned int count10 = gdcm::VM::GetNumberOfElementsFromArray(str10, (unsigned int)strlen(str10) );
   if( count10 != 1 ) return 1;
 
-  if( gdcm::VM::VM1 & gdcm::VM::VM2 ) return 1;
-  if( gdcm::VM::VM1 & gdcm::VM::VM3 ) return 1;
-  if( gdcm::VM::VM1 & gdcm::VM::VM32 ) return 1;
-
-  if( !(gdcm::VM::VM1 & gdcm::VM::VM1_2) ) return 1;
-  if( !(gdcm::VM::VM2 & gdcm::VM::VM1_2) ) return 1;
-
-  if( !(gdcm::VM::VM1 & gdcm::VM::VM1_3) ) return 1;
-  if( !(gdcm::VM::VM2 & gdcm::VM::VM1_3) ) return 1;
-  if( !(gdcm::VM::VM3 & gdcm::VM::VM1_3) ) return 1;
-
-  if( !(gdcm::VM::VM1 & gdcm::VM::VM1_n) ) return 1;
-
-  if( gdcm::VM::VM1 & gdcm::VM::VM2_n ) return 1;
-  if( !(gdcm::VM::VM2 & gdcm::VM::VM2_n) ) return 1;
-
-  if( gdcm::VM::VM1 & gdcm::VM::VM3_4 ) return 1;
-  if( !(gdcm::VM::VM3 & gdcm::VM::VM3_4) ) return 1;
-  if( !(gdcm::VM::VM4 & gdcm::VM::VM3_4) ) return 1;
-
-  if( gdcm::VM::VM1 & gdcm::VM::VM3_3n ) return 1;
-  if( !(gdcm::VM::VM3 & gdcm::VM::VM3_3n) ) return 1;
-  if( !(gdcm::VM::VM9 & gdcm::VM::VM3_3n) ) return 1;
-  if( !(gdcm::VM::VM99 & gdcm::VM::VM3_3n) ) return 1;
-
-  if( gdcm::VM::VM1 & gdcm::VM::VM4_4n ) return 1;
-  if( !(gdcm::VM::VM4 & gdcm::VM::VM4_4n) ) return 1;
+  // store invalid combinations inside an int array to trick the compiler
+  // and avoid unrechable return code warning
+  static const int error_combinations[] = {
+    gdcm::VM::VM1 & gdcm::VM::VM2,
+    gdcm::VM::VM1 & gdcm::VM::VM2,
+    gdcm::VM::VM1 & gdcm::VM::VM3,
+    gdcm::VM::VM1 & gdcm::VM::VM32,
+    !(gdcm::VM::VM1 & gdcm::VM::VM1_2),
+    !(gdcm::VM::VM2 & gdcm::VM::VM1_2),
+    !(gdcm::VM::VM1 & gdcm::VM::VM1_3),
+    !(gdcm::VM::VM2 & gdcm::VM::VM1_3),
+    !(gdcm::VM::VM3 & gdcm::VM::VM1_3),
+    !(gdcm::VM::VM1 & gdcm::VM::VM1_n),
+    gdcm::VM::VM1 & gdcm::VM::VM2_n,
+    !(gdcm::VM::VM2 & gdcm::VM::VM2_n),
+    gdcm::VM::VM1 & gdcm::VM::VM3_4,
+    !(gdcm::VM::VM3 & gdcm::VM::VM3_4),
+    !(gdcm::VM::VM4 & gdcm::VM::VM3_4),
+    gdcm::VM::VM1 & gdcm::VM::VM3_3n,
+    !(gdcm::VM::VM3 & gdcm::VM::VM3_3n),
+    !(gdcm::VM::VM9 & gdcm::VM::VM3_3n),
+    !(gdcm::VM::VM99 & gdcm::VM::VM3_3n),
+    gdcm::VM::VM1 & gdcm::VM::VM4_4n,
+    !(gdcm::VM::VM4 & gdcm::VM::VM4_4n),
+  };
+  static const int nerror_combinations = sizeof( error_combinations ) / sizeof( *error_combinations );
+  for( int i = 0; i < nerror_combinations; ++i )
+    {
+    if( error_combinations[i] ) return 1;
+    }
 
   const char *vm1 = gdcm::VM::GetVMString( gdcm::VM::VM1 );
   if( strcmp(vm1, "1" ) != 0 )
