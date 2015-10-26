@@ -240,7 +240,7 @@ typename TRAITS::SAMPLE JlsCodec<TRAITS,STRATEGY>::DoRegular(LONG Qs, LONG, LONG
 	{
 		STRATEGY::Skip(code.GetLength());
 		ErrVal = code.GetValue(); 
-		ASSERT(abs(ErrVal) < 65535);
+		ASSERT(std::abs(ErrVal) < 65535);
 	}
 	else
 	{

@@ -84,14 +84,14 @@ public:
 
 	inlinehint LONG ModRange(LONG Errval) const
 	{
-		ASSERT(abs(Errval) <= RANGE);
+		ASSERT(std::abs(Errval) <= RANGE);
 		if (Errval < 0)
 			Errval = Errval + RANGE;
 
 		if (Errval >= ((RANGE + 1) / 2))
 			Errval = Errval - RANGE;
 
-		ASSERT(abs(Errval) <= RANGE/2);
+		ASSERT(std::abs(Errval) <= RANGE/2);
 
 		return Errval;
 	}
