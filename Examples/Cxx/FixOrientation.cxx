@@ -37,10 +37,15 @@ int main(int argc, char* argv[] )
     }
 
   const double axial[] = { 1,0,0, 0,1,0 };
+  (void)axial;
   const double coronal[] = { 0,0,1, 1,0,0 };
+  (void)coronal;
   const double sagittal[] = { 0,1,0, 0,0,1 };
+  (void)sagittal;
   gdcm::Attribute<0x0020,0x0032> at1; // IPP
+  (void)at1;
   gdcm::Attribute<0x0020,0x0037> at2; // IOP
+  (void)at2;
 
   gdcm::File & f = reader.GetFile();
   gdcm::DataSet & ds = f.GetDataSet();
@@ -61,6 +66,7 @@ int main(int argc, char* argv[] )
   // for sagittal: swap element 0 & 2
   const double tmp0 = at1.GetValue(0);
   const double tmp2 = at1.GetValue(2);
+  (void)tmp2;
   //at1.SetValue(tmp2, 0);
   //at1.SetValue(tmp0, 2);
   at1.SetValue( - tmp0 );
