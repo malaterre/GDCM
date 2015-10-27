@@ -163,9 +163,9 @@ static frame_diff get_frame_diff( const char* filename )
     assert( csa.GetFormat() == gdcm::CSAHeader::SV10
       || csa.GetFormat() == gdcm::CSAHeader::NOMAGIC );
     // SIEMENS / Diffusion
-    const CSAElement &bvalue  = csa.GetCSAElementByName( "B_value" );
-    const CSAElement &bmatrix = csa.GetCSAElementByName( "B_matrix" );
-    const CSAElement &dgd = csa.GetCSAElementByName( "DiffusionGradientDirection" );
+    //const CSAElement &bvalue  = csa.GetCSAElementByName( "B_value" );
+    //const CSAElement &bmatrix = csa.GetCSAElementByName( "B_matrix" );
+    //const CSAElement &dgd = csa.GetCSAElementByName( "DiffusionGradientDirection" );
     //assert(0);
     }
   else
@@ -728,8 +728,8 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
       // check consistency 
       if( false )
         {
-        gdcm::DataSet & enhds = im0.GetFile().GetDataSet();
-        gdcm::DataSet & ds = reader.GetFile().GetDataSet();
+        //gdcm::DataSet & enhds = im0.GetFile().GetDataSet();
+        //gdcm::DataSet & ds = reader.GetFile().GetDataSet();
         // TODO
         }
       }
