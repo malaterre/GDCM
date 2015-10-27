@@ -5612,7 +5612,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x0027,"Philips MR Imaging DD 004",VR::CS,VM::VM1,"MRSpectroComplexComponent", false },
   {0x2005,0x0028,"Philips MR Imaging DD 004",VR::CS,VM::VM1,"MRSpectroDataOrigin", false },
   {0x2005,0x0029,"Philips MR Imaging DD 004",VR::FL,VM::VM1,"MRSpectroEchoTopPosition", false },
-  {0x2005,0x0030,"Philips MR Imaging DD 004",VR::CS,VM::VM1,"MRInPlaneTransforms", false },
+  {0x2005,0x0030,"Philips MR Imaging DD 004",VR::CS,VM::VM1_n,"MRInPlaneTransforms", false },
   {0x2005,0x0031,"Philips MR Imaging DD 004",VR::SS,VM::VM1,"MRNumberOfSpectraAcquired", false },
   {0x2005,0x0033,"Philips MR Imaging DD 004",VR::FL,VM::VM3,"MRPhaseEncodingEchoTopPositions", false },
   {0x2005,0x0034,"Philips MR Imaging DD 004",VR::CS,VM::VM1,"MRPhysicalQuantityForChemicalShift", false },
