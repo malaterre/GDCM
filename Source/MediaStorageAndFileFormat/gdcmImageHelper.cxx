@@ -2125,6 +2125,61 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
   }
 }
 
+bool ImageHelper::GetRealWorldValueMappingContent(File const & f, RealWorldValueMappingContent & ret)
+{
+  MediaStorage ms;
+  ms.SetFromFile(f);
+  const DataSet& ds = f.GetDataSet();
+
+  if( ms == MediaStorage::MRImageStorage )
+  {
+	  const Tag trwvms(0x0040,0x9096); // Real World Value Mapping Sequence
+	  if( ds.FindDataElement( trwvms ) )
+	  {
+		  SmartPointer<SequenceOfItems> sqi0 = ds.GetDataElement( trwvms ).GetValueAsSQ();
+		  if( sqi0 )
+		  {
+			  const Tag trwvlutd(0x0040,0x9212); // Real World Value LUT Data
+			  if( ds.FindDataElement( trwvlutd ) )
+			  {
+				  gdcmAssertAlwaysMacro(0); // Not supported !
+			  }
+			  // dont know how to handle multiples:
+			  gdcmAssertAlwaysMacro( sqi0->GetNumberOfItems() == 1 );
+			  const Item &item0 = sqi0->GetItem(1);
+			  const DataSet & subds0 = item0.GetNestedDataSet();
+			  //const Tag trwvi(0x0040,0x9224); // Real World Value Intercept
+			  //const Tag trwvs(0x0040,0x9225); // Real World Value Slope
+			  Attribute<0x0040,0x9224> at1 = {0};
+			  at1.SetFromDataSet( subds0 );
+			  Attribute<0x0040,0x9225> at2 = {1};
+			  at2.SetFromDataSet( subds0 );
+			  ret.RealWorldValueIntercept = at1.GetValue();
+			  ret.RealWorldValueSlope = at2.GetValue();
+			  const Tag tmucs(0x0040,0x08ea); // Measurement Units Code Sequence
+			  if( subds0.FindDataElement( tmucs ) )
+			  {
+				  SmartPointer<SequenceOfItems> sqi = subds0.GetDataElement( tmucs ).GetValueAsSQ();
+				  if( sqi )
+				  {
+					  gdcmAssertAlwaysMacro( sqi->GetNumberOfItems() == 1 );
+					  const Item &item = sqi->GetItem(1);
+					  const DataSet & subds = item.GetNestedDataSet();
+					  Attribute<0x0008,0x0100> at1;
+					  at1.SetFromDataSet( subds );
+					  Attribute<0x0008,0x0104> at2;
+					  at2.SetFromDataSet( subds );
+					  ret.CodeValue = at1.GetValue().Trim();
+					  ret.CodeMeaning = at2.GetValue().Trim();
+				  }
+			  }
+		  }
+	  return true;
+	  }
+  }
+  return false;
+}
+
 bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<double> & imageposition, std::vector<double> & spacing)
 {
   if( imageposition.size() % 3 != 0 )

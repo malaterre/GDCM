@@ -83,6 +83,17 @@ public:
   static std::vector<double> GetRescaleInterceptSlopeValue(File const & f);
   static void SetRescaleInterceptSlopeValue(File & f, const Image & img);
 
+  // minimal struct:
+  struct RealWorldValueMappingContent {
+	double RealWorldValueIntercept;
+	double RealWorldValueSlope;
+	// http://dicom.nema.org/MEDICAL/DICOM/2014c/output/chtml/part16/sect_CID_7181.html
+	std::string CodeValue;
+	std::string CodeMeaning;
+  };
+  // read only for now
+  static bool GetRealWorldValueMappingContent(File const & f, RealWorldValueMappingContent & ret);
+
   /// Set/Get Origin (IPP) from/to a file
   static std::vector<double> GetOriginValue(File const & f);
   static void SetOriginValue(DataSet & ds, const Image & img);
