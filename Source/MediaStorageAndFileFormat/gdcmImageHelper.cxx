@@ -1978,43 +1978,43 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     }
 
   if( ms == MediaStorage::MRImageStorage )
-    {
+  {
 #if 0
-/*
- * http://dicom.nema.org/medical/dicom/current/output/chtml/part03/sect_C.7.6.16.2.html#table_C.7.6.16-12b
-(0040,9096) SQ (Sequence with undefined length)                   # u/l,1 Real World Value Mapping Sequence
-  (fffe,e000) na (Item with defined length)
-    (0028,3003) LO [Grey Scale LUT]                               # 14,1 LUT Explanation
-    (0040,08ea) SQ (Sequence with undefined length)               # u/l,1 Measurement Units Code Sequence
-      (fffe,e000) na (Item with defined length)
-        (0008,0100) SH [mm2/s ]                                   # 6,1 Code Value
-        (0008,0102) SH [UCUM]                                     # 4,1 Coding Scheme Designator
-        (0008,0103) SH [1.4 ]                                     # 4,1 Coding Scheme Version
-        (0008,0104) LO [mm2/s ]                                   # 6,1 Code Meaning
-    (fffe,e0dd)
-    (0040,9210) SH [GE_GREY ]                                     # 8,1 LUT Label
-    (0040,9211) US 4904                                           # 2,1 Real World Value Last Value Mapped
-    (0040,9216) US 359                                            # 2,1 Real World Value First Value Mapped
-    (0040,9224) FD 0                                              # 8,1 Real World Value Intercept
-    (0040,9225) FD 1e-06                                          # 8,1 Real World Value Slope
-*/
+    /*
+     * http://dicom.nema.org/medical/dicom/current/output/chtml/part03/sect_C.7.6.16.2.html#table_C.7.6.16-12b
+     (0040,9096) SQ (Sequence with undefined length)                   # u/l,1 Real World Value Mapping Sequence
+     (fffe,e000) na (Item with defined length)
+     (0028,3003) LO [Grey Scale LUT]                               # 14,1 LUT Explanation
+     (0040,08ea) SQ (Sequence with undefined length)               # u/l,1 Measurement Units Code Sequence
+     (fffe,e000) na (Item with defined length)
+     (0008,0100) SH [mm2/s ]                                   # 6,1 Code Value
+     (0008,0102) SH [UCUM]                                     # 4,1 Coding Scheme Designator
+     (0008,0103) SH [1.4 ]                                     # 4,1 Coding Scheme Version
+     (0008,0104) LO [mm2/s ]                                   # 6,1 Code Meaning
+     (fffe,e0dd)
+     (0040,9210) SH [GE_GREY ]                                     # 8,1 LUT Label
+     (0040,9211) US 4904                                           # 2,1 Real World Value Last Value Mapped
+     (0040,9216) US 359                                            # 2,1 Real World Value First Value Mapped
+     (0040,9224) FD 0                                              # 8,1 Real World Value Intercept
+     (0040,9225) FD 1e-06                                          # 8,1 Real World Value Slope
+     */
     if( img.GetIntercept() != 0.0 || img.GetSlope() != 1.0 )
     {
-    SmartPointer<SequenceOfItems> sq = new SequenceOfItems;
-    Item it;
-    DataSet & subds = it.GetNestedDataSet();
-    Attribute<0x0040,0x9224> at1 = {0};
-    at1.SetValue( img.GetIntercept() );
-    Attribute<0x0040,0x9225> at2 = {1};
-    at2.SetValue( img.GetSlope() );
-    subds.Insert( at1.GetAsDataElement() );
-    subds.Insert( at2.GetAsDataElement() );
-    sq->AddItem( it );
-    const Tag trwvms(0x0040,0x9096); // Real World Value Mapping Sequence
-    DataElement de( trwvms );
-    de.SetVR( VR::SQ );
-    de.SetValue(*sq);
-    ds.Replace( de );
+      SmartPointer<SequenceOfItems> sq = new SequenceOfItems;
+      Item it;
+      DataSet & subds = it.GetNestedDataSet();
+      Attribute<0x0040,0x9224> at1 = {0};
+      at1.SetValue( img.GetIntercept() );
+      Attribute<0x0040,0x9225> at2 = {1};
+      at2.SetValue( img.GetSlope() );
+      subds.Insert( at1.GetAsDataElement() );
+      subds.Insert( at2.GetAsDataElement() );
+      sq->AddItem( it );
+      const Tag trwvms(0x0040,0x9096); // Real World Value Mapping Sequence
+      DataElement de( trwvms );
+      de.SetVR( VR::SQ );
+      de.SetValue(*sq);
+      ds.Replace( de );
     }
 
     ds.Remove( Tag(0x28,0x1052) );
@@ -2023,23 +2023,23 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 #else
     if( img.GetIntercept() != 0.0 || img.GetSlope() != 1.0 )
     {
-	    if( ForceRescaleInterceptSlope )
-	    {
-		    gdcmDebugMacro( "FIXME (Philips) MR Image Storage: [" << img.GetIntercept() << "," << img.GetSlope() );
-    Attribute<0x0028,0x1052> at1;
-    at1.SetValue( img.GetIntercept() );
-    ds.Replace( at1.GetAsDataElement() );
-    Attribute<0x0028,0x1053> at2;
-    at2.SetValue( img.GetSlope() );
-    ds.Replace( at2.GetAsDataElement() );
+      if( ForceRescaleInterceptSlope )
+      {
+        gdcmDebugMacro( "MR Image Storage should not use Modality LUT: [" << img.GetIntercept() << "," << img.GetSlope() );
+        Attribute<0x0028,0x1052> at1;
+        at1.SetValue( img.GetIntercept() );
+        ds.Replace( at1.GetAsDataElement() );
+        Attribute<0x0028,0x1053> at2;
+        at2.SetValue( img.GetSlope() );
+        ds.Replace( at2.GetAsDataElement() );
 
-    Attribute<0x0028,0x1054> at3; // Rescale Type
-    at3.SetValue( "US" ); // Compatible with Enhanced MR Image Storage
-    ds.Replace( at3.GetAsDataElement() );
-	    }
+        Attribute<0x0028,0x1054> at3; // Rescale Type
+        at3.SetValue( "US" ); // Compatible with Enhanced MR Image Storage
+        ds.Replace( at3.GetAsDataElement() );
+      }
     }
 #endif
-    }
+  }
   else
   {
     Attribute<0x0028,0x1052> at1;
