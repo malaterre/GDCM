@@ -852,15 +852,15 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       assert( interceptslope.size() == 2 );
       return interceptslope;
       }
-    else
-      {
-      interceptslope.resize( 2 );
-      interceptslope[0] = 0;
-      interceptslope[1] = 1;
-      bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
-      gdcmAssertMacro( b ); (void)b;
-      return interceptslope;
-      }
+    //else
+    //  {
+    //  interceptslope.resize( 2 );
+    //  interceptslope[0] = 0;
+    //  interceptslope[1] = 1;
+    //  bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
+    //  gdcmAssertMacro( b ); (void)b;
+    //  return interceptslope;
+    //  }
     }
 
   // else
@@ -1465,6 +1465,24 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
     at1.SetValue( spacing[0], 1 );
     subds2.Replace( at1.GetAsDataElement() );
     //subds2.Replace( at2.GetAsDataElement() );
+    // cleanup per-frame
+    {
+      const Tag tfgs(0x5200,0x9230);
+      if( ds.FindDataElement( tfgs ) )
+      {
+        SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
+        assert( sqi );
+        SequenceOfItems::SizeType nitems = sqi->GetNumberOfItems();
+        for(SequenceOfItems::SizeType i0 = 1; i0 <= nitems; ++i0)
+        {
+          // Get first item:
+          Item &item = sqi->GetItem(i0);
+          DataSet & subds = item.GetNestedDataSet();
+          const Tag tpms(0x0028,0x9110);
+          subds.Remove(tpms);
+        }
+      }
+    }
 
     return;
     }
@@ -1853,6 +1871,25 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
     DataSet &subds2 = item2.GetNestedDataSet();
 
     subds2.Replace( iop.GetAsDataElement() );
+    // cleanup per-frame
+    {
+      const Tag tfgs(0x5200,0x9230);
+      if( ds.FindDataElement( tfgs ) )
+      {
+        SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
+        assert( sqi );
+        SequenceOfItems::SizeType nitems = sqi->GetNumberOfItems();
+        for(SequenceOfItems::SizeType i0 = 1; i0 <= nitems; ++i0)
+        {
+          // Get first item:
+          Item &item = sqi->GetItem(i0);
+          DataSet & subds = item.GetNestedDataSet();
+          const Tag tpms(0x0020,0x9116);
+          subds.Remove(tpms);
+        }
+      }
+    }
+
     return;
     }
 
@@ -1955,6 +1992,25 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     at2.SetValue( img.GetSlope() );
     subds2.Insert( at2.GetAsDataElement() );
 
+    // cleanup per-frame
+    {
+      const Tag tfgs(0x5200,0x9230);
+      if( ds.FindDataElement( tfgs ) )
+      {
+        SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
+        assert( sqi );
+        SequenceOfItems::SizeType nitems = sqi->GetNumberOfItems();
+        for(SequenceOfItems::SizeType i0 = 1; i0 <= nitems; ++i0)
+        {
+          // Get first item:
+          Item &item = sqi->GetItem(i0);
+          DataSet & subds = item.GetNestedDataSet();
+          // (0028,9145) SQ (Sequence with undefined length)               # u/l,1 Pixel Value Transformation Sequence
+          const Tag tpms(0x0028,0x9145);
+          subds.Remove(tpms);
+        }
+      }
+    }
     return;
     }
 
