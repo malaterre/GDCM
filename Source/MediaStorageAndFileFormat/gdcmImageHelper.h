@@ -29,6 +29,7 @@ class MediaStorage;
 class DataSet;
 class File;
 class Image;
+class Pixmap;
 class ByteValue;
 /**
  * \brief ImageHelper (internal class, not intended for user level)
@@ -70,7 +71,7 @@ public:
   /// rows and columns of the image in pixels (as opposed to actual distances).
   /// The output is {col , row}
   static std::vector<unsigned int> GetDimensionsValue(const File& f);
-  static void SetDimensionsValue(File& f, const Image & img);
+  static void SetDimensionsValue(File& f, const Pixmap & img);
 
   /// This function returns pixel information about an image from its dataset
   /// That includes samples per pixel and bit depth (in that order)
@@ -125,10 +126,10 @@ public:
   //returns the configuration of colors in a plane, either RGB RGB RGB or RRR GGG BBB
   static unsigned int GetPlanarConfigurationValue(const File& f);
 
-  //returns the lookup table of an image file
+  /// returns the lookup table of an image file
   static SmartPointer<LookupTable> GetLUT(File const& f);
 
-  ///Moved from PixampReader to here.  Generally used for photometric interpretation.
+  // Moved from PixampReader to here. Generally used for photometric interpretation.
   static const ByteValue* GetPointerFromElement(Tag const &tag, File const& f);
 
   /// Moved from MediaStorage here, since we need extra info stored in PixelFormat & PhotometricInterpretation

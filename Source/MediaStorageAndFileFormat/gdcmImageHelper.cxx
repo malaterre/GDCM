@@ -417,6 +417,8 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
    || ms == MediaStorage::EnhancedMRImageStorage
    || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::OphthalmicTomographyImageStorage
+   || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
+   || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
     const Tag t1(0x5200,0x9229);
@@ -535,6 +537,8 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
    || ms == MediaStorage::EnhancedPETImageStorage
+   || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
+   || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
     const Tag t1(0x5200,0x9229);
@@ -794,42 +798,52 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
   return theReturn;
 }
 
-void ImageHelper::SetDimensionsValue(File& f, const Image & img)
+void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
 {
   const unsigned int *dims = img.GetDimensions();
   MediaStorage ms;
   ms.SetFromFile(f);
   DataSet& ds = f.GetDataSet();
   assert( MediaStorage::IsImage( ms ) );
-#if 0
-  if( ms == MediaStorage::VLWholeSlideMicroscopyImageStorage )
-    {
-    Attribute<0x0048,0x0006> columns;
-    columns.SetValue( dims[0] );
-    ds.Replace( columns.GetAsDataElement() );
-    Attribute<0x0048,0x0007> rows;
-    rows.SetValue( dims[1] );
-    ds.Replace( rows.GetAsDataElement() );
-    if( dims[2] > 1 )
-      {
-      assert( 0 );
-      }
-    }
-  else
-#endif
-    {
+  {
     Attribute<0x0028,0x0010> rows;
     rows.SetValue( (uint16_t)dims[1] );
     ds.Replace( rows.GetAsDataElement() );
     Attribute<0x0028,0x0011> columns;
     columns.SetValue( (uint16_t)dims[0] );
     ds.Replace( columns.GetAsDataElement() );
-    if( dims[2] > 1 )
+    Attribute<0x0028,0x0008> numframes = { 0 };
+    numframes.SetValue( dims[2] );
+    if( img.GetNumberOfDimensions() == 3 && dims[2] > 1 )
+    {
+      if( ms.MediaStorage::GetModalityDimension() > 2 )
+        ds.Replace( numframes.GetAsDataElement() );
+      else
       {
-      Attribute<0x0028,0x0008> numframes = { 0 };
-      ds.Replace( numframes.GetAsDataElement() );
+        gdcmErrorMacro( "MediaStorage does not allow 3rd dimension. But value is: " << dims[2] );
+        gdcmAssertAlwaysMacro( "Could not set third dimension" );
       }
     }
+    else // cleanup
+      ds.Remove( numframes.GetTag() );
+  }
+  // cleanup pass:
+  if( ms == MediaStorage::EnhancedCTImageStorage
+   || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::EnhancedPETImageStorage
+   || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
+   || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
+   || ms == MediaStorage::SegmentationStorage )
+    {
+      const Tag tfgs(0x5200,0x9230);
+      if( ds.FindDataElement( tfgs ) )
+      {
+        SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
+        assert( sqi );
+        sqi->SetNumberOfItems( dims[2] );
+      }
+    }
+
 }
 
 std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
@@ -1134,6 +1148,8 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     || ms == MediaStorage::EnhancedMRImageStorage
     || ms == MediaStorage::EnhancedPETImageStorage
     || ms == MediaStorage::OphthalmicTomographyImageStorage
+    || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
+    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
     || ms == MediaStorage::SegmentationStorage )
     {
     // <entry group="5200" element="9230" vr="SQ" vm="1" name="Per-frame Functional Groups Sequence"/>
@@ -1400,6 +1416,8 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
    || ms == MediaStorage::EnhancedPETImageStorage
+   || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
+   || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
 /*
@@ -1704,6 +1722,8 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
    && ms != MediaStorage::PETImageStorage
    //&& ms != MediaStorage::ComputedRadiographyImageStorage
    && ms != MediaStorage::SegmentationStorage
+   && ms != MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
+   && ms != MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedPETImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage )
@@ -1715,6 +1735,8 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
    || ms == MediaStorage::EnhancedPETImageStorage
+   || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
+   || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
 /*
@@ -1783,6 +1805,8 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
    && ms != MediaStorage::RTDoseStorage
    && ms != MediaStorage::PETImageStorage
    //&& ms != MediaStorage::ComputedRadiographyImageStorage
+   && ms != MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
+   && ms != MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    && ms != MediaStorage::SegmentationStorage
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedPETImageStorage
@@ -1814,6 +1838,8 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
    || ms == MediaStorage::EnhancedPETImageStorage
+   || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
+   || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
 /*

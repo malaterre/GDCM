@@ -391,7 +391,7 @@ bool Rescaler::Rescale(char *out, const char *in, size_t n)
   return true;
 }
 
-PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double intercept, double slope, double _min, double _max)
+static PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double intercept, double slope, double _min, double _max)
 {
   PixelFormat st = PixelFormat::UNKNOWN;
   //assert( slope == (int)slope && intercept == (int)intercept);
@@ -428,7 +428,7 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
       }
     else
       {
-      assert(0);
+      gdcmAssertAlwaysMacro(0);
       }
     int64_t max2 = max; // make a copy
     while (max2 >>= 1) ++log2max;
@@ -454,7 +454,7 @@ PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ double in
       }
     else
       {
-      assert(0);
+      gdcmAssertAlwaysMacro(0);
       }
     assert( min < 0 );
 #if 0
