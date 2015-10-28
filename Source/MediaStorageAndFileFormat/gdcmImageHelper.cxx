@@ -1476,6 +1476,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
     DataSet &subds2 = item2.GetNestedDataSet();
 
     // <entry group="0028" element="9110" vr="SQ" vm="1" name="Pixel Measures Sequence"/>
+    // do not set a slice thickness since GDCM always recompute it from the IOP/IPP
     //Attribute<0x0018,0x0050> at2;
     //at2.SetValue( spacing[2] );
     Attribute<0x0028,0x0030> at1;
@@ -1773,6 +1774,17 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
       ipp.SetValue( new_origin[2], 2);
       SetDataElementInSQAsItemNumber(ds, ipp.GetAsDataElement(), tfgs, i+1);
       }
+
+    // C.7.6.6.1.2 Frame Increment Pointer
+    // (0028,0009) AT (0018,2005)                                        # 4,1-n Frame Increment Pointer
+    if( ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
+        || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage )
+    {
+      Attribute<0x0028,0x0009> fip;
+      fip.SetNumberOfValues( 1 );
+      fip.SetValue( tfgs );
+      ds.Replace( fip.GetAsDataElement() );
+    }
 
     return;
     }
