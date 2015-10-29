@@ -31,6 +31,16 @@ class File;
 class Image;
 class Pixmap;
 class ByteValue;
+
+// minimal struct:
+struct RealWorldValueMappingContent {
+  double RealWorldValueIntercept;
+  double RealWorldValueSlope;
+  // http://dicom.nema.org/MEDICAL/DICOM/2014c/output/chtml/part16/sect_CID_7181.html
+  std::string CodeValue;
+  std::string CodeMeaning;
+};
+
 /**
  * \brief ImageHelper (internal class, not intended for user level)
  *
@@ -84,14 +94,6 @@ public:
   static std::vector<double> GetRescaleInterceptSlopeValue(File const & f);
   static void SetRescaleInterceptSlopeValue(File & f, const Image & img);
 
-  // minimal struct:
-  struct RealWorldValueMappingContent {
-	double RealWorldValueIntercept;
-	double RealWorldValueSlope;
-	// http://dicom.nema.org/MEDICAL/DICOM/2014c/output/chtml/part16/sect_CID_7181.html
-	std::string CodeValue;
-	std::string CodeMeaning;
-  };
   // read only for now
   static bool GetRealWorldValueMappingContent(File const & f, RealWorldValueMappingContent & ret);
 
