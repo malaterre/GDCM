@@ -254,7 +254,8 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     }
 
   zspacing = meanspacing;
-  assert( zspacing != 0.0 ); // technically this should not happen
+  if( nitems > 1 )
+    assert( zspacing != 0.0 ); // technically this should not happen
 
   if( !timeseries )
     {
@@ -2595,6 +2596,18 @@ MediaStorage ImageHelper::ComputeMediaStorageFromModality(const char *modality,
       return MediaStorage::MS_END;
       }
     }
+  // check MR Image Storage
+  if( ms == MediaStorage::MRImageStorage )
+  {
+    if( intercept != 0.0 || slope != 1.0 )
+    {
+      if( !ForceRescaleInterceptSlope )
+      {
+        // hopefully this is not a lame choice:
+        ms = MediaStorage::EnhancedMRImageStorage;
+      }
+    }
+  }
   return ms;
 }
 
