@@ -78,7 +78,7 @@ int TestImageChangeTransferSyntaxJ2K(const char *filename, bool verbose = false)
 
   ImageWriter writer;
   writer.SetFileName( outfilename.c_str() );
-  //writer.SetFile( reader.GetFile() ); // increase test goal
+  writer.SetFile( reader.GetFile() ); // important for palette + multiframes
   writer.SetImage( change.GetOutput() );
   if( !writer.Write() )
     {

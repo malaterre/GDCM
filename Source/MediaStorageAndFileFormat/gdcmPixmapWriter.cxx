@@ -620,7 +620,6 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
   DoIconImage(ds, GetPixmap());
 
   MediaStorage ms = ref_ms;
-  assert( ms != MediaStorage::MS_END );
 
   // Most SOP Class support 2D, but let's make sure that 3D is ok:
   if( PixelData->GetNumberOfDimensions() > 2 )
@@ -640,8 +639,9 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
       }
     }
   }
-  // Rescale Slope/Intercept for MR Image Storage
-  assert( ms != MediaStorage::MS_END );
+  // if we reach here somethnig went really wrong in previous step. Let's make
+  // it a hard failure
+  gdcmAssertAlwaysMacro( ms != MediaStorage::MS_END );
 
   const char* msstr = MediaStorage::GetMSString(ms);
   if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )

@@ -55,6 +55,7 @@ int TestImageWrite(const char *subdir, const char* filename)
 
   ImageWriter writer;
   writer.SetFileName( outfilename.c_str() );
+  writer.SetFile( reader.GetFile() ); // important
   writer.SetImage( reader.GetImage() );
   if( !writer.Write() )
     {
