@@ -2553,7 +2553,6 @@ MediaStorage ImageHelper::ComputeMediaStorageFromModality(const char *modality,
       {
       ms = MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage;
       // FIXME: GDCM does not handle bit packing...
-      gdcmAssertAlwaysMacro( 0 );
       if( intercept != 0 || slope != 1 )
         {
         gdcmDebugMacro( "Cannot have shift/scale" );
