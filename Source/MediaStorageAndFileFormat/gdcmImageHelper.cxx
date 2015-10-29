@@ -2505,6 +2505,7 @@ MediaStorage ImageHelper::ComputeMediaStorageFromModality(const char *modality,
   double intercept , double slope
   )
 {
+  // FIXME: Planar Configuration (0028,0006) shall not be present
   MediaStorage ms = MediaStorage::SecondaryCaptureImageStorage;
   ms.GuessFromModality(modality, dimension );
 
@@ -2536,8 +2537,7 @@ MediaStorage ImageHelper::ComputeMediaStorageFromModality(const char *modality,
       ms = MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage;
       if( intercept != 0 || slope != 1 )
         {
-        // Table C.8-25b SC MULTI-FRAME IMAGE MODULE ATTRIBUTES
-        // Note: This specifies an identity Modality LUT transformation.
+        // A.8.3.4 Multi-frame Grayscale Byte SC Image IOD Content Constraints
         gdcmErrorMacro( "Cannot have shift/scale" );
         return MediaStorage::MS_END;
         }
@@ -2552,6 +2552,8 @@ MediaStorage ImageHelper::ComputeMediaStorageFromModality(const char *modality,
     )
       {
       ms = MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage;
+      // FIXME: GDCM does not handle bit packing...
+      gdcmAssertAlwaysMacro( 0 );
       if( intercept != 0 || slope != 1 )
         {
         gdcmDebugMacro( "Cannot have shift/scale" );
@@ -2568,11 +2570,12 @@ MediaStorage ImageHelper::ComputeMediaStorageFromModality(const char *modality,
     )
       {
       ms = MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage;
-      if( intercept != 0 || slope != 1 )
-        {
-        gdcmDebugMacro( "Cannot have shift/scale" );
-        return MediaStorage::MS_END;
-        }
+      // A.8.4.4 Multi-frame Grayscale Word SC Image IOD Content Constraints
+      // Rescale Slope and Rescale Intercept are not constrained in this IOD to
+      // any particular values. E.g., they may be used to recover floating
+      // point values scaled to the integer range of the stored pixel values,
+      // Rescale Slope may be less than one, e.g., a Rescale Slope of 1.0/65535
+      // would allow represent floating point values from 0 to 1.0.
       }
     else if( dimension == 3 && /* A.8.5.4 Multi-frame True Color SC Image IOD Content Constraints */
       pixeltype.GetSamplesPerPixel() == 3 &&

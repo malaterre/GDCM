@@ -137,7 +137,8 @@ public:
   /// Moved from MediaStorage here, since we need extra info stored in PixelFormat & PhotometricInterpretation
   static MediaStorage ComputeMediaStorageFromModality(const char *modality,
     unsigned int dimension = 2, PixelFormat const & pf = PixelFormat(),
-    PhotometricInterpretation const & pi = PhotometricInterpretation(), double rescaleintercept = 0, double rescaleslope = 1 );
+    PhotometricInterpretation const & pi = PhotometricInterpretation(),
+    double rescaleintercept = 0, double rescaleslope = 1 );
 
 protected:
   static Tag GetSpacingTagFromMediaStorage(MediaStorage const &ms);
