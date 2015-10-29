@@ -66,7 +66,7 @@ int TestImageChangePlanarConfigurationFunc(const char *filename, bool verbose = 
 
   gdcm::ImageWriter writer;
   writer.SetFileName( outfilename.c_str() );
-  //writer.SetFile( reader.GetFile() ); // increase test goal
+  writer.SetFile( reader.GetFile() ); // important
   writer.SetImage( pcfilt.GetOutput() );
   if( !writer.Write() )
     {
