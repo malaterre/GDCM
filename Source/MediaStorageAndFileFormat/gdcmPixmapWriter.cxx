@@ -12,6 +12,7 @@
 
 =========================================================================*/
 #include "gdcmPixmapWriter.h"
+#include "gdcmImageHelper.h"
 #include "gdcmTrace.h"
 #include "gdcmDataSet.h"
 #include "gdcmDataElement.h"
@@ -238,6 +239,7 @@ bool PixmapWriter::PrepareWrite()
   const TransferSyntax &ts_orig = fmi_orig.GetDataSetTransferSyntax();
 
   // col & rows:
+#if 0
   Attribute<0x0028, 0x0011> columns;
   columns.SetValue( (uint16_t)PixelData->GetDimension(0) );
   ds.Replace( columns.GetAsDataElement() );
@@ -261,6 +263,9 @@ bool PixmapWriter::PrepareWrite()
     assert( PixelData->GetDimension(2) == 1 );
     ds.Remove( tnumberofframes );
     }
+#else
+    ImageHelper::SetDimensionsValue(file, *PixelData);
+#endif
 
   PixelFormat pf = PixelData->GetPixelFormat();
   if ( !pf.IsValid() )

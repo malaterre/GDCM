@@ -732,8 +732,8 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
       // check consistency 
       if( false )
         {
-        gdcm::DataSet & enhds = im0.GetFile().GetDataSet();
-        gdcm::DataSet & ds = reader.GetFile().GetDataSet();
+        //gdcm::DataSet & enhds = im0.GetFile().GetDataSet();
+        //gdcm::DataSet & ds = reader.GetFile().GetDataSet();
         // TODO
         }
       }
