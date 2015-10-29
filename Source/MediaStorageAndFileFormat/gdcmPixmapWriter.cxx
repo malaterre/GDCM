@@ -230,7 +230,10 @@ Attribute<0x0028,0x0004> piat;
     }
 }
 
-bool PixmapWriter::PrepareWrite()
+// TODO: remove me
+bool PrepareWrite(){ return false; }
+
+bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
 {
   File& file = GetFile();
   DataSet& ds = file.GetDataSet();
@@ -263,8 +266,6 @@ bool PixmapWriter::PrepareWrite()
     assert( PixelData->GetDimension(2) == 1 );
     ds.Remove( tnumberofframes );
     }
-#else
-    ImageHelper::SetDimensionsValue(file, *PixelData);
 #endif
 
   PixelFormat pf = PixelData->GetPixelFormat();
@@ -618,21 +619,29 @@ bool PixmapWriter::PrepareWrite()
   // Do Icon Image
   DoIconImage(ds, GetPixmap());
 
-  MediaStorage ms;
-  ms.SetFromFile( GetFile() );
+  MediaStorage ms = ref_ms;
   assert( ms != MediaStorage::MS_END );
 
   // Most SOP Class support 2D, but let's make sure that 3D is ok:
   if( PixelData->GetNumberOfDimensions() > 2 )
-    {
+  {
     if( ms.GetModalityDimension() < PixelData->GetNumberOfDimensions() )
+    {
+      // input was specified with SC, but the Number of Frame is > 1. Fix that:
+      ms = ImageHelper::ComputeMediaStorageFromModality( ms.GetModality(),
+          PixelData->GetNumberOfDimensions(),
+          PixelData->GetPixelFormat(),
+          PixelData->GetPhotometricInterpretation(),
+          0, 1 );
+      if( ms.GetModalityDimension() < PixelData->GetNumberOfDimensions() )
       {
-      gdcmErrorMacro( "Problem with NumberOfDimensions and MediaStorage" );
-#if 0
-      return false;
-#endif
+        gdcmErrorMacro( "Problem with NumberOfDimensions and MediaStorage" );
+        return false;
       }
     }
+  }
+  // Rescale Slope/Intercept for MR Image Storage
+  assert( ms != MediaStorage::MS_END );
 
   const char* msstr = MediaStorage::GetMSString(ms);
   if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
@@ -663,6 +672,7 @@ bool PixmapWriter::PrepareWrite()
       assert( bv->GetLength() == strlen( msstr ) || bv->GetLength() == strlen(msstr) + 1 );
       }
     }
+  ImageHelper::SetDimensionsValue(file, *PixelData);
 
   // UIDs:
   // (0008,0018) UI [1.3.6.1.4.1.5962.1.1.1.1.3.20040826185059.5457] #  46, 1 SOPInstanceUID
@@ -766,7 +776,17 @@ bool PixmapWriter::PrepareWrite()
 
 bool PixmapWriter::Write()
 {
-  if( !PrepareWrite() ) return false;
+  MediaStorage ms;
+  if( !ms.SetFromFile( GetFile() ) )
+  {
+    // Let's fix some old ACR-NAME stuff:
+    ms = ImageHelper::ComputeMediaStorageFromModality( ms.GetModality(),
+        PixelData->GetNumberOfDimensions(),
+        PixelData->GetPixelFormat(),
+        PixelData->GetPhotometricInterpretation(),
+        0, 1 );
+  }
+  if( !PrepareWrite( ms ) ) return false;
 
   assert( Stream );
   if( !Writer::Write() )

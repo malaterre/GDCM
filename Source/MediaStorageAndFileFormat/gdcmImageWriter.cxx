@@ -42,7 +42,27 @@ ImageWriter::~ImageWriter()
 
 bool ImageWriter::Write()
 {
-  if( !PrepareWrite() ) return false;
+  MediaStorage ms;
+  if( !ms.SetFromFile( GetFile() ) )
+  {
+    // Let's fix some old ACR-NAME stuff:
+    ms = ImageHelper::ComputeMediaStorageFromModality( ms.GetModality(),
+        PixelData->GetNumberOfDimensions(),
+        PixelData->GetPixelFormat(),
+        PixelData->GetPhotometricInterpretation(),
+        GetImage().GetIntercept(), GetImage().GetSlope() );
+  }
+  // double check for MR Image Storage:
+  if( ms == MediaStorage::MRImageStorage &&
+    ( GetImage().GetIntercept() != 0.0 || GetImage().GetSlope() != 1.0 ) )
+  {
+    ms = ImageHelper::ComputeMediaStorageFromModality( ms.GetModality(),
+        PixelData->GetNumberOfDimensions(),
+        PixelData->GetPixelFormat(),
+        PixelData->GetPhotometricInterpretation(),
+        GetImage().GetIntercept(), GetImage().GetSlope() );
+  }
+  if( !PrepareWrite( ms ) ) return false;
 
   //assert( Stream.is_open() );
   File& file = GetFile();
@@ -144,8 +164,6 @@ bool ImageWriter::Write()
     ds.Insert( de );
     }
 
-  MediaStorage ms;
-  ms.SetFromFile( GetFile() );
   assert( ms != MediaStorage::MS_END );
 
   // Patient Orientation
@@ -214,17 +232,22 @@ bool ImageWriter::Write()
 
   // Do the Rescale Intercept & Slope
   if( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 )
-    {
+  {
     assert( pf.GetSamplesPerPixel() == 1 );
     ImageHelper::SetRescaleInterceptSlopeValue(GetFile(), pixeldata);
     if( ms == MediaStorage::RTDoseStorage && pixeldata.GetIntercept() != 0 )
-      {
+    {
       return false;
-      }
     }
+    else if( ms == MediaStorage::MRImageStorage && (pixeldata.GetIntercept() != 0 || pixeldata.GetSlope() != 1.0) )
+    {
+      if( !gdcm::ImageHelper::GetForceRescaleInterceptSlope() )
+        return false;
+    }
+  }
   else
     {
-    assert( pixeldata.GetIntercept() == 0 && pixeldata.GetSlope() == 1 );
+    gdcmAssertAlwaysMacro( pixeldata.GetIntercept() == 0 && pixeldata.GetSlope() == 1 );
     }
 
 //      Attribute<0x0028, 0x0006> planarconfiguration;

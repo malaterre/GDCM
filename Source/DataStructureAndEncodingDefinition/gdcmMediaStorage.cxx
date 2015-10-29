@@ -510,8 +510,9 @@ bool MediaStorage::SetFromModality(DataSet const &ds)
       MSField = MediaStorage::SecondaryCaptureImageStorage;
       return false;
       }
+    return true;
     }
-  return true;
+  return false;
 }
 
 bool MediaStorage::SetFromFile(File const &file)
