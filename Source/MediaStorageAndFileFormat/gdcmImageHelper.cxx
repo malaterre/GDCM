@@ -2574,9 +2574,13 @@ MediaStorage ImageHelper::ComputeMediaStorageFromModality(const char *modality,
         return MediaStorage::MS_END;
         }
       }
-    else if( dimension == 3 &&
+    else if( dimension == 3 && /* A.8.5.4 Multi-frame True Color SC Image IOD Content Constraints */
       pixeltype.GetSamplesPerPixel() == 3 &&
-      pi == PhotometricInterpretation::RGB &&
+      ( pi == PhotometricInterpretation::RGB 
+      || pi == PhotometricInterpretation::YBR_RCT
+      || pi == PhotometricInterpretation::YBR_ICT
+      || pi == PhotometricInterpretation::YBR_PARTIAL_420
+      || pi == PhotometricInterpretation::YBR_FULL_422 ) &&
       pixeltype.GetBitsAllocated() == 8 &&
       pixeltype.GetBitsStored() == 8 &&
       pixeltype.GetHighBit() == 7 &&
