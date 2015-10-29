@@ -214,17 +214,22 @@ bool ImageWriter::Write()
 
   // Do the Rescale Intercept & Slope
   if( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 )
-    {
+  {
     assert( pf.GetSamplesPerPixel() == 1 );
     ImageHelper::SetRescaleInterceptSlopeValue(GetFile(), pixeldata);
     if( ms == MediaStorage::RTDoseStorage && pixeldata.GetIntercept() != 0 )
-      {
+    {
       return false;
-      }
     }
+    else if( ms == MediaStorage::MRImageStorage && (pixeldata.GetIntercept() != 0 || pixeldata.GetSlope() != 1.0) )
+    {
+      if( !gdcm::ImageHelper::GetForceRescaleInterceptSlope() )
+        return false;
+    }
+  }
   else
     {
-    assert( pixeldata.GetIntercept() == 0 && pixeldata.GetSlope() == 1 );
+    gdcmAssertAlwaysMacro( pixeldata.GetIntercept() == 0 && pixeldata.GetSlope() == 1 );
     }
 
 //      Attribute<0x0028, 0x0006> planarconfiguration;
