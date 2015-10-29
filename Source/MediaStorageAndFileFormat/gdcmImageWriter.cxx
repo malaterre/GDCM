@@ -42,7 +42,27 @@ ImageWriter::~ImageWriter()
 
 bool ImageWriter::Write()
 {
-  if( !PrepareWrite() ) return false;
+  MediaStorage ms;
+  if( !ms.SetFromFile( GetFile() ) )
+  {
+    // Let's fix some old ACR-NAME stuff:
+    ms = ImageHelper::ComputeMediaStorageFromModality( ms.GetModality(),
+        PixelData->GetNumberOfDimensions(),
+        PixelData->GetPixelFormat(),
+        PixelData->GetPhotometricInterpretation(),
+        GetImage().GetIntercept(), GetImage().GetSlope() );
+  }
+  // double check for MR Image Storage:
+  if( ms == MediaStorage::MRImageStorage &&
+    ( GetImage().GetIntercept() != 0.0 || GetImage().GetSlope() != 1.0 ) )
+  {
+    ms = ImageHelper::ComputeMediaStorageFromModality( ms.GetModality(),
+        PixelData->GetNumberOfDimensions(),
+        PixelData->GetPixelFormat(),
+        PixelData->GetPhotometricInterpretation(),
+        GetImage().GetIntercept(), GetImage().GetSlope() );
+  }
+  if( !PrepareWrite( ms ) ) return false;
 
   //assert( Stream.is_open() );
   File& file = GetFile();
@@ -144,8 +164,6 @@ bool ImageWriter::Write()
     ds.Insert( de );
     }
 
-  MediaStorage ms;
-  ms.SetFromFile( GetFile() );
   assert( ms != MediaStorage::MS_END );
 
   // Patient Orientation
