@@ -97,11 +97,11 @@ test_script:
 # scripts to run before deployment
 before_deploy:
   # create NSIS installer
-  - cpack -G NSIS
+  - cpack -G NSIS -C %CONFIG%
   # create binary zip
-  - cpack -G ZIP
+  - cpack -G ZIP -C %CONFIG%
   # create source zip
-  - cpack -G ZIP --config CPackSourceConfig.cmake
+  - cpack -G ZIP -C %CONFIG% --config CPackSourceConfig.cmake
 
 # scripts to run after deployment
 #after_deploy:
