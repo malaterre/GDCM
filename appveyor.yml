@@ -45,6 +45,8 @@ init:
   - cmake --version
   - python --version
   - java -version
+  # https://github.com/chocolatey/chocolatey/issues/431
+  - cmake -E remove -f c:\programdata\chocolatey\bin\cpack.exe
 
 # check nmake ?
 #- call "c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
