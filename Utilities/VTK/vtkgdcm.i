@@ -31,10 +31,10 @@
 #endif
 
 %{
-//#define VTK_MAJOR_VERSION 5
-//#define VTK_MINOR_VERSION 4
+//#define VTK_MAJOR_VERSION 6
+//#define VTK_MINOR_VERSION 2
 //#define VTK_BUILD_VERSION 0
-//#define VTK_VERSION "5.4.0"
+//#define VTK_VERSION "6.2.0"
 %}
 
 
@@ -101,16 +101,23 @@
 //using My.Own.Namespace;
 //%}
 
-#ifdef USEACTIVIZ
+#if defined( USEACTIVIZ ) || defined (SWIGCSHARP) 
 %typemap(csimports) SWIGTYPE %{
 // I need to duplicate those also:
 using System;
 using System.Runtime.InteropServices;
+%}
+#endif
+
+#if defined( USEACTIVIZ )
+%typemap(csimports) SWIGTYPE %{
 // my special import:
 using Kitware.VTK;
 //using Kitware.mummy.Runtime;
 %}
 #endif
+
+
 
 #define GDCM_EXPORT
 #define VTK_EXPORT
@@ -119,6 +126,13 @@ using Kitware.VTK;
 #define VTK_IO_EXPORT
 #define VTK_IMAGING_EXPORT
 #define VTK_RENDERING_EXPORT
+#define VTKCOMMONCORE_EXPORT
+#define VTKCOMMONMATH_EXPORT
+#define VTKIOIMAGE_EXPORT
+#define VTKCOMMONDATAMODEL_EXPORT
+#define VTKCOMMONEXECUTIONMODEL_EXPORT
+#define VTKRENDERINGCORE_EXPORT
+#define VTKIMAGINGCORE_EXPORT
 
 
 // FIXME. Including #include vtkSetGet would not work on siwg 1.3.33 ...
