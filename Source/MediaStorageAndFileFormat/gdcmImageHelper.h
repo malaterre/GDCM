@@ -95,7 +95,7 @@ public:
   static void SetRescaleInterceptSlopeValue(File & f, const Image & img);
 
   // read only for now
-  static bool GetRealWorldValueMappingContent(File const & f, RealWorldValueMappingContent & ret);
+  static bool GetRealWorldValueMappingContent(File const & f, RealWorldValueMappingContent & rwvmc);
 
   /// Set/Get Origin (IPP) from/to a file
   static std::vector<double> GetOriginValue(File const & f);
