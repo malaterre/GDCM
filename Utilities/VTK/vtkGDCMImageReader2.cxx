@@ -294,6 +294,8 @@ int vtkGDCMImageReader2::RequestInformation(vtkInformation *request,
                                       vtkInformationVector **inputVector,
                                       vtkInformationVector *outputVector)
 {
+  (void)request;
+  (void)inputVector;
   int res = RequestInformationCompat();
   if( !res )
     {

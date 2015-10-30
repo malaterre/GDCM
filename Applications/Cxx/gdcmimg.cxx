@@ -257,10 +257,12 @@ static bool AddUIDs(int sopclassuid, std::string const & sopclass, std::string c
     std::cerr << "problem with media storage: " << sopclass << std::endl;
     return false;
     }
-  gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016 ) );
-  de.SetByteValue( msstr, (uint32_t)strlen(msstr) );
-  de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
-  ds.Insert( de );
+  {
+    gdcm::DataElement de( gdcm::Tag(0x0008, 0x0016 ) );
+    de.SetByteValue( msstr, (uint32_t)strlen(msstr) );
+    de.SetVR( gdcm::Attribute<0x0008, 0x0016>::GetVR() );
+    ds.Insert( de );
+  }
 
     {
     gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) ); // Study

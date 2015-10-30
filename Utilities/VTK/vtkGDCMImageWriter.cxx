@@ -147,7 +147,7 @@ int vtkGDCMImageWriter::RequestInformation(
   vtkInformationVector *vtkNotUsed(outputVector))
 {
   // Check to make sure that all input information agrees
-  int mismatchedInputs = 0;
+  //int mismatchedInputs = 0;
 
   double spacing[3];
   double origin[3];
@@ -179,7 +179,7 @@ int vtkGDCMImageWriter::RequestInformation(
           != components ||
         inInfo->Get(vtkDataObject::FIELD_ARRAY_TYPE()) != dataType)
       {
-      mismatchedInputs = 1;
+      //mismatchedInputs = 1;
       return 0;
       }
     }
