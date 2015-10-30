@@ -683,8 +683,8 @@ int main(int argc, char *argv[])
     return 0;
     }
 
-  gdcm::ImageHelper::SetForceRescaleInterceptSlope(forcerescale);
-  gdcm::ImageHelper::SetForcePixelSpacing(forcespacing);
+  gdcm::ImageHelper::SetForceRescaleInterceptSlope(forcerescale ? true : false);
+  gdcm::ImageHelper::SetForcePixelSpacing(forcespacing ? true : false);
 
   if( filename.empty() )
     {
