@@ -304,7 +304,7 @@ static const MSModalityType MSModalityTypes[] = {
   {"XA", 3, 0},// Enhanced XA Image Storage
   {"  ", 2, 0},// RTIonBeamsTreatmentRecordStorage
   {"SEG", 3, 0},// Surface Segmentation Storage
-  {"SM", 2, 0},// VLWholeSlideMicroscopyImageStorage
+  {"SM", 3, 0},// VLWholeSlideMicroscopyImageStorage
   {"RTRECORD", 2, 0},//RTTreatmentSummaryRecordStorage
   {"US", 3, 0},// EnhancedUSVolumeStorage
   {"  ", 2, 0},// XRayRadiationDoseSR
