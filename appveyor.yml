@@ -14,18 +14,18 @@ environment:
   - VS_GEN: Visual Studio 14 2015
     CONFIG: RelWithDebInfo
     B_NAME: Win32
-  - VS_GEN: Visual Studio 14 2015 Win64
-    CONFIG: Release
-    B_NAME: Win64
-  - VS_GEN: MinGW Makefiles
-    CONFIG: None
-    B_NAME: MinGW
-  - VS_GEN: MSYS Makefiles
-    CONFIG: None
-    B_NAME: Msys
-  - VS_GEN: Visual Studio 14 2015 ARM
-    CONFIG: Debug
-    B_NAME: ARM
+#  - VS_GEN: Visual Studio 14 2015 Win64
+#    CONFIG: Release
+#    B_NAME: Win64
+#  - VS_GEN: MinGW Makefiles
+#    CONFIG: None
+#    B_NAME: MinGW
+#  - VS_GEN: MSYS Makefiles
+#    CONFIG: None
+#    B_NAME: Msys
+#  - VS_GEN: Visual Studio 14 2015 ARM
+#    CONFIG: Debug
+#    B_NAME: ARM
 
 matrix:
   fast_finish: true
@@ -53,7 +53,7 @@ init:
 # scripts that run after cloning repository
 install:
   # Fetch submodules
-  - git submodule update --init --recursive
+  #- git submodule update --init --recursive
   - choco install swig
   - swig -version
   # https://chocolatey.org/packages/nsis.install/
