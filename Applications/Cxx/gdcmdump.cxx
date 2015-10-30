@@ -228,7 +228,7 @@ static int DumpTOSHIBA_MEC_CT3(const gdcm::DataSet & ds)
   const gdcm::ByteValue *bv = data.GetByteValue();
   if( !bv ) return 1;
 
-  const int offset = 24;
+  const unsigned int offset = 24;
   if( bv->GetLength() < offset )
     {
     std::cerr << "Not enough header" << std::endl;

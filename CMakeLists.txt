@@ -29,18 +29,6 @@ set(GDCM_PACKAGE_CONTACT "GDCM Developers <gdcm-developers@lists.sourceforge.net
 # See the CVS version of files in VTK/GUISupport/MFC for details. Or grep the
 # VTK source tree for "DELAYLOAD"
 
-#-----------------------------------------------------------------------------
-if(NOT DEFINED GDCM_ALLOW_INSOURCE_BUILD)
-  # Disallow insource build since I never test that
-  string(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${GDCM_BINARY_DIR}" INSOURCE)
-  get_filename_component(PARENTDIR ${GDCM_BINARY_DIR} PATH)
-  string(COMPARE EQUAL "${GDCM_SOURCE_DIR}" "${PARENTDIR}" INSOURCESUBDIR)
-  if(INSOURCE OR INSOURCESUBDIR)
-    message(FATAL_ERROR "GDCM requires an out of source Build. "
-      "Please create a separate binary directory and run CMake there. "
-      "Or explicitly define GDCM_ALLOW_INSOURCE_BUILD")
-  endif()
-endif()
 #----------------------------------------------------------------------------
 set(GDCM_MAJOR_VERSION 2)
 set(GDCM_MINOR_VERSION 7)
@@ -535,6 +523,11 @@ if(GDCM_STANDALONE)
   mark_as_advanced(GDCM_USE_ACTIVIZ)
   option(GDCM_USE_JPEGLS "Build GDCM with JPEG-LS support" ON)
   mark_as_advanced(GDCM_USE_JPEGLS)
+  if(GDCM_WRAP_JAVA)
+    set(GDCM_JAVA_SOURCE_VERSION "1.5" CACHE STRING "javac source version")
+    set(GDCM_JAVA_TARGET_VERSION "1.5" CACHE STRING "javac target version")
+    mark_as_advanced(GDCM_JAVA_SOURCE_VERSION GDCM_JAVA_TARGET_VERSION)
+  endif()
   if(GDCM_WRAP_CSHARP)
     find_package(CSharp REQUIRED)
     include(${CSharp_USE_FILE})
