@@ -17,6 +17,7 @@
 
 int TestSequenceOfItems3Func(const char * filename, bool verbose = false)
 {
+  (void)verbose;
   gdcm::Reader r;
   r.SetFileName( filename );
   if( !r.Read() )

@@ -267,6 +267,7 @@ bool print73( gdcm::DataSet const & ds10, gdcm::SequenceOfItems *sqi_dict, std::
 
 bool print36( gdcm::DataSet const & ds10, gdcm::SequenceOfItems *sqi_dict, std::string const & indent )
 {
+  (void)sqi_dict;
   const gdcm::PrivateTag tseq_values36(0x7fe1,0x36,"GEMS_Ultrasound_MovieGroup_001");
   if( !ds10.FindDataElement( tseq_values36 ) )
     {

@@ -1429,62 +1429,64 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
       (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
     (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
 */
-    const Tag tfgs(0x5200,0x9229);
-    SmartPointer<SequenceOfItems> sqi;
-    if( !ds.FindDataElement( tfgs ) )
       {
-      sqi = new SequenceOfItems;
-      DataElement de( tfgs );
-      de.SetVR( VR::SQ );
-      de.SetValue( *sqi );
-      de.SetVLToUndefined();
-      ds.Insert( de );
-      }
-    //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
-    sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
-    sqi->SetLengthToUndefined();
+        const Tag tfgs(0x5200,0x9229);
+        SmartPointer<SequenceOfItems> sqi;
+        if( !ds.FindDataElement( tfgs ) )
+        {
+          sqi = new SequenceOfItems;
+          DataElement de( tfgs );
+          de.SetVR( VR::SQ );
+          de.SetValue( *sqi );
+          de.SetVLToUndefined();
+          ds.Insert( de );
+        }
+        //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+        sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
+        sqi->SetLengthToUndefined();
 
-    if( !sqi->GetNumberOfItems() )
-      {
-      Item item; //( Tag(0xfffe,0xe000) );
-      item.SetVLToUndefined();
-      sqi->AddItem( item );
-      }
-    Item &item1 = sqi->GetItem(1);
-    DataSet &subds = item1.GetNestedDataSet();
-    const Tag tpms(0x0028,0x9110);
-    if( !subds.FindDataElement( tpms ) )
-      {
-      SequenceOfItems *sqi2 = new SequenceOfItems;
-      DataElement de( tpms );
-      de.SetVR( VR::SQ );
-      de.SetValue( *sqi2 );
-      de.SetVLToUndefined();
-      subds.Insert( de );
-      }
+        if( !sqi->GetNumberOfItems() )
+        {
+          Item item; //( Tag(0xfffe,0xe000) );
+          item.SetVLToUndefined();
+          sqi->AddItem( item );
+        }
+        Item &item1 = sqi->GetItem(1);
+        DataSet &subds = item1.GetNestedDataSet();
+        const Tag tpms(0x0028,0x9110);
+        if( !subds.FindDataElement( tpms ) )
+        {
+          SequenceOfItems *sqi2 = new SequenceOfItems;
+          DataElement de( tpms );
+          de.SetVR( VR::SQ );
+          de.SetValue( *sqi2 );
+          de.SetVLToUndefined();
+          subds.Insert( de );
+        }
 
-    //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
-    sqi = subds.GetDataElement( tpms ).GetValueAsSQ();
-    sqi->SetLengthToUndefined();
+        //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+        sqi = subds.GetDataElement( tpms ).GetValueAsSQ();
+        sqi->SetLengthToUndefined();
 
-    if( !sqi->GetNumberOfItems() )
-      {
-      Item item; //( Tag(0xfffe,0xe000) );
-      item.SetVLToUndefined();
-      sqi->AddItem( item );
+        if( !sqi->GetNumberOfItems() )
+        {
+          Item item; //( Tag(0xfffe,0xe000) );
+          item.SetVLToUndefined();
+          sqi->AddItem( item );
+        }
+        Item &item2 = sqi->GetItem(1);
+        DataSet &subds2 = item2.GetNestedDataSet();
+
+        // <entry group="0028" element="9110" vr="SQ" vm="1" name="Pixel Measures Sequence"/>
+        // do not set a slice thickness since GDCM always recompute it from the IOP/IPP
+        //Attribute<0x0018,0x0050> at2;
+        //at2.SetValue( spacing[2] );
+        Attribute<0x0028,0x0030> at1;
+        at1.SetValue( spacing[1], 0 );
+        at1.SetValue( spacing[0], 1 );
+        subds2.Replace( at1.GetAsDataElement() );
+        //subds2.Replace( at2.GetAsDataElement() );
       }
-    Item &item2 = sqi->GetItem(1);
-    DataSet &subds2 = item2.GetNestedDataSet();
-
-    // <entry group="0028" element="9110" vr="SQ" vm="1" name="Pixel Measures Sequence"/>
-    // do not set a slice thickness since GDCM always recompute it from the IOP/IPP
-    //Attribute<0x0018,0x0050> at2;
-    //at2.SetValue( spacing[2] );
-    Attribute<0x0028,0x0030> at1;
-    at1.SetValue( spacing[1], 0 );
-    at1.SetValue( spacing[0], 1 );
-    subds2.Replace( at1.GetAsDataElement() );
-    //subds2.Replace( at2.GetAsDataElement() );
     // cleanup per-frame
     {
       const Tag tfgs(0x5200,0x9230);
@@ -1862,54 +1864,56 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
       (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
     (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
 */
-    const Tag tfgs(0x5200,0x9229);
-    SmartPointer<SequenceOfItems> sqi;
-    if( !ds.FindDataElement( tfgs ) )
       {
-      sqi = new SequenceOfItems;
-      DataElement de( tfgs );
-      de.SetVR( VR::SQ );
-      de.SetValue( *sqi );
-      de.SetVLToUndefined();
-      ds.Insert( de );
-      }
-    //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
-    sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
-    sqi->SetLengthToUndefined();
+        const Tag tfgs(0x5200,0x9229);
+        SmartPointer<SequenceOfItems> sqi;
+        if( !ds.FindDataElement( tfgs ) )
+        {
+          sqi = new SequenceOfItems;
+          DataElement de( tfgs );
+          de.SetVR( VR::SQ );
+          de.SetValue( *sqi );
+          de.SetVLToUndefined();
+          ds.Insert( de );
+        }
+        //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+        sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
+        sqi->SetLengthToUndefined();
 
-    if( !sqi->GetNumberOfItems() )
-      {
-      Item item; //( Tag(0xfffe,0xe000) );
-      item.SetVLToUndefined();
-      sqi->AddItem( item );
-      }
-    Item &item1 = sqi->GetItem(1);
-    DataSet &subds = item1.GetNestedDataSet();
-    const Tag tpms(0x0020,0x9116);
-    if( !subds.FindDataElement( tpms ) )
-      {
-      SequenceOfItems *sqi2 = new SequenceOfItems;
-      DataElement de( tpms );
-      de.SetVR( VR::SQ );
-      de.SetValue( *sqi2 );
-      de.SetVLToUndefined();
-      subds.Insert( de );
-      }
+        if( !sqi->GetNumberOfItems() )
+        {
+          Item item; //( Tag(0xfffe,0xe000) );
+          item.SetVLToUndefined();
+          sqi->AddItem( item );
+        }
+        Item &item1 = sqi->GetItem(1);
+        DataSet &subds = item1.GetNestedDataSet();
+        const Tag tpms(0x0020,0x9116);
+        if( !subds.FindDataElement( tpms ) )
+        {
+          SequenceOfItems *sqi2 = new SequenceOfItems;
+          DataElement de( tpms );
+          de.SetVR( VR::SQ );
+          de.SetValue( *sqi2 );
+          de.SetVLToUndefined();
+          subds.Insert( de );
+        }
 
-    //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
-    sqi = subds.GetDataElement( tpms ).GetValueAsSQ();
-    sqi->SetLengthToUndefined();
+        //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+        sqi = subds.GetDataElement( tpms ).GetValueAsSQ();
+        sqi->SetLengthToUndefined();
 
-    if( !sqi->GetNumberOfItems() )
-      {
-      Item item; //( Tag(0xfffe,0xe000) );
-      item.SetVLToUndefined();
-      sqi->AddItem( item );
+        if( !sqi->GetNumberOfItems() )
+        {
+          Item item; //( Tag(0xfffe,0xe000) );
+          item.SetVLToUndefined();
+          sqi->AddItem( item );
+        }
+        Item &item2 = sqi->GetItem(1);
+        DataSet &subds2 = item2.GetNestedDataSet();
+
+        subds2.Replace( iop.GetAsDataElement() );
       }
-    Item &item2 = sqi->GetItem(1);
-    DataSet &subds2 = item2.GetNestedDataSet();
-
-    subds2.Replace( iop.GetAsDataElement() );
     // cleanup per-frame
     {
       const Tag tfgs(0x5200,0x9230);
@@ -1977,59 +1981,61 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
       (fffe,e00d) na (ItemDelimitationItem)                   #   0, 0 ItemDelimitationItem
     (fffe,e0dd) na (SequenceDelimitationItem)               #   0, 0 SequenceDelimitationItem
 */
-    const Tag tfgs(0x5200,0x9229);
-    SmartPointer<SequenceOfItems> sqi;
-    if( !ds.FindDataElement( tfgs ) )
       {
-      sqi = new SequenceOfItems;
-      DataElement de( tfgs );
-      de.SetVR( VR::SQ );
-      de.SetValue( *sqi );
-      de.SetVLToUndefined();
-      ds.Insert( de );
-      }
-    //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
-    sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
-    sqi->SetLengthToUndefined();
+        const Tag tfgs(0x5200,0x9229);
+        SmartPointer<SequenceOfItems> sqi;
+        if( !ds.FindDataElement( tfgs ) )
+        {
+          sqi = new SequenceOfItems;
+          DataElement de( tfgs );
+          de.SetVR( VR::SQ );
+          de.SetValue( *sqi );
+          de.SetVLToUndefined();
+          ds.Insert( de );
+        }
+        //sqi = (SequenceOfItems*)ds.GetDataElement( tfgs ).GetSequenceOfItems();
+        sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
+        sqi->SetLengthToUndefined();
 
-    if( !sqi->GetNumberOfItems() )
-      {
-      Item item; //( Tag(0xfffe,0xe000) );
-      item.SetVLToUndefined();
-      sqi->AddItem( item );
-      }
-    Item &item1 = sqi->GetItem(1);
-    DataSet &subds = item1.GetNestedDataSet();
-    const Tag tpms(0x0028,0x9145);
-    if( !subds.FindDataElement( tpms ) )
-      {
-      SequenceOfItems *sqi2 = new SequenceOfItems;
-      DataElement de( tpms );
-      de.SetVR( VR::SQ );
-      de.SetValue( *sqi2 );
-      de.SetVLToUndefined();
-      subds.Insert( de );
-      }
+        if( !sqi->GetNumberOfItems() )
+        {
+          Item item; //( Tag(0xfffe,0xe000) );
+          item.SetVLToUndefined();
+          sqi->AddItem( item );
+        }
+        Item &item1 = sqi->GetItem(1);
+        DataSet &subds = item1.GetNestedDataSet();
+        const Tag tpms(0x0028,0x9145);
+        if( !subds.FindDataElement( tpms ) )
+        {
+          SequenceOfItems *sqi2 = new SequenceOfItems;
+          DataElement de( tpms );
+          de.SetVR( VR::SQ );
+          de.SetValue( *sqi2 );
+          de.SetVLToUndefined();
+          subds.Insert( de );
+        }
 
-    //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
-    sqi = subds.GetDataElement( tpms ).GetValueAsSQ();
-    sqi->SetLengthToUndefined();
+        //sqi = (SequenceOfItems*)subds.GetDataElement( tpms ).GetSequenceOfItems();
+        sqi = subds.GetDataElement( tpms ).GetValueAsSQ();
+        sqi->SetLengthToUndefined();
 
-    if( !sqi->GetNumberOfItems() )
-      {
-      Item item; //( Tag(0xfffe,0xe000) );
-      item.SetVLToUndefined();
-      sqi->AddItem( item );
+        if( !sqi->GetNumberOfItems() )
+        {
+          Item item; //( Tag(0xfffe,0xe000) );
+          item.SetVLToUndefined();
+          sqi->AddItem( item );
+        }
+        Item &item2 = sqi->GetItem(1);
+        DataSet &subds2 = item2.GetNestedDataSet();
+
+        Attribute<0x0028,0x1052> at1;
+        at1.SetValue( img.GetIntercept() );
+        subds2.Insert( at1.GetAsDataElement() );
+        Attribute<0x0028,0x1053> at2;
+        at2.SetValue( img.GetSlope() );
+        subds2.Insert( at2.GetAsDataElement() );
       }
-    Item &item2 = sqi->GetItem(1);
-    DataSet &subds2 = item2.GetNestedDataSet();
-
-    Attribute<0x0028,0x1052> at1;
-    at1.SetValue( img.GetIntercept() );
-    subds2.Insert( at1.GetAsDataElement() );
-    Attribute<0x0028,0x1053> at2;
-    at2.SetValue( img.GetSlope() );
-    subds2.Insert( at2.GetAsDataElement() );
 
     // cleanup per-frame
     {
@@ -2189,12 +2195,14 @@ bool ImageHelper::GetRealWorldValueMappingContent(File const & f, RealWorldValue
 			  const DataSet & subds0 = item0.GetNestedDataSet();
 			  //const Tag trwvi(0x0040,0x9224); // Real World Value Intercept
 			  //const Tag trwvs(0x0040,0x9225); // Real World Value Slope
-			  Attribute<0x0040,0x9224> at1 = {0};
-			  at1.SetFromDataSet( subds0 );
-			  Attribute<0x0040,0x9225> at2 = {1};
-			  at2.SetFromDataSet( subds0 );
-			  ret.RealWorldValueIntercept = at1.GetValue();
-			  ret.RealWorldValueSlope = at2.GetValue();
+        {
+          Attribute<0x0040,0x9224> at1 = {0};
+          at1.SetFromDataSet( subds0 );
+          Attribute<0x0040,0x9225> at2 = {1};
+          at2.SetFromDataSet( subds0 );
+          ret.RealWorldValueIntercept = at1.GetValue();
+          ret.RealWorldValueSlope = at2.GetValue();
+        }
 			  const Tag tmucs(0x0040,0x08ea); // Measurement Units Code Sequence
 			  if( subds0.FindDataElement( tmucs ) )
 			  {
