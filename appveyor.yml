@@ -112,7 +112,7 @@ before_deploy:
 # providers: Local, FTP, WebDeploy, AzureCS, AzureBlob, S3, NuGet, Environment
 # provider names are case-sensitive!
 deploy:
-  # Deploy to GitHub Releases
+  # Deploy to GitHub Releases http://www.appveyor.com/docs/deployment/github
   - provider: GitHub
     auth_token:
       secure: 7HmfZp9O7bVdQo2hRk6FjOUs7jJosftv2rZ6JPBNzjPcAOMXDTvLqv3lvzdAzBfy # your encrypted token from GitHub
