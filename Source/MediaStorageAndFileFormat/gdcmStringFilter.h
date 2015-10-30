@@ -54,8 +54,6 @@ public:
   /// Directly from a Tag:
   std::pair<std::string, std::string> ToStringPair(const Tag& t) const;
 
-  GDCM_LEGACY(std::string FromString(const Tag&t, const char * value, VL const & vl))
-
   /// Convert to string the char array defined by the pair (value,len)
   std::string FromString(const Tag&t, const char * value, size_t len);
 
