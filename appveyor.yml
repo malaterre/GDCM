@@ -56,20 +56,65 @@ install:
   - git submodule update --init --recursive
   - choco install swig
   - swig -version
+  # https://chocolatey.org/packages/nsis.install/
+  - choco install nsis.install -pre
 
+# scripts to run before build
 before_build:
   - cmake -Wno-dev -G"%VS_GEN%" -DCMAKE_BUILD_TYPE=%CONFIG% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%B_NAME% -DGDCM_WRAP_CSHARP:BOOL=ON -DGDCM_WRAP_JAVA:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_USE_PVRG:BOOL=ON -DGDCM_JAVA_SOURCE_VERSION:STRING=1.7 -DGDCM_JAVA_TARGET_VERSION:STRING=1.7 .
+  - ctest -D ExperimentalStart -C %CONFIG%
 
+# scripts to run after build
+after_build:
+
+# to run your custom scripts instead of automatic MSBuild
 build_script:
   - echo %CONFIG%
   # NUMBER_OF_PROCESSORS=2
   # msbuild /m => parallel
   #- msbuild gdcm.sln /m /p:Configuration=%config% /toolsversion:14.0 /p:Platform=x64 /p:PlatformToolset=v140
   # Do not run Test=Update/Configure, only Start/Build/Test/Submit (TODO: Coverage)
-  - ctest -D ExperimentalStart -C %CONFIG%
   - ctest -D ExperimentalBuild -j2 -C %CONFIG%
+
+# scripts to run before tests
+before_test:
+  - echo script1
+
+# scripts to run after tests
+after_test:
+
+# to run your custom scripts instead of automatic tests
+test_script:
   - ctest -D ExperimentalTest -j2 -C %CONFIG% || true
   - ctest -D ExperimentalSubmit -C %CONFIG%
 
-test: off
-deploy: off
+#---------------------------------#
+#     deployment configuration    #
+#---------------------------------#
+
+# scripts to run before deployment
+before_deploy:
+  # create NSIS installer
+  - cpack -G NSIS
+  # create binary zip
+  - cpack -G ZIP
+  # create source zip
+  - cpack -G ZIP --config CPackSourceConfig.cmake
+
+# scripts to run after deployment
+#after_deploy:
+
+# to run your custom scripts instead of provider deployments
+#deploy_script:
+
+# providers: Local, FTP, WebDeploy, AzureCS, AzureBlob, S3, NuGet, Environment
+# provider names are case-sensitive!
+deploy:
+  # Deploy to GitHub Releases
+  - provider: GitHub
+    artifact: /.*\.exe           # upload all NuGet packages to release assets
+    draft: true
+    prerelease: true
+    on:
+      branch: master                # release from master branch only
+      appveyor_repo_tag: false      # deploy on tag push only
