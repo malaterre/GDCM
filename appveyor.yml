@@ -48,9 +48,7 @@ init:
   # https://github.com/chocolatey/chocolatey/issues/431
   - cmake -E remove -f c:\programdata\chocolatey\bin\cpack.exe
 
-# check nmake ?
-#- call "c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-#- cl
+# check ninja ? 
 
 # scripts that run after cloning repository
 install:
@@ -59,7 +57,9 @@ install:
   - choco install swig
   - swig -version
   # https://chocolatey.org/packages/nsis.install/
+  # the other one does not seems to be supported
   - choco install nsis.install -pre
+  - choco install ninja
 
 # scripts to run before build
 before_build:
@@ -73,8 +73,6 @@ after_build:
 build_script:
   - echo %CONFIG%
   # NUMBER_OF_PROCESSORS=2
-  # msbuild /m => parallel
-  #- msbuild gdcm.sln /m /p:Configuration=%config% /toolsversion:14.0 /p:Platform=x64 /p:PlatformToolset=v140
   # Do not run Test=Update/Configure, only Start/Build/Test/Submit (TODO: Coverage)
   - ctest -D ExperimentalBuild -j2 -C %CONFIG%
 
