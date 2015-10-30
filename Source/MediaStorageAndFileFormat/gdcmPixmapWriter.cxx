@@ -230,9 +230,6 @@ Attribute<0x0028,0x0004> piat;
     }
 }
 
-// TODO: remove me
-bool PrepareWrite(){ return false; }
-
 bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
 {
   File& file = GetFile();

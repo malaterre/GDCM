@@ -55,7 +55,6 @@ public:
 
 protected:
   void DoIconImage(DataSet & ds, Pixmap const & image);
-  bool PrepareWrite();
   bool PrepareWrite( MediaStorage const & refms );
 
   SmartPointer<Pixmap> PixelData;
