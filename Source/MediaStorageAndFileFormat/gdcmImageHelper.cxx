@@ -666,7 +666,7 @@ bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<dou
         }
       }
     }
-  return true;
+  return intercept || slope;
 }
 
 
@@ -890,10 +890,13 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
  || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
  || ForceRescaleInterceptSlope
   )
-    {
+  {
     bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
-    gdcmAssertMacro( b ); (void)b;
+    if( !b )
+    {
+      gdcmDebugMacro( "No Modality LUT found (Rescale Intercept/Slope)" );
     }
+  }
   else if ( ms == MediaStorage::MRImageStorage )
   {
 #if 0
@@ -952,7 +955,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       if( GetRescaleInterceptSlopeValueFromDataSet(ds, dummy) )
         {
         // for everyone else, read your DCS, and set: ForceRescaleInterceptSlope = true if needed
-        gdcmWarningMacro( "Modality LUT found for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
+        gdcmDebugMacro( "Modality LUT found for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
         }
       }
 #endif
