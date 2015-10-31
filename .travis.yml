@@ -58,6 +58,6 @@ addons:
       name: "malaterre/GDCM"
       description: "Grassroots DICOM"
     notification_email: mathieu.malaterre@gmail.com
-    build_command_prepend: cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON .
+    build_command_prepend: cmake -G 'Unix Makefiles' -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON .
     build_command: make
     branch_pattern: coverity_scan
