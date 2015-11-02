@@ -103,7 +103,7 @@ artifacts:
   - path: GDCM-2.7.0-Windows-*.exe
     name: installer
   - path: GDCM-2.7.0-Windows-*.zip
-    name: zip executable
+    name: zip_executable
     type: zip
 #  - path: gdcm\gdcm-2.7.0.zip
 #    name: zip source
@@ -131,7 +131,7 @@ deploy:
       secure: 7HmfZp9O7bVdQo2hRk6FjOUs7jJosftv2rZ6JPBNzjPcAOMXDTvLqv3lvzdAzBfy
     release: gdcm-v$(appveyor_build_version)
     description: 'Release description'
-    artifact: installer,zip executable #,zip source
+    artifact: installer,zip_executable #,zip source
     draft: false
     prerelease: true
     on:
