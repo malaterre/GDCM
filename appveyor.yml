@@ -114,7 +114,7 @@ deploy:
   - provider: GitHub
     auth_token:
       secure: 7HmfZp9O7bVdQo2hRk6FjOUs7jJosftv2rZ6JPBNzjPcAOMXDTvLqv3lvzdAzBfy
-    release: myproduct-v$(appveyor_build_version)
+    release: gdcm-v$(appveyor_build_version)
     description: 'Release description'
     artifact: /.*\.exe/           # upload all NuGet packages to release assets
     draft: false
