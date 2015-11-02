@@ -6,7 +6,7 @@
 #ifndef CHARLS_CONTEXT
 #define CHARLS_CONTEXT
 
-#include <cmath>
+#include <cstdlib>
 
 //
 // JlsContext: a JPEG-LS context with it's current statistics.
