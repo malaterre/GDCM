@@ -63,7 +63,7 @@ install:
 
 # scripts to run before build
 before_build:
-  - cmake -Wno-dev -G"%VS_GEN%" -DCMAKE_BUILD_TYPE=%CONFIG% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%B_NAME% -DGDCM_WRAP_CSHARP:BOOL=ON -DGDCM_WRAP_JAVA:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_USE_PVRG:BOOL=ON -DGDCM_JAVA_SOURCE_VERSION:STRING=1.7 -DGDCM_JAVA_TARGET_VERSION:STRING=1.7 .
+  - cmake -Wno-dev -G"%VS_GEN%" -DCMAKE_BUILD_TYPE=%CONFIG% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%B_NAME% -DGDCM_WRAP_CSHARP:BOOL=ON -DGDCM_WRAP_JAVA:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_USE_PVRG:BOOL=ON -DGDCM_JAVA_SOURCE_VERSION:STRING=1.7 -DGDCM_JAVA_TARGET_VERSION:STRING=1.7 .
   - ctest -D ExperimentalStart -C %CONFIG%
 
 # scripts to run after build
@@ -73,7 +73,7 @@ after_build:
   # create binary zip
   - cpack -G ZIP -C %CONFIG%
   # create source zip
-  - cpack -G ZIP -C %CONFIG% --config CPackSourceConfig.cmake
+  #- cpack -G ZIP -C %CONFIG% --config CPackSourceConfig.cmake
   # I've move cpack stuff before artifacts (and before deploy)
 
 # to run your custom scripts instead of automatic MSBuild
@@ -105,9 +105,9 @@ artifacts:
   - path: gdcm\GDCM-2.7.0-Windows-*.zip
     name: zip executable
     type: zip
-  - path: gdcm\gdcm-2.7.0.zip
-    name: zip source
-    type: zip
+#  - path: gdcm\gdcm-2.7.0.zip
+#    name: zip source
+#    type: zip
 
 #---------------------------------#
 #     deployment configuration    #
@@ -131,7 +131,7 @@ deploy:
       secure: 7HmfZp9O7bVdQo2hRk6FjOUs7jJosftv2rZ6JPBNzjPcAOMXDTvLqv3lvzdAzBfy
     release: gdcm-v$(appveyor_build_version)
     description: 'Release description'
-    artifact: installer,zip executable,zip source
+    artifact: installer,zip executable #,zip source
     draft: false
     prerelease: true
     on:
