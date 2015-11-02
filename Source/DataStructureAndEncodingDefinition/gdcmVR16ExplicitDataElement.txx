@@ -301,7 +301,8 @@ std::istream &VR16ExplicitDataElement::ReadValue(std::istream &is, bool readvalu
 template <typename TSwap>
 std::istream &VR16ExplicitDataElement::ReadWithLength(std::istream &is, VL & length)
 {
-  return Read<TSwap>(is); (void)length;
+  (void)length;
+  return Read<TSwap>(is);
 }
 
 

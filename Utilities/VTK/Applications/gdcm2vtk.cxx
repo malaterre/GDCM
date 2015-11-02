@@ -674,12 +674,9 @@ int main(int argc, char *argv[])
     else if(  gdcm::System::StrCaseCmp(outputextension,".mha") == 0 ||
               gdcm::System::StrCaseCmp(outputextension,".mhd") == 0  ) // vtkMetaImageReader::GetFileExtensions()
       {
-      //vtkImageCast * cast = vtkImageCast::New();
-      //cast->SetInput( imgdata );
-      //cast->SetOutputScalarTypeToShort ();
-
       // Weird, the writer does not offer the same API as the Reader, for instance
       // One cannot set the patient name to store (see vtkMetaImageReader::GetPatientName ...)
+      // worse I cannot even set the transform ! Which means Reader -> Writer just breaks everything -sigh-
       vtkMetaImageWriter * writer = vtkMetaImageWriter::New();
       writer->SetFileName( outfilename );
 #if (VTK_MAJOR_VERSION >= 6)
@@ -687,7 +684,6 @@ int main(int argc, char *argv[])
 #else
       writer->SetInput( imgdata );
 #endif
-      //writer->SetInput( cast->GetOutput() );
       writer->SetCompression( compress );
       //writer->FileLowerLeftOff(); // not used in the implementation
       writer->Write();
