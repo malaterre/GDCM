@@ -116,7 +116,15 @@ deploy:
       secure: 7HmfZp9O7bVdQo2hRk6FjOUs7jJosftv2rZ6JPBNzjPcAOMXDTvLqv3lvzdAzBfy
     release: gdcm-v$(appveyor_build_version)
     description: 'Release description'
-    artifact: /.*\.exe/           # upload all NuGet packages to release assets
+    artifacts:
+      - path: gdcm\GDCM-2.7.0-Windows-*.exe
+        name: installer
+      - path: gdcm\GDCM-2.7.0-Windows-*.zip
+        name: zip executable
+        type: zip
+      - path: gdcm\gdcm-2.7.0.zip
+        name: zip source
+        type: zip
     draft: false
     prerelease: true
     on:
