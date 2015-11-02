@@ -226,7 +226,8 @@ std::istream &UNExplicitDataElement::ReadValue(std::istream &is, bool readvalues
 template <typename TSwap>
 std::istream &UNExplicitDataElement::ReadWithLength(std::istream &is, VL & length)
 {
-  return Read<TSwap>(is); (void)length;
+  (void)length;
+  return Read<TSwap>(is);
 }
 
 
