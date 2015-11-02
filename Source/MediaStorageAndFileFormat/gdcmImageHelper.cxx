@@ -2125,11 +2125,11 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     ds.Remove( Tag(0x28,0x1053) );
     ds.Remove( Tag(0x28,0x1054) );
 #else
-    if( img.GetIntercept() != 0.0 || img.GetSlope() != 1.0 )
+    //if( img.GetIntercept() != 0.0 || img.GetSlope() != 1.0 )
     {
       if( ForceRescaleInterceptSlope )
       {
-        gdcmDebugMacro( "MR Image Storage should not use Modality LUT: [" << img.GetIntercept() << "," << img.GetSlope() );
+        gdcmDebugMacro( "Forcing MR Image Storage / Modality LUT: [" << img.GetIntercept() << "," << img.GetSlope() );
         Attribute<0x0028,0x1052> at1;
         at1.SetValue( img.GetIntercept() );
         ds.Replace( at1.GetAsDataElement() );
