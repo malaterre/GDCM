@@ -101,11 +101,30 @@ before_deploy:
   # create source zip
   - cpack -G ZIP -C %CONFIG% --config CPackSourceConfig.cmake
 
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
+
+artifacts:
+  - path: gdcm/GDCM-2.7.0-Windows-*.exe
+    name: installer
+  - path: gdcm/GDCM-2.7.0-Windows-*.zip
+    name: zip executable
+    type: zip
+  - path: gdcm/gdcm-2.7.0.zip
+    name: zip source
+    type: zip
+
+#---------------------------------#
+#     deployment configuration    #
+#---------------------------------#
+
 # scripts to run after deployment
 #after_deploy:
 
 # to run your custom scripts instead of provider deployments
 #deploy_script:
+
 
 # providers: Local, FTP, WebDeploy, AzureCS, AzureBlob, S3, NuGet, Environment
 # provider names are case-sensitive!
@@ -116,15 +135,6 @@ deploy:
       secure: 7HmfZp9O7bVdQo2hRk6FjOUs7jJosftv2rZ6JPBNzjPcAOMXDTvLqv3lvzdAzBfy
     release: gdcm-v$(appveyor_build_version)
     description: 'Release description'
-    artifacts:
-      - path: gdcm/GDCM-2.7.0-Windows-*.exe
-        name: installer
-      - path: gdcm/GDCM-2.7.0-Windows-*.zip
-        name: zip executable
-        type: zip
-      - path: gdcm/gdcm-2.7.0.zip
-        name: zip source
-        type: zip
     draft: false
     prerelease: true
     on:
