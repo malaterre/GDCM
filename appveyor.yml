@@ -1,16 +1,36 @@
-version: 2.7.0.{build}
+# appveyor file
+# http://www.appveyor.com/docs/appveyor-yml
+
+# Set build version format here instead of in the admin panel.
+version: 2.6.2.{build}
+
+# http://www.appveyor.com/docs/build-cache#caching-chocolatey-packages
+cache:
+  - C:\ProgramData\chocolatey\bin -> appveyor.yml
+  - C:\ProgramData\chocolatey\lib -> appveyor.yml
 
 environment:
   matrix:
-  - VS_GEN: Visual Studio 14 2015
-    CONFIG: RelWithDebInfo
-    B_NAME: Win32
-  - VS_GEN: Visual Studio 14 2015 Win64
+  - VS_GEN: Visual Studio 10 2010
     CONFIG: Release
-    B_NAME: Win64
-  - VS_GEN: Visual Studio 14 2015 ARM
-    CONFIG: Debug
-    B_NAME: ARM
+    B_NAME: Windows-x86
+    DO_REL: true
+  - VS_GEN: Visual Studio 10 2010 Win64
+    CONFIG: Release
+    B_NAME: Windows-x86_64
+    DO_REL: true
+#  - VS_GEN: Visual Studio 14 2015 Win64
+#    CONFIG: Release
+#    B_NAME: Win64
+#  - VS_GEN: MinGW Makefiles
+#    CONFIG: None
+#    B_NAME: MinGW
+#  - VS_GEN: MSYS Makefiles
+#    CONFIG: None
+#    B_NAME: Msys
+#  - VS_GEN: Visual Studio 14 2015 ARM
+#    CONFIG: Debug
+#    B_NAME: ARM
 
 matrix:
   fast_finish: true
@@ -20,7 +40,9 @@ os: Visual Studio 2015
 branches:
   except:
   - coverity_scan
-skip_tags: true
+
+#You can disable builds on new tags through UI (General tab of project settings) or in appveyor.yml:
+#skip_tags: true
 
 # scripts that are called at very beginning, before repo cloning
 init:
@@ -30,31 +52,104 @@ init:
   - cmake --version
   - python --version
   - java -version
-
-# check nmake ?
-#- call "c:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-#- cl
+  # https://github.com/chocolatey/chocolatey/issues/431
+  #- cmake -E remove -f c:\programdata\chocolatey\bin\cpack.exe
+  - del c:\programdata\chocolatey\bin\cpack.exe
 
 # scripts that run after cloning repository
 install:
   # Fetch submodules
-  - git submodule update --init --recursive
+  #- git submodule update --init --recursive
   - choco install swig
   - swig -version
+  # https://chocolatey.org/packages/nsis.install/
+  # the other one does not seems to be supported
+  - choco install nsis.install -pre
+  #- choco install -y nsis
+  - choco install ninja
+  # Set VC variables for the platform
+  #  - if %PLATFORM% == x64 call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\vcvarsx86_amd64.bat"
+  #  - if %PLATFORM% == x86 call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\vcvars32.bat"
 
+on_failure:
+  # Display error log file if generated
+  - if exist C:\ProgramData\chocolatey\logs\chocolatey.log type C:\ProgramData\chocolatey\logs\chocolatey.log
+
+# scripts to run before build
 before_build:
-  - cmake -Wno-dev -G"%VS_GEN%" -DCMAKE_BUILD_TYPE=%CONFIG% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%B_NAME% -DGDCM_WRAP_CSHARP:BOOL=ON -DGDCM_WRAP_JAVA:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_USE_PVRG:BOOL=ON .
+  - cmake -Wno-dev -G"%VS_GEN%" -DCMAKE_BUILD_TYPE=%CONFIG% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%B_NAME% -DGDCM_WRAP_CSHARP:BOOL=ON -DGDCM_WRAP_JAVA:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_USE_PVRG:BOOL=ON -DGDCM_JAVA_SOURCE_VERSION:STRING=1.7 -DGDCM_JAVA_TARGET_VERSION:STRING=1.7 -DCPACK_SYSTEM_NAME:STRING=%B_NAME% .
+  - ctest -D ExperimentalStart -C %CONFIG%
 
+# scripts to run after build
+after_build:
+  # create NSIS installer
+  - cpack -G NSIS -C %CONFIG%
+  # create binary zip
+  - cpack -G ZIP -C %CONFIG%
+  # create source zip
+  #- cpack -G ZIP -C %CONFIG% --config CPackSourceConfig.cmake
+  # I've move cpack stuff before artifacts (and before deploy)
+
+# to run your custom scripts instead of automatic MSBuild
 build_script:
   - echo %CONFIG%
-  # NUMBER_OF_PROCESSORS=2
-  # msbuild /m => parallel
-  #- msbuild gdcm.sln /m /p:Configuration=%config% /toolsversion:14.0 /p:Platform=x64 /p:PlatformToolset=v140
+  - echo %NUMBER_OF_PROCESSORS%
   # Do not run Test=Update/Configure, only Start/Build/Test/Submit (TODO: Coverage)
-  - ctest -D ExperimentalStart -C %CONFIG%
-  - ctest -D ExperimentalBuild -j2 -C %CONFIG%
-  - ctest -D ExperimentalTest -j2 -C %CONFIG% || true
-  - ctest -D ExperimentalSubmit -C %CONFIG%
+  - ctest -D ExperimentalBuild -j2 -C %CONFIG% -Q
 
-test: off
-deploy: off
+# scripts to run before tests
+#before_test:
+#  - echo %APPVEYOR_REPO_TAG_NAME%
+#  - echo %APPVEYOR_REPO_TAG_NAME:~1%
+
+# scripts to run after tests
+after_test:
+
+# to run your custom scripts instead of automatic tests
+test_script:
+  - ctest -D ExperimentalTest -j2 -C %CONFIG% -Q || true
+  - ctest -D ExperimentalSubmit -C %CONFIG% -Q
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
+
+artifacts:
+  - path: GDCM-*-$(B_NAME).exe
+    name: installer
+  - path: GDCM-*-$(B_NAME).zip
+    name: zip_executable
+    type: zip
+
+#---------------------------------#
+#     deployment configuration    #
+#---------------------------------#
+
+# scripts to run before deployment
+#before_deploy:
+
+# scripts to run after deployment
+#after_deploy:
+
+# to run your custom scripts instead of provider deployments
+#deploy_script:
+
+# Deploy to GitHub Releases http://www.appveyor.com/docs/deployment/github
+# http://www.appveyor.com/docs/branches
+# AppVeyor sets APPVEYOR_REPO_TAG environment variable to distinguish regular
+# commits from tags - the value is True if tag was pushed; otherwise it's
+# False.  When it's True the name of tag is stored in APPVEYOR_REPO_TAG_NAME.
+deploy:
+  - provider: GitHub
+    auth_token:
+      secure: 7HmfZp9O7bVdQo2hRk6FjOUs7jJosftv2rZ6JPBNzjPcAOMXDTvLqv3lvzdAzBfy
+    release: $(appveyor_repo_tag_name)
+    description: 'Release of GDCM $(appveyor_repo_tag_name)'
+    # github automatically does source zip/tarball for us
+    artifact: installer,zip_executable
+    draft: false
+    prerelease: false
+    on:
+      branch: release               # release from release branch only
+      appveyor_repo_tag: true       # deploy on tag push only
+      do_rel: true
