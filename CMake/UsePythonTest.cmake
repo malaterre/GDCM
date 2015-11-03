@@ -48,7 +48,7 @@ macro(ADD_PYTHON_TEST TESTNAME FILENAME)
 "
   set(ENV{PYTHONPATH} ${pyenv}:\$ENV{PYTHONPATH})
   set(ENV{LD_LIBRARY_PATH} ${pyenv}:\$ENV{LD_LIBRARY_PATH})
-  message(\"${pyenv}\")
+  message(\"pyenv=${pyenv}\")
   execute_process(
     COMMAND ${PYTHON_EXECUTABLE} ${loc} ${wo_semicolumn}
     RESULT_VARIABLE import_res
