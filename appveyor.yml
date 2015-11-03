@@ -40,7 +40,8 @@ branches:
   - coverity_scan
 
 #You can disable builds on new tags through UI (General tab of project settings) or in appveyor.yml:
-#skip_tags: true
+# skip tag building since v2.7.0 will trigger an infinite loop
+skip_tags: true
 
 # scripts that are called at very beginning, before repo cloning
 init:
