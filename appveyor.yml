@@ -34,7 +34,7 @@ matrix:
   fast_finish: true
 
 # Operating system (build VM template)
-os: Visual Studio 2010
+os: Visual Studio 2015
 branches:
   except:
   - coverity_scan
