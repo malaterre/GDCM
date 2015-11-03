@@ -60,7 +60,15 @@ install:
   # https://chocolatey.org/packages/nsis.install/
   # the other one does not seems to be supported
   - choco install nsis.install -pre
+  #- choco install -y nsis
   - choco install ninja
+  # Set VC variables for the platform
+  #  - if %PLATFORM% == x64 call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\vcvarsx86_amd64.bat"
+  #  - if %PLATFORM% == x86 call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\vcvars32.bat"
+
+on_failure:
+  # Display error log file if generated
+  - if exist C:\ProgramData\chocolatey\logs\chocolatey.log type C:\ProgramData\chocolatey\logs\chocolatey.log
 
 # scripts to run before build
 before_build:
@@ -86,7 +94,8 @@ build_script:
 
 # scripts to run before tests
 before_test:
-  - echo script1
+  - echo %APPVEYOR_REPO_TAG_NAME%
+  - echo %APPVEYOR_REPO_TAG_NAME:~1%
 
 # scripts to run after tests
 after_test:
