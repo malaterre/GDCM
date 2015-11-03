@@ -38,7 +38,9 @@ os: Visual Studio 2015
 branches:
   except:
   - coverity_scan
-skip_tags: true
+
+#You can disable builds on new tags through UI (General tab of project settings) or in appveyor.yml:
+#skip_tags: true
 
 # scripts that are called at very beginning, before repo cloning
 init:
@@ -49,7 +51,8 @@ init:
   - python --version
   - java -version
   # https://github.com/chocolatey/chocolatey/issues/431
-  - cmake -E remove -f c:\programdata\chocolatey\bin\cpack.exe
+  #- cmake -E remove -f c:\programdata\chocolatey\bin\cpack.exe
+  - del c:\programdata\chocolatey\bin\cpack.exe
 
 # scripts that run after cloning repository
 install:
@@ -88,32 +91,31 @@ after_build:
 # to run your custom scripts instead of automatic MSBuild
 build_script:
   - echo %CONFIG%
-  # NUMBER_OF_PROCESSORS=2
+  - echo %NUMBER_OF_PROCESSORS%
   # Do not run Test=Update/Configure, only Start/Build/Test/Submit (TODO: Coverage)
-  - ctest -D ExperimentalBuild -j2 -C %CONFIG%
+  - ctest -D ExperimentalBuild -j2 -C %CONFIG% -Q
 
 # scripts to run before tests
-before_test:
-  - echo %APPVEYOR_REPO_TAG_NAME%
-  - echo %APPVEYOR_REPO_TAG_NAME:~1%
+#before_test:
+#  - echo %APPVEYOR_REPO_TAG_NAME%
+#  - echo %APPVEYOR_REPO_TAG_NAME:~1%
 
 # scripts to run after tests
 after_test:
 
 # to run your custom scripts instead of automatic tests
 test_script:
-  - ctest -D ExperimentalTest -j2 -C %CONFIG% || true
-  - ctest -D ExperimentalSubmit -C %CONFIG%
+  - ctest -D ExperimentalTest -j2 -C %CONFIG% -Q || true
+  - ctest -D ExperimentalSubmit -C %CONFIG% -Q
 
 #---------------------------------#
 #      artifacts configuration    #
 #---------------------------------#
 
 artifacts:
-  # could not figure out how to use %B_NAME%
-  - path: GDCM-2.7.0-Windows-*.exe
+  - path: GDCM-2.7.0-$(B_NAME).exe
     name: installer
-  - path: GDCM-2.7.0-Windows-*.zip
+  - path: GDCM-2.7.0-$(B_NAME).zip
     name: zip_executable
     type: zip
 
@@ -130,15 +132,18 @@ artifacts:
 # to run your custom scripts instead of provider deployments
 #deploy_script:
 
-# providers: Local, FTP, WebDeploy, AzureCS, AzureBlob, S3, NuGet, Environment
-# provider names are case-sensitive!
+# Deploy to GitHub Releases http://www.appveyor.com/docs/deployment/github
+# http://www.appveyor.com/docs/branches
+# AppVeyor sets APPVEYOR_REPO_TAG environment variable to distinguish regular
+# commits from tags - the value is True if tag was pushed; otherwise it's
+# False.  When it's True the name of tag is stored in APPVEYOR_REPO_TAG_NAME.
 deploy:
-  # Deploy to GitHub Releases http://www.appveyor.com/docs/deployment/github
   - provider: GitHub
     auth_token:
       secure: 7HmfZp9O7bVdQo2hRk6FjOUs7jJosftv2rZ6JPBNzjPcAOMXDTvLqv3lvzdAzBfy
-    release: gdcm-v$(appveyor_build_version) # name of the tag used
-    description: 'Release description $(appveyor_build_version)'
+    release: v$(appveyor_build_version) # name of the tag used
+    #release: $(appveyor_repo_tag_name)
+    description: 'Beta release of GDCM v$(appveyor_build_version)'
     # github automatically does source zip/tarball for us
     artifact: installer,zip_executable
     draft: false
