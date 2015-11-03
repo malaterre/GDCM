@@ -141,7 +141,8 @@ deploy:
   - provider: GitHub
     auth_token:
       secure: 7HmfZp9O7bVdQo2hRk6FjOUs7jJosftv2rZ6JPBNzjPcAOMXDTvLqv3lvzdAzBfy
-    release: v$(appveyor_build_version) # name of the tag used
+    #release: v$(appveyor_build_version) # name of the tag used
+    release: v2.7.0 # name of the tag used
     #release: $(appveyor_repo_tag_name)
     description: 'Beta release of GDCM v$(appveyor_build_version)'
     # github automatically does source zip/tarball for us
