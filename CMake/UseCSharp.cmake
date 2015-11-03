@@ -54,29 +54,34 @@ endif()
 
 # CMAKE_CSHARP_COMPILER /platform and anycpu
 if(WIN32)
-# There is a subttle issue when compiling on 64bits platform using a 32bits compiler
-# See bug ID: 3510023 (BadImageFormatException: An attempt was made to load a progr)
+  # There is a subttle issue when compiling on 64bits platform using a 32bits compiler
+  # See bug ID: 3510023 (BadImageFormatException: An attempt was made to load a progr)
+  set(CSC_ACCEPTS_PLATFORM_FLAG 0)
 
-set(CSC_ACCEPTS_PLATFORM_FLAG 0)
-
-if(CMAKE_CSHARP_COMPILER)
-  execute_process(COMMAND "${CMAKE_CSHARP_COMPILER}" "/?" OUTPUT_VARIABLE CSC_HELP)
-  # when cmd locale is in French it displays: "/platform:<chaine>" in english: "/platform:<string>"
-  # so only regex match in /platform:
-  if("${CSC_HELP}" MATCHES "/platform:")
-    set(CSC_ACCEPTS_PLATFORM_FLAG 1)
-  endif()
-endif()
-
-if(NOT DEFINED CSC_PLATFORM_FLAG)
-  set(CSC_PLATFORM_FLAG "")
-  if(CSC_ACCEPTS_PLATFORM_FLAG)
-    set(CSC_PLATFORM_FLAG "/platform:x86")
-    if("${CMAKE_SIZEOF_VOID_P}" GREATER 4)
-      set(CSC_PLATFORM_FLAG "/platform:x64")
+  if(CMAKE_CSHARP_COMPILER)
+    execute_process(COMMAND "${CMAKE_CSHARP_COMPILER}" "/?" OUTPUT_VARIABLE CSC_HELP)
+    # get version (no /version, so use /help output):
+    if("${CSC_HELP}" MATCHES "Compiler version")
+      string(REGEX MATCH "Compiler version (.*)"
+        comp_version "{CSC_HELP}")
+      message(STATUS "Comp version: ${comp_version}")
+    endif()
+    # when cmd locale is in French it displays: "/platform:<chaine>" in english: "/platform:<string>"
+    # so only regex match in /platform:
+    if("${CSC_HELP}" MATCHES "/platform:")
+      set(CSC_ACCEPTS_PLATFORM_FLAG 1)
     endif()
   endif()
-endif()
+
+  if(NOT DEFINED CSC_PLATFORM_FLAG)
+    set(CSC_PLATFORM_FLAG "")
+    if(CSC_ACCEPTS_PLATFORM_FLAG)
+      set(CSC_PLATFORM_FLAG "/platform:x86")
+      if("${CMAKE_SIZEOF_VOID_P}" GREATER 4)
+        set(CSC_PLATFORM_FLAG "/platform:x64")
+      endif()
+    endif()
+  endif()
 endif()
 
 
