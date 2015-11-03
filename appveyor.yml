@@ -58,15 +58,17 @@ init:
 
 # scripts that run after cloning repository
 install:
+  - set PATH=%PATH%;C:\Program Files (x86)\NSIS; # sometimes makensis cannot be found from the cache ...
   # Fetch submodules
   #- git submodule update --init --recursive
   - choco install swig
   - swig -version
   # https://chocolatey.org/packages/nsis.install/
   # the other one does not seems to be supported
-  - choco install nsis.install -pre
+  #- choco install nsis.install -pre
   #- choco install -y nsis
-  - choco install ninja
+  - choco install nsis -Version 2.460
+  #- choco install ninja
   # Set VC variables for the platform
   #  - if %PLATFORM% == x64 call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\vcvarsx86_amd64.bat"
   #  - if %PLATFORM% == x86 call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\vcvars32.bat"
