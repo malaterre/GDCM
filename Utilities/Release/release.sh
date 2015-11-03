@@ -122,8 +122,8 @@ make rebuild_cache
 make vtkgdcmDoxygenDoc
 check_exit_value $? "vtkgdcmDoxygenDoc did not return properly" || exit 1
 
+# https://sourceforge.net/p/forge/documentation/File%20Management/#rsync-over-ssh
 # Warning need to create /manually/ the subfolder:
-# https://sourceforge.net/project/admin/explorer.php?group_id=137895
 # https://sourceforge.net/projects/gdcm/files/gdcm%202.x/#folder-create
 
 rsync -e ssh GDCM-$version-Linux-x86_64.tar.gz          "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
