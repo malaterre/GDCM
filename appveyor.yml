@@ -101,9 +101,10 @@ test_script:
 #---------------------------------#
 
 artifacts:
-  - path: GDCM-2.7.0-%B_NAME%.exe
+  # could not figure out how to use %B_NAME%
+  - path: GDCM-2.7.0-Windows-*.exe
     name: installer
-  - path: GDCM-2.7.0-%B_NAME%.zip
+  - path: GDCM-2.7.0-Windows-*.zip
     name: zip_executable
     type: zip
 
