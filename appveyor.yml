@@ -13,10 +13,10 @@ environment:
   matrix:
   - VS_GEN: Visual Studio 10 2010
     CONFIG: Release
-    B_NAME: Win32
+    B_NAME: Windows-x86
   - VS_GEN: Visual Studio 10 2010 Win64
     CONFIG: Release
-    B_NAME: Win64
+    B_NAME: Windows-x86_64
 #  - VS_GEN: Visual Studio 14 2015 Win64
 #    CONFIG: Release
 #    B_NAME: Win64
@@ -101,14 +101,11 @@ test_script:
 #---------------------------------#
 
 artifacts:
-  - path: GDCM-2.7.0-Windows-*.exe
+  - path: GDCM-2.7.0-%B_NAME%.exe
     name: installer
-  - path: GDCM-2.7.0-Windows-*.zip
+  - path: GDCM-2.7.0-%B_NAME%.zip
     name: zip_executable
     type: zip
-#  - path: gdcm\gdcm-2.7.0.zip
-#    name: zip source
-#    type: zip
 
 #---------------------------------#
 #     deployment configuration    #
@@ -130,9 +127,10 @@ deploy:
   - provider: GitHub
     auth_token:
       secure: 7HmfZp9O7bVdQo2hRk6FjOUs7jJosftv2rZ6JPBNzjPcAOMXDTvLqv3lvzdAzBfy
-    release: gdcm-v$(appveyor_build_version)
+    release: gdcm-v$(appveyor_build_version) # name of the tag used
     description: 'Release description $(appveyor_build_version)'
-    artifact: installer,zip_executable #,zip source
+    # github automatically does source zip/tarball for us
+    artifact: installer,zip_executable
     draft: false
     prerelease: true
     on:
