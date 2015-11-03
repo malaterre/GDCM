@@ -62,9 +62,9 @@ if(WIN32)
     execute_process(COMMAND "${CMAKE_CSHARP_COMPILER}" "/?" OUTPUT_VARIABLE CSC_HELP)
     # get version (no /version, so use /help output):
     if("${CSC_HELP}" MATCHES "Compiler version")
-      string(REGEX MATCH "Compiler version (.*)"
-        comp_version "{CSC_HELP}")
-      message(STATUS "Comp version: ${comp_version}")
+      string(REGEX REPLACE ".*Compiler version ([0-9\.]+).*" "\\1" VERSION_STRING 
+        "${CSC_HELP}")
+      message(STATUS "Comp version: ${VERSION_STRING}")
     endif()
     # when cmd locale is in French it displays: "/platform:<chaine>" in english: "/platform:<string>"
     # so only regex match in /platform:
