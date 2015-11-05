@@ -5264,7 +5264,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x4001,0x001d,"Philips Imaging DD 070",VR::LT,VM::VM1,"?",false },
   {0x4007,0x0048,"Philips Imaging DD 073",VR::FL,VM::VM1,"?",false },
   {0x1001,0x0003,"Philips Imaging DD 124",VR::LO,VM::VM1,"?",false }, /* MR Import Filter 3/21/2014 1:57:35 PM */
-  {0x2001,0x0000,"Philips Imaging DD 129",VR::SQ,VM::VM1,"?",false },
+  {0x2001,0x0000,"Philips Imaging DD 129",VR::SQ,VM::VM1,"PresentationStateSequence",false },
   {0x2001,0x0001,"Philips Imaging DD 129",VR::SQ,VM::VM1,"?",false },
   {0x2005,0x0000,"PHILIPS MR IMAGING DD 001",VR::FL,VM::VM1,"?AngulationAP?",false },
   {0x2005,0x0001,"PHILIPS MR IMAGING DD 001",VR::FL,VM::VM1,"?AngulationFH?",false },
