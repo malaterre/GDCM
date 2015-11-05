@@ -1,3 +1,4 @@
+appveyor.yml merge=ours
 * -whitespace
 
 /Source/DataDictionary/gdcmDefaultDicts.cxx hooks.MaxObjectKiB=2048
