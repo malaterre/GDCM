@@ -5,9 +5,11 @@
 version: 2.6.2.{build}
 
 # http://www.appveyor.com/docs/build-cache#caching-chocolatey-packages
+# https://github.com/kvirc/KVIrc/blob/master/.appveyor.yml
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
+  - 'c:\Program Files (x86)\NSIS'
 
 environment:
   matrix:
@@ -59,7 +61,7 @@ init:
 
 # scripts that run after cloning repository
 install:
-  - set PATH=%PATH%;C:\Program Files (x86)\NSIS # sometimes makensis cannot be found from the cache ...
+  #- set PATH=%PATH%;C:\Program Files (x86)\NSIS # sometimes makensis cannot be found from the cache ...
   # Fetch submodules
   #- git submodule update --init --recursive
   - choco install swig -y
