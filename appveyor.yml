@@ -9,7 +9,8 @@ version: 2.6.2.{build}
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
-  - 'c:\Program Files (x86)\NSIS'
+  - 'c:\Program Files (x86)\NSIS' -> appveyor.yml
+  - 'c:\Program Files\NSIS'       -> appveyor.yml
 
 environment:
   matrix:
@@ -70,7 +71,8 @@ install:
   # the other one does not seems to be supported
   #- choco install nsis.install -pre
   #- choco install -y nsis
-  - choco install nsis -y -Version 2.460
+  #- choco install nsis -y -Version 2.460
+  - choco install nsis.install -version 2.46.0.20150406
   - makensis
   #- choco install ninja
   # Set VC variables for the platform
