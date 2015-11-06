@@ -23,8 +23,8 @@ matrix:
     - compiler: clang
       os: linux
       env:
-        - CFLAGS="-Wall -Wextra -m64 -fsanitize=address,undefined"
-        - CXXFLAGS="-g -Wall -Wextra -m64 -fsanitize=address,undefined"
+        - CFLAGS="-Wall -Wextra -m64 -fsanitize=address,undefined,shift"
+        - CXXFLAGS="-g -Wall -Wextra -m64 -fsanitize=address,undefined,shift"
         - B_NAME=fsanitize
     - compiler: clang
       os: osx
