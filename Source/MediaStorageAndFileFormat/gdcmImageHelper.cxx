@@ -666,7 +666,7 @@ bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<dou
         }
       }
     }
-  return true;
+  return intercept || slope;
 }
 
 
@@ -890,10 +890,13 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
  || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
  || ForceRescaleInterceptSlope
   )
-    {
+  {
     bool b = GetRescaleInterceptSlopeValueFromDataSet(ds, interceptslope);
-    gdcmAssertMacro( b ); (void)b;
+    if( !b )
+    {
+      gdcmDebugMacro( "No Modality LUT found (Rescale Intercept/Slope)" );
     }
+  }
   else if ( ms == MediaStorage::MRImageStorage )
   {
 #if 0
@@ -952,7 +955,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       if( GetRescaleInterceptSlopeValueFromDataSet(ds, dummy) )
         {
         // for everyone else, read your DCS, and set: ForceRescaleInterceptSlope = true if needed
-        gdcmWarningMacro( "Modality LUT found for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
+        gdcmDebugMacro( "Modality LUT found for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
         }
       }
 #endif
@@ -2122,11 +2125,11 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     ds.Remove( Tag(0x28,0x1053) );
     ds.Remove( Tag(0x28,0x1054) );
 #else
-    if( img.GetIntercept() != 0.0 || img.GetSlope() != 1.0 )
+    //if( img.GetIntercept() != 0.0 || img.GetSlope() != 1.0 )
     {
       if( ForceRescaleInterceptSlope )
       {
-        gdcmDebugMacro( "MR Image Storage should not use Modality LUT: [" << img.GetIntercept() << "," << img.GetSlope() );
+        gdcmDebugMacro( "Forcing MR Image Storage / Modality LUT: [" << img.GetIntercept() << "," << img.GetSlope() );
         Attribute<0x0028,0x1052> at1;
         at1.SetValue( img.GetIntercept() );
         ds.Replace( at1.GetAsDataElement() );

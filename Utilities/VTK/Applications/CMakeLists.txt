@@ -38,7 +38,7 @@ foreach(app ${GDCM_VTK_APPS})
       target_link_libraries(${app} vtkRendering)
     endif()
     if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
-      target_link_libraries(${app} vtkWidgets)
+      target_link_libraries(${app} vtkWidgets vtkHybrid)
     endif()
   else()
     # >= 6.0
