@@ -24,7 +24,7 @@ matrix:
       os: linux
       env:
         - CFLAGS="-Wall -Wextra -m64 -fsanitize=address,undefined"
-        - CXXFLAGS="-Wall -Wextra -m64 -fsanitize=address,undefined"
+        - CXXFLAGS="-g -Wall -Wextra -m64 -fsanitize=address,undefined"
         - B_NAME=fsanitize
     - compiler: clang
       os: osx
