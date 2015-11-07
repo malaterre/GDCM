@@ -885,8 +885,9 @@ opj_image_t* rawtoimage(char *inputbuffer, opj_cparameters_t *parameters,
       rawtoimage_fill<uint32_t>((uint32_t*)inputbuffer,w,h,numcomps,image,pc);
       }
     }
-  else
+  else // dead branch ?
     {
+    opj_image_destroy(image);
     return NULL;
     }
 
