@@ -10,7 +10,6 @@ cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
   - 'c:\Program Files\NSIS'
-#  - 'c:\Program Files (x86)\NSIS'
 
 environment:
   matrix:
@@ -49,38 +48,27 @@ branches:
 
 # scripts that are called at very beginning, before repo cloning
 init:
-  # Print environment info
-  #- set
-  #- systeminfo
+  # Print environment info ( set / systeminfo)
   - msbuild /version
   - cmake --version
   - python --version
   - java -version
   # https://github.com/chocolatey/chocolatey/issues/431
-  #- cmake -E remove -f c:\programdata\chocolatey\bin\cpack.exe
   - del c:\programdata\chocolatey\bin\cpack.exe
 
 # scripts that run after cloning repository
 install:
-  #- set PATH=%PATH%;C:\Program Files (x86)\NSIS # sometimes makensis cannot be found from the cache ...
   # Fetch submodules
   #- git submodule update --init --recursive
   - choco install swig
   - swig -version
   # https://chocolatey.org/packages/nsis.install/
-  # the other one does not seems to be supported
-  #- choco install nsis.install -pre
-  #- choco install -y nsis
-  #- choco install nsis -y -Version 2.460
-  #- choco install nsis.install -version 2.46.0.20150406
   - ps: |
       if (Test-Path "c:/Program Files/NSIS/makensis.exe") {
           echo "using nsis from cache"
       } else {
           choco install nsis.install -pre -version 2.46.0.20150406
       }
-  #- 'c:/Program Files/NSIS/makensis.exe'
-  #- choco install ninja
   # Set VC variables for the platform
   #  - if %PLATFORM% == x64 call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\vcvarsx86_amd64.bat"
   #  - if %PLATFORM% == x86 call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\vcvars32.bat"
@@ -100,16 +88,12 @@ after_build:
   - cpack -G NSIS -C %CONFIG%
   # create binary zip
   - cpack -G ZIP -C %CONFIG%
-  # create source zip
-  #- cpack -G ZIP -C %CONFIG% --config CPackSourceConfig.cmake
-  # I've move cpack stuff before artifacts (and before deploy)
+  # on github it does make sense to do source package
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
-  - echo %CONFIG%
-  - echo %NUMBER_OF_PROCESSORS%
   # Do not run Test=Update/Configure, only Start/Build/Test/Submit (TODO: Coverage)
-  - ctest -D ExperimentalBuild -j2 -C %CONFIG% -Q
+  - ctest -D ExperimentalBuild -j %NUMBER_OF_PROCESSORS% -C %CONFIG% -Q
 
 # scripts to run before tests
 #before_test:
@@ -121,7 +105,7 @@ after_test:
 
 # to run your custom scripts instead of automatic tests
 test_script:
-  - ctest -D ExperimentalTest -j2 -C %CONFIG% -Q || true
+  - ctest -D ExperimentalTest -j %NUMBER_OF_PROCESSORS% -C %CONFIG% -Q || true
   - ctest -D ExperimentalSubmit -C %CONFIG% -Q
 
 #---------------------------------#
