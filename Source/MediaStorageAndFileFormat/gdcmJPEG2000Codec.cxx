@@ -320,7 +320,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
       std::stringstream is;
       size_t j2kbv_len = j2kbv->GetLength();
       char *mybuffer = new char[j2kbv_len];
-      bool b = j2kbv->GetBuffer(mybuffer, j2kbv_len);
+      bool b = j2kbv->GetBuffer(mybuffer, (unsigned long)j2kbv_len);
       assert( b );
       if( b ) is.write(mybuffer, j2kbv_len);
       delete[] mybuffer;
