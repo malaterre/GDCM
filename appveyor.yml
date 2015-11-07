@@ -8,7 +8,7 @@ version: 2.7.0.{build}
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
-  - 'c:\Program Files\NSIS'
+  - 'C:\Program Files (x86)\NSIS'
 
 environment:
   matrix:
@@ -62,7 +62,7 @@ install:
   - swig -version
   # https://chocolatey.org/packages/nsis.install/
   - ps: |
-      if (Test-Path "c:/Program Files/NSIS/makensis.exe") {
+      if (Test-Path "C:/Program Files (x86)/NSIS/makensis.exe") {
           echo "using nsis from cache"
       } else {
           choco install nsis.install -pre -version 2.46.0.20150406
