@@ -724,6 +724,7 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
     case 3: hour = 0;
     case 4: min = 0;
     case 5: sec = 0;
+      break; // http://security.coverity.com/blog/2013/Sep/gimme-a-break.html
       }
     ptm.tm_year = year - 1900;
     if( mon < 1 || mon > 12 ) return false;
