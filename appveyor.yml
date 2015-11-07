@@ -9,8 +9,8 @@ version: 2.6.2.{build}
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
-  - 'c:\Program Files (x86)\NSIS' -> appveyor.yml
-  - 'c:\Program Files\NSIS'       -> appveyor.yml
+  - 'c:\Program Files (x86)\NSIS'
+  - 'c:\Program Files\NSIS'
 
 environment:
   matrix:
