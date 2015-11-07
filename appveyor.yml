@@ -10,7 +10,7 @@ cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
   - 'c:\Program Files (x86)\NSIS'
-  - 'c:\Program Files\NSIS'
+#  - 'c:\Program Files\NSIS'
 
 environment:
   matrix:
@@ -51,7 +51,7 @@ branches:
 init:
   # Print environment info
   #- set
-  - systeminfo
+  #- systeminfo
   - msbuild /version
   - cmake --version
   - python --version
@@ -72,7 +72,13 @@ install:
   #- choco install nsis.install -pre
   #- choco install -y nsis
   #- choco install nsis -y -Version 2.460
-  - choco install nsis.install -version 2.46.0.20150406
+  #- choco install nsis.install -version 2.46.0.20150406
+  - ps: |
+      if (Test-Path "c:/Program Files (x86)/NSIS/makensis.exe") {
+          echo "using nsis from cache"
+      } else {
+          choco install nsis.install -version 2.46.0.20150406
+      }
   - makensis
   #- choco install ninja
   # Set VC variables for the platform
