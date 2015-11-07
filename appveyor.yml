@@ -9,8 +9,8 @@ version: 2.6.2.{build}
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
-  - 'c:\Program Files (x86)\NSIS'
-#  - 'c:\Program Files\NSIS'
+  - 'c:\Program Files\NSIS'
+#  - 'c:\Program Files (x86)\NSIS'
 
 environment:
   matrix:
@@ -74,10 +74,10 @@ install:
   #- choco install nsis -y -Version 2.460
   #- choco install nsis.install -version 2.46.0.20150406
   - ps: |
-      if (Test-Path "c:/Program Files (x86)/NSIS/makensis.exe") {
+      if (Test-Path "c:/Program Files/NSIS/makensis.exe") {
           echo "using nsis from cache"
       } else {
-          choco install nsis.install -version 2.46.0.20150406
+          choco install nsis.install -pre -version 2.46.0.20150406
       }
   - makensis
   #- choco install ninja
