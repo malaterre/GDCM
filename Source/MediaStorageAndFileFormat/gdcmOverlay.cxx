@@ -350,7 +350,7 @@ Overlay::OverlayType Overlay::GetOverlayTypeFromString(const char *s)
       }
     }
   // could not find the proper type, maybe padded with \0 ?
-  if( strlen(s) == 1 )
+  if( s && strlen(s) == 1 )
     {
     for( int i = 0; i < n; ++i )
       {
