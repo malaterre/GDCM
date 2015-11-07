@@ -628,7 +628,7 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
     const unsigned long len = GetBufferLength();
     unsigned long pos = 0;
     // Each RLE Frame store a 2D frame. len is the 3d length
-    const unsigned long nframes = sf->GetNumberOfFragments();
+    const size_t nframes = sf->GetNumberOfFragments();
     const size_t zdim = Dimensions[2];
     if( nframes != zdim )
     {
