@@ -3150,7 +3150,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0043,0x0036,"GEMS_PARM_01",VR::UL,VM::VM1,"User_fill_map_MSW",false },
   {0x0043,0x0037,"GEMS_PARM_01",VR::UL,VM::VM1,"User_fill_map_LSW",false },
   {0x0043,0x0038,"GEMS_PARM_01",VR::FL,VM::VM24,"User data 25...User data 48 {User48=Effective Resolution for spiral}",false },
-  {0x0043,0x0039,"GEMS_PARM_01",VR::IS,VM::VM4,"Slop_int_6... slop_int_9",false },
+  {0x0043,0x0039,"GEMS_PARM_01",VR::IS,VM::VM4,"Slop_int_6... slop_int_9 (B_value/?/?/?)",false },
   {0x0043,0x0040,"GEMS_PARM_01",VR::FL,VM::VM4,"Trigger on position",false },
   {0x0043,0x0041,"GEMS_PARM_01",VR::FL,VM::VM4,"Degree of rotation",false },
   {0x0043,0x0042,"GEMS_PARM_01",VR::SL,VM::VM4,"DAS trigger source",false },
