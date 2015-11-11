@@ -110,8 +110,9 @@ int TestAttributeDS()
   // END FIXME
   if( ipp.GetNumberOfValues() != numvalues ) return 1;
 
+  const double epsilon = (double)std::numeric_limits<float>::epsilon();
   for(unsigned int i = 0; i < numvalues; ++i)
-    if( fabs(ipp.GetValue(i) - values[i]) > std::numeric_limits<float>::epsilon() ) return 1;
+    if( fabs(ipp.GetValue(i) - values[i]) > epsilon ) return 1;
 
   ipp.Print( std::cout );
   std::cout << std::endl;
@@ -124,7 +125,7 @@ int TestAttributeDS()
   if( ipp.GetNumberOfValues() != numvalues ) return 1;
 
   for(unsigned int i = 0; i < numvalues; ++i)
-    if( fabs(ipp.GetValue(i) - newvalues[i]) > std::numeric_limits<float>::epsilon() ) return 1;
+    if( fabs(ipp.GetValue(i) - newvalues[i]) > epsilon ) return 1;
 
   ipp.Print( std::cout );
   std::cout << std::endl;

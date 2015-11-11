@@ -160,7 +160,7 @@ int TestSurfaceWriter2(const char *subdir, const char* filename)
       return 1;
       }
 
-    if ( 0.41 > surf->GetSurfaceProcessingRatio() || surf->GetSurfaceProcessingRatio() > 0.43)
+    if ( 0.41f > surf->GetSurfaceProcessingRatio() || surf->GetSurfaceProcessingRatio() > 0.43f)
       {
       std::cerr << "Find different surface processing ratio"<< std::endl;
       return 1;
