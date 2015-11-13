@@ -629,6 +629,16 @@ bool ImageHelper::GetForceRescaleInterceptSlope()
   return ForceRescaleInterceptSlope;
 }
 
+void ImageHelper::SetPMSRescaleInterceptSlope(bool b)
+{
+  PMSRescaleInterceptSlope = b;
+}
+
+bool ImageHelper::GetPMSRescaleInterceptSlope()
+{
+  return PMSRescaleInterceptSlope;
+}
+
 void ImageHelper::SetForcePixelSpacing(bool b)
 {
   ForcePixelSpacing = b;
