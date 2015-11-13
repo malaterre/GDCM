@@ -68,6 +68,14 @@ public:
   static void SetForceRescaleInterceptSlope(bool);
   static bool GetForceRescaleInterceptSlope();
 
+  /// Since GDCM 2.6.1 Philips Medical System are read using the Private Field
+  /// For Rescale Slope/Intercept by default. This mechanism can be deactivated 
+  /// using the following API:
+  /// This option has no effect when ForceRescaleInterceptSlope is set to true
+  /// GDCM will only read those private attribute but never write them out.
+  static void SetPMSRescaleInterceptSlope(bool);
+  static bool GetPMSRescaleInterceptSlope();
+
   /// GDCM 1.x compatibility issue:
   /// When using ReWrite an MR Image Storage would be rewritten as Secondary Capture Object while
   /// still having a Pixel Spacing tag (0028,0030). If you have deal with those files, use this
@@ -146,6 +154,7 @@ protected:
 
 private:
   static bool ForceRescaleInterceptSlope;
+  static bool PMSRescaleInterceptSlope;
   static bool ForcePixelSpacing;
 };
 
