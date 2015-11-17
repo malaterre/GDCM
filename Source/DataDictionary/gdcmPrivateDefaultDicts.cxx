@@ -5458,7 +5458,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x002d,"Philips MR Imaging DD 001",VR::IS,VM::VM1,"PlanScanSurveyNumberOfImages", false },
   {0x2005,0x002e,"Philips MR Imaging DD 001",VR::CS,VM::VM1,"PPGPPUGating", false },
   {0x2005,0x002f,"Philips MR Imaging DD 001",VR::CS,VM::VM1,"SpatialPresaturation", false },
-  {0x2005,0x0030,"Philips MR Imaging DD 001",VR::FL,VM::VM1,"Repetition Time",false },
+  {0x2005,0x0030,"Philips MR Imaging DD 001",VR::FL,VM::VM1_n,"Repetition Time",false },
   {0x2005,0x0031,"Philips MR Imaging DD 001",VR::CS,VM::VM1,"RespiratoryGating", false },
   {0x2005,0x0032,"Philips MR Imaging DD 001",VR::CS,VM::VM1,"?SampleRepresentation",false },
   {0x2005,0x0033,"Philips MR Imaging DD 001",VR::FL,VM::VM1,"Scan Duration",false },
@@ -5750,7 +5750,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x004f,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"VolumeSelect", false },
   {0x2005,0x0050,"Philips MR Imaging DD 005",VR::SS,VM::VM1,"MRNrOfPatientOtherIDs", false },
   {0x2005,0x0055,"Philips MR Imaging DD 005",VR::FD,VM::VM3,"ImageVelocityEncodingDirection", false },
-  {0x2005,0x0092,"Philips MR Imaging DD 005",VR::OB,VM::VM1,"?",false },
+  {0x2005,0x0092,"Philips MR Imaging DD 005",VR::FL,VM::VM1,"Specific Energy Dose",false },
   /* new group */
   {0x7043,0x0000,"Philips NM Private Group",VR::SH,VM::VM1,"?",false },
   {0x0511,0x0000,"Philips PET Private Group",VR::US,VM::VM1,"?",false },
