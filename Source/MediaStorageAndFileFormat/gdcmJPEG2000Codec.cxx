@@ -1602,7 +1602,7 @@ bool JPEG2000Codec::DecodeExtent(
       //std::streamoff relstart = is.tellg();
       //assert( relstart - thestart == 8 );
       std::streamoff off = frag.GetVL();
-      offsets.push_back( off );
+      offsets.push_back( (size_t)off );
       is.seekg( off, std::ios::cur );
       ++numfrags;
       }
