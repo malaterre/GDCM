@@ -578,7 +578,7 @@ bool DoOverlays(const DataSet& ds, Pixmap& pixeldata)
     }
 
     for( size_t ov = 0;
-      updateoverlayinfo[ov] && ov < pixeldata.GetNumberOfOverlays(); ++ov )
+      ov < pixeldata.GetNumberOfOverlays() && updateoverlayinfo[ov] ; ++ov )
       {
       Overlay& o = pixeldata.GetOverlay(ov);
       // We need to update information
