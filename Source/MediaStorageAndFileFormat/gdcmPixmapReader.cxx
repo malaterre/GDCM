@@ -1063,12 +1063,15 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
     licat.SetFromDataSet( ds ); // could be empty
     const CSComp & v = licat.GetValue();
     lossyflag = atoi( v.c_str() ) == 1;
+    // Note: technically one can decompress into uncompressed form (eg.
+    // Implicit Little Endian) an input JPEG Lossy. So we need to check
+    // the attribute LossyImageCompression value:
     PixelData->SetLossyFlag(lossyflag);
     }
 
   // Two cases:
   // - DataSet did not specify the lossyflag
-  // - DataSet specify it to be 0, but there is still a change it could be wrong:
+  // - DataSet specify it to be 0, but there is still a chance it could be wrong:
   if( !haslossyflag || !lossyflag )
     {
     PixelData->ComputeLossyFlag();

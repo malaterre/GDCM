@@ -138,8 +138,8 @@ The tool return: 0621954acd5815e0b4f7b65fcc6506b1
 \subsection checking_lossless Checking if Pixel Data is lossless
 
 In some environment one wish to check whether or not the DICOM file is
-lossless. It is fairly easy to do that in most cases. Only in two occasion this
-is not clear from the sole DICOM Attribute. When the Transfer Syntax is JPEG
+lossless. It is fairly easy to do that in most cases. Only on two occasions this
+is not clear from the sole DICOM Attributes. When the Transfer Syntax is JPEG
 2000 Image Compression (1.2.840.10008.1.2.4.91) and when the Transfer Syntax is
 JPEG-LS Lossy (Near-Lossless) Image Compression (1.2.840.10008.1.2.4.81).
 
@@ -152,6 +152,10 @@ $ gdcminfo --check-compression gdcmData/MAROTECH_CT_JP2Lossy.dcm
 \endverbatim
 
 The tool returns: "Encapsulated Stream was found to be: lossy"
+
+Pay attention that this tool also checks the Image Lossy Compression attribute
+(0028,2110).  This means `check-compression` will also returns a value of lossy
+if a predecessor was found to be lossy compressed.
 
 \section see_also SEE ALSO
 
