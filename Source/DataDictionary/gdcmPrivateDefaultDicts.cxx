@@ -37,6 +37,7 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x0029,0x0004,"TELEMIS",VR::US,VM::VM1,"?",false },
   {0x3129,0x0010,"RamSoft Race Identifier",VR::LO,VM::VM1,"?",false },
   {0x7501,0x0001,"CoActiv_PvtTags",VR::LO,VM::VM1,"?",false },
   {0x7501,0x0002,"CoActiv_PvtTags",VR::LO,VM::VM1,"?IP Adress?",false },
@@ -3150,7 +3151,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0043,0x0036,"GEMS_PARM_01",VR::UL,VM::VM1,"User_fill_map_MSW",false },
   {0x0043,0x0037,"GEMS_PARM_01",VR::UL,VM::VM1,"User_fill_map_LSW",false },
   {0x0043,0x0038,"GEMS_PARM_01",VR::FL,VM::VM24,"User data 25...User data 48 {User48=Effective Resolution for spiral}",false },
-  {0x0043,0x0039,"GEMS_PARM_01",VR::IS,VM::VM4,"Slop_int_6... slop_int_9",false },
+  {0x0043,0x0039,"GEMS_PARM_01",VR::IS,VM::VM4,"Slop_int_6... slop_int_9 (B_value/?/?/?)",false },
   {0x0043,0x0040,"GEMS_PARM_01",VR::FL,VM::VM4,"Trigger on position",false },
   {0x0043,0x0041,"GEMS_PARM_01",VR::FL,VM::VM4,"Degree of rotation",false },
   {0x0043,0x0042,"GEMS_PARM_01",VR::SL,VM::VM4,"DAS trigger source",false },
@@ -5249,7 +5250,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2001,0x003e,"Philips Imaging DD 002",VR::SS,VM::VM1,"?",false },
   {0x2001,0x003f,"Philips Imaging DD 002",VR::SS,VM::VM1,"?",false },
   {0x2001,0x0040,"Philips Imaging DD 002",VR::SS,VM::VM1,"?",false },
-  {0x2001,0x006b,"Philips Imaging DD 002",VR::OB,VM::VM1,"?",false },
+  {0x2001,0x006b,"Philips Imaging DD 002",VR::LO,VM::VM1,"?",false },
   {0x4007,0x0000,"Philips Imaging DD 065",VR::CS,VM::VM1,"?",false },
   {0x4001,0x0000,"Philips Imaging DD 067",VR::SQ,VM::VM1,"?",false },
   {0x4001,0x0001,"Philips Imaging DD 067",VR::CS,VM::VM1,"?",false },
@@ -5458,7 +5459,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x002d,"Philips MR Imaging DD 001",VR::IS,VM::VM1,"PlanScanSurveyNumberOfImages", false },
   {0x2005,0x002e,"Philips MR Imaging DD 001",VR::CS,VM::VM1,"PPGPPUGating", false },
   {0x2005,0x002f,"Philips MR Imaging DD 001",VR::CS,VM::VM1,"SpatialPresaturation", false },
-  {0x2005,0x0030,"Philips MR Imaging DD 001",VR::FL,VM::VM1,"Repetition Time",false },
+  {0x2005,0x0030,"Philips MR Imaging DD 001",VR::FL,VM::VM1_n,"Repetition Time",false },
   {0x2005,0x0031,"Philips MR Imaging DD 001",VR::CS,VM::VM1,"RespiratoryGating", false },
   {0x2005,0x0032,"Philips MR Imaging DD 001",VR::CS,VM::VM1,"?SampleRepresentation",false },
   {0x2005,0x0033,"Philips MR Imaging DD 001",VR::FL,VM::VM1,"Scan Duration",false },
@@ -5711,7 +5712,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x0026,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"ViewingHardcopyOnly", false },
   {0x2005,0x0027,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"?PrivateEMR",false },
   {0x2005,0x0028,"Philips MR Imaging DD 005",VR::SL,VM::VM1,"MRSeriesNrOfLabelTypes", false },
-  {0x2005,0x0029,"Philips MR Imaging DD 005",VR::OB,VM::VM1,"?MRImageLabelType",false },
+  {0x2005,0x0029,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"?MRImageLabelType",false },
   {0x2005,0x002a,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"ExamPrintStatus", false },
   {0x2005,0x002b,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"ExamExportStatus", false },
   {0x2005,0x002c,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"ExamStorageCommitStatus", false },
@@ -5750,7 +5751,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x004f,"Philips MR Imaging DD 005",VR::CS,VM::VM1,"VolumeSelect", false },
   {0x2005,0x0050,"Philips MR Imaging DD 005",VR::SS,VM::VM1,"MRNrOfPatientOtherIDs", false },
   {0x2005,0x0055,"Philips MR Imaging DD 005",VR::FD,VM::VM3,"ImageVelocityEncodingDirection", false },
-  {0x2005,0x0092,"Philips MR Imaging DD 005",VR::OB,VM::VM1,"?",false },
+  {0x2005,0x0092,"Philips MR Imaging DD 005",VR::FL,VM::VM1,"Specific Energy Dose",false },
   /* new group */
   {0x7043,0x0000,"Philips NM Private Group",VR::SH,VM::VM1,"?",false },
   {0x0511,0x0000,"Philips PET Private Group",VR::US,VM::VM1,"?",false },

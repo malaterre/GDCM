@@ -233,7 +233,7 @@ void JPEG2000Codec::SetRate(unsigned int idx, double rate)
 
 double JPEG2000Codec::GetRate(unsigned int idx ) const
 {
-  return Internals->coder_param.tcp_rates[idx];
+  return (double)Internals->coder_param.tcp_rates[idx];
 }
 
 void JPEG2000Codec::SetQuality(unsigned int idx, double q)
@@ -248,7 +248,7 @@ void JPEG2000Codec::SetQuality(unsigned int idx, double q)
 
 double JPEG2000Codec::GetQuality(unsigned int idx) const
 {
-  return Internals->coder_param.tcp_distoratio[idx];
+  return (double)Internals->coder_param.tcp_distoratio[idx];
 }
 
 void JPEG2000Codec::SetTileSize(unsigned int tx, unsigned int ty)
@@ -1602,7 +1602,7 @@ bool JPEG2000Codec::DecodeExtent(
       //std::streamoff relstart = is.tellg();
       //assert( relstart - thestart == 8 );
       std::streamoff off = frag.GetVL();
-      offsets.push_back( off );
+      offsets.push_back( (size_t)off );
       is.seekg( off, std::ios::cur );
       ++numfrags;
       }

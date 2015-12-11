@@ -46,6 +46,7 @@ namespace gdcm
 {
 
 bool ImageHelper::ForceRescaleInterceptSlope = false;
+bool ImageHelper::PMSRescaleInterceptSlope = true;
 bool ImageHelper::ForcePixelSpacing = false;
 
 bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)
@@ -628,6 +629,16 @@ bool ImageHelper::GetForceRescaleInterceptSlope()
   return ForceRescaleInterceptSlope;
 }
 
+void ImageHelper::SetPMSRescaleInterceptSlope(bool b)
+{
+  PMSRescaleInterceptSlope = b;
+}
+
+bool ImageHelper::GetPMSRescaleInterceptSlope()
+{
+  return PMSRescaleInterceptSlope;
+}
+
 void ImageHelper::SetForcePixelSpacing(bool b)
 {
   ForcePixelSpacing = b;
@@ -946,8 +957,12 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       el_ri.SetFromDataElement( priv_rescaleintercept );
       Element<VR::DS,VM::VM1> el_rs = {{ 0 }};
       el_rs.SetFromDataElement( priv_rescaleslope );
-      interceptslope[0] = el_ri.GetValue();
-      interceptslope[1] = el_rs.GetValue();
+      if( PMSRescaleInterceptSlope )
+      {
+        interceptslope[0] = el_ri.GetValue();
+        interceptslope[1] = el_rs.GetValue();
+        gdcmWarningMacro( "PMS Modality LUT found for MR Image Storage: [" << interceptslope[0] << "," << interceptslope[1] << "]" );
+      }
       }
     else
       {
