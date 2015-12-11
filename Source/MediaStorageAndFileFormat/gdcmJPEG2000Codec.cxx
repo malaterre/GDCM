@@ -233,7 +233,7 @@ void JPEG2000Codec::SetRate(unsigned int idx, double rate)
 
 double JPEG2000Codec::GetRate(unsigned int idx ) const
 {
-  return Internals->coder_param.tcp_rates[idx];
+  return (double)Internals->coder_param.tcp_rates[idx];
 }
 
 void JPEG2000Codec::SetQuality(unsigned int idx, double q)
@@ -248,7 +248,7 @@ void JPEG2000Codec::SetQuality(unsigned int idx, double q)
 
 double JPEG2000Codec::GetQuality(unsigned int idx) const
 {
-  return Internals->coder_param.tcp_distoratio[idx];
+  return (double)Internals->coder_param.tcp_distoratio[idx];
 }
 
 void JPEG2000Codec::SetTileSize(unsigned int tx, unsigned int ty)

@@ -273,7 +273,7 @@ std::string to_string ( Float data ) {
   int const digits =
     static_cast< int >(
     - std::log( std::numeric_limits<Float>::epsilon() )
-    / std::log( 10.0 ) );
+    / static_cast< Float >( std::log( 10.0 ) ) );
   if ( in << std::dec << std::setprecision(/*2+*/digits) << data ) {
     return ( in.str() );
   } else {
