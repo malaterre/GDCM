@@ -454,6 +454,12 @@ bool JPEGLSCodec::DecodeExtent(
     const unsigned int colsize = ymax - ymin + 1;
     const unsigned int bytesPerPixel = pf.GetPixelSize();
 
+    if( outv.size() != dimensions[0] * dimensions[1] * bytesPerPixel )
+    {
+       gdcmDebugMacro( "Inconsistant buffer size. Giving up" );
+       return false;
+    }
+
     const unsigned char *tmpBuffer1 = raw;
     unsigned int z = 0;
     for (unsigned int y = ymin; y <= ymax; ++y)
@@ -509,6 +515,12 @@ bool JPEGLSCodec::DecodeExtent(
       const unsigned int rowsize = xmax - xmin + 1;
       const unsigned int colsize = ymax - ymin + 1;
       const unsigned int bytesPerPixel = pf.GetPixelSize();
+
+      if( outv.size() != dimensions[0] * dimensions[1] * bytesPerPixel )
+      {
+         gdcmDebugMacro( "Inconsistant buffer size. Giving up" );
+         return false;
+      }
 
       const unsigned char *tmpBuffer1 = raw;
       for (unsigned int y = ymin; y <= ymax; ++y)
