@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>off-screen rendering of DICOM images</title>
+<section xml:id="gdcmxml_1synopsis">
+<title>SYNOPSIS</title>
+
+<para><literallayout>gdcm2pnm [options] file-in bitmap-out
+</literallayout></para>
+</section>
+<section xml:id="gdcmxml_1description">
+<title>DESCRIPTION</title>
+
+<para>The <emphasis role="bold">gdcm2pnm</emphasis> command line program takes as input a DICOM file and produces a rendered bitmap file.</para>
+</section>
+<section xml:id="gdcmxml_1parameters">
+<title>PARAMETERS</title>
+
+<para><literallayout>file-in   DICOM input filename
+
+bitmap-out  Bitmap output filename
+</literallayout></para>
+</section>
+<section xml:id="gdcmxml_1options">
+<title>OPTIONS</title>
+<section xml:id="gdcmxml_1options">
+<title>OPTIONS</title>
+
+<para><literallayout></literallayout></para>
+</section>
+<section xml:id="gdcmxml_1general_options">
+<title>general options</title>
+
+<para><literallayout>  -h   --help
+         print this help text and exit
+
+  -v   --version
+         print version information and exit
+
+  -V   --verbose
+         verbose mode (warning+error).
+
+  -W   --warning
+         warning mode, print warning information
+
+  -E   --error
+         error mode, print error information
+
+  -D   --debug
+         debug mode, print debug information
+</literallayout></para>
+</section>
+</section>
+<section xml:id="gdcmviewer_1simple_usage">
+<title>Simple usage</title>
+
+<para><emphasis role="bold">gdcm2pnm</emphasis> will take as input DICOM and render it into a bitmap file using the window/level attributes value.</para>
+
+<para><literallayout>$ gdcm2pnm input.dcm output.png
+</literallayout></para>
+
+<para>It is much different from the gdcmraw or gdcmimg command line tool as it will render a DICOM image. This means that the output will be rendered in 8bits ready for display.</para>
+</section>
+<section xml:id="gdcmxml_1see_also">
+<title>SEE ALSO</title>
+
+<para><emphasis role="bold">gdcm2vtk</emphasis>(1), <emphasis role="bold">gdcmimg</emphasis>(1)</para>
+</section>
+<section xml:id="gdcmxml_1copyright">
+<title>COPYRIGHT</title>
+
+<para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
+</section>
+
+</chapter>
