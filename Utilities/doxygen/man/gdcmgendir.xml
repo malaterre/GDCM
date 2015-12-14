@@ -3,31 +3,31 @@
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
   <refnamediv><refname>gdcmgendir</refname></refnamediv>
     <title>Tool to generate a DICOMDIR file from a File-Set.</title>
-<section xml:id="gdcmxml_1synopsis">
+<refsection xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmgendir [options] file-in file-out
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1description">
+</refsection>
+<refsection xml:id="gdcmxml_1description">
 <title>DESCRIPTION</title>
-</section>
-<section xml:id="gdcmxml_1parameters">
+</refsection>
+<refsection xml:id="gdcmxml_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file-in   DICOM input filename
 
 file-out  DICOM output filename
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1options">
+</refsection>
+<refsection xml:id="gdcmxml_1options">
 <title>OPTIONS</title>
-<section xml:id="gdcmgendir_1params">
+<refsection xml:id="gdcmgendir_1params">
 <title>Parameters</title>
 
 <para><literallayout></literallayout></para>
-</section>
-<section xml:id="gdcmxml_1options">
+</refsection>
+<refsection xml:id="gdcmxml_1options">
 <title>OPTIONS</title>
 
 <para><literallayout>  -i --input              DICOM filename or directory
@@ -36,8 +36,8 @@ file-out  DICOM output filename
      --descriptor         descriptor.
      --root-uid           Root UID.
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1general_options">
+</refsection>
+<refsection xml:id="gdcmxml_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -58,18 +58,18 @@ file-out  DICOM output filename
   -D   --debug
          debug mode, print debug information
 </literallayout></para>
-</section>
-<section xml:id="gdcmtar_1environment_variable">
+</refsection>
+<refsection xml:id="gdcmtar_1environment_variable">
 <title>environment variable</title>
 
 <para><literallayout>  GDCM_ROOT_UID Root UID
 </literallayout></para>
-</section>
-</section>
-<section xml:id="gdcmviewer_1usage">
+</refsection>
+</refsection>
+<refsection xml:id="gdcmviewer_1usage">
 <title>Typical usage</title>
-</section>
-<section xml:id="gdcmgendir_1note">
+</refsection>
+<refsection xml:id="gdcmgendir_1note">
 <title>NOTE</title>
 
 <para>One may have to run some preliminary steps in order to get gdcmgendir to generate the DICOMDIR file. Namely two steps: <itemizedlist>
@@ -86,16 +86,16 @@ Step 1. can be solved in a numerous way. Eg. on UNIX environment this could eith
 
 <para><literallayout>  $ for i in `ls IMG*`; do gdcmconv --raw --force $i /tmp/out/$i; done
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1see_also">
+</refsection>
+<refsection xml:id="gdcmxml_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmconv</emphasis>(1), <emphasis role="bold">gdcmanon</emphasis>(1), <emphasis role="bold">rename</emphasis>(1), <emphasis role="bold">mkisofs</emphasis>(1)</para>
-</section>
-<section xml:id="gdcmxml_1copyright">
+</refsection>
+<refsection xml:id="gdcmxml_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
-</section>
+</refsection>
 
 </refentry>

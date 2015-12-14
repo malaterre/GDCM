@@ -3,50 +3,50 @@
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
   <refnamediv><refname>gdcmxml</refname></refnamediv>
     <title>provides a tool to convert a DICOM file into a XML infoset and vice-versa.</title>
-<section xml:id="gdcmxml_1synopsis">
+<refsection xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmxml [options] file-in[DICOM or XML] file-out[XML or DICOM]
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1description">
+</refsection>
+<refsection xml:id="gdcmxml_1description">
 <title>DESCRIPTION</title>
 
 <para>The <emphasis role="bold">gdcmxml</emphasis> command line program converts a DICOM file (DataSet) into an XML file (according to the Native DICOM Model) or vice-versa. For those familiar with DCMTK, this provides binary capabilities (i.e. functionality of both dcm2xml and xml2dcm).</para>
 
 <para>The XML infoset which is from the DICOM file gdcmXMLPrintet Class. This is in strict compliance with the Native DICOM Model as given in Supp 118.</para>
-</section>
-<section xml:id="gdcmxml_1parameters">
+</refsection>
+<refsection xml:id="gdcmxml_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file-in   DICOM or XML input filename ( cannot be absent)
 
 file-out  output filename (can be absent)
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1options">
+</refsection>
+<refsection xml:id="gdcmxml_1options">
 <title>OPTIONS</title>
-<section xml:id="gdcmxml_1parameters">
+<refsection xml:id="gdcmxml_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>  -i --input      DICOM filename
   -o --output     DICOM filename
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1options_dicom2xml">
+</refsection>
+<refsection xml:id="gdcmxml_1options_dicom2xml">
 <title>Options for DICOM to XML:</title>
 
 <para><literallayout>  -B --loadBulkData   Loads bulk data into a binary file named &quot;UUID&quot; (by default UUID are written).
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1options_xml2dicom">
+</refsection>
+<refsection xml:id="gdcmxml_1options_xml2dicom">
 <title>Options for XML to DICOM:</title>
 
 <para><literallayout>  -B --loadBulkData   Loads bulk data from a binary file named as the &quot;UUID&quot; in XML file (by default UUID are written).
   -T --TransferSyntax Loads transfer syntax from file (default is LittleEndianImplicit)
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1general_options">
+</refsection>
+<refsection xml:id="gdcmxml_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -67,17 +67,17 @@ file-out  output filename (can be absent)
   -D   --debug
          debug mode, print debug information
 </literallayout></para>
-</section>
-</section>
-<section xml:id="gdcmxml_1see_also">
+</refsection>
+</refsection>
+<refsection xml:id="gdcmxml_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmconv</emphasis>(1)</para>
-</section>
-<section xml:id="gdcmxml_1copyright">
+</refsection>
+<refsection xml:id="gdcmxml_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
-</section>
+</refsection>
 
 </refentry>

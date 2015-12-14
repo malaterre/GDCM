@@ -3,43 +3,43 @@
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
   <refnamediv><refname>gdcmpap3</refname></refnamediv>
     <title>Tool to convert PAPYRUS 3.0 to DICOM.</title>
-<section xml:id="gdcmxml_1synopsis">
+<refsection xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmconv [options] file-in file-out
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1description">
+</refsection>
+<refsection xml:id="gdcmxml_1description">
 <title>DESCRIPTION</title>
 
 <para>The <emphasis role="bold">gdcmconv</emphasis> command line program takes as input a PAPYRUS 3.0 file (file-in) and process it to generate an output (pseudo) DICOM file (file-out). The command line option dictate the type of operation(s) gdcmconv will use to generate the output file.</para>
-</section>
-<section xml:id="gdcmxml_1parameters">
+</refsection>
+<refsection xml:id="gdcmxml_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file-in   DICOM input filename
 
 file-out  DICOM output filename
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1options">
+</refsection>
+<refsection xml:id="gdcmxml_1options">
 <title>OPTIONS</title>
-<section xml:id="gdcmxml_1parameters">
+<refsection xml:id="gdcmxml_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>  -i --input      DICOM filename
   -o --output     DICOM filename
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1options">
+</refsection>
+<refsection xml:id="gdcmxml_1options">
 <title>OPTIONS</title>
 
 <para><literallayout>  -S --split            Split multiframes PAPYRUS 3.0 into multiples DICOM files
      --decomp-pap3      Use PAPYRUS 3.0 for decompressing (can be combined with --split).
      --check-iop        Check that the Image Orientation (Patient) Attribute is ok (see --split).
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1general_options">
+</refsection>
+<refsection xml:id="gdcmxml_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -60,15 +60,15 @@ file-out  DICOM output filename
   -D   --debug
          debug mode, print debug information
 </literallayout></para>
-</section>
-<section xml:id="gdcmtar_1environment_variable">
+</refsection>
+<refsection xml:id="gdcmtar_1environment_variable">
 <title>environment variable</title>
 
 <para><literallayout>  GDCM_ROOT_UID Root UID
 </literallayout></para>
-</section>
-</section>
-<section xml:id="gdcmviewer_1simple_usage">
+</refsection>
+</refsection>
+<refsection xml:id="gdcmviewer_1simple_usage">
 <title>Simple usage</title>
 
 <para><emphasis role="bold">gdcmconv</emphasis> is a great tool to convert broken PAPYRUS 3.0 implementation into properly parsable DICOM file. Usage is simply:</para>
@@ -82,16 +82,16 @@ file-out  DICOM output filename
 </literallayout></para>
 
 <para>Even though gdcmpap3 can overwrite directly on the same file (input.pa3 = output.dcm), it is recommended that user should first convert into a different file to make sure the bug is properly handled by GDCM.</para>
-</section>
-<section xml:id="gdcmxml_1see_also">
+</refsection>
+<refsection xml:id="gdcmxml_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmconv</emphasis>(1), <emphasis role="bold">gdcminfo</emphasis>(1)</para>
-</section>
-<section xml:id="gdcmxml_1copyright">
+</refsection>
+<refsection xml:id="gdcmxml_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
-</section>
+</refsection>
 
 </refentry>

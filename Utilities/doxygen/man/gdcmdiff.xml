@@ -3,35 +3,35 @@
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
   <refnamediv><refname>gdcmdiff</refname></refnamediv>
     <title>dumps differences of two DICOM files</title>
-<section xml:id="gdcmxml_1synopsis">
+<refsection xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmdiff [options] file1 file2
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1description">
+</refsection>
+<refsection xml:id="gdcmxml_1description">
 <title>DESCRIPTION</title>
 
 <para>The <emphasis role="bold">gdcmdiff</emphasis> command line program takes as input two DICOM files: file1 and file2.</para>
-</section>
-<section xml:id="gdcmxml_1parameters">
+</refsection>
+<refsection xml:id="gdcmxml_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file1   DICOM input filename
 
 file2   DICOM output filename
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1options">
+</refsection>
+<refsection xml:id="gdcmxml_1options">
 <title>OPTIONS</title>
-<section xml:id="gdcmxml_1options">
+<refsection xml:id="gdcmxml_1options">
 <title>OPTIONS</title>
 
 <para><literallayout>  -m      --meta          Compare metainformation. Default is off.
   -t &lt;n&gt;  --truncate &lt;n&gt;  String values trimmed to n characters.
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1general_options">
+</refsection>
+<refsection xml:id="gdcmxml_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -52,25 +52,25 @@ file2   DICOM output filename
   -D   --debug
          debug mode, print debug information
 </literallayout></para>
-</section>
-</section>
-<section xml:id="gdcmviewer_1simple_usage">
+</refsection>
+</refsection>
+<refsection xml:id="gdcmviewer_1simple_usage">
 <title>Simple usage</title>
 
 <para><emphasis role="bold">gdcmdiff</emphasis> is a great tool to produce a diff in between two DICOM files. Usage is simply:</para>
 
 <para><literallayout>$ gdcmdiff input1.dcm input2.dcm
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1see_also">
+</refsection>
+<refsection xml:id="gdcmxml_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcminfo</emphasis>(1)</para>
-</section>
-<section xml:id="gdcmxml_1copyright">
+</refsection>
+<refsection xml:id="gdcmxml_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
-</section>
+</refsection>
 
 </refentry>
