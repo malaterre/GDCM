@@ -1,8 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <refnamediv><refname>gdcmimg</refname></refnamediv>
-  <title>Manipulate DICOM image file.</title>
+  <refmeta>
+    <refentrytitle>gdcmimg</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="source">GDCM</refmiscinfo>
+    <refmiscinfo class="version">VER_FULL</refmiscinfo>
+    <refmiscinfo class="manual">DICOM Manipulation.</refmiscinfo>
+  </refmeta>
+  <refnamediv><refname>gdcmimg</refname>
+    <refpurpose>Manipulate DICOM image file.</refpurpose>
+</refnamediv>
 
 <para>gdcmimg is a low level tool to allow de-/encapsulation from/to DICOM image. This tool does not understand Transfer Syntax conversion. It will encapsulate the raw data as-is. This has some impact in some cases, see special warnings below.</para>
 
@@ -94,9 +102,9 @@ file-out  DICOM output filename
 </refsection>
 </refsection>
 <refsection xml:id="gdcmimg_1supported">
-<title>Supported File Format (appropriate file extension) gdcmimg</title>
+<title>Supported File Format (appropriate file extension)</title>
 
-<para>will base it&apos;s conversion process based on the file extension. Follows the list of recognized file extension. When no extension is found, DICOM file is assumed.</para>
+<para>gdcmimg will base it&apos;s conversion process based on the file extension. Follows the list of recognized file extension. When no extension is found, DICOM file is assumed.</para>
 
 <para>input format <literallayout>  * RAW       (raw, rawl, gray, rgb)
   * RLE       (rle)

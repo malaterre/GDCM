@@ -1,8 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <refnamediv><refname>gdcminfo</refname></refnamediv>
-    <title>Display meta info about the input DICOM file.</title>
+  <refmeta>
+    <refentrytitle>gdcminfo</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="source">GDCM</refmiscinfo>
+    <refmiscinfo class="version">VER_FULL</refmiscinfo>
+    <refmiscinfo class="manual">DICOM Manipulation.</refmiscinfo>
+  </refmeta>
+  <refnamediv><refname>gdcminfo</refname>
+    <refpurpose>Display meta info about the input DICOM file.</refpurpose>
+</refnamediv>
 <refsection xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
 

@@ -1,8 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <refnamediv><refname>gdcmdiff</refname></refnamediv>
-    <title>dumps differences of two DICOM files</title>
+  <refmeta>
+    <refentrytitle>gdcmdiff</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="source">GDCM</refmiscinfo>
+    <refmiscinfo class="version">VER_FULL</refmiscinfo>
+    <refmiscinfo class="manual">DICOM Manipulation.</refmiscinfo>
+  </refmeta>
+  <refnamediv><refname>gdcmdiff</refname>
+    <refpurpose>dumps differences of two DICOM files</refpurpose>
+</refnamediv>
 <refsection xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
 

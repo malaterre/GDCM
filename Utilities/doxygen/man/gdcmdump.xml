@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <refnamediv><refname>gdcmdump</refname></refnamediv>
-    <title>dumps a DICOM file, it will display the structure and values contained in the specified DICOM file.</title>
+  <refmeta>
+    <refentrytitle>gdcmdump</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="source">GDCM</refmiscinfo>
+    <refmiscinfo class="version">VER_FULL</refmiscinfo>
+    <refmiscinfo class="manual">DICOM Manipulation.</refmiscinfo>
+  </refmeta>
+  <refnamediv><refname>gdcmdump</refname>
+    <refpurpose>dumps a DICOM file, it will display the structure and values contained in the specified DICOM file.</refpurpose>
+</refnamediv>
 <refsection xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
 

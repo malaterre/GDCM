@@ -1,8 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <refnamediv><refname>gdcm2vtk</refname></refnamediv>
-    <title>Convert a file supported by VTK into DICOM.</title>
+  <refmeta>
+    <refentrytitle>gdcm2vtk</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="source">GDCM</refmiscinfo>
+    <refmiscinfo class="version">VER_FULL</refmiscinfo>
+    <refmiscinfo class="manual">DICOM Manipulation.</refmiscinfo>
+  </refmeta>
+  <refnamediv><refname>gdcm2vtk</refname>
+    <refpurpose>Convert a file supported by VTK into DICOM.</refpurpose>
+</refnamediv>
 <refsection xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
 
