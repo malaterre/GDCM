@@ -79,6 +79,13 @@ bool BoxRegion::IsValid() const
     {
     return false;
     }
+  // Some properly crafted DICOM could have bigger values, reject them:
+  // technically there is no such restrictions for Z direction
+  if (Internals->XMax > std::numeric_limits<uint16_t>::max() ||
+      Internals->YMax > std::numeric_limits<uint16_t>::max() )
+  {
+    return false;
+  }
   return true;
 }
 
