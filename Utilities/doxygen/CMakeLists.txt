@@ -20,7 +20,7 @@ if(GDCM_DOCUMENTATION)
     "${GDCM_SOURCE_DIR}/Source/*.h"
     "${GDCM_SOURCE_DIR}/Wrapping/*.h"
     "${GDCM_SOURCE_DIR}/Utilities/VTK/*.h"
-    "${GDCM_SOURCE_DIR}/Utilities/doxygen/man/*.dox"
+    #"${GDCM_SOURCE_DIR}/Utilities/doxygen/man/*.dox"
   )
   list(REMOVE_ITEM headerfiles
     "${GDCM_SOURCE_DIR}/Source/DataDictionary/gdcmTagKeywords.h"
@@ -187,26 +187,26 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmviewer.html
   #  DESTINATION ${GDCM_INSTALL_DOC_DIR} COMPONENT DebugDevel
   #)
-  install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2vtk.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2pnm.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmconv.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmpap3.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmxml.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmanon.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmgendir.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdump.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdiff.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmimg.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcminfo.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmpdf.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmraw.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmscu.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmscanner.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmtar.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmviewer.1
-    DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT DebugDevel
-  )
+  #install(FILES
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2vtk.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2pnm.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmconv.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmpap3.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmxml.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmanon.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmgendir.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdump.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdiff.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmimg.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcminfo.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmpdf.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmraw.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmscu.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmscanner.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmtar.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmviewer.1
+  #  DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT DebugDevel
+  #)
   install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${GDCM_INSTALL_DOC_DIR}
     PATTERN "*.md5" EXCLUDE
     PATTERN "*.dot" EXCLUDE
@@ -224,4 +224,46 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     subdirs(vtk)
   endif()
 
+set(NEWMANPAGES 1)
+if(NEWMANPAGES)
+set(MANPAGES_XML
+    gdcm2pnm
+    gdcm2vtk
+    gdcmanon
+    gdcmconv
+    gdcmdiff
+    gdcmdump
+    gdcmgendir
+    gdcmimg
+    gdcminfo
+    gdcmpap3
+    gdcmpdf
+    gdcmraw
+    gdcmscanner
+    gdcmscu
+    gdcmtar
+    gdcmviewer
+    gdcmxml
+    )
+find_package(LibXslt REQUIRED)
+foreach(docbook ${MANPAGES_XML})
+  add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${docbook}.1
+    COMMAND ${LIBXSLT_XSLTPROC_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/man/${docbook}.xml
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/man/${docbook}.xml
+    )
+  list(APPEND MANPAGES
+    ${CMAKE_CURRENT_BINARY_DIR}/${docbook}.1
+    )
+endforeach()
+add_custom_target(DOCBOOK_MANPAGES
+  ALL
+  DEPENDS ${MANPAGES}
+  COMMENT  "docbook manpages"
+  )
+install(FILES
+  ${MANPAGES}
+  DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT DebugDevel
+)
+endif()
 endif()
