@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>Tool to convert DICOM to DICOM.</title>
 <section xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
@@ -396,4 +397,4 @@ autocmd&#32;BufReadPost&#32;*.dcm&#32;silent&#32;%!dcmdump&#32;-M&#32;+uc&#32;&q
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
 </section>
 
-</chapter>
+</refentry>

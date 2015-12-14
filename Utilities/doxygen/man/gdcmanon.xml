@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>Tool to anonymize a DICOM file.</title>
 <section xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
@@ -267,4 +268,4 @@ In this case one could simply do, as a first step execute the reversible anonymi
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
 </section>
 
-</chapter>
+</refentry>

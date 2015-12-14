@@ -1,5 +1,6 @@
-<?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>dumps a DICOM file, it will display the structure and values contained in the specified DICOM file.</title>
 <section xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
@@ -397,4 +398,4 @@ PMS/Item name: [PDF_SPT_PARS/IEEE_PDF/Y ]
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
 </section>
 
-</chapter>
+</refentry>
