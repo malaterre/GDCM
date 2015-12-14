@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <refnamediv><refname>gdcmdump</refname></refnamediv>
     <title>dumps a DICOM file, it will display the structure and values contained in the specified DICOM file.</title>
 <section xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
