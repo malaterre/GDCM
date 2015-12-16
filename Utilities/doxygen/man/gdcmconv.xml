@@ -1,37 +1,45 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <refnamediv><refname>gdcmconv</refname></refnamediv>
-    <title>Tool to convert DICOM to DICOM.</title>
-<section xml:id="gdcmxml_1synopsis">
+  <refmeta>
+    <refentrytitle>gdcmconv</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="source">GDCM</refmiscinfo>
+    <refmiscinfo class="version">VER_FULL</refmiscinfo>
+    <refmiscinfo class="manual">DICOM Manipulation.</refmiscinfo>
+  </refmeta>
+  <refnamediv><refname>gdcmconv</refname>
+    <refpurpose>Tool to convert DICOM to DICOM.</refpurpose>
+</refnamediv>
+<refsection xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmconv [options] file-in file-out
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1description">
+</refsection>
+<refsection xml:id="gdcmxml_1description">
 <title>DESCRIPTION</title>
 
 <para>The <emphasis role="bold">gdcmconv</emphasis> command line program takes as input a DICOM file (file-in) and process it to generate an output DICOM file (file-out). The command line option dictate the type of operation(s) gdcmconv will use to generate the output file.</para>
-</section>
-<section xml:id="gdcmxml_1parameters">
+</refsection>
+<refsection xml:id="gdcmxml_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file-in   DICOM input filename
 
 file-out  DICOM output filename
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1options">
+</refsection>
+<refsection xml:id="gdcmxml_1options">
 <title>OPTIONS</title>
-<section xml:id="gdcmxml_1parameters">
+<refsection xml:id="gdcmxml_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>  -i --input      DICOM filename
   -o --output     DICOM filename
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1options">
+</refsection>
+<refsection xml:id="gdcmxml_1options">
 <title>OPTIONS</title>
 
 <para><literallayout>  -X --explicit            Change Transfer Syntax to explicit.
@@ -44,8 +52,8 @@ file-out  DICOM output filename
      --remove-private-tags Remove private tags.
      --remove-retired      Remove retired tags.
 </literallayout></para>
-</section>
-<section xml:id="gdcmconv_1image_options">
+</refsection>
+<refsection xml:id="gdcmconv_1image_options">
 <title>image options</title>
 
 <para><literallayout>  -l --apply-lut                      Apply LUT (non-standard, advanced user only).
@@ -65,20 +73,20 @@ file-out  DICOM output filename
   -Y --lossy                          Use the lossy (if possible) compressor.
   -S --split %d                       Write 2D image with multiple fragments (using max size)
 </literallayout></para>
-</section>
-<section xml:id="gdcmconv_1jpeg_options">
+</refsection>
+<refsection xml:id="gdcmconv_1jpeg_options">
 <title>JPEG options</title>
 
 <para><literallayout>  -q --quality %*f           set quality.
 </literallayout></para>
-</section>
-<section xml:id="gdcmconv_1jpegls_options">
+</refsection>
+<refsection xml:id="gdcmconv_1jpegls_options">
 <title>JPEG-LS options</title>
 
 <para><literallayout>  -e --lossy-error %*i       set error.
 </literallayout></para>
-</section>
-<section xml:id="gdcmconv_1j2k_options">
+</refsection>
+<refsection xml:id="gdcmconv_1j2k_options">
 <title>J2K options</title>
 
 <para><literallayout>  -r --rate    %*f           set rate.
@@ -87,8 +95,8 @@ file-out  DICOM output filename
   -n --number-resolution %d  set number of resolution.
      --irreversible          set irreversible.
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1general_options">
+</refsection>
+<refsection xml:id="gdcmxml_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -109,21 +117,21 @@ file-out  DICOM output filename
   -D   --debug
          debug mode, print debug information
 </literallayout></para>
-</section>
-<section xml:id="gdcmdump_1special_options">
+</refsection>
+<refsection xml:id="gdcmdump_1special_options">
 <title>special options</title>
 
 <para><literallayout>  -I --ignore-errors   convert even if file is corrupted (advanced users only, see disclaimers).
 </literallayout></para>
-</section>
-<section xml:id="gdcmtar_1environment_variable">
+</refsection>
+<refsection xml:id="gdcmtar_1environment_variable">
 <title>environment variable</title>
 
 <para><literallayout>  GDCM_ROOT_UID Root UID
 </literallayout></para>
-</section>
-</section>
-<section xml:id="gdcmviewer_1simple_usage">
+</refsection>
+</refsection>
+<refsection xml:id="gdcmviewer_1simple_usage">
 <title>Simple usage</title>
 
 <para><emphasis role="bold">gdcmconv</emphasis> is a great tool to convert broken DICOM implementation into properly parsable DICOM file. Usage is simply:</para>
@@ -163,16 +171,16 @@ file-out  DICOM output filename
 <para>&amp;... </para>
 </listitem>
 <listitem>
-<para>All other broken files listed in the supported section.</para>
+<para>All other broken files listed in the supported refsection.</para>
 </listitem>
 </itemizedlist>
 When no option other is used, only the dataset is inspected. So encapsulated Pixel Data, for instance, is not inspected for well known bugs.</para>
 
-<para>When doing this kind of work, this is usually a good idea to perform some kind of quality control, see gdcmconv Quality Control section (down below).</para>
-</section>
-<section xml:id="gdcmviewer_1usage">
+<para>When doing this kind of work, this is usually a good idea to perform some kind of quality control, see gdcmconv Quality Control refsection (down below).</para>
+</refsection>
+<refsection xml:id="gdcmviewer_1usage">
 <title>Typical usage</title>
-<section xml:id="gdcmconv_1file_meta">
+<refsection xml:id="gdcmconv_1file_meta">
 <title>File Meta Header</title>
 
 <para>Running</para>
@@ -186,24 +194,24 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 </literallayout></para>
 
 <para>See typical cases such as: GE_DLX-8-MONO2-PrivateSyntax.dcm or PICKER-16-MONO2-No_DicomV3_Preamble.dcm from gdcmData.</para>
-</section>
-<section xml:id="gdcmconv_1explicit">
+</refsection>
+<refsection xml:id="gdcmconv_1explicit">
 <title>Conversion to Explicit Transfer Syntax</title>
 
 <para>To convert a file that was written using Implicit Transfer Syntax into Explicit Transfer Syntax simply use:</para>
 
 <para><literallayout>$ gdcmconv --explicit uncompressed.dcm compressed.dcm
 </literallayout></para>
-</section>
-<section xml:id="gdcmconv_1lossless_jpeg">
+</refsection>
+<refsection xml:id="gdcmconv_1lossless_jpeg">
 <title>Compressing to lossless JPEG</title>
 
 <para>To compress an uncompressed DICOM file to a JPEG Lossless encapsulated format:</para>
 
 <para><literallayout>$ gdcmconv --jpeg uncompressed.dcm compressed.dcm
 </literallayout></para>
-</section>
-<section xml:id="gdcmconv_1lossy_jpeg">
+</refsection>
+<refsection xml:id="gdcmconv_1lossy_jpeg">
 <title>Compressing to lossy JPEG</title>
 
 <para>To compress an uncompressed DICOM file to a JPEG Lossy encapsulated format:</para>
@@ -213,16 +221,16 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 
 <para>Note: <literallayout>  -q is just one of the many way to specify lossy quality, you need to inspect the other cmd line flag to specify lossyness properties.
 </literallayout></para>
-</section>
-<section xml:id="gdcmconv_1lossless_jpegls">
+</refsection>
+<refsection xml:id="gdcmconv_1lossless_jpegls">
 <title>Compressing to lossless JPEG-LS</title>
 
 <para>To compress an uncompressed DICOM file to a JPEG-LS Lossless encapsulated format:</para>
 
 <para><literallayout>$ gdcmconv --jpegls uncompressed.dcm compressed.dcm
 </literallayout></para>
-</section>
-<section xml:id="gdcmconv_1lossy_jpegls">
+</refsection>
+<refsection xml:id="gdcmconv_1lossy_jpegls">
 <title>Compressing to lossy JPEG-LS</title>
 
 <para>To compress an uncompressed DICOM file to a JPEG-LS Lossy encapsulated format:</para>
@@ -233,16 +241,16 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 <para>Note:</para>
 
 <para>-e (or &#8211;lossy-error) means that the maximum tolerate error is 2 for each pixel value</para>
-</section>
-<section xml:id="gdcmconv_1lossless_j2k">
+</refsection>
+<refsection xml:id="gdcmconv_1lossless_j2k">
 <title>Compressing to lossless J2K</title>
 
 <para>To compress an uncompressed DICOM file to a JPEG-2000 Lossless encapsulated format:</para>
 
 <para><literallayout>$ gdcmconv --j2k uncompressed.dcm compressed.dcm
 </literallayout></para>
-</section>
-<section xml:id="gdcmconv_1lossy_j2k">
+</refsection>
+<refsection xml:id="gdcmconv_1lossy_j2k">
 <title>Compressing to lossy J2K</title>
 
 <para>To compress an uncompressed DICOM file to a JPEG-2000 Lossy encapsulated format:</para>
@@ -252,8 +260,8 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 
 <para>Note: <literallayout>  -q is just one of the many way to specify lossy quality, you need to inspect the other cmd line flag to specify lossyness properties.
 </literallayout></para>
-</section>
-<section xml:id="gdcmconv_1lossless_rle">
+</refsection>
+<refsection xml:id="gdcmconv_1lossless_rle">
 <title>Compressing to lossless RLE</title>
 
 <para>To compress an uncompressed DICOM file to a RLE Lossless encapsulated format:</para>
@@ -262,8 +270,8 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 </literallayout></para>
 
 <para>There is no such thing as lossy RLE compression.</para>
-</section>
-<section xml:id="gdcmconv_1split_encapsulated">
+</refsection>
+<refsection xml:id="gdcmconv_1split_encapsulated">
 <title>Split encapsulated DICOM:</title>
 
 <para>To split an encapsulated stream into smaller chunk (1024 bytes each):</para>
@@ -272,8 +280,8 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 </literallayout></para>
 
 <para>If an odd number of bytes is passed it will be rounded down to the next even number (eg. 1025 -&gt; 1024) since DICOM only allow even number for Value Length.</para>
-</section>
-<section xml:id="gdcmconv_1force">
+</refsection>
+<refsection xml:id="gdcmconv_1force">
 <title>Forcing (re)compression</title>
 
 <para>Sometime it is necessary to use the &#8211;force option. By default when user specify &#8211;j2k and input file is already in JPEG 2000 encapsulated DICOM format then no operation takes places. By using &#8211;force you make sure that (re)compression operation takes places.</para>
@@ -287,14 +295,14 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 </listitem>
 </itemizedlist>
 </para>
-</section>
-<section xml:id="gdcmconv_1decompress_raw">
+</refsection>
+<refsection xml:id="gdcmconv_1decompress_raw">
 <title>Decompressing a Compressed DICOM</title>
 
 <para><literallayout>$ gdcmconv --raw compressed.dcm uncompressed.dcm
 </literallayout></para>
-</section>
-<section xml:id="gdcmconv_1compress_icon">
+</refsection>
+<refsection xml:id="gdcmconv_1compress_icon">
 <title>Compressing an uncompressed Icon</title>
 
 <para>By default when compressing a DICOM Image file, gdcmconv will not compress the icon. A user option needs to be turned on to explicitly force the compression of the Icon Image Sequence Pixel Data</para>
@@ -308,8 +316,8 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 
 <para><literallayout>$ gdcmconv --jpeg --compress-icon gdcmData/simpleImageWithIcon.dcm compressed_icon.dcm
 </literallayout></para>
-</section>
-<section xml:id="gdcmconv_1generate_icon">
+</refsection>
+<refsection xml:id="gdcmconv_1generate_icon">
 <title>Generating an Icon</title>
 
 <para>For some application it might be necessary to produce a small preview of the main image to be able to quickly load that short preview instead of the main image. In that case:</para>
@@ -321,8 +329,8 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 
 <para><literallayout>$ gdcmconv --raw --generate-icon --icon-minmax 0,192 gdcmData/012345.002.050.dcm icon_minmax.dcm
 </literallayout></para>
-</section>
-<section xml:id="gdcmconv_1planar_configuration">
+</refsection>
+<refsection xml:id="gdcmconv_1planar_configuration">
 <title>Changing the planar Configuration</title>
 
 <para>Often RLE files are compressed using a different Planar Configuration (RRR ... GGG... BBB...) instead of the usual triplet (RGB ... RGB ... RGB ). So upon decompression the Planar Configuration is 1. This is perfectly legal in DICOM, however this is unconventional, and thus it may be a good idea to also change the planar configuration and set it to the default :</para>
@@ -334,9 +342,9 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 
 <para><literallayout>$ gdcmconv --raw --planar-configuration 1 uncompressed1.dcm uncompressed2.dcm
 </literallayout></para>
-</section>
-</section>
-<section xml:id="gdcmconv_1lossless_conversion">
+</refsection>
+</refsection>
+<refsection xml:id="gdcmconv_1lossless_conversion">
 <title>Lossless Conversion</title>
 
 <para>When talking about lossless conversion, there is an ambiguity that need to be understood. To achieve higher compression ratio, the RGB color space is usually not used, in favor of a YBR one. Changing from one color space to the other is (bit level) not lossless.</para>
@@ -344,14 +352,14 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 <para>For more detail, see what are the true lossless transformations as described:</para>
 
 <para><link xlink:href="http://gdcm.sourceforge.net/wiki/index.php/Color_Space_Transformations">http://gdcm.sourceforge.net/wiki/index.php/Color_Space_Transformations</link></para>
-</section>
-<section xml:id="gdcmconv_1quality_control">
+</refsection>
+<refsection xml:id="gdcmconv_1quality_control">
 <title>Quality Control</title>
 
 <para>One important part when using gdcmconv it to have a way to quality control the output.</para>
 
 <para>You can use 3rd party tool to check the output of gdcmconv is correct.</para>
-<section xml:id="gdcmconv_1other_toolkit">
+<refsection xml:id="gdcmconv_1other_toolkit">
 <title>DCMTK / dicom3tools</title>
 
 <para>Using another DICOM implementation such as the one from DCMTK or dicom3tools can be a good process to check the output of gdcmconv. <itemizedlist>
@@ -363,8 +371,8 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 </listitem>
 </itemizedlist>
 For reference, gdcmconv &#8211;raw will act as dcmdjpeg +cn +px, since it never tries to convert color space.</para>
-</section>
-<section xml:id="gdcmconv_1vim">
+</refsection>
+<refsection xml:id="gdcmconv_1vim">
 <title>VIM: vimdiff</title>
 
 <para>You can setup your favorite editor to compare the output, for instance in vim:</para>
@@ -377,25 +385,25 @@ autocmd&#32;BufReadPost&#32;*.dcm&#32;silent&#32;%!dcmdump&#32;-M&#32;+uc&#32;&q
 
 <para><literallayout><computeroutput>$&#32;vimdiff&#32;input.dcm&#32;output.dcm
 </computeroutput></literallayout></para>
-</section>
-<section xml:id="gdcmconv_1binary_diff">
+</refsection>
+<refsection xml:id="gdcmconv_1binary_diff">
 <title>vbindiff</title>
 
 <para>On UNIX you can visually compare binary file using the vbindiff command:</para>
 
 <para><literallayout><computeroutput>$&#32;vbindiff&#32;input.dcm&#32;output.dcm
 </computeroutput></literallayout></para>
-</section>
-</section>
-<section xml:id="gdcmxml_1see_also">
+</refsection>
+</refsection>
+<refsection xml:id="gdcmxml_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmraw</emphasis>(1), <emphasis role="bold">gdcminfo</emphasis>(1), <emphasis role="bold">gdcmdiff</emphasis>(1)</para>
-</section>
-<section xml:id="gdcmxml_1copyright">
+</refsection>
+<refsection xml:id="gdcmxml_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
-</section>
+</refsection>
 
 </refentry>

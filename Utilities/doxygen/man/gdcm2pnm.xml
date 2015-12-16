@@ -1,35 +1,43 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <refnamediv><refname>gdcm2pnm</refname></refnamediv>
-    <title>off-screen rendering of DICOM images</title>
-<section xml:id="gdcmxml_1synopsis">
+  <refmeta>
+    <refentrytitle>gdcm2pnm</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="source">GDCM</refmiscinfo>
+    <refmiscinfo class="version">VER_FULL</refmiscinfo>
+    <refmiscinfo class="manual">DICOM Manipulation.</refmiscinfo>
+  </refmeta>
+  <refnamediv><refname>gdcm2pnm</refname>
+    <refpurpose>off-screen rendering of DICOM images</refpurpose>
+</refnamediv>
+<refsection xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcm2pnm [options] file-in bitmap-out
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1description">
+</refsection>
+<refsection xml:id="gdcmxml_1description">
 <title>DESCRIPTION</title>
 
 <para>The <emphasis role="bold">gdcm2pnm</emphasis> command line program takes as input a DICOM file and produces a rendered bitmap file.</para>
-</section>
-<section xml:id="gdcmxml_1parameters">
+</refsection>
+<refsection xml:id="gdcmxml_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file-in   DICOM input filename
 
 bitmap-out  Bitmap output filename
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1options">
+</refsection>
+<refsection xml:id="gdcmxml_1options">
 <title>OPTIONS</title>
-<section xml:id="gdcmxml_1options">
+<refsection xml:id="gdcmxml_1options">
 <title>OPTIONS</title>
 
 <para><literallayout></literallayout></para>
-</section>
-<section xml:id="gdcmxml_1general_options">
+</refsection>
+<refsection xml:id="gdcmxml_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -50,9 +58,9 @@ bitmap-out  Bitmap output filename
   -D   --debug
          debug mode, print debug information
 </literallayout></para>
-</section>
-</section>
-<section xml:id="gdcmviewer_1simple_usage">
+</refsection>
+</refsection>
+<refsection xml:id="gdcmviewer_1simple_usage">
 <title>Simple usage</title>
 
 <para><emphasis role="bold">gdcm2pnm</emphasis> will take as input DICOM and render it into a bitmap file using the window/level attributes value.</para>
@@ -61,16 +69,16 @@ bitmap-out  Bitmap output filename
 </literallayout></para>
 
 <para>It is much different from the gdcmraw or gdcmimg command line tool as it will render a DICOM image. This means that the output will be rendered in 8bits ready for display.</para>
-</section>
-<section xml:id="gdcmxml_1see_also">
+</refsection>
+<refsection xml:id="gdcmxml_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcm2vtk</emphasis>(1), <emphasis role="bold">gdcmimg</emphasis>(1)</para>
-</section>
-<section xml:id="gdcmxml_1copyright">
+</refsection>
+<refsection xml:id="gdcmxml_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
-</section>
+</refsection>
 
 </refentry>

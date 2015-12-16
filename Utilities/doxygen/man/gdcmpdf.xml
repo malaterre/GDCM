@@ -1,30 +1,38 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <refnamediv><refname>gdcmpdf</refname></refnamediv>
-    <title>Tool to convert PDF to PDF/DICOM.</title>
-<section xml:id="gdcmxml_1synopsis">
+  <refmeta>
+    <refentrytitle>gdcmpdf</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="source">GDCM</refmiscinfo>
+    <refmiscinfo class="version">VER_FULL</refmiscinfo>
+    <refmiscinfo class="manual">DICOM Manipulation.</refmiscinfo>
+  </refmeta>
+  <refnamediv><refname>gdcmpdf</refname>
+    <refpurpose>Tool to convert PDF to PDF/DICOM.</refpurpose>
+</refnamediv>
+<refsection xml:id="gdcmxml_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmpdf [options] file-in file-out
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1description">
+</refsection>
+<refsection xml:id="gdcmxml_1description">
 <title>DESCRIPTION</title>
 
 <para>The <emphasis role="bold">gdcmpdf</emphasis> tool convert a PDF file (any PDF version) into an encapsulated PDF/DICOM file. By default it will try to read the PDF meta information stored in the PDF and convert this information to some specific DICOM fields (see below). However it may fails (eg. wrong password on encrypted PDF file) in which case empty value are used.</para>
-</section>
-<section xml:id="gdcmxml_1parameters">
+</refsection>
+<refsection xml:id="gdcmxml_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file-in   PDF input filename
 
 file-out  DICOM output filename
 </literallayout></para>
-</section>
-<section xml:id="gdcmxml_1options">
+</refsection>
+<refsection xml:id="gdcmxml_1options">
 <title>OPTIONS</title>
-<section xml:id="gdcmxml_1general_options">
+<refsection xml:id="gdcmxml_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -45,9 +53,9 @@ file-out  DICOM output filename
   -D   --debug
          debug mode, print debug information
 </literallayout></para>
-</section>
-</section>
-<section xml:id="gdcmpdf_1usage_example">
+</refsection>
+</refsection>
+<refsection xml:id="gdcmpdf_1usage_example">
 <title>Usage Example</title>
 
 <para><literallayout>$ wget http://gdcm.sourceforge.net/gdcm.pdf
@@ -59,8 +67,8 @@ $ gdcmpdf gdcm.pdf gdcm.dcm
 <para><literallayout> $ gdcmraw -i gdcm.dcm -t 42,11 -o gdcm.dcm.pdf
  $ diff gdcm.pdf gdcm.dcm.pdf
 </literallayout></para>
-</section>
-<section xml:id="gdcmpdf_1pdf_mapping">
+</refsection>
+<refsection xml:id="gdcmpdf_1pdf_mapping">
 <title>PDF Info Mapping</title>
 
 <para>Here is how the PDF info is mapped to DICOM information (typical pdfinfo output):</para>
@@ -142,16 +150,16 @@ Change: 2009-04-28 16:05:00.000000000 +0200
 </listitem>
 </itemizedlist>
 </para>
-</section>
-<section xml:id="gdcmxml_1see_also">
+</refsection>
+<refsection xml:id="gdcmxml_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmconv</emphasis>(1), <emphasis role="bold">gdcmraw</emphasis>(1), <emphasis role="bold">pdfinfo</emphasis>(1)</para>
-</section>
-<section xml:id="gdcmxml_1copyright">
+</refsection>
+<refsection xml:id="gdcmxml_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
-</section>
+</refsection>
 
 </refentry>

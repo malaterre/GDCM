@@ -148,12 +148,17 @@ public:
   }
   /// Replace a dataelement with another one
   void Replace(const DataElement& de) {
-    if( DES.find(de) != DES.end() ) DES.erase(de);
+    ConstIterator it = DES.find(de);
+    // detect loop:
+    gdcmAssertAlwaysMacro( &*it != &de );
+    if( it != DES.end() ) DES.erase(de);
     DES.insert(de);
   }
   /// Only replace a DICOM attribute when it is missing or empty
   void ReplaceEmpty(const DataElement& de) {
     ConstIterator it = DES.find(de);
+    // detect loop:
+    gdcmAssertAlwaysMacro( &*it != &de );
     if( it != DES.end() && it->IsEmpty() )
       DES.erase(de);
     DES.insert(de);
