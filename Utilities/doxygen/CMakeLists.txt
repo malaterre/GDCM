@@ -223,9 +223,8 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     endif()
     subdirs(vtk)
   endif()
+endif()
 
-set(NEWMANPAGES 1)
-if(NEWMANPAGES)
 set(MANPAGES_XML
     gdcm2pnm
     gdcm2vtk
@@ -245,7 +244,9 @@ set(MANPAGES_XML
     gdcmviewer
     gdcmxml
     )
-find_package(LibXslt REQUIRED)
+find_package(LibXslt)
+# need an XSLT 1.0 processor, use xsltproc, maybe add more implementations later
+if(LIBXSLT_XSLTPROC_EXECUTABLE)
 foreach(docbook ${MANPAGES_XML})
   add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${docbook}.1
@@ -265,5 +266,6 @@ install(FILES
   ${MANPAGES}
   DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT DebugDevel
 )
-endif()
+else()
+  message(WARNING "Cannot build man page from docbook (need xsltproc)")
 endif()
