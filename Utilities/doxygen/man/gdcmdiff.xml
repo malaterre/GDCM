@@ -11,18 +11,18 @@
   <refnamediv><refname>gdcmdiff</refname>
     <refpurpose>dumps differences of two DICOM files</refpurpose>
 </refnamediv>
-<refsection xml:id="gdcmxml_1synopsis">
+<refsection xml:id="gdcmdiff_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmdiff [options] file1 file2
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1description">
+<refsection xml:id="gdcmdiff_1description">
 <title>DESCRIPTION</title>
 
 <para>The <emphasis role="bold">gdcmdiff</emphasis> command line program takes as input two DICOM files: file1 and file2.</para>
 </refsection>
-<refsection xml:id="gdcmxml_1parameters">
+<refsection xml:id="gdcmdiff_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file1   DICOM input filename
@@ -30,16 +30,16 @@
 file2   DICOM output filename
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
+<refsection xml:id="gdcmdiff_1options">
 <title>OPTIONS</title>
-<refsection xml:id="gdcmxml_1options">
-<title>OPTIONS</title>
+<refsection xml:id="gdcmdiff_1specific_options">
+<title>specific options</title>
 
 <para><literallayout>  -m      --meta          Compare metainformation. Default is off.
   -t &lt;n&gt;  --truncate &lt;n&gt;  String values trimmed to n characters.
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1general_options">
+<refsection xml:id="gdcmdiff_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -70,12 +70,12 @@ file2   DICOM output filename
 <para><literallayout>$ gdcmdiff input1.dcm input2.dcm
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1see_also">
+<refsection xml:id="gdcmdiff_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcminfo</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1copyright">
+<refsection xml:id="gdcmdiff_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>

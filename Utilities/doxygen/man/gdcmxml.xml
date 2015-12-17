@@ -34,8 +34,6 @@ file-out  output filename (can be absent)
 </refsection>
 <refsection xml:id="gdcmxml_1options">
 <title>OPTIONS</title>
-<refsection xml:id="gdcmxml_1parameters">
-<title>PARAMETERS</title>
 
 <para><literallayout>  -i --input      DICOM filename
   -o --output     DICOM filename
@@ -75,7 +73,6 @@ file-out  output filename (can be absent)
   -D   --debug
          debug mode, print debug information
 </literallayout></para>
-</refsection>
 </refsection>
 <refsection xml:id="gdcmxml_1see_also">
 <title>SEE ALSO</title>

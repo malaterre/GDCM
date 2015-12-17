@@ -11,18 +11,18 @@
   <refnamediv><refname>gdcmtar</refname>
     <refpurpose>Concatenate/Extract DICOM files.</refpurpose>
 </refnamediv>
-<refsection xml:id="gdcmxml_1synopsis">
+<refsection xml:id="gdcmtar_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmtar [options] file-in file-out
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1description">
+<refsection xml:id="gdcmtar_1description">
 <title>DESCRIPTION</title>
 
 <para>The <emphasis role="bold">gdcmtar</emphasis> is a command line tool used to tar/untar multi-frames images (including SIEMENS MOSAIC file)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1parameters">
+<refsection xml:id="gdcmtar_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file-in   DICOM input filename
@@ -30,10 +30,10 @@
 file-out  DICOM output filename
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
+<refsection xml:id="gdcmtar_1options">
 <title>OPTIONS</title>
-<refsection xml:id="gdcmxml_1options">
-<title>OPTIONS</title>
+<refsection xml:id="gdcmtar_1specific_options">
+<title>specific options</title>
 
 <para><literallayout>     --enhance    enhance (default)
   -U --unenhance  unenhance
@@ -42,7 +42,7 @@ file-out  DICOM output filename
      --root-uid        Root UID.
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1general_options">
+<refsection xml:id="gdcmtar_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -135,12 +135,12 @@ Dimensions: (64,64,1)
 </literallayout></para>
 </refsection>
 </refsection>
-<refsection xml:id="gdcmxml_1see_also">
+<refsection xml:id="gdcmtar_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmraw</emphasis>(1), <emphasis role="bold">gdcminfo</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1copyright">
+<refsection xml:id="gdcmtar_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>

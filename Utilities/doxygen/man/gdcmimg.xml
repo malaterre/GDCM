@@ -15,13 +15,13 @@
 <para>gdcmimg is a low level tool to allow de-/encapsulation from/to DICOM image. This tool does not understand Transfer Syntax conversion. It will encapsulate the raw data as-is. This has some impact in some cases, see special warnings below.</para>
 
 <para>It is important to note that gdcmimg can only encapsulate proper input file, for instance JPG and or JP2 are accepted since an associated DICOM Transfer Syntax can be found. However input such as TIFF and/or PNG are not, since DICOM does not support those. See instead a tool such as gdcm2vtk.</para>
-<refsection xml:id="gdcmxml_1synopsis">
+<refsection xml:id="gdcmimg_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmimg [options] file-in file-out
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1description">
+<refsection xml:id="gdcmimg_1description">
 <title>DESCRIPTION</title>
 
 <para>The <emphasis role="bold">gdcmimg</emphasis> command line tool can be used in two fashions: <itemizedlist>
@@ -34,7 +34,7 @@
 </itemizedlist>
 </para>
 </refsection>
-<refsection xml:id="gdcmxml_1parameters">
+<refsection xml:id="gdcmimg_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file-in   input filename (non-DICOM)
@@ -42,17 +42,15 @@
 file-out  DICOM output filename
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
+<refsection xml:id="gdcmimg_1options">
 <title>OPTIONS</title>
-<refsection xml:id="gdcmxml_1parameters">
-<title>PARAMETERS</title>
 
 <para><literallayout>  -i --input     Input filename
   -o --output    Output filename
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
-<title>OPTIONS</title>
+<refsection xml:id="gdcmimg_1specific_options">
+<title>specific options</title>
 
 <para><literallayout>     --endian %s       Endianness (LSB/MSB).
   -d --depth %d        Depth (Either 8/16/32 or BitsAllocated eg. 12 when known).
@@ -72,7 +70,7 @@ file-out  DICOM output filename
   -F --fill %d         Fill with pixel value specified.
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1general_options">
+<refsection xml:id="gdcmimg_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -99,7 +97,6 @@ file-out  DICOM output filename
 
 <para><literallayout>  GDCM_ROOT_UID Root UID
 </literallayout></para>
-</refsection>
 </refsection>
 <refsection xml:id="gdcmimg_1supported">
 <title>Supported File Format (appropriate file extension)</title>
@@ -262,12 +259,12 @@ $ gdcmconv --j2k --force output_jp2.dcm output_j2k.dcm
 <para><literallayout>$ gdcmconv --raw input_jpeg.dcm output_raw.dcm
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1see_also">
+<refsection xml:id="gdcmimg_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcm2vtk</emphasis>(1), <emphasis role="bold">gdcmraw</emphasis>(1), <emphasis role="bold">convert</emphasis>(1), <emphasis role="bold">dd</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1copyright">
+<refsection xml:id="gdcmimg_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>

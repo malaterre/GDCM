@@ -11,16 +11,16 @@
   <refnamediv><refname>gdcmgendir</refname>
     <refpurpose>Tool to generate a DICOMDIR file from a File-Set.</refpurpose>
 </refnamediv>
-<refsection xml:id="gdcmxml_1synopsis">
+<refsection xml:id="gdcmgendir_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmgendir [options] file-in file-out
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1description">
+<refsection xml:id="gdcmgendir_1description">
 <title>DESCRIPTION</title>
 </refsection>
-<refsection xml:id="gdcmxml_1parameters">
+<refsection xml:id="gdcmgendir_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file-in   DICOM input filename
@@ -28,15 +28,15 @@
 file-out  DICOM output filename
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
+<refsection xml:id="gdcmgendir_1options">
 <title>OPTIONS</title>
 <refsection xml:id="gdcmgendir_1params">
 <title>Parameters</title>
 
 <para><literallayout></literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
-<title>OPTIONS</title>
+<refsection xml:id="gdcmgendir_1specific_options">
+<title>specific options</title>
 
 <para><literallayout>  -i --input              DICOM filename or directory
   -o --output             DICOM filename or directory
@@ -45,7 +45,7 @@ file-out  DICOM output filename
      --root-uid           Root UID.
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1general_options">
+<refsection xml:id="gdcmgendir_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -95,12 +95,12 @@ Step 1. can be solved in a numerous way. Eg. on UNIX environment this could eith
 <para><literallayout>  $ for i in `ls IMG*`; do gdcmconv --raw --force $i /tmp/out/$i; done
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1see_also">
+<refsection xml:id="gdcmgendir_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmconv</emphasis>(1), <emphasis role="bold">gdcmanon</emphasis>(1), <emphasis role="bold">rename</emphasis>(1), <emphasis role="bold">mkisofs</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1copyright">
+<refsection xml:id="gdcmgendir_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>

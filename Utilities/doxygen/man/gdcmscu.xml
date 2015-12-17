@@ -11,13 +11,13 @@
   <refnamediv><refname>gdcmscu</refname>
     <refpurpose>Tool to execute a DICOM Query/Retrieve operation</refpurpose>
 </refnamediv>
-<refsection xml:id="gdcmxml_1synopsis">
+<refsection xml:id="gdcmscu_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmscu [OPTION]...[OPERATION]...HOSTNAME...[PORT]...
 </literallayout> Execute a DICOM Q/R operation to HOSTNAME, using port PORT (104 when not specified)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1description">
+<refsection xml:id="gdcmscu_1description">
 <title>DESCRIPTION</title>
 
 <para>The <emphasis role="bold">gdcmscu</emphasis> command line program is the tool to execute DICOM Query/Retrieve operation. It supports: <itemizedlist>
@@ -36,13 +36,13 @@
 </itemizedlist>
 </para>
 </refsection>
-<refsection xml:id="gdcmxml_1parameters">
+<refsection xml:id="gdcmscu_1parameters">
 <title>PARAMETERS</title>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
+<refsection xml:id="gdcmscu_1options">
 <title>OPTIONS</title>
-<refsection xml:id="gdcmxml_1options">
-<title>OPTIONS</title>
+<refsection xml:id="gdcmscu_1specific_options">
+<title>specific options</title>
 
 <para><literallayout>  -H --hostname    %s  Hostname.
   -p --port        %d  Port number.
@@ -90,7 +90,7 @@
                          Note that C-MOVE supports the same queries as C-FIND, but no wildcards are allowed
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1general_options">
+<refsection xml:id="gdcmscu_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -306,12 +306,12 @@
 
 <para><link xlink:href="http://www.dclunie.com/medical-image-faq/html/part8.html#DICOMPublicServers">http://www.dclunie.com/medical-image-faq/html/part8.html#DICOMPublicServers</link></para>
 </refsection>
-<refsection xml:id="gdcmxml_1see_also">
+<refsection xml:id="gdcmscu_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmconv</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1copyright">
+<refsection xml:id="gdcmscu_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright Insight Software Consortium </para>

@@ -11,18 +11,18 @@
   <refnamediv><refname>gdcmpap3</refname>
     <refpurpose>Tool to convert PAPYRUS 3.0 to DICOM.</refpurpose>
 </refnamediv>
-<refsection xml:id="gdcmxml_1synopsis">
+<refsection xml:id="gdcmpap3_1synopsis">
 <title>SYNOPSIS</title>
 
-<para><literallayout>gdcmconv [options] file-in file-out
+<para><literallayout>gdcmpap3 [options] file-in file-out
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1description">
+<refsection xml:id="gdcmpap3_1description">
 <title>DESCRIPTION</title>
 
-<para>The <emphasis role="bold">gdcmconv</emphasis> command line program takes as input a PAPYRUS 3.0 file (file-in) and process it to generate an output (pseudo) DICOM file (file-out). The command line option dictate the type of operation(s) gdcmconv will use to generate the output file.</para>
+<para>The <command>gdcmpap3</command> command line program takes as input a PAPYRUS 3.0 file (file-in) and process it to generate an output (pseudo) DICOM file (file-out). The command line option dictate the type of operation(s) gdcmpap3 will use to generate the output file.</para>
 </refsection>
-<refsection xml:id="gdcmxml_1parameters">
+<refsection xml:id="gdcmpap3_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file-in   DICOM input filename
@@ -30,24 +30,22 @@
 file-out  DICOM output filename
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
+<refsection xml:id="gdcmpap3_1options">
 <title>OPTIONS</title>
-<refsection xml:id="gdcmxml_1parameters">
-<title>PARAMETERS</title>
 
 <para><literallayout>  -i --input      DICOM filename
   -o --output     DICOM filename
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
-<title>OPTIONS</title>
+<refsection xml:id="gdcmpap3_1specific_options">
+<title>specific options</title>
 
 <para><literallayout>  -S --split            Split multiframes PAPYRUS 3.0 into multiples DICOM files
      --decomp-pap3      Use PAPYRUS 3.0 for decompressing (can be combined with --split).
      --check-iop        Check that the Image Orientation (Patient) Attribute is ok (see --split).
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1general_options">
+<refsection xml:id="gdcmpap3_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -69,34 +67,33 @@ file-out  DICOM output filename
          debug mode, print debug information
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmtar_1environment_variable">
+<refsection xml:id="gdcmpap3_1environment_variable">
 <title>environment variable</title>
 
 <para><literallayout>  GDCM_ROOT_UID Root UID
 </literallayout></para>
 </refsection>
-</refsection>
-<refsection xml:id="gdcmviewer_1simple_usage">
+<refsection xml:id="gdcmpap3_1simple_usage">
 <title>Simple usage</title>
 
-<para><emphasis role="bold">gdcmconv</emphasis> is a great tool to convert broken PAPYRUS 3.0 implementation into properly parsable DICOM file. Usage is simply:</para>
+<para><command>gdcmpap3</command> is a great tool to convert broken PAPYRUS 3.0 implementation into properly parsable DICOM file. Usage is simply:</para>
 
-<para><literallayout>$ gdcmconv input.pa3 output.dcm
+<para><literallayout>$ gdcmpap3 input.pa3 output.dcm
 </literallayout></para>
 
 <para>or if you prefer being explicit:</para>
 
-<para><literallayout>$ gdcmconv -i input.pa3 -o output.dcm
+<para><literallayout>$ gdcmpap3 -i input.pa3 -o output.dcm
 </literallayout></para>
 
 <para>Even though gdcmpap3 can overwrite directly on the same file (input.pa3 = output.dcm), it is recommended that user should first convert into a different file to make sure the bug is properly handled by GDCM.</para>
 </refsection>
-<refsection xml:id="gdcmxml_1see_also">
+<refsection xml:id="gdcmpap3_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmconv</emphasis>(1), <emphasis role="bold">gdcminfo</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1copyright">
+<refsection xml:id="gdcmpap3_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
