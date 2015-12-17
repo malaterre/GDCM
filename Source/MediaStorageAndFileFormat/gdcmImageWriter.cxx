@@ -35,12 +35,7 @@ ImageWriter::~ImageWriter()
 {
 }
 
-//void ImageWriter::SetImage(Image const &img)
-//{
-//  PixelData = img;
-//}
-
-bool ImageWriter::Write()
+MediaStorage ImageWriter::ComputeTargetMediaStorage()
 {
   MediaStorage ms;
   if( !ms.SetFromFile( GetFile() ) )
@@ -62,6 +57,12 @@ bool ImageWriter::Write()
         PixelData->GetPhotometricInterpretation(),
         GetImage().GetIntercept(), GetImage().GetSlope() );
   }
+  return ms;
+}
+
+bool ImageWriter::Write()
+{
+  const MediaStorage ms = ComputeTargetMediaStorage();
   if( !PrepareWrite( ms ) ) return false;
 
   //assert( Stream.is_open() );

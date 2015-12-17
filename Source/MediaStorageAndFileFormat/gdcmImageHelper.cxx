@@ -1665,7 +1665,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
 
 }
 
-void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag const & sqtag, unsigned int itemidx)
+static void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag const & sqtag, unsigned int itemidx)
 {
     const Tag tfgs = sqtag; //(0x5200,0x9230);
     SmartPointer<SequenceOfItems> sqi;
