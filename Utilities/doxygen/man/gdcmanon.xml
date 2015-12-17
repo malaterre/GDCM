@@ -11,14 +11,14 @@
   <refnamediv><refname>gdcmanon</refname>
     <refpurpose>Tool to anonymize a DICOM file.</refpurpose>
 </refnamediv>
-<refsection xml:id="gdcmxml_1synopsis">
+<refsection xml:id="gdcmanon_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmanon [options] file-in file-out
 gdcmanon [options] dir-in  dir-out
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1description">
+<refsection xml:id="gdcmanon_1description">
 <title>DESCRIPTION</title>
 
 <para>The <emphasis role="bold">gdcmanon</emphasis> tool is an implementation of PS 3.15 / E.1 / Basic Application Level Confidentiality Profile (Implementation of E.1.1 De-identify &amp; E.1.2 Re-identify)</para>
@@ -37,7 +37,7 @@ Dumb mode and PS 3.15 do not work well together, you should really only use one 
 
 <para>gdcmanon will exit early if OpenSSL was not configured/build properly into the library (see GDCM_USE_SYSTEM_OPENSSL in cmake).</para>
 </refsection>
-<refsection xml:id="gdcmxml_1parameters">
+<refsection xml:id="gdcmanon_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file-in   DICOM input filename
@@ -52,7 +52,7 @@ file-out  DICOM output filename
 file-out  DICOM output directory
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
+<refsection xml:id="gdcmanon_1options">
 <title>OPTIONS</title>
 
 <para>You need to specify at least one operating mode, from the following list (and only one):</para>
@@ -66,8 +66,8 @@ file-out  DICOM output directory
 
 <para>Warning when operating in dumb mode, you need to also specify an operation to do, such as &apos;remove&apos; or &apos;empty&apos; a tag, see below the dumb mode options.</para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
-<title>OPTIONS</title>
+<refsection xml:id="gdcmanon_1specific_options">
+<title>specific options</title>
 
 <para><literallayout>  -i --input                  DICOM filename / directory
   -o --output                 DICOM filename / directory
@@ -97,7 +97,7 @@ file-out  DICOM output directory
      --replace %d,%d,%s        DICOM tag(s) to replace
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1general_options">
+<refsection xml:id="gdcmanon_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -266,12 +266,12 @@ In this case one could simply do, as a first step execute the reversible anonymi
 
 <para>Certain attributes may still contains Protected Health Information (PHI) after an anonymization step. This is typically the case for Patient&apos;s Address (0010,1040). The reason is that this particular attribute is not supposed to be in the composite IODs in the first place. DICOM Supp 142 includes it (however gdcmanon does not implement it).</para>
 </refsection>
-<refsection xml:id="gdcmxml_1see_also">
+<refsection xml:id="gdcmanon_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmconv</emphasis>(1), <emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmdiff</emphasis>(1), <emphasis role="bold">openssl</emphasis>(1), <emphasis role="bold">dumpasn1</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1copyright">
+<refsection xml:id="gdcmanon_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>

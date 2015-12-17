@@ -11,18 +11,18 @@
   <refnamediv><refname>gdcmraw</refname>
     <refpurpose>Extract Data Element Value Field.</refpurpose>
 </refnamediv>
-<refsection xml:id="gdcmxml_1synopsis">
+<refsection xml:id="gdcmraw_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmraw [options] file-in file-out
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1description">
+<refsection xml:id="gdcmraw_1description">
 <title>DESCRIPTION</title>
 
 <para>The <emphasis role="bold">gdcmraw</emphasis> tool is mostly used for development purpose. It is used to extract a specific binary field from a DICOM DataSet.</para>
 </refsection>
-<refsection xml:id="gdcmxml_1parameters">
+<refsection xml:id="gdcmraw_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file-in   DICOM input filename
@@ -30,25 +30,23 @@
 file-out  output filename
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
+<refsection xml:id="gdcmraw_1options">
 <title>OPTIONS</title>
-<refsection xml:id="gdcmxml_1parameters">
-<title>PARAMETERS</title>
 
 <para><literallayout>  -i --input     Input filename
   -o --output    Output filename
   -t --tag       Specify tag to extract value from.
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
-<title>OPTIONS</title>
+<refsection xml:id="gdcmraw_1specific_options">
+<title>specific options</title>
 
 <para><literallayout>  -S --split-frags  Split fragments into multiple files.
   -p --pattern      Specify trailing file pattern (see split-frags).
   -P --pixel-data   Pixel Data trailing 0.
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1general_options">
+<refsection xml:id="gdcmraw_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -69,7 +67,6 @@ file-out  output filename
   -D   --debug
          debug mode, print debug information
 </literallayout></para>
-</refsection>
 </refsection>
 <refsection xml:id="gdcmviewer_1usage">
 <title>Typical usage</title>
@@ -212,12 +209,12 @@ Qabs_ranges=18,19,19,20,19,19,20,19,19,20,19,19,20,19,19,20
 </itemizedlist>
 Those are what is defined in ITU-T T.81, ISO/IEC IS 10918-1.</para>
 </refsection>
-<refsection xml:id="gdcmxml_1see_also">
+<refsection xml:id="gdcmraw_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmraw</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1copyright">
+<refsection xml:id="gdcmraw_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>

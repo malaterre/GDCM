@@ -11,14 +11,14 @@
   <refnamediv><refname>gdcmdump</refname>
     <refpurpose>dumps a DICOM file, it will display the structure and values contained in the specified DICOM file.</refpurpose>
 </refnamediv>
-<refsection xml:id="gdcmxml_1synopsis">
+<refsection xml:id="gdcmdump_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmdump [options] dcm_file
 gdcmdump [options] dcm_directory
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1description">
+<refsection xml:id="gdcmdump_1description">
 <title>DESCRIPTION</title>
 
 <para>The <emphasis role="bold">gdcmdump</emphasis> command line program dumps a DICOM file to the console. For those familiar with dcmdump (DCMTK) output, gdcmdump has some minor differences. Namely: <itemizedlist>
@@ -28,17 +28,17 @@ gdcmdump [options] dcm_directory
 </itemizedlist>
 gdcmdump has a limited private dictionary that is used to lookup private element whenever possible.</para>
 </refsection>
-<refsection xml:id="gdcmxml_1parameters">
+<refsection xml:id="gdcmdump_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>dcm_file        DICOM input filename
 dcm_directory   DICOM input directory
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
+<refsection xml:id="gdcmdump_1options">
 <title>OPTIONS</title>
-<refsection xml:id="gdcmxml_1options">
-<title>OPTIONS</title>
+<refsection xml:id="gdcmdump_1specific_options">
+<title>specific options</title>
 
 <para><literallayout>  -x --xml-dict       generate the XML dict (only private elements for now).
   -r --recursive      recursive (input is a directory)
@@ -55,7 +55,7 @@ dcm_directory   DICOM input directory
      --map-uid-names  map UID to names.
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1general_options">
+<refsection xml:id="gdcmdump_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -396,12 +396,12 @@ PMS/Item name: [PDF_SPT_PARS/IEEE_PDF/Y ]
 </literallayout></para>
 </refsection>
 </refsection>
-<refsection xml:id="gdcmxml_1see_also">
+<refsection xml:id="gdcmdump_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmraw</emphasis>(1), <emphasis role="bold">gdcmanon</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1copyright">
+<refsection xml:id="gdcmdump_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>

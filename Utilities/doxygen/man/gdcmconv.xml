@@ -11,18 +11,18 @@
   <refnamediv><refname>gdcmconv</refname>
     <refpurpose>Tool to convert DICOM to DICOM.</refpurpose>
 </refnamediv>
-<refsection xml:id="gdcmxml_1synopsis">
+<refsection xml:id="gdcmconv_1synopsis">
 <title>SYNOPSIS</title>
 
 <para><literallayout>gdcmconv [options] file-in file-out
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1description">
+<refsection xml:id="gdcmconv_1description">
 <title>DESCRIPTION</title>
 
 <para>The <emphasis role="bold">gdcmconv</emphasis> command line program takes as input a DICOM file (file-in) and process it to generate an output DICOM file (file-out). The command line option dictate the type of operation(s) gdcmconv will use to generate the output file.</para>
 </refsection>
-<refsection xml:id="gdcmxml_1parameters">
+<refsection xml:id="gdcmconv_1parameters">
 <title>PARAMETERS</title>
 
 <para><literallayout>file-in   DICOM input filename
@@ -30,17 +30,15 @@
 file-out  DICOM output filename
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
+<refsection xml:id="gdcmconv_1options">
 <title>OPTIONS</title>
-<refsection xml:id="gdcmxml_1parameters">
-<title>PARAMETERS</title>
 
 <para><literallayout>  -i --input      DICOM filename
   -o --output     DICOM filename
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
-<title>OPTIONS</title>
+<refsection xml:id="gdcmconv_1specific_options">
+<title>specific options</title>
 
 <para><literallayout>  -X --explicit            Change Transfer Syntax to explicit.
   -M --implicit            Change Transfer Syntax to implicit.
@@ -96,7 +94,7 @@ file-out  DICOM output filename
      --irreversible          set irreversible.
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1general_options">
+<refsection xml:id="gdcmconv_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -129,7 +127,6 @@ file-out  DICOM output filename
 
 <para><literallayout>  GDCM_ROOT_UID Root UID
 </literallayout></para>
-</refsection>
 </refsection>
 <refsection xml:id="gdcmviewer_1simple_usage">
 <title>Simple usage</title>
@@ -395,12 +392,12 @@ autocmd&#32;BufReadPost&#32;*.dcm&#32;silent&#32;%!dcmdump&#32;-M&#32;+uc&#32;&q
 </computeroutput></literallayout></para>
 </refsection>
 </refsection>
-<refsection xml:id="gdcmxml_1see_also">
+<refsection xml:id="gdcmconv_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmraw</emphasis>(1), <emphasis role="bold">gdcminfo</emphasis>(1), <emphasis role="bold">gdcmdiff</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1copyright">
+<refsection xml:id="gdcmconv_1copyright">
 <title>COPYRIGHT</title>
 
 <para>Copyright (c) 2006-2011 Mathieu Malaterre </para>

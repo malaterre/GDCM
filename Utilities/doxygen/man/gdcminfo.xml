@@ -1,6 +1,23 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+<info>
+<author>
+<personname>
+      <firstname>Mathieu</firstname>
+          <surname>Malaterre</surname>
+        </personname>
+<contrib>Main developer</contrib>
+<!--
+        <personblurb><para>??</para></personblurb>
+-->
+   </author>
+<copyright>
+        <year>2006</year>
+       <year>2011</year>
+        <holder>Mathieu Malaterre</holder>
+     </copyright>
+</info>
   <refmeta>
     <refentrytitle>gdcminfo</refentrytitle>
     <manvolnum>1</manvolnum>
@@ -11,36 +28,39 @@
   <refnamediv><refname>gdcminfo</refname>
     <refpurpose>Display meta info about the input DICOM file.</refpurpose>
 </refnamediv>
-<refsection xml:id="gdcmxml_1synopsis">
-<title>SYNOPSIS</title>
-
-<para><literallayout>gdcminfo [options] file-in
-</literallayout></para>
-</refsection>
-<refsection xml:id="gdcmxml_1description">
+ <refsynopsisdiv>
+      <cmdsynopsis>
+          <command>gdcminfo</command>
+        <arg choice="opt">
+            <option>options</option>
+        </arg>
+          <arg choice="opt" rep="repeat">file-in/dir-in</arg>
+      </cmdsynopsis>
+     </refsynopsisdiv>
+<refsection xml:id="gdcminfo_1description">
 <title>DESCRIPTION</title>
 
-<para>The <emphasis role="bold">gdcminfo</emphasis> command line program takes as input a DICOM file, or a directory and process it to extract meta- information about the DICOM file processed.</para>
+<para>The <emphasis role="bold">gdcminfo</emphasis> command line program takes as input a DICOM file, or a directory and process it to extract meta-information about the DICOM file(s) processed.</para>
 </refsection>
-<refsection xml:id="gdcmxml_1parameters">
+<refsection xml:id="gdcminfo_1parameters">
 <title>PARAMETERS</title>
 
-<para><literallayout>file-in   DICOM input filename
+<para><literallayout>file-in/dir-in   DICOM input filename/dirname
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1options">
+<refsection xml:id="gdcminfo_1options">
 <title>OPTIONS</title>
-<refsection xml:id="gdcmxml_1options">
-<title>OPTIONS</title>
+<refsection xml:id="gdcminfo_1specific_options">
+<title>specific options</title>
 
-<para><literallayout>  -r --recursive          recursive.
+<para><literallayout>  -r --recursive          recursive traversal of an input directory
   -d --check-deflated     check if file is proper deflated syntax.
      --resources-path     Resources path.
      --md5sum             Compute md5sum of Pixel Data attribute value.
      --check-compression  check the encapsulated stream compression (lossless/lossy).
 </literallayout></para>
 </refsection>
-<refsection xml:id="gdcmxml_1general_options">
+<refsection xml:id="gdcminfo_1general_options">
 <title>general options</title>
 
 <para><literallayout>  -h   --help
@@ -65,7 +85,7 @@
 <refsection xml:id="gdcmtar_1environment_variable">
 <title>environment variable</title>
 
-<para>GDCM_RESOURCES_PATH path pointing to resources files (Part3.xml, ...)</para>
+<para><envar>GDCM_RESOURCES_PATH</envar> path pointing to resources files (Part3.xml, ...)</para>
 </refsection>
 </refsection>
 <refsection xml:id="gdcmviewer_1simple_usage">
@@ -152,18 +172,12 @@ Orientation Label: SAGITTAL
 
 <para>The tool returns: &quot;Encapsulated Stream was found to be: lossy&quot;</para>
 
-<para>Pay attention that this tool also checks the Image Lossy Compression attribute (0028,2110). This means <computeroutput>check-compression</computeroutput> will also returns a value of lossy if a predecessor was found to be lossy compressed.</para>
+<para>Pay attention that this tool also checks the Image Lossy Compression attribute (0028,2110). This means <option>--check-compression</option> will also returns a value of lossy if a predecessor was found to be lossy compressed.</para>
 </refsection>
 </refsection>
-<refsection xml:id="gdcmxml_1see_also">
+<refsection xml:id="gdcminfo_1see_also">
 <title>SEE ALSO</title>
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmraw</emphasis>(1), <emphasis role="bold">gdcmconv</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1copyright">
-<title>COPYRIGHT</title>
-
-<para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
-</refsection>
-
 </refentry>

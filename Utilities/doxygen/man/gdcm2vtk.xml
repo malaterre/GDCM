@@ -32,8 +32,8 @@ file-out  output filename (DICOM or VTK supported)
 </refsection>
 <refsection xml:id="gdcmxml_1options">
 <title>OPTIONS</title>
-<refsection xml:id="gdcmxml_1options">
-<title>OPTIONS</title>
+<refsection xml:id="gdcmxml_1specific_options">
+<title>specific options</title>
 
 <para><literallayout>     --force-rescale    force rescale.
      --force-spacing    force spacing.
@@ -89,7 +89,7 @@ file-out  output filename (DICOM or VTK supported)
 </literallayout></para>
 </refsection>
 </refsection>
-<refsection xml:id="gdcmxml_1description">
+<refsection xml:id="gdcmxml_1description2">
 <title>DESCRIPTION</title>
 
 <para>Convert a file supported by VTK into DICOM.</para>
