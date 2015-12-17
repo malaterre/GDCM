@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+<info>
+<author><personname><firstname>Mathieu</firstname><surname>Malaterre</surname></personname><contrib>Main developer</contrib></author>
+<copyright><year>2006</year><year>2011</year><holder>Mathieu Malaterre</holder></copyright>
+</info>
   <refmeta>
     <refentrytitle>gdcmraw</refentrytitle>
     <manvolnum>1</manvolnum>
@@ -214,10 +218,4 @@ Those are what is defined in ITU-T T.81, ISO/IEC IS 10918-1.</para>
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmraw</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmraw_1copyright">
-<title>COPYRIGHT</title>
-
-<para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
-</refsection>
-
 </refentry>

@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+<info>
+<author><personname><firstname>Mathieu</firstname><surname>Malaterre</surname></personname><contrib>Main developer</contrib></author>
+<copyright><year>2006</year><year>2011</year><holder>Mathieu Malaterre</holder></copyright>
+</info>
   <refmeta>
     <refentrytitle>gdcmpdf</refentrytitle>
     <manvolnum>1</manvolnum>
@@ -156,10 +160,4 @@ Change: 2009-04-28 16:05:00.000000000 +0200
 
 <para><emphasis role="bold">gdcmconv</emphasis>(1), <emphasis role="bold">gdcmraw</emphasis>(1), <emphasis role="bold">pdfinfo</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1copyright">
-<title>COPYRIGHT</title>
-
-<para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
-</refsection>
-
 </refentry>

@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+<info>
+<author><personname><firstname>Mathieu</firstname><surname>Malaterre</surname></personname><contrib>Main developer</contrib></author>
+<copyright><year>2006</year><year>2011</year><holder>Mathieu Malaterre</holder></copyright>
+</info>
   <refmeta>
     <refentrytitle>gdcmviewer</refentrytitle>
     <manvolnum>1</manvolnum>
@@ -20,7 +24,7 @@
 <refsection xml:id="gdcmviewer_1description">
 <title>DESCRIPTION</title>
 
-<para>The <emphasis role="bold">gdcmviewer</emphasis> is a simple tool that show how to use <link linkend="classvtkGDCMImageReader">vtkGDCMImageReader</link>. The class that use gdcm to make a layer to VTK. <emphasis role="bold">gdcmviewer</emphasis> is basically only just a wrapper around VTK/GDCM.</para>
+<para>The <emphasis role="bold">gdcmviewer</emphasis> is a simple tool that show how to use <emphasis>vtkGDCMImageReader</emphasis>. The class that use gdcm to make a layer to VTK. <emphasis role="bold">gdcmviewer</emphasis> is basically only just a wrapper around VTK/GDCM.</para>
 
 <para>This tool is meant for testing integration of GDCM in VTK. You should see it as a demo tool. It does compile with VTK ranging from 4.2 to 5.10, but only with VTK 5.2 (or above) can play with the widgets (as described below).</para>
 </refsection>
@@ -102,10 +106,4 @@
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcm2vtk</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmviewer_1copyright">
-<title>COPYRIGHT</title>
-
-<para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
-</refsection>
-
 </refentry>

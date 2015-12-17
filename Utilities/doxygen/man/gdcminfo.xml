@@ -2,21 +2,8 @@
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
 <info>
-<author>
-<personname>
-      <firstname>Mathieu</firstname>
-          <surname>Malaterre</surname>
-        </personname>
-<contrib>Main developer</contrib>
-<!--
-        <personblurb><para>??</para></personblurb>
--->
-   </author>
-<copyright>
-        <year>2006</year>
-       <year>2011</year>
-        <holder>Mathieu Malaterre</holder>
-     </copyright>
+<author><personname><firstname>Mathieu</firstname><surname>Malaterre</surname></personname><contrib>Main developer</contrib></author>
+<copyright><year>2006</year><year>2011</year><holder>Mathieu Malaterre</holder></copyright>
 </info>
   <refmeta>
     <refentrytitle>gdcminfo</refentrytitle>

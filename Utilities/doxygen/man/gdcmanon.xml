@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+<info>
+<author><personname><firstname>Mathieu</firstname><surname>Malaterre</surname></personname><contrib>Main developer</contrib></author>
+<copyright><year>2006</year><year>2011</year><holder>Mathieu Malaterre</holder></copyright>
+</info>
   <refmeta>
     <refentrytitle>gdcmanon</refentrytitle>
     <manvolnum>1</manvolnum>
@@ -271,10 +275,4 @@ In this case one could simply do, as a first step execute the reversible anonymi
 
 <para><emphasis role="bold">gdcmconv</emphasis>(1), <emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmdiff</emphasis>(1), <emphasis role="bold">openssl</emphasis>(1), <emphasis role="bold">dumpasn1</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmanon_1copyright">
-<title>COPYRIGHT</title>
-
-<para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
-</refsection>
-
 </refentry>

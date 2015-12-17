@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+<info>
+<author><personname><firstname>Mathieu</firstname><surname>Malaterre</surname></personname><contrib>Main developer</contrib></author>
+<copyright><year>2006</year><year>2011</year><holder>Mathieu Malaterre</holder></copyright>
+</info>
   <refmeta>
     <refentrytitle>gdcm2vtk</refentrytitle>
     <manvolnum>1</manvolnum>
@@ -177,10 +181,4 @@ $ gdcm2vtk --modality US --imageformat 7 output.mhd output.dcm
 
 <para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmviewer</emphasis>(1), <emphasis role="bold">gdcmimg</emphasis>(1)</para>
 </refsection>
-<refsection xml:id="gdcmxml_1copyright">
-<title>COPYRIGHT</title>
-
-<para>Copyright (c) 2006-2011 Mathieu Malaterre </para>
-</refsection>
-
 </refentry>
