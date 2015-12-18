@@ -98,7 +98,17 @@ size_t ImageRegionReader::ComputeBufferLength() const
   else
   {
     std::vector<unsigned int> dims = ImageHelper::GetDimensionsValue(GetFile());
-    npixels = dims[0] * dims[1] * dims[2];
+    BoxRegion full;
+    // Use BoxRegion to do robust computation
+    full.SetRegion(0, dims[0] - 1,
+                   0, dims[1] - 1,
+                   0, dims[2] - 1 );
+    if( full.IsValid() )
+    {
+      gdcmDebugMacro( "Sorry not a valid extent. Giving up" );
+      return 0;
+     }
+    npixels = full.Area();
   }
   const PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
   const size_t bytesPerPixel = pixelInfo.GetPixelSize();
