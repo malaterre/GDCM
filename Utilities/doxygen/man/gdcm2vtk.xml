@@ -156,7 +156,7 @@ file-out  output filename (DICOM or VTK supported)
 <para><literallayout>$ gdcm2vtk input.dcm output.dcm
 </literallayout></para>
 
-<para><link linkend="classvtkGDCMImageReader">vtkGDCMImageReader</link> will be used to read in a DICOM file, not the default vtkDICOMImageReader. See option &#8211;use-vtkdicom to use vtkDICOMImageReader.</para>
+<para><emphasis>vtkGDCMImageReader</emphasis> will be used to read in a DICOM file, not the default vtkDICOMImageReader. See option &#8211;use-vtkdicom to use vtkDICOMImageReader.</para>
 </refsection>
 <refsection xml:id="gdcm2vtk_1round_tripmhd">
 <title>RoundTrip DICOM to MHD to DICOM</title>
