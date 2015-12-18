@@ -472,7 +472,13 @@ bool ImageRegionReader::ReadJPEGLSIntoBuffer(char *buffer, size_t buflen)
 bool ImageRegionReader::ReadIntoBuffer(char *buffer, size_t buflen)
 {
   size_t thelen = ComputeBufferLength();
-  if( buflen < thelen )
+  if( thelen == 0 )
+    {
+    // does not sound right, something seems odd.
+    gdcmDebugMacro( "Cannot load an image of 0 bytes" );
+    return false;
+    }
+   if( buflen < thelen )
     {
     gdcmDebugMacro( "buffer cannot be smaller than computed buffer length" );
     return false;
