@@ -223,8 +223,9 @@ unsigned int VR::GetSizeof() const
 
 int VR::GetIndex(VRType vr)
 {
-  assert( vr <= VR_END );
+  if( vr == VR::VL32 ) return 0;
   int l;
+  assert( vr <= VR_END );
   switch(vr)
     {
   case INVALID:
@@ -306,6 +307,12 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
     std::lower_bound(start, end, vr, MySort());
   if( (*p)[0] != vr[0] || (*p)[1] != vr[1] )
     {
+    if( (*p)[0] >= 'A' && (*p)[0] <= 'Z'
+     && (*p)[1] >= 'A' && (*p)[1] <= 'Z' )
+      {
+      // newly added VR ?
+      return VR::VL32;
+      }
     return VR::INVALID;
     }
   assert( (*p)[0] == vr[0] && (*p)[1] == vr[1] );
