@@ -307,8 +307,8 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
     std::lower_bound(start, end, vr, MySort());
   if( (*p)[0] != vr[0] || (*p)[1] != vr[1] )
     {
-    if( (*p)[0] >= 'A' && (*p)[0] <= 'Z'
-     && (*p)[1] >= 'A' && (*p)[1] <= 'Z' )
+    if( vr[0] >= 'A' && vr[0] <= 'Z'
+     && vr[1] >= 'A' && vr[1] <= 'Z' )
       {
       // newly added VR ?
       return VR::VL32;
