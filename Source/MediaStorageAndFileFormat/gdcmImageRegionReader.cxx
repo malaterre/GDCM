@@ -100,7 +100,7 @@ size_t ImageRegionReader::ComputeBufferLength() const
     std::vector<unsigned int> dims = ImageHelper::GetDimensionsValue(GetFile());
     BoxRegion full;
     // Use BoxRegion to do robust computation
-    full.SetRegion(0, dims[0] - 1,
+    full.SetDomain(0, dims[0] - 1,
                    0, dims[1] - 1,
                    0, dims[2] - 1 );
     if( full.IsValid() )
