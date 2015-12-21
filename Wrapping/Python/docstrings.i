@@ -960,6 +960,46 @@ gdcm::network::BaseCompositeMessage::ConstructPDV(const ULConnection
 &inConnection, const BaseRootQuery *inRootQuery)=0 ";
 
 
+// File: classgdcm_1_1network_1_1BaseNormalizedMessage.xml
+%feature("docstring") gdcm::network::BaseNormalizedMessage "
+
+BaseNormalizedMessage The Normalized events described in section
+3.7-2011 of the DICOM standard all use their own messages. These
+messages are constructed using Presentation Data Values, from section
+3.8-2011 of the standard, and then fill in appropriate values in their
+datasets.
+
+So, for the five normalized: N-ACTION
+
+N-CREATE
+
+N-DELETE
+
+N-EVENT
+
+N-GET
+
+N-SET there are a series of messages. However, all of these messages
+are obtained as part of a PDataPDU, and all have to be placed there.
+Therefore, since they all have shared functionality and construction
+tropes, that will be put into a base class. Further, the base class
+will be then returned by the factory class,
+gdcmNormalizedMessageFactory.h.  This is an abstract class. It cannot
+be instantiated on its own.
+
+C++ includes: gdcmBaseNormalizedMessage.h ";
+
+%feature("docstring")
+gdcm::network::BaseNormalizedMessage::~BaseNormalizedMessage "virtual
+gdcm::network::BaseNormalizedMessage::~BaseNormalizedMessage() ";
+
+%feature("docstring")
+gdcm::network::BaseNormalizedMessage::ConstructPDV "virtual
+std::vector<PresentationDataValue>
+gdcm::network::BaseNormalizedMessage::ConstructPDV(const ULConnection
+&inConnection, const BaseQuery *inQuery)=0 ";
+
+
 // File: classgdcm_1_1network_1_1BasePDU.xml
 %feature("docstring") gdcm::network::BasePDU "
 
@@ -1003,6 +1043,58 @@ std::ostream& gdcm::network::BasePDU::Write(std::ostream &os) const =0
 ";
 
 
+// File: classgdcm_1_1BaseQuery.xml
+%feature("docstring") gdcm::BaseQuery "
+
+BaseQuery contains: a baseclass which will produce a dataset for all
+dimse messages.
+
+C++ includes: gdcmBaseQuery.h ";
+
+%feature("docstring")  gdcm::BaseQuery::~BaseQuery "virtual
+gdcm::BaseQuery::~BaseQuery() ";
+
+%feature("docstring")  gdcm::BaseQuery::AddQueryDataSet "void
+gdcm::BaseQuery::AddQueryDataSet(const DataSet &ds) ";
+
+%feature("docstring")  gdcm::BaseQuery::GetAbstractSyntaxUID "virtual
+UIDs::TSName gdcm::BaseQuery::GetAbstractSyntaxUID() const =0 ";
+
+%feature("docstring")  gdcm::BaseQuery::GetQueryDataSet "DataSet
+const& gdcm::BaseQuery::GetQueryDataSet() const
+
+Set/Get the internal representation of the query as a DataSet. ";
+
+%feature("docstring")  gdcm::BaseQuery::GetQueryDataSet "DataSet&
+gdcm::BaseQuery::GetQueryDataSet() ";
+
+%feature("docstring")  gdcm::BaseQuery::GetSOPInstanceUID "std::string gdcm::BaseQuery::GetSOPInstanceUID() const ";
+
+%feature("docstring")  gdcm::BaseQuery::Print "void
+gdcm::BaseQuery::Print(std::ostream &os) const ";
+
+%feature("docstring")  gdcm::BaseQuery::SetSearchParameter "void
+gdcm::BaseQuery::SetSearchParameter(const Tag &inTag, const
+std::string &inValue) ";
+
+%feature("docstring")  gdcm::BaseQuery::SetSearchParameter "void
+gdcm::BaseQuery::SetSearchParameter(const std::string &inKeyword,
+const std::string &inValue) ";
+
+%feature("docstring")  gdcm::BaseQuery::SetSOPInstanceUID "void
+gdcm::BaseQuery::SetSOPInstanceUID(const std::string &iSopInstanceUID)
+";
+
+%feature("docstring")  gdcm::BaseQuery::ValidateQuery "virtual bool
+gdcm::BaseQuery::ValidateQuery(bool inStrict=true) const =0 ";
+
+%feature("docstring")  gdcm::BaseQuery::WriteHelpFile "const
+std::ostream& gdcm::BaseQuery::WriteHelpFile(std::ostream &os) ";
+
+%feature("docstring")  gdcm::BaseQuery::WriteQuery "bool
+gdcm::BaseQuery::WriteQuery(const std::string &inFileName) ";
+
+
 // File: classgdcm_1_1BaseRootQuery.xml
 %feature("docstring") gdcm::BaseRootQuery "
 
@@ -1026,20 +1118,6 @@ C++ includes: gdcmBaseRootQuery.h ";
 %feature("docstring")  gdcm::BaseRootQuery::~BaseRootQuery "virtual
 gdcm::BaseRootQuery::~BaseRootQuery() ";
 
-%feature("docstring")  gdcm::BaseRootQuery::AddQueryDataSet "void
-gdcm::BaseRootQuery::AddQueryDataSet(const DataSet &ds) ";
-
-%feature("docstring")  gdcm::BaseRootQuery::GetAbstractSyntaxUID "virtual UIDs::TSName gdcm::BaseRootQuery::GetAbstractSyntaxUID() const
-=0 ";
-
-%feature("docstring")  gdcm::BaseRootQuery::GetQueryDataSet "DataSet
-const& gdcm::BaseRootQuery::GetQueryDataSet() const
-
-Set/Get the internal representation of the query as a DataSet. ";
-
-%feature("docstring")  gdcm::BaseRootQuery::GetQueryDataSet "DataSet&
-gdcm::BaseRootQuery::GetQueryDataSet() ";
-
 %feature("docstring")  gdcm::BaseRootQuery::GetQueryLevelFromQueryRoot
 "EQueryLevel
 gdcm::BaseRootQuery::GetQueryLevelFromQueryRoot(ERootType roottype) ";
@@ -1058,17 +1136,6 @@ this function sets tag 8,52 to the appropriate value based on query
 level also fills in the right unique tags, as per the standard's
 requirements should allow for connection with dcmtk ";
 
-%feature("docstring")  gdcm::BaseRootQuery::Print "void
-gdcm::BaseRootQuery::Print(std::ostream &os) const ";
-
-%feature("docstring")  gdcm::BaseRootQuery::SetSearchParameter "void
-gdcm::BaseRootQuery::SetSearchParameter(const Tag &inTag, const
-std::string &inValue) ";
-
-%feature("docstring")  gdcm::BaseRootQuery::SetSearchParameter "void
-gdcm::BaseRootQuery::SetSearchParameter(const std::string &inKeyword,
-const std::string &inValue) ";
-
 %feature("docstring")  gdcm::BaseRootQuery::ValidateQuery "virtual
 bool gdcm::BaseRootQuery::ValidateQuery(bool inStrict=true) const =0
 
@@ -1086,12 +1153,6 @@ share that interpretation. So, if 'inStrict' is false, then tags from
 the current level and all higher levels are now considered valid. So,
 if you're doing a non-strict series-level query, tags from the patient
 and study level can be passed along as well. ";
-
-%feature("docstring")  gdcm::BaseRootQuery::WriteHelpFile "const
-std::ostream& gdcm::BaseRootQuery::WriteHelpFile(std::ostream &os) ";
-
-%feature("docstring")  gdcm::BaseRootQuery::WriteQuery "bool
-gdcm::BaseRootQuery::WriteQuery(const std::string &inFileName) ";
 
 
 // File: structgdcm_1_1SegmentHelper_1_1BasicCodedEntry.xml
@@ -2233,7 +2294,7 @@ C++ includes: gdcmCStoreMessages.h ";
 
 %feature("docstring")  gdcm::network::CStoreRQ::ConstructPDV "std::vector<PresentationDataValue>
 gdcm::network::CStoreRQ::ConstructPDV(const ULConnection
-&inConnection, const File &file) ";
+&inConnection, const File &file, bool writeDataSet=true) ";
 
 
 // File: classgdcm_1_1network_1_1CStoreRSP.xml
@@ -3861,7 +3922,7 @@ FileChangeTransferSyntax.
 This class is a file-based (limited) replacement of the in-memory
 ImageChangeTransferSyntax.
 
-This class provide a file-based compression-only mecanism. It will
+This class provide a file-based compression-only mechanism. It will
 take in an uncompressed DICOM image file (Pixel Data element). Then
 produced as output a compressed DICOM file (Transfer Syntax will be
 updated).
@@ -3907,6 +3968,40 @@ gdcm::FileChangeTransferSyntax::SetTransferSyntax(TransferSyntax const
 &ts)
 
 Specify the Target Transfer Syntax. ";
+
+
+// File: classgdcm_1_1FileDecompressLookupTable.xml
+%feature("docstring") gdcm::FileDecompressLookupTable "
+
+FileDecompressLookupTable class It decompress the segmented LUT into
+linearized one (only PALETTE_COLOR images) Output will be a
+PhotometricInterpretation=RGB image.
+
+C++ includes: gdcmFileDecompressLookupTable.h ";
+
+%feature("docstring")
+gdcm::FileDecompressLookupTable::FileDecompressLookupTable "gdcm::FileDecompressLookupTable::FileDecompressLookupTable() ";
+
+%feature("docstring")
+gdcm::FileDecompressLookupTable::~FileDecompressLookupTable "gdcm::FileDecompressLookupTable::~FileDecompressLookupTable() ";
+
+%feature("docstring")  gdcm::FileDecompressLookupTable::Change "bool
+gdcm::FileDecompressLookupTable::Change()
+
+Decompress. ";
+
+%feature("docstring")  gdcm::FileDecompressLookupTable::GetFile "File& gdcm::FileDecompressLookupTable::GetFile() ";
+
+%feature("docstring")  gdcm::FileDecompressLookupTable::GetPixmap "const Pixmap& gdcm::FileDecompressLookupTable::GetPixmap() const ";
+
+%feature("docstring")  gdcm::FileDecompressLookupTable::GetPixmap "Pixmap& gdcm::FileDecompressLookupTable::GetPixmap() ";
+
+%feature("docstring")  gdcm::FileDecompressLookupTable::SetFile "void
+gdcm::FileDecompressLookupTable::SetFile(const File &f)
+
+Set/Get File. ";
+
+%feature("docstring")  gdcm::FileDecompressLookupTable::SetPixmap "void gdcm::FileDecompressLookupTable::SetPixmap(Pixmap const &img) ";
 
 
 // File: classgdcm_1_1FileDerivation.xml
@@ -4181,7 +4276,7 @@ Convert backslash (windows style) to UNIX style slash. ";
 %feature("docstring")  gdcm::Filename::ToWindowsSlashes "const char*
 gdcm::Filename::ToWindowsSlashes()
 
-Convert foward slash (UNIX style) to windows style slash. ";
+Convert forward slash (UNIX style) to windows style slash. ";
 
 
 // File: classgdcm_1_1FileNameEvent.xml
@@ -5327,6 +5422,12 @@ C++ includes: gdcmImageWriter.h ";
 
 %feature("docstring")  gdcm::ImageWriter::~ImageWriter "gdcm::ImageWriter::~ImageWriter() ";
 
+%feature("docstring")  gdcm::ImageWriter::ComputeTargetMediaStorage "MediaStorage gdcm::ImageWriter::ComputeTargetMediaStorage()
+
+internal function used to compute a target MediaStorage the most
+appropriate User may want to call this function ahead of time (before
+Write) ";
+
 %feature("docstring")  gdcm::ImageWriter::GetImage "const Image&
 gdcm::ImageWriter::GetImage() const
 
@@ -5596,7 +5697,10 @@ how it is defined in DICOM, advanced users may refers to:
 http://gdcm.sourceforge.net/wiki/index.php/Imager_Pixel_Spacing
 
 Bug There are currently a couple of bugs in this implementation:
-Gantry Tilt is not considered
+Gantry Tilt is not considered (always an error)
+
+Application programmer should only sort valid DataSet (eg.
+MRImageStorage, CTImageStorage, PETImageStorage)
 
 C++ includes: gdcmIPPSorter.h ";
 
@@ -5637,14 +5741,14 @@ Sometimes IOP along a series is slightly changing for example:
 \"0.999081\\\\\\\\0.0426952\\\\\\\\0.00369272\\\\\\\\-0.0419025\\\\\\\\0.955059\\\\\\\\0.293439\",
 We need an API to define the tolerance which is allowed. Internally
 the cross vector of each direction cosines is computed. The tolerance
-then define the the distance in between 1. to the dot product of those
+then define the distance in between 1.0 to the dot product of those
 cross vectors. In a perfect world this dot product is of course 1.0
 which imply a DirectionCosines tolerance of exactly 0.0 (default). ";
 
 %feature("docstring")  gdcm::IPPSorter::SetDropDuplicatePositions "void gdcm::IPPSorter::SetDropDuplicatePositions(bool b)
 
 Makes the IPPSorter ignore multiple images located at the same
-position. Only the first occurence will be kept.
+position. Only the first occurrence will be kept.
 DropDuplicatePositions defaults to false. ";
 
 %feature("docstring")  gdcm::IPPSorter::SetZSpacingTolerance "void
@@ -6492,6 +6596,68 @@ gdcm::MeshPrimitive::SetPrimitivesData(PrimitivesData const &DEs) ";
 gdcm::MeshPrimitive::SetPrimitiveType(const MPType type) ";
 
 
+// File: classgdcm_1_1ModalityPerformedProcedureStepCreateQuery.xml
+%feature("docstring") gdcm::ModalityPerformedProcedureStepCreateQuery
+"
+
+ModalityPerformedProcedureStepCreateQuery contains: the class which
+will produce a dataset for n-create for Modality Performed Procedure
+Step sop class.
+
+C++ includes: gdcmModalityPerformedProcedureStepCreateQuery.h ";
+
+%feature("docstring")
+gdcm::ModalityPerformedProcedureStepCreateQuery::ModalityPerformedProcedureStepCreateQuery
+"gdcm::ModalityPerformedProcedureStepCreateQuery::ModalityPerformedProcedureStepCreateQuery(const
+std::string &iSopInstanceUID) ";
+
+%feature("docstring")
+gdcm::ModalityPerformedProcedureStepCreateQuery::GetAbstractSyntaxUID
+"UIDs::TSName
+gdcm::ModalityPerformedProcedureStepCreateQuery::GetAbstractSyntaxUID()
+const ";
+
+%feature("docstring")
+gdcm::ModalityPerformedProcedureStepCreateQuery::GetRequiredDataSet "gdcm::DataSet
+gdcm::ModalityPerformedProcedureStepCreateQuery::GetRequiredDataSet()
+const ";
+
+%feature("docstring")
+gdcm::ModalityPerformedProcedureStepCreateQuery::ValidateQuery "bool
+gdcm::ModalityPerformedProcedureStepCreateQuery::ValidateQuery(bool
+inStrict=true) const ";
+
+
+// File: classgdcm_1_1ModalityPerformedProcedureStepSetQuery.xml
+%feature("docstring") gdcm::ModalityPerformedProcedureStepSetQuery "
+
+ModalityPerformedProcedureStepSetQuery contains: the class which will
+produce a dataset for n-set for Modality Performed Procedure Step sop
+class.
+
+C++ includes: gdcmModalityPerformedProcedureStepSetQuery.h ";
+
+%feature("docstring")
+gdcm::ModalityPerformedProcedureStepSetQuery::ModalityPerformedProcedureStepSetQuery
+"gdcm::ModalityPerformedProcedureStepSetQuery::ModalityPerformedProcedureStepSetQuery(const
+std::string &iSopInstanceUID) ";
+
+%feature("docstring")
+gdcm::ModalityPerformedProcedureStepSetQuery::GetAbstractSyntaxUID "UIDs::TSName
+gdcm::ModalityPerformedProcedureStepSetQuery::GetAbstractSyntaxUID()
+const ";
+
+%feature("docstring")
+gdcm::ModalityPerformedProcedureStepSetQuery::GetRequiredDataSet "gdcm::DataSet
+gdcm::ModalityPerformedProcedureStepSetQuery::GetRequiredDataSet()
+const ";
+
+%feature("docstring")
+gdcm::ModalityPerformedProcedureStepSetQuery::ValidateQuery "bool
+gdcm::ModalityPerformedProcedureStepSetQuery::ValidateQuery(bool
+inStrict=true) const ";
+
+
 // File: classgdcm_1_1ModifiedEvent.xml
 %feature("docstring") gdcm::ModifiedEvent "C++ includes: gdcmEvent.h
 ";
@@ -6703,6 +6869,81 @@ if you're doing a non-strict series-level query, tags from the patient
 and study level can be passed along as well. ";
 
 
+// File: classgdcm_1_1network_1_1NActionRQ.xml
+%feature("docstring") gdcm::network::NActionRQ "
+
+NActionRQ this file defines the messages for the NAction action.
+
+C++ includes: gdcmNActionMessages.h ";
+
+%feature("docstring")  gdcm::network::NActionRQ::ConstructPDV "std::vector<PresentationDataValue>
+gdcm::network::NActionRQ::ConstructPDV(const ULConnection
+&inConnection, const BaseQuery *inQuery) ";
+
+
+// File: classgdcm_1_1network_1_1NActionRSP.xml
+%feature("docstring") gdcm::network::NActionRSP "
+
+NActionRSP this file defines the messages for the NAction action.
+
+C++ includes: gdcmNActionMessages.h ";
+
+%feature("docstring")
+gdcm::network::NActionRSP::ConstructPDVByDataSet "std::vector<PresentationDataValue>
+gdcm::network::NActionRSP::ConstructPDVByDataSet(const DataSet
+*inDataSet) ";
+
+
+// File: classgdcm_1_1network_1_1NCreateRQ.xml
+%feature("docstring") gdcm::network::NCreateRQ "
+
+NCreateRQ this file defines the messages for the ncreate action.
+
+C++ includes: gdcmNCreateMessages.h ";
+
+%feature("docstring")  gdcm::network::NCreateRQ::ConstructPDV "std::vector<PresentationDataValue>
+gdcm::network::NCreateRQ::ConstructPDV(const ULConnection
+&inConnection, const BaseQuery *inQuery) ";
+
+
+// File: classgdcm_1_1network_1_1NCreateRSP.xml
+%feature("docstring") gdcm::network::NCreateRSP "
+
+NCreateRSP this file defines the messages for the ncreate action.
+
+C++ includes: gdcmNCreateMessages.h ";
+
+%feature("docstring")
+gdcm::network::NCreateRSP::ConstructPDVByDataSet "std::vector<PresentationDataValue>
+gdcm::network::NCreateRSP::ConstructPDVByDataSet(const DataSet
+*inDataSet) ";
+
+
+// File: classgdcm_1_1network_1_1NDeleteRQ.xml
+%feature("docstring") gdcm::network::NDeleteRQ "
+
+NDeleteRQ this file defines the messages for the ndelete action.
+
+C++ includes: gdcmNDeleteMessages.h ";
+
+%feature("docstring")  gdcm::network::NDeleteRQ::ConstructPDV "std::vector<PresentationDataValue>
+gdcm::network::NDeleteRQ::ConstructPDV(const ULConnection
+&inConnection, const BaseQuery *inQuery) ";
+
+
+// File: classgdcm_1_1network_1_1NDeleteRSP.xml
+%feature("docstring") gdcm::network::NDeleteRSP "
+
+NDeleteRSP this file defines the messages for the ndelete action.
+
+C++ includes: gdcmNDeleteMessages.h ";
+
+%feature("docstring")
+gdcm::network::NDeleteRSP::ConstructPDVByDataSet "std::vector<PresentationDataValue>
+gdcm::network::NDeleteRSP::ConstructPDVByDataSet(const DataSet
+*inDataSet) ";
+
+
 // File: classgdcm_1_1NestedModuleEntries.xml
 %feature("docstring") gdcm::NestedModuleEntries "
 
@@ -6732,12 +6973,123 @@ gdcm::NestedModuleEntries::GetNumberOfModuleEntries "SizeType
 gdcm::NestedModuleEntries::GetNumberOfModuleEntries() ";
 
 
+// File: classgdcm_1_1network_1_1NEventReportRQ.xml
+%feature("docstring") gdcm::network::NEventReportRQ "
+
+NEventReportRQ this file defines the messages for the neventreport
+action.
+
+C++ includes: gdcmNEventReportMessages.h ";
+
+%feature("docstring")  gdcm::network::NEventReportRQ::ConstructPDV "std::vector<PresentationDataValue>
+gdcm::network::NEventReportRQ::ConstructPDV(const ULConnection
+&inConnection, const BaseQuery *inQuery) ";
+
+
+// File: classgdcm_1_1network_1_1NEventReportRSP.xml
+%feature("docstring") gdcm::network::NEventReportRSP "
+
+NEventReportRSP this file defines the messages for the neventreport
+action.
+
+C++ includes: gdcmNEventReportMessages.h ";
+
+%feature("docstring")
+gdcm::network::NEventReportRSP::ConstructPDVByDataSet "std::vector<PresentationDataValue>
+gdcm::network::NEventReportRSP::ConstructPDVByDataSet(const DataSet
+*inDataSet) ";
+
+
+// File: classgdcm_1_1network_1_1NGetRQ.xml
+%feature("docstring") gdcm::network::NGetRQ "
+
+NGetRQ this file defines the messages for the nget action.
+
+C++ includes: gdcmNGetMessages.h ";
+
+%feature("docstring")  gdcm::network::NGetRQ::ConstructPDV "std::vector<PresentationDataValue>
+gdcm::network::NGetRQ::ConstructPDV(const ULConnection &inConnection,
+const BaseQuery *inQuery) ";
+
+
+// File: classgdcm_1_1network_1_1NGetRSP.xml
+%feature("docstring") gdcm::network::NGetRSP "
+
+NGetRSP this file defines the messages for the nget action.
+
+C++ includes: gdcmNGetMessages.h ";
+
+%feature("docstring")  gdcm::network::NGetRSP::ConstructPDVByDataSet "std::vector<PresentationDataValue>
+gdcm::network::NGetRSP::ConstructPDVByDataSet(const DataSet
+*inDataSet) ";
+
+
 // File: classgdcm_1_1NoEvent.xml
 %feature("docstring") gdcm::NoEvent "
 
 Define some common GDCM events
 
 C++ includes: gdcmEvent.h ";
+
+
+// File: classgdcm_1_1network_1_1NormalizedMessageFactory.xml
+%feature("docstring") gdcm::network::NormalizedMessageFactory "C++
+includes: gdcmNormalizedMessageFactory.h ";
+
+
+// File: classgdcm_1_1NormalizedNetworkFunctions.xml
+%feature("docstring") gdcm::NormalizedNetworkFunctions "
+
+Normalized Network Functions These functions provide a generic API to
+the DICOM functions implemented in GDCM. Advanced users can use this
+code as a template for building their own versions of these functions
+(for instance, to provide progress bars or some other way of handling
+returned query information), but for most users, these functions
+should be sufficient to interface with a PACS to a local machine. Note
+that these functions are not contained within a static class or some
+other class-style interface, because multiple connections can be
+instantiated in the same program. The DICOM standard is much more
+function oriented rather than class oriented in this instance, so the
+design of this API reflects that functional approach. These functions
+implements the following SCU operations:
+
+N-EVENT-REPORT
+
+N-GET
+
+N-SET
+
+N-ACTION
+
+N-CREATE
+
+N-DELETE
+
+C++ includes: gdcmNormalizedNetworkFunctions.h ";
+
+
+// File: classgdcm_1_1network_1_1NSetRQ.xml
+%feature("docstring") gdcm::network::NSetRQ "
+
+NSetRQ this file defines the messages for the nset action.
+
+C++ includes: gdcmNSetMessages.h ";
+
+%feature("docstring")  gdcm::network::NSetRQ::ConstructPDV "std::vector<PresentationDataValue>
+gdcm::network::NSetRQ::ConstructPDV(const ULConnection &inConnection,
+const BaseQuery *inQuery) ";
+
+
+// File: classgdcm_1_1network_1_1NSetRSP.xml
+%feature("docstring") gdcm::network::NSetRSP "
+
+NSetRSP this file defines the messages for the nset action.
+
+C++ includes: gdcmNSetMessages.h ";
+
+%feature("docstring")  gdcm::network::NSetRSP::ConstructPDVByDataSet "std::vector<PresentationDataValue>
+gdcm::network::NSetRSP::ConstructPDVByDataSet(const DataSet
+*inDataSet) ";
 
 
 // File: classgdcm_1_1Object.xml
@@ -7024,7 +7376,7 @@ return if the Overlay is stored in the pixel data or not ";
 %feature("docstring")  gdcm::Overlay::IsInPixelData "void
 gdcm::Overlay::IsInPixelData(bool b)
 
-Set wether or no the OverlayData is in the Pixel Data: ";
+Set whether or no the OverlayData is in the Pixel Data: ";
 
 %feature("docstring")  gdcm::Overlay::IsZero "bool
 gdcm::Overlay::IsZero() const
@@ -7389,7 +7741,7 @@ C++ includes: gdcmPhotometricInterpretation.h ";
 
 %feature("docstring")
 gdcm::PhotometricInterpretation::PhotometricInterpretation "gdcm::PhotometricInterpretation::PhotometricInterpretation(PIType
-pi=UNKNOW) ";
+pi=UNKNOWN) ";
 
 %feature("docstring")
 gdcm::PhotometricInterpretation::GetSamplesPerPixel "unsigned short
@@ -7933,6 +8285,13 @@ C++ includes: gdcmPresentationContextGenerator.h ";
 
 %feature("docstring")
 gdcm::PresentationContextGenerator::PresentationContextGenerator "gdcm::PresentationContextGenerator::PresentationContextGenerator() ";
+
+%feature("docstring")  gdcm::PresentationContextGenerator::AddFromFile
+"bool gdcm::PresentationContextGenerator::AddFromFile(const File
+&file)
+
+Add a single PresentationContext from a single File. Call multiple
+times when dealing with multiple files. ";
 
 %feature("docstring")
 gdcm::PresentationContextGenerator::GenerateFromFilenames "bool
@@ -8719,6 +9078,11 @@ gdcm::Reader::SetStream(std::istream &input_stream)
 Set the open-ed stream directly. ";
 
 
+// File: structgdcm_1_1RealWorldValueMappingContent.xml
+%feature("docstring") gdcm::RealWorldValueMappingContent "C++
+includes: gdcmImageHelper.h ";
+
+
 // File: classgdcm_1_1Region.xml
 %feature("docstring") gdcm::Region "
 
@@ -8991,8 +9355,7 @@ tags. ";
 %feature("docstring")  gdcm::Scanner::AddTag "void
 gdcm::Scanner::AddTag(Tag const &t)
 
-Add a tag that will need to be read. Those are root level skip tags.
-";
+Add a tag that will need to be read. Those are root level tags. ";
 
 %feature("docstring")  gdcm::Scanner::Begin "ConstIterator
 gdcm::Scanner::Begin() const ";
@@ -9390,6 +9753,12 @@ constructor (UndefinedLength by default) ";
 
 %feature("docstring")  gdcm::SequenceOfItems::AddItem "void
 gdcm::SequenceOfItems::AddItem(Item const &item)
+
+Appends an Item to the already added ones. ";
+
+%feature("docstring")
+gdcm::SequenceOfItems::AddNewUndefinedLengthItem "Item&
+gdcm::SequenceOfItems::AddNewUndefinedLengthItem()
 
 Appends an Item to the already added ones. ";
 
@@ -11968,7 +12337,8 @@ C++ includes: gdcmULConnectionManager.h ";
 gdcm::network::ULConnectionManager::ULConnectionManager "gdcm::network::ULConnectionManager::ULConnectionManager() ";
 
 %feature("docstring")
-gdcm::network::ULConnectionManager::~ULConnectionManager "gdcm::network::ULConnectionManager::~ULConnectionManager() ";
+gdcm::network::ULConnectionManager::~ULConnectionManager "virtual
+gdcm::network::ULConnectionManager::~ULConnectionManager() ";
 
 %feature("docstring")
 gdcm::network::ULConnectionManager::BreakConnection "bool
@@ -12024,11 +12394,64 @@ gdcm::network::ULConnectionManager::SendMove(const BaseRootQuery
 
 return false upon error ";
 
+%feature("docstring")  gdcm::network::ULConnectionManager::SendNAction
+"std::vector<DataSet>
+gdcm::network::ULConnectionManager::SendNAction(const BaseQuery
+*inQuery) ";
+
+%feature("docstring")  gdcm::network::ULConnectionManager::SendNAction
+"void gdcm::network::ULConnectionManager::SendNAction(const BaseQuery
+*inQuery, ULConnectionCallback *inCallback) ";
+
+%feature("docstring")  gdcm::network::ULConnectionManager::SendNCreate
+"std::vector<DataSet>
+gdcm::network::ULConnectionManager::SendNCreate(const BaseQuery
+*inQuery) ";
+
+%feature("docstring")  gdcm::network::ULConnectionManager::SendNCreate
+"void gdcm::network::ULConnectionManager::SendNCreate(const BaseQuery
+*inQuery, ULConnectionCallback *inCallback) ";
+
+%feature("docstring")  gdcm::network::ULConnectionManager::SendNDelete
+"std::vector<DataSet>
+gdcm::network::ULConnectionManager::SendNDelete(const BaseQuery
+*inQuery) ";
+
+%feature("docstring")  gdcm::network::ULConnectionManager::SendNDelete
+"void gdcm::network::ULConnectionManager::SendNDelete(const BaseQuery
+*inQuery, ULConnectionCallback *inCallback) ";
+
+%feature("docstring")
+gdcm::network::ULConnectionManager::SendNEventReport "std::vector<DataSet>
+gdcm::network::ULConnectionManager::SendNEventReport(const BaseQuery
+*inQuery) ";
+
+%feature("docstring")
+gdcm::network::ULConnectionManager::SendNEventReport "void
+gdcm::network::ULConnectionManager::SendNEventReport(const BaseQuery
+*inQuery, ULConnectionCallback *inCallback) ";
+
+%feature("docstring")  gdcm::network::ULConnectionManager::SendNGet "std::vector<DataSet>
+gdcm::network::ULConnectionManager::SendNGet(const BaseQuery *inQuery)
+";
+
+%feature("docstring")  gdcm::network::ULConnectionManager::SendNGet "void gdcm::network::ULConnectionManager::SendNGet(const BaseQuery
+*inQuery, ULConnectionCallback *inCallback) ";
+
+%feature("docstring")  gdcm::network::ULConnectionManager::SendNSet "std::vector<DataSet>
+gdcm::network::ULConnectionManager::SendNSet(const BaseQuery *inQuery)
+";
+
+%feature("docstring")  gdcm::network::ULConnectionManager::SendNSet "void gdcm::network::ULConnectionManager::SendNSet(const BaseQuery
+*inQuery, ULConnectionCallback *inCallback) ";
+
 %feature("docstring")  gdcm::network::ULConnectionManager::SendStore "std::vector<DataSet>
-gdcm::network::ULConnectionManager::SendStore(const File &file) ";
+gdcm::network::ULConnectionManager::SendStore(const File &file,
+std::istream *pStream=NULL, std::streampos dataSetOffset=0) ";
 
 %feature("docstring")  gdcm::network::ULConnectionManager::SendStore "void gdcm::network::ULConnectionManager::SendStore(const File &file,
-ULConnectionCallback *inCallback)
+ULConnectionCallback *inCallback, std::istream *pStream=NULL,
+std::streampos dataSetOffset=0)
 
 callback based API ";
 
@@ -12047,15 +12470,21 @@ associated event to destroy it!
 C++ includes: gdcmULEvent.h ";
 
 %feature("docstring")  gdcm::network::ULEvent::ULEvent "gdcm::network::ULEvent::ULEvent(const EEventID &inEventID,
-std::vector< BasePDU * > const &inBasePDU) ";
+std::vector< BasePDU * > inBasePDU, std::istream *iStream=NULL,
+std::streampos posDataSet=0) ";
 
 %feature("docstring")  gdcm::network::ULEvent::ULEvent "gdcm::network::ULEvent::ULEvent(const EEventID &inEventID, BasePDU
-*inBasePDU) ";
+*inBasePDU, std::istream *iStream=NULL, std::streampos posDataSet=0)
+";
 
 %feature("docstring")  gdcm::network::ULEvent::~ULEvent "gdcm::network::ULEvent::~ULEvent() ";
 
+%feature("docstring")  gdcm::network::ULEvent::GetDataSetPos "std::streampos gdcm::network::ULEvent::GetDataSetPos() const ";
+
 %feature("docstring")  gdcm::network::ULEvent::GetEvent "EEventID
 gdcm::network::ULEvent::GetEvent() const ";
+
+%feature("docstring")  gdcm::network::ULEvent::GetIStream "std::istream* gdcm::network::ULEvent::GetIStream() const ";
 
 %feature("docstring")  gdcm::network::ULEvent::GetPDUs "std::vector<BasePDU*> const& gdcm::network::ULEvent::GetPDUs() const
 ";
@@ -13427,6 +13856,51 @@ C++ includes: gdcmWaveform.h ";
 %feature("docstring")  gdcm::Waveform::Waveform "gdcm::Waveform::Waveform() ";
 
 
+// File: classgdcm_1_1WLMFindQuery.xml
+%feature("docstring") gdcm::WLMFindQuery "
+
+PatientRootQuery contains: the class which will produce a dataset for
+c-find with patient root.
+
+C++ includes: gdcmWLMFindQuery.h ";
+
+%feature("docstring")  gdcm::WLMFindQuery::WLMFindQuery "gdcm::WLMFindQuery::WLMFindQuery() ";
+
+%feature("docstring")  gdcm::WLMFindQuery::GetAbstractSyntaxUID "UIDs::TSName gdcm::WLMFindQuery::GetAbstractSyntaxUID() const ";
+
+%feature("docstring")  gdcm::WLMFindQuery::GetTagListByLevel "std::vector<Tag> gdcm::WLMFindQuery::GetTagListByLevel(const
+EQueryLevel &inQueryLevel)
+
+this function will return all tags at a given query level, so that
+they maybe selected for searching. The boolean forFind is true if the
+query is a find query, or false for a move query. ";
+
+%feature("docstring")  gdcm::WLMFindQuery::InitializeDataSet "void
+gdcm::WLMFindQuery::InitializeDataSet(const EQueryLevel &inQueryLevel)
+
+this function sets tag 8,52 to the appropriate value based on query
+level also fills in the right unique tags, as per the standard's
+requirements should allow for connection with dcmtk ";
+
+%feature("docstring")  gdcm::WLMFindQuery::ValidateQuery "bool
+gdcm::WLMFindQuery::ValidateQuery(bool inStrict=true) const
+
+have to be able to ensure that 0x8,0x52 is set (which will be true if
+InitializeDataSet is called...) that the level is appropriate (ie, not
+setting PATIENT for a study query that the tags in the query match the
+right level (either required, unique, optional) by default, this
+function checks to see if the query is for finding, which is more
+permissive than for moving. For moving, only the unique tags are
+allowed. 10 Jan 2011: adding in the 'strict' mode. according to the
+standard (at least, how I've read it), only tags for a particular
+level should be allowed in a particular query (ie, just series level
+tags in a series level query). However, it seems that dcm4chee doesn't
+share that interpretation. So, if 'inStrict' is false, then tags from
+the current level and all higher levels are now considered valid. So,
+if you're doing a non-strict series-level query, tags from the patient
+and study level can be passed along as well. ";
+
+
 // File: classgdcm_1_1Writer.xml
 %feature("docstring") gdcm::Writer "
 
@@ -13537,8 +14011,8 @@ gdcm::XMLPrinter::GetPrintStyle() const ";
 gdcm::XMLPrinter::HandleBulkData(const char *uuid, const
 TransferSyntax &ts, const char *bulkdata, size_t bulklen)
 
-Virtual function mecanism to allow application programmer to override
-the default mecanism for BulkData handling. By default GDCM will
+Virtual function mechanism to allow application programmer to override
+the default mechanism for BulkData handling. By default GDCM will
 simply discard the BulkData and only write the UUID ";
 
 %feature("docstring")  gdcm::XMLPrinter::Print "void
@@ -13623,12 +14097,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: namespacestd.xml
 
 
-// File: gdcm2pnm_8dox.xml
-
-
-// File: gdcm2vtk_8dox.xml
-
-
 // File: gdcmAAbortPDU_8h.xml
 
 
@@ -13642,9 +14110,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmAbstractSyntax_8h.xml
-
-
-// File: gdcmanon_8dox.xml
 
 
 // File: gdcmAnonymizeEvent_8h.xml
@@ -13686,7 +14151,13 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmBaseCompositeMessage_8h.xml
 
 
+// File: gdcmBaseNormalizedMessage_8h.xml
+
+
 // File: gdcmBasePDU_8h.xml
+
+
+// File: gdcmBaseQuery_8h.xml
 
 
 // File: gdcmBaseRootQuery_8h.xml
@@ -13753,9 +14224,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmConstCharWrapper_8h.xml
-
-
-// File: gdcmconv_8dox.xml
 
 
 // File: gdcmCP246ExplicitDataElement_8h.xml
@@ -13836,9 +14304,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmDicts_8h.xml
 
 
-// File: gdcmdiff_8dox.xml
-
-
 // File: gdcmDIMSE_8h.xml
 
 
@@ -13852,9 +14317,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmDummyValueGenerator_8h.xml
-
-
-// File: gdcmdump_8dox.xml
 
 
 // File: gdcmDumper_8h.xml
@@ -13893,6 +14355,9 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmFileChangeTransferSyntax_8h.xml
 
 
+// File: gdcmFileDecompressLookupTable_8h.xml
+
+
 // File: gdcmFileDerivation_8h.xml
 
 
@@ -13924,9 +14389,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmFragment_8h.xml
-
-
-// File: gdcmgendir_8dox.xml
 
 
 // File: gdcmGlobal_8h.xml
@@ -13983,9 +14445,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmImageWriter_8h.xml
 
 
-// File: gdcmimg_8dox.xml
-
-
 // File: gdcmImplementationClassUIDSub_8h.xml
 
 
@@ -13996,9 +14455,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmImplicitDataElement_8h.xml
-
-
-// File: gdcminfo_8dox.xml
 
 
 // File: gdcmIOD_8h.xml
@@ -14070,6 +14526,12 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmMeshPrimitive_8h.xml
 
 
+// File: gdcmModalityPerformedProcedureStepCreateQuery_8h.xml
+
+
+// File: gdcmModalityPerformedProcedureStepSetQuery_8h.xml
+
+
 // File: gdcmModule_8h.xml
 
 
@@ -14085,6 +14547,15 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmMoveStudyRootQuery_8h.xml
 
 
+// File: gdcmNActionMessages_8h.xml
+
+
+// File: gdcmNCreateMessages_8h.xml
+
+
+// File: gdcmNDeleteMessages_8h.xml
+
+
 // File: gdcmNestedModuleEntries_8h.xml
 
 
@@ -14092,6 +14563,21 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmNetworkStateID_8h.xml
+
+
+// File: gdcmNEventReportMessages_8h.xml
+
+
+// File: gdcmNGetMessages_8h.xml
+
+
+// File: gdcmNormalizedMessageFactory_8h.xml
+
+
+// File: gdcmNormalizedNetworkFunctions_8h.xml
+
+
+// File: gdcmNSetMessages_8h.xml
 
 
 // File: gdcmObject_8h.xml
@@ -14115,9 +14601,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmOverlay_8h.xml
 
 
-// File: gdcmpap3_8dox.xml
-
-
 // File: gdcmParseException_8h.xml
 
 
@@ -14134,9 +14617,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmPDBHeader_8h.xml
-
-
-// File: gdcmpdf_8dox.xml
 
 
 // File: gdcmPDFCodec_8h.xml
@@ -14223,9 +14703,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmQueryStudy_8h.xml
 
 
-// File: gdcmraw_8dox.xml
-
-
 // File: gdcmRAWCodec_8h.xml
 
 
@@ -14244,13 +14721,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmRoleSelectionSub_8h.xml
 
 
-// File: gdcmscanner_8dox.xml
-
-
 // File: gdcmScanner_8h.xml
-
-
-// File: gdcmscu_8dox.xml
 
 
 // File: gdcmSegment_8h.xml
@@ -14376,9 +14847,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmTagToVR_8h.xml
 
 
-// File: gdcmtar_8dox.xml
-
-
 // File: gdcmTerminal_8h.xml
 
 
@@ -14478,9 +14946,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmVersion_8h.xml
 
 
-// File: gdcmviewer_8dox.xml
-
-
 // File: gdcmVL_8h.xml
 
 
@@ -14499,10 +14964,10 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmWin32_8h.xml
 
 
+// File: gdcmWLMFindQuery_8h.xml
+
+
 // File: gdcmWriter_8h.xml
-
-
-// File: gdcmxml_8dox.xml
 
 
 // File: gdcmXMLDictReader_8h.xml
@@ -14571,57 +15036,6 @@ gdcm::terminal::setmode(Mode m) ";
 // File: vtkRTStructSetProperties_8h.xml
 
 
-// File: gdcm2pnm.xml
-
-
-// File: gdcm2vtk.xml
-
-
-// File: gdcmanon.xml
-
-
-// File: gdcmconv.xml
-
-
-// File: gdcmdiff.xml
-
-
-// File: gdcmdump.xml
-
-
-// File: gdcmgendir.xml
-
-
-// File: gdcmimg.xml
-
-
-// File: gdcminfo.xml
-
-
-// File: gdcmpap3.xml
-
-
-// File: gdcmpdf.xml
-
-
-// File: gdcmraw.xml
-
-
-// File: gdcmscanner.xml
-
-
-// File: gdcmscu.xml
-
-
-// File: gdcmtar.xml
-
-
-// File: gdcmviewer.xml
-
-
-// File: gdcmxml.xml
-
-
 // File: todo.xml
 
 
@@ -14631,40 +15045,40 @@ gdcm::terminal::setmode(Mode m) ";
 // File: bug.xml
 
 
-// File: dir_baa54b0fc0a51ae65b8ade5fc5834843.xml
+// File: dir_48be02fb937e08881437e02515417ab2.xml
 
 
-// File: dir_760652a266da5834cc3e97cfe417708e.xml
+// File: dir_dbdfee04788ce02e68d05e06d5e6d98f.xml
 
 
-// File: dir_c4773660235d6419cbce98ba7728c69c.xml
+// File: dir_422e8974cbd0b7203ed9c70ede735192.xml
 
 
-// File: dir_4eed16b43278c59f2ec90617aa823645.xml
+// File: dir_fc2dbd93ff698b14d78f486017ee822b.xml
 
 
-// File: dir_1b862fb7590f5660fca04cc43d96fb27.xml
+// File: dir_63e84970519399936bea68aa0151439e.xml
 
 
-// File: dir_a73f40d126d81357a14a94e26d2bdf1b.xml
+// File: dir_a3a231e2bd7f702d85036607d7d87964.xml
 
 
-// File: dir_a4ab8faed3a40b14352018492e6b9514.xml
+// File: dir_bfc3201f3b82d7ccf14c524caa3c389b.xml
 
 
-// File: dir_b6fa77c9e8690cb24913e26282ff8de3.xml
+// File: dir_9a6580727919559370fc2250dcaca6b8.xml
 
 
-// File: dir_9681c4dd247acdffddd07e8149decc60.xml
+// File: dir_087222ad62d2f517f4e0198672951648.xml
 
 
-// File: dir_1060e304b1e64f0c0a2e3f0d58ae4655.xml
+// File: dir_2a74275ceded0a5f3b0fb2e9bd792825.xml
 
 
-// File: dir_e1e30d61f6961475b2a4c887cfe98de1.xml
+// File: dir_acafdc7d686494cf0735517ddc7a7669.xml
 
 
-// File: dir_cff348c9442501173f15a3e4169a76d0.xml
+// File: dir_d2ab22b73e3ee89be3a207288d7a9056.xml
 
 
 // File: AWTMedical3_8java-example.xml
@@ -14862,6 +15276,9 @@ gdcm::terminal::setmode(Mode m) ";
 // File: FixJAIBugJPEGLS_8cxx-example.xml
 
 
+// File: FixOrientation_8cxx-example.xml
+
+
 // File: gdcmorthoplanes_8cxx-example.xml
 
 
@@ -14968,6 +15385,9 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: MagnifyFile_8cxx-example.xml
+
+
+// File: MakeTemplate_8cxx-example.xml
 
 
 // File: ManipulateFile_8cs-example.xml

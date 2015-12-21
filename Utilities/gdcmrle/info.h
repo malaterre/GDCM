@@ -41,7 +41,7 @@ public:
   /// return number of bits per pixel
   int get_number_of_bits_per_pixel() const;
 
-  /// return wether or not the number of segments `num_segments` is valid
+  /// return whether or not the number of segments `num_segments` is valid
   static bool check_num_segments( const int num_segments );
 
 private:

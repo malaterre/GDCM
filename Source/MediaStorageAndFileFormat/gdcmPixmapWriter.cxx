@@ -283,7 +283,7 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
     }
 
     {
-    assert( pi != PhotometricInterpretation::UNKNOW );
+    assert( pi != PhotometricInterpretation::UNKNOWN );
     const char *pistr = PhotometricInterpretation::GetPIString(pi);
     DataElement de( Tag(0x0028, 0x0004 ) );
     VL::Type strlenPistr = (VL::Type)strlen(pistr);

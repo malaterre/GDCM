@@ -131,7 +131,7 @@ std::istream &CP246ExplicitDataElement::ReadValue(std::istream &is, bool readval
   //assert( ValueField == 0 );
   if( VRField == VR::SQ )
     {
-    // Check wether or not this is an undefined length sequence
+    // Check whether or not this is an undefined length sequence
     assert( TagField != Tag(0x7fe0,0x0010) );
     ValueField = new SequenceOfItems;
     }
