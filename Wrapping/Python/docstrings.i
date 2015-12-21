@@ -6448,10 +6448,6 @@ In all other cases it will return an error
 
 C++ includes: gdcmMD5.h ";
 
-%feature("docstring")  gdcm::MD5::MD5 "gdcm::MD5::MD5() ";
-
-%feature("docstring")  gdcm::MD5::~MD5 "gdcm::MD5::~MD5() ";
-
 
 // File: classgdcm_1_1MediaStorage.xml
 %feature("docstring") gdcm::MediaStorage "
@@ -8123,34 +8119,50 @@ C++ includes: gdcmPreamble.h ";
 %feature("docstring")  gdcm::Preamble::~Preamble "gdcm::Preamble::~Preamble() ";
 
 %feature("docstring")  gdcm::Preamble::Clear "void
-gdcm::Preamble::Clear() ";
+gdcm::Preamble::Clear()
+
+Clear. ";
 
 %feature("docstring")  gdcm::Preamble::Create "void
 gdcm::Preamble::Create() ";
 
 %feature("docstring")  gdcm::Preamble::GetInternal "const char*
-gdcm::Preamble::GetInternal() const ";
+gdcm::Preamble::GetInternal() const
+
+Get internal pointer to preamble. ";
 
 %feature("docstring")  gdcm::Preamble::GetLength "VL
-gdcm::Preamble::GetLength() const ";
+gdcm::Preamble::GetLength() const
+
+Return size of Preamble. ";
 
 %feature("docstring")  gdcm::Preamble::IsEmpty "bool
-gdcm::Preamble::IsEmpty() const ";
+gdcm::Preamble::IsEmpty() const
+
+Check if Preamble is empty. ";
 
 %feature("docstring")  gdcm::Preamble::Print "void
-gdcm::Preamble::Print(std::ostream &os) const ";
+gdcm::Preamble::Print(std::ostream &os) const
+
+Print Preamble. ";
 
 %feature("docstring")  gdcm::Preamble::Read "std::istream&
-gdcm::Preamble::Read(std::istream &is) ";
+gdcm::Preamble::Read(std::istream &is)
+
+Read Preamble. ";
 
 %feature("docstring")  gdcm::Preamble::Remove "void
 gdcm::Preamble::Remove() ";
 
 %feature("docstring")  gdcm::Preamble::Valid "void
-gdcm::Preamble::Valid() ";
+gdcm::Preamble::Valid()
+
+Set Preamble to the default one. ";
 
 %feature("docstring")  gdcm::Preamble::Write "std::ostream const&
-gdcm::Preamble::Write(std::ostream &os) const ";
+gdcm::Preamble::Write(std::ostream &os) const
+
+Write Preamble. ";
 
 
 // File: classgdcm_1_1PresentationContext.xml
@@ -10254,6 +10266,13 @@ Print. ";
 %feature("docstring")  gdcm::Sorter::SetSortFunction "void
 gdcm::Sorter::SetSortFunction(SortFunction f) ";
 
+%feature("docstring")  gdcm::Sorter::SetTagsToRead "void
+gdcm::Sorter::SetTagsToRead(std::set< Tag > const &tags)
+
+Specify a set of tags to be read in during the sort procedure. By
+default this set is empty, in which case the entire image, including
+pixel data, is read in. ";
+
 %feature("docstring")  gdcm::Sorter::Sort "virtual bool
 gdcm::Sorter::Sort(std::vector< std::string > const &filenames)
 
@@ -10792,10 +10811,6 @@ gdcm::StringFilter::ExecuteQuery(std::string const &query, std::string
 Execute the XPATH query to find a value (as string) return false when
 attribute is not found (or an error in the XPATH query) You need to
 make sure that your XPATH query is syntatically correct ";
-
-%feature("docstring")  gdcm::StringFilter::FromString "std::string
-gdcm::StringFilter::FromString(const Tag &t, const char *value, VL
-const &vl) ";
 
 %feature("docstring")  gdcm::StringFilter::FromString "std::string
 gdcm::StringFilter::FromString(const Tag &t, const char *value, size_t
@@ -15181,6 +15196,9 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: DecompressPixmap_8java-example.xml
+
+
+// File: DeriveSeries_8cxx-example.xml
 
 
 // File: DiffFile_8cxx-example.xml
