@@ -40,7 +40,7 @@ MediaStorage ImageWriter::ComputeTargetMediaStorage()
   MediaStorage ms;
   if( !ms.SetFromFile( GetFile() ) )
   {
-    // Let's fix some old ACR-NAME stuff:
+    // Let's fix some old ACR-NEMA stuff:
     ms = ImageHelper::ComputeMediaStorageFromModality( ms.GetModality(),
         PixelData->GetNumberOfDimensions(),
         PixelData->GetPixelFormat(),
