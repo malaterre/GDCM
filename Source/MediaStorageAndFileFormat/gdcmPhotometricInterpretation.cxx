@@ -43,7 +43,7 @@ namespace gdcm
  */
 
 static const char *PIStrings[] = {
-  "UNKNOW",
+  "UNKNOWN",
   "MONOCHROME1 ",
   "MONOCHROME2 ",
   "PALETTE COLOR ",
@@ -111,7 +111,7 @@ bool PhotometricInterpretation::IsRetired(PIType pi)
 
 unsigned short PhotometricInterpretation::GetSamplesPerPixel() const
 {
-  if ( PIField == UNKNOW ) return 0;
+  if ( PIField == UNKNOWN ) return 0;
   else if( PIField == MONOCHROME1
    || PIField == MONOCHROME2
    || PIField == PALETTE_COLOR )
@@ -171,7 +171,7 @@ bool PhotometricInterpretation::IsLossless() const
     return false;
     }
 
-  assert( 0 ); // technically one should not reach here, unless UNKNOW ...
+  assert( 0 ); // technically one should not reach here, unless UNKNOWN ...
   return false;
 }
 

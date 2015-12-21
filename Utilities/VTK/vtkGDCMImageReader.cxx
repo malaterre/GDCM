@@ -682,7 +682,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
     return 0;
     }
   // I do not think this is a good idea anyway to let the user decide
-  // wether or not she wants *not* to apply shift/scale...
+  // whether or not she wants *not* to apply shift/scale...
   if( !this->ApplyShiftScale )
   {
     vtkErrorMacro("ApplyShiftScale not compatible" );

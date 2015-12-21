@@ -844,7 +844,7 @@ MediaStorage FileMetaInformation::GetMediaStorage() const
   MediaStorage ms = MediaStorage::GetMSType(ts.c_str());
   if( ms == MediaStorage::MS_END )
     {
-    gdcmWarningMacro( "Media Storage Class UID: " << ts << " is unknow" );
+    gdcmWarningMacro( "Media Storage Class UID: " << ts << " is unknown" );
     }
   return ms;
 }

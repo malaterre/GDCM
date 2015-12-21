@@ -81,7 +81,7 @@ public:
   double GetDirectionCosinesTolerance() const { return DirCosTolerance; }
 
   /// Makes the IPPSorter ignore multiple images located at the same position.
-  /// Only the first occurence will be kept.
+  /// Only the first occurrence will be kept.
   /// DropDuplicatePositions defaults to false.
   void SetDropDuplicatePositions(bool b) { DropDuplicatePositions = b; }
 

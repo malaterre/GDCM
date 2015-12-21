@@ -254,7 +254,7 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
       pi = PhotometricInterpretation::GetPIType(
         photometricinterpretation_str.c_str());
       }
-    assert( pi != PhotometricInterpretation::UNKNOW);
+    assert( pi != PhotometricInterpretation::UNKNOWN);
     pixeldata.SetPhotometricInterpretation( pi );
 
     //
@@ -714,7 +714,7 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
   const Tag tphotometricinterpretation(0x0028, 0x0004);
   const ByteValue *photometricinterpretation
     = ImageHelper::GetPointerFromElement( tphotometricinterpretation, *F );
-  PhotometricInterpretation pi = PhotometricInterpretation::UNKNOW;
+  PhotometricInterpretation pi = PhotometricInterpretation::UNKNOWN;
   if( photometricinterpretation )
     {
     std::string photometricinterpretation_str(
@@ -756,14 +756,14 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
   assert( pi != PhotometricInterpretation::PI_END );
   if( !pf.GetSamplesPerPixel() || (pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel()) )
     {
-    if( pi != PhotometricInterpretation::UNKNOW )
+    if( pi != PhotometricInterpretation::UNKNOWN )
       {
       pf.SetSamplesPerPixel( pi.GetSamplesPerPixel() );
       }
     else if ( isacrnema )
       {
       assert ( pf.GetSamplesPerPixel() == 0 );
-      assert ( pi == PhotometricInterpretation::UNKNOW );
+      assert ( pi == PhotometricInterpretation::UNKNOWN );
       pf.SetSamplesPerPixel( 1 );
       pi = PhotometricInterpretation::MONOCHROME2;
       }
@@ -783,7 +783,7 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
     {
     return false;
     }
-  if( pi == PhotometricInterpretation::UNKNOW ) return false;
+  if( pi == PhotometricInterpretation::UNKNOWN ) return false;
   PixelData->SetPhotometricInterpretation( pi );
 
   // 4. Planar Configuration

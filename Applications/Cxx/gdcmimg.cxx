@@ -818,7 +818,7 @@ int main (int argc, char *argv[])
   if( pinter )
     {
     refpi = gdcm::PhotometricInterpretation::GetPIType( pinterstr.c_str() );
-    if( refpi == gdcm::PhotometricInterpretation::UNKNOW
+    if( refpi == gdcm::PhotometricInterpretation::UNKNOWN
       || refpi == gdcm::PhotometricInterpretation::PI_END )
       {
       std::cerr << "Invalid PI: " << pinterstr << std::endl;

@@ -2286,7 +2286,7 @@ PhotometricInterpretation ImageHelper::GetPhotometricInterpretationValue(File co
   const Tag tphotometricinterpretation(0x0028, 0x0004);
   const ByteValue *photometricinterpretation =
     ImageHelper::GetPointerFromElement(tphotometricinterpretation, f);
-  PhotometricInterpretation pi = PhotometricInterpretation::UNKNOW;
+  PhotometricInterpretation pi = PhotometricInterpretation::UNKNOWN;
   if( photometricinterpretation )
     {
     std::string photometricinterpretation_str(
@@ -2325,14 +2325,14 @@ PhotometricInterpretation ImageHelper::GetPhotometricInterpretationValue(File co
   }
   if( !pf.GetSamplesPerPixel() || (pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel()) )
     {
-    if( pi != PhotometricInterpretation::UNKNOW )
+    if( pi != PhotometricInterpretation::UNKNOWN )
       {
       pf.SetSamplesPerPixel( pi.GetSamplesPerPixel() );
       }
     else if ( isacrnema )
       {
       assert ( pf.GetSamplesPerPixel() == 0 );
-      assert ( pi == PhotometricInterpretation::UNKNOW );
+      assert ( pi == PhotometricInterpretation::UNKNOWN );
       pf.SetSamplesPerPixel( 1 );
       pi = PhotometricInterpretation::MONOCHROME2;
       }

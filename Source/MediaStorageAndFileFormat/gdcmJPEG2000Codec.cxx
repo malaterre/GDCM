@@ -1449,7 +1449,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     return false;
     }
 
-  assert( PI != PhotometricInterpretation::UNKNOW );
+  assert( PI != PhotometricInterpretation::UNKNOWN );
 
   bool bmct = false;
   if( bmct )
