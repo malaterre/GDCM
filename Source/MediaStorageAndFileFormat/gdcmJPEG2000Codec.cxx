@@ -1308,6 +1308,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
 #endif // OPENJPEG_MAJOR_VERSION == 1
 
   int reversible;
+  int mct;
 #if OPENJPEG_MAJOR_VERSION == 1
   opj_j2k_t* j2k = NULL;
   opj_jp2_t* jp2 = NULL;
@@ -1318,11 +1319,13 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     j2k = (opj_j2k_t*)dinfo->j2k_handle;
     assert( j2k );
     reversible = j2k->cp->tcps->tccps->qmfbid;
+    mct = j2k->cp->tcps->mct;
     break;
   case JP2_CFMT:
     jp2 = (opj_jp2_t*)dinfo->jp2_handle;
     assert( jp2 );
     reversible = jp2->j2k->cp->tcps->tccps->qmfbid;
+    mct = jp2->j2k->cp->tcps->mct;
     break;
   default:
     gdcmErrorMacro( "Impossible happen" );
@@ -1331,6 +1334,8 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
 #else
   reversible = opj_get_reversible(dinfo, &parameters );
   assert( reversible == 0 || reversible == 1 );
+  // FIXME
+  assert( mct == 0 || mct == 1 );
 #endif // OPENJPEG_MAJOR_VERSION == 1
   LossyFlag = !reversible;
 
@@ -1422,7 +1427,10 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     profiles. Note in particular that the JP2 file header is not sent in the JPEG
     2000 bitstream that is encapsulated in DICOM.
      */
-    PI = PhotometricInterpretation::YBR_RCT;
+    if( mct )
+      PI = PhotometricInterpretation::YBR_RCT;
+    else
+      PI = PhotometricInterpretation::RGB;
     this->PF.SetSamplesPerPixel( 3 );
     }
   else if( image->numcomps == 4 )
@@ -1443,8 +1451,8 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
 
   assert( PI != PhotometricInterpretation::UNKNOW );
 
-  bool mct = false;
-  if( mct )
+  bool bmct = false;
+  if( bmct )
     {
     if( reversible )
       {
