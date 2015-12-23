@@ -311,7 +311,8 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
      && vr[1] >= 'A' && vr[1] <= 'Z' )
       {
       // newly added VR ?
-      return VR::VL32;
+      // we are not capable of preserving the original VR. this is accepted behavior
+      return VR::UN;
       }
     return VR::INVALID;
     }
