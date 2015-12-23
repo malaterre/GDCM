@@ -961,7 +961,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       {
         interceptslope[0] = el_ri.GetValue();
         interceptslope[1] = el_rs.GetValue();
-        gdcmWarningMacro( "PMS Modality LUT found for MR Image Storage: [" << interceptslope[0] << "," << interceptslope[1] << "]" );
+        gdcmWarningMacro( "PMS Modality LUT loaded for MR Image Storage: [" << interceptslope[0] << "," << interceptslope[1] << "]" );
       }
       }
     else
@@ -970,7 +970,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       if( GetRescaleInterceptSlopeValueFromDataSet(ds, dummy) )
         {
         // for everyone else, read your DCS, and set: ForceRescaleInterceptSlope = true if needed
-        gdcmDebugMacro( "Modality LUT found for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
+        gdcmDebugMacro( "Modality LUT unused for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
         }
       }
 #endif
