@@ -35,8 +35,8 @@ before_install:
 - cmake --version
 - mv Testing/Data Testing/Data.old
 - echo "Deploying build $TRAVIS_BUILD_NUMBER"
-- echo "TB: $TRAVIS_BRANCH"
-- echo "TT: $TRAVIS_TAG"
+- echo "$TRAVIS_BRANCH"
+- echo "$TRAVIS_TAG"
 - echo $TRAVIS_TAG | cut -f2 -dv
 - MYV=`echo $TRAVIS_TAG | cut -f2 -dv`
 - echo "$MYV"
