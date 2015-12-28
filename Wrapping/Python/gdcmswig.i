@@ -190,6 +190,7 @@
 #include "gdcmBoxRegion.h"
 #include "gdcmImageRegionReader.h"
 #include "gdcmJSON.h"
+#include "gdcmFileDecompressLookupTable.h"
 
 using namespace gdcm;
 %}
@@ -785,3 +786,4 @@ EXTEND_CLASS_PRINT(gdcm::BoxRegion)
 %include "gdcmImageRegionReader.h"
 %clear char* inreadbuffer;
 %include "gdcmJSON.h"
+%include "gdcmFileDecompressLookupTable.h"
