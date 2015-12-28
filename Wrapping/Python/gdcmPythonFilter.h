@@ -34,7 +34,7 @@ public:
   PythonFilter();
   ~PythonFilter();
 
-  void UseDictAlways(bool use) {}
+  void UseDictAlways(bool ) {}
 
   // Allow user to pass in there own dicts
   void SetDicts(const Dicts &dicts);
