@@ -22,7 +22,7 @@ matrix:
       -DGDCM_USE_SYSTEM_JSON:BOOL=OFF -DGDCM_USE_SYSTEM_LIBXML2:BOOL=ON -DGDCM_USE_SYSTEM_OPENJPEG:BOOL=OFF
       -DGDCM_USE_SYSTEM_POPPLER:BOOL=OFF -DGDCM_USE_SYSTEM_UUID:BOOL=OFF -DGDCM_USE_SYSTEM_ZLIB:BOOL=ON"
     - B_NAME=system
-    - VTAG=`echo $TRAVIS_TAG | cut -f2 -dv`
+    - VTAG=$(echo $TRAVIS_TAG | cut -f2 -dv)
   - compiler: clang
     os: linux
     env:
