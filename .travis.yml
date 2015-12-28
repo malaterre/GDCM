@@ -23,7 +23,7 @@ matrix:
         - B_NAME=default
     - compiler: gcc
       os: linux
-      addons: {apt: {sources: debian-sid, packages: [default-jdk, mono-devel, swig, libcharls-dev, libvtk5-dev, libopenjpeg-dev, libexpat-dev, libz-dev, uuid-dev, python-all-dev, libpoppler-dev, xsltproc]}}
+      addons: {apt: {sources: debian-sid, packages: [cmake, build-essential, default-jdk, mono-devel, swig, libcharls-dev, libvtk5-dev, libopenjpeg-dev, libexpat-dev, libz-dev, uuid-dev, python-all-dev, libpoppler-dev, xsltproc]}}
       env:
         - CFLAGS="-Wall -Wextra -m64"
         - CXXFLAGS="-Wall -Wextra -m64"
