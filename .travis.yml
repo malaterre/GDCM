@@ -46,16 +46,20 @@ script:
 after_success:
 - ctest -D ExperimentalSubmit || true
 after_failure: true
+before_deploy:
+- cpack -G TGZ
+- cpack -G TBZ2
 deploy:
   provider: releases
   api_key:
     secure: R5+dbibdcgPHq6cAPC8uepifDuS3yjZu2dBB2oSeQtBZTAeN1VIfJMrF8TeQDqj2GC28RHxXm4BHwdJ2FUpBXjOS2eUE6Mto1Rbbvfi63MREnFPIAWkNyLtR2Jxq/Gzb8X05PbCWGwCNvX9eeo+qcWTpczuQvJ+/bds7MyRsk45+sUc+j7rglAbxewgijsXebCkObwaXmhqTYJwrvf2lyEnA2Jo1gL2WmK6iPjHvTOVS9JfBMqVRmlk7j8efnqag8fMCzNp1Ess5wBy5Jf58qvVs7RuuBi16s7vOOBtb9xVjcDB1KaAxc/dDQGQhRkrveBtH18ZpFrArOj6DBPbupS3+xuU4ywdYbCuGnvdpRFafBc+iNU4M81crkFUDmSPEQChBnL4wwpaYaQ1LlgdlF0r9/Rlu2/iqKe4t7rdZnkQqQ/3SNNf+x4AKnGmaSGasV/VUXstTGVrtl7hsDMzSdrVCXODao0SRv5tPSI3BgAZi7NzCJ/xv5LgA1EQVkGdTQN0ZpKZCQYfifL5K6oYDI+WlAFU0OcH+9dy4KNqF+QnzMh9iPwP0zR6BN9yE0w6ydnyNt0CkIUaxgaTtr+pHPXsmmtgXzQScESC8B9JHGocOXjT6MtyUmoP/ewlPz2G6x114PnAL7LlZ07jPqAASJwW/ZiXtBcVxv50hPhC7L80=
   file:
-    - gdcm-2.6.3.tar.gz
-    - gdcm-2.6.3.tar.bz2
+    - GDCM-2.6.3-Linux-x86_64.tar.gz
+    - GDCM-2.6.3-Linux-x86_64.tar.bz2
+  skip_cleanup: true
   on:
     repo: malaterre/GDCM
-    branch: travisdoc
+    tags: true
 after_script: true
 addons:
   coverity_scan:
