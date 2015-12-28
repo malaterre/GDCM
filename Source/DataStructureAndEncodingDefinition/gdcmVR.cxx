@@ -307,8 +307,10 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
     std::lower_bound(start, end, vr, MySort());
   if( (*p)[0] != vr[0] || (*p)[1] != vr[1] )
     {
-    if( vr[0] >= 'A' && vr[0] <= 'Z'
-     && vr[1] >= 'A' && vr[1] <= 'Z' )
+    // https://groups.google.com/d/msg/comp.protocols.dicom/0ata_3lpjF4/xlkjOKRGBwAJ
+    // http://dicom.nema.org/medical/dicom/current/output/chtml/part05/chapter_E.html
+    if( vr[0] >= ' ' && vr[0] <= '~'
+     && vr[1] >= ' ' && vr[1] <= '~' ) // FIXME Control Char LF/FF/CR TAB and ESC should be accepted
       {
       // newly added VR ?
       // we are not capable of preserving the original VR. this is accepted behavior
