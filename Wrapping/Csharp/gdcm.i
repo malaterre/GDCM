@@ -239,6 +239,7 @@ public class";
 #include "gdcmBoxRegion.h"
 #include "gdcmImageRegionReader.h"
 #include "gdcmJSON.h"
+#include "gdcmFileDecompressLookupTable.h"
 
 using namespace gdcm;
 %}
@@ -356,6 +357,7 @@ EXTEND_CLASS_PRINT(gdcm::VM)
 %template (FilenamesType) std::vector<std::string>;
 %include "gdcmDirectory.h"
 EXTEND_CLASS_PRINT(gdcm::Directory)
+%clear FilenamesType;
 %include "gdcmObject.h"
 %include "gdcmValue.h"
 EXTEND_CLASS_PRINT(gdcm::Value)
@@ -441,6 +443,7 @@ EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %include "gdcmDataSet.h"
 EXTEND_CLASS_PRINT(gdcm::DataSet)
 //%include "gdcmString.h"
+//%include "gdcmCodeString.h"
 //%include "gdcmTransferSyntax.h"
 %include "gdcmPhotometricInterpretation.h"
 EXTEND_CLASS_PRINT(gdcm::PhotometricInterpretation)
@@ -865,3 +868,4 @@ EXTEND_CLASS_PRINT(gdcm::BoxRegion)
 %include "gdcmImageRegionReader.h"
 %clear char* inreadbuffer;
 %include "gdcmJSON.h"
+%include "gdcmFileDecompressLookupTable.h"
