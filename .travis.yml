@@ -1,3 +1,5 @@
+# https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
+# https://github.com/travis-ci/travis-ci/issues/3505
 language: cpp
 # Use the faster container-based infrastructure.
 sudo: false
@@ -5,7 +7,7 @@ env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
    #   via the "travis encrypt" command using the project repo's public key
-   - secure: "ClIqhtIIfQPhil8GH9bnJg70rvJfuYs7Z2Aq2SrdwQsIFNvvfFD5pVxQiaYbZI3nxNclggQ50BmGB96e6jLxbbd/xlIOjcU19W2nzyP6LGkXFHDHm8FwhqqDNpfYvirAOfqgjqf7khRe3ajF33jhrLrhb5QOO5640N93pdChu1sAvI0LZv8JFIUcN7A7To3+WYc7H4CK3U8B2V8nzqcBSHDZNBGAdeVdmldwrlBtQeWBg5wJAEzzUHn0x+kltqvuoPYi2ShpaUkEfHeUWYhOT1uoyXNRAqHXiM1jhiw3JCkqaf7sUKLzyx0ozjTnYntNMggtBzavKjuYg6RhdlNdNbdsi2nxrycCOyCZcF+d4limq+yDMqoP7g/DnPag7XFgjkG/ThULPu+pEK/6nV1NqGNWFu1CqgAwPW7hGbIUADPsMEb+Bz2L2KUof2wU1cdvGK4fzsM9Qpdipbagghn4b5eGtvyBzYzoCS02AKrYfimhcm8bVmlfaMVgd6PnJ19Y1+ADCWwStwaQL2S6udh66JVGNszY/kYSmZKn51RQQDkubmGpywzeNdn7gM9u8QR9s2Lsq0GaSdptcLOPmVNSg6mQJThbMRHM/H2UrSyo7/GLr28sNNbYNweGPevsnrRJPUdG2ENWVw5rg1sD1cLm8rLlD4H2f/b97X9NCl4bLxY="
+   - secure: ClIqhtIIfQPhil8GH9bnJg70rvJfuYs7Z2Aq2SrdwQsIFNvvfFD5pVxQiaYbZI3nxNclggQ50BmGB96e6jLxbbd/xlIOjcU19W2nzyP6LGkXFHDHm8FwhqqDNpfYvirAOfqgjqf7khRe3ajF33jhrLrhb5QOO5640N93pdChu1sAvI0LZv8JFIUcN7A7To3+WYc7H4CK3U8B2V8nzqcBSHDZNBGAdeVdmldwrlBtQeWBg5wJAEzzUHn0x+kltqvuoPYi2ShpaUkEfHeUWYhOT1uoyXNRAqHXiM1jhiw3JCkqaf7sUKLzyx0ozjTnYntNMggtBzavKjuYg6RhdlNdNbdsi2nxrycCOyCZcF+d4limq+yDMqoP7g/DnPag7XFgjkG/ThULPu+pEK/6nV1NqGNWFu1CqgAwPW7hGbIUADPsMEb+Bz2L2KUof2wU1cdvGK4fzsM9Qpdipbagghn4b5eGtvyBzYzoCS02AKrYfimhcm8bVmlfaMVgd6PnJ19Y1+ADCWwStwaQL2S6udh66JVGNszY/kYSmZKn51RQQDkubmGpywzeNdn7gM9u8QR9s2Lsq0GaSdptcLOPmVNSg6mQJThbMRHM/H2UrSyo7/GLr28sNNbYNweGPevsnrRJPUdG2ENWVw5rg1sD1cLm8rLlD4H2f/b97X9NCl4bLxY=
 
 # -m32 is not supported 
 # no poppler, openjpeg, uuid, json
@@ -15,16 +17,18 @@ matrix:
   include:
     - compiler: gcc
       os: linux
+      addons: {apt: {packages: [cmake, xsltproc]}}
       env:
         - CFLAGS="-Wall -Wextra -m64"
         - CXXFLAGS="-Wall -Wextra -m64"
         - CMAKE_EXTRA="-DGDCM_USE_SYSTEM_OPENSSL:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=OFF -DGDCM_WRAP_CSHARP:BOOL=OFF -DGDCM_WRAP_JAVA:BOOL=OFF -DGDCM_WRAP_PHP:BOOL=OFF -DGDCM_USE_SYSTEM_EXPAT:BOOL=ON -DGDCM_USE_SYSTEM_JSON:BOOL=OFF -DGDCM_USE_SYSTEM_LIBXML2:BOOL=ON -DGDCM_USE_SYSTEM_OPENJPEG:BOOL=OFF -DGDCM_USE_SYSTEM_POPPLER:BOOL=OFF -DGDCM_USE_SYSTEM_UUID:BOOL=OFF -DGDCM_USE_SYSTEM_ZLIB:BOOL=ON"
         - B_NAME=system
+        - VTAG=$(echo $TRAVIS_TAG | cut -f2 -dv)
     - compiler: clang
       os: linux
       env:
-        - CFLAGS="-Wall -Wextra -m64 -fsanitize=address,undefined,shift"
-        - CXXFLAGS="-g -Wall -Wextra -m64 -fsanitize=address,undefined,shift"
+        - CFLAGS="-g -O0 -Wall -Wextra -m64 -fsanitize=address,undefined,shift"
+        - CXXFLAGS="-g -O0 -Wall -Wextra -m64 -fsanitize=address,undefined,shift"
         - B_NAME=fsanitize
     - compiler: clang
       os: osx
@@ -40,24 +44,46 @@ before_install:
   # do not run the full test suite for now
   - mv Testing/Data Testing/Data.old
 install: true
-before_script: true
-script:
-  - cmake -Wno-dev -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=None -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DBUILDNAME:STRING=${TRAVIS_OS_NAME}-${TRAVIS_BRANCH}-${B_NAME} ${CMAKE_EXTRA} .
+before_script:
+- cmake -Wno-dev -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=None -DGDCM_BUILD_TESTING:BOOL=ON
+  -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON
+  -DBUILDNAME:STRING=${TRAVIS_OS_NAME}-${TRAVIS_BRANCH}-${B_NAME} ${CMAKE_EXTRA} .
   - ctest -D ExperimentalStart
+script:
   - ctest -D ExperimentalBuild -j2
   - ctest -D ExperimentalTest -j2 || true
+after_success:
   - ctest -D ExperimentalSubmit || true
-
-after_success: true
 after_failure: true
+
+before_deploy:
+- cpack -G TGZ
+- cpack -G TBZ2
+deploy:
+  edge: true
+  provider: releases
+  api_key:
+    secure: R5+dbibdcgPHq6cAPC8uepifDuS3yjZu2dBB2oSeQtBZTAeN1VIfJMrF8TeQDqj2GC28RHxXm4BHwdJ2FUpBXjOS2eUE6Mto1Rbbvfi63MREnFPIAWkNyLtR2Jxq/Gzb8X05PbCWGwCNvX9eeo+qcWTpczuQvJ+/bds7MyRsk45+sUc+j7rglAbxewgijsXebCkObwaXmhqTYJwrvf2lyEnA2Jo1gL2WmK6iPjHvTOVS9JfBMqVRmlk7j8efnqag8fMCzNp1Ess5wBy5Jf58qvVs7RuuBi16s7vOOBtb9xVjcDB1KaAxc/dDQGQhRkrveBtH18ZpFrArOj6DBPbupS3+xuU4ywdYbCuGnvdpRFafBc+iNU4M81crkFUDmSPEQChBnL4wwpaYaQ1LlgdlF0r9/Rlu2/iqKe4t7rdZnkQqQ/3SNNf+x4AKnGmaSGasV/VUXstTGVrtl7hsDMzSdrVCXODao0SRv5tPSI3BgAZi7NzCJ/xv5LgA1EQVkGdTQN0ZpKZCQYfifL5K6oYDI+WlAFU0OcH+9dy4KNqF+QnzMh9iPwP0zR6BN9yE0w6ydnyNt0CkIUaxgaTtr+pHPXsmmtgXzQScESC8B9JHGocOXjT6MtyUmoP/ewlPz2G6x114PnAL7LlZ07jPqAASJwW/ZiXtBcVxv50hPhC7L80=
+  file:
+  - GDCM-$VTAG-Linux-x86_64.tar.gz
+  - GDCM-$VTAG-Linux-x86_64.tar.bz2
+  skip_cleanup: true
+  on:
+    repo: malaterre/GDCM
+    condition: $B_NAME = system
+    all_branches: true
+    tags: true
+
+# final
 after_script: true
 
 addons:
   coverity_scan:
     project:
-      name: "malaterre/GDCM"
+      name: malaterre/GDCM
       description: "Grassroots DICOM"
     notification_email: mathieu.malaterre@gmail.com
-    build_command_prepend: cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON ..
+    build_command_prepend: cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo
+      -DGDCM_BUILD_SHARED_LIBS:BOOL=ON ..
     build_command: cmake --build .
     branch_pattern: coverity_scan
