@@ -10,10 +10,7 @@ matrix:
   include:
   - compiler: gcc
     os: linux
-    addons:
-      apt:
-      packages:
-      - xsltproc
+    addons: {apt: {packages: [cmake, xsltproc]}}
     env:
     - CFLAGS="-Wall -Wextra -m64"
     - CXXFLAGS="-Wall -Wextra -m64"
