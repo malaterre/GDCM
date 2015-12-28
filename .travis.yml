@@ -8,6 +8,9 @@ matrix:
   include:
   - compiler: gcc
     os: linux
+    addons:
+      packages:
+      - xsltproc
     env:
     - CFLAGS="-Wall -Wextra -m64"
     - CXXFLAGS="-Wall -Wextra -m64"
@@ -34,7 +37,7 @@ before_install:
 install: true
 before_script:
 - cmake -Wno-dev -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=None -DGDCM_BUILD_TESTING:BOOL=ON
-  -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON
+  -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON
   -DBUILDNAME:STRING=${TRAVIS_OS_NAME}-${TRAVIS_BRANCH}-${B_NAME} ${CMAKE_EXTRA} .
 - ctest -D ExperimentalStart
 script:
