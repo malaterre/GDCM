@@ -163,10 +163,7 @@ public:
       // \0\4 Data/THERALYS-12-MONO2-Uncompressed-Even_Length_Tag.dcm
       // \0\4 Data/PrivateGEImplicitVRBigEndianTransferSyntax16Bits.dcm
       // \0\4 Data/GE_DLX-8-MONO2-PrivateSyntax.dcm
-      if( vr[0] == 0 || vr[1] == 0 )
-        throw Exception( "INVALID VR" );
-      else
-        gdcmDebugMacro( "Bizarre VR. Assuming unrecognized: [" << (int)vr[0] << "/" << (int)vr[1] );
+      throw Exception( "INVALID VR" );
     }
     if( VRField & VL32 )
       {
