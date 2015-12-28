@@ -113,6 +113,9 @@ if(WIN32 AND NOT CYGWIN)
   set_target_properties(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES SUFFIX ".pyd")
   # shared libs on windows needs to be fully resolved
   SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} ${PYTHON_LIBRARIES})
+  message(STATUS "Will use pyd extension" )
+else()
+  message(STATUS "Will NOT use pyd extension" )
 endif()
 set_target_properties(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 
