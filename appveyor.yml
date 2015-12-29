@@ -28,11 +28,13 @@ environment:
     B_NAME: Windows-x86
     DO_REL: true
     PYTHON: C:\Python27;C:\Python27\Scripts
+    JAVA: C:\Program Files (x86)\Java\jdk1.7.0\bin
   - VS_GEN: Visual Studio 10 2010 Win64
     CONFIG: Release
     B_NAME: Windows-x86_64
     DO_REL: true
     PYTHON: C:\Python34-x64;C:\Python34-x64\Scripts
+    JAVA: C:\Program Files\Java\jdk1.8.0
 #  - VS_GEN: Visual Studio 14 2015 Win64
 #    CONFIG: Release
 #    B_NAME: Win64
@@ -61,6 +63,7 @@ branches:
 # scripts that are called at very beginning, before repo cloning
 init:
   # Print environment info ( set / systeminfo)
+  - set PATH=%JAVA%;%PYTHON%;%PATH%
   - msbuild /version
   - cmake --version
   - python --version
@@ -93,7 +96,6 @@ on_failure:
 
 # scripts to run before build
 before_build:
-  - set PATH=%PATH%;%PYTHON%
   - cmake -Wno-dev -G"%VS_GEN%" -DCMAKE_BUILD_TYPE=%CONFIG% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%B_NAME% -DGDCM_WRAP_CSHARP:BOOL=ON -DGDCM_WRAP_JAVA:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_USE_PVRG:BOOL=ON -DCPACK_SYSTEM_NAME:STRING=%B_NAME% .
   - ctest -D ExperimentalStart -C %CONFIG%
 
