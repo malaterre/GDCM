@@ -12,8 +12,8 @@
 #
 ############################################################################
 
-import gdcm
 import os,sys
+import gdcm
 
 def TestRead(filename, verbose = False):
   r = gdcm.Reader()
