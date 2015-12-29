@@ -78,12 +78,11 @@ install:
   #- git submodule update --init --recursive
   # PowerShell
   - ps: (New-Object Net.WebClient).DownloadFile('http://download.microsoft.com/download/f/2/6/f263ac46-1fe9-4ae9-8fd3-21102100ebf5/msxsl.exe', "$env:appveyor_build_folder\msxsl.exe")
-  - msxsl -?
+  #- msxsl -? --> code return is 1 !!
   # chocolatey:
   # C:/ProgramData/chocolatey/bin/swig.exe
   - choco install swig
   - swig -version
-  # https://chocolatey.org/packages/nsis.install/
   - ps: |
       if (Test-Path "c:/Program Files/NSIS/makensis.exe") {
           echo "using nsis from cache"
