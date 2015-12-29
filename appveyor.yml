@@ -27,14 +27,14 @@ environment:
     CONFIG: Release
     B_NAME: Windows-x86
     DO_REL: true
-    PYTHON: C:\Python27;C:\Python27\Scripts
-    JAVA: C:\Program Files (x86)\Java\jdk1.7.0\bin
+    PYTHONHOME: C:\Python27
+    JAVA_HOME: C:\Program Files (x86)\Java\jdk1.7.0
   - VS_GEN: Visual Studio 10 2010 Win64
     CONFIG: Release
     B_NAME: Windows-x86_64
     DO_REL: true
-    PYTHON: C:\Python34-x64;C:\Python34-x64\Scripts
-    JAVA: C:\Program Files\Java\jdk1.8.0
+    PYTHONHOME: C:\Python34-x64
+    JAVA_HOME: C:\Program Files\Java\jdk1.8.0
 #  - VS_GEN: Visual Studio 14 2015 Win64
 #    CONFIG: Release
 #    B_NAME: Win64
@@ -63,7 +63,7 @@ branches:
 # scripts that are called at very beginning, before repo cloning
 init:
   # Print environment info ( set / systeminfo)
-  - set PATH=%JAVA%;%PYTHON%;%PATH%
+  - set PATH=%JAVA_HOME%\bin;%PYTHONHOME%;%PATH%
   - msbuild /version
   - cmake --version
   - python --version
