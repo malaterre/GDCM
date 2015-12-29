@@ -436,6 +436,9 @@ EXTEND_CLASS_PRINT(gdcm::Pixmap)
 EXTEND_CLASS_PRINT(gdcm::Image)
 %include "gdcmFragment.h"
 EXTEND_CLASS_PRINT(gdcm::Fragment)
+// convert SWIGTYPE_p_std__vectorT_gdcm__Fragment_t__size_type
+//%template() std::vector< gdcm::Fragment >;
+// -> error: ‘type_name’ is not a member of ‘swig::traits<gdcm::Fragment>’ (swig 3.0.7)
 %include "gdcmPDBElement.h"
 EXTEND_CLASS_PRINT(gdcm::PDBElement)
 %include "gdcmPDBHeader.h"

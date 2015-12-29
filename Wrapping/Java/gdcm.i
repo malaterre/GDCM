@@ -518,6 +518,8 @@ EXTEND_CLASS_PRINT(gdcm::Pixmap)
 EXTEND_CLASS_PRINT(gdcm::Image)
 %include "gdcmFragment.h"
 EXTEND_CLASS_PRINT(gdcm::Fragment)
+// convert SWIGTYPE_p_std__vectorT_gdcm__Fragment_t__size_type
+%template() std::vector< gdcm::Fragment >;
 %include "gdcmPDBElement.h"
 EXTEND_CLASS_PRINT(gdcm::PDBElement)
 %include "gdcmPDBHeader.h"

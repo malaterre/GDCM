@@ -34,6 +34,11 @@ public class DecompressImage
       return 1;
       }
 
+    // check that one can access a Fragment from C#:
+    var de = reader.GetFile().GetDataSet().GetDataElement(new Tag(0x7fe0, 0x0010));
+    var sq = de.GetSequenceOfFragments();
+    sq.GetFragment(0);
+
     Image image = new Image();
     Image ir = reader.GetImage();
 
