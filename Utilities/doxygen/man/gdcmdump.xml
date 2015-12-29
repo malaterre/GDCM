@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" ?>
+<?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl" ?>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
 <info>
 <author><personname><firstname>Mathieu</firstname><surname>Malaterre</surname></personname><contrib>Main developer</contrib></author>
