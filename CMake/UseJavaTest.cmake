@@ -68,17 +68,19 @@ macro(ADD_JAVA_TEST TESTNAME FILENAME)
   set(ENV{LD_LIBRARY_PATH} ${ld_library_path})
   set(ENV{DYLD_LIBRARY_PATH} ${ld_library_path})
   #set(ENV{CLASSPATH} ${pyenv}/gdcm.jar${_sep}.)
-  message(\"pyenv: ${pyenv}\")
+  #message(\"pyenv: ${pyenv}\")
   else()
   #set(the_path $ENV{PATH})
   set(ENV{PATH} ${ld_library_path})
   endif()
+  message(\"ld_library_path: ${ld_library_path}\")
   message(\"loc: ${loc}\")
   message(\"loc2: ${loc2}\")
   message(\"classpath: ${classpath}\")
   message(\"java runtime: ${Java_JAVA_EXECUTABLE}\")
   #message( \"wo_semicolumn: ${wo_semicolumn}\" )
   execute_process(
+    #COMMAND ${Java_JAVA_EXECUTABLE} -Djava.library.path=\"${GDCM_LIBRARY_DIR}\" -classpath \"${classpath}\" ${loc2} ${wo_semicolumn}
     COMMAND ${Java_JAVA_EXECUTABLE} -classpath \"${classpath}\" ${loc2} ${wo_semicolumn}
     WORKING_DIRECTORY \"${EXECUTABLE_OUTPUT_PATH}\"
     RESULT_VARIABLE import_res
