@@ -2,7 +2,7 @@
 # http://www.appveyor.com/docs/appveyor-yml
 
 # Set build version format here instead of in the admin panel.
-version: 2.6.2.{build}
+version: 2.6.3.{build}
 
 # http://www.appveyor.com/docs/build-cache#caching-chocolatey-packages
 # https://github.com/kvirc/KVIrc/blob/master/.appveyor.yml
@@ -111,7 +111,7 @@ after_build:
   - cpack -G NSIS -C %CONFIG%
   # create binary zip
   - cpack -G ZIP -C %CONFIG%
-  # on github it does make sense to do source package
+  # no need for source release on github
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
