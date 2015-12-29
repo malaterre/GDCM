@@ -256,12 +256,13 @@ else()
   if(MSXSL_EXECUTABLE)
     set(XSLT_PROCESSOR ${MSXSL_EXECUTABLE})
     set(XSLT_PROCESSOR_ARG "-pi")
-# msxsl.exe -pi gdcmpdf.xml
-# 
-# Error occurred while executing stylesheet 'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl'.
-# 
-# Code:   0x80004005
-# Unable to strip the namespace from DB5 document, cannot proceed.
+# msxsl.exe -pi gdcmimg.xml
+#
+#Error occurred while executing stylesheet 'http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl'.
+#
+#Code:   0x80004005
+#Namespace 'http://exslt.org/common' does not contain any functions.
+# -> http://stackoverflow.com/a/16605034/136285 ??
   endif()
 endif()
 if(XSLT_PROCESSOR)
