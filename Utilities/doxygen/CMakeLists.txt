@@ -248,19 +248,28 @@ find_package(LibXslt)
 # need an XSLT 1.0 processor, use xsltproc, maybe add more implementations later
 if(LIBXSLT_XSLTPROC_EXECUTABLE)
   set(XSLT_PROCESSOR ${LIBXSLT_XSLTPROC_EXECUTABLE})
+  set(XSLT_PROCESSOR_ARG "")
 else()
   find_program(MSXSL_EXECUTABLE
     msxsl
     )
   if(MSXSL_EXECUTABLE)
     set(XSLT_PROCESSOR ${MSXSL_EXECUTABLE})
+    set(XSLT_PROCESSOR_ARG "-pi")
+# msxsl.exe -pi gdcmpdf.xml
+# 
+# Error occurred while executing stylesheet 'http://docbook.sourceforge.net/releas
+# e/xsl/current/manpages/docbook.xsl'.
+# 
+# Code:   0x80004005
+# Unable to strip the namespace from DB5 document, cannot proceed.
   endif()
 endif()
 if(XSLT_PROCESSOR)
 foreach(docbook ${MANPAGES_XML})
   add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${docbook}.1
-    COMMAND ${XSLT_PROCESSOR} ${CMAKE_CURRENT_SOURCE_DIR}/man/${docbook}.xml
+    COMMAND ${XSLT_PROCESSOR} ${XSLT_PROCESSOR_ARG} ${CMAKE_CURRENT_SOURCE_DIR}/man/${docbook}.xml
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/man/${docbook}.xml
     )
   list(APPEND MANPAGES
