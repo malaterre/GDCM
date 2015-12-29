@@ -102,7 +102,7 @@ size_t BoxRegion::Area() const
     // multiplication exceed range of unsigned
     return 0;
   }
-  return tmp * C;
+  return (size_t)(tmp * C);
 }
 
 unsigned int BoxRegion::GetXMin() const

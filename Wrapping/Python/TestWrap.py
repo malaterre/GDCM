@@ -180,6 +180,19 @@ blacklist = (
 "SOPClassExtendedNegociationSub"
 "FindPatientRootQuery"
 "ServiceClassApplicationInformation"
+"ModalityPerformedProcedureStepSetQuery"
+"NormalizedMessageFactory"
+"NormalizedNetworkFunctions"
+"NSetMessages"
+"WLMFindQuery"
+"ModalityPerformedProcedureStepCreateQuery"
+"BaseNormalizedMessage"
+"NCreateMessages"
+"NActionMessages"
+"NGetMessages"
+"BaseQuery"
+"NEventReportMessages"
+"NDeleteMessages"
 )
 
 def processonedir(dirname):

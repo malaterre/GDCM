@@ -20,6 +20,7 @@
 
 # Try first to locate a cmake config file
 find_package(OpenJPEG QUIET NO_MODULE)
+mark_as_advanced(OpenJPEG_DIR)
 
 if( NOT OpenJPEG_DIR )
 set(OPENJPEG_MAJOR_VERSION 1) # FIXME ?

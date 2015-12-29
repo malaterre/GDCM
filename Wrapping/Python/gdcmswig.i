@@ -33,6 +33,7 @@
 #include "gdcmSwapCode.h"
 #include "gdcmEvent.h"
 #include "gdcmProgressEvent.h"
+#include "gdcmFileNameEvent.h"
 #include "gdcmAnonymizeEvent.h"
 #include "gdcmDirectory.h"
 #ifdef GDCM_BUILD_TESTING
@@ -89,6 +90,7 @@
 #include "gdcmUUIDGenerator.h"
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
+#include "gdcmStrictScanner.h"
 #include "gdcmAttribute.h"
 #include "gdcmSubject.h"
 #include "gdcmCommand.h"
@@ -148,6 +150,7 @@
 #include "gdcmDecoder.h"
 #include "gdcmCodec.h"
 #include "gdcmImageCodec.h"
+#include "gdcmRLECodec.h"
 #include "gdcmJPEGCodec.h"
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
@@ -190,6 +193,7 @@
 #include "gdcmBoxRegion.h"
 #include "gdcmImageRegionReader.h"
 #include "gdcmJSON.h"
+#include "gdcmFileDecompressLookupTable.h"
 
 using namespace gdcm;
 %}
@@ -290,7 +294,6 @@ EXTEND_CLASS_PRINT(gdcm::VM)
 %template (FilenamesType) std::vector<std::string>;
 %include "gdcmDirectory.h"
 EXTEND_CLASS_PRINT(gdcm::Directory)
-//%clear FilenameType;
 %clear FilenamesType;
 %include "gdcmObject.h"
 %include "gdcmValue.h"
@@ -433,6 +436,9 @@ EXTEND_CLASS_PRINT(gdcm::Pixmap)
 EXTEND_CLASS_PRINT(gdcm::Image)
 %include "gdcmFragment.h"
 EXTEND_CLASS_PRINT(gdcm::Fragment)
+// convert SWIGTYPE_p_std__vectorT_gdcm__Fragment_t__size_type
+//%template() std::vector< gdcm::Fragment >;
+// -> error: ‘type_name’ is not a member of ‘swig::traits<gdcm::Fragment>’ (swig 3.0.7)
 %include "gdcmPDBElement.h"
 EXTEND_CLASS_PRINT(gdcm::PDBElement)
 %include "gdcmPDBHeader.h"
@@ -536,6 +542,9 @@ EXTEND_CLASS_PRINT(gdcm::Dicts)
 %template(SmartPtrScan) gdcm::SmartPointer<gdcm::Scanner>;
 %include "gdcmScanner.h"
 EXTEND_CLASS_PRINT(gdcm::Scanner)
+%template(SmartPtrStrictScan) gdcm::SmartPointer<gdcm::StrictScanner>;
+%include "gdcmStrictScanner.h"
+EXTEND_CLASS_PRINT(gdcm::StrictScanner)
 
 %template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
 //%ignore gdcm::Anonymizer::Anonymizer;
@@ -724,6 +733,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 //%include "gdcmCodec.h"
 %feature("director") ImageCodec;
 %include "gdcmImageCodec.h"
+%include "gdcmRLECodec.h"
 %include "gdcmJPEGCodec.h"
 %include "gdcmJPEGLSCodec.h"
 %include "gdcmJPEG2000Codec.h"
@@ -785,3 +795,4 @@ EXTEND_CLASS_PRINT(gdcm::BoxRegion)
 %include "gdcmImageRegionReader.h"
 %clear char* inreadbuffer;
 %include "gdcmJSON.h"
+%include "gdcmFileDecompressLookupTable.h"

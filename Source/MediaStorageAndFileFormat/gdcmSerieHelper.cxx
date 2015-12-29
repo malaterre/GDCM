@@ -23,6 +23,7 @@
 namespace gdcm
 {
 
+#if !defined(GDCM_LEGACY_REMOVE)
 SerieHelper::SerieHelper()
 {
   Trace::WarningOff();
@@ -62,6 +63,8 @@ void SerieHelper::AddRestriction(const Tag& tag)
   r.elem  = tag.GetElement();
   Refine.push_back( r );
 }
+
+void SerieHelper::SetLoadMode (int ) {}
 
 void SerieHelper::SetUseSeriesDetails( bool useSeriesDetails )
 {
@@ -148,7 +151,7 @@ void SerieHelper::AddFileName(std::string const &filename)
     }
 }
 
-bool CompareDicomString(const std::string &s1, const char *s2, int op)
+static bool CompareDicomString(const std::string &s1, const char *s2, int op)
 {
   // s2 is the string from the DICOM reference e.g. : 'MONOCHROME1'
   std::string s1_even = s1; //Never change input parameter
@@ -256,6 +259,7 @@ bool SerieHelper::UserOrdering(FileList *fileList)
     }
   return true;
 }
+#endif
 
 namespace details {
 bool MyFileNameSortPredicate(const SmartPointer<FileWithName>& d1, const SmartPointer<FileWithName>& d2)
@@ -393,6 +397,7 @@ bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList )
   return true;
 }
 
+#if !defined(GDCM_LEGACY_REMOVE)
 void SerieHelper::OrderFileList(FileList *fileSet)
 {
   IPPSorter ipps;
@@ -469,5 +474,6 @@ std::string SerieHelper::CreateUniqueSeriesIdentifier( File * inFile )
     return id;
     }
 }
+#endif
 
 } // end namespace gdcm
