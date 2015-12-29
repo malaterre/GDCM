@@ -56,11 +56,16 @@ endif()
 if(WIN32)
 # There is a subttle issue when compiling on 64bits platform using a 32bits compiler
 # See bug ID: 3510023 (BadImageFormatException: An attempt was made to load a progr)
-
 set(CSC_ACCEPTS_PLATFORM_FLAG 0)
 
 if(CMAKE_CSHARP_COMPILER)
   execute_process(COMMAND "${CMAKE_CSHARP_COMPILER}" "/?" OUTPUT_VARIABLE CSC_HELP)
+  # get version (no /version, so use /help output):
+  if("${CSC_HELP}" MATCHES "Compiler version")
+    string(REGEX REPLACE ".*Compiler version ([0-9\\.]+).*" "\\1" VERSION_STRING 
+      "${CSC_HELP}")
+    message(STATUS "Comp version: ${VERSION_STRING}")
+  endif()
   # when cmd locale is in French it displays: "/platform:<chaine>" in english: "/platform:<string>"
   # so only regex match in /platform:
   if("${CSC_HELP}" MATCHES "/platform:")
