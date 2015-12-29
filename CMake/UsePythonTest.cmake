@@ -48,7 +48,9 @@ macro(ADD_PYTHON_TEST TESTNAME FILENAME)
 "
   set(ENV{PYTHONPATH} ${pyenv}:\$ENV{PYTHONPATH})
   set(ENV{LD_LIBRARY_PATH} ${pyenv}:\$ENV{LD_LIBRARY_PATH})
-  message(\"pyenv=${pyenv}\")
+  message(\"pyenv is: ${pyenv}\")
+  message(\"py_exec is: ${PYTHON_EXECUTABLE}\")
+  message(\"py_found is: ${PYTHONINTERP_FOUND}\")
   execute_process(
     COMMAND ${PYTHON_EXECUTABLE} ${loc} ${wo_semicolumn}
     RESULT_VARIABLE import_res
@@ -58,13 +60,13 @@ macro(ADD_PYTHON_TEST TESTNAME FILENAME)
 
   # Pass the output back to ctest
   if(import_output)
-    message(\"\${import_output}\")
+    message(\"import_output is: \${import_output}\")
   endif()
   if(import_res)
     message(\"Import res: \${import_res}\")
-    message(\"\${PYTHON_EXECUTABLE}\")
-    message(\"\${loc}\")
-    message(\"\${wo_semicolumn}\")
+    message(\"py_exec is: \${PYTHON_EXECUTABLE}\")
+    message(\"loc is: \${loc}\")
+    message(\"wo is: \${wo_semicolumn}\")
     execute_process(
       COMMAND ${PYTHON_EXECUTABLE} -v ${loc} ${wo_semicolumn}
       RESULT_VARIABLE import2_res
