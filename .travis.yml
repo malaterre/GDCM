@@ -54,21 +54,20 @@ before_install:
   - mv Testing/Data Testing/Data.old
 install: true
 before_script:
-- cmake -Wno-dev -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=None -DGDCM_BUILD_TESTING:BOOL=ON
-  -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON
-  -DBUILDNAME:STRING=${TRAVIS_OS_NAME}-${TRAVIS_BRANCH}-${B_NAME} ${CMAKE_EXTRA} .
-- ctest -D ExperimentalStart
+  - cmake -Wno-dev -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=None -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DBUILDNAME:STRING=${TRAVIS_OS_NAME}-${TRAVIS_BRANCH}-${B_NAME} ${CMAKE_EXTRA} .
+  - ctest -D ExperimentalStart
 script:
   - ctest -D ExperimentalBuild -j2
   - ctest -D ExperimentalTest -j2 || true
 after_success:
   - ctest -D ExperimentalSubmit || true
+  # prefer after_success since before_deploy is not called (conditions unmet)
+  - cpack -G TGZ
+  - cpack -G TBZ2
 after_failure: true
 
 before_deploy:
 - VTAG=$(echo $TRAVIS_TAG | cut -f2 -dv)
-- cpack -G TGZ
-- cpack -G TBZ2
 deploy:
   edge: true
   provider: releases
