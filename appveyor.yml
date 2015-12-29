@@ -72,9 +72,14 @@ init:
   - del c:\programdata\chocolatey\bin\cpack.exe
 
 # scripts that run after cloning repository
+# https://www.appveyor.com/docs/build-configuration#powershell
 install:
   # Fetch submodules
   #- git submodule update --init --recursive
+  # PowerShell
+  - ps: (New-Object Net.WebClient).DownloadFile('http://download.microsoft.com/download/f/2/6/f263ac46-1fe9-4ae9-8fd3-21102100ebf5/msxsl.exe', "$env:appveyor_build_folder\msxsl.exe")
+  - msxsl -?
+  # chocolatey:
   - choco install swig
   - swig -version
   # https://chocolatey.org/packages/nsis.install/
