@@ -23,10 +23,10 @@ def TestImageRead(filename, verbose = False):
   return success
 
 if __name__ == "__main__":
-  sucess = 0
+  success = 0
   try:
     filename = os.sys.argv[1]
-    sucess += TestImageRead( filename, True )
+    success += TestImageRead( filename, True )
   except:
     # loop over all files:
     gdcm.Trace.DebugOff()
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     for i in range(0,nfiles):
       #print t.GetFileName(i)
       filename = t.GetFileName(i)
-      sucess += TestImageRead( filename )
+      success += TestImageRead( filename )
 
   # Test succeed ?
-  sys.exit(sucess == 0)
+  sys.exit(success == 0)

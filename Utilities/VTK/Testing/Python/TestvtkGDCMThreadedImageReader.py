@@ -35,8 +35,8 @@ def ExecuteInformation(reader, filename, dimz = 1):
   #print reader
   r = gdcm.ImageReader()
   r.SetFileName( reffile )
-  sucess = r.Read()
-  assert sucess
+  success = r.Read()
+  assert success
   #print r.GetImage().Print()
   image = r.GetImage()
   assert image.GetNumberOfDimensions() == 2 or image.GetNumberOfDimensions() == 3
@@ -118,4 +118,4 @@ if __name__ == "__main__":
 
 
   # Test succeed ?
-  #sys.exit(sucess != 1)
+  #sys.exit(success != 1)

@@ -67,17 +67,17 @@ def TestKakadu(filename, kdu_expand):
   return retval
 
 if __name__ == "__main__":
-    sucess = 0
+    success = 0
     #try:
     #  filename = os.sys.argv[1]
-    #  sucess += TestKakadu( filename )
+    #  success += TestKakadu( filename )
     #except:
     # loop over all files:
     #t = gdcm.Testing()
     #nfiles = t.GetNumberOfFileNames()
     #for i in range(0,nfiles):
     #  filename = t.GetFileName(i)
-    #  sucess += TestKakadu( filename )
+    #  success += TestKakadu( filename )
     d = gdcm.Directory()
     tempdir = gdcm.Testing.GetTempDirectory()
     j2ksubdir = 'TestImageChangeTransferSyntax2' # FIXME hardcoded !
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     files = d.GetFilenames()
     for i in range(0,nfiles):
       filename = files[i]
-      sucess += TestKakadu( filename, os.sys.argv[1] )
+      success += TestKakadu( filename, os.sys.argv[1] )
 
     # Test succeed ?
-    sys.exit(sucess)
+    sys.exit(success)
