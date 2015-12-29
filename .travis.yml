@@ -30,7 +30,7 @@ matrix:
       addons: {apt: {packages: [default-jdk, mono-devel, swig, libcharls-dev, libvtk5-dev, libopenjpeg-dev, libexpat-dev, libz-dev, uuid-dev, python-all-dev, libpoppler-dev, xsltproc]}}
       env:
         - CFLAGS="-Wall -Wextra -m64"
-        - CXXFLAGS="-Wall -Wextra -m64"
+        - CXXFLAGS="-Wall -Wextra -Weffc++ -m64"
         - CMAKE_EXTRA="-DGDCM_USE_SYSTEM_OPENSSL:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_WRAP_CSHARP:BOOL=ON -DGDCM_WRAP_JAVA:BOOL=ON -DGDCM_WRAP_PHP:BOOL=OFF -DGDCM_USE_SYSTEM_EXPAT:BOOL=ON -DGDCM_USE_SYSTEM_JSON:BOOL=OFF -DGDCM_USE_SYSTEM_LIBXML2:BOOL=ON -DGDCM_USE_SYSTEM_OPENJPEG:BOOL=ON -DGDCM_USE_SYSTEM_POPPLER:BOOL=ON -DGDCM_USE_SYSTEM_UUID:BOOL=ON -DGDCM_USE_SYSTEM_ZLIB:BOOL=ON -DGDCM_WEAK_SWIG_CHECK:BOOL=ON -DGDCM_LEGACY_SILENT:BOOL=ON"
         - B_NAME=system
     - compiler: clang
