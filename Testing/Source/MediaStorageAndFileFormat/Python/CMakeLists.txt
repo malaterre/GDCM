@@ -1,16 +1,21 @@
 # Define the tests for gdcm-python
 # gdcm-python
 set(GDCM_PYTHON_TEST_SRCS
-  TestScanner
-  TestImageReader
-  TestUIDGenerator
-  TestModifyFields
-  TestAnonymizer
-  #TestStringFilter
-  TestOrientation
-  TestIPPSorter
   #TestPythonFilter
+  #TestStringFilter
+  TestIPPSorter
+  TestOrientation
+  TestUIDGenerator
   )
+if(GDCM_DATA_ROOT)
+  set(GDCM_PYTHON_TEST_SRCS
+    ${GDCM_PYTHON_TEST_SRCS}
+    TestAnonymizer
+    TestModifyFields
+    TestImageReader
+    TestScanner
+  )
+endif()
 if(BUILD_APPLICATIONS)
   if(DCMTK_DCMDUMP_EXECUTABLE)
   if(UNIX)
