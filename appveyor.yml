@@ -97,7 +97,7 @@ on_failure:
   # Display error log file if generated
   - dir C:\projects\gdcm\bin
   - dir C:\projects\gdcm\bin\Release
-  - if exist C:\ProgramData\chocolatey\logs\chocolatey.log type C:\ProgramData\chocolatey\logs\chocolatey.log
+  #- if exist C:\ProgramData\chocolatey\logs\chocolatey.log type C:\ProgramData\chocolatey\logs\chocolatey.log
 
 # scripts to run before build
 before_build:

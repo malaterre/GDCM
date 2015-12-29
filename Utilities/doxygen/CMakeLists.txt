@@ -258,8 +258,7 @@ else()
     set(XSLT_PROCESSOR_ARG "-pi")
 # msxsl.exe -pi gdcmpdf.xml
 # 
-# Error occurred while executing stylesheet 'http://docbook.sourceforge.net/releas
-# e/xsl/current/manpages/docbook.xsl'.
+# Error occurred while executing stylesheet 'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl'.
 # 
 # Code:   0x80004005
 # Unable to strip the namespace from DB5 document, cannot proceed.
