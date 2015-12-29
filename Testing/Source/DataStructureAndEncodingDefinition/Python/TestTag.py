@@ -12,8 +12,9 @@
 #
 ############################################################################
 
-import gdcm
 import os,sys
+print sys.path
+import gdcm
 
 if __name__ == "__main__":
   o1 = gdcm.Tag(0x0000,0x0000)
