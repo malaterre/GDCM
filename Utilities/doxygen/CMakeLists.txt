@@ -247,10 +247,20 @@ set(MANPAGES_XML
 find_package(LibXslt)
 # need an XSLT 1.0 processor, use xsltproc, maybe add more implementations later
 if(LIBXSLT_XSLTPROC_EXECUTABLE)
+  set(XSLT_PROCESSOR ${LIBXSLT_XSLTPROC_EXECUTABLE})
+else()
+  find_program(MSXSL_EXECUTABLE
+    msxsl
+    )
+  if(MSXSL_EXECUTABLE)
+    set(XSLT_PROCESSOR ${MSXSL_EXECUTABLE})
+  endif()
+endif()
+if(XSLT_PROCESSOR)
 foreach(docbook ${MANPAGES_XML})
   add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${docbook}.1
-    COMMAND ${LIBXSLT_XSLTPROC_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/man/${docbook}.xml
+    COMMAND ${XSLT_PROCESSOR} ${CMAKE_CURRENT_SOURCE_DIR}/man/${docbook}.xml
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/man/${docbook}.xml
     )
   list(APPEND MANPAGES
@@ -267,5 +277,5 @@ install(FILES
   DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT DebugDevel
 )
 else()
-  message(WARNING "Cannot build man page from docbook (need xsltproc)")
+  message(WARNING "Cannot build man page from docbook (need an XSL processor)")
 endif()
