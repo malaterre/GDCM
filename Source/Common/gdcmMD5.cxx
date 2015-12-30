@@ -22,8 +22,6 @@
 #include <fstream>
 #include <vector>
 
-/*
- */
 namespace gdcm
 {
 
@@ -80,7 +78,7 @@ static bool process_file(const char *filename, unsigned char *digest)
   return true;
 }
 #elif defined(GDCM_BUILD_TESTING)
-inline bool process_file(const char *filename, md5_byte_t *digest)
+static bool process_file(const char *filename, md5_byte_t *digest)
 {
   if( !filename || !digest ) return false;
 
@@ -101,7 +99,7 @@ inline bool process_file(const char *filename, md5_byte_t *digest)
   return true;
 }
 #else
-inline bool process_file(const char *, unsigned char *)
+static inline bool process_file(const char *, unsigned char *)
 {
   return false;
 }
