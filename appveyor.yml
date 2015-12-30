@@ -5,19 +5,36 @@
 version: 2.7.0.{build}
 
 # http://www.appveyor.com/docs/build-cache#caching-chocolatey-packages
+# https://github.com/kvirc/KVIrc/blob/master/.appveyor.yml
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
   - 'C:\Program Files (x86)\NSIS'
+
+## http://www.appveyor.com/docs/installed-software#python
+## Python 2.7; 32-bit version
+#    - python: C:\Python27;C:\Python27\Scripts
+## Python 2.7; 64-bit version
+#    - python: C:\Python27-x64;C:\Python27-x64\Scripts
+## Python 3.4; 32-bit version
+#    - python: C:\Python34;C:\Python34\Scripts
+## Python 3.4; 64-bit version
+#    - python: C:\Python34-x64;C:\Python34-x64\Scripts
 
 environment:
   matrix:
   - VS_GEN: Visual Studio 10 2010
     CONFIG: Release
     B_NAME: Windows-x86
+    DO_REL: true
+    PYTHONHOME: C:\Python27
+    JAVA_HOME: C:\Program Files (x86)\Java\jdk1.7.0
   - VS_GEN: Visual Studio 10 2010 Win64
     CONFIG: Release
     B_NAME: Windows-x86_64
+    DO_REL: true
+    PYTHONHOME: C:\Python34-x64
+    JAVA_HOME: C:\Program Files\Java\jdk1.8.0
 #  - VS_GEN: Visual Studio 14 2015 Win64
 #    CONFIG: Release
 #    B_NAME: Win64
@@ -47,6 +64,7 @@ skip_tags: true
 # scripts that are called at very beginning, before repo cloning
 init:
   # Print environment info ( set / systeminfo)
+  - set PATH=%JAVA_HOME%\bin;%PYTHONHOME%;%PATH%
   - msbuild /version
   - cmake --version
   - python --version
@@ -55,10 +73,20 @@ init:
   - del c:\programdata\chocolatey\bin\cpack.exe
 
 # scripts that run after cloning repository
+# https://www.appveyor.com/docs/build-configuration#powershell
 install:
   # Fetch submodules
   #- git submodule update --init --recursive
-  - choco install swig
+  # PowerShell
+  #- ps: (New-Object Net.WebClient).DownloadFile('http://download.microsoft.com/download/f/2/6/f263ac46-1fe9-4ae9-8fd3-21102100ebf5/msxsl.exe', "$env:appveyor_build_folder\msxsl.exe")
+  #- msxsl -? --> code return is 1 !!
+  # chocolatey:
+  - ps: |
+      if (Test-Path "C:/ProgramData/chocolatey/bin/swig.exe") {
+          echo "using swig from cache"
+      } else {
+          choco install swig
+      }
   - swig -version
   # https://chocolatey.org/packages/nsis.install/
   - ps: |
@@ -68,18 +96,16 @@ install:
           choco install nsis.install -pre -version 2.46.0.20150406
       }
   - cmd: SET PATH=%PATH%;C:\Program Files (x86)\NSIS
-  #- choco install ninja
-  # Set VC variables for the platform
-  #  - if %PLATFORM% == x64 call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\vcvarsx86_amd64.bat"
-  #  - if %PLATFORM% == x86 call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\vcvars32.bat"
 
-#on_failure:
-#  # Display error log file if generated
-#  - if exist C:\ProgramData\chocolatey\logs\chocolatey.log type C:\ProgramData\chocolatey\logs\chocolatey.log
+on_failure:
+  # Display error log file if generated
+  - dir C:\projects\gdcm\bin
+  - dir C:\projects\gdcm\bin\Release
+  #- if exist C:\ProgramData\chocolatey\logs\chocolatey.log type C:\ProgramData\chocolatey\logs\chocolatey.log
 
 # scripts to run before build
 before_build:
-  - cmake -Wno-dev -G"%VS_GEN%" -DCMAKE_BUILD_TYPE=%CONFIG% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%branch%-%B_NAME% -DGDCM_WRAP_CSHARP:BOOL=ON -DGDCM_WRAP_JAVA:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_USE_PVRG:BOOL=ON -DGDCM_JAVA_SOURCE_VERSION:STRING=1.7 -DGDCM_JAVA_TARGET_VERSION:STRING=1.7 -DCPACK_SYSTEM_NAME:STRING=%B_NAME% .
+  - cmake -Wno-dev -G"%VS_GEN%" -DCMAKE_BUILD_TYPE=%CONFIG% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_EXAMPLES:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%branch%-%B_NAME% -DGDCM_WRAP_CSHARP:BOOL=ON -DGDCM_WRAP_JAVA:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_USE_PVRG:BOOL=ON -DGDCM_LEGACY_SILENT:BOOL=ON -DCPACK_SYSTEM_NAME:STRING=%B_NAME% .
   - ctest -D ExperimentalStart -C %CONFIG%
 
 # scripts to run after build
@@ -88,16 +114,12 @@ after_build:
   - cpack -G NSIS -C %CONFIG%
   # create binary zip
   - cpack -G ZIP -C %CONFIG%
+  # no need for source release on github
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
   # Do not run Test=Update/Configure, only Start/Build/Test/Submit (TODO: Coverage)
   - ctest -D ExperimentalBuild -j %NUMBER_OF_PROCESSORS% -C %CONFIG% -Q
-
-# scripts to run before tests
-#before_test:
-#  - echo %APPVEYOR_REPO_TAG_NAME%
-#  - echo %APPVEYOR_REPO_TAG_NAME:~1%
 
 # scripts to run after tests
 after_test:
@@ -151,3 +173,4 @@ deploy:
     on:
       branch: master                # release from master branch only
       appveyor_repo_tag: false      # deploy on tag push only
+      do_rel: true
