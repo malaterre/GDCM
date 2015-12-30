@@ -9,7 +9,7 @@ version: 2.6.3.{build}
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
-  - 'c:\Program Files\NSIS'
+  - 'C:\Program Files (x86)\NSIS'
 
 ## http://www.appveyor.com/docs/installed-software#python
 ## Python 2.7; 32-bit version
@@ -80,18 +80,21 @@ install:
   #- ps: (New-Object Net.WebClient).DownloadFile('http://download.microsoft.com/download/f/2/6/f263ac46-1fe9-4ae9-8fd3-21102100ebf5/msxsl.exe', "$env:appveyor_build_folder\msxsl.exe")
   #- msxsl -? --> code return is 1 !!
   # chocolatey:
-  # C:/ProgramData/chocolatey/bin/swig.exe
-  - choco install swig
-  - swig -version
   - ps: |
-      if (Test-Path "c:/Program Files/NSIS/makensis.exe") {
+      if (Test-Path "C:/ProgramData/chocolatey/bin/swig.exe") {
+          echo "using swig from cache"
+      } else {
+          choco install swig
+      }
+  - swig -version
+  # https://chocolatey.org/packages/nsis.install/
+  - ps: |
+      if (Test-Path "C:/Program Files (x86)/NSIS/makensis.exe") {
           echo "using nsis from cache"
       } else {
           choco install nsis.install -pre -version 2.46.0.20150406
       }
-  # Set VC variables for the platform
-  #  - if %PLATFORM% == x64 call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\vcvarsx86_amd64.bat"
-  #  - if %PLATFORM% == x86 call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\vcvars32.bat"
+  - cmd: SET PATH=%PATH%;C:\Program Files (x86)\NSIS
 
 on_failure:
   # Display error log file if generated
@@ -101,7 +104,7 @@ on_failure:
 
 # scripts to run before build
 before_build:
-  - cmake -Wno-dev -G"%VS_GEN%" -DCMAKE_BUILD_TYPE=%CONFIG% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_EXAMPLES:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%B_NAME% -DGDCM_WRAP_CSHARP:BOOL=ON -DGDCM_WRAP_JAVA:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_USE_PVRG:BOOL=ON -DGDCM_LEGACY_SILENT:BOOL=ON -DCPACK_SYSTEM_NAME:STRING=%B_NAME% .
+  - cmake -Wno-dev -G"%VS_GEN%" -DCMAKE_BUILD_TYPE=%CONFIG% -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_EXAMPLES:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DBUILDNAME:STRING=%COMPUTERNAME%-%branch%-%B_NAME% -DGDCM_WRAP_CSHARP:BOOL=ON -DGDCM_WRAP_JAVA:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_USE_PVRG:BOOL=ON -DGDCM_LEGACY_SILENT:BOOL=ON -DCPACK_SYSTEM_NAME:STRING=%B_NAME% .
   - ctest -D ExperimentalStart -C %CONFIG%
 
 # scripts to run after build
@@ -116,11 +119,6 @@ after_build:
 build_script:
   # Do not run Test=Update/Configure, only Start/Build/Test/Submit (TODO: Coverage)
   - ctest -D ExperimentalBuild -j %NUMBER_OF_PROCESSORS% -C %CONFIG% -Q
-
-# scripts to run before tests
-#before_test:
-#  - echo %APPVEYOR_REPO_TAG_NAME%
-#  - echo %APPVEYOR_REPO_TAG_NAME:~1%
 
 # scripts to run after tests
 after_test:
