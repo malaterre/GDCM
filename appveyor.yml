@@ -84,7 +84,7 @@ install:
       if (Test-Path "C:/ProgramData/chocolatey/bin/swig.exe") {
           echo "using swig from cache"
       } else {
-          choco install swig > NUL
+          choco install swig > $null
       }
   - swig -version
   # https://chocolatey.org/packages/nsis.install/
