@@ -16,7 +16,7 @@ import gdcm
 import os,sys
 
 if __name__ == "__main__":
-  sucess = 0
+  success = 0
   s = gdcm.IPPSorter()
   # black box test:
   if not s.Sort([]):

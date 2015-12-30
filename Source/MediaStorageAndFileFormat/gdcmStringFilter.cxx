@@ -221,6 +221,7 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
     }
   if( state != 2 )
     {
+    free( query );
     return false;
     }
   free( query );

@@ -18,6 +18,10 @@
 # UseCSharp.cmake
 
 macro(ADD_JAVA_TEST TESTNAME FILENAME)
+  set(_sep ":")
+  if(WIN32)
+    set(_sep "\\;")
+  endif()
   get_source_file_property(loc ${FILENAME}.class LOCATION)
   get_source_file_property(pyenv ${FILENAME}.class RUNTIMEPATH)
   get_source_file_property(theclasspath ${FILENAME}.class CLASSPATH)
@@ -36,7 +40,7 @@ macro(ADD_JAVA_TEST TESTNAME FILENAME)
     endif()
   else()
     if(pyenv)
-      set(pyenv ${pyenv}:${LIBRARY_OUTPUT_PATH})
+      set(pyenv ${pyenv}${_sep}${LIBRARY_OUTPUT_PATH})
     else()
       set(pyenv ${LIBRARY_OUTPUT_PATH})
     endif()
@@ -55,7 +59,7 @@ macro(ADD_JAVA_TEST TESTNAME FILENAME)
     set(ld_library_path ${theld_library_path})
   endif()
   if(pyenv)
-    set(ld_library_path ${ld_library_path}:${pyenv})
+    set(ld_library_path ${ld_library_path}${_sep}${pyenv})
   endif()
 
   file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME}.cmake
@@ -63,18 +67,20 @@ macro(ADD_JAVA_TEST TESTNAME FILENAME)
   if(UNIX)
   set(ENV{LD_LIBRARY_PATH} ${ld_library_path})
   set(ENV{DYLD_LIBRARY_PATH} ${ld_library_path})
-  #set(ENV{CLASSPATH} ${pyenv}/gdcm.jar:.)
-  message(\"pyenv: ${pyenv}\")
+  #set(ENV{CLASSPATH} ${pyenv}/gdcm.jar${_sep}.)
+  #message(\"pyenv: ${pyenv}\")
   else()
   #set(the_path $ENV{PATH})
   set(ENV{PATH} ${ld_library_path})
   endif()
+  message(\"ld_library_path: ${ld_library_path}\")
   message(\"loc: ${loc}\")
   message(\"loc2: ${loc2}\")
   message(\"classpath: ${classpath}\")
   message(\"java runtime: ${Java_JAVA_EXECUTABLE}\")
   #message( \"wo_semicolumn: ${wo_semicolumn}\" )
   execute_process(
+    #COMMAND ${Java_JAVA_EXECUTABLE} -Djava.library.path=\"${GDCM_LIBRARY_DIR}\" -classpath \"${classpath}\" ${loc2} ${wo_semicolumn}
     COMMAND ${Java_JAVA_EXECUTABLE} -classpath \"${classpath}\" ${loc2} ${wo_semicolumn}
     WORKING_DIRECTORY \"${EXECUTABLE_OUTPUT_PATH}\"
     RESULT_VARIABLE import_res

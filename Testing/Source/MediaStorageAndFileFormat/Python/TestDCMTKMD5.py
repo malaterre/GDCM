@@ -172,10 +172,10 @@ def TestDCMTKMD5( filename, verbose = False ):
   return 1
 
 if __name__ == "__main__":
-  sucess = 0
+  success = 0
   try:
     filename = os.sys.argv[1]
-    sucess += TestDCMTKMD5( filename, True )
+    success += TestDCMTKMD5( filename, True )
   except:
     # loop over all files:
     t = gdcm.Testing()
@@ -184,7 +184,7 @@ if __name__ == "__main__":
     nfiles = t.GetNumberOfFileNames()
     for i in range(0,nfiles):
       filename = t.GetFileName(i)
-      sucess += TestDCMTKMD5( filename )
+      success += TestDCMTKMD5( filename )
 
   # Test succeed ?
-  sys.exit(sucess)
+  sys.exit(success)

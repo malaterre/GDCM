@@ -1,23 +1,30 @@
 # Define the tests for gdcm-python
 # gdcm-python
 set(GDCM_PYTHON_TEST_SRCS
-  TestScanner
-  TestImageReader
-  TestUIDGenerator
-  TestModifyFields
-  TestAnonymizer
-  #TestStringFilter
-  TestOrientation
-  TestIPPSorter
   #TestPythonFilter
+  #TestStringFilter
+  TestIPPSorter
+  TestOrientation
+  TestUIDGenerator
   )
+if(GDCM_DATA_ROOT)
+  set(GDCM_PYTHON_TEST_SRCS
+    ${GDCM_PYTHON_TEST_SRCS}
+    TestAnonymizer
+    TestModifyFields
+    TestImageReader
+    TestScanner
+  )
+endif()
 if(BUILD_APPLICATIONS)
   if(DCMTK_DCMDUMP_EXECUTABLE)
   if(UNIX)
+  if(GDCM_DATA_ROOT)
     set(GDCM_PYTHON_TEST_SRCS
       ${GDCM_PYTHON_TEST_SRCS}
       TestDCMTKMD5 # need dcmdrle and dcmdjpeg
     )
+  endif()
   endif()
   endif()
 endif()
@@ -33,7 +40,9 @@ find_package(KAKADU)
 if(BUILD_APPLICATIONS)
   if(KDU_EXPAND_EXECUTABLE)
   if(UNIX)
+  if(GDCM_DATA_ROOT)
     ADD_PYTHON_TEST(TestKakaduDecompressionMD5Python TestKakaduDecompressionMD5.py ${KDU_EXPAND_EXECUTABLE})
+  endif()
   endif()
   endif()
 endif()

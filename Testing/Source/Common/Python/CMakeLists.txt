@@ -2,9 +2,13 @@
 # gdcm-python
 set(GDCM_PYTHON_TEST_SRCS
   TestTesting
-  TestDirectory
   )
-
+if(GDCM_DATA_ROOT)
+  set(GDCM_PYTHON_TEST_SRCS
+    ${GDCM_PYTHON_TEST_SRCS}
+    TestDirectory
+  )
+endif()
 
 # Loop over files and create executables
 foreach(name ${GDCM_PYTHON_TEST_SRCS})

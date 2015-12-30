@@ -19,7 +19,7 @@ def TestModifyFields(filename):
   outfilename = filename + ".rewrite"
   r = gdcm.Reader()
   r.SetFileName( filename )
-  sucess = r.Read()
+  success = r.Read()
   #print r.GetFile().GetDataSet()
 
   ds = r.GetFile().GetDataSet()
@@ -63,22 +63,22 @@ def TestModifyFields(filename):
   #w = gdcm.Writer()
   #w.SetFileName( outfilename )
   #w.SetFile( r.GetFile() )
-  #sucess = w.Write()
-  return sucess
+  #success = w.Write()
+  return success
 
 if __name__ == "__main__":
-  sucess = 0
+  success = 0
   try:
     filename = os.sys.argv[1]
-    sucess += TestModifyFields( filename, True )
+    success += TestModifyFields( filename, True )
   except:
     # loop over all files:
     t = gdcm.Testing()
     nfiles = t.GetNumberOfFileNames()
     for i in range(0,nfiles):
       filename = t.GetFileName(i)
-      sucess += TestModifyFields( filename )
+      success += TestModifyFields( filename )
 
 
   # Test succeed ?
-  sys.exit(sucess == 0)
+  sys.exit(success == 0)

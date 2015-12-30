@@ -180,7 +180,7 @@ macro(CSHARP_LINK_LIBRARIES name)
     ARGS ${CSHARP_EXECUTABLE_${name}_ARGS}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     #DEPENDS ${csharp_cs_sources}
-    COMMENT "Create HelloWorld.exe"
+    COMMENT "Create ${name}.exe"
   )
 
   #message("DEBUG2:${csharp_libraries_depends}")

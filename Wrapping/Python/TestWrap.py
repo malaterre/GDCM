@@ -49,12 +49,14 @@ blacklist = (
 "GroupDict"
 "DictConverter"
 # Information thingy :
+"Tables"
 "MacroEntry"
 "XMLDictReader"
 "TableReader"
 "Table"
 "XMLPrivateDictReader"
 # Common
+"Configure"
 "LegacyMacro"
 "Swapper"
 "SmartPointer"

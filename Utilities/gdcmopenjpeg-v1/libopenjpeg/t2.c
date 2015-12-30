@@ -714,7 +714,11 @@ int t2_decode_packets(opj_t2_t *t2, unsigned char *src, int len, int tileno, opj
 			} else {
 				e = 0;
 			}
-			if(e == -999) return -999;
+			if(e == -999)
+			{
+			pi_destroy(pi, cp, tileno);
+			return -999;
+			}
 			/* progression in resolution */
 			image->comps[pi[pino].compno].resno_decoded =	
 				(e > 0) ? 
