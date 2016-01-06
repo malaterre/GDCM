@@ -70,6 +70,7 @@ void SerieHelper::SetUseSeriesDetails( bool useSeriesDetails )
 {
   UseSeriesDetails = useSeriesDetails;
 }
+#endif
 
 void SerieHelper::CreateDefaultUniqueSeriesIdentifier()
 {
@@ -121,6 +122,7 @@ void SerieHelper::Clear()
   SingleSerieUIDFileSetHT.clear();
 }
 
+#if !defined(GDCM_LEGACY_REMOVE)
 void SerieHelper::SetDirectory(std::string const &dir, bool recursive)
 {
   Directory dirList;
@@ -231,6 +233,7 @@ bool SerieHelper::AddFile(FileWithName &header)
     }
   return true;
 }
+#endif
 
 FileList *SerieHelper::GetFirstSingleSerieUIDFileSet()
 {
@@ -250,6 +253,7 @@ FileList *SerieHelper::GetNextSingleSerieUIDFileSet()
   return NULL;
 }
 
+#if !defined(GDCM_LEGACY_REMOVE)
 bool SerieHelper::UserOrdering(FileList *fileList)
 {
   std::sort(fileList->begin(), fileList->end(), SerieHelper::UserLessThanFunction);
@@ -420,6 +424,7 @@ void SerieHelper::OrderFileList(FileList *fileSet)
   FileNameOrdering(fileSet );
   }
 }
+#endif
 
 
 std::string SerieHelper::CreateUniqueSeriesIdentifier( File * inFile )
@@ -474,6 +479,5 @@ std::string SerieHelper::CreateUniqueSeriesIdentifier( File * inFile )
     return id;
     }
 }
-#endif
 
 } // end namespace gdcm
