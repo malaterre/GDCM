@@ -85,7 +85,7 @@ install:
       if (Test-Path "C:/ProgramData/chocolatey/bin/swig.exe") {
           echo "using swig from cache"
       } else {
-          choco install swig > $null
+          choco install -y swig > $null
       }
   - swig -version
   # https://chocolatey.org/packages/nsis.install/
@@ -93,7 +93,7 @@ install:
       if (Test-Path "C:/Program Files (x86)/NSIS/makensis.exe") {
           echo "using nsis from cache"
       } else {
-          choco install nsis.install -pre -version 2.46.0.20150406
+          choco install -y nsis.install -pre -version 2.46.0.20150406
       }
   - cmd: SET PATH=%PATH%;C:\Program Files (x86)\NSIS
 
