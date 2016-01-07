@@ -249,7 +249,7 @@ find_package(LibXslt)
 if(LIBXSLT_XSLTPROC_EXECUTABLE)
   set(XSLT_PROCESSOR ${LIBXSLT_XSLTPROC_EXECUTABLE})
 # http://docbook.sourceforge.net/release/xsl/current/doc/manpages/man.output.quietly.html
-  set(XSLT_PROCESSOR_ARG --param man.output.quietly 1)
+  set(XSLT_PROCESSOR_ARG --param man.output.quietly 1 --nonet)
 else()
   find_program(MSXSL_EXECUTABLE
     msxsl

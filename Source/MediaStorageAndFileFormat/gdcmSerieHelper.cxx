@@ -33,12 +33,12 @@ SerieHelper::SerieHelper()
   //LoadMode = 0;
 }
 
-#if !defined(GDCM_LEGACY_REMOVE)
 SerieHelper::~SerieHelper()
 {
   Clear();
 }
 
+#if !defined(GDCM_LEGACY_REMOVE)
 void SerieHelper::AddRestriction(uint16_t group, uint16_t elem, std::string const &value, int op)
 {
   Rule r;
