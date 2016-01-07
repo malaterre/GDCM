@@ -69,7 +69,7 @@ class GDCM_EXPORT SerieHelper
 {
 public:
   SerieHelper();
-  GDCM_LEGACY(~SerieHelper());
+  ~SerieHelper();
 
   void Clear();
   GDCM_LEGACY(void SetLoadMode (int ));
