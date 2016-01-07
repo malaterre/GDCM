@@ -21,7 +21,8 @@ foreach(example ${GDCM_JAVA_TEST_SRCS})
     COMMENT "javac ${example}.java"
     )
   list(APPEND classfilesdep ${GDCM_EXECUTABLE_DIR}/${example}.class)
-  set_source_files_properties(${GDCM_EXECUTABLE_DIR}/${example}.class PROPERTIES CLASSPATH "${GDCM_LIBRARY_DIR}/gdcm.jar")
+  set(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
+  set_source_files_properties(${GDCM_EXECUTABLE_DIR}/${example}.class PROPERTIES CLASSPATH "${GDCM_LIBRARY_DIR2}/gdcm.jar")
   ADD_JAVA_TEST(${example}Java ${GDCM_EXECUTABLE_DIR}/${example})
 endforeach()
 
