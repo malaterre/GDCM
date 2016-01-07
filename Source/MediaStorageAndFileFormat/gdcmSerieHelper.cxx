@@ -23,7 +23,6 @@
 namespace gdcm
 {
 
-#if !defined(GDCM_LEGACY_REMOVE)
 SerieHelper::SerieHelper()
 {
   Trace::WarningOff();
@@ -34,6 +33,7 @@ SerieHelper::SerieHelper()
   //LoadMode = 0;
 }
 
+#if !defined(GDCM_LEGACY_REMOVE)
 SerieHelper::~SerieHelper()
 {
   Clear();

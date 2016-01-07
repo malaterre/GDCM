@@ -68,7 +68,7 @@ class Scanner;
 class GDCM_EXPORT SerieHelper
 {
 public:
-  GDCM_LEGACY(SerieHelper());
+  SerieHelper();
   GDCM_LEGACY(~SerieHelper());
 
   void Clear();
