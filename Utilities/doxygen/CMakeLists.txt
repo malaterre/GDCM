@@ -249,7 +249,18 @@ find_package(LibXslt)
 if(LIBXSLT_XSLTPROC_EXECUTABLE)
   set(XSLT_PROCESSOR ${LIBXSLT_XSLTPROC_EXECUTABLE})
 # http://docbook.sourceforge.net/release/xsl/current/doc/manpages/man.output.quietly.html
-  set(XSLT_PROCESSOR_ARG --param man.output.quietly 1 --nonet)
+  set(XSLT_PROCESSOR_ARG --param man.output.quietly 1)
+  # User can change the behavior at cmake time:
+  if(NOT DEFINED GDCM_MANPAGES_USE_NONET)
+    set(GDCM_MANPAGES_USE_NONET FALSE)
+    # By default I want nonet on Debian:
+    if(EXISTS /etc/xml/catalog)
+      set(GDCM_MANPAGES_USE_NONET TRUE)
+    endif()
+  endif()
+  if(GDCM_MANPAGES_USE_NONET)
+    list(APPEND XSLT_PROCESSOR_ARG --nonet)
+  endif()
 else()
   find_program(MSXSL_EXECUTABLE
     msxsl
