@@ -93,8 +93,9 @@ void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
   // We have the choice to decide to use Bits Stored or Bits Allocated, however in the case of
   // such an image as: gdcmData/MR16BitsAllocated_8BitsStored.dcm we are required to use
   // bits allocated to deal with the logic to decide withe the encoder
-  SetBitSample( pt.GetBitsAllocated() );
-  //SetBitSample( pt.GetBitsStored() );
+  // but for 12 bits images if we encode and decode data values are padded and don't fit anymore with bit stored information
+  SetBitSample( pt.GetBitsStored() );
+  //SetBitSample( pt.GetBitsAllocated() );
 }
 
 void JPEGCodec::SetupJPEGBitCodec(int bit)
