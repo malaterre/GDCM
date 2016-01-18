@@ -1169,10 +1169,7 @@ int main (int argc, char *argv[])
       {
       if( lossy )
         {
-        if( image.GetPixelFormat().GetBitsAllocated() == 8 )
-          change.SetTransferSyntax( gdcm::TransferSyntax::JPEGBaselineProcess1 );
-        else
-          change.SetTransferSyntax( gdcm::TransferSyntax::JPEGExtendedProcess2_4 );
+        change.SetTransferSyntax( gdcm::TransferSyntax::JPEGBaselineProcess1 );
         jpegcodec.SetLossless( false );
         if( quality )
           {
