@@ -38,7 +38,6 @@ SerieHelper::~SerieHelper()
   Clear();
 }
 
-#if !defined(GDCM_LEGACY_REMOVE)
 void SerieHelper::AddRestriction(uint16_t group, uint16_t elem, std::string const &value, int op)
 {
   Rule r;
@@ -64,13 +63,10 @@ void SerieHelper::AddRestriction(const Tag& tag)
   Refine.push_back( r );
 }
 
-void SerieHelper::SetLoadMode (int ) {}
-
 void SerieHelper::SetUseSeriesDetails( bool useSeriesDetails )
 {
   UseSeriesDetails = useSeriesDetails;
 }
-#endif
 
 void SerieHelper::CreateDefaultUniqueSeriesIdentifier()
 {
@@ -122,7 +118,6 @@ void SerieHelper::Clear()
   SingleSerieUIDFileSetHT.clear();
 }
 
-#if !defined(GDCM_LEGACY_REMOVE)
 void SerieHelper::SetDirectory(std::string const &dir, bool recursive)
 {
   Directory dirList;
@@ -153,7 +148,7 @@ void SerieHelper::AddFileName(std::string const &filename)
     }
 }
 
-static bool CompareDicomString(const std::string &s1, const char *s2, int op)
+bool CompareDicomString(const std::string &s1, const char *s2, int op)
 {
   // s2 is the string from the DICOM reference e.g. : 'MONOCHROME1'
   std::string s1_even = s1; //Never change input parameter
@@ -233,7 +228,6 @@ bool SerieHelper::AddFile(FileWithName &header)
     }
   return true;
 }
-#endif
 
 FileList *SerieHelper::GetFirstSingleSerieUIDFileSet()
 {
@@ -253,7 +247,6 @@ FileList *SerieHelper::GetNextSingleSerieUIDFileSet()
   return NULL;
 }
 
-#if !defined(GDCM_LEGACY_REMOVE)
 bool SerieHelper::UserOrdering(FileList *fileList)
 {
   std::sort(fileList->begin(), fileList->end(), SerieHelper::UserLessThanFunction);
@@ -263,7 +256,6 @@ bool SerieHelper::UserOrdering(FileList *fileList)
     }
   return true;
 }
-#endif
 
 namespace details {
 bool MyFileNameSortPredicate(const SmartPointer<FileWithName>& d1, const SmartPointer<FileWithName>& d2)
@@ -401,7 +393,6 @@ bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList )
   return true;
 }
 
-#if !defined(GDCM_LEGACY_REMOVE)
 void SerieHelper::OrderFileList(FileList *fileSet)
 {
   IPPSorter ipps;
@@ -424,7 +415,6 @@ void SerieHelper::OrderFileList(FileList *fileSet)
   FileNameOrdering(fileSet );
   }
 }
-#endif
 
 
 std::string SerieHelper::CreateUniqueSeriesIdentifier( File * inFile )

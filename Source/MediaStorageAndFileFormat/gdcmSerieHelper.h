@@ -72,17 +72,17 @@ public:
   ~SerieHelper();
 
   void Clear();
-  GDCM_LEGACY(void SetLoadMode (int ));
-  GDCM_LEGACY(void SetDirectory(std::string const &dir, bool recursive=false));
+  void SetLoadMode (int ) {}
+  void SetDirectory(std::string const &dir, bool recursive=false);
 
-  GDCM_LEGACY(void AddRestriction(const std::string & tag));
-  GDCM_LEGACY(void SetUseSeriesDetails( bool useSeriesDetails ));
-  GDCM_LEGACY(void CreateDefaultUniqueSeriesIdentifier());
+  void AddRestriction(const std::string & tag);
+  void SetUseSeriesDetails( bool useSeriesDetails );
+  void CreateDefaultUniqueSeriesIdentifier();
   FileList *GetFirstSingleSerieUIDFileSet();
   FileList *GetNextSingleSerieUIDFileSet();
   std::string CreateUniqueSeriesIdentifier( File * inFile );
-  GDCM_LEGACY(void OrderFileList(FileList *fileSet));
-  GDCM_LEGACY(void AddRestriction(uint16_t group, uint16_t elem, std::string const &value, int op));
+  void OrderFileList(FileList *fileSet);
+  void AddRestriction(uint16_t group, uint16_t elem, std::string const &value, int op);
 
 protected:
   bool UserOrdering(FileList *fileSet);
