@@ -109,12 +109,7 @@ before_build:
   - ctest -D ExperimentalStart -C %CONFIG%
 
 # scripts to run after build
-after_build:
-  # create NSIS installer
-  - cpack -G NSIS -C %CONFIG%
-  # create binary zip
-  - cpack -G ZIP -C %CONFIG%
-  # no need for source release on github
+#after_build:
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
@@ -145,7 +140,12 @@ artifacts:
 #---------------------------------#
 
 # scripts to run before deployment
-#before_deploy:
+before_deploy:
+  # create NSIS installer
+  - cpack -G NSIS -C %CONFIG%
+  # create binary zip
+  - cpack -G ZIP -C %CONFIG%
+  # no need for source release on github
 
 # scripts to run after deployment
 #after_deploy:
