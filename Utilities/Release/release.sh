@@ -19,7 +19,7 @@ echo ""
 
 major=2
 minor=6
-patch=1
+patch=3
 dirversion="$major.$minor"
 version="$major.$minor.$patch"
 version2="$major-$minor-$patch"
@@ -115,7 +115,8 @@ cpack -G TBZ2 --config CPackSourceConfig.cmake
 check_exit_value $? "cpack did not return properly" || exit 1
 
 # Let's start doing the VTK documentation then:
-cmake -DGDCM_VTK_DOCUMENTATION:BOOL=ON -DGDCM_USE_VTK:BOOL=ON -DVTK_DIR:PATH=/home/mathieu/tmp/vtk-5.10.1+dfsg/Build .
+#cmake -DGDCM_VTK_DOCUMENTATION:BOOL=ON -DGDCM_USE_VTK:BOOL=ON -DVTK_DIR:PATH=/home/mathieu/tmp/vtk-5.10.1+dfsg/Build .
+cmake -DGDCM_VTK_DOCUMENTATION:BOOL=ON -DGDCM_USE_VTK:BOOL=ON -DVTK_DIR:PATH=/home/mathieu/tmp/vtk6-6.2.0+dfsg1/debian/build .
 check_exit_value $? "cmake did not return properly" || exit 1
 #make -j4
 make rebuild_cache
