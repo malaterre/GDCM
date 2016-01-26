@@ -57,7 +57,7 @@ if(WIN32)
 endif()
 
 add_library(${CHARLS_LIBRARY_NAME} header.cpp  interface.cpp  jpegls.cpp
-  stdafx.cpp jpegstreamwriter.cpp jpegmarkersegment.cpp
+  jpegstreamwriter.cpp jpegmarkersegment.cpp
   )
 set_target_properties(${CHARLS_LIBRARY_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 
