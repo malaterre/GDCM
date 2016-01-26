@@ -324,7 +324,7 @@ option(GDCM_USE_SYSTEM_PAPYRUS3 "Use system papyrus3" OFF)
 option(GDCM_USE_SYSTEM_SOCKETXX "Use system socket++" OFF)
 option(GDCM_USE_SYSTEM_LJPEG "Use system ljpeg (ijg lib)" OFF)
 option(GDCM_USE_SYSTEM_OPENJPEG "Use system openjpeg" OFF)
-option(GDCM_USE_SYSTEM_CHARLS "Use system charls" OFF)
+option(GDCM_USE_SYSTEM_CHARLS "Use system CharLS" OFF)
 mark_as_advanced(
   GDCM_USE_SYSTEM_ZLIB
   GDCM_USE_SYSTEM_OPENSSL
