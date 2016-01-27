@@ -17,7 +17,8 @@
 /* Use the charls library configured for gdcm.  */
 #include "gdcmTypes.h"
 #ifdef GDCM_USE_SYSTEM_CHARLS
-// It is expected that 1.0 API is used (JlsParameters instead of JlsParamaters)
+// It is required that CharLS 1.0 API is used, not older versions with
+// 'JlsParamaters' instead of 'JlsParameters', and not the newer 2.x versions.
 # include <CharLS/interface.h>
 # include <CharLS/util.h>
 # include <CharLS/defaulttraits.h>

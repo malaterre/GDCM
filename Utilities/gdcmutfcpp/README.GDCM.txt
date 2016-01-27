@@ -1,5 +1,12 @@
 I was looking for a UTF-8 lightweight library with a license compatible with GDCM.
 
-I decided to pick utfcpp. Which still seems to be active (2.2.4 was released 23 days ago).
+I (Mathieu Malaterre) decided to pick utfcpp:
+http://sourceforge.net/projects/utfcpp/
 
--- Mathieu Malaterre  Mon Nov 23 18:30:46 CET 2009
+Version 2.2.4 is included here, with no changes.
+
+Source:
+http://sourceforge.net/projects/utfcpp/files/utf8cpp_2x/Release%202.2.4/utf8_v2_2_4.zip/download
+
+SHA 256 checksum:
+7611ed3f084b2833bbdb028772ce89e30d38cd41fd6f4009d32e7610cacc246d
