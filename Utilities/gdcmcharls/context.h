@@ -8,7 +8,6 @@
 
 #include <cstdlib>
 
-
 //
 // JlsContext: a JPEG-LS context with it's current statistics.
 //
@@ -45,8 +44,8 @@ public:
 		ASSERT(N != 0);
 
 		// For performance work on copies of A,B,N (compiler will use registers).
-		int a = A + std::abs(errorValue);
 		int b = B + errorValue * (2 * NEAR + 1); 
+		int a = A + std::abs(errorValue);
 		int n = N;
 
 		ASSERT(a < 65536 * 256);
@@ -59,10 +58,8 @@ public:
 			n = n >> 1;
 		}
 
-		A = a;		
 		n = n + 1;
-		N = (short)n;
-
+		
 		if (b + n <= 0) 
 		{
 			b = b + n;
@@ -70,7 +67,7 @@ public:
 			{
 				b = -n + 1;
 			}
-			C = C - (C > -128);
+			C = _tableC[C - 1];
 		} 
 		else  if (b > 0) 
 		{
@@ -79,10 +76,11 @@ public:
 			{
 				b = 0;
 			}
-			C = C + (C < 127);
+			C = _tableC[C + 1];
 		}
+		A = a;
 		B = b;
-		
+		N = (short)n;
 		ASSERT(N != 0);
 	}
 
@@ -92,14 +90,7 @@ public:
 	{
 		LONG Ntest	= N;
 		LONG Atest	= A;
-
-		if (Ntest >= Atest) return 0;
-		if (Ntest << 1 >= Atest) return 1;
-		if (Ntest << 2 >= Atest) return 2;
-		if (Ntest << 3 >= Atest) return 3;
-		if (Ntest << 4 >= Atest) return 4;
-
-		LONG k = 5;
+		LONG k = 0;
 		for(; (Ntest << k) < Atest; k++) 
 		{ 
 			ASSERT(k <= 32); 
@@ -107,7 +98,26 @@ public:
 		return k;
 	}
 
-	
+	static signed char* CreateTableC()
+	{
+		static std::vector<signed char> rgtableC;
+		
+		rgtableC.reserve(256 + 2);
+
+		rgtableC.push_back(-128);	
+		for (int i = -128; i < 128; i++)
+		{
+			rgtableC.push_back(char(i));	
+		}
+		rgtableC.push_back(127);	
+		
+		signed char* pZero = &rgtableC[128 + 1];	
+		ASSERT(pZero[0] == 0);
+		return pZero;
+	}
+private:
+
+	static signed char* _tableC;
 };
 
 #endif

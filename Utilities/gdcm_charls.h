@@ -2,7 +2,7 @@
 
   Program: GDCM (Grassroots DICOM). A DICOM library
 
-  Copyright (c) 2006-2016 Mathieu Malaterre
+  Copyright (c) 2006-2011 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -24,6 +24,7 @@
 # include <CharLS/defaulttraits.h>
 # include <CharLS/losslesstraits.h>
 # include <CharLS/colortransform.h>
+# include <CharLS/streams.h>
 # include <CharLS/processline.h>
 #else
 #include "gdcmcharls/header.h"
@@ -32,6 +33,7 @@
 #include "gdcmcharls/defaulttraits.h"
 #include "gdcmcharls/losslesstraits.h"
 #include "gdcmcharls/colortransform.h"
+#include "gdcmcharls/streams.h"
 #include "gdcmcharls/processline.h"
 #endif
 
