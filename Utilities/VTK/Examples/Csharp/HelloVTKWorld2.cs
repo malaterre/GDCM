@@ -30,15 +30,15 @@ public class HelloVTKWorld2
     reader.SetDataSpacing(3.2, 3.2, 1.5);
 
     vtkImageCast cast = vtkImageCast.New();
-    cast.SetInput( reader.GetOutput() );
+    cast.SetInputConnection( reader.GetOutputPort() );
     cast.SetOutputScalarTypeToUnsignedChar();
 
     // By default this is creating a Multiframe Grayscale Word Secondary Capture Image Storage
     vtkGDCMImageWriter writer = vtkGDCMImageWriter.New();
     writer.SetFileName( "headsq.dcm" );
-    writer.SetInput( reader.GetOutput() );
+    writer.SetInputConnection( reader.GetOutputPort() );
     // cast -> Multiframe Grayscale Byte Secondary Capture Image Storage
-    // writer.SetInput( cast.GetOutput() );
+    // writer.SetInputConnection( cast.GetOutputPort() );
     writer.SetFileDimensionality( 3 );
     writer.Write();
 
