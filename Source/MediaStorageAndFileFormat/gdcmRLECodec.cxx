@@ -557,7 +557,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 // Endif
 // Endloop
 
-size_t RLECodec::DecodeFragment(Fragment const & frag, char *buffer, unsigned long llen)
+size_t RLECodec::DecodeFragment(Fragment const & frag, char *buffer, size_t llen)
 {
 
   std::stringstream is;
