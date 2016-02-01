@@ -658,6 +658,11 @@ basic_zip_ostream<charT,traits>& basic_zip_ostream<charT, traits>::add_footer(vo
 // PUBLIC
 //-----------------------------------------------------------------------------
 
+#if defined(_MSC_VER)
+# pragma warning (push)
+# pragma warning (disable:4355)
+#endif
+
 /** Constructor
  */
 template <class charT, class traits>
@@ -678,6 +683,10 @@ basic_zip_istream<charT, traits>::basic_zip_istream(istream_reference istream,
     //std::cerr << "check_header:" << check << std::endl;
     }
 }
+
+#if defined(_MSC_VER)
+# pragma warning (pop)
+#endif
 
 /** returns true if it is a gzip file
  */
