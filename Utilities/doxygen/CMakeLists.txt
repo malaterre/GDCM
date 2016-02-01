@@ -256,6 +256,8 @@ if(LIBXSLT_XSLTPROC_EXECUTABLE)
     # By default I want nonet on Debian:
     if(EXISTS /etc/xml/catalog)
       set(GDCM_MANPAGES_USE_NONET TRUE)
+    else()
+      message(STATUS "Could not find /etc/xml/catalog")
     endif()
   endif()
   if(GDCM_MANPAGES_USE_NONET)
