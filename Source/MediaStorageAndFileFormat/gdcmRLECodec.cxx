@@ -636,7 +636,7 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
       return false;
     }
     char *buffer = new char[len];
-    const unsigned long llen = len / nframes;
+    const std::size_t llen = len / nframes;
     // assert( GetNumberOfDimensions() == 2
     //      || GetDimension(2) == sf->GetNumberOfFragments() );
     bool corruption = false;

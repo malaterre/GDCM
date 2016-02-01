@@ -556,6 +556,7 @@ std::istream &FileMetaInformation::Read(std::istream &is)
   }
   catch( std::exception & ex )
   {
+(void)ex;
     // we've read a little bit too much. We are possibly in the case where an
     // implicit dataelement with group 2 (technically impossible) was found
     // (first dataelement). Let's start over again, but this time use group

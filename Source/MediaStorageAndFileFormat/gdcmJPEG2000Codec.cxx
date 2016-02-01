@@ -320,10 +320,10 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
       std::stringstream is;
       size_t j2kbv_len = j2kbv->GetLength();
       char *mybuffer = new char[j2kbv_len];
-      bool b = j2kbv->GetBuffer(mybuffer, j2kbv_len);
-      assert( b );
+      bool b = j2kbv->GetBuffer(mybuffer, (unsigned long)j2kbv_len);
       if( b ) is.write(mybuffer, j2kbv_len);
       delete[] mybuffer;
+      if( !b ) return false;
 
       try {
         sf_bug->Read<SwapperNoOp>(is,true);
@@ -371,7 +371,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
       const Fragment &frag = sf->GetFragment(i);
       if( frag.IsEmpty() ) return false;
       const ByteValue *bv = frag.GetByteValue();
-      assert( bv );
+      if( !bv ) return false;
       size_t bv_len = bv->GetLength();
       char *mybuffer = new char[bv_len];
       bv->GetBuffer(mybuffer, bv->GetLength());
