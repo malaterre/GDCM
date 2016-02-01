@@ -643,7 +643,6 @@ if(GDCM_WRAP_JAVA)
     include(${VTK_CMAKE_DIR}/vtkWrapJava.cmake)
     include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-    VTK_WRAP_JAVA3(${VTKGDCM_NAME}Java vtkgdcmJAVA_SRCS "${vtkgdcm_SRCS}")
     # libvtk-java is a pain to handle...
     if(EXISTS ${VTK_JAVA_JAR})
       # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=533193
@@ -660,6 +659,7 @@ if(GDCM_WRAP_JAVA)
     endif()
     mark_as_advanced(GDCM_VTK_JAVA_JAR)
     if(EXISTS ${GDCM_VTK_JAVA_JAR})
+    VTK_WRAP_JAVA3(${VTKGDCM_NAME}Java vtkgdcmJAVA_SRCS "${vtkgdcm_SRCS}")
     add_library(${VTKGDCM_NAME}Java SHARED ${vtkgdcmJAVA_SRCS})
     # special jnilib extension:
     if(APPLE)
