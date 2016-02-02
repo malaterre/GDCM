@@ -79,7 +79,7 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
     }
 
   std::istringstream is;
-  is.str( std::string( buf, len ) );
+  is.str( std::string( buf, (size_t)len ) );
 
   std::streamoff totalsize;
   is.read( (char*)&totalsize, sizeof( totalsize ));

@@ -551,7 +551,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
 // Endif
 // Endloop
 
-size_t RLECodec::DecodeFragment(Fragment const & frag, char *buffer, unsigned long llen)
+size_t RLECodec::DecodeFragment(Fragment const & frag, char *buffer, size_t llen)
 {
 
   std::stringstream is;
@@ -630,7 +630,7 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
       return false;
     }
     char *buffer = new char[len];
-    const unsigned long llen = len / nframes;
+    const std::size_t llen = len / nframes;
     // assert( GetNumberOfDimensions() == 2
     //      || GetDimension(2) == sf->GetNumberOfFragments() );
     bool corruption = false;
