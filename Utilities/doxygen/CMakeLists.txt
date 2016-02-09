@@ -225,6 +225,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
   endif()
 endif()
 
+if(NOT GDCM_DOCUMENTATION_SKIP_MANPAGES)
 set(MANPAGES_XML
     gdcm2pnm
     gdcm2vtk
@@ -302,3 +303,4 @@ install(FILES
 else()
   message(WARNING "Cannot build man page from docbook (need an XSL processor)")
 endif()
+endif() #NOT GDCM_DOCUMENTATION_SKIP_MANPAGES
