@@ -49,12 +49,12 @@ bool ImageHelper::ForceRescaleInterceptSlope = false;
 bool ImageHelper::PMSRescaleInterceptSlope = true;
 bool ImageHelper::ForcePixelSpacing = false;
 
-bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)
+static bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)
 {
   if( !ds.FindDataElement( tfgs ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
-  assert( sqi );
+  if( !(sqi && sqi->GetNumberOfItems() > 0) ) return false;
   // Get first item:
   const Item &item = sqi->GetItem(1);
   const DataSet & subds = item.GetNestedDataSet();
@@ -81,12 +81,12 @@ bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<
   return true;
 }
 
-bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &dircos)
+static bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &dircos)
 {
   if( !ds.FindDataElement( tfgs ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
-  assert( sqi );
+  if( !(sqi && sqi->GetNumberOfItems() > 0) ) return false;
   // Get first item:
   const Item &item = sqi->GetItem(1);
   const DataSet & subds = item.GetNestedDataSet();
@@ -116,12 +116,12 @@ bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, st
   return true;
 }
 
-bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &intslope)
+static bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &intslope)
 {
   if( !ds.FindDataElement( tfgs ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
-  assert( sqi );
+  if( !(sqi && sqi->GetNumberOfItems() > 0) ) return false;
   // Get first item:
   const Item &item = sqi->GetItem(1);
   const DataSet & subds = item.GetNestedDataSet();
@@ -160,7 +160,7 @@ bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std:
   return true;
 }
 
-bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
+static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
 {
   // first we need to get the direction cosines:
   const Tag t1(0x5200,0x9229);
@@ -279,7 +279,7 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
 }
 
 // EnhancedMRImageStorage & EnhancedCTImageStorage
-bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &sp)
+static bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &sp)
 {
   //  (0028,9110) SQ (Sequence with undefined length #=1)     # u/l, 1 PixelMeasuresSequence
   //      (fffe,e000) na (Item with undefined length #=2)         # u/l, 1 Item
@@ -292,7 +292,7 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
   if( !ds.FindDataElement( tfgs ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
-  assert( sqi );
+  if( !(sqi && sqi->GetNumberOfItems() > 0) ) return false;
   // Get first item:
   const Item &item = sqi->GetItem(1);
   const DataSet & subds = item.GetNestedDataSet();
@@ -339,7 +339,7 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
 }
 
 // UltrasoundMultiframeImageStorage
-bool GetUltraSoundSpacingValueFromSequence(const DataSet& ds, std::vector<double> &sp)
+static bool GetUltraSoundSpacingValueFromSequence(const DataSet& ds, std::vector<double> &sp)
 {
 /*
 (0018,6011) SQ (Sequence with explicit length #=1)      # 196, 1 SequenceOfUltrasoundRegions
