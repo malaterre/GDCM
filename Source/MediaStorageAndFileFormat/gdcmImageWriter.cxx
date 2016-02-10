@@ -57,6 +57,16 @@ MediaStorage ImageWriter::ComputeTargetMediaStorage()
         PixelData->GetPhotometricInterpretation(),
         GetImage().GetIntercept(), GetImage().GetSlope() );
   }
+  // double check for Grayscale since they need specific pixel type
+  if( ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
+   || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage )
+  {
+    ms = ImageHelper::ComputeMediaStorageFromModality( ms.GetModality(),
+        PixelData->GetNumberOfDimensions(),
+        PixelData->GetPixelFormat(),
+        PixelData->GetPhotometricInterpretation(),
+        GetImage().GetIntercept(), GetImage().GetSlope() );
+  }
   return ms;
 }
 

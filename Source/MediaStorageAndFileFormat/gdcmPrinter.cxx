@@ -898,7 +898,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
     if( refvr == VR::SQ /*|| sqi*/ )
       {
       //SmartPointer<SequenceOfItems> sqi2 = DataSetHelper::ComputeSQFromByteValue( *F, ds, de.GetTag() );
-      SmartPointer<SequenceOfItems> sqi2 = de.GetValueAsSQ();
+      SmartPointer<SequenceOfItems> sqi2 = de.GetValueAsSQ(); // may throw
       PrintSQ(sqi2, os, indent);
       /*
       const SequenceOfItems *sqi = de.GetSequenceOfItems();
