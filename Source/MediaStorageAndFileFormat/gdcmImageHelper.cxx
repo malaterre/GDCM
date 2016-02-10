@@ -836,6 +836,12 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
         gdcmAssertAlwaysMacro( "Could not set third dimension" );
       }
     }
+    else if( img.GetNumberOfDimensions() == 2 && dims[2] == 1 )
+    {
+      // This is a MF instances, need to set Number of Frame to 1
+      if( ms.MediaStorage::GetModalityDimension() > 2 )
+        ds.Replace( numframes.GetAsDataElement() );
+    }
     else // cleanup
       ds.Remove( numframes.GetTag() );
   }
@@ -1801,10 +1807,12 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
     if( ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
         || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage )
     {
+      if( dimz > 1 ) {
       Attribute<0x0028,0x0009> fip;
       fip.SetNumberOfValues( 1 );
       fip.SetValue( tfgs );
       ds.Replace( fip.GetAsDataElement() );
+    }
     }
 
     return;
