@@ -83,7 +83,7 @@ struct fnv_hash
 
     while( pFirst < pLast )
       {
-      nHashVal ^= *pFirst++,
+      nHashVal ^= *pFirst++;
       nHashVal *= nMagicPrime;
       }
 
