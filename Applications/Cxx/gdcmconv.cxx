@@ -1174,7 +1174,7 @@ int main (int argc, char *argv[])
         if( quality )
           {
           assert( qualities.size() == 1 );
-          jpegcodec.SetQuality( qualities[0] );
+          jpegcodec.SetQuality( static_cast<double>(qualities[0]) );
           }
         change.SetUserCodec( &jpegcodec );
         }
@@ -1210,7 +1210,7 @@ int main (int argc, char *argv[])
           int i = 0;
           for(std::vector<float>::const_iterator it = rates.begin(); it != rates.end(); ++it )
             {
-            j2kcodec.SetRate(i++, *it );
+            j2kcodec.SetRate(i++, static_cast<double>(*it) );
             }
           }
         if( quality )
@@ -1218,7 +1218,7 @@ int main (int argc, char *argv[])
           int i = 0;
           for(std::vector<float>::const_iterator it = qualities.begin(); it != qualities.end(); ++it )
             {
-            j2kcodec.SetQuality( i++, *it );
+            j2kcodec.SetQuality( i++, static_cast<double>(*it) );
             }
           }
         if( tile )
