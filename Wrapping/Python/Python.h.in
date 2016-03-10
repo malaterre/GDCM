@@ -44,7 +44,7 @@
 #    define _CRT_NOFORCE_MANIFEST 1
 #  endif
 #  include "@PYTHON_INCLUDE_PATH@/Python.h"
-#  define _DEBUG
+#  define _DEBUG 1
 # else
 #  include "@PYTHON_INCLUDE_PATH@/Python.h"
 # endif
