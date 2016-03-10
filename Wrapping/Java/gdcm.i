@@ -262,6 +262,15 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 #define GDCM_EXPORT
 %include "gdcmLegacyMacro.h"
 
+// The following must be define early on as gdcmVL.h get included real early
+%rename(GetValueLength) gdcm::VL::operator uint32_t;
+//%csmethodmodifiers gdcm::VL::GetValueLength "private"
+//%csmethodmodifiers GetValueLength "private"
+//%rename(GetValue) VL::operator uint32_t ();
+//  public static implicit operator int( MyType a )
+//        {
+//            return a.value;
+//        }
 %include "gdcmSwapCode.h"
 
 //%feature("director") Event;
