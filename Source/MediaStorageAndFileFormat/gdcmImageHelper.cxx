@@ -2057,10 +2057,10 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
         Attribute<0x0028,0x1052> at1;
         at1.SetValue( img.GetIntercept() );
-        subds2.Insert( at1.GetAsDataElement() );
+        subds2.Replace( at1.GetAsDataElement() );
         Attribute<0x0028,0x1053> at2;
         at2.SetValue( img.GetSlope() );
-        subds2.Insert( at2.GetAsDataElement() );
+        subds2.Replace( at2.GetAsDataElement() );
       }
 
     // cleanup per-frame
