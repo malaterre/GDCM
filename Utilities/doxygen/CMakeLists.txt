@@ -254,9 +254,30 @@ if(LIBXSLT_XSLTPROC_EXECUTABLE)
   # User can change the behavior at cmake time:
   if(NOT DEFINED GDCM_MANPAGES_USE_NONET)
     set(GDCM_MANPAGES_USE_NONET FALSE)
-    # By default I want nonet on Debian:
+    # By default I want nonet on Debian (docbook-xsl-ns)
+    # on fedora you need to install docbook5-style-xsl-1.78.1-3.fc21.noarch
     if(EXISTS /etc/xml/catalog)
-      set(GDCM_MANPAGES_USE_NONET TRUE)
+      # https://cmake.org/pipermail/cmake/2007-May/014317.html
+      file(READ /etc/xml/catalog xml_catalog_in)
+      #<rewriteSystem systemIdStartString="http://docbook.sourceforge.net/release/xsl-ns/current" rewritePrefix="file:///usr/share/sgml/docbook/xsl-ns-stylesheets-1.78.1"/>
+      #<rewriteURI uriStartString="http://docbook.sourceforge.net/release/xsl-ns/current" rewritePrefix="file:///usr/share/sgml/docbook/xsl-ns-stylesheets-1.78.1"/>
+      string(REGEX REPLACE "\r?\n" ";" xml_catalog ${xml_catalog_in})
+
+      set(DOCBOOK_REWRITE_PREFIX_FOUND FALSE)
+      foreach(line ${xml_catalog})
+        string(REGEX MATCH "^.*systemIdStartString=\"http://docbook.sourceforge.net/release/xsl-ns/current\".*" out1 ${line})
+        string(REGEX REPLACE "^.*systemIdStartString=\"http://docbook.sourceforge.net/release/xsl-ns/current\".*\"([A-Za-z ]*)\".*" "\\1" output_variable ${line})
+        if(out1)
+          message("Your docbook install was found here :${output_variable}")
+          set(DOCBOOK_REWRITE_PREFIX_FOUND TRUE)
+        endif()
+      endforeach()
+      # Need both the catalog and the docbook installation
+      if(DOCBOOK_REWRITE_PREFIX_FOUND)
+        set(GDCM_MANPAGES_USE_NONET TRUE)
+      else()
+        message(WARNING "Could not find the location of your docbook-xsl-ns installation")
+      endif()
     else()
       message(STATUS "Could not find /etc/xml/catalog")
     endif()
