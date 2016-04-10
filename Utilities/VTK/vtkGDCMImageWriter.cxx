@@ -66,7 +66,7 @@ inline bool vtkGDCMImageWriter_IsCharTypeSigned()
 }
 
 #ifndef vtkFloatingPointType
-#define vtkFloatingPointType float
+#define vtkFloatingPointType double
 #endif
 
 //----------------------------------------------------------------------------
