@@ -95,7 +95,7 @@ class vtkAngleWidget;
 class vtkGDCMImageViewer : public vtkImageViewer
 {
 public:
-  vtkTypeRevisionMacro(vtkGDCMImageViewer,vtkImageViewer);
+  vtkTypeMacro(vtkGDCMImageViewer,vtkImageViewer);
 
   static vtkGDCMImageViewer *New()
     {
@@ -126,7 +126,7 @@ vtkInstantiatorNewMacro(vtkGDCMImageViewer)
 class vtkImageColorViewer : public vtkImageViewer2
 {
 public:
-  vtkTypeRevisionMacro(vtkImageColorViewer,vtkImageViewer2);
+  vtkTypeMacro(vtkImageColorViewer,vtkImageViewer2);
 
   static vtkImageColorViewer *New()
     {

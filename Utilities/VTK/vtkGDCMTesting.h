@@ -27,7 +27,7 @@ class VTK_EXPORT vtkGDCMTesting : public vtkObject
 {
 public:
   static vtkGDCMTesting *New();
-  vtkTypeRevisionMacro(vtkGDCMTesting,vtkObject);
+  vtkTypeMacro(vtkGDCMTesting,vtkObject);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   static const char *GetVTKDataRoot();

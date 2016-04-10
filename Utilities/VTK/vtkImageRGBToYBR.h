@@ -45,7 +45,7 @@ class VTK_EXPORT vtkImageRGBToYBR : public vtkThreadedImageAlgorithm
 {
 public:
   static vtkImageRGBToYBR *New();
-  vtkTypeRevisionMacro(vtkImageRGBToYBR,vtkThreadedImageAlgorithm);
+  vtkTypeMacro(vtkImageRGBToYBR,vtkThreadedImageAlgorithm);
 
   void PrintSelf(ostream& os, vtkIndent indent);
 

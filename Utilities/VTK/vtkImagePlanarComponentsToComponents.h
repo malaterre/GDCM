@@ -49,8 +49,8 @@ class VTK_EXPORT vtkImagePlanarComponentsToComponents : public vtkImageAlgorithm
 {
 public:
   static vtkImagePlanarComponentsToComponents *New();
-  //vtkTypeRevisionMacro(vtkImagePlanarComponentsToComponents,vtkThreadedImageAlgorithm);
-  vtkTypeRevisionMacro(vtkImagePlanarComponentsToComponents,vtkImageAlgorithm);
+  //vtkTypeMacro(vtkImagePlanarComponentsToComponents,vtkThreadedImageAlgorithm);
+  vtkTypeMacro(vtkImagePlanarComponentsToComponents,vtkImageAlgorithm);
 
   void PrintSelf(ostream& os, vtkIndent indent);
 

@@ -103,7 +103,7 @@ class VTK_EXPORT vtkGDCMImageReader : public vtkMedicalImageReader2
 {
 public:
   static vtkGDCMImageReader *New();
-  vtkTypeRevisionMacro(vtkGDCMImageReader,vtkMedicalImageReader2);
+  vtkTypeMacro(vtkGDCMImageReader,vtkMedicalImageReader2);
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description: is the given file name a DICOM file containing an image ?

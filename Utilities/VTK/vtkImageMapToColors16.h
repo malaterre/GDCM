@@ -50,7 +50,7 @@ class VTK_EXPORT vtkImageMapToColors16 : public vtkThreadedImageAlgorithm
 {
 public:
   static vtkImageMapToColors16 *New();
-  vtkTypeRevisionMacro(vtkImageMapToColors16,vtkThreadedImageAlgorithm);
+  vtkTypeMacro(vtkImageMapToColors16,vtkThreadedImageAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description:
