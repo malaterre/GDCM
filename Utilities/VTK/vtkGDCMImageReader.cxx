@@ -51,7 +51,7 @@
 
 #include <sstream>
 
-vtkCxxRevisionMacro(vtkGDCMImageReader, "$Revision: 1.1 $")
+//vtkCxxRevisionMacro(vtkGDCMImageReader, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageReader)
 
 static inline bool vtkGDCMImageReader_IsCharTypeSigned()

@@ -28,7 +28,7 @@
 #include <assert.h>
 
 //----------------------------------------------------------------------------
-vtkCxxRevisionMacro(vtkRTStructSetProperties, "1.21")
+//vtkCxxRevisionMacro(vtkRTStructSetProperties, "1.21")
 vtkStandardNewMacro(vtkRTStructSetProperties)
 
 

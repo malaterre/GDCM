@@ -18,7 +18,7 @@
 #include <vector>
 #include <string>
 
-vtkCxxRevisionMacro(vtkStringArray, "$Revision: 1.1 $")
+//vtkCxxRevisionMacro(vtkStringArray, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkStringArray)
 
 struct vtkStringArrayInternals

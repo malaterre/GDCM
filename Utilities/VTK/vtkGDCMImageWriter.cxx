@@ -47,7 +47,7 @@
 
 #include <limits>
 
-vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
+//vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMImageWriter)
 
 //vtkCxxSetObjectMacro(vtkGDCMImageWriter,LookupTable,vtkLookupTable)

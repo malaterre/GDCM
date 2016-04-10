@@ -25,7 +25,7 @@
 
 #include <assert.h>
 
-vtkCxxRevisionMacro(vtkGDCMThreadedImageReader2, "$Revision: 1.1 $")
+//vtkCxxRevisionMacro(vtkGDCMThreadedImageReader2, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMThreadedImageReader2)
 vtkCxxSetObjectMacro(vtkGDCMThreadedImageReader2,FileNames,vtkStringArray)
 

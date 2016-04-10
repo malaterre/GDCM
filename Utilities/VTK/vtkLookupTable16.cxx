@@ -32,7 +32,7 @@
 
 #include <cassert>
 
-vtkCxxRevisionMacro(vtkLookupTable16, "$Revision: 1.107 $")
+//vtkCxxRevisionMacro(vtkLookupTable16, "$Revision: 1.107 $")
 vtkStandardNewMacro(vtkLookupTable16)
 
 vtkLookupTable16::vtkLookupTable16(int sze, int ext)
