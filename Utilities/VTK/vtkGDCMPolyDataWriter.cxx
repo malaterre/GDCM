@@ -40,7 +40,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmDirectoryHelper.h"
 
-vtkCxxRevisionMacro(vtkGDCMPolyDataWriter, "$Revision: 1.74 $")
+//vtkCxxRevisionMacro(vtkGDCMPolyDataWriter, "$Revision: 1.74 $")
 vtkStandardNewMacro(vtkGDCMPolyDataWriter)
 vtkCxxSetObjectMacro(vtkGDCMPolyDataWriter,MedicalImageProperties,vtkMedicalImageProperties)
 vtkCxxSetObjectMacro(vtkGDCMPolyDataWriter,RTStructSetProperties,vtkRTStructSetProperties)

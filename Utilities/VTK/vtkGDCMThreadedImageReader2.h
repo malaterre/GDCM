@@ -50,7 +50,7 @@ class VTK_EXPORT vtkGDCMThreadedImageReader2 : public vtkThreadedImageAlgorithm
 {
 public:
   static vtkGDCMThreadedImageReader2 *New();
-  vtkTypeRevisionMacro(vtkGDCMThreadedImageReader2,vtkThreadedImageAlgorithm);
+  vtkTypeMacro(vtkGDCMThreadedImageReader2,vtkThreadedImageAlgorithm);
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
   vtkGetMacro(FileLowerLeft,int);

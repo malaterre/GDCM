@@ -34,7 +34,7 @@
 #include "vtkMath.h"
 #include "vtkObjectFactory.h"
 
-vtkCxxRevisionMacro(vtkImageRGBToYBR, "$Revision: 1.31 $")
+//vtkCxxRevisionMacro(vtkImageRGBToYBR, "$Revision: 1.31 $")
 vtkStandardNewMacro(vtkImageRGBToYBR)
 
 //----------------------------------------------------------------------------

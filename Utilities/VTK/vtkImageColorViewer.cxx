@@ -49,7 +49,7 @@
 #include "vtkInformation.h"
 #endif
 
-vtkCxxRevisionMacro(vtkImageColorViewer, "$Revision: 1.3 $")
+//vtkCxxRevisionMacro(vtkImageColorViewer, "$Revision: 1.3 $")
 vtkStandardNewMacro(vtkImageColorViewer)
 
 //----------------------------------------------------------------------------

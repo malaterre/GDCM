@@ -43,7 +43,7 @@
 #include <sys/sysctl.h>
 #endif
 
-vtkCxxRevisionMacro(vtkGDCMThreadedImageReader, "$Revision: 1.1 $")
+//vtkCxxRevisionMacro(vtkGDCMThreadedImageReader, "$Revision: 1.1 $")
 vtkStandardNewMacro(vtkGDCMThreadedImageReader)
 
 // Output Ports are as follow:

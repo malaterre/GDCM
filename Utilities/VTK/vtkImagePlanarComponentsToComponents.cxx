@@ -41,7 +41,7 @@
 
 #include <assert.h>
 
-vtkCxxRevisionMacro(vtkImagePlanarComponentsToComponents, "$Revision: 1.31 $")
+//vtkCxxRevisionMacro(vtkImagePlanarComponentsToComponents, "$Revision: 1.31 $")
 vtkStandardNewMacro(vtkImagePlanarComponentsToComponents)
 
 //----------------------------------------------------------------------------

@@ -64,6 +64,10 @@
 
 #include <getopt.h>
 
+#ifndef vtkFloatingPointType
+#define vtkFloatingPointType double
+#endif
+
 void PrintVersion()
 {
   std::cout << "gdcm2vtk: gdcm " << gdcm::Version::GetVersion() << " ";

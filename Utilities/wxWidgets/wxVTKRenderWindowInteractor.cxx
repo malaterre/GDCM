@@ -134,7 +134,7 @@ BEGIN_EVENT_TABLE(wxVTKRenderWindowInteractor, wxWindow)
   EVT_SIZE        (wxVTKRenderWindowInteractor::OnSize)
 END_EVENT_TABLE()
 
-vtkCxxRevisionMacro(wxVTKRenderWindowInteractor, "$Revision: 1.42 $")
+//vtkCxxRevisionMacro(wxVTKRenderWindowInteractor, "$Revision: 1.42 $")
 vtkInstantiatorNewMacro(wxVTKRenderWindowInteractor)
 
 //---------------------------------------------------------------------------

@@ -30,7 +30,7 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmDirectoryHelper.h"
 
-vtkCxxRevisionMacro(vtkGDCMPolyDataReader, "$Revision: 1.74 $")
+//vtkCxxRevisionMacro(vtkGDCMPolyDataReader, "$Revision: 1.74 $")
 vtkStandardNewMacro(vtkGDCMPolyDataReader)
 
 //----------------------------------------------------------------------------

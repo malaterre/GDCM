@@ -18,7 +18,7 @@
 #include "gdcmTesting.h"
 #include "gdcmFilename.h"
 
-vtkCxxRevisionMacro(vtkGDCMTesting, "$Revision: 1.31 $")
+//vtkCxxRevisionMacro(vtkGDCMTesting, "$Revision: 1.31 $")
 vtkStandardNewMacro(vtkGDCMTesting)
 
 // DICOM Filename, MHD MD5, RAW MD5

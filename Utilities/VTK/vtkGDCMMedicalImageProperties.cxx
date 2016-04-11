@@ -17,7 +17,7 @@
 #include "gdcmFile.h"
 
 //----------------------------------------------------------------------------
-vtkCxxRevisionMacro(vtkGDCMMedicalImageProperties, "1.21")
+//vtkCxxRevisionMacro(vtkGDCMMedicalImageProperties, "1.21")
 vtkStandardNewMacro(vtkGDCMMedicalImageProperties)
 
 class vtkGDCMMedicalImagePropertiesInternals

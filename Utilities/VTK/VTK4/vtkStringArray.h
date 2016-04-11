@@ -34,7 +34,7 @@ class VTK_EXPORT vtkStringArray : public vtkObject
 {
 public:
   static vtkStringArray *New();
-  vtkTypeRevisionMacro(vtkStringArray,vtkObject);
+  vtkTypeMacro(vtkStringArray,vtkObject);
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
 //BTX

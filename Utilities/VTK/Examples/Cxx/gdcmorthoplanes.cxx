@@ -51,7 +51,7 @@
 #include "gdcmIPPSorter.h"
 
 #ifndef vtkFloatingPointType
-#define vtkFloatingPointType float
+#define vtkFloatingPointType double
 #endif
 
 //----------------------------------------------------------------------------
