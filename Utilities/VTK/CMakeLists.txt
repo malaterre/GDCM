@@ -70,14 +70,25 @@ else()
     vtkIOLegacy
     #vtksys
   )
-  set(vtkgdcm_COND_LIBS
-    vtkIOMPIImage
-    vtkInteractionStyle
-    vtkRenderingCore
-    vtkRenderingFreeType
-    vtkRenderingFreeTypeOpenGL
-    vtkRenderingOpenGL
-  )
+  if("${VTK_MAJOR_VERSION}" EQUAL 6)
+    set(vtkgdcm_COND_LIBS
+      vtkIOMPIImage
+      vtkInteractionStyle
+      vtkRenderingCore
+      vtkRenderingFreeType
+      vtkRenderingFreeTypeOpenGL
+      vtkRenderingOpenGL
+    )
+  else()
+    set(vtkgdcm_COND_LIBS
+      vtkIOMPIImage
+      vtkInteractionStyle
+      vtkRenderingCore
+      vtkRenderingFreeType
+      vtkRenderingFreeTypeOpenGL
+      vtkRenderingOpenGL2
+    )
+  endif()
   foreach(TMP_LIB ${VTK_LIBRARIES})
     foreach(TRY_LIB ${vtkgdcm_COND_LIBS})
       if("${TMP_LIB}" STREQUAL "${TRY_LIB}")
