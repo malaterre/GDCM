@@ -29,7 +29,7 @@
 #include "vtkPNMWriter.h"
 #include "vtkBMPWriter.h"
 #include "vtkImageChangeInformation.h"
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0) || (VTK_MAJOR_VERSION >= 7)
 #include "vtkMetaImageReader.h"
 #include "vtkXMLImageDataReader.h"
 #include "vtkMetaImageWriter.h"
