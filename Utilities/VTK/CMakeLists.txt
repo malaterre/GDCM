@@ -770,6 +770,12 @@ if(GDCM_WRAP_PYTHON)
     set_property(TARGET ${VTKGDCM_NAME}PythonD PROPERTY LINK_INTERFACE_LIBRARIES "")
     set_property(TARGET ${VTKGDCM_NAME}Python PROPERTY NO_SONAME 1)
     #set_property(TARGET ${VTKGDCM_NAME}PythonD PROPERTY NO_SONAME 1)
+    # Removing lib prefix if we are at VTK7. Based on a reply by David Gobbi to
+    # this Thread
+    # http://vtk.1045678.n5.nabble.com/python-wrapping-with-VTK-7-td5737442.html
+    if( "${VTK_MAJOR_VERSION}" EQUAL 7 )
+      set_target_properties(${VTKGDCM_NAME}Python PROPERTIES PREFIX "")
+    endif()
     # Python extension modules on Windows must have the extension ".pyd"
     # instead of ".dll" as of Python 2.5.  Older python versions do support
     # this suffix.
