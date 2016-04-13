@@ -42,7 +42,11 @@ if os.name == 'posix':
     #print "dl was imported"
     #sys.setdlopenflags(dl.RTLD_LAZY|dl.RTLD_GLOBAL)
     sys.setdlopenflags(dl.RTLD_NOW|dl.RTLD_GLOBAL)
-  from libvtkgdcmPython import *
+  try:
+    from libvtkgdcmPython import *
+  except ImportError:
+    # maybe vtk7
+    from vtkgdcmPython import *
   # revert:
   sys.setdlopenflags(orig_dlopen_flags)
   del sys, dl
