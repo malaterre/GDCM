@@ -32,7 +32,11 @@
 
 #include <cassert>
 
+#if VTK_MAJOR_VERSION < 6
 vtkCxxRevisionMacro(vtkLookupTable16, "$Revision: 1.107 $")
+#else
+//vtkCxxRevisionMacro(vtkLookupTable16, "$Revision: 1.107 $")
+#endif
 vtkStandardNewMacro(vtkLookupTable16)
 
 vtkLookupTable16::vtkLookupTable16(int sze, int ext)

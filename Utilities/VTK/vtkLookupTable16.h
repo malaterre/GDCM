@@ -46,7 +46,11 @@ class VTK_EXPORT vtkLookupTable16 : public vtkLookupTable
 public:
   static vtkLookupTable16 *New();
 
+#if VTK_MAJOR_VERSION < 6
   vtkTypeRevisionMacro(vtkLookupTable16,vtkLookupTable);
+#else
+  vtkTypeMacro(vtkLookupTable16,vtkLookupTable);
+#endif
   void PrintSelf(ostream& os, vtkIndent indent);
 
   void Build();

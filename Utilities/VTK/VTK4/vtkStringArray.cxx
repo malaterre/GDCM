@@ -18,7 +18,11 @@
 #include <vector>
 #include <string>
 
+#if VTK_MAJOR_VERSION < 6
 vtkCxxRevisionMacro(vtkStringArray, "$Revision: 1.1 $")
+#else
+//vtkCxxRevisionMacro(vtkStringArray, "$Revision: 1.1 $")
+#endif
 vtkStandardNewMacro(vtkStringArray)
 
 struct vtkStringArrayInternals

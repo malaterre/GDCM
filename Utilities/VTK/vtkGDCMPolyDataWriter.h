@@ -39,7 +39,11 @@ class VTK_EXPORT vtkGDCMPolyDataWriter : public vtkPolyDataWriter
 {
 public:
   static vtkGDCMPolyDataWriter *New();
+#if VTK_MAJOR_VERSION < 6
   vtkTypeRevisionMacro(vtkGDCMPolyDataWriter,vtkPolyDataWriter);
+#else
+  vtkTypeMacro(vtkGDCMPolyDataWriter,vtkPolyDataWriter);
+#endif
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description:

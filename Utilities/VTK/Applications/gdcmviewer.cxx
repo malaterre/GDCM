@@ -88,6 +88,13 @@ class vtkAngleWidget;
 
 #include <getopt.h>
 #include <assert.h>
+
+#if VTK_MAJOR_VERSION >= 6
+#ifndef vtkFloatingPointType
+#define vtkFloatingPointType double
+#endif
+#endif
+
 //----------------------------------------------------------------------------
 // vtkImageViewer2 new interface wants SetSlice, but vtkImageViewer does not have
 // this new interface (what a pain), so let's fake a new interface to
@@ -95,7 +102,11 @@ class vtkAngleWidget;
 class vtkGDCMImageViewer : public vtkImageViewer
 {
 public:
+#if VTK_MAJOR_VERSION < 6
   vtkTypeRevisionMacro(vtkGDCMImageViewer,vtkImageViewer);
+#else
+  vtkTypeMacro(vtkGDCMImageViewer,vtkImageViewer);
+#endif
 
   static vtkGDCMImageViewer *New()
     {
@@ -118,7 +129,11 @@ public:
   double GetOverlayVisibility() { return 0; }
   void SetOverlayVisibility(double vis) {(void)vis;}
 };
+#if VTK_MAJOR_VERSION < 6
 vtkCxxRevisionMacro(vtkGDCMImageViewer, "$Revision: 1.30 $")
+#else
+//vtkCxxRevisionMacro(vtkGDCMImageViewer, "$Revision: 1.30 $")
+#endif
 vtkInstantiatorNewMacro(vtkGDCMImageViewer)
 
 #if VTK_MAJOR_VERSION >= 5
@@ -126,7 +141,11 @@ vtkInstantiatorNewMacro(vtkGDCMImageViewer)
 class vtkImageColorViewer : public vtkImageViewer2
 {
 public:
+#if VTK_MAJOR_VERSION < 6
   vtkTypeRevisionMacro(vtkImageColorViewer,vtkImageViewer2);
+#else
+  vtkTypeMacro(vtkImageColorViewer,vtkImageViewer2);
+#endif
 
   static vtkImageColorViewer *New()
     {
@@ -164,7 +183,11 @@ public:
 private:
   vtkImageActor                   *OverlayImageActor;
 };
+#if VTK_MAJOR_VERSION < 6
 vtkCxxRevisionMacro(vtkImageColorViewer, "$Revision: 1.30 $")
+#else
+//vtkCxxRevisionMacro(vtkImageColorViewer, "$Revision: 1.30 $")
+#endif
 vtkInstantiatorNewMacro(vtkImageColorViewer)
 #endif
 

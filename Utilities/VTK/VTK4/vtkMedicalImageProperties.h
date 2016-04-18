@@ -51,7 +51,11 @@ class VTK_IO_EXPORT vtkMedicalImageProperties : public vtkObject
 {
 public:
   static vtkMedicalImageProperties *New();
+#if VTK_MAJOR_VERSION < 6
   vtkTypeRevisionMacro(vtkMedicalImageProperties,vtkObject);
+#else
+  vtkTypeMacro(vtkMedicalImageProperties,vtkObject);
+#endif
   void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description:

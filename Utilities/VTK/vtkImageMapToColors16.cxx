@@ -37,7 +37,11 @@
 #include "vtkScalarsToColors.h"
 #include "vtkPointData.h"
 
+#if VTK_MAJOR_VERSION < 6
 vtkCxxRevisionMacro(vtkImageMapToColors16, "$Revision: 1.30 $")
+#else
+//vtkCxxRevisionMacro(vtkImageMapToColors16, "$Revision: 1.30 $")
+#endif
 vtkStandardNewMacro(vtkImageMapToColors16)
 vtkCxxSetObjectMacro(vtkImageMapToColors16,LookupTable,vtkScalarsToColors)
 

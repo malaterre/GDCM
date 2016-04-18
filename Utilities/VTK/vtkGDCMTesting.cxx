@@ -18,7 +18,11 @@
 #include "gdcmTesting.h"
 #include "gdcmFilename.h"
 
+#if VTK_MAJOR_VERSION < 6
 vtkCxxRevisionMacro(vtkGDCMTesting, "$Revision: 1.31 $")
+#else
+//vtkCxxRevisionMacro(vtkGDCMTesting, "$Revision: 1.31 $")
+#endif
 vtkStandardNewMacro(vtkGDCMTesting)
 
 // DICOM Filename, MHD MD5, RAW MD5

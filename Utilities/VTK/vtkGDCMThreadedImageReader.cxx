@@ -43,7 +43,11 @@
 #include <sys/sysctl.h>
 #endif
 
+#if VTK_MAJOR_VERSION < 6
 vtkCxxRevisionMacro(vtkGDCMThreadedImageReader, "$Revision: 1.1 $")
+#else
+//vtkCxxRevisionMacro(vtkGDCMThreadedImageReader, "$Revision: 1.1 $")
+#endif
 vtkStandardNewMacro(vtkGDCMThreadedImageReader)
 
 // Output Ports are as follow:

@@ -39,7 +39,11 @@
 #include <assert.h>
 
 //----------------------------------------------------------------------------
+#if VTK_MAJOR_VERSION < 6
 vtkCxxRevisionMacro(vtkMedicalImageProperties, "1.21")
+#else
+//vtkCxxRevisionMacro(vtkMedicalImageProperties, "1.21")
+#endif
 vtkStandardNewMacro(vtkMedicalImageProperties)
 
 static const char *vtkMedicalImagePropertiesOrientationString[] = {

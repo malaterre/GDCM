@@ -39,7 +39,11 @@ class VTK_EXPORT vtkGDCMPolyDataReader : public vtkPolyDataAlgorithm
 {
 public:
   static vtkGDCMPolyDataReader *New();
+#if VTK_MAJOR_VERSION < 6
   vtkTypeRevisionMacro(vtkGDCMPolyDataReader,vtkPolyDataAlgorithm);
+#else
+  vtkTypeMacro(vtkGDCMPolyDataReader,vtkPolyDataAlgorithm);
+#endif
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description:

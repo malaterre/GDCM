@@ -41,7 +41,11 @@
 
 #include <assert.h>
 
+#if VTK_MAJOR_VERSION < 6
 vtkCxxRevisionMacro(vtkImagePlanarComponentsToComponents, "$Revision: 1.31 $")
+#else
+//vtkCxxRevisionMacro(vtkImagePlanarComponentsToComponents, "$Revision: 1.31 $")
+#endif
 vtkStandardNewMacro(vtkImagePlanarComponentsToComponents)
 
 //----------------------------------------------------------------------------

@@ -17,7 +17,11 @@
 #include "gdcmFile.h"
 
 //----------------------------------------------------------------------------
+#if VTK_MAJOR_VERSION < 6
 vtkCxxRevisionMacro(vtkGDCMMedicalImageProperties, "1.21")
+#else
+//vtkCxxRevisionMacro(vtkGDCMMedicalImageProperties, "1.21")
+#endif
 vtkStandardNewMacro(vtkGDCMMedicalImageProperties)
 
 class vtkGDCMMedicalImagePropertiesInternals

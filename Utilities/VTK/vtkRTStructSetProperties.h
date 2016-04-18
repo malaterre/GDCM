@@ -28,7 +28,11 @@ class VTK_EXPORT vtkRTStructSetProperties : public vtkObject
 {
 public:
   static vtkRTStructSetProperties *New();
+#if VTK_MAJOR_VERSION < 6
   vtkTypeRevisionMacro(vtkRTStructSetProperties,vtkObject);
+#else
+  vtkTypeMacro(vtkRTStructSetProperties,vtkObject);
+#endif
   void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description:
