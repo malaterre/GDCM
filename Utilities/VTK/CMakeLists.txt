@@ -640,7 +640,7 @@ if(GDCM_WRAP_JAVA)
     find_package(JNI REQUIRED)
     include_directories(${JNI_INCLUDE_DIRS})
     set(VTK_WRAP_JAVA3_INIT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-    # Lars Matthäus patch (package vtk => imply vtk subdir )
+    # Lars Matthaus patch (package vtk => imply vtk subdir )
     set(VTK_JAVA_HOME ${CMAKE_CURRENT_BINARY_DIR}/java/vtk)
     # This is *required* don't ask
     file(MAKE_DIRECTORY ${VTK_JAVA_HOME})
