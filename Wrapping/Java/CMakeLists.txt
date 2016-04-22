@@ -14,7 +14,7 @@ include_directories(
 
 # $ export JAVA_HOME=/usr/lib/j2sdk1.6-sun/
 # $ export JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun/
-find_package(Java 1.7 REQUIRED) # javac, jar
+find_package(Java ${GDCM_DEFAULT_JAVA_VERSION} REQUIRED) # javac, jar
 find_package(JNI REQUIRED)
 include_directories(
   ${JNI_INCLUDE_DIRS}
