@@ -39,7 +39,7 @@
 #include "vtkImageMapToWindowLevelColors.h"
 #include "vtkImageActor.h"
 #include "vtkWindowToImageFilter.h"
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
 #include "vtkImageMapToColors16.h"
 #include "vtkBalloonWidget.h"
 #include "vtkBalloonRepresentation.h"
@@ -218,7 +218,7 @@ public:
           vtkPNGWriter * writer = vtkPNGWriter::New();
           vtkWindowToImageFilter * w2i = vtkWindowToImageFilter::New();
           w2i->SetInput( rwi->GetRenderWindow() );
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
           writer->SetInputConnection( w2i->GetOutputPort() );
 #else
           writer->SetInput( w2i->GetOutput() );
@@ -229,7 +229,7 @@ public:
           w2i->Delete();
           //std::cerr << "Screenshort saved to snapshot.png" << std::endl;
           }
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
         else if ( keycode == 'l' )
           {
           IconWidget->Off();
@@ -256,7 +256,7 @@ public:
 #endif
         else
           {
-#if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
+#if VTK_MAJOR_VERSION >= 5 || (VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5)
           int max = ImageViewer->GetSliceMax();
           int slice = (ImageViewer->GetSlice() + 1) % ++max;
           ImageViewer->SetSlice( slice );
@@ -297,7 +297,7 @@ public:
 
 int verbose;
 
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
 class vtkBalloonCallback : public vtkCommand
 {
 public:
@@ -395,7 +395,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     viewer->AddInputConnection ( reader->GetOverlayPort(0) );
     }
   // TODO: Icon can be added using the vtkLogoWidget
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
   vtkPointHandleRepresentation2D *handle = vtkPointHandleRepresentation2D::New();
   handle->GetProperty()->SetColor(1,0,0);
   vtkDistanceRepresentation2D *drep = vtkDistanceRepresentation2D::New();
@@ -519,7 +519,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // MONOCHROME1 is also implemented with a lookup table
   if( reader->GetImageFormat() == VTK_LOOKUP_TABLE || reader->GetImageFormat() == VTK_INVERSE_LUMINANCE )
     {
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
     assert( reader->GetOutput()->GetPointData()->GetScalars()
       && reader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable() );
 #endif
@@ -530,11 +530,11 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
       // This must be a Segmented Palette and on VTK 4.4 this is not supported
       std::cerr << "Not implemented. You will not see the Color LUT" << std::endl;
       }
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
     if( lut->IsA( "vtkLookupTable16" ) )
       {
       vtkImageMapToColors16 *map = vtkImageMapToColors16::New ();
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
       map->SetInputConnection (reader->GetOutputPort());
 #else
       map->SetInput (reader->GetOutput());
@@ -550,7 +550,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
         }
       map->Update();
       map->GetOutput()->GetScalarRange(range);
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
       viewer->SetInputConnection( map->GetOutputPort() );
 #else
       viewer->SetInput( map->GetOutput() );
@@ -561,7 +561,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #endif
       {
       vtkImageMapToColors *map = vtkImageMapToColors::New ();
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
       map->SetInputConnection (reader->GetOutputPort());
 #else
       map->SetInput (reader->GetOutput());
@@ -577,7 +577,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
         }
       map->Update();
       map->GetOutput()->GetScalarRange(range);
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
       viewer->SetInputConnection( map->GetOutputPort() );
 #else
       viewer->SetInput( map->GetOutput() );
@@ -589,14 +589,14 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     {
 #if VTK_MAJOR_VERSION >= 5
     vtkImageYBRToRGB *filter = vtkImageYBRToRGB::New();
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
     filter->SetInputConnection( reader->GetOutputPort() );
 #else
     filter->SetInput( reader->GetOutput() );
 #endif
     filter->Update();
     filter->GetOutput()->GetScalarRange(range);
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
     viewer->SetInputConnection( filter->GetOutputPort() );
 #else
     viewer->SetInput( filter->GetOutput() );
@@ -623,7 +623,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   if( reader->GetCurve() )
     {
     vtkPolyDataMapper2D * rectMapper = vtkPolyDataMapper2D::New();
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
     rectMapper->SetInputData( reader->GetCurve() );
 #else
     rectMapper->SetInput( reader->GetCurve() );
@@ -704,7 +704,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
   // Here is where we setup the observer,
   vtkGDCMObserver<TViewer> *obs = vtkGDCMObserver<TViewer>::New();
   obs->ImageViewer = viewer;
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
   if(iconwidget) iconwidget->On();
   obs->IconWidget = iconwidget;
   obs->DistanceWidget = dwidget;
@@ -747,7 +747,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
 #endif
 
   reader->Delete();
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
   cbk->Delete();
   dwidget->Off();
   balloonwidget->Off();
