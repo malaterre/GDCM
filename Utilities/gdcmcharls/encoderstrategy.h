@@ -63,7 +63,7 @@ protected:
 #ifndef NDEBUG
 		if (length < 32)
 		{
-			int mask = (1 << (length)) - 1;
+			int mask = (1u << (length)) - 1;
 			ASSERT((value | mask) == mask);
 		}
 #endif
