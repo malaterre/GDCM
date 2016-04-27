@@ -63,7 +63,7 @@ protected:
 #ifndef NDEBUG
 		if (length < 32)
 		{
-			int mask = (1 << (length)) - 1;
+			int mask = (1u << (length)) - 1;
 			ASSERT((value | mask) == mask);
 		}
 #endif
@@ -75,9 +75,15 @@ protected:
 			return;
 		}
 		valcurrent |= value >> -bitpos;
-
 		Flush();
 	        
+		// A second flush may be required if extra marker-detect bits were needed and not all bits could be written.
+		if (bitpos < 0)
+		{
+			valcurrent |= value >> -bitpos;
+			Flush();
+		}
+
 		ASSERT(bitpos >=0);
 		valcurrent |= value << bitpos;	
 
@@ -106,7 +112,7 @@ protected:
 
 			if (_isFFWritten)
 			{
-				// insert highmost bit
+				// JPEG-LS requirement (T.87, A.1) to detect markers: after a xFF value a single 0 bit needs to be inserted.
 				*_position = BYTE(valcurrent >> 25);
 				valcurrent = valcurrent << 7;			
 				bitpos += 7;	
