@@ -24,7 +24,11 @@
 #include "gdcmImageReader.h"
 
 #ifndef vtkFloatingPointType
+#if VTK_MAJOR_VERSION < 6
 #define vtkFloatingPointType float
+#else
+#define vtkFloatingPointType double
+#endif
 #endif
 
 int TestvtkGDCMImageReaderIsLossyFunc(const char *filename, bool verbose = false)
