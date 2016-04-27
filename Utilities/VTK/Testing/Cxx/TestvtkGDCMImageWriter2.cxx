@@ -29,7 +29,7 @@
 #include <iostream>
 
 #ifndef vtkFloatingPointType
-#define vtkFloatingPointType float
+#define vtkFloatingPointType double
 #endif
 
 int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)

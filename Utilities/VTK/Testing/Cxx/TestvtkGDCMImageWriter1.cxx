@@ -25,7 +25,7 @@
 #include "gdcmImageReader.h"
 
 #ifndef vtkFloatingPointType
-#define vtkFloatingPointType float
+#define vtkFloatingPointType double
 #endif
 
 int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)

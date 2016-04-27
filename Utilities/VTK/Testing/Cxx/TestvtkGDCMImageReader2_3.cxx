@@ -26,7 +26,7 @@
 #include "gdcmFilenameGenerator.h"
 
 #ifndef vtkFloatingPointType
-#define vtkFloatingPointType float
+#define vtkFloatingPointType double
 #endif
 /*
  * Test to show the pipeline for
