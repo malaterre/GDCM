@@ -395,7 +395,7 @@ void ExecuteViewer(TViewer *viewer, vtkStringArray *filenames)
     viewer->AddInputConnection ( reader->GetOverlayPort(0) );
     }
   // TODO: Icon can be added using the vtkLogoWidget
-#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
   vtkPointHandleRepresentation2D *handle = vtkPointHandleRepresentation2D::New();
   handle->GetProperty()->SetColor(1,0,0);
   vtkDistanceRepresentation2D *drep = vtkDistanceRepresentation2D::New();
