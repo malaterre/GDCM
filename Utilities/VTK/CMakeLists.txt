@@ -671,9 +671,13 @@ if(GDCM_WRAP_JAVA)
     endif()
     target_link_libraries(${VTKGDCM_NAME}Java ${VTKGDCM_NAME})
     set_property(TARGET ${VTKGDCM_NAME}Java PROPERTY NO_SONAME 1)
-    foreach(c ${vtkgdcm_LIBS})
-      target_link_libraries(${VTKGDCM_NAME}Java ${c}Java)
-    endforeach()
+    # By default link those module since APPLE and WIN32 needs fully resolved
+    # shared lib allow advanced users to skip the link step:
+    if(NOT GDCM_NO_VTKJAVA_LIBS_LINKING)
+      foreach(c ${vtkgdcm_LIBS})
+        target_link_libraries(${VTKGDCM_NAME}Java ${c}Java)
+      endforeach()
+    endif()
     # Create the jar file:
     # I am pretty sure this *.java thingy will bite me one day, when someone will try
     # to recompile from an existing build tree with invalid generated *.java file...
