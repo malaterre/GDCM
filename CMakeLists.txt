@@ -561,7 +561,11 @@ endif()
 # Add a target so that the documentation can be build from the
 # root dir
 if(GDCM_DOCUMENTATION)
-  add_custom_target(DoxygenDoc)
+  if(NOT DEFINED GDCM_SKIP_DOXYGENDOC_ALL_RULE)
+    add_custom_target(DoxygenDoc ALL)
+  else()
+    add_custom_target(DoxygenDoc)
+  endif()
 endif()
 
 # Need to subdirs in Source/Common before Wrapping
