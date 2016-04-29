@@ -259,14 +259,14 @@ if(LIBXSLT_XSLTPROC_EXECUTABLE)
     if(EXISTS /etc/xml/catalog)
       # https://cmake.org/pipermail/cmake/2007-May/014317.html
       file(READ /etc/xml/catalog xml_catalog_in)
-      #<rewriteSystem systemIdStartString="http://docbook.sourceforge.net/release/xsl-ns/current" rewritePrefix="file:///usr/share/sgml/docbook/xsl-ns-stylesheets-1.78.1"/>
-      #<rewriteURI uriStartString="http://docbook.sourceforge.net/release/xsl-ns/current" rewritePrefix="file:///usr/share/sgml/docbook/xsl-ns-stylesheets-1.78.1"/>
+      #<rewriteSystem systemIdStartString="http://docbook.sourceforge.net/release/xsl-ns/" rewritePrefix="file:///usr/share/sgml/docbook/xsl-ns-stylesheets-1.78.1"/>
+      #<rewriteURI uriStartString="http://docbook.sourceforge.net/release/xsl-ns/" rewritePrefix="file:///usr/share/sgml/docbook/xsl-ns-stylesheets-1.78.1"/>
       string(REGEX REPLACE "\r?\n" ";" xml_catalog ${xml_catalog_in})
 
       set(DOCBOOK_REWRITE_PREFIX_FOUND FALSE)
       foreach(line ${xml_catalog})
-        string(REGEX MATCH "^.*systemIdStartString=\"http://docbook.sourceforge.net/release/xsl-ns/current\".*" out1 ${line})
-        string(REGEX REPLACE "^.*systemIdStartString=\"http://docbook.sourceforge.net/release/xsl-ns/current\".*\"([A-Za-z ]*)\".*" "\\1" output_variable ${line})
+        string(REGEX MATCH "^.*systemIdStartString=\"http://docbook.sourceforge.net/release/xsl-ns/\".*" out1 ${line})
+        string(REGEX REPLACE "^.*systemIdStartString=\"http://docbook.sourceforge.net/release/xsl-ns/\".*\"([A-Za-z ]*)\".*" "\\1" output_variable ${line})
         if(out1)
           message("Your docbook install was found here :${output_variable}")
           set(DOCBOOK_REWRITE_PREFIX_FOUND TRUE)

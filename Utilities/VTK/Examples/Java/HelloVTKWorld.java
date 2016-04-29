@@ -87,8 +87,8 @@ public class HelloVTKWorld
     writer.SetScale( reader.GetScale() );
     writer.SetImageFormat( reader.GetImageFormat() );
     writer.SetFileName( outfilename );
-    //writer.SetInputConnection( reader.GetOutputPort() ); // new
-    writer.SetInput( reader.GetOutput() ); // old
+    writer.SetInputConnection( reader.GetOutputPort() ); // new
+    //writer.SetInput( reader.GetOutput() ); // old
     writer.Write();
 
     System.out.println("Success reading: " + filename );
