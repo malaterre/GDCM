@@ -29,7 +29,7 @@
 #include "vtkPNMWriter.h"
 #include "vtkBMPWriter.h"
 #include "vtkImageChangeInformation.h"
-#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
 #include "vtkMetaImageReader.h"
 #include "vtkXMLImageDataReader.h"
 #include "vtkMetaImageWriter.h"
@@ -451,7 +451,7 @@ int main(int argc, char *argv[])
   if( debug )
     {
     gdcmreader->DebugOn();
-#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
     dicomreader->DebugOn();
 #endif
     }
