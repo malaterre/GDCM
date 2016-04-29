@@ -558,6 +558,16 @@ if(WIN32)
 endif()
 #-----------------------------------------------------------------------------
 
+# Add a target so that the documentation can be build from the
+# root dir
+if(GDCM_DOCUMENTATION)
+  if(NOT DEFINED GDCM_SKIP_DOXYGENDOC_ALL_RULE)
+    add_custom_target(DoxygenDoc ALL)
+  else()
+    add_custom_target(DoxygenDoc)
+  endif()
+endif()
+
 # Need to subdirs in Source/Common before Wrapping
 # to have gdcmConfigure.h around
 subdirs(Utilities)

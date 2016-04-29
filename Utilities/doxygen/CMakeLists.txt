@@ -154,7 +154,6 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     endif()
     # add target to 'ALL'
     add_custom_target(GDCMDoxygenPDF
-      ALL
       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
       COMMENT  "GDCM: Executing GDCMDoxygenPDF"
     )
@@ -162,13 +161,14 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
       ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
       DESTINATION ${GDCM_INSTALL_DOC_DIR}
     )
+    add_dependencies(DoxygenDoc GDCMDoxygenPDF)
   else()
     # make DoxygenDoc depends on the final tarball thus all file are garantee to be generated
     add_custom_target(GDCMDoxygenDoc
-      ALL
       DEPENDS ${GDCM_DOC_TARBALL}
       COMMENT  "GDCM: Executing GDCMDoxygenDoc"
     )
+    add_dependency(DoxygenDoc GDCMDoxygenDoc)
   endif()
 
   # Install html pages:
