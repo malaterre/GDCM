@@ -361,6 +361,10 @@ bool System::DeleteDirectory(const char *source)
   return Rmdir(source) == 0;
 }
 
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
+
 // return size of file; also returns zero if no file exists
 size_t System::FileSize(const char* filename)
 {
