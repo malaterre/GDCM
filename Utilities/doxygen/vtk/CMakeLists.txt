@@ -109,7 +109,6 @@ mark_as_advanced(VTK_DIR)
     ${CMAKE_CURRENT_BINARY_DIR}/doc_makeall.sh @ONLY )
 
   add_custom_target(${DOXYGEN_PROJECT_NAME}DoxygenDoc
-    #ALL
     ${BASH}
     ${CMAKE_CURRENT_BINARY_DIR}/doc_makeall.sh)
 
@@ -117,6 +116,8 @@ mark_as_advanced(VTK_DIR)
     ${DOXYGEN_PROJECT_NAME}DoxygenDoc
     GDCMDoxygenPDF
   )
+  add_dependencies(DoxygenDoc
+    ${DOXYGEN_PROJECT_NAME}DoxygenDoc)
 
   if(INCLUDE_QT_DOCUMENTATION)
     add_custom_target(QtDoxygenTags
