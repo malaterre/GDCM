@@ -79,7 +79,7 @@ public class ReadSeriesIntoVTK
     vtkMetaImageWriter writer = new vtkMetaImageWriter();
     writer.DebugOn();
     writer.SetCompression( false );
-    writer.SetInput( reader.GetOutput() );
+    writer.SetInputConnection( reader.GetOutputPort() );
     writer.SetFileName( "ReadSeriesIntoVTK.mhd" );
     writer.Write();
 
