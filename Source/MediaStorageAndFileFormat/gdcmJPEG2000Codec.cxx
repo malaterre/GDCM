@@ -78,6 +78,10 @@ void info_callback(const char *msg, void *) {
 #define RAW_DFMT 15
 #define TGA_DFMT 16
 #define PNG_DFMT 17
+#define CODEC_JP2 OPJ_CODEC_JP2
+#define CODEC_J2K OPJ_CODEC_J2K
+#define CLRSPC_GRAY OPJ_CLRSPC_GRAY
+#define CLRSPC_SRGB OPJ_CLRSPC_SRGB
 #endif // OPENJPEG_MAJOR_VERSION == 1
 
 #if OPENJPEG_MAJOR_VERSION == 2
@@ -190,7 +194,7 @@ opj_stream_t* OPJ_CALLCONV opj_stream_create_memory_stream (myfile* p_mem,OPJ_UI
   {
     return 00;
   }
-  opj_stream_set_user_data(l_stream,p_mem);
+  opj_stream_set_user_data(l_stream,p_mem,NULL);
   opj_stream_set_read_function(l_stream,(opj_stream_read_fn) opj_read_from_memory);
   opj_stream_set_write_function(l_stream, (opj_stream_write_fn) opj_write_from_memory);
   opj_stream_set_skip_function(l_stream, (opj_stream_skip_fn) opj_skip_from_memory);
@@ -534,13 +538,18 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
   s[1] = 0;
   opj_set_error_handler(dinfo, gdcm_error_callback, s);
 
+#ifdef OPJ_J2K_STREAM_CHUNK_SIZE
+  cio = opj_stream_create_memory_stream(fsrc,OPJ_J2K_STREAM_CHUNK_SIZE, true);
+#else
   cio = opj_stream_create_memory_stream(fsrc,J2K_STREAM_CHUNK_SIZE, true);
+#endif
 
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
   bool bResult;
   OPJ_INT32 l_tile_x0,l_tile_y0;
   OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
+#if 0
   bResult = opj_read_header(
     dinfo,
     &image,
@@ -551,17 +560,25 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     &l_nb_tiles_x,
     &l_nb_tiles_y,
     cio);
+#else
+  bResult = opj_read_header(
+    cio,
+    dinfo,
+    &image);
+#endif
   assert( bResult );
 
 #if OPENJPEG_MAJOR_VERSION == 1
 #else
+#if 0
   // needs to be before call to opj_decode...
   reversible = opj_get_reversible(dinfo, &parameters );
   assert( reversible == 0 || reversible == 1 );
 #endif
+#endif
 
-  image = opj_decode(dinfo, cio);
-  //assert( image );
+  bResult = opj_decode(dinfo, cio,image);
+  assert( bResult );
   bResult = bResult && (image != 00);
   bResult = bResult && opj_end_decompress(dinfo,cio);
   if (!image || !check_comp_valid(image) )
@@ -1050,7 +1067,7 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
 
   /* open a byte stream for writing */
   /* allocate memory for all tiles */
-  cio = opj_stream_create_memory_stream(fsrc,J2K_STREAM_CHUNK_SIZE,false);
+  cio = opj_stream_create_memory_stream(fsrc,OPJ_J2K_STREAM_CHUNK_SIZE,false);
   if (! cio)
     {
     return false;
@@ -1277,13 +1294,14 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   // the hack is not used when reading meta-info of a j2k stream:
   opj_set_error_handler(dinfo, gdcm_error_callback, NULL);
 
-  cio = opj_stream_create_memory_stream(fsrc,J2K_STREAM_CHUNK_SIZE, true);
+  cio = opj_stream_create_memory_stream(fsrc,OPJ_J2K_STREAM_CHUNK_SIZE, true);
 
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
   bool bResult;
   OPJ_INT32 l_tile_x0,l_tile_y0;
   OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
+#if 0
   bResult = opj_read_header(
     dinfo,
     &image,
@@ -1294,6 +1312,12 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     &l_nb_tiles_x,
     &l_nb_tiles_y,
     cio);
+#else
+  bResult = opj_read_header(
+    cio,
+    dinfo,
+    &image);
+#endif
   //image = opj_decode(dinfo, cio);
   //bResult = bResult && (image != 00);
   //bResult = bResult && opj_end_decompress(dinfo,cio);
@@ -1331,10 +1355,12 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     return false;
     }
 #else
+#if 0
   reversible = opj_get_reversible(dinfo, &parameters );
   assert( reversible == 0 || reversible == 1 );
   // FIXME
   assert( mct == 0 || mct == 1 );
+#endif
 #endif // OPENJPEG_MAJOR_VERSION == 1
   LossyFlag = !reversible;
 
