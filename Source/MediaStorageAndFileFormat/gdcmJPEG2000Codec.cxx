@@ -574,6 +574,8 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
   // needs to be before call to opj_decode...
   reversible = opj_get_reversible(dinfo, &parameters );
   assert( reversible == 0 || reversible == 1 );
+#else
+  reversible = 0;
 #endif
 #endif
 
@@ -1360,6 +1362,8 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   assert( reversible == 0 || reversible == 1 );
   // FIXME
   assert( mct == 0 || mct == 1 );
+#else
+  reversible = 0;
 #endif
 #endif // OPENJPEG_MAJOR_VERSION == 1
   LossyFlag = !reversible;
