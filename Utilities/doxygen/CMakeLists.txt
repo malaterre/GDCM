@@ -289,6 +289,7 @@ else()
   find_program(MSXSL_EXECUTABLE
     msxsl
     )
+  mark_as_advanced(MSXSL_EXECUTABLE)
   if(MSXSL_EXECUTABLE)
     set(XSLT_PROCESSOR ${MSXSL_EXECUTABLE})
     set(XSLT_PROCESSOR_ARG "-pi")
