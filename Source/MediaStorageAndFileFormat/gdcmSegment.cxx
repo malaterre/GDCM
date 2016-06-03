@@ -20,8 +20,9 @@ namespace gdcm
 {
 
 static const char * ALGOTypeStrings[] = {
-  "MANUAL",
   "AUTOMATIC",
+  "SEMIAUTOMATIC",
+  "MANUAL",
 
   0
 };

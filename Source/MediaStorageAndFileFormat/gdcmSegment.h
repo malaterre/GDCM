@@ -37,8 +37,9 @@ public:
   typedef std::vector< SmartPointer< Surface > > SurfaceVector;
 
   typedef enum {
-    MANUAL = 0,
-    AUTOMATIC,
+    AUTOMATIC = 0,
+    SEMIAUTOMATIC,
+    MANUAL,
     ALGOType_END
   } ALGOType;
 
