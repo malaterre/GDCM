@@ -180,6 +180,7 @@ int TestAttributeIS()
 int TestAttributeLO() { return 0; }
 int TestAttributeLT() { return 0; }
 int TestAttributeOB() { return 0; }
+int TestAttributeOD() { return 0; }
 int TestAttributeOF()
 {
   gdcm::DataSet ds;
@@ -199,6 +200,7 @@ int TestAttributeOF()
 
   return 0;
 }
+int TestAttributeOL() { return 0; }
 int TestAttributeOW() { return 0; }
 int TestAttributePN() { return 0; }
 int TestAttributeSH() { return 0; }
@@ -230,7 +232,9 @@ int TestAttribute1(int , char *[])
   numerrors += TestAttributeLO();
   numerrors += TestAttributeLT();
   numerrors += TestAttributeOB();
+  numerrors += TestAttributeOD();
   numerrors += TestAttributeOF();
+  numerrors += TestAttributeOL();
   numerrors += TestAttributeOW();
   numerrors += TestAttributePN();
   numerrors += TestAttributeSH();

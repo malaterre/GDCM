@@ -124,6 +124,12 @@ int TestValue()
   vr = gdcm::VR::UT; // = 67108864,
   if( (int)vr != (1 << k++) )
     return 1;
+  vr = gdcm::VR::OD; // = 134217728,
+  if( (int)vr != (1 << k++) )
+    return 1;
+  vr = gdcm::VR::OL; // = 268435456,
+  if( (int)vr != (1 << k++) )
+    return 1;
 
   return 0;
 }
