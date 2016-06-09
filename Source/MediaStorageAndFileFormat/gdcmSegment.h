@@ -35,6 +35,7 @@ class GDCM_EXPORT Segment : public Object
 public:
 
   typedef std::vector< SmartPointer< Surface > > SurfaceVector;
+  typedef std::vector< SegmentHelper::BasicCodedEntry > BasicCodedEntryVector;
 
   typedef enum {
     AUTOMATIC = 0,
@@ -65,6 +66,10 @@ public:
   SegmentHelper::BasicCodedEntry & GetAnatomicRegion();
   void SetAnatomicRegion(SegmentHelper::BasicCodedEntry const & BSE);
 
+  BasicCodedEntryVector const & GetAnatomicRegionModifiers() const;
+  BasicCodedEntryVector & GetAnatomicRegionModifiers();
+  void SetAnatomicRegionModifiers(BasicCodedEntryVector const & BSEV);
+
   SegmentHelper::BasicCodedEntry const & GetPropertyCategory() const;
   SegmentHelper::BasicCodedEntry & GetPropertyCategory();
   void SetPropertyCategory(SegmentHelper::BasicCodedEntry const & BSE);
@@ -72,6 +77,10 @@ public:
   SegmentHelper::BasicCodedEntry const & GetPropertyType() const;
   SegmentHelper::BasicCodedEntry & GetPropertyType();
   void SetPropertyType(SegmentHelper::BasicCodedEntry const & BSE);
+
+  BasicCodedEntryVector const & GetPropertyTypeModifiers() const;
+  BasicCodedEntryVector & GetPropertyTypeModifiers();
+  void SetPropertyTypeModifiers(BasicCodedEntryVector const & BSEV);
 
   ALGOType GetSegmentAlgorithmType() const;
   void SetSegmentAlgorithmType(ALGOType type);
@@ -102,10 +111,14 @@ protected :
 
   // General Anatomic Region
   SegmentHelper::BasicCodedEntry AnatomicRegion;
+  // General Anatomic Region Modifier
+  BasicCodedEntryVector AnatomicRegionModifiers;
   // Property Category Code
   SegmentHelper::BasicCodedEntry PropertyCategory;
   // Property Type Code
   SegmentHelper::BasicCodedEntry PropertyType;
+  // Property Type Modifier Code
+  BasicCodedEntryVector PropertyTypeModifiers;
 
   //0062 0008 CS 1 Segment Algorithm Type
   ALGOType        SegmentAlgorithmType;
