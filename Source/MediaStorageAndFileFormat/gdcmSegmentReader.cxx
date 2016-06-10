@@ -233,8 +233,7 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
   segment->SetSurfaceCount( surfaceCount );
 
   // Check if there is a Surface Segmentation Module
-  if (surfaceCount > 0
-   || rootDs.FindDataElement( Tag(0x0066, 0x0002) ))
+  if (surfaceCount > 0 || rootDs.FindDataElement(Tag(0x0066, 0x0002)))
   {
 
     //Basic Coded Entries in each sequences
@@ -250,14 +249,19 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
       {
         gdcmWarningMacro("Only a single Item is permitted in Anatomic Region Sequence, other items will be ignored");
       }
+
+      SmartPointer<SequenceOfItems> sequence = segmentDS.GetDataElement(Tag(0x0008, 0x2218)).GetValueAsSQ();
+      Item& item = sequence->GetItem(1);
+      DataSet& itemDataSet = item.GetNestedDataSet();
+
+      // Anatomic Region Modifier Sequence (Type 3)
+      basicCodedEntries = readCodeSequenceMacroAttributes(Tag(0x0008, 0x2220), itemDataSet);
+      if(!basicCodedEntries.empty())
+      {
+          segment->SetAnatomicRegionModifiers(basicCodedEntries);
+      }
     }
 
-    // Anatomic Region Modifier Sequence (Type 3)
-    basicCodedEntries = readCodeSequenceMacroAttributes(Tag(0x0008, 0x2220), segmentDS);
-    if(!basicCodedEntries.empty())
-    {
-      segment->SetAnatomicRegionModifiers(basicCodedEntries);
-    }
 
     // Segmented Property Category Code Sequence (Type 1)
     basicCodedEntries = readCodeSequenceMacroAttributes(Tag(0x0062, 0x0003), segmentDS);
@@ -285,18 +289,23 @@ bool SegmentReader::ReadSegment(const Item & segmentItem, const unsigned int idx
       {
         gdcmWarningMacro("Only a single Item shall be included in Segmented Property Type Code Sequence, other items will be ignored");
       }
+
+      SmartPointer<SequenceOfItems> sequence = segmentDS.GetDataElement(Tag(0x0062, 0x000F)).GetValueAsSQ();
+      Item& item = sequence->GetItem(1);
+      DataSet& itemDataSet = item.GetNestedDataSet();
+
+      // Segmented Property Type Modifier Sequence (Type 3)
+      basicCodedEntries = readCodeSequenceMacroAttributes(Tag(0x0062, 0x0011), itemDataSet);
+      if(!basicCodedEntries.empty())
+      {
+          segment->SetPropertyTypeModifiers(basicCodedEntries);
+      }
     }
     else
     {
         gdcmWarningMacro("No Item have been found in Segmented Property Type Code Sequence.");
     }
 
-    // Segmented Property Type Modifier Sequence (Type 3)
-    basicCodedEntries = readCodeSequenceMacroAttributes(Tag(0x0062, 0x0011), segmentDS);
-    if(!basicCodedEntries.empty())
-    {
-      segment->SetPropertyTypeModifiers(basicCodedEntries);
-    }
 
 
     // Referenced Surface Sequence

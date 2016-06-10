@@ -158,23 +158,23 @@ bool SegmentWriter::PrepareWrite()
   segmentsSQ = ds.GetDataElement( Tag(0x0062, 0x0002) ).GetValueAsSQ();
   segmentsSQ->SetLengthToUndefined();
 
-{
-  // Fill the Segment Sequence
-  const unsigned int              numberOfSegments  = this->GetNumberOfSegments();
-  assert( numberOfSegments );
-  const size_t nbItems           = segmentsSQ->GetNumberOfItems();
-  if (nbItems < numberOfSegments)
   {
-    const size_t diff           = numberOfSegments - nbItems;
-    const size_t nbOfItemToMake = (diff > 0?diff:0);
-    for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
+    // Fill the Segment Sequence
+    const unsigned int              numberOfSegments  = this->GetNumberOfSegments();
+    assert( numberOfSegments );
+    const size_t nbItems           = segmentsSQ->GetNumberOfItems();
+    if (nbItems < numberOfSegments)
     {
-      Item item;
-      item.SetVLToUndefined();
-      segmentsSQ->AddItem(item);
+      const size_t diff           = numberOfSegments - nbItems;
+      const size_t nbOfItemToMake = (diff > 0?diff:0);
+      for(unsigned int i = 1; i <= nbOfItemToMake; ++i)
+      {
+        Item item;
+        item.SetVLToUndefined();
+        segmentsSQ->AddItem(item);
+      }
     }
   }
-}
   // else Should I remove items?
 
   std::vector< SmartPointer< Segment > >::const_iterator  it0            = Segments.begin();
@@ -240,21 +240,26 @@ bool SegmentWriter::PrepareWrite()
       if(!anatomicRegion.IsEmpty())
       {
         writeCodeSequenceMacroAttributes(anatomicRegion, Tag(0x0008, 0x2218), segmentDS, false);
+
+        // Anatomic Region Modifier Sequence (Type 3)
+        const Segment::BasicCodedEntryVector & anatomicRegionModifiers = segment->GetAnatomicRegionModifiers();
+        if(!anatomicRegionModifiers.empty())
+        {
+          SmartPointer<SequenceOfItems> sequence = segmentDS.GetDataElement(Tag(0x0008, 0x2218)).GetValueAsSQ();
+          Item& item = sequence->GetItem(1);
+          DataSet& itemDataSet = item.GetNestedDataSet();
+
+          writeCodeSequenceMacroAttributes(anatomicRegionModifiers, Tag(0x0008, 0x2220), itemDataSet);
+        }
       }
 
-      // Anatomic Region Modifier Sequence (Type 3)
-      const Segment::BasicCodedEntryVector & anatomicRegionModifiers = segment->GetAnatomicRegionModifiers();
-      if(!anatomicRegionModifiers.empty())
-      {
-        writeCodeSequenceMacroAttributes(anatomicRegionModifiers, Tag(0x0008, 0x2220), segmentDS);
-      }
     }
 
     // Segmented Property Category Code Sequence (Type 1) - Only a single Item allowed
     const SegmentHelper::BasicCodedEntry & propertyCategory = segment->GetPropertyCategory();
     if(propertyCategory.IsEmpty())
     {
-        gdcmWarningMacro("The property category is not specified or incomplete");
+      gdcmWarningMacro("The property category is not specified or incomplete");
     }
     writeCodeSequenceMacroAttributes(propertyCategory, Tag(0x0062, 0x0003), segmentDS, false);
 
@@ -263,7 +268,7 @@ bool SegmentWriter::PrepareWrite()
     const SegmentHelper::BasicCodedEntry & propertyType = segment->GetPropertyType();
     if(propertyType.IsEmpty())
     {
-        gdcmWarningMacro("The property type is not specified or incomplete");
+      gdcmWarningMacro("The property type is not specified or incomplete");
     }
     writeCodeSequenceMacroAttributes(propertyType, Tag(0x0062, 0x000F), segmentDS, false);
 
@@ -272,7 +277,11 @@ bool SegmentWriter::PrepareWrite()
     const Segment::BasicCodedEntryVector & propertyTypeModifiers = segment->GetPropertyTypeModifiers();
     if(!propertyTypeModifiers.empty())
     {
-        writeCodeSequenceMacroAttributes(propertyTypeModifiers, Tag(0x0062, 0x0011), segmentDS);
+      SmartPointer<SequenceOfItems> sequence = segmentDS.GetDataElement(Tag(0x0062, 0x000F)).GetValueAsSQ();
+      Item& item = sequence->GetItem(1);
+      DataSet& itemDataSet = item.GetNestedDataSet();
+
+      writeCodeSequenceMacroAttributes(propertyTypeModifiers, Tag(0x0062, 0x0011), itemDataSet);
     }
 
 
