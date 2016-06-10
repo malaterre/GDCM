@@ -71,8 +71,10 @@ Segment::Segment():
   SegmentLabel(""),
   SegmentDescription(""),
   AnatomicRegion(),
+  AnatomicRegionModifiers(),
   PropertyCategory(),
   PropertyType(),
+  PropertyTypeModifiers(),
   SegmentAlgorithmType(ALGOType_END),
   SegmentAlgorithmName(""),
   SurfaceCount(0),
@@ -131,6 +133,21 @@ void Segment::SetAnatomicRegion(SegmentHelper::BasicCodedEntry const & BSE)
   AnatomicRegion.CM   = BSE.CM;
 }
 
+Segment::BasicCodedEntryVector const & Segment::GetAnatomicRegionModifiers() const
+{
+  return AnatomicRegionModifiers;
+}
+
+Segment::BasicCodedEntryVector & Segment::GetAnatomicRegionModifiers()
+{
+  return AnatomicRegionModifiers;
+}
+
+void Segment::SetAnatomicRegionModifiers(BasicCodedEntryVector const & BSEV)
+{
+    AnatomicRegionModifiers = BSEV;
+}
+
 SegmentHelper::BasicCodedEntry const & Segment::GetPropertyCategory() const
 {
   return PropertyCategory;
@@ -163,6 +180,21 @@ void Segment::SetPropertyType(SegmentHelper::BasicCodedEntry const & BSE)
   PropertyType.CV   = BSE.CV;
   PropertyType.CSD  = BSE.CSD;
   PropertyType.CM   = BSE.CM;
+}
+
+Segment::BasicCodedEntryVector const & Segment::GetPropertyTypeModifiers() const
+{
+  return PropertyTypeModifiers;
+}
+
+Segment::BasicCodedEntryVector & Segment::GetPropertyTypeModifiers()
+{
+  return PropertyTypeModifiers;
+}
+
+void Segment::SetPropertyTypeModifiers(BasicCodedEntryVector const & BSEV)
+{
+    PropertyTypeModifiers = BSEV;
 }
 
 Segment::ALGOType Segment::GetSegmentAlgorithmType() const
