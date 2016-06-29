@@ -225,7 +225,9 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
   endif()
 endif()
 
-if(NOT GDCM_DOCUMENTATION_SKIP_MANPAGES)
+option(GDCM_BUILD_DOCBOOK_MANPAGES "Build man pages from XML docbook ?" ON)
+mark_as_advanced(GDCM_BUILD_DOCBOOK_MANPAGES)
+if(GDCM_BUILD_DOCBOOK_MANPAGES)
 set(MANPAGES_XML
     gdcm2pnm
     gdcm2vtk
@@ -255,7 +257,7 @@ if(LIBXSLT_XSLTPROC_EXECUTABLE)
   if(NOT DEFINED GDCM_MANPAGES_USE_NONET)
     set(GDCM_MANPAGES_USE_NONET FALSE)
     # By default I want nonet on Debian (docbook-xsl-ns)
-    # on fedora you need to install docbook5-style-xsl-1.78.1-3.fc21.noarch
+    # on fedora you need to install docbook-style-xsl
     if(EXISTS /etc/xml/catalog)
       # https://cmake.org/pipermail/cmake/2007-May/014317.html
       file(READ /etc/xml/catalog xml_catalog_in)
@@ -276,7 +278,7 @@ if(LIBXSLT_XSLTPROC_EXECUTABLE)
       if(DOCBOOK_REWRITE_PREFIX_FOUND)
         set(GDCM_MANPAGES_USE_NONET TRUE)
       else()
-        message(WARNING "Could not find the location of your docbook-xsl-ns installation")
+        message(WARNING "Could not find the location of your docbook-xsl-ns installation. Please make sure your internet connection works.")
       endif()
     else()
       message(STATUS "Could not find /etc/xml/catalog")
@@ -325,4 +327,4 @@ install(FILES
 else()
   message(WARNING "Cannot build man page from docbook (need an XSL processor)")
 endif()
-endif() #NOT GDCM_DOCUMENTATION_SKIP_MANPAGES
+endif() # GDCM_BUILD_DOCBOOK_MANPAGES
