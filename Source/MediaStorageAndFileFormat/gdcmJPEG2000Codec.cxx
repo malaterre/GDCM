@@ -199,6 +199,7 @@ opj_stream_t* OPJ_CALLCONV opj_stream_create_memory_stream (myfile* p_mem,OPJ_UI
   opj_stream_set_write_function(l_stream, (opj_stream_write_fn) opj_write_from_memory);
   opj_stream_set_skip_function(l_stream, (opj_stream_skip_fn) opj_skip_from_memory);
   opj_stream_set_seek_function(l_stream, (opj_stream_seek_fn) opj_seek_from_memory);
+  opj_stream_set_user_data_length(l_stream, p_size); /* important to avoid an assert() */
   return l_stream;
 }
 
