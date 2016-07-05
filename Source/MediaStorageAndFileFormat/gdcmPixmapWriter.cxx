@@ -573,10 +573,15 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
       }
     else
       {
-      assert( ds.FindDataElement( at1.GetTag() ) );
-      //assert( ds.FindDataElement( at3.GetTag() ) );
-      at1.Set( ds );
-      assert( atoi(at1.GetValue().c_str()) == 1 );
+      if( ds.FindDataElement( at1.GetTag() ) ) {
+            //assert( ds.FindDataElement( at3.GetTag() ) );
+            at1.Set( ds );
+            if( atoi(at1.GetValue().c_str()) != 1 ) {
+               gdcmWarningMacro( "Invalid value for LossyImageCompression" );
+            }
+      } else {
+               gdcmWarningMacro( "Missing attribute for LossyImageCompression" );
+      }
       }
     }
 
