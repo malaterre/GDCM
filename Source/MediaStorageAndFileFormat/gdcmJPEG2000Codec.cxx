@@ -199,7 +199,7 @@ opj_stream_t* OPJ_CALLCONV opj_stream_create_memory_stream (myfile* p_mem,OPJ_UI
   opj_stream_set_write_function(l_stream, (opj_stream_write_fn) opj_write_from_memory);
   opj_stream_set_skip_function(l_stream, (opj_stream_skip_fn) opj_skip_from_memory);
   opj_stream_set_seek_function(l_stream, (opj_stream_seek_fn) opj_seek_from_memory);
-  opj_stream_set_user_data_length(l_stream, p_size); /* important to avoid an assert() */
+  opj_stream_set_user_data_length(l_stream, p_mem->len /* p_size*/); /* important to avoid an assert() */
   return l_stream;
 }
 
@@ -539,11 +539,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
   s[1] = 0;
   opj_set_error_handler(dinfo, gdcm_error_callback, s);
 
-#ifdef OPJ_J2K_STREAM_CHUNK_SIZE
   cio = opj_stream_create_memory_stream(fsrc,OPJ_J2K_STREAM_CHUNK_SIZE, true);
-#else
-  cio = opj_stream_create_memory_stream(fsrc,J2K_STREAM_CHUNK_SIZE, true);
-#endif
 
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
@@ -1066,7 +1062,7 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
   myfile *fsrc = &mysrc;
   char *buffer_j2k = new char[inputlength]; // overallocated
   fsrc->mem = fsrc->cur = buffer_j2k;
-  fsrc->len = 0;
+  fsrc->len = inputlength;
 
   /* open a byte stream for writing */
   /* allocate memory for all tiles */
