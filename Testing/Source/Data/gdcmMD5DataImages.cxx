@@ -689,6 +689,9 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "4a5d8549791432b29948dd8ff63e2534" , "SIEMENS_SYNGO-12-MONO2-LUTWrongLength512.dcm" },
 
+{ "2c8630ae1bff925b258d98e742dfc632" , "JPEGLS_CharLS_10742.dcm" },
+{ "f666a95dde9ddfdec0cf9574a7985ae3" , "IllegalGroup2ImplicitTS.dcm" },
+
 
 /* Stopping condition */
 { 0 ,0 }
