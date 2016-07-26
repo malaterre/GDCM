@@ -129,7 +129,7 @@ static inline bool read16(const char ** input, size_t * len, uint16_t * ret)
   {
   union { uint16_t v; char bytes[2]; } u;
   memcpy(u.bytes, *input, 2);
-  *ret = bswap_16(u.v);
+  *ret = SwapperDoOp::Swap(u.v);
   *input += 2; *len -= 2;
   return true;
   }
@@ -143,7 +143,7 @@ static inline bool read32(const char ** input, size_t * len, uint32_t * ret)
   {
   union { uint32_t v; char bytes[4]; } u;
   memcpy(u.bytes, *input, 4);
-  *ret = bswap_32(u.v);
+  *ret = SwapperDoOp::Swap(u.v);
   *input += 4; *len -= 4;
   return true;
   }
@@ -156,7 +156,7 @@ static inline bool read64(const char ** input, size_t * len, uint64_t * ret)
   {
   union { uint64_t v; char bytes[8]; } u;
   memcpy(u.bytes, *input, 8);
-  *ret = bswap_64(u.v);
+  *ret = SwapperDoOp::Swap(u.v);
   *input += 8; *len -= 8;
   return true;
   }
