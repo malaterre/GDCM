@@ -1186,9 +1186,16 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
     }
 
   if(parameters.cp_comment == NULL) {
-    const char comment[] = "Created by GDCM/OpenJPEG version 2.0";
+#if OPENJPEG_MAJOR_VERSION == 1
+    const char comment[] = "Created by GDCM/OpenJPEG version 1.4.0";
     parameters.cp_comment = (char*)malloc(strlen(comment) + 1);
     strcpy(parameters.cp_comment, comment);
+#else
+    const char comment[] = "Created by GDCM/OpenJPEG version %s";
+    const char * vers = opj_version();
+    parameters.cp_comment = (char*)malloc(strlen(comment) + 10);
+    snprintf( parameters.cp_comment, strlen(comment) + 10, comment, vers );
+#endif
     /* no need to delete parameters.cp_comment on exit */
     //delete_comment = false;
   }
