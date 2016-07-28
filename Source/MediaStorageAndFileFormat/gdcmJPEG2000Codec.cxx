@@ -291,43 +291,46 @@ struct myfile
 
 void gdcm_error_callback(const char* msg, void* f)
 {
+#if 0
   if( strcmp( msg, "Cannot read data with no size known, giving up\n" ) == 0 )
     {
     OPJ_UINT32 **s = (OPJ_UINT32**)f;
     *s[1] = *s[0];
     gdcmWarningMacro( "Recovering from odd J2K file" );
+    assert(0);
     }
-//  else
-//    {
-//    fprintf( stderr, msg );
-//    }
+  else
+#endif
+    {
+    fprintf( stderr, msg );
+    }
 }
 
 
-OPJ_UINT32 opj_read_from_memory(void * p_buffer, OPJ_UINT32 p_nb_bytes, myfile* p_file)
+OPJ_SIZE_T opj_read_from_memory(void * p_buffer, OPJ_SIZE_T p_nb_bytes, myfile* p_file)
 {
   //OPJ_UINT32 l_nb_read = fread(p_buffer,1,p_nb_bytes,p_file);
-  OPJ_UINT32 l_nb_read;
-  if( p_file->cur + p_nb_bytes < p_file->mem + p_file->len )
+  OPJ_SIZE_T l_nb_read;
+  if( p_file->cur + p_nb_bytes <= p_file->mem + p_file->len )
     {
     l_nb_read = 1*p_nb_bytes;
     }
   else
     {
-    l_nb_read = (OPJ_UINT32)(p_file->mem + p_file->len - p_file->cur);
+    l_nb_read = (OPJ_SIZE_T)(p_file->mem + p_file->len - p_file->cur);
     assert( l_nb_read < p_nb_bytes );
     }
   memcpy(p_buffer,p_file->cur,l_nb_read);
   p_file->cur += l_nb_read;
   assert( p_file->cur <= p_file->mem + p_file->len );
   //std::cout << "l_nb_read: " << l_nb_read << std::endl;
-  return l_nb_read ? l_nb_read : ((OPJ_UINT32)-1);
+  return l_nb_read ? l_nb_read : ((OPJ_SIZE_T)-1);
 }
 
-OPJ_UINT32 opj_write_from_memory (void * p_buffer, OPJ_UINT32 p_nb_bytes, myfile* p_file)
+OPJ_SIZE_T opj_write_from_memory (void * p_buffer, OPJ_SIZE_T p_nb_bytes, myfile* p_file)
 {
   //return fwrite(p_buffer,1,p_nb_bytes,p_file);
-  OPJ_UINT32 l_nb_write;
+  OPJ_SIZE_T l_nb_write;
   //if( p_file->cur + p_nb_bytes < p_file->mem + p_file->len )
   //  {
   l_nb_write = 1*p_nb_bytes;
@@ -345,39 +348,40 @@ OPJ_UINT32 opj_write_from_memory (void * p_buffer, OPJ_UINT32 p_nb_bytes, myfile
   //return p_nb_bytes;
 }
 
-OPJ_SIZE_T opj_skip_from_memory (OPJ_SIZE_T p_nb_bytes, myfile * p_file)
+OPJ_OFF_T opj_skip_from_memory (OPJ_OFF_T p_nb_bytes, myfile * p_file)
 {
   //if (fseek(p_user_data,p_nb_bytes,SEEK_CUR))
   //  {
   //  return -1;
   //  }
-  if( p_file->cur + p_nb_bytes < p_file->mem + p_file->len )
+  if( p_file->cur + p_nb_bytes <= p_file->mem + p_file->len )
     {
     p_file->cur += p_nb_bytes;
     return p_nb_bytes;
     }
 
   p_file->cur = p_file->mem + p_file->len;
-  return (OPJ_SIZE_T)-1;
+  return -1;
 }
 
-bool opj_seek_from_memory (OPJ_SIZE_T p_nb_bytes, myfile * p_file)
+OPJ_BOOL opj_seek_from_memory (OPJ_OFF_T p_nb_bytes, myfile * p_file)
 {
   //if (fseek(p_user_data,p_nb_bytes,SEEK_SET))
   //  {
   //  return false;
   //  }
   //return true;
-  if( p_file->cur + p_nb_bytes < p_file->mem + p_file->len )
+  if( p_nb_bytes <= p_file->len )
     {
-    p_file->cur += p_nb_bytes;
-    return true;
+    p_file->cur = p_file->mem + p_nb_bytes;
+    return OPJ_TRUE;
     }
+
   p_file->cur = p_file->mem + p_file->len;
-  return false;
+  return OPJ_FALSE;
 }
 
-opj_stream_t* OPJ_CALLCONV opj_stream_create_memory_stream (myfile* p_mem,OPJ_UINT32 p_size,bool p_is_read_stream)
+opj_stream_t* OPJ_CALLCONV opj_stream_create_memory_stream (myfile* p_mem,OPJ_SIZE_T p_size,bool p_is_read_stream)
 {
   opj_stream_t* l_stream = 00;
   if
@@ -739,8 +743,9 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
   cio = opj_stream_create_memory_stream(fsrc,OPJ_J2K_STREAM_CHUNK_SIZE, true);
 
   /* setup the decoder decoding parameters using user parameters */
-  opj_setup_decoder(dinfo, &parameters);
   bool bResult;
+  bResult = opj_setup_decoder(dinfo, &parameters);
+  assert( bResult );
   OPJ_INT32 l_tile_x0,l_tile_y0;
   OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
 #if 0
@@ -762,15 +767,10 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
 #endif
   assert( bResult );
 
-#if OPENJPEG_MAJOR_VERSION == 1
-#else
 #if 0
-  // needs to be before call to opj_decode...
-  reversible = opj_get_reversible(dinfo, &parameters );
-  assert( reversible == 0 || reversible == 1 );
-#else
-  reversible = 0;
-#endif
+  /* Optional if you want decode the entire image */
+  opj_set_decode_area(dinfo, image, (OPJ_INT32)parameters.DA_x0,
+     (OPJ_INT32)parameters.DA_y0, (OPJ_INT32)parameters.DA_x1, (OPJ_INT32)parameters.DA_y1);
 #endif
 
   bResult = opj_decode(dinfo, cio,image);
@@ -1277,7 +1277,7 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
   myfile *fsrc = &mysrc;
   char *buffer_j2k = new char[inputlength]; // overallocated
   fsrc->mem = fsrc->cur = buffer_j2k;
-  fsrc->len = inputlength;
+  fsrc->len = 0; //inputlength;
 
   /* open a byte stream for writing */
   /* allocate memory for all tiles */
