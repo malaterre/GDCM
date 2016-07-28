@@ -87,7 +87,7 @@ file-out  DICOM output filename
 TransferSyntax is 1.2.840.10008.1.2.1 [Explicit VR Little Endian]
 NumberOfDimensions: 2
 Dimensions: (384,384,1)
-\&amp;...
+...
 </literallayout></para>
 
 <para><literallayout>$ gdcmtar --mosaic -i MR-sonata-3D-as-Tile.dcm -o mosaic --pattern %03d.dcm
@@ -135,7 +135,7 @@ Dimensions: (384,384,1)
 TransferSyntax is 1.2.840.10008.1.2.1 [Explicit VR Little Endian]
 NumberOfDimensions: 2
 Dimensions: (64,64,1)
-\&amp;...
+...
 </literallayout></para>
 </refsection>
 </refsection>
