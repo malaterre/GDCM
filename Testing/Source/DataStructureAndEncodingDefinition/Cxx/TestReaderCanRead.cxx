@@ -41,16 +41,16 @@ int TestReadCanRead(const char *subdir, const char* filename, bool verbose = fal
     ret = 0;
     }
   // This is not an error if you are in the black list:
-  if( strcmp(name, "BuggedDicomWorksImage_Hopeless.dcm" ) != 0
-   || strcmp(name, "Philips_Wrong_Terminator_XX_0277" ) != 0
-   || strcmp(name, "DICOMDIR_noPATIENT_noSTUDY" ) != 0
-   || strcmp(name, "JpegLosslessMultiframePapyrus.pap" ) != 0
-   || strcmp(name, "Fish-1.img" ) != 0
-   || strcmp(name, "NM_FromJulius_Caesar.dcm" ) != 0
-   || strcmp(name, "Siemens-leonardo-bugged.dcm" ) != 0
-   || strcmp(name, "illegal_UN_stands_for_OB.dcm" ) != 0
-   || strcmp(name, "MR_PHILIPS_LargePreamble.dcm" ) != 0
-   || strcmp(name, "illegal_UN_stands_for_OB.dcm.secu" ) != 0 )
+  if( strcmp(name, "BuggedDicomWorksImage_Hopeless.dcm" ) == 0
+   || strcmp(name, "Philips_Wrong_Terminator_XX_0277" ) == 0
+   || strcmp(name, "DICOMDIR_noPATIENT_noSTUDY" ) == 0
+   || strcmp(name, "JpegLosslessMultiframePapyrus.pap" ) == 0
+   || strcmp(name, "Fish-1.img" ) == 0
+   || strcmp(name, "NM_FromJulius_Caesar.dcm" ) == 0
+   || strcmp(name, "Siemens-leonardo-bugged.dcm" ) == 0
+   || strcmp(name, "illegal_UN_stands_for_OB.dcm" ) == 0
+   || strcmp(name, "MR_PHILIPS_LargePreamble.dcm" ) == 0
+   || strcmp(name, "illegal_UN_stands_for_OB.dcm.secu" ) == 0 )
     {
     ret = 0;
     }

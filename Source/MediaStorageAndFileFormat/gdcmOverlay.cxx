@@ -262,7 +262,7 @@ bool Overlay::GrabOverlayFromPixelData(DataSet const &ds)
     //assert( Internal->BitPosition >= 12 );
     if( ds.FindDataElement( Tag(0x7fe0,0x0010) ) )
       {
-      gdcmErrorMacro("Could not find Pixel Data. Cannot extract Overlay." );
+      gdcmWarningMacro("Could not find Pixel Data. Cannot extract Overlay." );
       return false;
       }
     const DataElement &pixeldata = ds.GetDataElement( Tag(0x7fe0,0x0010) );

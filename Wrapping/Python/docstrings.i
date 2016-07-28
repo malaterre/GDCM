@@ -5697,6 +5697,7 @@ how it is defined in DICOM, advanced users may refers to:
 http://gdcm.sourceforge.net/wiki/index.php/Imager_Pixel_Spacing
 
 Bug There are currently a couple of bugs in this implementation:
+
 Gantry Tilt is not considered (always an error)
 
 Application programmer should only sort valid DataSet (eg.
@@ -8725,7 +8726,7 @@ gdcm::PythonFilter::SetFile(const File &f) ";
 gdcm::PythonFilter::ToPyObject(const Tag &t) const ";
 
 %feature("docstring")  gdcm::PythonFilter::UseDictAlways "void
-gdcm::PythonFilter::UseDictAlways(bool use) ";
+gdcm::PythonFilter::UseDictAlways(bool) ";
 
 
 // File: classgdcm_1_1QueryBase.xml
@@ -15060,40 +15061,40 @@ gdcm::terminal::setmode(Mode m) ";
 // File: bug.xml
 
 
-// File: dir_48be02fb937e08881437e02515417ab2.xml
+// File: dir_041d54874d9fecec94d9cb4ae010b51e.xml
 
 
-// File: dir_dbdfee04788ce02e68d05e06d5e6d98f.xml
+// File: dir_8021392154ea27d3da33100afd5b42a1.xml
 
 
-// File: dir_422e8974cbd0b7203ed9c70ede735192.xml
+// File: dir_83a82e6a2bc4a0f6429532cb237ca746.xml
 
 
-// File: dir_fc2dbd93ff698b14d78f486017ee822b.xml
+// File: dir_9760e222fce508c3b7270d68e6523d76.xml
 
 
-// File: dir_63e84970519399936bea68aa0151439e.xml
+// File: dir_90174c188c639015dd869d1a853f914f.xml
 
 
-// File: dir_a3a231e2bd7f702d85036607d7d87964.xml
+// File: dir_aceed280bd27dc60f64c2cb4efae4f90.xml
 
 
-// File: dir_bfc3201f3b82d7ccf14c524caa3c389b.xml
+// File: dir_5aab2906425e8d9a7aa9fea4f8d0a2fa.xml
 
 
-// File: dir_9a6580727919559370fc2250dcaca6b8.xml
+// File: dir_5daaa9a41ac240f7de3019ff61b11839.xml
 
 
-// File: dir_087222ad62d2f517f4e0198672951648.xml
+// File: dir_b138abe427a068e1da5116454e79caa4.xml
 
 
-// File: dir_2a74275ceded0a5f3b0fb2e9bd792825.xml
+// File: dir_6b1a62c3f439db8dff4e3363f340e91f.xml
 
 
-// File: dir_acafdc7d686494cf0735517ddc7a7669.xml
+// File: dir_776c231028699256e0cc13f46def7474.xml
 
 
-// File: dir_d2ab22b73e3ee89be3a207288d7a9056.xml
+// File: dir_6285418b2babf39982c6f35dbd05cbb5.xml
 
 
 // File: AWTMedical3_8java-example.xml

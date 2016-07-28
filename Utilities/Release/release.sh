@@ -127,6 +127,9 @@ check_exit_value $? "vtkgdcmDoxygenDoc did not return properly" || exit 1
 # Warning need to create /manually/ the subfolder:
 # https://sourceforge.net/projects/gdcm/files/gdcm%202.x/#folder-create
 
+# Update default version:
+#https://sourceforge.net/p/forge/documentation/Using%20the%20Release%20API/
+exit 1
 #rsync -e ssh GDCM-$version-Linux-x86_64.tar.gz          "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
 #check_exit_value $? "rsync did not return properly" || exit 1
 #rsync -e ssh GDCM-$version-Linux-x86_64.tar.bz2         "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"

@@ -64,6 +64,10 @@ set(BLACK_LIST_READER
   MR-MONO2-12-angio-an1.acr
 # Openjpeg / Part 2:
   lena512_rot90.j2k.dcm
+# Remove this one for now:
+  LengthOfItemLarger.dcm
+# Need CharLS 1.1
+  JPEG_LS_InvalidEscapeSequence_COM_padding.dcm
 )
 if(NOT GDCM_USE_PVRG)
   set(BLACK_LIST_READER
