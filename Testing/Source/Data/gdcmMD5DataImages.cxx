@@ -692,6 +692,13 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "2c8630ae1bff925b258d98e742dfc632" , "JPEGLS_CharLS_10742.dcm" },
 { "f666a95dde9ddfdec0cf9574a7985ae3" , "IllegalGroup2ImplicitTS.dcm" },
 
+{ "b85686dd3169b99725149abb00181254" , "RLEDebianBug816607Orig.dcm" },
+{ "464960d948dff0ded72b0380080f18a3" , "JPEGNote_empty.dcm" },
+{ "cdfb5dd0c999d88badeb00a16f96554f" , "JPEGLosslessYBR_FULL_422.dcm" },
+{ "464960d948dff0ded72b0380080f18a3" , "JPEGNote_missing.dcm" },
+{ "161e9fd986ea87adf2596e8e16641f11" , "JPEGNote_bogus.dcm" },
+
+
 
 /* Stopping condition */
 { 0 ,0 }
