@@ -396,6 +396,12 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
         i->SetPixelFormat( codec.GetPixelFormat() );
         }
 #endif
+      if( GetDimensions()[0] != codec.GetDimensions()[0]
+      || GetDimensions()[1] != codec.GetDimensions()[1] )
+{
+      gdcmWarningMacro( "dimension mismatch for JPEG" );
+	((Bitmap*)this)->SetDimensions( codec.GetDimensions() ); //JPEGNote_bogus.dcm
+}
 
       return true;
       }
