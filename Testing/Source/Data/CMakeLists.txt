@@ -68,6 +68,8 @@ set(BLACK_LIST_READER
   LengthOfItemLarger.dcm
 # Need CharLS 1.1
   JPEG_LS_InvalidEscapeSequence_COM_padding.dcm
+# something wrong with OPJ 1.4
+  JPEGLS_CharLS_10742.dcm
 )
 if(NOT GDCM_USE_PVRG)
   set(BLACK_LIST_READER
