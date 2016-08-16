@@ -138,6 +138,11 @@ exit 1
 #check_exit_value $? "rsync did not return properly" || exit 1
 rsync -e ssh gdcm-$version.tar.gz                       "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
 check_exit_value $? "rsync did not return properly" || exit 1
+
+def_prop="default=windows&default=mac&default=linux&default=bsd&default=solaris&default=others"
+def_path="https://sourceforge.net/projects/gdcm/files/gdcm%202.x/GDCM%20$version/gdcm-$version.tar.gz"
+curl -H "Accept: application/json" -X PUT -d $def_prop -d "api_key=$SFAPIKEY" $def_path
+
 rsync -e ssh gdcm-$version.tar.bz2                      "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
 check_exit_value $? "rsync did not return properly" || exit 1
 rsync -e ssh Utilities/doxygen/gdcm-$version-doc.tar.gz "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
