@@ -652,8 +652,9 @@ if(GDCM_WRAP_JAVA)
       # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=533193
       set(GDCM_VTK_JAVA_JAR ${VTK_JAVA_JAR})
     else()
+      # http://bugs.debian.org/834493
       find_file(VTK_JAVA_JAR NAMES vtk.jar vtk6.jar vtk5.jar
-        PATHS ${vtkWrappingJava_RUNTIME_LIBRARY_DIRS})
+        PATHS ${vtkWrappingJava_RUNTIME_LIBRARY_DIRS} /usr/share/java)
       set(GDCM_VTK_JAVA_JAR ${VTK_JAVA_JAR})
     endif()
     if(EXISTS /usr/lib/jni/libvtkCommonJava.so)
