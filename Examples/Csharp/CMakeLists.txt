@@ -26,6 +26,7 @@ set(CSHARP_EXAMPLES
   FileStreaming
   FileChangeTS
   FileChangeTSLossy
+  DumpCSA
   )
 
 if(BUILD_TESTING)
