@@ -636,7 +636,7 @@ endif()
 
 if(GDCM_WRAP_JAVA)
   if(VTK_WRAP_JAVA)
-    find_package(Java 1.5 REQUIRED) # javac, jar
+    find_package(Java ${GDCM_DEFAULT_JAVA_VERSION} REQUIRED) # javac, jar
     find_package(JNI REQUIRED)
     include_directories(${JNI_INCLUDE_DIRS})
     set(VTK_WRAP_JAVA3_INIT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")

@@ -1,4 +1,4 @@
-find_package(Java REQUIRED) # javac, jar
+find_package(Java ${GDCM_DEFAULT_JAVA_VERSION} REQUIRED) # javac, jar
 find_package(JNI REQUIRED)
 include_directories(
   #${JNI_INCLUDE_PATH}
