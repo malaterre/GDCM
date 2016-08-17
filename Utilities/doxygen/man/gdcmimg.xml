@@ -64,6 +64,7 @@ file-out  DICOM output filename
   -C --sop-class-uid   SOP Class UID (name or value).
   -T --study-uid       Study UID.
   -S --series-uid      Series UID.
+     --template        Template DICOM file.
      --root-uid        Root UID.
 </literallayout></para>
 </refsection>
@@ -220,6 +221,16 @@ file-out  DICOM output filename
 
 <para><literallayout>$ gdcmimg --sop-class-uid 1.2.840.10008.5.1.4.1.1.77.1.4 input.jpg output.dcm
 </literallayout></para>
+</refsection>
+<refsection xml:id="gdcmimg_1template">
+<title>Specifying a template DICOM file</title>
+
+<para>Instead of the default Secondary Capture Image Storage, generated with default values, one may want to specify a DICOM file that will serve as template to fill in the DICOM attributes.</para>
+
+<para><literallayout>$ gdcmimg --sign 1 --template template.dcm input.jpg output.dcm
+</literallayout></para>
+<para>Pay attention that any values from template.dcm that are not consistent with what is found inside the reference image will be overriden (eg. image size). On particular case should be of concern: the Pixel Representation for the JPEG family.</para>
+
 </refsection>
 </refsection>
 <refsection xml:id="gdcmimg_1multiple_files">
