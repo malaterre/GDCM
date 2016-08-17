@@ -228,6 +228,12 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "d17a34f8ae066048442ab5b110d43c412472ea7e"  , "SC16BitsAllocated_8BitsStoredJ2K.dcm" },
 { "71517fce6c32625f1051b72085cfceeee58bd164"  , "SC16BitsAllocated_8BitsStoredJPEG.dcm" },
 { "0d19e4a98265afc3c782db02bc64bd32124ed2f6"  , "SIEMENS_SYNGO-12-MONO2-LUTWrongLength512.dcm" },
+{ "5cb6c554e80b552ea68cad05409dce4fe92b6dd7" , "IllegalGroup2ImplicitTS.dcm" },
+{ "031f8cb2cbbe7b5e524b1f79aef6674a66e7f390" , "JPEGLosslessYBR_FULL_422.dcm" },
+{ "4710e6cfd86c0d349c61b60ae69a684b246db3ff" , "JPEGNote_bogus.dcm" },
+{ "197e47b5afeeeb75eccafe04e5a1bb0af1a7957a" , "JPEGNote_empty.dcm" },
+{ "08828e913a7a1ebbc0129c42974b64ce702814b6" , "JPEGNote_missing.dcm" },
+{ "99c169688190a66100b61319eaeefb3db1936125" , "RLEDebianBug816607Orig.dcm" },
 
 { NULL, NULL}
 };
