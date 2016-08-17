@@ -84,6 +84,7 @@ protected:
 protected:
   std::ostream *Stream;
   std::ofstream *Ofstream;
+  bool GetCheckFileMetaInformation() const { return CheckFileMetaInformation; }
 
 private:
   SmartPointer<File> F;
