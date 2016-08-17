@@ -759,18 +759,33 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
     }
 
   FileMetaInformation &fmi = file.GetHeader();
-  fmi.Clear();
-  //assert( ts == TransferSyntax::ImplicitVRLittleEndian );
-    {
-    const char *tsuid = TransferSyntax::GetTSString( ts );
-    DataElement de( Tag(0x0002,0x0010) );
-    VL::Type strlenTSUID = (VL::Type)strlen(tsuid);
-    de.SetByteValue( tsuid, strlenTSUID );
-    de.SetVR( Attribute<0x0002, 0x0010>::GetVR() );
-    fmi.Replace( de );
-    fmi.SetDataSetTransferSyntax(ts);
-    }
-  fmi.FillFromDataSet( ds );
+  if( GetCheckFileMetaInformation() )
+  {
+    fmi.Clear();
+    //assert( ts == TransferSyntax::ImplicitVRLittleEndian );
+      {
+      const char *tsuid = TransferSyntax::GetTSString( ts );
+      DataElement de( Tag(0x0002,0x0010) );
+      VL::Type strlenTSUID = (VL::Type)strlen(tsuid);
+      de.SetByteValue( tsuid, strlenTSUID );
+      de.SetVR( Attribute<0x0002, 0x0010>::GetVR() );
+      fmi.Replace( de );
+      fmi.SetDataSetTransferSyntax(ts);
+      }
+    fmi.FillFromDataSet( ds );
+  }
+  else
+  {
+      Attribute<0x0002,0x0010> at;
+      at.SetFromDataSet( fmi );
+      const char *tsuid = TransferSyntax::GetTSString( ts );
+      UIComp tsui  = at.GetValue();
+      if( tsui != tsuid )
+      {
+        gdcmErrorMacro( "Incompatible TransferSyntax." );
+         return false;
+      }
+  }
 
 
   return true;

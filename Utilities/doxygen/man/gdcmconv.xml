@@ -169,7 +169,7 @@ file-out  DICOM output filename
 <para>convert GDCM 1.2.0 broken UN-2-bytes fields, </para>
 </listitem>
 <listitem>
-<para>&amp;... </para>
+<para>... </para>
 </listitem>
 <listitem>
 <para>All other broken files listed in the supported refsection.</para>

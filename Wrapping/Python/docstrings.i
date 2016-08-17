@@ -5353,7 +5353,14 @@ The input DICOM file does not contains an Image. ";
 // File: classgdcm_1_1ImageRegionReader.xml
 %feature("docstring") gdcm::ImageRegionReader "
 
-ImageRegionReader.
+ImageRegionReader This class is able to read a region from a DICOM
+file containing an image. This implementation requires that the
+information stored in the DICOM header are consistent with what is in
+the encapsulated Pixel Data. This is technically not required by DICOM
+standard, which makes this implementation illegal with regards to the
+famous JPEG
+note:http://dicom.nema.org/medical/dicom/current/output/chtml/part05/sect_8.2.html
+#para_4bcb841e-c6bf-4e26-82a5-3fad3c942da0.
 
 See:   ImageReader
 
