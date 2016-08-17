@@ -25,6 +25,7 @@ matrix:
         - CFLAGS="-g -O2"
         - CXXFLAGS="-g -O2"
         - B_NAME=default
+        - CPACK_NAME=Linux
     - compiler: gcc
       os: linux
       addons: {apt: {packages: [default-jdk, mono-devel, swig, libcharls-dev, libvtk5-dev, libopenjpeg-dev, libexpat-dev, libz-dev, uuid-dev, python-all-dev, libpoppler-dev, xsltproc, docbook-xsl, dcmtk]}}
@@ -33,18 +34,21 @@ matrix:
         - CXXFLAGS="-Wall -Wextra -m64"
         - CMAKE_EXTRA="-DGDCM_USE_SYSTEM_OPENSSL:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_WRAP_CSHARP:BOOL=ON -DGDCM_WRAP_JAVA:BOOL=ON -DGDCM_WRAP_PHP:BOOL=OFF -DGDCM_USE_SYSTEM_EXPAT:BOOL=ON -DGDCM_USE_SYSTEM_JSON:BOOL=OFF -DGDCM_USE_SYSTEM_LIBXML2:BOOL=ON -DGDCM_USE_SYSTEM_OPENJPEG:BOOL=ON -DGDCM_USE_SYSTEM_POPPLER:BOOL=ON -DGDCM_USE_SYSTEM_UUID:BOOL=ON -DGDCM_USE_SYSTEM_ZLIB:BOOL=ON -DGDCM_WEAK_SWIG_CHECK:BOOL=ON -DGDCM_LEGACY_SILENT:BOOL=ON"
         - B_NAME=system
+        - CPACK_NAME=Linux
     - compiler: clang
       os: linux
       env:
         - CFLAGS="-g -O0 -Wall -Wextra -m64 -fsanitize=address,undefined,shift"
         - CXXFLAGS="-g -O0 -Wall -Wextra -m64 -fsanitize=address,undefined,shift"
         - B_NAME=fsanitize
+        - CPACK_NAME=Linux
     - compiler: clang
       os: osx
       env:
         - CFLAGS="-Wall -Wextra" # -m64 -fsanitize=address,undefined
         - CXXFLAGS="-Wall -Wextra" # -m64 -fsanitize=address,undefined
         - B_NAME=default
+        - CPACK_NAME=Darwin
 
 before_install:
   #- env
@@ -80,8 +84,8 @@ deploy:
   api_key:
     secure: R5+dbibdcgPHq6cAPC8uepifDuS3yjZu2dBB2oSeQtBZTAeN1VIfJMrF8TeQDqj2GC28RHxXm4BHwdJ2FUpBXjOS2eUE6Mto1Rbbvfi63MREnFPIAWkNyLtR2Jxq/Gzb8X05PbCWGwCNvX9eeo+qcWTpczuQvJ+/bds7MyRsk45+sUc+j7rglAbxewgijsXebCkObwaXmhqTYJwrvf2lyEnA2Jo1gL2WmK6iPjHvTOVS9JfBMqVRmlk7j8efnqag8fMCzNp1Ess5wBy5Jf58qvVs7RuuBi16s7vOOBtb9xVjcDB1KaAxc/dDQGQhRkrveBtH18ZpFrArOj6DBPbupS3+xuU4ywdYbCuGnvdpRFafBc+iNU4M81crkFUDmSPEQChBnL4wwpaYaQ1LlgdlF0r9/Rlu2/iqKe4t7rdZnkQqQ/3SNNf+x4AKnGmaSGasV/VUXstTGVrtl7hsDMzSdrVCXODao0SRv5tPSI3BgAZi7NzCJ/xv5LgA1EQVkGdTQN0ZpKZCQYfifL5K6oYDI+WlAFU0OcH+9dy4KNqF+QnzMh9iPwP0zR6BN9yE0w6ydnyNt0CkIUaxgaTtr+pHPXsmmtgXzQScESC8B9JHGocOXjT6MtyUmoP/ewlPz2G6x114PnAL7LlZ07jPqAASJwW/ZiXtBcVxv50hPhC7L80=
   file:
-  - GDCM-$VTAG-Linux-x86_64.tar.gz
-  - GDCM-$VTAG-Linux-x86_64.tar.bz2
+  - GDCM-$VTAG-$CPACK_NAME-x86_64.tar.gz
+  - GDCM-$VTAG-$CPACK_NAME-x86_64.tar.bz2
   skip_cleanup: true
   on:
     repo: malaterre/GDCM
