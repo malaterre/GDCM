@@ -302,7 +302,7 @@ void gdcm_error_callback(const char* msg, void* f)
   else
 #endif
     {
-    fprintf( stderr, msg );
+    fprintf( stderr, "%s", msg );
     }
 }
 
