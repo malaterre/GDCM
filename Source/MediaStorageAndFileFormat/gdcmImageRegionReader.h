@@ -24,7 +24,7 @@ namespace gdcm
 class ImageRegionReaderInternals;
 /**
  * \brief ImageRegionReader
- * This class is able to read a region from a DICOM file containing an image. This implementation
+ * \details This class is able to read a region from a DICOM file containing an image. This implementation
  * requires that the information stored in the DICOM header are consistent with what is in the
  * encapsulated Pixel Data. This is technically not required by DICOM standard, which makes 
  * this implementation illegal with regards to the famous JPEG note:

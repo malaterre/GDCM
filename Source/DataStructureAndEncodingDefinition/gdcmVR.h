@@ -39,7 +39,7 @@ namespace gdcm
 
 /**
  * \brief VR class
- * This is adapted from DICOM standard
+ * \details This is adapted from DICOM standard
  * The biggest difference is the INVALID VR
  * and the composite one that differ from standard (more like an addition)
  * This allow us to represent all the possible case express in the DICOMV3 dict

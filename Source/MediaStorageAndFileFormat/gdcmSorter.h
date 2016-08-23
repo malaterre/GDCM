@@ -28,7 +28,7 @@ class DataSet;
 
 /**
  * \brief Sorter
- * General class to do sorting using a custom function
+ * \details General class to do sorting using a custom function
  * You simply need to provide a function of type: Sorter::SortFunction
  *
  * \warning implementation details. For now there is no cache mechanism. Which means

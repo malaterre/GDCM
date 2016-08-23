@@ -29,7 +29,7 @@ namespace gdcm
  */
 /**
  * \brief SplitMosaicFilter class
- * Class to reshuffle bytes for a SIEMENS Mosaic image
+ * \details Class to reshuffle bytes for a SIEMENS Mosaic image
  * Siemens CSA Image Header
  * CSA:= Common Siemens Architecture, sometimes also known as Common syngo Architecture
  *
