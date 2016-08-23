@@ -26,7 +26,7 @@ namespace gdcm_ns
 
 /**
  * \brief Class to represent a Sequence Of Items
- * (value representation : SQ)
+ * \details (value representation : SQ)
  *  - a Value Representation for Data Elements that contains a sequence of Data Sets.
  *  - Sequence of Item allows for Nested Data Sets
  *

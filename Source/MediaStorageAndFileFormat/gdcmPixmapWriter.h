@@ -24,7 +24,7 @@ class StreamImageWriter;
 class Pixmap;
 /**
  * \brief PixmapWriter
- * This class will takes two inputs:
+ * \details This class will takes two inputs:
  * 1. The DICOM DataSet
  * 2. The Image input
  * It will override any info from the Image over the DataSet.

@@ -23,7 +23,7 @@ namespace gdcm
 class FileMetaInformation;
 /**
  * \brief Writer ala DOM (Document Object Model)
- * This class is a non-validating writer, it will only performs well-
+ * \details This class is a non-validating writer, it will only performs well-
  * formedness check only.
  *
  * \details Detailled description here

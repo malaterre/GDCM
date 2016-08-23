@@ -23,7 +23,7 @@ namespace gdcm
 {
 /**
  * \brief IPPSorter
- * Implement a simple Image Position (Patient) sorter, along the Image
+ * \details Implement a simple Image Position (Patient) sorter, along the Image
  * Orientation (Patient) direction.
  * This algorithm does NOT support duplicate and will FAIL in case of duplicate
  * IPP.
