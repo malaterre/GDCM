@@ -1509,9 +1509,9 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
         DataSet &subds2 = item2.GetNestedDataSet();
 
         // <entry group="0028" element="9110" vr="SQ" vm="1" name="Pixel Measures Sequence"/>
-        // do not set a slice thickness since GDCM always recompute it from the IOP/IPP
-        //Attribute<0x0018,0x0050> at2;
-        //at2.SetValue( spacing[2] );
+        // do not set spacing between slices since GDCM always recompute it from the IOP/IPP
+        //Attribute<0x0018,0x0088> at2;
+        //at2.SetValue( fabs(spacing[2]) );
         Attribute<0x0028,0x0030> at1;
         at1.SetValue( spacing[1], 0 );
         at1.SetValue( spacing[0], 1 );
