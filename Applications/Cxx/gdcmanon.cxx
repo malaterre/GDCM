@@ -773,20 +773,22 @@ int main(int argc, char *argv[])
     }
 
   // Get private key/certificate
-  std::auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr;
+  gdcm::CryptographicMessageSyntax *cms_ptr = NULL;
   if( crypto_factory )
     {
-    cms_ptr = std::auto_ptr<gdcm::CryptographicMessageSyntax>(crypto_factory->CreateCMSProvider());
+    cms_ptr = crypto_factory->CreateCMSProvider();
     }
   if( !dumb_mode )
     {
     if( !GetRSAKeys(*cms_ptr, rsa_path.c_str(), cert_path.c_str() ) )
       {
+      delete cms_ptr;
       return 1;
       }
     if (!password.empty() && !cms_ptr->SetPassword(password.c_str(), password.length()) )
       {
       std::cerr << "Could not set the password " << std::endl;
+      delete cms_ptr;
       return 1;
       }
     cms_ptr->SetCipherType( ciphertype );
@@ -796,7 +798,7 @@ int main(int argc, char *argv[])
   gdcm::Anonymizer anon;
   if( !dumb_mode )
     {
-    anon.SetCryptographicMessageSyntax( cms_ptr.get() );
+    anon.SetCryptographicMessageSyntax( cms_ptr );
     }
 
   if( dumb_mode )
@@ -808,6 +810,7 @@ int main(int argc, char *argv[])
       if( !AnonymizeOneFileDumb(anon, in, out, empty_tags, remove_tags, replace_tags_value, (continuemode > 0 ? true: false)) )
         {
         //std::cerr << "Could not anonymize: " << in << std::endl;
+        delete cms_ptr;
         return 1;
         }
       }
@@ -821,9 +824,11 @@ int main(int argc, char *argv[])
       if( !AnonymizeOneFile(anon, in, out, (continuemode > 0 ? true: false)) )
         {
         //std::cerr << "Could not anonymize: " << in << std::endl;
+        delete cms_ptr;
         return 1;
         }
       }
     }
+  delete cms_ptr;
   return 0;
 }
