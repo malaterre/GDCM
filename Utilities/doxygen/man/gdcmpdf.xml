@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl" ?>
+<!DOCTYPE Data [ <!ENTITY version SYSTEM 'version.txt'> ]>
 <refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
 <info>
 <author><personname><firstname>Mathieu</firstname><surname>Malaterre</surname></personname><contrib>Main developer</contrib></author>
@@ -9,7 +10,7 @@
     <refentrytitle>gdcmpdf</refentrytitle>
     <manvolnum>1</manvolnum>
     <refmiscinfo class="source">GDCM</refmiscinfo>
-    <refmiscinfo class="version">VER_FULL</refmiscinfo>
+    <refmiscinfo class="version">&version;</refmiscinfo>
     <refmiscinfo class="manual">DICOM Manipulation.</refmiscinfo>
   </refmeta>
   <refnamediv><refname>gdcmpdf</refname>
