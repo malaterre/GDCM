@@ -66,8 +66,6 @@ set(BLACK_LIST_READER
   lena512_rot90.j2k.dcm
 # Remove this one for now:
   LengthOfItemLarger.dcm
-# Need CharLS 1.1
-  JPEG_LS_InvalidEscapeSequence_COM_padding.dcm
 # something wrong with OPJ 1.4
   JPEGLS_CharLS_10742.dcm
 )
