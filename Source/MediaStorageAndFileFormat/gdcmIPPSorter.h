@@ -101,7 +101,7 @@ protected:
   double DirCosTolerance;
 
 private:
-  bool ComputeSpacing(std::vector<std::string> const & filenames);
+  GDCM_LEGACY(bool ComputeSpacing(std::vector<std::string> const & filenames))
 };
 
 
