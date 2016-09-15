@@ -305,10 +305,13 @@ else()
   endif()
 endif()
 if(XSLT_PROCESSOR)
+  configure_file(version.txt.in
+    version.txt @ONLY)
 foreach(docbook ${MANPAGES_XML})
   add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${docbook}.1
-    COMMAND ${XSLT_PROCESSOR} ${XSLT_PROCESSOR_ARG} ${CMAKE_CURRENT_SOURCE_DIR}/man/${docbook}.xml
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/man/${docbook}.xml ${CMAKE_CURRENT_BINARY_DIR}/${docbook}.xml
+    COMMAND ${XSLT_PROCESSOR} ${XSLT_PROCESSOR_ARG} ${CMAKE_CURRENT_BINARY_DIR}/${docbook}.xml
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/man/${docbook}.xml
     )
   list(APPEND MANPAGES
