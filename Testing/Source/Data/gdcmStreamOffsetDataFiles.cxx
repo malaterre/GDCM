@@ -228,7 +228,15 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "SC16BitsAllocated_8BitsStoredJ2K.dcm", 764 },
 { "SC16BitsAllocated_8BitsStoredJPEG.dcm", 958 },
 { "SIEMENS_SYNGO-12-MONO2-LUTWrongLength512.dcm", 48726 },
-
+{ "JPEGNote_empty.dcm", 716 },
+{ "JPEGLS_CharLS_10742.dcm", 760 },
+{ "JPEGLosslessYBR_FULL_422.dcm", 814 },
+{ "JPEGNote_missing.dcm", 608 },
+{ "JPEGNote_bogus.dcm", 734 },
+{ "RLEDebianBug816607Orig.dcm", 780 },
+{ "IllegalGroup2ImplicitTS.dcm", 2272 },
+{ "JPEG_LS_InvalidEscapeSequence_COM_padding.dcm", 764 },
+{ "LengthOfItemLarger.dcm", 12748 },
 
 /* Stopping condition */
 { 0 ,0 },

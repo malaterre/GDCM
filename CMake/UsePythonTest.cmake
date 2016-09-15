@@ -24,6 +24,10 @@ find_package(PythonInterp REQUIRED)
 mark_as_advanced(PYTHON_EXECUTABLE)
 
 macro(ADD_PYTHON_TEST TESTNAME FILENAME)
+  set(_sep ":")
+  if(WIN32)
+    set(_sep "\\;")
+  endif()
   get_source_file_property(loc ${FILENAME} LOCATION)
   get_source_file_property(pyenv ${FILENAME} PYTHONPATH)
   if(CMAKE_CONFIGURATION_TYPES)
@@ -38,7 +42,7 @@ macro(ADD_PYTHON_TEST TESTNAME FILENAME)
     endif()
   else()
     if(pyenv)
-      set(pyenv ${pyenv}:${LIBRARY_OUTPUT_PATH})
+      set(pyenv ${pyenv}${_sep}${LIBRARY_OUTPUT_PATH})
     else()
       set(pyenv ${LIBRARY_OUTPUT_PATH})
     endif()
@@ -46,9 +50,11 @@ macro(ADD_PYTHON_TEST TESTNAME FILENAME)
   string(REGEX REPLACE ";" " " wo_semicolumn "${ARGN}")
   file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME}.cmake
 "
-  set(ENV{PYTHONPATH} ${pyenv}:\$ENV{PYTHONPATH})
-  set(ENV{LD_LIBRARY_PATH} ${pyenv}:\$ENV{LD_LIBRARY_PATH})
-  message(\"${pyenv}\")
+  set(ENV{PYTHONPATH} ${pyenv}${_sep}\$ENV{PYTHONPATH})
+  set(ENV{LD_LIBRARY_PATH} ${pyenv}${_sep}\$ENV{LD_LIBRARY_PATH})
+  message(\"pyenv is: ${pyenv}\")
+  message(\"py_exec is: ${PYTHON_EXECUTABLE}\")
+  message(\"py_found is: ${PYTHONINTERP_FOUND}\")
   execute_process(
     COMMAND ${PYTHON_EXECUTABLE} ${loc} ${wo_semicolumn}
     RESULT_VARIABLE import_res
@@ -58,9 +64,20 @@ macro(ADD_PYTHON_TEST TESTNAME FILENAME)
 
   # Pass the output back to ctest
   if(import_output)
-    message(\"\${import_output}\")
+    message(\"import_output is: \${import_output}\")
   endif()
   if(import_res)
+    message(\"Import res: \${import_res}\")
+    message(\"py_exec is: \${PYTHON_EXECUTABLE}\")
+    message(\"loc is: \${loc}\")
+    message(\"wo is: \${wo_semicolumn}\")
+    execute_process(
+      COMMAND ${PYTHON_EXECUTABLE} -v ${loc} ${wo_semicolumn}
+      RESULT_VARIABLE import2_res
+      OUTPUT_VARIABLE import2_output
+      ERROR_VARIABLE  import2_output
+      )
+    message(\"\${import2_output}\")
     message(SEND_ERROR \"\${import_res}\")
   endif()
 "

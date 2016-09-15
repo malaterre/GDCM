@@ -88,7 +88,7 @@ int TestAS()
 
 int TestUL()
 {
-  const char array[4] = {-78, 1, 0, 0}; // 434
+  const signed char array[4] = {-78, 1, 0, 0}; // 434
   {
   Element<VR::UL, VM::VM1> a;
   // reinterpret_cast< const Element<VR::UL, VM::VM1>& > ( array );

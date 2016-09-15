@@ -11,12 +11,15 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+#include "vtkVersion.h"
 #include "vtkGDCMImageReader.h"
 #include "vtkPiecewiseFunction.h"
 #include "vtkColorTransferFunction.h"
 #include "vtkVolume.h"
 #include "vtkVolumeProperty.h"
+#if VTK_MAJOR_VERSION < 7
 #include "vtkVolumeTextureMapper3D.h"
+#endif
 #include "vtkFixedPointVolumeRayCastMapper.h"
 #include "vtkInteractorStyleTrackballCamera.h"
 #include "vtkRenderer.h"

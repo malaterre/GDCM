@@ -32,7 +32,7 @@ set(GDCM_PACKAGE_CONTACT "GDCM Developers <gdcm-developers@lists.sourceforge.net
 #----------------------------------------------------------------------------
 set(GDCM_MAJOR_VERSION 2)
 set(GDCM_MINOR_VERSION 6)
-set(GDCM_BUILD_VERSION 2)
+set(GDCM_BUILD_VERSION 6)
 set(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 # let advanced user the option to define GDCM_API_VERSION:
@@ -523,9 +523,13 @@ if(GDCM_STANDALONE)
   mark_as_advanced(GDCM_USE_ACTIVIZ)
   option(GDCM_USE_JPEGLS "Build GDCM with JPEG-LS support" ON)
   mark_as_advanced(GDCM_USE_JPEGLS)
+  if(NOT DEFINED GDCM_DEFAULT_JAVA_VERSION)
+    # override with cmake -DGDCM_DEFAULT_JAVA_VERSION:STRING=1.5 if you dare
+    set(GDCM_DEFAULT_JAVA_VERSION 1.7)
+  endif()
   if(GDCM_WRAP_JAVA)
-    set(GDCM_JAVA_SOURCE_VERSION "1.5" CACHE STRING "javac source version")
-    set(GDCM_JAVA_TARGET_VERSION "1.5" CACHE STRING "javac target version")
+    set(GDCM_JAVA_SOURCE_VERSION "${GDCM_DEFAULT_JAVA_VERSION}" CACHE STRING "javac source version")
+    set(GDCM_JAVA_TARGET_VERSION "${GDCM_DEFAULT_JAVA_VERSION}" CACHE STRING "javac target version")
     mark_as_advanced(GDCM_JAVA_SOURCE_VERSION GDCM_JAVA_TARGET_VERSION)
   endif()
   if(GDCM_WRAP_CSHARP)
@@ -553,6 +557,16 @@ if(WIN32)
   mark_as_advanced(GDCM_DEBUG_POSTFIX)
 endif()
 #-----------------------------------------------------------------------------
+
+# Add a target so that the documentation can be build from the
+# root dir
+if(GDCM_DOCUMENTATION)
+  if(NOT DEFINED GDCM_SKIP_DOXYGENDOC_ALL_RULE)
+    add_custom_target(DoxygenDoc ALL)
+  else()
+    add_custom_target(DoxygenDoc)
+  endif()
+endif()
 
 # Need to subdirs in Source/Common before Wrapping
 # to have gdcmConfigure.h around

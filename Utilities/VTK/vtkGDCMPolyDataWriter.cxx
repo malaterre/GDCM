@@ -40,7 +40,11 @@
 #include "gdcmAttribute.h"
 #include "gdcmDirectoryHelper.h"
 
+#if VTK_MAJOR_VERSION < 6
 vtkCxxRevisionMacro(vtkGDCMPolyDataWriter, "$Revision: 1.74 $")
+#else
+//vtkCxxRevisionMacro(vtkGDCMPolyDataWriter, "$Revision: 1.74 $")
+#endif
 vtkStandardNewMacro(vtkGDCMPolyDataWriter)
 vtkCxxSetObjectMacro(vtkGDCMPolyDataWriter,MedicalImageProperties,vtkMedicalImageProperties)
 vtkCxxSetObjectMacro(vtkGDCMPolyDataWriter,RTStructSetProperties,vtkRTStructSetProperties)

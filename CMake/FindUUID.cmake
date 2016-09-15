@@ -7,18 +7,14 @@
 # also defined, but not for general use are
 #  UUID_LIBRARY, where to find the UUID library.
 #
-#  Copyright (c) 2006-2011 Mathieu Malaterre <mathieu.malaterre@gmail.com>
+#  Copyright (c) 2006-2016 Mathieu Malaterre <mathieu.malaterre@gmail.com>
 #
 #  Redistribution and use is allowed according to the terms of the New
 #  BSD license.
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-# On MacOSX we have:
-# $ nm -g /usr/lib/libSystem.dylib | grep uuid_generate
-# 000b3aeb T _uuid_generate
-# 0003e67e T _uuid_generate_random
-# 000b37a1 T _uuid_generate_time
+# On Mac OS X the uuid functions are in the System library.
 if(APPLE)
   set(UUID_LIBRARY_VAR System)
 else()

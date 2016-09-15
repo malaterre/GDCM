@@ -98,7 +98,17 @@ size_t ImageRegionReader::ComputeBufferLength() const
   else
   {
     std::vector<unsigned int> dims = ImageHelper::GetDimensionsValue(GetFile());
-    npixels = dims[0] * dims[1] * dims[2];
+    BoxRegion full;
+    // Use BoxRegion to do robust computation
+    full.SetDomain(0, dims[0] - 1,
+                   0, dims[1] - 1,
+                   0, dims[2] - 1 );
+    if( full.IsValid() )
+    {
+      gdcmDebugMacro( "Sorry not a valid extent. Giving up" );
+      return 0;
+     }
+    npixels = full.Area();
   }
   const PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
   const size_t bytesPerPixel = pixelInfo.GetPixelSize();
@@ -462,7 +472,13 @@ bool ImageRegionReader::ReadJPEGLSIntoBuffer(char *buffer, size_t buflen)
 bool ImageRegionReader::ReadIntoBuffer(char *buffer, size_t buflen)
 {
   size_t thelen = ComputeBufferLength();
-  if( buflen < thelen )
+  if( thelen == 0 )
+    {
+    // does not sound right, something seems odd.
+    gdcmDebugMacro( "Cannot load an image of 0 bytes" );
+    return false;
+    }
+   if( buflen < thelen )
     {
     gdcmDebugMacro( "buffer cannot be smaller than computed buffer length" );
     return false;

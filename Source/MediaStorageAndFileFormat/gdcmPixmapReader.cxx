@@ -254,7 +254,7 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
       pi = PhotometricInterpretation::GetPIType(
         photometricinterpretation_str.c_str());
       }
-    assert( pi != PhotometricInterpretation::UNKNOW);
+    assert( pi != PhotometricInterpretation::UNKNOWN);
     pixeldata.SetPhotometricInterpretation( pi );
 
     //
@@ -714,7 +714,7 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
   const Tag tphotometricinterpretation(0x0028, 0x0004);
   const ByteValue *photometricinterpretation
     = ImageHelper::GetPointerFromElement( tphotometricinterpretation, *F );
-  PhotometricInterpretation pi = PhotometricInterpretation::UNKNOW;
+  PhotometricInterpretation pi = PhotometricInterpretation::UNKNOWN;
   if( photometricinterpretation )
     {
     std::string photometricinterpretation_str(
@@ -756,14 +756,14 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
   assert( pi != PhotometricInterpretation::PI_END );
   if( !pf.GetSamplesPerPixel() || (pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel()) )
     {
-    if( pi != PhotometricInterpretation::UNKNOW )
+    if( pi != PhotometricInterpretation::UNKNOWN )
       {
       pf.SetSamplesPerPixel( pi.GetSamplesPerPixel() );
       }
     else if ( isacrnema )
       {
       assert ( pf.GetSamplesPerPixel() == 0 );
-      assert ( pi == PhotometricInterpretation::UNKNOW );
+      assert ( pi == PhotometricInterpretation::UNKNOWN );
       pf.SetSamplesPerPixel( 1 );
       pi = PhotometricInterpretation::MONOCHROME2;
       }
@@ -783,7 +783,7 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
     {
     return false;
     }
-  if( pi == PhotometricInterpretation::UNKNOW ) return false;
+  if( pi == PhotometricInterpretation::UNKNOWN ) return false;
   PixelData->SetPhotometricInterpretation( pi );
 
   // 4. Planar Configuration
@@ -1034,8 +1034,18 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
           v[0] = jpeg.GetDimensions()[0];
           v[1] = jpeg.GetDimensions()[1];
           PixelData->SetDimensions( &v[0] );
-          //PixelData->SetPixelFormat( jpeg.GetPixelFormat() );
+          //PixelData->SetPixelFormat( jpeg.GetPixelFormat() ); // need to handle carefully
+          if( PixelData->GetPixelFormat().GetSamplesPerPixel() != jpeg.GetPixelFormat().GetSamplesPerPixel() )
+          {
+          gdcmDebugMacro( "Fix samples per pixel." );
+          PixelData->GetPixelFormat().SetSamplesPerPixel( jpeg.GetPixelFormat().GetSamplesPerPixel() );
+          }
           //PixelData->SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
+          if( PixelData->GetPhotometricInterpretation().GetSamplesPerPixel() != jpeg.GetPhotometricInterpretation().GetSamplesPerPixel() )
+          {
+          gdcmDebugMacro( "Fix photometric interpretation." );
+          PixelData->SetPhotometricInterpretation( jpeg.GetPhotometricInterpretation() );
+          }
           assert( PixelData->IsTransferSyntaxCompatible( ts ) );
           }
         else

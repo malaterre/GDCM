@@ -117,7 +117,7 @@ public class MIPViewer extends Canvas
     vtkBoxWidget box = new vtkBoxWidget();
     box.SetInteractor(iren);
     box.SetPlaceFactor(1.01);
-    box.SetInput(change.GetOutput());
+    box.SetInputConnection(change.GetOutputPort());
 
     //box.SetDefaultRenderer(renderer);
     box.InsideOutOn();

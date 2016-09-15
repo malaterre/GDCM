@@ -248,6 +248,6 @@ int TestFindPatientRootQuery(int , char *[])
       }
     }
 
-  //std::cout << "sucess" << std::endl;
+  //std::cout << "success" << std::endl;
   return 0;
 }

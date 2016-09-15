@@ -18,8 +18,8 @@ import os,sys
 def TestPythonFilter(filename, verbose = False):
   r = gdcm.Reader()
   r.SetFileName( filename )
-  sucess = r.Read()
-  if( not sucess ): return 1
+  success = r.Read()
+  if( not success ): return 1
 
   file = r.GetFile()
   ds = file.GetDataSet()
@@ -46,10 +46,10 @@ def TestPythonFilter(filename, verbose = False):
   return 0
 
 if __name__ == "__main__":
-  sucess = 0
+  success = 0
   try:
     filename = os.sys.argv[1]
-    sucess += TestPythonFilter( filename, True )
+    success += TestPythonFilter( filename, True )
   except:
     # loop over all files:
     gdcm.Trace.WarningOff()
@@ -57,8 +57,8 @@ if __name__ == "__main__":
     nfiles = t.GetNumberOfFileNames()
     for i in range(0,nfiles):
       filename = t.GetFileName(i)
-      sucess += TestPythonFilter( filename )
+      success += TestPythonFilter( filename )
 
 
   # Test succeed ?
-  sys.exit(sucess == 0)
+  sys.exit(success == 0)

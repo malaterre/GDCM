@@ -255,9 +255,9 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       for(SortedFilenames::const_iterator it1 = sorted.begin(); it1 != sorted.end(); ++it1)
         {
         std::string f = it1->second;
-        if( f.length() > 32 )
+        if( f.length() > 62 )
           {
-          f = f.substr(0,10) + " ... " + f.substr(f.length()-17);
+          f = f.substr(0,10) + " ... " + f.substr(f.length()-47);
           }
         double d = it1->first - prev1;
         if( it1 != sorted.begin() && fabs(d - zspacing) > ZTolerance) os << "* ";
@@ -275,10 +275,12 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   return true;
 }
 
+#if !defined(GDCM_LEGACY_REMOVE)
 bool IPPSorter::ComputeSpacing(std::vector<std::string> const & filenames)
 {
   (void)filenames;
   return false;
 }
+#endif
 
 } // end namespace gdcm

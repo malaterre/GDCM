@@ -27,7 +27,11 @@ class VTK_EXPORT vtkGDCMTesting : public vtkObject
 {
 public:
   static vtkGDCMTesting *New();
+#if VTK_MAJOR_VERSION < 6
   vtkTypeRevisionMacro(vtkGDCMTesting,vtkObject);
+#else
+  vtkTypeMacro(vtkGDCMTesting,vtkObject);
+#endif
   void PrintSelf(ostream& os, vtkIndent indent);
 
   static const char *GetVTKDataRoot();

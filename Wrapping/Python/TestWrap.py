@@ -49,12 +49,14 @@ blacklist = (
 "GroupDict"
 "DictConverter"
 # Information thingy :
+"Tables"
 "MacroEntry"
 "XMLDictReader"
 "TableReader"
 "Table"
 "XMLPrivateDictReader"
 # Common
+"Configure"
 "LegacyMacro"
 "Swapper"
 "SmartPointer"
@@ -180,6 +182,19 @@ blacklist = (
 "SOPClassExtendedNegociationSub"
 "FindPatientRootQuery"
 "ServiceClassApplicationInformation"
+"ModalityPerformedProcedureStepSetQuery"
+"NormalizedMessageFactory"
+"NormalizedNetworkFunctions"
+"NSetMessages"
+"WLMFindQuery"
+"ModalityPerformedProcedureStepCreateQuery"
+"BaseNormalizedMessage"
+"NCreateMessages"
+"NActionMessages"
+"NGetMessages"
+"BaseQuery"
+"NEventReportMessages"
+"NDeleteMessages"
 )
 
 def processonedir(dirname):

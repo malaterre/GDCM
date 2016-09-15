@@ -18,8 +18,8 @@ import os,sys
 def TestAnonymizer(filename, verbose = False):
   r = gdcm.Reader()
   r.SetFileName( filename )
-  sucess = r.Read()
-  if( not sucess ): return 1
+  success = r.Read()
+  if( not success ): return 1
   #print r.GetFile().GetDataSet()
 
   ano = gdcm.Anonymizer()
@@ -31,8 +31,8 @@ def TestAnonymizer(filename, verbose = False):
   # 3. Make a tag empty
   ano.Empty( gdcm.Tag(0x0008,0x0070) )
   # Call the main function:
-  sucess = ano.RemovePrivateTags() # do it !
-  if( not sucess ): return 1
+  success = ano.RemovePrivateTags() # do it !
+  if( not success ): return 1
 
   # Check we can also change value from binary field
   #ano.Replace( gdcm.Tag(0x0010,0x0010), "16", gdcm. )
@@ -55,27 +55,27 @@ def TestAnonymizer(filename, verbose = False):
   w.SetFileName( outfilename )
   w.SetFile( r.GetFile() )
   w.SetCheckFileMetaInformation( False )
-  sucess = w.Write()
-  if( not sucess ): return 1
+  success = w.Write()
+  if( not success ): return 1
 
   if verbose:
     print("Success to write: %s"%outfilename)
 
-  return sucess
+  return success
 
 if __name__ == "__main__":
-  sucess = 0
+  success = 0
   try:
     filename = os.sys.argv[1]
-    sucess += TestAnonymizer( filename, True )
+    success += TestAnonymizer( filename, True )
   except:
     # loop over all files:
     t = gdcm.Testing()
     nfiles = t.GetNumberOfFileNames()
     for i in range(0,nfiles):
       filename = t.GetFileName(i)
-      sucess += TestAnonymizer( filename )
+      success += TestAnonymizer( filename )
 
 
   # Test succeed ?
-  sys.exit(sucess == 0)
+  sys.exit(success == 0)

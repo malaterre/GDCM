@@ -16,6 +16,12 @@
 #include "vtkStringArray.h"
 #include "gdcmIPPSorter.h"
 
+#if VTK_MAJOR_VERSION >= 6
+#ifndef vtkFloatingPointType
+#define vtkFloatingPointType double
+#endif
+
+#endif
 /*
  * Simple example to check computation of spacing within vtkGDCMImageReader2
  * This is a direct implementation of:

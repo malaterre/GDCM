@@ -95,7 +95,11 @@ class VTK_EXPORT vtkGDCMImageReader2 : public vtkMedicalImageReader2
 {
 public:
   static vtkGDCMImageReader2 *New();
+#if VTK_MAJOR_VERSION < 6
   vtkTypeRevisionMacro(vtkGDCMImageReader2,vtkMedicalImageReader2);
+#else
+  vtkTypeMacro(vtkGDCMImageReader2,vtkMedicalImageReader2);
+#endif
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description: is the given file name a DICOM file containing an image ?

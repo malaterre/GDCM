@@ -1,6 +1,3 @@
-# TODO:
-# SWIG is really a pain in the neck to use, a better alternative is Py++ which is using
-# gccxml for the C++ parser and allow a full ANSI C++ support
 find_package(SWIG REQUIRED)
 include(${SWIG_USE_FILE})
 option(GDCM_AUTOLOAD_GDCMJNI "Automatically load gdcmjni" ON)
@@ -17,13 +14,12 @@ include_directories(
 
 # $ export JAVA_HOME=/usr/lib/j2sdk1.6-sun/
 # $ export JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun/
-find_package(Java 1.5 REQUIRED) # javac, jar
+find_package(Java ${GDCM_DEFAULT_JAVA_VERSION} REQUIRED) # javac, jar
 find_package(JNI REQUIRED)
 include_directories(
   ${JNI_INCLUDE_DIRS}
   )
 set_source_files_properties(gdcm.i PROPERTIES CPLUSPLUS ON)
-#include(${GDCM_SOURCE_DIR}/CMake/UseSWIGExtra.cmake)
 
 set(GDCM_JAVA_HOME ${CMAKE_CURRENT_BINARY_DIR}/java/gdcm)
 file(MAKE_DIRECTORY ${GDCM_JAVA_HOME})
@@ -70,7 +66,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 add_custom_command(
-  OUTPUT ${LIBRARY_OUTPUT_PATH}/gdcm.jar
+  OUTPUT ${GDCM_LIBRARY_DIR}/gdcm.jar
 # 1. run the custom command only when the gdcmJAVA_wrap.cxx has been generated
 # (which means all *.java should be there) Some compiler are picky about Java
 # version. For instance covariant return type was only added to Java 5, so to
@@ -81,7 +77,7 @@ add_custom_command(
 # 2. now that the *.class have been generated construct the jar file. We can
 # only rely on the gdcm.java / gdcm.class to build dependencie, I am pretty
 # sure it will break parallel builds... oh well
-  COMMAND ${Java_JAR_EXECUTABLE} ARGS cvf ${LIBRARY_OUTPUT_PATH}/gdcm.jar gdcm/*.class
+  COMMAND ${Java_JAR_EXECUTABLE} ARGS cvf ${GDCM_LIBRARY_DIR}/gdcm.jar gdcm/*.class
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
   DEPENDS "${swig_generated_file_fullname}"
   COMMENT "javac *.java; jar cvf -> gdcm.jar"
@@ -89,14 +85,15 @@ add_custom_command(
 
 # 3. ok now add the target
 add_custom_target(GDCMJavaJar ALL
-  DEPENDS ${LIBRARY_OUTPUT_PATH}/gdcm.jar
+  DEPENDS ${GDCM_LIBRARY_DIR}/gdcm.jar
   COMMENT "building gdcm.jar"
 )
 
 if(NOT GDCM_INSTALL_NO_LIBRARIES)
   install_swig_module(gdcmjni Java)
+  set(GDCM_LIBRARY_DIR2 ${LIBRARY_OUTPUT_PATH}/\${BUILD_TYPE})
   # because gdcm.jar is constructed with custom commands, it need the INSTALL(FILES signature:
-  install(FILES ${LIBRARY_OUTPUT_PATH}/gdcm.jar
+  install(FILES ${GDCM_LIBRARY_DIR2}/gdcm.jar
     DESTINATION ${GDCM_INSTALL_JARMODULE_DIR} COMPONENT JavaModule
   )
 endif()

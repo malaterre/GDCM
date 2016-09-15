@@ -26,4 +26,4 @@ print(t.GetFileName(10000))
 print(t.GetDataRoot())
 
 # Test succeed ?
-#sys.exit(sucess != 1)
+#sys.exit(success != 1)

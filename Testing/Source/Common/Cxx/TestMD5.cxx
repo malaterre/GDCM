@@ -229,6 +229,15 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "027faefc8031768dad1afc100f7aee27"  , "SC16BitsAllocated_8BitsStoredJ2K.dcm" },
 { "f7c4fbb93b0347101e21e36f223b4d46"  , "SC16BitsAllocated_8BitsStoredJPEG.dcm" },
 { "af580e6202a240005a5a05adc5c691f2"  , "SIEMENS_SYNGO-12-MONO2-LUTWrongLength512.dcm" },
+{ "236713383dd9d315415f3a5957707ad1" , "JPEGNote_empty.dcm" },
+{ "5b6f7f59dbefd679aa29e9082f100ff5" , "JPEGLS_CharLS_10742.dcm" },
+{ "66fe7d517941802364e7ad8dee7149e7" , "JPEGLosslessYBR_FULL_422.dcm" },
+{ "dcb4b29b7e0f0da441ab3e5cdcb506b4" , "JPEGNote_missing.dcm" },
+{ "2c30e74ee3db1895027932bb0566f54e" , "JPEGNote_bogus.dcm" },
+{ "c71a2cf95325395264c4dc6e15a898bd" , "RLEDebianBug816607Orig.dcm" },
+{ "e49c403278663d9739014ad1d57c276f" , "IllegalGroup2ImplicitTS.dcm" },
+{ "299df0175ea4d3ab1f02651f88ffe9f3" , "JPEG_LS_InvalidEscapeSequence_COM_padding.dcm" },
+{ "9add5fd3c83cc0946633e792f448f732" , "LengthOfItemLarger.dcm" },
 
 { NULL, NULL}
 };

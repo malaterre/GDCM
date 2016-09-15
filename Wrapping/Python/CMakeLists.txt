@@ -20,7 +20,11 @@ include_regular_expression("^(gdcm).*$")
 # http://sourceforge.net/mailarchive/message.php?msg_id=29294773
 # 2.0.6 cannot be used because of a serious typemap bug in 2.0.5
 # http://sourceforge.net/mailarchive/message.php?msg_id=29305946
+if(GDCM_WEAK_SWIG_CHECK)
+find_package(SWIG 2.0.4 REQUIRED)
+else()
 find_package(SWIG 2.0.7 REQUIRED)
+endif()
 mark_as_advanced(SWIG_DIR SWIG_EXECUTABLE SWIG_VERSION)
 include(${SWIG_USE_FILE})
 
@@ -109,6 +113,9 @@ if(WIN32 AND NOT CYGWIN)
   set_target_properties(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES SUFFIX ".pyd")
   # shared libs on windows needs to be fully resolved
   SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} ${PYTHON_LIBRARIES})
+  message(STATUS "Will use pyd extension" )
+else()
+  message(STATUS "Will NOT use pyd extension" )
 endif()
 set_target_properties(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 

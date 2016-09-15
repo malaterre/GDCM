@@ -34,7 +34,11 @@ class VTK_EXPORT vtkStringArray : public vtkObject
 {
 public:
   static vtkStringArray *New();
+#if VTK_MAJOR_VERSION < 6
   vtkTypeRevisionMacro(vtkStringArray,vtkObject);
+#else
+  vtkTypeMacro(vtkStringArray,vtkObject);
+#endif
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
 //BTX

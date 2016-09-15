@@ -49,12 +49,12 @@ bool ImageHelper::ForceRescaleInterceptSlope = false;
 bool ImageHelper::PMSRescaleInterceptSlope = true;
 bool ImageHelper::ForcePixelSpacing = false;
 
-bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)
+static bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)
 {
   if( !ds.FindDataElement( tfgs ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
-  assert( sqi );
+  if( !(sqi && sqi->GetNumberOfItems() > 0) ) return false;
   // Get first item:
   const Item &item = sqi->GetItem(1);
   const DataSet & subds = item.GetNestedDataSet();
@@ -81,12 +81,12 @@ bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<
   return true;
 }
 
-bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &dircos)
+static bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &dircos)
 {
   if( !ds.FindDataElement( tfgs ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
-  assert( sqi );
+  if( !(sqi && sqi->GetNumberOfItems() > 0) ) return false;
   // Get first item:
   const Item &item = sqi->GetItem(1);
   const DataSet & subds = item.GetNestedDataSet();
@@ -116,12 +116,12 @@ bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, st
   return true;
 }
 
-bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &intslope)
+static bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &intslope)
 {
   if( !ds.FindDataElement( tfgs ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
-  assert( sqi );
+  if( !(sqi && sqi->GetNumberOfItems() > 0) ) return false;
   // Get first item:
   const Item &item = sqi->GetItem(1);
   const DataSet & subds = item.GetNestedDataSet();
@@ -160,7 +160,7 @@ bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std:
   return true;
 }
 
-bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
+static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
 {
   // first we need to get the direction cosines:
   const Tag t1(0x5200,0x9229);
@@ -279,7 +279,7 @@ bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
 }
 
 // EnhancedMRImageStorage & EnhancedCTImageStorage
-bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &sp)
+static bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &sp)
 {
   //  (0028,9110) SQ (Sequence with undefined length #=1)     # u/l, 1 PixelMeasuresSequence
   //      (fffe,e000) na (Item with undefined length #=2)         # u/l, 1 Item
@@ -292,7 +292,7 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
   if( !ds.FindDataElement( tfgs ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
-  assert( sqi );
+  if( !(sqi && sqi->GetNumberOfItems() > 0) ) return false;
   // Get first item:
   const Item &item = sqi->GetItem(1);
   const DataSet & subds = item.GetNestedDataSet();
@@ -339,7 +339,7 @@ bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector
 }
 
 // UltrasoundMultiframeImageStorage
-bool GetUltraSoundSpacingValueFromSequence(const DataSet& ds, std::vector<double> &sp)
+static bool GetUltraSoundSpacingValueFromSequence(const DataSet& ds, std::vector<double> &sp)
 {
 /*
 (0018,6011) SQ (Sequence with explicit length #=1)      # 196, 1 SequenceOfUltrasoundRegions
@@ -421,6 +421,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
    || ms == MediaStorage::OphthalmicTomographyImageStorage
    || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
+   || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
     const Tag t1(0x5200,0x9229);
@@ -541,6 +542,7 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
    || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
+   || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
     const Tag t1(0x5200,0x9229);
@@ -836,6 +838,12 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
         gdcmAssertAlwaysMacro( "Could not set third dimension" );
       }
     }
+    else if( img.GetNumberOfDimensions() == 2 && dims[2] == 1 )
+    {
+      // This is a MF instances, need to set Number of Frame to 1
+      if( ms.MediaStorage::GetModalityDimension() > 2 )
+        ds.Replace( numframes.GetAsDataElement() );
+    }
     else // cleanup
       ds.Remove( numframes.GetTag() );
   }
@@ -845,6 +853,7 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
    || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
+   || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
       const Tag tfgs(0x5200,0x9230);
@@ -868,6 +877,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
    || ms == MediaStorage::EnhancedPETImageStorage
+   || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
     const Tag t1(0x5200,0x9229);
@@ -961,7 +971,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       {
         interceptslope[0] = el_ri.GetValue();
         interceptslope[1] = el_rs.GetValue();
-        gdcmWarningMacro( "PMS Modality LUT found for MR Image Storage: [" << interceptslope[0] << "," << interceptslope[1] << "]" );
+        gdcmWarningMacro( "PMS Modality LUT loaded for MR Image Storage: [" << interceptslope[0] << "," << interceptslope[1] << "]" );
       }
       }
     else
@@ -970,7 +980,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       if( GetRescaleInterceptSlopeValueFromDataSet(ds, dummy) )
         {
         // for everyone else, read your DCS, and set: ForceRescaleInterceptSlope = true if needed
-        gdcmDebugMacro( "Modality LUT found for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
+        gdcmDebugMacro( "Modality LUT unused for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
         }
       }
 #endif
@@ -1010,6 +1020,7 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   // Enhanced stuff are handled elsewere... look carefully :)
   //case MediaStorage::EnhancedMRImageStorage:
   //case MediaStorage::EnhancedCTImageStorage:
+  //case MediaStorage::XRay3DAngiographicImageStorage
   //  gdcmWarningMacro( "Enhanced image are not currently supported. Spacing will be wrong" );
   case MediaStorage::CTImageStorage:
   case MediaStorage::MRImageStorage:
@@ -1169,6 +1180,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     || ms == MediaStorage::OphthalmicTomographyImageStorage
     || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
     || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
+    || ms == MediaStorage::XRay3DAngiographicImageStorage
     || ms == MediaStorage::SegmentationStorage )
     {
     // <entry group="5200" element="9230" vr="SQ" vm="1" name="Per-frame Functional Groups Sequence"/>
@@ -1437,6 +1449,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
    || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
+   || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
 /*
@@ -1496,9 +1509,9 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
         DataSet &subds2 = item2.GetNestedDataSet();
 
         // <entry group="0028" element="9110" vr="SQ" vm="1" name="Pixel Measures Sequence"/>
-        // do not set a slice thickness since GDCM always recompute it from the IOP/IPP
-        //Attribute<0x0018,0x0050> at2;
-        //at2.SetValue( spacing[2] );
+        // do not set spacing between slices since GDCM always recompute it from the IOP/IPP
+        //Attribute<0x0018,0x0088> at2;
+        //at2.SetValue( fabs(spacing[2]) );
         Attribute<0x0028,0x0030> at1;
         at1.SetValue( spacing[1], 0 );
         at1.SetValue( spacing[0], 1 );
@@ -1665,7 +1678,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
 
 }
 
-void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag const & sqtag, unsigned int itemidx)
+static void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de, Tag const & sqtag, unsigned int itemidx)
 {
     const Tag tfgs = sqtag; //(0x5200,0x9230);
     SmartPointer<SequenceOfItems> sqi;
@@ -1746,6 +1759,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
    && ms != MediaStorage::SegmentationStorage
    && ms != MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
    && ms != MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
+   && ms != MediaStorage::XRay3DAngiographicImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedPETImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage )
@@ -1757,6 +1771,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
    || ms == MediaStorage::EnhancedPETImageStorage
+   || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    || ms == MediaStorage::SegmentationStorage )
@@ -1801,10 +1816,12 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
     if( ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
         || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage )
     {
+      if( dimz > 1 ) {
       Attribute<0x0028,0x0009> fip;
       fip.SetNumberOfValues( 1 );
       fip.SetValue( tfgs );
       ds.Replace( fip.GetAsDataElement() );
+    }
     }
 
     return;
@@ -1841,6 +1858,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
    && ms != MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
    && ms != MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    && ms != MediaStorage::SegmentationStorage
+   && ms != MediaStorage::XRay3DAngiographicImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedPETImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage )
@@ -1873,6 +1891,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
    || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
+   || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::SegmentationStorage )
     {
 /*
@@ -1977,6 +1996,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage
    && ms != MediaStorage::EnhancedPETImageStorage
+   && ms != MediaStorage::XRay3DAngiographicImageStorage
    && ms != MediaStorage::SegmentationStorage )
     {
     if( img.GetIntercept() != 0. || img.GetSlope() != 1. )
@@ -1990,6 +2010,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
    || ms == MediaStorage::EnhancedPETImageStorage
+   || ms == MediaStorage::XRay3DAngiographicImageStorage
   )
     {
 /*
@@ -2049,10 +2070,10 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
 
         Attribute<0x0028,0x1052> at1;
         at1.SetValue( img.GetIntercept() );
-        subds2.Insert( at1.GetAsDataElement() );
+        subds2.Replace( at1.GetAsDataElement() );
         Attribute<0x0028,0x1053> at2;
         at2.SetValue( img.GetSlope() );
-        subds2.Insert( at2.GetAsDataElement() );
+        subds2.Replace( at2.GetAsDataElement() );
       }
 
     // cleanup per-frame
@@ -2286,7 +2307,7 @@ PhotometricInterpretation ImageHelper::GetPhotometricInterpretationValue(File co
   const Tag tphotometricinterpretation(0x0028, 0x0004);
   const ByteValue *photometricinterpretation =
     ImageHelper::GetPointerFromElement(tphotometricinterpretation, f);
-  PhotometricInterpretation pi = PhotometricInterpretation::UNKNOW;
+  PhotometricInterpretation pi = PhotometricInterpretation::UNKNOWN;
   if( photometricinterpretation )
     {
     std::string photometricinterpretation_str(
@@ -2325,14 +2346,14 @@ PhotometricInterpretation ImageHelper::GetPhotometricInterpretationValue(File co
   }
   if( !pf.GetSamplesPerPixel() || (pi.GetSamplesPerPixel() != pf.GetSamplesPerPixel()) )
     {
-    if( pi != PhotometricInterpretation::UNKNOW )
+    if( pi != PhotometricInterpretation::UNKNOWN )
       {
       pf.SetSamplesPerPixel( pi.GetSamplesPerPixel() );
       }
     else if ( isacrnema )
       {
       assert ( pf.GetSamplesPerPixel() == 0 );
-      assert ( pi == PhotometricInterpretation::UNKNOW );
+      assert ( pi == PhotometricInterpretation::UNKNOWN );
       pf.SetSamplesPerPixel( 1 );
       pi = PhotometricInterpretation::MONOCHROME2;
       }

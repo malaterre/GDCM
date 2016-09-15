@@ -122,13 +122,13 @@ public class MPRViewer2
     double oy = origin[1];
     double oz = origin[2];
 
-    int wextent[] = image.GetWholeExtent();
-    int xMin = wextent[0];
-    int xMax = wextent[1];
-    int yMin = wextent[2];
-    int yMax = wextent[3];
-    int zMin = wextent[4];
-    int zMax = wextent[5];
+    int dims[] = image.GetDimensions();
+    int xMin = 0;
+    int xMax = 1;
+    int yMin = 2;
+    int yMax = dims[0]-1;
+    int zMin = dims[1]-1;
+    int zMax = dims[2]-1;
 
     double[] spacing = image.GetSpacing();
     double sx = spacing[0];
@@ -251,7 +251,7 @@ public class MPRViewer2
     //planeWidgetX.GetPlaneProperty().SetColor(1,0,0);
     //planeWidgetX.TextureInterpolateOff();
     //planeWidgetX.SetResliceInterpolateToNearestNeighbour();
-    planeWidgetX.SetInput(change.GetOutput());
+    planeWidgetX.SetInputConnection(change.GetOutputPort());
     planeWidgetX.SetPlaneOrientationToXAxes();
     planeWidgetX.SetSliceIndex(62);
     planeWidgetX.SetPicker(picker);
@@ -268,7 +268,7 @@ public class MPRViewer2
     //planeWidgetY.GetPlaneProperty().SetColor(1,0,0);
     //planeWidgetY.TextureInterpolateOff();
     //planeWidgetY.SetResliceInterpolateToNearestNeighbour();
-    planeWidgetY.SetInput(change.GetOutput());
+    planeWidgetY.SetInputConnection(change.GetOutputPort());
     planeWidgetY.SetLookupTable( planeWidgetX.GetLookupTable() );
     planeWidgetY.SetPlaneOrientationToYAxes();
     planeWidgetY.SetSliceIndex(32);
@@ -286,7 +286,7 @@ public class MPRViewer2
     //planeWidgetZ.GetPlaneProperty().SetColor(1,0,0);
     //planeWidgetZ.TextureInterpolateOff();
     //planeWidgetZ.SetResliceInterpolateToNearestNeighbour();
-    planeWidgetZ.SetInput(change.GetOutput());
+    planeWidgetZ.SetInputConnection(change.GetOutputPort());
     planeWidgetZ.SetLookupTable( planeWidgetX.GetLookupTable() );
     planeWidgetZ.SetPlaneOrientationToZAxes();
     planeWidgetZ.SetSliceIndex(32);

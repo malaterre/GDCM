@@ -564,7 +564,7 @@ bool JPEGLSCodec::AppendRowEncode( std::ostream & , const char * , size_t )
 bool JPEGLSCodec::AppendFrameEncode( std::ostream & out, const char * data, size_t datalen )
 {
   const unsigned int * dimensions = this->GetDimensions();
-  const PixelFormat & pf = this->GetPixelFormat();
+  const PixelFormat & pf = this->GetPixelFormat(); (void)pf;
   assert( datalen == dimensions[0] * dimensions[1] * pf.GetPixelSize() );
 
   std::vector<BYTE> rgbyteCompressed;

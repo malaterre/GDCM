@@ -136,7 +136,7 @@ int TestByteSwap(int , char *[])
 
   uint16_t array[] = { 0x1234 };
   gdcm::ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem(array,
-    gdcm::SwapCode::BigEndian,2);
+    gdcm::SwapCode::BigEndian,1);
    if ( array[0] != 0x3412 )
      {
      std::cerr << std::hex << "array: " << array[0] << std::endl;

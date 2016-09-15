@@ -499,6 +499,7 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, const TransferSyntax & ts, std:
         	}        
         }
       */
+      delete[] bulkData;
       }
     else
       {

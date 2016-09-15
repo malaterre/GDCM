@@ -1,33 +1,46 @@
-/*!
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl" ?>
+<!DOCTYPE Data [ <!ENTITY version SYSTEM 'version.txt'> ]>
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+<info>
+<author><personname><firstname>Mathieu</firstname><surname>Malaterre</surname></personname><contrib>Main developer</contrib></author>
+<copyright><year>2006</year><year>2011</year><holder>Mathieu Malaterre</holder></copyright>
+</info>
+  <refmeta>
+    <refentrytitle>gdcmpdf</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="source">GDCM</refmiscinfo>
+    <refmiscinfo class="version">&version;</refmiscinfo>
+    <refmiscinfo class="manual">DICOM Manipulation.</refmiscinfo>
+  </refmeta>
+  <refnamediv><refname>gdcmpdf</refname>
+    <refpurpose>Tool to convert PDF to PDF/DICOM.</refpurpose>
+</refnamediv>
+<refsection xml:id="gdcmxml_1synopsis">
+<title>SYNOPSIS</title>
 
-\page gdcmpdf Tool to convert PDF to PDF/DICOM.
+<para><literallayout>gdcmpdf [options] file-in file-out
+</literallayout></para>
+</refsection>
+<refsection xml:id="gdcmxml_1description">
+<title>DESCRIPTION</title>
 
-\section synopsis SYNOPSIS
+<para>The <emphasis role="bold">gdcmpdf</emphasis> tool convert a PDF file (any PDF version) into an encapsulated PDF/DICOM file. By default it will try to read the PDF meta information stored in the PDF and convert this information to some specific DICOM fields (see below). However it may fails (eg. wrong password on encrypted PDF file) in which case empty value are used.</para>
+</refsection>
+<refsection xml:id="gdcmxml_1parameters">
+<title>PARAMETERS</title>
 
-\verbatim
-gdcmpdf [options] file-in file-out
-\endverbatim
-
-\section description DESCRIPTION
-
-The \b gdcmpdf tool convert a PDF file (any PDF version) into an encapsulated PDF/DICOM file.
-By default it will try to read the PDF meta information stored in the PDF and convert this
-information to some specific DICOM fields (see below). However it may fails (eg. wrong
-password on encrypted PDF file) in which case empty value are used.
-
-\section parameters PARAMETERS
-
-\verbatim
-file-in   PDF input filename
+<para><literallayout>file-in   PDF input filename
 
 file-out  DICOM output filename
-\endverbatim
+</literallayout></para>
+</refsection>
+<refsection xml:id="gdcmxml_1options">
+<title>OPTIONS</title>
+<refsection xml:id="gdcmxml_1general_options">
+<title>general options</title>
 
-\section options OPTIONS
-
-\subsection general_options general options
-\verbatim
-  -h   --help
+<para><literallayout>  -h   --help
          print this help text and exit
 
   -v   --version
@@ -44,28 +57,28 @@ file-out  DICOM output filename
 
   -D   --debug
          debug mode, print debug information
-\endverbatim
+</literallayout></para>
+</refsection>
+</refsection>
+<refsection xml:id="gdcmpdf_1usage_example">
+<title>Usage Example</title>
 
-\section usage_example Usage Example
-
-\verbatim
-$ wget http://gdcm.sourceforge.net/gdcm.pdf
+<para><literallayout>$ wget http://gdcm.sourceforge.net/gdcm.pdf
 $ gdcmpdf gdcm.pdf gdcm.dcm
-\endverbatim
+</literallayout></para>
 
-To re-extract the encapsulated PDF file:
+<para>To re-extract the encapsulated PDF file:</para>
 
-\verbatim
- $ gdcmraw -i gdcm.dcm -t 42,11 -o gdcm.dcm.pdf
+<para><literallayout> $ gdcmraw -i gdcm.dcm -t 42,11 -o gdcm.dcm.pdf
  $ diff gdcm.pdf gdcm.dcm.pdf
-\endverbatim
+</literallayout></para>
+</refsection>
+<refsection xml:id="gdcmpdf_1pdf_mapping">
+<title>PDF Info Mapping</title>
 
-\section pdf_mapping PDF Info Mapping
+<para>Here is how the PDF info is mapped to DICOM information (typical pdfinfo output):</para>
 
-Here is how the PDF info is mapped to DICOM information (typical pdfinfo output):
-
-\verbatim
-Title:          GDCM Reference Manual
+<para><literallayout>Title:          GDCM Reference Manual
 Subject:        Grassroots DICOM API reference
 Keywords:       GDCM,DICOM,JPEG,Lossless JPEG,JPEG-LS,J2K,JPEG 2000,RLE
 Author:         Mathieu Malaterre and co.
@@ -79,12 +92,11 @@ Page size:      612 x 792 pts (letter)
 File size:      13756841 bytes
 Optimized:      yes
 PDF version:    1.4
-\endverbatim
+</literallayout></para>
 
-Converted to DICOM this leads to:
+<para>Converted to DICOM this leads to:</para>
 
-\verbatim
-# Dicom-Data-Set
+<para><literallayout># Dicom-Data-Set
 # Used TransferSyntax: Little Endian Explicit
 (0008,0005) CS [ISO_IR 100]                             #  10, 1 SpecificCharacterSet
 (0008,0012) DA [20090428]                               #   8, 1 InstanceCreationDate
@@ -117,33 +129,36 @@ Converted to DICOM this leads to:
 (0042,0010) ST [GDCM Reference Manual]                  #  22, 1 DocumentTitle
 (0042,0011) OB 25\\50\\44\\46\\2d\\31\\2e\\34\\0a\\25\\e7\\f3\\cf\\d3\\0a\\33\\32\\30\\37\\37\\20\\30... # 13756842, 1 EncapsulatedDocument
 (0042,0012) LO [application/pdf]                        #  16, 1 MIMETypeOfEncapsulatedDocument
-\endverbatim
+</literallayout></para>
 
-\verbatim
-$ stat gdcm.pdf
-  File: `gdcm.pdf'
+<para><literallayout>$ stat gdcm.pdf
+  File: `gdcm.pdf&apos;
   Size: 13756841        Blocks: 26912      IO Block: 4096   regular file
 Device: fe01h/65025d    Inode: 2675750     Links: 1
 Access: (0644/-rw-r--r--)  Uid: ( 1002/mmalaterre)   Gid: ( 1002/mmalaterre)
 Access: 2009-04-28 16:05:00.000000000 +0200
 Modify: 2009-04-28 15:34:37.000000000 +0200
 Change: 2009-04-28 16:05:00.000000000 +0200
-\endverbatim
+</literallayout></para>
 
+<para>Explanation for the different Date/Time mappings:</para>
 
-Explanation for the different Date/Time mappings:
+<para><itemizedlist>
+<listitem>
+<para>Study Date/Time, Instance Creation Date/Time are both equal to the current time gdcmpdf tool was run, </para>
+</listitem>
+<listitem>
+<para>Acquisition Date Time is set to the Modify Time of the actual PDF file, </para>
+</listitem>
+<listitem>
+<para>Content Date/Time are set from the actual PDF header info: CreationDate.</para>
+</listitem>
+</itemizedlist>
+</para>
+</refsection>
+<refsection xml:id="gdcmxml_1see_also">
+<title>SEE ALSO</title>
 
-\li Study Date/Time, Instance Creation Date/Time are both equal to the current time gdcmpdf tool was run,
-\li Acquisition Date Time is set to the Modify Time of the actual PDF file,
-\li Content Date/Time are set from the actual PDF header info: CreationDate.
-
-
-\section see_also SEE ALSO
-
-<b>gdcmconv</b>(1), <b>gdcmraw</b>(1), <b>pdfinfo</b>(1)
-
-\section copyright COPYRIGHT
-
-Copyright (c) 2006-2011 Mathieu Malaterre
-
-*/
+<para><emphasis role="bold">gdcmconv</emphasis>(1), <emphasis role="bold">gdcmraw</emphasis>(1), <emphasis role="bold">pdfinfo</emphasis>(1)</para>
+</refsection>
+</refentry>

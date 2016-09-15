@@ -47,7 +47,11 @@
 
 #include <limits>
 
+#if VTK_MAJOR_VERSION < 6
 vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
+#else
+//vtkCxxRevisionMacro(vtkGDCMImageWriter, "$Revision: 1.1 $")
+#endif
 vtkStandardNewMacro(vtkGDCMImageWriter)
 
 //vtkCxxSetObjectMacro(vtkGDCMImageWriter,LookupTable,vtkLookupTable)
@@ -66,7 +70,11 @@ inline bool vtkGDCMImageWriter_IsCharTypeSigned()
 }
 
 #ifndef vtkFloatingPointType
+#if VTK_MAJOR_VERSION < 6
 #define vtkFloatingPointType float
+#else
+#define vtkFloatingPointType double
+#endif
 #endif
 
 //----------------------------------------------------------------------------

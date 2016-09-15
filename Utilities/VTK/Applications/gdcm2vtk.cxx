@@ -29,7 +29,7 @@
 #include "vtkPNMWriter.h"
 #include "vtkBMPWriter.h"
 #include "vtkImageChangeInformation.h"
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
 #include "vtkMetaImageReader.h"
 #include "vtkXMLImageDataReader.h"
 #include "vtkMetaImageWriter.h"
@@ -63,6 +63,12 @@
 #include "gdcmIPPSorter.h"
 
 #include <getopt.h>
+
+#if VTK_MAJOR_VERSION >= 6
+#ifndef vtkFloatingPointType
+#define vtkFloatingPointType double
+#endif
+#endif
 
 void PrintVersion()
 {
@@ -439,13 +445,13 @@ int main(int argc, char *argv[])
 
   vtkGDCMImageReader *gdcmreader = vtkGDCMImageReader::New();
 
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
   vtkDICOMImageReader *dicomreader = vtkDICOMImageReader::New();
 #endif
   if( debug )
     {
     gdcmreader->DebugOn();
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
     dicomreader->DebugOn();
 #endif
     }
@@ -459,7 +465,7 @@ int main(int argc, char *argv[])
   d->Delete();
 #endif
   if( usevtkdicom )
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
     imgfactory->RegisterReader( dicomreader );
 #else
     (void)0;
@@ -507,7 +513,7 @@ int main(int argc, char *argv[])
     if( ippsort )
     {
       const vtkFloatingPointType *spacing = imgreader->GetOutput()->GetSpacing();
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
       v16->SetInputConnection( imgreader->GetOutputPort() );
 #else
       v16->SetInput( imgreader->GetOutput() );
@@ -550,13 +556,13 @@ int main(int argc, char *argv[])
       vtkStructuredPointsWriter * writer = vtkStructuredPointsWriter::New();
       writer->SetFileName( outfilename );
       writer->SetFileTypeToBinary();
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
       writer->SetInputData( imgdata );
 #else
       writer->SetInput( imgdata );
 #endif
       writer->Write();
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
@@ -570,13 +576,13 @@ int main(int argc, char *argv[])
       {
       vtkBMPWriter * writer = vtkBMPWriter::New();
       writer->SetFileName( outfilename );
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
       writer->SetInputData( imgdata );
 #else
       writer->SetInput( imgdata );
 #endif
       writer->Write();
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
@@ -592,13 +598,13 @@ int main(int argc, char *argv[])
       {
       vtkPNMWriter * writer = vtkPNMWriter::New();
       writer->SetFileName( outfilename );
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
       writer->SetInputData( imgdata );
 #else
       writer->SetInput( imgdata );
 #endif
       writer->Write();
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
@@ -612,13 +618,13 @@ int main(int argc, char *argv[])
       {
       vtkPNGWriter * writer = vtkPNGWriter::New();
       writer->SetFileName( outfilename );
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
       writer->SetInputData( imgdata );
 #else
       writer->SetInput( imgdata );
 #endif
       writer->Write();
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
@@ -633,13 +639,13 @@ int main(int argc, char *argv[])
       {
       vtkTIFFWriter * writer = vtkTIFFWriter::New();
       writer->SetFileName( outfilename );
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
       writer->SetInputData( imgdata );
 #else
       writer->SetInput( imgdata );
 #endif
       writer->Write();
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
@@ -654,13 +660,13 @@ int main(int argc, char *argv[])
       vtkXMLImageDataWriter * writer = vtkXMLImageDataWriter::New();
       writer->SetFileName( outfilename );
       writer->SetDataModeToBinary();
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
       writer->SetInputData( imgdata );
 #else
       writer->SetInput( imgdata );
 #endif
       writer->Write();
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
       if( writer->GetErrorCode() )
         {
         std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
@@ -670,7 +676,7 @@ int main(int argc, char *argv[])
       writer->Delete();
       goto cleanup;
       }
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
     else if(  gdcm::System::StrCaseCmp(outputextension,".mha") == 0 ||
               gdcm::System::StrCaseCmp(outputextension,".mhd") == 0  ) // vtkMetaImageReader::GetFileExtensions()
       {
@@ -679,7 +685,7 @@ int main(int argc, char *argv[])
       // worse I cannot even set the transform ! Which means Reader -> Writer just breaks everything -sigh-
       vtkMetaImageWriter * writer = vtkMetaImageWriter::New();
       writer->SetFileName( outfilename );
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
       writer->SetInputData( imgdata );
 #else
       writer->SetInput( imgdata );
@@ -772,13 +778,13 @@ int main(int argc, char *argv[])
       std::cout << "alpha channel will be lost " << imgreader->GetOutput()->GetNumberOfScalarComponents() << std::endl;
       }
     vtkImageExtractComponents *extract = vtkImageExtractComponents::New();
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
     extract->SetInputConnection( imgreader->GetOutputPort() );
 #else
     extract->SetInput( imgreader->GetOutput() );
 #endif
     extract->SetComponents( 0,1,2 );
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
     writer->SetInputConnection( extract->GetOutputPort() );
 #else
     writer->SetInput( extract->GetOutput() );
@@ -788,7 +794,7 @@ int main(int argc, char *argv[])
   else
     {
     //writer->SetInput( imgreader->GetOutput() );
-#if (VTK_MAJOR_VERSION >= 6)
+#if VTK_MAJOR_VERSION >= 6
     writer->SetInputData( imgdata );
 #else
     writer->SetInput( imgdata );
@@ -824,7 +830,7 @@ int main(int argc, char *argv[])
         reader0->GetMedicalImageProperties()->Print( std::cout );
         }
       }
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
     else if( vtkDICOMImageReader * reader1 = vtkDICOMImageReader::SafeDownCast(imgreader) )
       {
       const float* iop = reader1->GetImageOrientationPatient();
@@ -838,7 +844,7 @@ int main(int argc, char *argv[])
       //writer->GetMedicalImageProperties()->SetStudyUID( reader1->GetStudyUID() ); // TODO
       writer->GetMedicalImageProperties()->SetStudyID( reader1->GetStudyID() );
       //writer->GetMedicalImageProperties()->SetGantryTilt( reader1->GetGantryAngle() ); // TODO
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 2
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 2)
       writer->GetMedicalImageProperties()->SetDirectionCosine( dircos[0],
         dircos[1],
         dircos[2],
@@ -877,12 +883,12 @@ int main(int argc, char *argv[])
       }
     else if( vtkGESignaReader * reader4 = vtkGESignaReader::SafeDownCast(imgreader) )
       {
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
       writer->SetMedicalImageProperties( reader4->GetMedicalImageProperties() );
 #endif
       //reader4->GetMedicalImageProperties()->Print( std::cout );
       }
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
     else if( vtkMINCImageReader *reader5 = vtkMINCImageReader::SafeDownCast( imgreader ) )
       {
       writer->SetDirectionCosines( reader5->GetDirectionCosines() );
@@ -900,11 +906,11 @@ int main(int argc, char *argv[])
       // For some reason vtkTIFFReader is all skrew up and will load the image in whatever orientation
       // as stored on file, thus this is up to the user to set it properly...
       // If anyone has any clue why...
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
       reader6->SetOrientationType( ORIENTATION_BOTLEFT );
 #endif
       }
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
     else if( vtkMetaImageReader *reader7 = vtkMetaImageReader::SafeDownCast( imgreader ) )
       {
 //  vtkGetMacro(RescaleSlope, double);
@@ -984,7 +990,7 @@ int main(int argc, char *argv[])
     }
 
   writer->Write();
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
   if( writer->GetErrorCode() )
     {
     std::cerr << "There was an error: " << vtkErrorCode::GetStringFromErrorCode(writer->GetErrorCode()) << std::endl;
@@ -1003,7 +1009,7 @@ cleanup:
   xmlreader->Delete();
   datareader->Delete();
   gdcmreader->Delete();
-#if VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0
+#if VTK_MAJOR_VERSION >= 6 || (VTK_MAJOR_VERSION >= 5 && VTK_MINOR_VERSION > 0)
   dicomreader->Delete();
 #endif
 

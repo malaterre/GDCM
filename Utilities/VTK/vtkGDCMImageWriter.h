@@ -48,7 +48,11 @@ class VTK_EXPORT vtkGDCMImageWriter : public vtkImageWriter
 {
 public:
   static vtkGDCMImageWriter *New();
+#if VTK_MAJOR_VERSION < 6
   vtkTypeRevisionMacro(vtkGDCMImageWriter,vtkImageWriter);
+#else
+  vtkTypeMacro(vtkGDCMImageWriter,vtkImageWriter);
+#endif
   virtual void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description:

@@ -27,8 +27,8 @@ import numpy
 
 def get_gdcm_to_numpy_typemap():
     """Returns the GDCM Pixel Format to numpy array type mapping."""
-    _gdcm_np = {gdcm.PixelFormat.UINT8  :numpy.int8,
-                gdcm.PixelFormat.INT8   :numpy.uint8,
+    _gdcm_np = {gdcm.PixelFormat.UINT8  :numpy.uint8,
+                gdcm.PixelFormat.INT8   :numpy.int8,
                 #gdcm.PixelFormat.UINT12 :numpy.uint12,
                 #gdcm.PixelFormat.INT12  :numpy.int12,
                 gdcm.PixelFormat.UINT16 :numpy.uint16,

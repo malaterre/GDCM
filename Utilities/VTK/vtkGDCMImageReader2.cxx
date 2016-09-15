@@ -49,7 +49,11 @@
 
 #include <sstream>
 
+#if VTK_MAJOR_VERSION < 6
 vtkCxxRevisionMacro(vtkGDCMImageReader2, "$Revision: 1.1 $")
+#else
+//vtkCxxRevisionMacro(vtkGDCMImageReader2, "$Revision: 1.1 $")
+#endif
 vtkStandardNewMacro(vtkGDCMImageReader2)
 
 static inline bool vtkGDCMImageReader2_IsCharTypeSigned()
@@ -459,7 +463,7 @@ int vtkGDCMImageReader2::RequestInformationCompat()
     return 0;
     }
   // I do not think this is a good idea anyway to let the user decide
-  // wether or not she wants *not* to apply shift/scale...
+  // whether or not she wants *not* to apply shift/scale...
   if( !this->ApplyShiftScale )
   {
     vtkErrorMacro("ApplyShiftScale not compatible" );

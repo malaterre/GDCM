@@ -23,7 +23,7 @@ namespace gdcm
 {
 /**
  * \brief IPPSorter
- * Implement a simple Image Position (Patient) sorter, along the Image
+ * \details Implement a simple Image Position (Patient) sorter, along the Image
  * Orientation (Patient) direction.
  * This algorithm does NOT support duplicate and will FAIL in case of duplicate
  * IPP.
@@ -81,7 +81,7 @@ public:
   double GetDirectionCosinesTolerance() const { return DirCosTolerance; }
 
   /// Makes the IPPSorter ignore multiple images located at the same position.
-  /// Only the first occurence will be kept.
+  /// Only the first occurrence will be kept.
   /// DropDuplicatePositions defaults to false.
   void SetDropDuplicatePositions(bool b) { DropDuplicatePositions = b; }
 
@@ -101,7 +101,7 @@ protected:
   double DirCosTolerance;
 
 private:
-  bool ComputeSpacing(std::vector<std::string> const & filenames);
+  GDCM_LEGACY(bool ComputeSpacing(std::vector<std::string> const & filenames))
 };
 
 

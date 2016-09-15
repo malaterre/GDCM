@@ -45,6 +45,12 @@ int TestFileStream4(const char *filename, bool verbose = false)
     {
     checktemplate = true;
     }
+  if( strcmp(name, "JPEGNote_empty.dcm" ) == 0
+   || strcmp(name, "JPEGNote_missing.dcm" ) == 0 )
+    {
+    // cannot read dims from DICOM header...
+    return 0;
+    }
 
   gdcm::ImageRegionReader irr;
   irr.SetFileName( filename );
@@ -84,8 +90,11 @@ int TestFileStream4(const char *filename, bool verbose = false)
 
   const gdcm::Tag pixeldata(0x7fe0,0x0010);
 
-  bool b;
+  bool b = true;
+  if( strcmp(name, "libido1.0-vol.acr" ) != 0 ) // use Planes instead of Number of Frames
+  {
   b = fs.CheckDataElement( pixeldata ); // will be checking file size
+  } 
   if( !b )
     {
     std::cerr << "Failed to CheckDataElement: " << outfilename << std::endl;

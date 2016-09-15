@@ -43,7 +43,7 @@ struct rle_encoder::internal
   // when writing, need to keep updating offsets:
   header::ul comp_pos[16];
 
-  // internal buffer mecanism:
+  // internal buffer mechanism:
   std::vector<char> invalues;
   std::vector<char> outvalues;
 };
@@ -68,7 +68,7 @@ rle_encoder::~rle_encoder()
 //  - on first pass it will detect if user input was found to be invalid and
 // update pixel_info accordingly.
 // - on the second pass when the user update with the proper pixel_info, then
-// the code will fails is the remaining of the header was found to be invalid
+// the code will fails if the remaining of the header was found to be invalid
 // as per DICOM spec.
 static inline bool check_header( header const & rh, pixel_info & pt )
 {
@@ -97,7 +97,7 @@ static inline bool check_header( header const & rh, pixel_info & pt )
       return false;
     }
 
-  // DICOM mandates all unused segments to have there offset be 0:
+  // DICOM mandates all unused segments to have their offsets be 0:
   for( int i = rh.num_segments; i < max_number_offset; ++i )
     if( rh.offset[i] != 0 )
       return false;
@@ -339,7 +339,7 @@ struct rle_decoder::internal
   source ** sources;
   int nsources;
 
-  // scanline buffering mecanism:
+  // scanline buffering mechanism:
   std::vector<char> scanline;
 
   // row crossing handling. some RLE encoder are brain dead and do cross the

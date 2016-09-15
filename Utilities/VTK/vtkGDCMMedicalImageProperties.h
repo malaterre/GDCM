@@ -34,11 +34,15 @@ class VTK_EXPORT vtkGDCMMedicalImageProperties : public vtkMedicalImagePropertie
 {
 public:
   static vtkGDCMMedicalImageProperties *New();
+#if VTK_MAJOR_VERSION < 6
   vtkTypeRevisionMacro(vtkGDCMMedicalImageProperties,vtkMedicalImageProperties);
+#else
+  vtkTypeMacro(vtkGDCMMedicalImageProperties,vtkMedicalImageProperties);
+#endif
   void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description:
-  // Convenience method to reset all fields to an emptry string/value
+  // Convenience method to reset all fields to an empty string/value
   virtual void Clear();
 
 /*

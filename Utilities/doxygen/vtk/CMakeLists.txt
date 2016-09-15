@@ -31,7 +31,13 @@ mark_as_advanced(VTK_DIR)
   set(DOXYGEN_SOURCE_DIR "${VTK_SOURCE_DIR}/Utilities/Doxygen")
   else()
       # sudo apt-get install vtk-doc
-  set(DOXYGEN_SOURCE_DIR "/usr/share/doc/vtk-doc/html/")
+  if(EXISTS "/usr/share/doc/vtk-doc/html")
+  set(DOXYGEN_SOURCE_DIR "/usr/share/doc/vtk-doc/html")
+  elseif(EXISTS "/usr/share/doc/vtk6-doc/doxygen")
+  set(DOXYGEN_SOURCE_DIR "/usr/share/doc/vtk6-doc/doxygen")
+  else()
+  message(WARNING "DOXYGEN_SOURCE_DIR need to be set.")
+  endif()
   endif()
   set(DOXYGEN_PROJECT_SOURCE_DIR "${vtkgdcm_SOURCE_DIR}")
   set(VTK_DOXYGEN_HOME "${vtkgdcm_SOURCE_DIR}/VTK/Utilities/Doxygen")
@@ -103,7 +109,6 @@ mark_as_advanced(VTK_DIR)
     ${CMAKE_CURRENT_BINARY_DIR}/doc_makeall.sh @ONLY )
 
   add_custom_target(${DOXYGEN_PROJECT_NAME}DoxygenDoc
-    #ALL
     ${BASH}
     ${CMAKE_CURRENT_BINARY_DIR}/doc_makeall.sh)
 
@@ -111,6 +116,8 @@ mark_as_advanced(VTK_DIR)
     ${DOXYGEN_PROJECT_NAME}DoxygenDoc
     GDCMDoxygenPDF
   )
+  add_dependencies(DoxygenDoc
+    ${DOXYGEN_PROJECT_NAME}DoxygenDoc)
 
   if(INCLUDE_QT_DOCUMENTATION)
     add_custom_target(QtDoxygenTags

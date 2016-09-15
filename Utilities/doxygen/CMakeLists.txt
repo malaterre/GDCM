@@ -20,7 +20,7 @@ if(GDCM_DOCUMENTATION)
     "${GDCM_SOURCE_DIR}/Source/*.h"
     "${GDCM_SOURCE_DIR}/Wrapping/*.h"
     "${GDCM_SOURCE_DIR}/Utilities/VTK/*.h"
-    "${GDCM_SOURCE_DIR}/Utilities/doxygen/man/*.dox"
+    #"${GDCM_SOURCE_DIR}/Utilities/doxygen/man/*.dox"
   )
   list(REMOVE_ITEM headerfiles
     "${GDCM_SOURCE_DIR}/Source/DataDictionary/gdcmTagKeywords.h"
@@ -154,7 +154,6 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     endif()
     # add target to 'ALL'
     add_custom_target(GDCMDoxygenPDF
-      ALL
       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
       COMMENT  "GDCM: Executing GDCMDoxygenPDF"
     )
@@ -162,13 +161,14 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
       ${CMAKE_CURRENT_BINARY_DIR}/latex/gdcm-${GDCM_VERSION}.pdf
       DESTINATION ${GDCM_INSTALL_DOC_DIR}
     )
+    add_dependencies(DoxygenDoc GDCMDoxygenPDF)
   else()
     # make DoxygenDoc depends on the final tarball thus all file are garantee to be generated
     add_custom_target(GDCMDoxygenDoc
-      ALL
       DEPENDS ${GDCM_DOC_TARBALL}
       COMMENT  "GDCM: Executing GDCMDoxygenDoc"
     )
+    add_dependency(DoxygenDoc GDCMDoxygenDoc)
   endif()
 
   # Install html pages:
@@ -187,26 +187,26 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
   #  ${CMAKE_CURRENT_BINARY_DIR}/html/gdcmviewer.html
   #  DESTINATION ${GDCM_INSTALL_DOC_DIR} COMPONENT DebugDevel
   #)
-  install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2vtk.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2pnm.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmconv.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmpap3.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmxml.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmanon.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmgendir.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdump.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdiff.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmimg.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcminfo.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmpdf.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmraw.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmscu.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmscanner.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmtar.1
-    ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmviewer.1
-    DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT DebugDevel
-  )
+  #install(FILES
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2vtk.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcm2pnm.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmconv.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmpap3.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmxml.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmanon.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmgendir.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdump.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmdiff.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmimg.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcminfo.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmpdf.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmraw.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmscu.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmscanner.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmtar.1
+  #  ${CMAKE_CURRENT_BINARY_DIR}/man/man1/gdcmviewer.1
+  #  DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT DebugDevel
+  #)
   install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${GDCM_INSTALL_DOC_DIR}
     PATTERN "*.md5" EXCLUDE
     PATTERN "*.dot" EXCLUDE
@@ -223,5 +223,111 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     endif()
     subdirs(vtk)
   endif()
-
 endif()
+
+option(GDCM_BUILD_DOCBOOK_MANPAGES "Build man pages from XML docbook ?" ON)
+mark_as_advanced(GDCM_BUILD_DOCBOOK_MANPAGES)
+if(GDCM_BUILD_DOCBOOK_MANPAGES)
+set(MANPAGES_XML
+    gdcm2pnm
+    gdcm2vtk
+    gdcmanon
+    gdcmconv
+    gdcmdiff
+    gdcmdump
+    gdcmgendir
+    gdcmimg
+    gdcminfo
+    gdcmpap3
+    gdcmpdf
+    gdcmraw
+    gdcmscanner
+    gdcmscu
+    gdcmtar
+    gdcmviewer
+    gdcmxml
+    )
+find_package(LibXslt)
+# need an XSLT 1.0 processor, use xsltproc, maybe add more implementations later
+if(LIBXSLT_XSLTPROC_EXECUTABLE)
+  set(XSLT_PROCESSOR ${LIBXSLT_XSLTPROC_EXECUTABLE})
+# http://docbook.sourceforge.net/release/xsl/current/doc/manpages/man.output.quietly.html
+  set(XSLT_PROCESSOR_ARG --param man.output.quietly 1)
+  # User can change the behavior at cmake time:
+  if(NOT DEFINED GDCM_MANPAGES_USE_NONET)
+    set(GDCM_MANPAGES_USE_NONET FALSE)
+    # By default I want nonet on Debian (docbook-xsl-ns)
+    # on fedora you need to install docbook-style-xsl
+    if(EXISTS /etc/xml/catalog)
+      # https://cmake.org/pipermail/cmake/2007-May/014317.html
+      file(READ /etc/xml/catalog xml_catalog_in)
+      #<rewriteSystem systemIdStartString="http://docbook.sourceforge.net/release/xsl-ns/" rewritePrefix="file:///usr/share/sgml/docbook/xsl-ns-stylesheets-1.78.1"/>
+      #<rewriteURI uriStartString="http://docbook.sourceforge.net/release/xsl-ns/" rewritePrefix="file:///usr/share/sgml/docbook/xsl-ns-stylesheets-1.78.1"/>
+      string(REGEX REPLACE "\r?\n" ";" xml_catalog ${xml_catalog_in})
+
+      set(DOCBOOK_REWRITE_PREFIX_FOUND FALSE)
+      foreach(line ${xml_catalog})
+        string(REGEX MATCH "^.*systemIdStartString=\"http://docbook.sourceforge.net/release/xsl-ns/\".*" out1 ${line})
+        string(REGEX REPLACE "^.*systemIdStartString=\"http://docbook.sourceforge.net/release/xsl-ns/\".*\"([A-Za-z ]*)\".*" "\\1" output_variable ${line})
+        if(out1)
+          message(STATUS "Your docbook install was found here :${output_variable}")
+          set(DOCBOOK_REWRITE_PREFIX_FOUND TRUE)
+        endif()
+      endforeach()
+      # Need both the catalog and the docbook installation
+      if(DOCBOOK_REWRITE_PREFIX_FOUND)
+        set(GDCM_MANPAGES_USE_NONET TRUE)
+      else()
+        message(WARNING "Could not find the location of your docbook-xsl-ns installation. Please make sure your internet connection works.")
+      endif()
+    else()
+      message(STATUS "Could not find /etc/xml/catalog")
+    endif()
+  endif()
+  if(GDCM_MANPAGES_USE_NONET)
+    list(APPEND XSLT_PROCESSOR_ARG --nonet)
+  endif()
+else()
+  find_program(MSXSL_EXECUTABLE
+    msxsl
+    )
+  mark_as_advanced(MSXSL_EXECUTABLE)
+  if(MSXSL_EXECUTABLE)
+    set(XSLT_PROCESSOR ${MSXSL_EXECUTABLE})
+    set(XSLT_PROCESSOR_ARG "-pi")
+# msxsl.exe -pi gdcmimg.xml
+#
+#Error occurred while executing stylesheet 'http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl'.
+#
+#Code:   0x80004005
+#Namespace 'http://exslt.org/common' does not contain any functions.
+# -> http://stackoverflow.com/a/16605034/136285 ??
+  endif()
+endif()
+if(XSLT_PROCESSOR)
+  configure_file(version.txt.in
+    version.txt @ONLY)
+foreach(docbook ${MANPAGES_XML})
+  add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${docbook}.1
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/man/${docbook}.xml ${CMAKE_CURRENT_BINARY_DIR}/${docbook}.xml
+    COMMAND ${XSLT_PROCESSOR} ${XSLT_PROCESSOR_ARG} ${CMAKE_CURRENT_BINARY_DIR}/${docbook}.xml
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/man/${docbook}.xml
+    )
+  list(APPEND MANPAGES
+    ${CMAKE_CURRENT_BINARY_DIR}/${docbook}.1
+    )
+endforeach()
+add_custom_target(DOCBOOK_MANPAGES
+  ALL
+  DEPENDS ${MANPAGES}
+  COMMENT  "docbook manpages"
+  )
+install(FILES
+  ${MANPAGES}
+  DESTINATION ${GDCM_INSTALL_MAN_DIR}/man1 COMPONENT DebugDevel
+)
+else()
+  message(WARNING "Cannot build man page from docbook (need an XSL processor)")
+endif()
+endif() # GDCM_BUILD_DOCBOOK_MANPAGES

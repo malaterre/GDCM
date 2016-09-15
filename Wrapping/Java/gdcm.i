@@ -33,6 +33,7 @@
 #include "gdcmSwapCode.h"
 #include "gdcmEvent.h"
 #include "gdcmProgressEvent.h"
+#include "gdcmFileNameEvent.h"
 #include "gdcmAnonymizeEvent.h"
 #include "gdcmDirectory.h"
 #ifdef GDCM_BUILD_TESTING
@@ -89,6 +90,7 @@
 #include "gdcmUUIDGenerator.h"
 //#include "gdcmConstCharWrapper.h"
 #include "gdcmScanner.h"
+#include "gdcmStrictScanner.h"
 #include "gdcmAttribute.h"
 #include "gdcmSubject.h"
 #include "gdcmCommand.h"
@@ -147,6 +149,7 @@
 #include "gdcmDecoder.h"
 #include "gdcmCodec.h"
 #include "gdcmImageCodec.h"
+#include "gdcmRLECodec.h"
 #include "gdcmJPEGCodec.h"
 #include "gdcmJPEGLSCodec.h"
 #include "gdcmJPEG2000Codec.h"
@@ -189,6 +192,7 @@
 #include "gdcmBoxRegion.h"
 #include "gdcmImageRegionReader.h"
 #include "gdcmJSON.h"
+#include "gdcmFileDecompressLookupTable.h"
 
 using namespace gdcm;
 %}
@@ -258,6 +262,15 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 #define GDCM_EXPORT
 %include "gdcmLegacyMacro.h"
 
+// The following must be define early on as gdcmVL.h get included real early
+%rename(GetValueLength) gdcm::VL::operator uint32_t;
+//%csmethodmodifiers gdcm::VL::GetValueLength "private"
+//%csmethodmodifiers GetValueLength "private"
+//%rename(GetValue) VL::operator uint32_t ();
+//  public static implicit operator int( MyType a )
+//        {
+//            return a.value;
+//        }
 %include "gdcmSwapCode.h"
 
 //%feature("director") Event;
@@ -308,6 +321,12 @@ EXTEND_CLASS_PRINT(gdcm::PrivateTag)
 %extend gdcm::ProgressEvent {
   static ProgressEvent *Cast(Event *event) {
     return dynamic_cast<ProgressEvent*>(event);
+  }
+};
+%include "gdcmFileNameEvent.h"
+%extend gdcm::FileNameEvent {
+  static FileNameEvent *Cast(Event *event) {
+    return dynamic_cast<FileNameEvent*>(event);
   }
 };
 //%feature("director") AnonymizeEvent;
@@ -508,6 +527,8 @@ EXTEND_CLASS_PRINT(gdcm::Pixmap)
 EXTEND_CLASS_PRINT(gdcm::Image)
 %include "gdcmFragment.h"
 EXTEND_CLASS_PRINT(gdcm::Fragment)
+// convert SWIGTYPE_p_std__vectorT_gdcm__Fragment_t__size_type
+%template() std::vector< gdcm::Fragment >;
 %include "gdcmPDBElement.h"
 EXTEND_CLASS_PRINT(gdcm::PDBElement)
 %include "gdcmPDBHeader.h"
@@ -652,6 +673,9 @@ $1 = JNU_GetStringNativeChars(jenv, $input);
 %template(SmartPtrScan) gdcm::SmartPointer<gdcm::Scanner>;
 %include "gdcmScanner.h"
 EXTEND_CLASS_PRINT(gdcm::Scanner)
+%template(SmartPtrStrictScan) gdcm::SmartPointer<gdcm::StrictScanner>;
+%include "gdcmStrictScanner.h"
+EXTEND_CLASS_PRINT(gdcm::StrictScanner)
 
 %template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
 //%ignore gdcm::Anonymizer::Anonymizer;
@@ -776,6 +800,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 //%include "gdcmCodec.h"
 %feature("director") ImageCodec;
 %include "gdcmImageCodec.h"
+%include "gdcmRLECodec.h"
 %include "gdcmJPEGCodec.h"
 %include "gdcmJPEGLSCodec.h"
 %include "gdcmJPEG2000Codec.h"
@@ -852,3 +877,4 @@ EXTEND_CLASS_PRINT(gdcm::BoxRegion)
 //EXTEND_CLASS_PRINT(gdcm::ImageRegionReader)
 %clear signed char* inreadbuffer;
 %include "gdcmJSON.h"
+%include "gdcmFileDecompressLookupTable.h"

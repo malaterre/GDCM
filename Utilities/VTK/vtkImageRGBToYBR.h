@@ -45,7 +45,11 @@ class VTK_EXPORT vtkImageRGBToYBR : public vtkThreadedImageAlgorithm
 {
 public:
   static vtkImageRGBToYBR *New();
+#if VTK_MAJOR_VERSION < 6
   vtkTypeRevisionMacro(vtkImageRGBToYBR,vtkThreadedImageAlgorithm);
+#else
+  vtkTypeMacro(vtkImageRGBToYBR,vtkThreadedImageAlgorithm);
+#endif
 
   void PrintSelf(ostream& os, vtkIndent indent);
 

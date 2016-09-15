@@ -92,4 +92,4 @@ if __name__ == "__main__":
     print(r.GetOutput())
 
   # Test succeed ?
-  #sys.exit(sucess != 1)
+  #sys.exit(success != 1)

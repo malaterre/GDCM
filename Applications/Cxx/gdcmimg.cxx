@@ -142,6 +142,8 @@ static void PrintHelp()
   std::cout << "  -C --sop-class-uid   SOP Class UID (name or value)." << std::endl;
   std::cout << "  -T --study-uid       Study UID." << std::endl;
   std::cout << "  -S --series-uid      Series UID." << std::endl;
+  std::cout << "     --template        DICOM template." << std::endl;
+  std::cout << "     --keep-meta       Keep meta info from template file (advanced users only)." << std::endl;
   std::cout << "     --root-uid        Root UID." << std::endl;
   std::cout << "Fill Options:" << std::endl;
   std::cout << "  -R --region %d,%d    Region." << std::endl;
@@ -414,6 +416,7 @@ int main (int argc, char *argv[])
   gdcm::Filename filename;
   gdcm::Directory::FilenamesType filenames;
   gdcm::Filename outfilename;
+  gdcm::Filename templatefilename;
   unsigned int region[6] = {}; // Rows & Columns are VR=US anyway...
   unsigned int color = 0;
   int bregion = 0;
@@ -423,6 +426,8 @@ int main (int argc, char *argv[])
   int pconf = 0; // planar configuration
   int studyuid = 0;
   int seriesuid = 0;
+  int templated = 0;
+  int keepmeta = 0;
   unsigned int size[3] = {0,0,0};
   unsigned int ndimension = 2;
   int depth = 0;
@@ -473,6 +478,8 @@ int main (int argc, char *argv[])
         {"pi", 1, &pinter, 1}, //
         {"pf", 1, &pformat, 1}, //
         {"offset", 1, &poffset, 1}, //
+        {"template", 1, &templated, 1},
+        {"keep-meta", 0, &keepmeta, 1}, // by default we do not want to keep
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -586,6 +593,12 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "offset") == 0 );
             poffset = 1;
             start_pos = (size_t)atoll(optarg);
+            }
+          else if( option_index == 17 ) /* template */
+            {
+            assert( strcmp(s, "template") == 0 );
+            templated = 1;
+            templatefilename = optarg;
             }
           //printf (" with arg %s", optarg);
           }
@@ -818,7 +831,7 @@ int main (int argc, char *argv[])
   if( pinter )
     {
     refpi = gdcm::PhotometricInterpretation::GetPIType( pinterstr.c_str() );
-    if( refpi == gdcm::PhotometricInterpretation::UNKNOW
+    if( refpi == gdcm::PhotometricInterpretation::UNKNOWN
       || refpi == gdcm::PhotometricInterpretation::PI_END )
       {
       std::cerr << "Invalid PI: " << pinterstr << std::endl;
@@ -831,6 +844,16 @@ int main (int argc, char *argv[])
   //if( !inputextension || !outputextension ) return 1;
   if( inputextension )
     {
+    gdcm::Reader reader;
+    if( templated )
+      {
+      reader.SetFileName( templatefilename );
+      if( !reader.Read() )
+        {
+        std::cerr << "Failed to read: " << templatefilename << std::endl;
+        return 1;
+        }
+      }
     if(  gdcm::System::StrCaseCmp(inputextension,".raw") == 0   // watch out that .raw for kakadu means big-endian
       || gdcm::System::StrCaseCmp(inputextension,".rawl") == 0  // kakadu convention for raw little endian
       || gdcm::System::StrCaseCmp(inputextension,".gray") == 0  // imagemagick convention
@@ -844,6 +867,8 @@ int main (int argc, char *argv[])
         }
       gdcm::RAWCodec raw;
       gdcm::PixmapWriter writer;
+      writer.SetCheckFileMetaInformation( (keepmeta > 0 ? false : true) );
+      writer.SetFile( reader.GetFile() );
       // Because the RAW stream is not self sufficient, we need to pass in some extra
       // user info:
       unsigned int dims[3] = {};
@@ -909,6 +934,8 @@ int main (int argc, char *argv[])
         }
       gdcm::RLECodec rle;
       gdcm::PixmapWriter writer;
+      writer.SetCheckFileMetaInformation( (keepmeta > 0 ? false : true) );
+      writer.SetFile( reader.GetFile() );
       // Because the RLE stream is not self sufficient, we need to pass in some extra
       // user info:
       unsigned int dims[3] = {};
@@ -947,6 +974,8 @@ int main (int argc, char *argv[])
       if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign ) ) return 1;
       pnm.SetPixelFormat( pf );
       gdcm::PixmapWriter writer;
+      writer.SetCheckFileMetaInformation( (keepmeta > 0 ? false : true) );
+      writer.SetFile( reader.GetFile() );
       if( !Populate( writer, pnm, filenames ) ) return 1;
       // populate will guess pixel format and photometric inter from file, need
       // to override after calling Populate:
@@ -977,6 +1006,8 @@ int main (int argc, char *argv[])
       {
       gdcm::PGXCodec pnm;
       gdcm::PixmapWriter writer;
+      writer.SetCheckFileMetaInformation( (keepmeta > 0 ? false : true) );
+      writer.SetFile( reader.GetFile() );
       if( !Populate( writer, pnm, filenames ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
@@ -993,6 +1024,8 @@ int main (int argc, char *argv[])
       {
       gdcm::JPEGLSCodec jpeg;
       gdcm::PixmapWriter writer;
+      writer.SetCheckFileMetaInformation( (keepmeta > 0 ? false : true) );
+      writer.SetFile( reader.GetFile() );
       if( !Populate( writer, jpeg, filenames ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
@@ -1018,6 +1051,8 @@ int main (int argc, char *argv[])
        */
       gdcm::JPEG2000Codec jpeg;
       gdcm::PixmapWriter writer;
+      writer.SetCheckFileMetaInformation( (keepmeta > 0 ? false : true) );
+      writer.SetFile( reader.GetFile() );
       if( !Populate( writer, jpeg, filenames ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
@@ -1042,6 +1077,8 @@ int main (int argc, char *argv[])
       if( !GetPixelFormat( pf, depth, bpp, sign, pixelsign ) ) return 1;
       jpeg.SetPixelFormat( pf );
       gdcm::PixmapWriter writer;
+      writer.SetCheckFileMetaInformation( (keepmeta > 0 ? false : true) );
+      writer.SetFile( reader.GetFile() );
       if( !Populate( writer, jpeg, filenames ) ) return 1;
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 

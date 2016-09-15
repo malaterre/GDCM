@@ -35,17 +35,12 @@ ImageWriter::~ImageWriter()
 {
 }
 
-//void ImageWriter::SetImage(Image const &img)
-//{
-//  PixelData = img;
-//}
-
-bool ImageWriter::Write()
+MediaStorage ImageWriter::ComputeTargetMediaStorage()
 {
   MediaStorage ms;
   if( !ms.SetFromFile( GetFile() ) )
   {
-    // Let's fix some old ACR-NAME stuff:
+    // Let's fix some old ACR-NEMA stuff:
     ms = ImageHelper::ComputeMediaStorageFromModality( ms.GetModality(),
         PixelData->GetNumberOfDimensions(),
         PixelData->GetPixelFormat(),
@@ -62,6 +57,22 @@ bool ImageWriter::Write()
         PixelData->GetPhotometricInterpretation(),
         GetImage().GetIntercept(), GetImage().GetSlope() );
   }
+  // double check for Grayscale since they need specific pixel type
+  if( ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
+   || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage )
+  {
+    ms = ImageHelper::ComputeMediaStorageFromModality( ms.GetModality(),
+        PixelData->GetNumberOfDimensions(),
+        PixelData->GetPixelFormat(),
+        PixelData->GetPhotometricInterpretation(),
+        GetImage().GetIntercept(), GetImage().GetSlope() );
+  }
+  return ms;
+}
+
+bool ImageWriter::Write()
+{
+  const MediaStorage ms = ComputeTargetMediaStorage();
   if( !PrepareWrite( ms ) ) return false;
 
   //assert( Stream.is_open() );
