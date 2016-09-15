@@ -83,6 +83,11 @@ int TestUIDGeneratorValid()
     {
     return 1;
     }
+  const char invalid11[] = "00.1";
+  if( gdcm::UIDGenerator::IsValid( invalid11 ) )
+    {
+    return 1;
+    }
   return 0; // no error
 }
 

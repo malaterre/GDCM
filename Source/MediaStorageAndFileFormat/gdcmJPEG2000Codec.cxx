@@ -37,6 +37,8 @@
 namespace gdcm
 {
 
+#if OPENJPEG_MAJOR_VERSION == 1
+#else
 /* Part 1  Table A.2 List of markers and marker segments */
 typedef enum {
   FF30 = 0xFF30,
@@ -167,7 +169,6 @@ static inline bool read64(const char ** input, size_t * len, uint64_t * ret)
 static bool parsej2k_imp( const char * const stream, const size_t file_size, bool * lossless )
 {
   uint16_t marker;
-  uintmax_t sotlen = 0;
   size_t lenmarker;
   const char * cur = stream;
   size_t cur_size = file_size;
@@ -232,6 +233,7 @@ static bool parsejp2_imp( const char * const stream, const size_t file_size, boo
 
   return false;
 }
+#endif
 
 
 /**
