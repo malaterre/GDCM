@@ -733,9 +733,9 @@ std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
 //  if( t.GetGroup() == 0x0002 )
     {
     // Purposely not Re-use ReadVR since we can read VR_END
-    char vr_str[2];
-    is.read(vr_str, 2);
-    if( VR::IsValid(vr_str) )
+    char vr_str0[2];
+    is.read(vr_str0, 2);
+    if( VR::IsValid(vr_str0) )
       {
       MetaInformationTS = TransferSyntax::Explicit;
       // Hourah !
