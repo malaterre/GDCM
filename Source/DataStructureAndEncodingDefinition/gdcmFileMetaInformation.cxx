@@ -780,7 +780,7 @@ std::istream &FileMetaInformation::ReadCompatInternal(std::istream &is)
       // Now is a good time to find out the dataset transfer syntax
       try {
       ComputeDataSetTransferSyntax();
-      } catch( gdcm::Exception & ex ) {
+      } catch( gdcm::Exception & ) {
         // We were able to read some of the Meta Header, but failed to compute the DataSetTS
         // technically GDCM is able to cope with any value here. But be kind and try to have a good guess:
      
