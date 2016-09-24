@@ -81,7 +81,7 @@ public:
 
   // Description:
   // We need to check the modified time of the lookup table too.
-  virtual unsigned long GetMTime();
+  virtual unsigned long GDCM_GetMTime();
 
 protected:
   vtkImageMapToColors16();

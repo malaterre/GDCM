@@ -62,7 +62,7 @@ vtkImageMapToColors16::~vtkImageMapToColors16()
 }
 
 //----------------------------------------------------------------------------
-unsigned long vtkImageMapToColors16::GetMTime()
+unsigned long vtkImageMapToColors16::GDCM_GetMTime()
 {
   unsigned long t1, t2;
 
