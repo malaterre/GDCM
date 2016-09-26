@@ -168,7 +168,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
       DEPENDS ${GDCM_DOC_TARBALL}
       COMMENT  "GDCM: Executing GDCMDoxygenDoc"
     )
-    add_dependency(DoxygenDoc GDCMDoxygenDoc)
+    add_dependencies(DoxygenDoc GDCMDoxygenDoc)
   endif()
 
   # Install html pages:
