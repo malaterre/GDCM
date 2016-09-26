@@ -119,7 +119,7 @@ if(NOT BUILD_SHARED_LIBS)
 else()
   set_source_files_properties(gdcmJPEGLSCodec.cxx
                               PROPERTIES
-                              COMPILE_FLAGS -DCHARLS_SHARED
+                              COMPILE_FLAGS -DCHARLS_DLL
                               )
 endif()
 
