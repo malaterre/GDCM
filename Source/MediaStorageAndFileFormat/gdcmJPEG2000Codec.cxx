@@ -19,6 +19,7 @@
 #include "gdcmSwapper.h"
 
 #include <cstring>
+#include <cstdio> // snprintf
 #include <numeric>
 
 #ifdef OPENJPEG_MAJOR_VERSION
