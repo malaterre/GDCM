@@ -19,6 +19,7 @@
 #include "gdcmSwapper.h"
 
 #include <cstring>
+#include <cstdio> // snprintf
 #include <numeric>
 
 #include "gdcm_openjpeg.h"
