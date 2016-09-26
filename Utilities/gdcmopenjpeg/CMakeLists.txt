@@ -326,7 +326,7 @@ configure_file( ${${OPENJPEG_NAMESPACE}_SOURCE_DIR}/cmake/OpenJPEGConfig.cmake.i
   ${${OPENJPEG_NAMESPACE}_BINARY_DIR}/OpenJPEGConfig.cmake
   @ONLY
 )
-install( FILES ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
+install( FILES ${${OPENJPEG_NAMESPACE}_BINARY_DIR}/OpenJPEGConfig.cmake
   DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR}
 )
 
