@@ -270,19 +270,8 @@ struct myfile
 
 void gdcm_error_callback(const char* msg, void* f)
 {
-#if 0
-  if( strcmp( msg, "Cannot read data with no size known, giving up\n" ) == 0 )
-    {
-    OPJ_UINT32 **s = (OPJ_UINT32**)f;
-    *s[1] = *s[0];
-    gdcmWarningMacro( "Recovering from odd J2K file" );
-    assert(0);
-    }
-  else
-#endif
-    {
-    fprintf( stderr, "%s", msg );
-    }
+  (void)f;
+  fprintf( stderr, "%s", msg );
 }
 
 
