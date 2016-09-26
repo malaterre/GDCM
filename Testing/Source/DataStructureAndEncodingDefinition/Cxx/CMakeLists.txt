@@ -12,7 +12,7 @@ set(DSED_TEST_SRCS
   #TestByteValue
   TestPreamble
   TestReader
-  TestReader4
+  #TestReader4 # FIXME
   TestReaderUpToTag1
   TestReaderUpToTag2
   TestReaderSelectedTags
