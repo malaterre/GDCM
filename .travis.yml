@@ -18,19 +18,21 @@ matrix:
       env:
         - CFLAGS="-Wall -Wextra -m64"
         - CXXFLAGS="-Wall -Wextra -m64"
-        - CMAKE_EXTRA="-DGDCM_USE_SYSTEM_OPENSSL:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=OFF -DGDCM_WRAP_CSHARP:BOOL=OFF -DGDCM_WRAP_JAVA:BOOL=OFF -DGDCM_WRAP_PHP:BOOL=OFF -DGDCM_USE_SYSTEM_EXPAT:BOOL=ON -DGDCM_USE_SYSTEM_JSON:BOOL=OFF -DGDCM_USE_SYSTEM_LIBXML2:BOOL=ON -DGDCM_USE_SYSTEM_OPENJPEG:BOOL=OFF -DGDCM_USE_SYSTEM_POPPLER:BOOL=OFF -DGDCM_USE_SYSTEM_UUID:BOOL=OFF -DGDCM_USE_SYSTEM_ZLIB:BOOL=ON"
+        - CMAKE_EXTRA="-DGDCM_USE_SYSTEM_OPENSSL:BOOL=ON -DGDCM_WRAP_PYTHON:BOOL=OFF -DGDCM_WRAP_CSHARP:BOOL=OFF -DGDCM_WRAP_JAVA:BOOL=OFF -DGDCM_WRAP_PHP:BOOL=OFF -DGDCM_USE_SYSTEM_EXPAT:BOOL=ON -DGDCM_USE_SYSTEM_JSON:BOOL=OFF -DGDCM_USE_SYSTEM_LIBXML2:BOOL=ON -DGDCM_USE_SYSTEM_OPENJPEG:BOOL=OFF -DGDCM_USE_SYSTEM_POPPLER:BOOL=OFF -DGDCM_USE_SYSTEM_UUID:BOOL=OFF -DGDCM_USE_SYSTEM_ZLIB:BOOL=ON -DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF"
         - B_NAME=system
     - compiler: clang
       os: linux
       env:
         - CFLAGS="-Wall -Wextra -m64 -fsanitize=address,undefined"
         - CXXFLAGS="-g -Wall -Wextra -m64 -fsanitize=address,undefined"
+        - CMAKE_EXTRA="-DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF"
         - B_NAME=fsanitize
     - compiler: clang
       os: osx
       env:
         - CFLAGS="-Wall -Wextra" # -m64 -fsanitize=address,undefined
         - CXXFLAGS="-Wall -Wextra" # -m64 -fsanitize=address,undefined
+        - CMAKE_EXTRA="-DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF"
         - B_NAME=fsanitize
 
 before_install:
@@ -58,6 +60,6 @@ addons:
       name: "malaterre/GDCM"
       description: "Grassroots DICOM"
     notification_email: mathieu.malaterre@gmail.com
-    build_command_prepend: cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON ..
+    build_command_prepend: cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DGDCM_ALLOW_INSOURCE_BUILD:BOOL=ON -DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF ..
     build_command: cmake --build .
     branch_pattern: coverity_scan
