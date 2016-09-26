@@ -23,6 +23,7 @@
 
 #ifdef OPENJPEG_MAJOR_VERSION
 #if OPENJPEG_MAJOR_VERSION == 1
+#error
 #include "gdcm_openjpeg.h"
 #elif OPENJPEG_MAJOR_VERSION == 2
 #define USE_OPJ_DEPRECATED // opj_setup_decoder

@@ -370,9 +370,7 @@ if(GDCM_USE_SYSTEM_OPENJPEG)
   find_package(OpenJPEG REQUIRED)
   set(GDCM_OPENJPEG_LIBRARIES ${OPENJPEG_LIBRARIES})
 else()
-  set(GDCM_OPENJPEG_LIBRARIES gdcmopenjpeg)
-  option(GDCM_USE_OPENJPEG_V2 "Use openjpeg v2 version (advanced users only)." OFF)
-  mark_as_advanced(GDCM_USE_OPENJPEG_V2)
+  set(GDCM_OPENJPEG_LIBRARIES gdcmopenjp2)
 endif()
 
 # Very advanced user option:

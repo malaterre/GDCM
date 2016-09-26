@@ -115,7 +115,7 @@ set(targets
   gdcmjpeg12
   gdcmjpeg16
   gdcmexpat
-  gdcmopenjpeg
+  gdcmopenjp2
   gdcmcharls
   gdcmmd5
   gdcmzlib

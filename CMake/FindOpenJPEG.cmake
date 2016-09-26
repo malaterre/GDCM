@@ -31,7 +31,7 @@ find_package(OpenJPEG QUIET NO_MODULE)
 mark_as_advanced(OpenJPEG_DIR)
 
 if( NOT OpenJPEG_DIR )
-set(OPENJPEG_MAJOR_VERSION 1) # FIXME ?
+set(OPENJPEG_MAJOR_VERSION 2) # FIXME ?
 find_path(OPENJPEG_INCLUDE_DIR
   NAMES openjpeg.h #openjpeg-1.0/openjpeg.h
   PATHS /usr/local/include

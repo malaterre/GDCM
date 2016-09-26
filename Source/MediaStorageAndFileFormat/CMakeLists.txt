@@ -155,15 +155,10 @@ if(GDCM_USE_SYSTEM_OPENJPEG)
 else()
   include_directories(
   "${GDCM_BINARY_DIR}/Utilities/gdcmopenjpeg"
+  "${GDCM_BINARY_DIR}/Utilities/gdcmopenjpeg/src/lib/openjp2"
     )
-if(GDCM_USE_OPENJPEG_V2)
-  INCLUDE_DIRECTORIES(
-  "${GDCM_BINARY_DIR}/Utilities/gdcmopenjpeg-v2"
-    )
-endif()
 endif()
 if(GDCM_USE_SYSTEM_LJPEG)
-  #message(${LJPEG_INCLUDE_DIRS} )
   include_directories(${LJPEG_INCLUDE_DIRS} )
 endif()
 if(NOT GDCM_USE_SYSTEM_ZLIB)
