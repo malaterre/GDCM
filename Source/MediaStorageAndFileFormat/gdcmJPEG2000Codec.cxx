@@ -196,8 +196,8 @@ static bool parsejp2_imp( const char * const stream, const size_t file_size, boo
 
   while( read32(&cur, &cur_size, &len32) )
     {
-    bool b = read32(&cur, &cur_size, &marker);
-    if( !b ) break;
+    bool b0 = read32(&cur, &cur_size, &marker);
+    if( !b0 ) break;
     len64 = len32;
     if( len32 == 1 ) /* 64bits ? */
       {
@@ -340,7 +340,8 @@ OPJ_BOOL opj_seek_from_memory (OPJ_OFF_T p_nb_bytes, myfile * p_file)
   //  return false;
   //  }
   //return true;
-  if( p_nb_bytes <= p_file->len )
+  assert( p_nb_bytes >= 0 );
+  if( (size_t)p_nb_bytes <= p_file->len )
     {
     p_file->cur = p_file->mem + p_nb_bytes;
     return OPJ_TRUE;
@@ -669,8 +670,10 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
   bool bResult;
   bResult = opj_setup_decoder(dinfo, &parameters);
   assert( bResult );
+#if 0
   OPJ_INT32 l_tile_x0,l_tile_y0;
   OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
+#endif
   bResult = opj_read_header(
     cio,
     dinfo,
@@ -1272,12 +1275,19 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
   bool bResult;
+#if 0
   OPJ_INT32 l_tile_x0,l_tile_y0;
   OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
+#endif
   bResult = opj_read_header(
     cio,
     dinfo,
     &image);
+  if(!bResult)
+  {
+  opj_stream_destroy(cio);
+    return false;
+  }
   //image = opj_decode(dinfo, cio);
   //bResult = bResult && (image != 00);
   //bResult = bResult && opj_end_decompress(dinfo,cio);
@@ -1290,7 +1300,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   //  }
 
   int reversible;
-  int mct;
+  int mct = 0;
 #if 0
   reversible = opj_get_reversible(dinfo, &parameters );
   assert( reversible == 0 || reversible == 1 );
