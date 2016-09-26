@@ -62,7 +62,12 @@ vtkImageMapToColors16::~vtkImageMapToColors16()
 }
 
 //----------------------------------------------------------------------------
-unsigned long vtkImageMapToColors16::GetMTime()
+#if VTK_MAJOR_VERSION >= 8 || ( VTK_MAJOR_VERSION == 7 && VTK_MINOR_VERSION >= 1 )
+vtkMTimeType
+#else
+unsigned long
+#endif
+vtkImageMapToColors16::GetMTime()
 {
   unsigned long t1, t2;
 
