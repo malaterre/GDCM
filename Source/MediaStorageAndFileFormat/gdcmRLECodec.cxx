@@ -503,7 +503,9 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
         ptrdiff_t llength = rle_encode(outbuf, n, ptr + y*dims[0], partition / dims[1] /*image_len*/);
         if( llength < 0 )
           {
-          std::cerr << "RLE compressor error" << std::endl;
+          gdcmWarningMacro( "RLE compressor error" );
+          delete[] buffer;
+          delete[] bufferrgb;
           return false;
           }
         assert( llength );
