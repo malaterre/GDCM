@@ -14,7 +14,6 @@
 // This work was realised during the GSOC 2011 by Manoj Alwani
 
 #include <fstream>
-#include <openjpeg.h>
 #include <stdint.h>
 #include <string.h>
 #include <assert.h>
@@ -33,6 +32,7 @@
 
 
 
+#include "gdcm_openjpeg.h"
 #include "gdcmMediaStorage.h"
 #include "gdcmWriter.h"
 #include "gdcmItem.h"

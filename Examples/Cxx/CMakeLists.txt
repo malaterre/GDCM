@@ -87,12 +87,12 @@ set(EXAMPLES_SRCS
   GenSeqs
   GetJPEGSamplePrecision
 )
-set(EXAMPLES_SRCS
-  ${EXAMPLES_SRCS}
-  StreamImageReaderTest
-  Extracting_All_Resolution
-  Fake_Image_Using_Stream_Image_Writer
-  )
+#set(EXAMPLES_SRCS
+#  ${EXAMPLES_SRCS}
+#  StreamImageReaderTest
+#  Extracting_All_Resolution
+#  Fake_Image_Using_Stream_Image_Writer
+#  )
 if(GDCM_USE_JPEGLS)
 set(EXAMPLES_SRCS
   ${EXAMPLES_SRCS}
