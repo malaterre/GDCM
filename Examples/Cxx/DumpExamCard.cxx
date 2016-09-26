@@ -381,7 +381,8 @@ Wotsit ?
         }
 
       std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
-      assert( isvalidpdfstring( fn.c_str() ) );
+      bool b1 = isvalidpdfstring( fn.c_str() );
+      assert( b1 ); (void)b1;
       fn += ".csv";
       //fn += ".xml";
       std::ofstream csv( fn.c_str() );
