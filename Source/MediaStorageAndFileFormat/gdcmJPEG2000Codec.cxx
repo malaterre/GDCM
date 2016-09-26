@@ -1942,7 +1942,7 @@ bool JPEG2000Codec::AppendFrameEncode( std::ostream & out, const char * data, si
 {
   const unsigned int * dimensions = this->GetDimensions();
   const PixelFormat & pf = this->GetPixelFormat();
-  assert( datalen == dimensions[0] * dimensions[1] * pf.GetPixelSize() );
+  assert( datalen == dimensions[0] * dimensions[1] * pf.GetPixelSize() ); (void)pf;
 
   std::vector<char> rgbyteCompressed;
   rgbyteCompressed.resize(dimensions[0] * dimensions[1] * 4);

@@ -41,7 +41,8 @@ Segment::ALGOType Segment::GetALGOType(const char * type)
   String<>  str( type );
   str.Trim();
 
-  const char * strClear = str.Trim().c_str();
+  std::string strClearStr = str.Trim();
+  const char * strClear = strClearStr.c_str();
 
   for(unsigned int i = 0; ALGOTypeStrings[i] != 0; ++i)
     {
