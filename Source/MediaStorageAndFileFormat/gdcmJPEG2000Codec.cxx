@@ -21,6 +21,9 @@
 #include <cstring>
 #include <cstdio> // snprintf
 #include <numeric>
+#ifdef _WIN32
+#define snprintf _snprintf
+#endif
 
 #ifdef OPENJPEG_MAJOR_VERSION
 #if OPENJPEG_MAJOR_VERSION == 1
