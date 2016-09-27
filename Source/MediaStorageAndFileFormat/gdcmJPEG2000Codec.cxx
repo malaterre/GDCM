@@ -863,10 +863,13 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
 
   assert( image->numcomps == this->GetPixelFormat().GetSamplesPerPixel() );
   assert( image->numcomps == this->GetPhotometricInterpretation().GetSamplesPerPixel() );
+#if OPENJPEG_MAJOR_VERSION == 1
+#else
   if( !mct )
     assert( this->GetPhotometricInterpretation() == PhotometricInterpretation::RGB );
   else
     assert( this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT );
+#endif
 
 #if OPENJPEG_MAJOR_VERSION == 1
   /* close the byte stream */
