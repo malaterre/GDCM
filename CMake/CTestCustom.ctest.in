@@ -30,6 +30,7 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "CUSTOMBUILD : warning CS1668: Invalid search path" # appveyor ?
   "Returning a pointer or reference in a director method is not recommended."
   "Covariant return types not supported in Java."
+  "Covariant return types not supported in C#."
   "Nested struct not currently supported"
   )
 
