@@ -21,6 +21,9 @@
 #include <cstring>
 #include <cstdio> // snprintf
 #include <numeric>
+#ifdef _WIN32
+#define snprintf _snprintf
+#endif
 
 #include "gdcm_openjpeg.h"
 
