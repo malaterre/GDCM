@@ -154,7 +154,7 @@ static inline bool read64(const char ** input, size_t * len, uint64_t * ret)
 }
 
 
-static bool parsej2k_imp( const char * const stream, const size_t file_size, bool * lossless )
+static bool parsej2k_imp( const char * const stream, const size_t file_size, bool * lossless, bool * mct )
 {
   uint16_t marker;
   size_t lenmarker;
@@ -173,6 +173,10 @@ static bool parsej2k_imp( const char * const stream, const size_t file_size, boo
 
       if( marker == COD )
         {
+        const uint8_t MCTransformation = *(cur+4);
+        if( MCTransformation == 0x0 ) *mct = false;
+        else if( MCTransformation == 0x1 ) *mct = true;
+        else return false;
         const uint8_t Transformation = *(cur+9);
         if( Transformation == 0x0 ) { *lossless = false; return true; }
         else if( Transformation == 0x1 ) *lossless = true;
@@ -186,7 +190,7 @@ static bool parsej2k_imp( const char * const stream, const size_t file_size, boo
   return false;
 }
 
-static bool parsejp2_imp( const char * const stream, const size_t file_size, bool * lossless )
+static bool parsejp2_imp( const char * const stream, const size_t file_size, bool * lossless, bool * mct )
 {
   uint32_t marker;
   uint64_t len64; /* ref */
@@ -213,7 +217,7 @@ static bool parsejp2_imp( const char * const stream, const size_t file_size, boo
         len64 = (size_t)(file_size - start + 8);
         }
       assert( len64 >= 8 );
-      return parsej2k_imp( cur, len64 - 8, lossless );
+      return parsej2k_imp( cur, len64 - 8, lossless, mct );
       }
       const size_t lenmarker = len64 - 8;
       cur += lenmarker;
@@ -720,18 +724,24 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
 
   bool b = false;
   bool lossless;
+  bool mct;
   if( parameters.decod_format == JP2_CFMT )
-    b = parsejp2_imp( dummy_buffer, buf_size, &lossless);
+    b = parsejp2_imp( dummy_buffer, buf_size, &lossless, &mct);
   else if( parameters.decod_format == J2K_CFMT )
-    b = parsej2k_imp( dummy_buffer, buf_size, &lossless);
+    b = parsej2k_imp( dummy_buffer, buf_size, &lossless, &mct);
  
   reversible = 0;
-  if( b )
+  if( b ) {
     reversible = lossless;
+  }
   LossyFlag = !reversible;
 
   assert( image->numcomps == this->GetPixelFormat().GetSamplesPerPixel() );
   assert( image->numcomps == this->GetPhotometricInterpretation().GetSamplesPerPixel() );
+  if( !mct )
+    assert( this->GetPhotometricInterpretation() == PhotometricInterpretation::RGB );
+  else
+    assert( this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT );
 
   /* close the byte stream */
   opj_stream_destroy(cio);
@@ -1309,14 +1319,17 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
 #else
   bool b = false;
   bool lossless;
+  bool mctb;
   if( parameters.decod_format == JP2_CFMT )
-    b = parsejp2_imp( dummy_buffer, buf_size, &lossless);
+    b = parsejp2_imp( dummy_buffer, buf_size, &lossless, &mctb);
   else if( parameters.decod_format == J2K_CFMT )
-    b = parsej2k_imp( dummy_buffer, buf_size, &lossless);
+    b = parsej2k_imp( dummy_buffer, buf_size, &lossless, &mctb);
  
   reversible = 0;
-  if( b )
+  if( b ) {
     reversible = lossless;
+    mct = mctb;
+  }
 #endif
   LossyFlag = !reversible;
 
