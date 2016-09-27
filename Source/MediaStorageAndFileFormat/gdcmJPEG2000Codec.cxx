@@ -754,9 +754,15 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
   cio = opj_stream_create_memory_stream(fsrc,OPJ_J2K_STREAM_CHUNK_SIZE, true);
 
   /* setup the decoder decoding parameters using user parameters */
-  bool bResult;
+  OPJ_BOOL bResult;
   bResult = opj_setup_decoder(dinfo, &parameters);
-  assert( bResult );
+  if( !bResult )
+    {
+    opj_destroy_codec(dinfo);
+    opj_stream_destroy(cio);
+    gdcmErrorMacro( "opj_setup_decoder failure" );
+    return std::make_pair<char*,size_t>(0,0);
+    }
 #if 0
   OPJ_INT32 l_tile_x0,l_tile_y0;
   OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
@@ -778,8 +784,13 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     dinfo,
     &image);
 #endif
-  assert( bResult );
-
+  if( !bResult )
+    {
+    opj_destroy_codec(dinfo);
+    opj_stream_destroy(cio);
+    gdcmErrorMacro( "opj_setup_decoder failure" );
+    return std::make_pair<char*,size_t>(0,0);
+    }
 #if 0
   /* Optional if you want decode the entire image */
   opj_set_decode_area(dinfo, image, (OPJ_INT32)parameters.DA_x0,
@@ -787,7 +798,13 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
 #endif
 
   bResult = opj_decode(dinfo, cio,image);
-  assert( bResult );
+  if (!bResult )
+    {
+    opj_destroy_codec(dinfo);
+    opj_stream_destroy(cio);
+    gdcmErrorMacro( "opj_decode failed" );
+    return std::make_pair<char*,size_t>(0,0);
+    }
   bResult = bResult && (image != 00);
   bResult = bResult && opj_end_decompress(dinfo,cio);
   if (!image || !check_comp_valid(image) )
@@ -868,10 +885,12 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
   assert( image->numcomps == this->GetPhotometricInterpretation().GetSamplesPerPixel() );
 #if OPENJPEG_MAJOR_VERSION == 1
 #else
-  if( !mct )
-    assert( this->GetPhotometricInterpretation() == PhotometricInterpretation::RGB );
+  if( this->GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+    assert( !mct );
+  else if( this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT )
+    assert( !mct );
   else
-    assert( this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT );
+    assert( !mct );
 #endif
 
 #if OPENJPEG_MAJOR_VERSION == 1
