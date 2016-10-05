@@ -82,13 +82,13 @@ static int TestFileAnonymize3(const char *filename, bool verbose = false)
   if( !r.Read() )
     {
     gdcm::Filename fn( filename );
-    std::cerr << "Failed to read: " << outfilename << std::endl;
     if( strcmp(fn.GetName(), "SIEMENS_MAGNETOM-12-MONO2-GDCM12-VRUN.dcm") == 0
       || strcmp(fn.GetName(), "DMCPACS_ExplicitImplicit_BogusIOP.dcm") == 0
       || strcmp(fn.GetName(), "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm") == 0 )
       {
       return 0;
       }
+    std::cerr << "Failed to read: " << outfilename << std::endl;
     return 1;
     }
   const File &f = r.GetFile();
