@@ -66,6 +66,8 @@ int TestStrictScanner1(int argc, char *argv[])
   gdcm::Trace::WarningOff();
   gdcm::Trace::ErrorOff();
   const char *directory = gdcm::Testing::GetDataRoot();
+  std::string tmpdir = gdcm::Testing::GetTempDirectory( "TestWriter" );
+  directory = tmpdir.c_str();
   if( argc == 2 )
     {
     directory = argv[1];
@@ -156,6 +158,7 @@ int TestStrictScanner1(int argc, char *argv[])
   gdcm::StrictScanner::MappingType const &mt = s.GetMappings();
   std::string sfilename;
   sfilename = gdcm::Testing::GetDataRoot();
+  sfilename = directory;
   sfilename+= "/test.acr";
 {
   //const char *filename = d.GetFilenames()[0].c_str();
