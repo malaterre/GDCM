@@ -109,7 +109,7 @@ static int checkdeflated(const char *name)
     return 1;
     }
   buf = (unsigned char*)malloc(size);
-  if (buf != NULL && (size1 = fread(buf, 1, size, in)) != size) {
+  if (buf != NULL && (size1 = (unsigned long)fread(buf, 1, size, in)) != size) {
     free(buf);
     buf = NULL;
     fprintf( stderr, "could not fread: %lu bytes != %lu\n", size, size1 );
