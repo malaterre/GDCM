@@ -503,7 +503,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
         ptrdiff_t llength = rle_encode(outbuf, n, ptr + y*dims[0], partition / dims[1] /*image_len*/);
         if( llength < 0 )
           {
-          gdcmWarningMacro( "RLE compressor error" );
+          gdcmErrorMacro( "RLE compressor error" );
           delete[] buffer;
           delete[] bufferrgb;
           return false;
@@ -570,7 +570,7 @@ size_t RLECodec::DecodeFragment(Fragment const & frag, char *buffer, size_t llen
   is.write(mybuffer, bv.GetLength());
   delete[] mybuffer;
   std::stringstream os;
-  SetLength( llen );
+  SetLength( (unsigned long)llen );
 #if !defined(NDEBUG)
   const unsigned int * const dimensions = this->GetDimensions();
   const PixelFormat & pf = this->GetPixelFormat();
@@ -651,7 +651,7 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
         gdcmDebugMacro( "RLE pb with frag: " << i );
         corruption = true;
       }
-      pos += llen;
+      pos += (unsigned long)llen;
       }
     if( !corruption )
       assert( pos == len );

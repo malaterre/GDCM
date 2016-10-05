@@ -19,7 +19,11 @@
 #include "gdcmSwapper.h"
 
 #include <cstring>
+#include <cstdio> // snprintf
 #include <numeric>
+#ifdef _WIN32
+#define snprintf _snprintf
+#endif
 
 #ifdef OPENJPEG_MAJOR_VERSION
 #if OPENJPEG_MAJOR_VERSION == 1
@@ -166,7 +170,7 @@ static inline bool read64(const char ** input, size_t * len, uint64_t * ret)
 }
 
 
-static bool parsej2k_imp( const char * const stream, const size_t file_size, bool * lossless )
+static bool parsej2k_imp( const char * const stream, const size_t file_size, bool * lossless, bool * mct )
 {
   uint16_t marker;
   size_t lenmarker;
@@ -185,6 +189,10 @@ static bool parsej2k_imp( const char * const stream, const size_t file_size, boo
 
       if( marker == COD )
         {
+        const uint8_t MCTransformation = *(cur+4);
+        if( MCTransformation == 0x0 ) *mct = false;
+        else if( MCTransformation == 0x1 ) *mct = true;
+        else return false;
         const uint8_t Transformation = *(cur+9);
         if( Transformation == 0x0 ) { *lossless = false; return true; }
         else if( Transformation == 0x1 ) *lossless = true;
@@ -198,7 +206,7 @@ static bool parsej2k_imp( const char * const stream, const size_t file_size, boo
   return false;
 }
 
-static bool parsejp2_imp( const char * const stream, const size_t file_size, bool * lossless )
+static bool parsejp2_imp( const char * const stream, const size_t file_size, bool * lossless, bool * mct )
 {
   uint32_t marker;
   uint64_t len64; /* ref */
@@ -208,8 +216,8 @@ static bool parsejp2_imp( const char * const stream, const size_t file_size, boo
 
   while( read32(&cur, &cur_size, &len32) )
     {
-    bool b = read32(&cur, &cur_size, &marker);
-    if( !b ) break;
+    bool b0 = read32(&cur, &cur_size, &marker);
+    if( !b0 ) break;
     len64 = len32;
     if( len32 == 1 ) /* 64bits ? */
       {
@@ -225,7 +233,7 @@ static bool parsejp2_imp( const char * const stream, const size_t file_size, boo
         len64 = (size_t)(file_size - start + 8);
         }
       assert( len64 >= 8 );
-      return parsej2k_imp( cur, len64 - 8, lossless );
+      return parsej2k_imp( cur, len64 - 8, lossless, mct );
       }
       const size_t lenmarker = len64 - 8;
       cur += lenmarker;
@@ -373,7 +381,8 @@ OPJ_BOOL opj_seek_from_memory (OPJ_OFF_T p_nb_bytes, myfile * p_file)
   //  return false;
   //  }
   //return true;
-  if( p_nb_bytes <= p_file->len )
+  assert( p_nb_bytes >= 0 );
+  if( (size_t)p_nb_bytes <= p_file->len )
     {
     p_file->cur = p_file->mem + p_nb_bytes;
     return OPJ_TRUE;
@@ -745,11 +754,19 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
   cio = opj_stream_create_memory_stream(fsrc,OPJ_J2K_STREAM_CHUNK_SIZE, true);
 
   /* setup the decoder decoding parameters using user parameters */
-  bool bResult;
+  OPJ_BOOL bResult;
   bResult = opj_setup_decoder(dinfo, &parameters);
-  assert( bResult );
+  if( !bResult )
+    {
+    opj_destroy_codec(dinfo);
+    opj_stream_destroy(cio);
+    gdcmErrorMacro( "opj_setup_decoder failure" );
+    return std::make_pair<char*,size_t>(0,0);
+    }
+#if 0
   OPJ_INT32 l_tile_x0,l_tile_y0;
   OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
+#endif
 #if 0
   bResult = opj_read_header(
     dinfo,
@@ -767,8 +784,13 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     dinfo,
     &image);
 #endif
-  assert( bResult );
-
+  if( !bResult )
+    {
+    opj_destroy_codec(dinfo);
+    opj_stream_destroy(cio);
+    gdcmErrorMacro( "opj_setup_decoder failure" );
+    return std::make_pair<char*,size_t>(0,0);
+    }
 #if 0
   /* Optional if you want decode the entire image */
   opj_set_decode_area(dinfo, image, (OPJ_INT32)parameters.DA_x0,
@@ -776,7 +798,13 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
 #endif
 
   bResult = opj_decode(dinfo, cio,image);
-  assert( bResult );
+  if (!bResult )
+    {
+    opj_destroy_codec(dinfo);
+    opj_stream_destroy(cio);
+    gdcmErrorMacro( "opj_decode failed" );
+    return std::make_pair<char*,size_t>(0,0);
+    }
   bResult = bResult && (image != 00);
   bResult = bResult && opj_end_decompress(dinfo,cio);
   if (!image || !check_comp_valid(image) )
@@ -831,14 +859,16 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
 #else
   bool b = false;
   bool lossless;
+  bool mct;
   if( parameters.decod_format == JP2_CFMT )
-    b = parsejp2_imp( dummy_buffer, buf_size, &lossless);
+    b = parsejp2_imp( dummy_buffer, buf_size, &lossless, &mct);
   else if( parameters.decod_format == J2K_CFMT )
-    b = parsej2k_imp( dummy_buffer, buf_size, &lossless);
+    b = parsej2k_imp( dummy_buffer, buf_size, &lossless, &mct);
  
   reversible = 0;
-  if( b )
+  if( b ) {
     reversible = lossless;
+  }
 #endif // OPENJPEG_MAJOR_VERSION == 1
   LossyFlag = !reversible;
 
@@ -853,6 +883,15 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
 
   assert( image->numcomps == this->GetPixelFormat().GetSamplesPerPixel() );
   assert( image->numcomps == this->GetPhotometricInterpretation().GetSamplesPerPixel() );
+#if OPENJPEG_MAJOR_VERSION == 1
+#else
+  if( this->GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
+    assert( !mct );
+  else if( this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT )
+    assert( !mct );
+  else
+    assert( !mct );
+#endif
 
 #if OPENJPEG_MAJOR_VERSION == 1
   /* close the byte stream */
@@ -1515,8 +1554,10 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   /* setup the decoder decoding parameters using user parameters */
   opj_setup_decoder(dinfo, &parameters);
   bool bResult;
+#if 0
   OPJ_INT32 l_tile_x0,l_tile_y0;
   OPJ_UINT32 l_tile_width,l_tile_height,l_nb_tiles_x,l_nb_tiles_y;
+#endif
 #if 0
   bResult = opj_read_header(
     dinfo,
@@ -1534,6 +1575,11 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     dinfo,
     &image);
 #endif
+  if(!bResult)
+  {
+  opj_stream_destroy(cio);
+    return false;
+  }
   //image = opj_decode(dinfo, cio);
   //bResult = bResult && (image != 00);
   //bResult = bResult && opj_end_decompress(dinfo,cio);
@@ -1547,7 +1593,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
 #endif // OPENJPEG_MAJOR_VERSION == 1
 
   int reversible;
-  int mct;
+  int mct = 0;
 #if OPENJPEG_MAJOR_VERSION == 1
   opj_j2k_t* j2k = NULL;
   opj_jp2_t* jp2 = NULL;
@@ -1579,14 +1625,17 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
 #else
   bool b = false;
   bool lossless;
+  bool mctb;
   if( parameters.decod_format == JP2_CFMT )
-    b = parsejp2_imp( dummy_buffer, buf_size, &lossless);
+    b = parsejp2_imp( dummy_buffer, buf_size, &lossless, &mctb);
   else if( parameters.decod_format == J2K_CFMT )
-    b = parsej2k_imp( dummy_buffer, buf_size, &lossless);
+    b = parsej2k_imp( dummy_buffer, buf_size, &lossless, &mctb);
  
   reversible = 0;
-  if( b )
+  if( b ) {
     reversible = lossless;
+    mct = mctb;
+  }
 #endif
 #endif // OPENJPEG_MAJOR_VERSION == 1
   LossyFlag = !reversible;

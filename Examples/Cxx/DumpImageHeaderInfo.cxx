@@ -46,7 +46,7 @@ std::istream & element::read( std::istream & is )
     return is;
     }
   //os << magic << std::endl;
-  assert( magic == ref );
+  assert( magic == ref ); (void)ref;
 
   uint32_t l;
   is.read( (char*)&l, sizeof(l) );
