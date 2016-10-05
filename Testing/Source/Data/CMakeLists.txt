@@ -66,6 +66,8 @@ set(BLACK_LIST_READER
   lena512_rot90.j2k.dcm
 # Remove this one for now:
   LengthOfItemLarger.dcm
+# https://github.com/team-charls/charls/issues/16
+  JPEG_LS_InvalidEscapeSequence_COM_padding.dcm
 )
 if(GDCM_USE_SYSTEM_OPENJPEG)
   if(OPENJPEG_MAJOR_VERSION EQUAL 1)
