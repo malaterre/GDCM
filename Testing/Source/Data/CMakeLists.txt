@@ -67,6 +67,15 @@ set(BLACK_LIST_READER
 # Remove this one for now:
   LengthOfItemLarger.dcm
 )
+if(GDCM_USE_SYSTEM_OPENJPEG)
+  if(OPENJPEG_MAJOR_VERSION EQUAL 1)
+    set(BLACK_LIST_READER
+      ${BLACK_LIST_READER}
+      # openjpeg system on travis buildd seems broken
+      TOSHIBA_J2K_OpenJPEGv2Regression.dcm
+    )
+  endif()
+endif()
 if(NOT GDCM_USE_PVRG)
   set(BLACK_LIST_READER
     # The following should really fails according to JPEG spec, IJG is failing and even when forcing
