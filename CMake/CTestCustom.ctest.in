@@ -33,6 +33,7 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "Covariant return types not supported in C#."
   "Nested struct not currently supported"
   "bootstrap class path not set in conjunction with"
+  "warning CS1699"
   )
 
 # Disable dynamic analysis on some tests:
