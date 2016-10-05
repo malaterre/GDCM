@@ -153,12 +153,14 @@ bool System::MakeDirectory(const char *path)
     pos = 0;
     }
   std::string topdir;
-  while((pos = dir.find('/', pos)) != std::string::npos)
+  bool ok = true;
+  while(ok && (pos = dir.find('/', pos)) != std::string::npos)
     {
     topdir = dir.substr(0, pos);
-    Mkdir(topdir.c_str());
+    ok = ok && Mkdir(topdir.c_str());
     pos++;
     }
+  if( !ok ) return false;
   if(dir[dir.size()-1] == '/')
     {
     topdir = dir.substr(0, dir.size());
@@ -675,6 +677,7 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
     case 3: hour = 0;
     case 4: min = 0;
     case 5: sec = 0;
+      break; // http://security.coverity.com/blog/2013/Sep/gimme-a-break.html
       }
     ptm.tm_year = year - 1900;
     if( mon < 1 || mon > 12 ) return false;
