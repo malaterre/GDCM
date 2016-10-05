@@ -134,9 +134,9 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
     const Bytef *source = (Bytef*)buf + offsets[r] + 16;
     uLong sourceLen;
     if( r + 1 == nframes )
-      sourceLen = (uLong)totalsize - offsets[r] - 16;
+      sourceLen = (uLong)totalsize - (uLong)offsets[r] - 16;
     else
-      sourceLen = (uLong)offsets[r+1] - offsets[r] - 16;
+      sourceLen = (uLong)offsets[r+1] - (uLong)offsets[r] - 16;
     // FIXME: in-memory decompression:
     int ret = uncompress (dest, &destLen, source, sourceLen);
     assert( ret == Z_OK ); (void)ret;
@@ -180,7 +180,7 @@ static bool ProcessNone( const char *outfilename, const int nslices, const
     }
 
   std::istringstream is;
-  is.str( std::string( buf, len ) );
+  is.str( std::string( buf, (size_t)len ) );
 
   std::streampos totalsize;
   is.read( (char*)&totalsize, sizeof( totalsize ));
