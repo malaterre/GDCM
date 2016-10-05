@@ -34,7 +34,7 @@ static bool LoadFile(const char * filename, char* & buffer, size_t & bufLen)
   buffer = new char[sz];
   bufLen = sz;
   while (sz)
-    sz -= fread(buffer + bufLen - sz, sizeof(char), sz, f);
+    sz -= (long)fread(buffer + bufLen - sz, sizeof(char), sz, f);
   return true;
 }
 

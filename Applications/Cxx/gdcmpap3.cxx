@@ -437,7 +437,7 @@ int main(int argc, char *argv[])
         gdcm::DataSet & nested = it.GetNestedDataSet();
         gdcm::File f;
         f.SetDataSet( nested );
-        if( !DecompressPapyrus3( pap3handle, i, ts, f ) )
+        if( !DecompressPapyrus3( pap3handle, (int)i, ts, f ) )
           {
           std::cerr << "Could not decompress frame #" << i << " from file: " << filename << std::endl;
           return 1;
@@ -515,7 +515,7 @@ int main(int argc, char *argv[])
 
       if( decomp_pap3 )
         {
-        if( !DecompressPapyrus3( pap3handle, i, ts, w.GetFile() ) )
+        if( !DecompressPapyrus3( pap3handle, (int)i, ts, w.GetFile() ) )
           {
           std::cerr << "Could not decompress frame #" << i << " from file: " << filename << std::endl;
           return 1;
