@@ -17,10 +17,10 @@ set(MSFF_TEST_SRCS
   TestFileAnonymizer3
   TestFileAnonymizer4
   TestIconImageFilter
-  TestIconImageGenerator
-  TestIconImageGenerator2
-  TestIconImageGenerator3
-  TestIconImageGenerator4
+  #TestIconImageGenerator
+  #TestIconImageGenerator2
+  #TestIconImageGenerator3
+  #TestIconImageGenerator4
   TestParseXPATH
   TestValidate
   TestAnonymizeEvent
