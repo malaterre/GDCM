@@ -220,9 +220,9 @@ static bool parsejp2_imp( const char * const stream, const size_t file_size, boo
         len64 = (size_t)(file_size - start + 8);
         }
       assert( len64 >= 8 );
-      return parsej2k_imp( cur, len64 - 8, lossless, mct );
+      return parsej2k_imp( cur, (size_t)(len64 - 8), lossless, mct );
       }
-      const size_t lenmarker = len64 - 8;
+      const size_t lenmarker = (size_t)(len64 - 8);
       cur += lenmarker;
     }
 
@@ -1140,7 +1140,7 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
   /*if (*indexfilename)          // If need to extract codestream information
     bSuccess = opj_encode_with_info(cinfo, cio, image, &cstr_info);
     else*/
-  bSuccess = opj_start_compress(cinfo,image,cio);
+  bSuccess = opj_start_compress(cinfo,image,cio) ? true : false;
   bSuccess = bSuccess && opj_encode(cinfo, cio);
   bSuccess = bSuccess && opj_end_compress(cinfo, cio);
 
@@ -1314,7 +1314,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   bResult = opj_read_header(
     cio,
     dinfo,
-    &image);
+    &image) ? true : false;
   if(!bResult)
   {
   opj_stream_destroy(cio);
