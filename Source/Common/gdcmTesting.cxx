@@ -36,7 +36,7 @@ namespace gdcm
 #include "gdcmSelectedTagsOffsetDataFiles.cxx"
 #include "gdcmSelectedPrivateGroupOffsetDataFiles.cxx"
 
-bool Testing::ComputeMD5(const char *buffer, unsigned long buf_len,
+bool Testing::ComputeMD5(const char *buffer, size_t buf_len,
   char digest_str[33])
 {
   return MD5::Compute(buffer, buf_len, digest_str);

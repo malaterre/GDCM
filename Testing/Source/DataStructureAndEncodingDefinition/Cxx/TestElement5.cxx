@@ -23,7 +23,7 @@ int TestLO()
   const size_t lenstr = strlen(str);
   std::stringstream ss;
   ss.str( str );
-  unsigned int count = gdcm::VM::GetNumberOfElementsFromArray(str, lenstr);
+  size_t count = gdcm::VM::GetNumberOfElementsFromArray(str, lenstr);
   gdcm::VR vr = gdcm::VR::LO;
   //gdcm::VM vm = gdcm::VM::VM2;
   //gdcm::VR vr = gdcm::VR::DS;
