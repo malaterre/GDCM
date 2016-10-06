@@ -130,6 +130,7 @@ public:
     VLMicroscopicImageStorage,
     EnhancedPETImageStorage,
     VideoPhotographicImageStorage,
+    XRay3DCraniofacialImageStorage,
     MS_END
   } MSType; // Media Storage Type
 
