@@ -299,7 +299,7 @@ struct myfile
   size_t len;
 };
 
-void gdcm_error_callback(const char* msg, void* f)
+void gdcm_error_callback(const char* msg, void* )
 {
 #if 0
   if( strcmp( msg, "Cannot read data with no size known, giving up\n" ) == 0 )
