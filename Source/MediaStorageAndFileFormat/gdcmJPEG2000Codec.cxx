@@ -276,7 +276,7 @@ struct myfile
   size_t len;
 };
 
-void gdcm_error_callback(const char* msg, void* f)
+void gdcm_error_callback(const char* msg, void* )
 {
   (void)f;
   fprintf( stderr, "%s", msg );

@@ -4,7 +4,9 @@
 // File: classgdcm_1_1network_1_1AAbortPDU.xml
 %feature("docstring") gdcm::network::AAbortPDU "
 
-AAbortPDU Table 9-26 A-ABORT PDU FIELDS.
+AAbortPDU.
+
+Table 9-26 A-ABORT PDU FIELDS
 
 C++ includes: gdcmAAbortPDU.h ";
 
@@ -36,7 +38,9 @@ std::ostream& gdcm::network::AAbortPDU::Write(std::ostream &os) const
 // File: classgdcm_1_1network_1_1AAssociateACPDU.xml
 %feature("docstring") gdcm::network::AAssociateACPDU "
 
-AAssociateACPDU Table 9-17 ASSOCIATE-AC PDU fields.
+AAssociateACPDU.
+
+Table 9-17 ASSOCIATE-AC PDU fields
 
 C++ includes: gdcmAAssociateACPDU.h ";
 
@@ -87,7 +91,9 @@ const ";
 // File: classgdcm_1_1network_1_1AAssociateRJPDU.xml
 %feature("docstring") gdcm::network::AAssociateRJPDU "
 
-AAssociateRJPDU Table 9-21 ASSOCIATE-RJ PDU FIELDS.
+AAssociateRJPDU.
+
+Table 9-21 ASSOCIATE-RJ PDU FIELDS
 
 C++ includes: gdcmAAssociateRJPDU.h ";
 
@@ -114,7 +120,9 @@ const ";
 // File: classgdcm_1_1network_1_1AAssociateRQPDU.xml
 %feature("docstring") gdcm::network::AAssociateRQPDU "
 
-AAssociateRQPDU Table 9-11 ASSOCIATE-RQ PDU fields.
+AAssociateRQPDU.
+
+Table 9-11 ASSOCIATE-RQ PDU fields
 
 C++ includes: gdcmAAssociateRQPDU.h ";
 
@@ -215,7 +223,9 @@ const ";
 // File: classgdcm_1_1network_1_1AbstractSyntax.xml
 %feature("docstring") gdcm::network::AbstractSyntax "
 
-AbstractSyntax Table 9-14 ABSTRACT SYNTAX SUB-ITEM FIELDS.
+AbstractSyntax.
+
+Table 9-14 ABSTRACT SYNTAX SUB-ITEM FIELDS
 
 C++ includes: gdcmAbstractSyntax.h ";
 
@@ -250,8 +260,9 @@ const ";
 // File: classgdcm_1_1AnonymizeEvent.xml
 %feature("docstring") gdcm::AnonymizeEvent "
 
-AnonymizeEvent Special type of event triggered during the
-Anonymization process.
+AnonymizeEvent.
+
+Special type of event triggered during the Anonymization process
 
 See:   Anonymizer
 
@@ -288,10 +299,10 @@ gdcm::AnonymizeEvent::SetTag(const Tag &t) ";
 // File: classgdcm_1_1Anonymizer.xml
 %feature("docstring") gdcm::Anonymizer "
 
-Anonymizer This class is a multi purpose anonymizer. It can work in 2
-mode:
+Anonymizer.
 
-Full (irreversible) anonymizer (aka dumb mode)
+This class is a multi purpose anonymizer. It can work in 2 mode: Full
+(irreversible) anonymizer (aka dumb mode)
 
 reversible de-identifier/re-identifier (aka smart mode). This
 implements the Basic Application Level Confidentiality Profile, DICOM
@@ -432,10 +443,10 @@ Set/Get File. ";
 // File: classgdcm_1_1network_1_1ApplicationContext.xml
 %feature("docstring") gdcm::network::ApplicationContext "
 
-ApplicationContext Table 9-12 APPLICATION CONTEXT ITEM FIELDS.
+ApplicationContext.
 
-Todo Looks like Application Context can only be 64 bytes at max (see
-Figure 9-1 / PS 3.8 - 2009 )
+Table 9-12 APPLICATION CONTEXT ITEM FIELDSTodo Looks like Application
+Context can only be 64 bytes at max (see Figure 9-1 / PS 3.8 - 2009 )
 
 C++ includes: gdcmApplicationContext.h ";
 
@@ -493,7 +504,9 @@ gdcm::ApplicationEntity::Squeeze() ";
 // File: classgdcm_1_1network_1_1AReleaseRPPDU.xml
 %feature("docstring") gdcm::network::AReleaseRPPDU "
 
-AReleaseRPPDU Table 9-25 A-RELEASE-RP PDU fields.
+AReleaseRPPDU.
+
+Table 9-25 A-RELEASE-RP PDU fields
 
 C++ includes: gdcmAReleaseRPPDU.h ";
 
@@ -517,7 +530,9 @@ const ";
 // File: classgdcm_1_1network_1_1AReleaseRQPDU.xml
 %feature("docstring") gdcm::network::AReleaseRQPDU "
 
-AReleaseRQPDU Table 9-24 A-RELEASE-RQ PDU FIELDS.
+AReleaseRQPDU.
+
+Table 9-24 A-RELEASE-RQ PDU FIELDS
 
 C++ includes: gdcmAReleaseRQPDU.h ";
 
@@ -541,7 +556,9 @@ const ";
 // File: classgdcm_1_1network_1_1ARTIMTimer.xml
 %feature("docstring") gdcm::network::ARTIMTimer "
 
-ARTIMTimer This file contains the code for the ARTIM timer.
+ARTIMTimer.
+
+This file contains the code for the ARTIM timer.
 
 Basically, the ARTIM timer will just get the wall time when it's
 started, and then can be queried for the current time, and then can be
@@ -593,8 +610,10 @@ C++ includes: gdcmASN1.h ";
 // File: classgdcm_1_1network_1_1AsynchronousOperationsWindowSub.xml
 %feature("docstring") gdcm::network::AsynchronousOperationsWindowSub "
 
-AsynchronousOperationsWindowSub PS 3.7 Table D.3-7 ASYNCHRONOUS
-OPERATIONS WINDOW SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
+AsynchronousOperationsWindowSub.
+
+PS 3.7 Table D.3-7 ASYNCHRONOUS OPERATIONS WINDOW SUB-ITEM FIELDS (A
+-ASSOCIATE-RQ)
 
 C++ includes: gdcmAsynchronousOperationsWindowSub.h ";
 
@@ -926,11 +945,12 @@ C++ includes: gdcmBase64.h ";
 // File: classgdcm_1_1network_1_1BaseCompositeMessage.xml
 %feature("docstring") gdcm::network::BaseCompositeMessage "
 
-BaseCompositeMessage The Composite events described in section
-3.7-2009 of the DICOM standard all use their own messages. These
-messages are constructed using Presentation Data Values, from section
-3.8-2009 of the standard, and then fill in appropriate values in their
-datasets.
+BaseCompositeMessage.
+
+The Composite events described in section 3.7-2009 of the DICOM
+standard all use their own messages. These messages are constructed
+using Presentation Data Values, from section 3.8-2009 of the standard,
+and then fill in appropriate values in their datasets.
 
 So, for the five composites: C-ECHO
 
@@ -963,11 +983,12 @@ gdcm::network::BaseCompositeMessage::ConstructPDV(const ULConnection
 // File: classgdcm_1_1network_1_1BaseNormalizedMessage.xml
 %feature("docstring") gdcm::network::BaseNormalizedMessage "
 
-BaseNormalizedMessage The Normalized events described in section
-3.7-2011 of the DICOM standard all use their own messages. These
-messages are constructed using Presentation Data Values, from section
-3.8-2011 of the standard, and then fill in appropriate values in their
-datasets.
+BaseNormalizedMessage.
+
+The Normalized events described in section 3.7-2011 of the DICOM
+standard all use their own messages. These messages are constructed
+using Presentation Data Values, from section 3.8-2011 of the standard,
+and then fill in appropriate values in their datasets.
 
 So, for the five normalized: N-ACTION
 
@@ -1003,7 +1024,9 @@ gdcm::network::BaseNormalizedMessage::ConstructPDV(const ULConnection
 // File: classgdcm_1_1network_1_1BasePDU.xml
 %feature("docstring") gdcm::network::BasePDU "
 
-BasePDU base class for PDUs.
+BasePDU.
+
+base class for PDUs
 
 all PDUs start with the first ten bytes as specified: 01 PDU type 02
 reserved 3-6 PDU Length (unsigned) 7-10 variable
@@ -1046,8 +1069,10 @@ std::ostream& gdcm::network::BasePDU::Write(std::ostream &os) const =0
 // File: classgdcm_1_1BaseQuery.xml
 %feature("docstring") gdcm::BaseQuery "
 
-BaseQuery contains: a baseclass which will produce a dataset for all
-dimse messages.
+BaseQuery.
+
+contains: a baseclass which will produce a dataset for all dimse
+messages
 
 C++ includes: gdcmBaseQuery.h ";
 
@@ -1098,8 +1123,10 @@ gdcm::BaseQuery::WriteQuery(const std::string &inFileName) ";
 // File: classgdcm_1_1BaseRootQuery.xml
 %feature("docstring") gdcm::BaseRootQuery "
 
-BaseRootQuery contains: a baseclass which will produce a dataset for
-c-find and c-move with patient/study root.
+BaseRootQuery.
+
+contains: a baseclass which will produce a dataset for c-find and
+c-move with patient/study root
 
 This class contains the functionality used in patient c-find and
 c-move queries. PatientRootQuery and StudyRootQuery derive from this
@@ -1208,9 +1235,11 @@ gdcm::BasicOffsetTable::Read(std::istream &is) ";
 // File: classgdcm_1_1Bitmap.xml
 %feature("docstring") gdcm::Bitmap "
 
-Bitmap class A bitmap based image. Used as parent for both IconImage
-and the main Pixel Data Image It does not contains any World Space
-information (IPP, IOP)
+Bitmap class.
+
+A bitmap based image. Used as parent for both IconImage and the main
+Pixel Data Image It does not contains any World Space information
+(IPP, IOP)
 
 C++ includes: gdcmBitmap.h ";
 
@@ -1366,8 +1395,10 @@ Transfer syntax. ";
 // File: classgdcm_1_1BitmapToBitmapFilter.xml
 %feature("docstring") gdcm::BitmapToBitmapFilter "
 
-BitmapToBitmapFilter class Super class for all filter taking an image
-and producing an output image.
+BitmapToBitmapFilter class.
+
+Super class for all filter taking an image and producing an output
+image
 
 C++ includes: gdcmBitmapToBitmapFilter.h ";
 
@@ -1393,9 +1424,11 @@ Set input image. ";
 // File: classgdcm_1_1BoxRegion.xml
 %feature("docstring") gdcm::BoxRegion "
 
-Class for manipulation box region This is a very simple implementation
-of the Region class. It only support 3D box type region. It assumes
-the 3D Box does not have a tilt Origin is as (0,0,0)
+Class for manipulation box region.
+
+This is a very simple implementation of the Region class. It only
+support 3D box type region. It assumes the 3D Box does not have a tilt
+Origin is as (0,0,0)
 
 C++ includes: gdcmBoxRegion.h ";
 
@@ -1502,7 +1535,9 @@ C++ includes: gdcmByteSwap.h ";
 // File: classgdcm_1_1ByteSwapFilter.xml
 %feature("docstring") gdcm::ByteSwapFilter "
 
-ByteSwapFilter In place byte-swapping of a dataset FIXME: FL status ??
+ByteSwapFilter.
+
+In place byte-swapping of a dataset FIXME: FL status ??
 
 C++ includes: gdcmByteSwapFilter.h ";
 
@@ -1669,7 +1704,9 @@ size_t passLen) ";
 // File: classgdcm_1_1network_1_1CEchoRQ.xml
 %feature("docstring") gdcm::network::CEchoRQ "
 
-CEchoRQ this file defines the messages for the cecho action.
+CEchoRQ.
+
+this file defines the messages for the cecho action
 
 C++ includes: gdcmCEchoMessages.h ";
 
@@ -1715,7 +1752,9 @@ gdcm::network::CFindCancelRQ::ConstructPDVByDataSet(const DataSet
 // File: classgdcm_1_1network_1_1CFindRQ.xml
 %feature("docstring") gdcm::network::CFindRQ "
 
-CFindRQ this file defines the messages for the cfind action.
+CFindRQ.
+
+this file defines the messages for the cfind action
 
 C++ includes: gdcmCFindMessages.h ";
 
@@ -1750,7 +1789,9 @@ gdcm::network::CMoveCancelRq::ConstructPDVByDataSet(const DataSet
 // File: classgdcm_1_1network_1_1CMoveRQ.xml
 %feature("docstring") gdcm::network::CMoveRQ "
 
-CMoveRQ this file defines the messages for the cmove action.
+CMoveRQ.
+
+this file defines the messages for the cmove action
 
 C++ includes: gdcmCMoveMessages.h ";
 
@@ -1805,8 +1846,10 @@ Code. ";
 // File: classgdcm_1_1CodeString.xml
 %feature("docstring") gdcm::CodeString "
 
-CodeString This is an implementation of DICOM VR: CS The cstor will
-properly Trim so that operator== is correct.
+CodeString.
+
+This is an implementation of DICOM VR: CS The cstor will properly Trim
+so that operator== is correct.
 
 the cstor of CodeString will Trim the string on the fly so as to
 remove the extra leading and ending spaces. However it will not
@@ -1905,13 +1948,14 @@ Write. ";
 // File: classgdcm_1_1network_1_1CompositeMessageFactory.xml
 %feature("docstring") gdcm::network::CompositeMessageFactory "
 
-CompositeMessageFactory This class constructs PDataPDUs, but that have
-been specifically constructed for the composite DICOM services
-(C-Echo, C-Find, C-Get, C-Move, and C-Store). It will also handle
-parsing the incoming data to determine which of the CompositePDUs the
-incoming data is, and so therefore allowing the scu to determine what
-to do with incoming data (if acting as a storescp server, for
-instance).
+CompositeMessageFactory.
+
+This class constructs PDataPDUs, but that have been specifically
+constructed for the composite DICOM services (C-Echo, C-Find, C-Get,
+C-Move, and C-Store). It will also handle parsing the incoming data to
+determine which of the CompositePDUs the incoming data is, and so
+therefore allowing the scu to determine what to do with incoming data
+(if acting as a storescp server, for instance).
 
 C++ includes: gdcmCompositeMessageFactory.h ";
 
@@ -1919,20 +1963,20 @@ C++ includes: gdcmCompositeMessageFactory.h ";
 // File: classgdcm_1_1CompositeNetworkFunctions.xml
 %feature("docstring") gdcm::CompositeNetworkFunctions "
 
-Composite Network Functions These functions provide a generic API to
-the DICOM functions implemented in GDCM. Advanced users can use this
-code as a template for building their own versions of these functions
-(for instance, to provide progress bars or some other way of handling
-returned query information), but for most users, these functions
-should be sufficient to interface with a PACS to a local machine. Note
-that these functions are not contained within a static class or some
-other class-style interface, because multiple connections can be
-instantiated in the same program. The DICOM standard is much more
-function oriented rather than class oriented in this instance, so the
-design of this API reflects that functional approach. These functions
-implements the following SCU operations:
+Composite Network Functions.
 
-C-ECHO SCU
+These functions provide a generic API to the DICOM functions
+implemented in GDCM. Advanced users can use this code as a template
+for building their own versions of these functions (for instance, to
+provide progress bars or some other way of handling returned query
+information), but for most users, these functions should be sufficient
+to interface with a PACS to a local machine. Note that these functions
+are not contained within a static class or some other class-style
+interface, because multiple connections can be instantiated in the
+same program. The DICOM standard is much more function oriented rather
+than class oriented in this instance, so the design of this API
+reflects that functional approach. These functions implements the
+following SCU operations: C-ECHO SCU
 
 C-FIND SCU
 
@@ -2233,11 +2277,11 @@ gdcm::CSAHeaderDict::IsEmpty() const ";
 // File: classgdcm_1_1CSAHeaderDictEntry.xml
 %feature("docstring") gdcm::CSAHeaderDictEntry "
 
-Class to represent an Entry in the Dict Does not really exist within
-the DICOM definition, just a way to minimize storage and have a
-mapping from gdcm::Tag to the needed information.
+Class to represent an Entry in the Dict.
 
-bla TODO FIXME: Need a PublicCSAHeaderDictEntry...indeed
+Does not really exist within the DICOM definition, just a way to
+minimize storage and have a mapping from gdcm::Tag to the needed
+information bla TODO FIXME: Need a PublicCSAHeaderDictEntry...indeed
 CSAHeaderDictEntry has a notion of retired which does not exist in
 PrivateCSAHeaderDictEntry...
 
@@ -2288,7 +2332,9 @@ gdcmCSAHeaderDict.h ";
 // File: classgdcm_1_1network_1_1CStoreRQ.xml
 %feature("docstring") gdcm::network::CStoreRQ "
 
-CStoreRQ this file defines the messages for the cecho action.
+CStoreRQ.
+
+this file defines the messages for the cecho action
 
 C++ includes: gdcmCStoreMessages.h ";
 
@@ -2312,8 +2358,9 @@ BasePDU *inPC) ";
 // File: classgdcm_1_1Curve.xml
 %feature("docstring") gdcm::Curve "
 
-Curve class to handle element 50xx,3000 Curve Data WARNING: This is
-deprecated and lastly defined in PS 3.3 - 2004.
+Curve class to handle element 50xx,3000 Curve Data.
+
+WARNING: This is deprecated and lastly defined in PS 3.3 - 2004
 
 Examples: GE_DLX-8-MONO2-Multiframe-Jpeg_Lossless.dcm
 
@@ -2611,9 +2658,9 @@ gdcm::DataEvent::SetData(const char *bytes, size_t len) ";
 // File: classgdcm_1_1DataSet.xml
 %feature("docstring") gdcm::DataSet "
 
-Class to represent a Data Set (which contains Data Elements) A Data
-Set represents an instance of a real world Information Object.
+Class to represent a Data Set (which contains Data Elements)
 
+A Data Set represents an instance of a real world Information Object
 DATA SET: Exchanged information consisting of a structured set of
 Attribute values directly or indirectly related to Information
 Objects. The value of each Attribute in a Data Set is expressed as a
@@ -2761,8 +2808,9 @@ gdcm::DataSet::Write(std::ostream &os) const ";
 // File: classgdcm_1_1DataSetEvent.xml
 %feature("docstring") gdcm::DataSetEvent "
 
-DataSetEvent Special type of event triggered during the DataSet
-store/move process.
+DataSetEvent.
+
+Special type of event triggered during the DataSet store/move process
 
 See:
 
@@ -2933,9 +2981,10 @@ C++ includes: gdcmDICOMDIR.h ";
 // File: classgdcm_1_1DICOMDIRGenerator.xml
 %feature("docstring") gdcm::DICOMDIRGenerator "
 
-DICOMDIRGenerator class This is a STD-GEN-CD DICOMDIR generator. ref:
-PS 3.11-2008 Annex D (Normative) - General Purpose CD-R and DVD
-Interchange Profiles.
+DICOMDIRGenerator class.
+
+This is a STD-GEN-CD DICOMDIR generator. ref: PS 3.11-2008 Annex D
+(Normative) - General Purpose CD-R and DVD Interchange Profiles
 
 PS 3.11 - 2008 / D.3.2 Physical Medium And Medium Format The STD-GEN-
 CD and STD-GEN-SEC-CD application profiles require the 120 mm CD-R
@@ -3096,12 +3145,12 @@ gdcm::DictConverter::SetOutputType(int type) ";
 // File: classgdcm_1_1DictEntry.xml
 %feature("docstring") gdcm::DictEntry "
 
-Class to represent an Entry in the Dict Does not really exist within
-the DICOM definition, just a way to minimize storage and have a
-mapping from gdcm::Tag to the needed information.
+Class to represent an Entry in the Dict.
 
-bla TODO FIXME: Need a PublicDictEntry...indeed DictEntry has a notion
-of retired which does not exist in PrivateDictEntry...
+Does not really exist within the DICOM definition, just a way to
+minimize storage and have a mapping from gdcm::Tag to the needed
+information bla TODO FIXME: Need a PublicDictEntry...indeed DictEntry
+has a notion of retired which does not exist in PrivateDictEntry...
 
 See:   gdcm::Dict
 
@@ -3231,8 +3280,10 @@ gdcm::Dicts::IsEmpty() const ";
 // File: classgdcm_1_1network_1_1DIMSE.xml
 %feature("docstring") gdcm::network::DIMSE "
 
-DIMSE PS 3.7 - 2009 Annex E Command Dictionary (Normative) E.1
-REGISTRY OF DICOM COMMAND ELEMENTS Table E.1-1 COMMAND FIELDS (PART 1)
+DIMSE.
+
+PS 3.7 - 2009 Annex E Command Dictionary (Normative) E.1 REGISTRY OF
+DICOM COMMAND ELEMENTS Table E.1-1 COMMAND FIELDS (PART 1)
 
 C++ includes: gdcmDIMSE.h ";
 
@@ -3345,15 +3396,17 @@ Print. ";
 // File: classgdcm_1_1DirectoryHelper.xml
 %feature("docstring") gdcm::DirectoryHelper "
 
-DirectoryHelper this class is designed to help mitigate some of the
-commonly performed operations on directories. namely: 1) the ability
-to determine the number of series in a directory by what type of
-series is present 2) the ability to find all ct series in a directory
-3) the ability to find all mr series in a directory 4) to load a set
-of DataSets from a series that's already been sorted by the IPP sorter
-5) For rtstruct stuff, you need to know the sopinstanceuid of each z
-plane, so there's a retrieval function for that 6) then a few other
-functions for rtstruct writeouts.
+DirectoryHelper.
+
+this class is designed to help mitigate some of the commonly performed
+operations on directories. namely: 1) the ability to determine the
+number of series in a directory by what type of series is present 2)
+the ability to find all ct series in a directory 3) the ability to
+find all mr series in a directory 4) to load a set of DataSets from a
+series that's already been sorted by the IPP sorter 5) For rtstruct
+stuff, you need to know the sopinstanceuid of each z plane, so there's
+a retrieval function for that 6) then a few other functions for
+rtstruct writeouts
 
 C++ includes: gdcmDirectoryHelper.h ";
 
@@ -3789,10 +3842,12 @@ C++ includes: gdcmFiducials.h ";
 // File: classgdcm_1_1File.xml
 %feature("docstring") gdcm::File "
 
-a DICOM File See PS 3.10 File: A File is an ordered string of zero or
-more bytes, where the first byte is at the beginning of the file and
-the last byte at the end of the File. Files are identified by a unique
-File ID and may by written, read and/or deleted.
+a DICOM File
+
+See PS 3.10 File: A File is an ordered string of zero or more bytes,
+where the first byte is at the beginning of the file and the last byte
+at the end of the File. Files are identified by a unique File ID and
+may by written, read and/or deleted.
 
 See:   Reader Writer
 
@@ -3973,9 +4028,11 @@ Specify the Target Transfer Syntax. ";
 // File: classgdcm_1_1FileDecompressLookupTable.xml
 %feature("docstring") gdcm::FileDecompressLookupTable "
 
-FileDecompressLookupTable class It decompress the segmented LUT into
-linearized one (only PALETTE_COLOR images) Output will be a
-PhotometricInterpretation=RGB image.
+FileDecompressLookupTable class.
+
+It decompress the segmented LUT into linearized one (only
+PALETTE_COLOR images) Output will be a PhotometricInterpretation=RGB
+image
 
 C++ includes: gdcmFileDecompressLookupTable.h ";
 
@@ -4007,8 +4064,10 @@ Set/Get File. ";
 // File: classgdcm_1_1FileDerivation.xml
 %feature("docstring") gdcm::FileDerivation "
 
-FileDerivation class See PS 3.16 - 2008 For the list of Code Value
-that can be used for in Derivation Code Sequence.
+FileDerivation class.
+
+See PS 3.16 - 2008 For the list of Code Value that can be used for in
+Derivation Code Sequence
 
 URL:http://medical.nema.org/medical/dicom/2008/08_16pu.pdf
 
@@ -4075,11 +4134,13 @@ Specify the Purpose Of Reference Code Value. Eg. 121320. ";
 // File: classgdcm_1_1FileExplicitFilter.xml
 %feature("docstring") gdcm::FileExplicitFilter "
 
-FileExplicitFilter class After changing a file from Implicit to
-Explicit representation (see ImageChangeTransferSyntax) one operation
-is to make sure the VR of each DICOM attribute are accurate and do
-match the one from PS 3.6. Indeed when a file is written in Implicit
-reprensentation, the VR is not stored directly in the file.
+FileExplicitFilter class.
+
+After changing a file from Implicit to Explicit representation (see
+ImageChangeTransferSyntax) one operation is to make sure the VR of
+each DICOM attribute are accurate and do match the one from PS 3.6.
+Indeed when a file is written in Implicit reprensentation, the VR is
+not stored directly in the file.
 
 WARNING:  changing an implicit dataset to an explicit dataset is NOT a
 trivial task of simply changing the VR to the dict one: One has to
@@ -4282,8 +4343,9 @@ Convert forward slash (UNIX style) to windows style slash. ";
 // File: classgdcm_1_1FileNameEvent.xml
 %feature("docstring") gdcm::FileNameEvent "
 
-FileNameEvent Special type of event triggered during processing of
-FileSet.
+FileNameEvent.
+
+Special type of event triggered during processing of FileSet
 
 See:   AnyEvent
 
@@ -4406,8 +4468,10 @@ gdcm::FileSet::SetFiles(FilesType const &files) ";
 // File: classgdcm_1_1FileStreamer.xml
 %feature("docstring") gdcm::FileStreamer "
 
-FileStreamer This class let a user create a massive DICOM DataSet from
-a template DICOM file, by appending chunks of data.
+FileStreamer.
+
+This class let a user create a massive DICOM DataSet from a template
+DICOM file, by appending chunks of data.
 
 This class support two mode of operation: Creating a single
 DataElement by appending chunk after chunk of data.
@@ -4523,8 +4587,10 @@ C++ includes: gdcmSerieHelper.h ";
 // File: classgdcm_1_1FindPatientRootQuery.xml
 %feature("docstring") gdcm::FindPatientRootQuery "
 
-PatientRootQuery contains: the class which will produce a dataset for
-c-find with patient root.
+PatientRootQuery.
+
+contains: the class which will produce a dataset for c-find with
+patient root
 
 C++ includes: gdcmFindPatientRootQuery.h ";
 
@@ -4571,8 +4637,10 @@ and study level can be passed along as well. ";
 // File: classgdcm_1_1FindStudyRootQuery.xml
 %feature("docstring") gdcm::FindStudyRootQuery "
 
-FindStudyRootQuery contains: the class which will produce a dataset
-for C-FIND with study root.
+FindStudyRootQuery.
+
+contains: the class which will produce a dataset for C-FIND with study
+root
 
 C++ includes: gdcmFindStudyRootQuery.h ";
 
@@ -4716,12 +4784,14 @@ gdcm::GroupDict::Size() const ";
 // File: classgdcm_1_1IconImageFilter.xml
 %feature("docstring") gdcm::IconImageFilter "
 
-IconImageFilter This filter will extract icons from a File This filter
-will loop over all known sequence (public and private) that may
-contains an IconImage and retrieve them. The filter will fails with a
-value of false if no icon can be found Since it handle both public and
-private icon type, one should not assume the icon is in uncompress
-form, some private vendor store private icon in JPEG8/JPEG12.
+IconImageFilter.
+
+This filter will extract icons from a File This filter will loop over
+all known sequence (public and private) that may contains an IconImage
+and retrieve them. The filter will fails with a value of false if no
+icon can be found Since it handle both public and private icon type,
+one should not assume the icon is in uncompress form, some private
+vendor store private icon in JPEG8/JPEG12
 
 Implementation details: This filter supports the following Icons:
 (0088,0200) Icon Image Sequence
@@ -4774,11 +4844,11 @@ Set/Get File. ";
 // File: classgdcm_1_1IconImageGenerator.xml
 %feature("docstring") gdcm::IconImageGenerator "
 
-IconImageGenerator This filter will generate a valid Icon from the
-Pixel Data element (an instance of Pixmap). To generate a valid Icon,
-one is only allowed the following Photometric Interpretation:
+IconImageGenerator.
 
-MONOCHROME1
+This filter will generate a valid Icon from the Pixel Data element (an
+instance of Pixmap). To generate a valid Icon, one is only allowed the
+following Photometric Interpretation: MONOCHROME1
 
 MONOCHROME2
 
@@ -4864,10 +4934,10 @@ Set/Get File. ";
 // File: classgdcm_1_1Image.xml
 %feature("docstring") gdcm::Image "
 
-Image This is the container for an Image in the general sense. From
-this container you should be able to request information like:
+Image.
 
-Origin
+This is the container for an Image in the general sense. From this
+container you should be able to request information like: Origin
 
 Dimension
 
@@ -4972,9 +5042,10 @@ gdcm::Image::SetSpacing(unsigned int idx, double spacing) ";
 // File: classgdcm_1_1ImageApplyLookupTable.xml
 %feature("docstring") gdcm::ImageApplyLookupTable "
 
-ImageApplyLookupTable class It applies the LUT the PixelData (only
-PALETTE_COLOR images) Output will be a PhotometricInterpretation=RGB
-image.
+ImageApplyLookupTable class.
+
+It applies the LUT the PixelData (only PALETTE_COLOR images) Output
+will be a PhotometricInterpretation=RGB image
 
 C++ includes: gdcmImageApplyLookupTable.h ";
 
@@ -4993,8 +5064,9 @@ Apply. ";
 // File: classgdcm_1_1ImageChangePhotometricInterpretation.xml
 %feature("docstring") gdcm::ImageChangePhotometricInterpretation "
 
-ImageChangePhotometricInterpretation class Class to change the
-Photometric Interpetation of an input DICOM.
+ImageChangePhotometricInterpretation class.
+
+Class to change the Photometric Interpetation of an input DICOM
 
 C++ includes: gdcmImageChangePhotometricInterpretation.h ";
 
@@ -5032,9 +5104,11 @@ Set/Get requested PhotometricInterpretation. ";
 // File: classgdcm_1_1ImageChangePlanarConfiguration.xml
 %feature("docstring") gdcm::ImageChangePlanarConfiguration "
 
-ImageChangePlanarConfiguration class Class to change the Planar
-configuration of an input DICOM By default it will change into the
-more usual reprensentation: PlanarConfiguration = 0.
+ImageChangePlanarConfiguration class.
+
+Class to change the Planar configuration of an input DICOM By default
+it will change into the more usual reprensentation:
+PlanarConfiguration = 0
 
 C++ includes: gdcmImageChangePlanarConfiguration.h ";
 
@@ -5067,8 +5141,9 @@ Set/Get requested PlanarConfigation. ";
 // File: classgdcm_1_1ImageChangeTransferSyntax.xml
 %feature("docstring") gdcm::ImageChangeTransferSyntax "
 
-ImageChangeTransferSyntax class Class to change the transfer syntax of
-an input DICOM.
+ImageChangeTransferSyntax class.
+
+Class to change the transfer syntax of an input DICOM
 
 If only Force param is set but no input TransferSyntax is set, it is
 assumed that user only wants to inspect encapsulated stream (advanced
@@ -5261,8 +5336,10 @@ gdcm::ImageConverter::SetInput(Image const &input) ";
 // File: classgdcm_1_1ImageFragmentSplitter.xml
 %feature("docstring") gdcm::ImageFragmentSplitter "
 
-ImageFragmentSplitter class For single frame image, DICOM standard
-allow splitting the frame into multiple fragments.
+ImageFragmentSplitter class.
+
+For single frame image, DICOM standard allow splitting the frame into
+multiple fragments
 
 C++ includes: gdcmImageFragmentSplitter.h ";
 
@@ -5353,16 +5430,15 @@ The input DICOM file does not contains an Image. ";
 // File: classgdcm_1_1ImageRegionReader.xml
 %feature("docstring") gdcm::ImageRegionReader "
 
-ImageRegionReader This class is able to read a region from a DICOM
-file containing an image. This implementation requires that the
-information stored in the DICOM header are consistent with what is in
-the encapsulated Pixel Data. This is technically not required by DICOM
-standard, which makes this implementation illegal with regards to the
-famous JPEG
-note:http://dicom.nema.org/medical/dicom/current/output/chtml/part05/sect_8.2.html
-#para_4bcb841e-c6bf-4e26-82a5-3fad3c942da0.
+ImageRegionReader.
 
-See:   ImageReader
+This class is able to read a region from a DICOM file containing an
+image. This implementation requires that the information stored in the
+DICOM header are consistent with what is in the encapsulated Pixel
+Data. This is technically not required by DICOM standard, which makes
+this implementation illegal with regards to the famous JPEG
+note:http://dicom.nema.org/medical/dicom/current/output/chtml/part05/sect_8.2.html
+#para_4bcb841e-c6bf-4e26-82a5-3fad3c942da0 See:   ImageReader
 
 C++ includes: gdcmImageRegionReader.h ";
 
@@ -5400,8 +5476,10 @@ Set/Get Region to be read. ";
 // File: classgdcm_1_1ImageToImageFilter.xml
 %feature("docstring") gdcm::ImageToImageFilter "
 
-ImageToImageFilter class Super class for all filter taking an image
-and producing an output image.
+ImageToImageFilter class.
+
+Super class for all filter taking an image and producing an output
+image
 
 C++ includes: gdcmImageToImageFilter.h ";
 
@@ -5453,8 +5531,10 @@ Write. ";
 // File: classgdcm_1_1network_1_1ImplementationClassUIDSub.xml
 %feature("docstring") gdcm::network::ImplementationClassUIDSub "
 
-ImplementationClassUIDSub PS 3.7 Table D.3-1 IMPLEMENTATION CLASS UID
-SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
+ImplementationClassUIDSub.
+
+PS 3.7 Table D.3-1 IMPLEMENTATION CLASS UID SUB-ITEM FIELDS (A
+-ASSOCIATE-RQ)
 
 C++ includes: gdcmImplementationClassUIDSub.h ";
 
@@ -5482,8 +5562,9 @@ const ";
 // File: classgdcm_1_1network_1_1ImplementationUIDSub.xml
 %feature("docstring") gdcm::network::ImplementationUIDSub "
 
-ImplementationUIDSub Table D.3-2 IMPLEMENTATION UID SUB-ITEM FIELDS (A
--ASSOCIATE-AC)
+ImplementationUIDSub.
+
+Table D.3-2 IMPLEMENTATION UID SUB-ITEM FIELDS (A-ASSOCIATE-AC)
 
 C++ includes: gdcmImplementationUIDSub.h ";
 
@@ -5497,8 +5578,10 @@ gdcm::network::ImplementationUIDSub::Write(std::ostream &os) const ";
 // File: classgdcm_1_1network_1_1ImplementationVersionNameSub.xml
 %feature("docstring") gdcm::network::ImplementationVersionNameSub "
 
-ImplementationVersionNameSub Table D.3-3 IMPLEMENTATION VERSION NAME
-SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
+ImplementationVersionNameSub.
+
+Table D.3-3 IMPLEMENTATION VERSION NAME SUB-ITEM FIELDS (A-ASSOCIATE-
+RQ)
 
 C++ includes: gdcmImplementationVersionNameSub.h ";
 
@@ -5692,14 +5775,15 @@ gdcm::IODs::GetIOD(const char *name) const ";
 // File: classgdcm_1_1IPPSorter.xml
 %feature("docstring") gdcm::IPPSorter "
 
-IPPSorter Implement a simple Image Position ( Patient) sorter, along
-the Image Orientation ( Patient) direction. This algorithm does NOT
-support duplicate and will FAIL in case of duplicate IPP.
+IPPSorter.
 
-WARNING:  See special note for SetZSpacingTolerance when computing the
-ZSpacing from the IPP of each DICOM files (default tolerance for
-consistent spacing is: 1e-6mm)  For more information on Spacing, and
-how it is defined in DICOM, advanced users may refers to:
+Implement a simple Image Position ( Patient) sorter, along the Image
+Orientation ( Patient) direction. This algorithm does NOT support
+duplicate and will FAIL in case of duplicate IPP. WARNING:  See
+special note for SetZSpacingTolerance when computing the ZSpacing from
+the IPP of each DICOM files (default tolerance for consistent spacing
+is: 1e-6mm)  For more information on Spacing, and how it is defined in
+DICOM, advanced users may refers to:
 
 http://gdcm.sourceforge.net/wiki/index.php/Imager_Pixel_Spacing
 
@@ -5780,16 +5864,16 @@ deduce if file are actually a 3D volume ";
 // File: classgdcm_1_1Item.xml
 %feature("docstring") gdcm::Item "
 
-Class to represent an Item A component of the value of a Data Element
-that is of Value Representation Sequence of Items. An Item contains a
-Data Set . See PS 3.5 7.5.1 Item Encoding Rules Each Item of a Data
-Element of VR SQ shall be encoded as a DICOM Standart Data Element
-with a specific Data Element Tag of Value (FFFE,E000). The Item Tag is
-followed by a 4 byte Item Length field encoded in one of the following
-two ways Explicit/ Implicit.
+Class to represent an Item.
 
-ITEM: A component of the Value of a Data Element that is of Value
-Representation Sequence of Items. An Item contains a Data Set.
+A component of the value of a Data Element that is of Value
+Representation Sequence of Items. An Item contains a Data Set . See PS
+3.5 7.5.1 Item Encoding Rules Each Item of a Data Element of VR SQ
+shall be encoded as a DICOM Standart Data Element with a specific Data
+Element Tag of Value (FFFE,E000). The Item Tag is followed by a 4 byte
+Item Length field encoded in one of the following two ways Explicit/
+Implicit ITEM: A component of the Value of a Data Element that is of
+Value Representation Sequence of Items. An Item contains a Data Set.
 
 C++ includes: gdcmItem.h ";
 
@@ -5979,11 +6063,13 @@ std::ostream &os) ";
 // File: classgdcm_1_1JPEGCodec.xml
 %feature("docstring") gdcm::JPEGCodec "
 
-JPEG codec Class to do JPEG (8bits, 12bits, 16bits lossy & lossless).
-It redispatch in between the different codec implementation:
-JPEG8Codec, JPEG12Codec & JPEG16Codec It also support inconsistency in
-between DICOM header and JPEG compressed stream ImageCodec
-implementation for the JPEG case.
+JPEG codec.
+
+Class to do JPEG (8bits, 12bits, 16bits lossy & lossless). It
+redispatch in between the different codec implementation: JPEG8Codec,
+JPEG12Codec & JPEG16Codec It also support inconsistency in between
+DICOM header and JPEG compressed stream ImageCodec implementation for
+the JPEG case
 
 Things you should know if you ever want to dive into DICOM/JPEG world
 (among other):
@@ -6063,7 +6149,7 @@ JPEG-LS.
 
 codec that implement the JPEG-LS compression this is an implementation
 of ImageCodec for JPEG-LS  It uses the CharLS JPEG-LS
-implementationhttp://charls.codeplex.com
+implementationhttps://github.com/team-charls/charls
 
 C++ includes: gdcmJPEGLSCodec.h ";
 
@@ -6405,8 +6491,9 @@ gdcm::Macros::IsEmpty() const ";
 // File: classgdcm_1_1network_1_1MaximumLengthSub.xml
 %feature("docstring") gdcm::network::MaximumLengthSub "
 
-MaximumLengthSub Annex D Table D.1-1 MAXIMUM LENGTH SUB-ITEM FIELDS (A
--ASSOCIATE-RQ)
+MaximumLengthSub.
+
+Annex D Table D.1-1 MAXIMUM LENGTH SUB-ITEM FIELDS (A-ASSOCIATE-RQ)
 
 or
 
@@ -6547,8 +6634,9 @@ TConstMemberFunctionPointer memberFunction) ";
 // File: classgdcm_1_1MeshPrimitive.xml
 %feature("docstring") gdcm::MeshPrimitive "
 
-This class defines surface mesh primitives. It is designed from
-surface mesh primitives macro.
+This class defines surface mesh primitives.
+
+It is designed from surface mesh primitives macro.
 
 See:  PS 3.3 C.27.4
 
@@ -6604,9 +6692,10 @@ gdcm::MeshPrimitive::SetPrimitiveType(const MPType type) ";
 %feature("docstring") gdcm::ModalityPerformedProcedureStepCreateQuery
 "
 
-ModalityPerformedProcedureStepCreateQuery contains: the class which
-will produce a dataset for n-create for Modality Performed Procedure
-Step sop class.
+ModalityPerformedProcedureStepCreateQuery.
+
+contains: the class which will produce a dataset for n-create for
+Modality Performed Procedure Step sop class
 
 C++ includes: gdcmModalityPerformedProcedureStepCreateQuery.h ";
 
@@ -6635,9 +6724,10 @@ inStrict=true) const ";
 // File: classgdcm_1_1ModalityPerformedProcedureStepSetQuery.xml
 %feature("docstring") gdcm::ModalityPerformedProcedureStepSetQuery "
 
-ModalityPerformedProcedureStepSetQuery contains: the class which will
-produce a dataset for n-set for Modality Performed Procedure Step sop
-class.
+ModalityPerformedProcedureStepSetQuery.
+
+contains: the class which will produce a dataset for n-set for
+Modality Performed Procedure Step sop class
 
 C++ includes: gdcmModalityPerformedProcedureStepSetQuery.h ";
 
@@ -6781,8 +6871,10 @@ gdcm::Modules::IsEmpty() const ";
 // File: classgdcm_1_1MovePatientRootQuery.xml
 %feature("docstring") gdcm::MovePatientRootQuery "
 
-MovePatientRootQuery contains: the class which will produce a dataset
-for c-move with patient root.
+MovePatientRootQuery.
+
+contains: the class which will produce a dataset for c-move with
+patient root
 
 C++ includes: gdcmMovePatientRootQuery.h ";
 
@@ -6829,8 +6921,10 @@ and study level can be passed along as well. ";
 // File: classgdcm_1_1MoveStudyRootQuery.xml
 %feature("docstring") gdcm::MoveStudyRootQuery "
 
-MoveStudyRootQuery contains: the class which will produce a dataset
-for C-MOVE with study root.
+MoveStudyRootQuery.
+
+contains: the class which will produce a dataset for C-MOVE with study
+root
 
 C++ includes: gdcmMoveStudyRootQuery.h ";
 
@@ -6876,7 +6970,9 @@ and study level can be passed along as well. ";
 // File: classgdcm_1_1network_1_1NActionRQ.xml
 %feature("docstring") gdcm::network::NActionRQ "
 
-NActionRQ this file defines the messages for the NAction action.
+NActionRQ.
+
+this file defines the messages for the NAction action
 
 C++ includes: gdcmNActionMessages.h ";
 
@@ -6901,7 +6997,9 @@ gdcm::network::NActionRSP::ConstructPDVByDataSet(const DataSet
 // File: classgdcm_1_1network_1_1NCreateRQ.xml
 %feature("docstring") gdcm::network::NCreateRQ "
 
-NCreateRQ this file defines the messages for the ncreate action.
+NCreateRQ.
+
+this file defines the messages for the ncreate action
 
 C++ includes: gdcmNCreateMessages.h ";
 
@@ -6926,7 +7024,9 @@ gdcm::network::NCreateRSP::ConstructPDVByDataSet(const DataSet
 // File: classgdcm_1_1network_1_1NDeleteRQ.xml
 %feature("docstring") gdcm::network::NDeleteRQ "
 
-NDeleteRQ this file defines the messages for the ndelete action.
+NDeleteRQ.
+
+this file defines the messages for the ndelete action
 
 C++ includes: gdcmNDeleteMessages.h ";
 
@@ -6980,8 +7080,9 @@ gdcm::NestedModuleEntries::GetNumberOfModuleEntries() ";
 // File: classgdcm_1_1network_1_1NEventReportRQ.xml
 %feature("docstring") gdcm::network::NEventReportRQ "
 
-NEventReportRQ this file defines the messages for the neventreport
-action.
+NEventReportRQ.
+
+this file defines the messages for the neventreport action
 
 C++ includes: gdcmNEventReportMessages.h ";
 
@@ -7007,7 +7108,9 @@ gdcm::network::NEventReportRSP::ConstructPDVByDataSet(const DataSet
 // File: classgdcm_1_1network_1_1NGetRQ.xml
 %feature("docstring") gdcm::network::NGetRQ "
 
-NGetRQ this file defines the messages for the nget action.
+NGetRQ.
+
+this file defines the messages for the nget action
 
 C++ includes: gdcmNGetMessages.h ";
 
@@ -7044,20 +7147,20 @@ includes: gdcmNormalizedMessageFactory.h ";
 // File: classgdcm_1_1NormalizedNetworkFunctions.xml
 %feature("docstring") gdcm::NormalizedNetworkFunctions "
 
-Normalized Network Functions These functions provide a generic API to
-the DICOM functions implemented in GDCM. Advanced users can use this
-code as a template for building their own versions of these functions
-(for instance, to provide progress bars or some other way of handling
-returned query information), but for most users, these functions
-should be sufficient to interface with a PACS to a local machine. Note
-that these functions are not contained within a static class or some
-other class-style interface, because multiple connections can be
-instantiated in the same program. The DICOM standard is much more
-function oriented rather than class oriented in this instance, so the
-design of this API reflects that functional approach. These functions
-implements the following SCU operations:
+Normalized Network Functions.
 
-N-EVENT-REPORT
+These functions provide a generic API to the DICOM functions
+implemented in GDCM. Advanced users can use this code as a template
+for building their own versions of these functions (for instance, to
+provide progress bars or some other way of handling returned query
+information), but for most users, these functions should be sufficient
+to interface with a PACS to a local machine. Note that these functions
+are not contained within a static class or some other class-style
+interface, because multiple connections can be instantiated in the
+same program. The DICOM standard is much more function oriented rather
+than class oriented in this instance, so the design of this API
+reflects that functional approach. These functions implements the
+following SCU operations: N-EVENT-REPORT
 
 N-GET
 
@@ -7075,7 +7178,9 @@ C++ includes: gdcmNormalizedNetworkFunctions.h ";
 // File: classgdcm_1_1network_1_1NSetRQ.xml
 %feature("docstring") gdcm::network::NSetRQ "
 
-NSetRQ this file defines the messages for the nset action.
+NSetRQ.
+
+this file defines the messages for the nset action
 
 C++ includes: gdcmNSetMessages.h ";
 
@@ -7204,7 +7309,7 @@ gdcm::OpenSSLP7CryptoFactory::CreateCMSProvider() ";
 %feature("docstring") gdcm::OpenSSLP7CryptographicMessageSyntax "
 
 Class for CryptographicMessageSyntax encryption. This is just a simple
-wrapper around openssl PKCS7_encrypt functionalities.
+wrapper around openssl PKCS7_encrypt functionalities
 
 See online
 documentationhttp://www.openssl.org/docs/crypto/PKCS7_encrypt.html
@@ -7522,7 +7627,9 @@ C++ includes: gdcmPatient.h ";
 // File: classgdcm_1_1network_1_1PDataTFPDU.xml
 %feature("docstring") gdcm::network::PDataTFPDU "
 
-PDataTFPDU Table 9-22 P-DATA-TF PDU FIELDS.
+PDataTFPDU.
+
+Table 9-22 P-DATA-TF PDU FIELDS
 
 C++ includes: gdcmPDataTFPDU.h ";
 
@@ -7664,9 +7771,10 @@ Decode. ";
 // File: classgdcm_1_1network_1_1PDUFactory.xml
 %feature("docstring") gdcm::network::PDUFactory "
 
-PDUFactory basically, given an initial byte, construct the appropriate
-PDU. This way, the event loop doesn't have to know about all the
-different PDU types.
+PDUFactory basically, given an initial byte, construct the.
+
+appropriate PDU. This way, the event loop doesn't have to know about
+all the different PDU types.
 
 C++ includes: gdcmPDUFactory.h ";
 
@@ -7701,8 +7809,9 @@ gdcm::PersonName::SetComponents(const char *components[]) ";
 // File: classgdcm_1_1PGXCodec.xml
 %feature("docstring") gdcm::PGXCodec "
 
-Class to do PGX See PGX as used in JPEG 2000 implementation and
-reference images.
+Class to do PGX.
+
+See PGX as used in JPEG 2000 implementation and reference images
 
 C++ includes: gdcmPGXCodec.h ";
 
@@ -7891,9 +8000,11 @@ call SetScalarType before SetSamplesPerPixel ";
 // File: classgdcm_1_1Pixmap.xml
 %feature("docstring") gdcm::Pixmap "
 
-Pixmap class A bitmap based image. Used as parent for both IconImage
-and the main Pixel Data Image It does not contains any World Space
-information (IPP, IOP)
+Pixmap class.
+
+A bitmap based image. Used as parent for both IconImage and the main
+Pixel Data Image It does not contains any World Space information
+(IPP, IOP)
 
 See:   PixmapReader
 
@@ -7998,8 +8109,10 @@ The input DICOM file does not contains an Pixmap. ";
 // File: classgdcm_1_1PixmapToPixmapFilter.xml
 %feature("docstring") gdcm::PixmapToPixmapFilter "
 
-PixmapToPixmapFilter class Super class for all filter taking an image
-and producing an output image.
+PixmapToPixmapFilter class.
+
+Super class for all filter taking an image and producing an output
+image
 
 C++ includes: gdcmPixmapToPixmapFilter.h ";
 
@@ -8023,9 +8136,9 @@ Get Output image. ";
 // File: classgdcm_1_1PixmapWriter.xml
 %feature("docstring") gdcm::PixmapWriter "
 
-PixmapWriter This class will takes two inputs:
+PixmapWriter.
 
-The DICOM DataSet
+This class will takes two inputs: The DICOM DataSet
 
 The Image input It will override any info from the Image over the
 DataSet.
@@ -8070,10 +8183,11 @@ Write. ";
 // File: classgdcm_1_1PNMCodec.xml
 %feature("docstring") gdcm::PNMCodec "
 
-Class to do PNM PNM is the Portable anymap file format. The main web
-page can be found at:http://netpbm.sourceforge.net/.
+Class to do PNM.
 
-Only support P5 & P6 PNM file (binary grayscale and binary rgb)
+PNM is the Portable anymap file format. The main web page can be found
+at:http://netpbm.sourceforge.net/ Only support P5 & P6 PNM file
+(binary grayscale and binary rgb)
 
 C++ includes: gdcmPNMCodec.h ";
 
@@ -8224,9 +8338,9 @@ gdcm::PresentationContext::SetPresentationContextID(uint8_t id) ";
 // File: classgdcm_1_1network_1_1PresentationContextAC.xml
 %feature("docstring") gdcm::network::PresentationContextAC "
 
-PresentationContextAC Table 9-18 PRESENTATION CONTEXT ITEM FIELDS.
+PresentationContextAC.
 
-See:   PresentationContext
+Table 9-18 PRESENTATION CONTEXT ITEM FIELDS See:   PresentationContext
 
 C++ includes: gdcmPresentationContextAC.h ";
 
@@ -8273,12 +8387,13 @@ gdcm::network::PresentationContextAC::Write(std::ostream &os) const ";
 // File: classgdcm_1_1PresentationContextGenerator.xml
 %feature("docstring") gdcm::PresentationContextGenerator "
 
-PresentationContextGenerator This class is responsible for generating
-the proper PresentationContext that will be used in subsequent
-operation during a DICOM Query/Retrieve association. The step of the
-association is very sensible as special care need to be taken to
-explicitly define what instance are going to be send and how they are
-encoded.
+PresentationContextGenerator.
+
+This class is responsible for generating the proper
+PresentationContext that will be used in subsequent operation during a
+DICOM Query/Retrieve association. The step of the association is very
+sensible as special care need to be taken to explicitly define what
+instance are going to be send and how they are encoded.
 
 For example a PresentationContext will express that negotiation
 requires that CT Image Storage are send using JPEG Lossless, while US
@@ -8353,9 +8468,10 @@ gdcm::PresentationContextGenerator::SetMergeModeToTransferSyntax() ";
 // File: classgdcm_1_1network_1_1PresentationContextRQ.xml
 %feature("docstring") gdcm::network::PresentationContextRQ "
 
-PresentationContextRQ Table 9-13 PRESENTATION CONTEXT ITEM FIELDS.
+PresentationContextRQ.
 
-See:   PresentationContextAC
+Table 9-13 PRESENTATION CONTEXT ITEM FIELDS See:
+PresentationContextAC
 
 C++ includes: gdcmPresentationContextRQ.h ";
 
@@ -8436,7 +8552,9 @@ gdcm::network::PresentationContextRQ::Write(std::ostream &os) const ";
 // File: classgdcm_1_1network_1_1PresentationDataValue.xml
 %feature("docstring") gdcm::network::PresentationDataValue "
 
-PresentationDataValue Table 9-23 PRESENTATION-DATA-VALUE ITEM FIELDS.
+PresentationDataValue.
+
+Table 9-23 PRESENTATION-DATA-VALUE ITEM FIELDS
 
 C++ includes: gdcmPresentationDataValue.h ";
 
@@ -8620,7 +8738,9 @@ gdcm::PrivateTag::SetOwner(const char *owner) ";
 // File: classgdcm_1_1ProgressEvent.xml
 %feature("docstring") gdcm::ProgressEvent "
 
-ProgressEvent Special type of event triggered during.
+ProgressEvent.
+
+Special type of event triggered during
 
 See:   AnyEvent
 
@@ -8739,8 +8859,10 @@ gdcm::PythonFilter::UseDictAlways(bool) ";
 // File: classgdcm_1_1QueryBase.xml
 %feature("docstring") gdcm::QueryBase "
 
-QueryBase contains: the base class for constructing a query dataset
-for a C-FIND and a C-MOVE.
+QueryBase.
+
+contains: the base class for constructing a query dataset for a C-FIND
+and a C-MOVE
 
 There are four levels of C-FIND and C-MOVE query:  Patient
 
@@ -8813,9 +8935,11 @@ std::vector<Tag> gdcm::QueryBase::GetUniqueTags(const ERootType
 QueryFactory.h.
 
 contains: a class to produce a query based off of user-entered
-information  Essentially, this class is used to construct a query
-based off of user input (typically from the command line; if in code
-directly, the query itself could just be instantiated)
+information
+
+Essentially, this class is used to construct a query based off of user
+input (typically from the command line; if in code directly, the query
+itself could just be instantiated)
 
 In theory, could also be used as the interface to validate incoming
 datasets as belonging to a particular query style
@@ -8826,8 +8950,10 @@ C++ includes: gdcmQueryFactory.h ";
 // File: classgdcm_1_1QueryImage.xml
 %feature("docstring") gdcm::QueryImage "
 
-QueryImage contains: class to construct an image-based query for
-C-FIND and C-MOVE.
+QueryImage.
+
+contains: class to construct an image-based query for C-FIND and
+C-MOVE
 
 C++ includes: gdcmQueryImage.h ";
 
@@ -8856,8 +8982,10 @@ gdcm::QueryImage::GetQueryLevel() const ";
 // File: classgdcm_1_1QueryPatient.xml
 %feature("docstring") gdcm::QueryPatient "
 
-QueryPatient contains: class to construct a patient-based query for
-c-find and c-move.
+QueryPatient.
+
+contains: class to construct a patient-based query for c-find and
+c-move
 
 C++ includes: gdcmQueryPatient.h ";
 
@@ -8886,8 +9014,10 @@ gdcm::QueryPatient::GetQueryLevel() const ";
 // File: classgdcm_1_1QuerySeries.xml
 %feature("docstring") gdcm::QuerySeries "
 
-QuerySeries contains: class to construct a series-based query for
-c-find and c-move.
+QuerySeries.
+
+contains: class to construct a series-based query for c-find and
+c-move
 
 C++ includes: gdcmQuerySeries.h ";
 
@@ -8916,8 +9046,9 @@ gdcm::QuerySeries::GetQueryLevel() const ";
 // File: classgdcm_1_1QueryStudy.xml
 %feature("docstring") gdcm::QueryStudy "
 
-QueryStudy.h contains: class to construct a study-based query for
-C-FIND and C-MOVE.
+QueryStudy.h.
+
+contains: class to construct a study-based query for C-FIND and C-MOVE
 
 C++ includes: gdcmQueryStudy.h ";
 
@@ -9148,15 +9279,17 @@ Print. ";
 // File: classgdcm_1_1Rescaler.xml
 %feature("docstring") gdcm::Rescaler "
 
-Rescale class This class is meant to apply the linear transform of
-Stored Pixel Value to Real World Value. This is mostly found in CT or
-PET dataset, where the value are stored using one type, but need to be
-converted to another scale using a linear transform. There are
-basically two cases: In CT: the linear transform is generally integer
-based. E.g. the Stored Pixel Type is unsigned short 12bits, but to get
-Hounsfield unit, one need to apply the linear transform: \\\\[ RWV =
-1. * SV - 1024 \\\\] So the best scalar to store the Real World Value
-will be 16 bits signed type.
+Rescale class.
+
+This class is meant to apply the linear transform of Stored Pixel
+Value to Real World Value. This is mostly found in CT or PET dataset,
+where the value are stored using one type, but need to be converted to
+another scale using a linear transform. There are basically two cases:
+In CT: the linear transform is generally integer based. E.g. the
+Stored Pixel Type is unsigned short 12bits, but to get Hounsfield
+unit, one need to apply the linear transform: \\\\[ RWV = 1. * SV -
+1024 \\\\] So the best scalar to store the Real World Value will be 16
+bits signed type.
 
 In PET: the linear transform is generally floating point based. Since
 the dynamic range can be quite high, the Rescale Slope / Rescale
@@ -9305,8 +9438,10 @@ gdcm::RLECodec::SetLength(unsigned long l) ";
 // File: classgdcm_1_1network_1_1RoleSelectionSub.xml
 %feature("docstring") gdcm::network::RoleSelectionSub "
 
-RoleSelectionSub PS 3.7 Table D.3-9 SCP/SCU ROLE SELECTION SUB-ITEM
-FIELDS (A-ASSOCIATE-RQ)
+RoleSelectionSub.
+
+PS 3.7 Table D.3-9 SCP/SCU ROLE SELECTION SUB-ITEM FIELDS (A
+-ASSOCIATE-RQ)
 
 C++ includes: gdcmRoleSelectionSub.h ";
 
@@ -9336,10 +9471,12 @@ const ";
 // File: classgdcm_1_1Scanner.xml
 %feature("docstring") gdcm::Scanner "
 
-Scanner This filter is meant for quickly browsing a FileSet (a set of
-files on disk). Special consideration are taken so as to read the
-mimimum amount of information in each file in order to retrieve the
-user specified set of DICOM Attribute.
+Scanner.
+
+This filter is meant for quickly browsing a FileSet (a set of files on
+disk). Special consideration are taken so as to read the mimimum
+amount of information in each file in order to retrieve the user
+specified set of DICOM Attribute.
 
 This filter is dealing with both VRASCII and VRBINARY element, thanks
 to the help of StringFilter
@@ -9474,8 +9611,10 @@ Start the scan ! ";
 // File: classgdcm_1_1Segment.xml
 %feature("docstring") gdcm::Segment "
 
-This class defines a segment. It mainly contains attributes of group
-0x0062. In addition, it can be associated with surface.
+This class defines a segment.
+
+It mainly contains attributes of group 0x0062. In addition, it can be
+associated with surface.
 
 See:  PS 3.3 C.8.20.2 and C.8.23
 
@@ -9595,8 +9734,9 @@ Initialize a SegmentedPaletteColorLookupTable. ";
 // File: classgdcm_1_1SegmentReader.xml
 %feature("docstring") gdcm::SegmentReader "
 
-This class defines a segment reader. It reads attributes of group
-0x0062.
+This class defines a segment reader.
+
+It reads attributes of group 0x0062.
 
 See:  PS 3.3 C.8.20.2 and C.8.23
 
@@ -9621,8 +9761,9 @@ Read. ";
 // File: classgdcm_1_1SegmentWriter.xml
 %feature("docstring") gdcm::SegmentWriter "
 
-This class defines a segment writer. It writes attributes of group
-0x0062.
+This class defines a segment writer.
+
+It writes attributes of group 0x0062.
 
 See:  PS 3.3 C.8.20.2 and C.8.23
 
@@ -9753,10 +9894,10 @@ gdcm::SequenceOfFragments::WriteBuffer(std::ostream &os) const ";
 // File: classgdcm_1_1SequenceOfItems.xml
 %feature("docstring") gdcm::SequenceOfItems "
 
-Class to represent a Sequence Of Items (value representation : SQ)
+Class to represent a Sequence Of Items.
 
-a Value Representation for Data Elements that contains a sequence of
-Data Sets.
+(value representation : SQ) a Value Representation for Data Elements
+that contains a sequence of Data Sets.
 
 Sequence of Item allows for Nested Data Sets
 
@@ -10139,8 +10280,9 @@ Specify the callback function. ";
 // File: classgdcm_1_1SimpleSubjectWatcher.xml
 %feature("docstring") gdcm::SimpleSubjectWatcher "
 
-SimpleSubjectWatcher This is a typical Subject Watcher class. It will
-observe all events.
+SimpleSubjectWatcher.
+
+This is a typical Subject Watcher class. It will observe all events.
 
 C++ includes: gdcmSimpleSubjectWatcher.h ";
 
@@ -10188,8 +10330,10 @@ Explicit function to retrieve the pointer. ";
 // File: classgdcm_1_1network_1_1SOPClassExtendedNegociationSub.xml
 %feature("docstring") gdcm::network::SOPClassExtendedNegociationSub "
 
-SOPClassExtendedNegociationSub PS 3.7 Table D.3-11 SOP CLASS EXTENDED
-NEGOTIATION SUB-ITEM FIELDS (A-ASSOCIATE-RQ and A-ASSOCIATE-AC)
+SOPClassExtendedNegociationSub.
+
+PS 3.7 Table D.3-11 SOP CLASS EXTENDED NEGOTIATION SUB-ITEM FIELDS (A
+-ASSOCIATE-RQ and A-ASSOCIATE-AC)
 
 C++ includes: gdcmSOPClassExtendedNegociationSub.h ";
 
@@ -10238,8 +10382,10 @@ C++ includes: gdcmSOPClassUIDToIOD.h ";
 // File: classgdcm_1_1Sorter.xml
 %feature("docstring") gdcm::Sorter "
 
-Sorter General class to do sorting using a custom function You simply
-need to provide a function of type: Sorter::SortFunction.
+Sorter.
+
+General class to do sorting using a custom function You simply need to
+provide a function of type: Sorter::SortFunction
 
 WARNING:  implementation details. For now there is no cache mechanism.
 Which means that everytime you call Sort, all files specified as input
@@ -10325,8 +10471,9 @@ differentiate those.
 
 Thank you for your time,
 
-Ref:http://lists.nema.org/scripts/lyris.pl?sub=488573&id=400720477 See
-PS 3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES
+Ref:http://lists.nema.org/scripts/lyris.pl?sub=488573&id=400720477
+
+See PS 3.3-2008, Table C.7-11b IMAGE PIXEL MACRO ATTRIBUTES
 
 Ratio of the vertical size and horizontal size of the pixels in the
 image specified by a pair of integer values where the first value is
@@ -10364,9 +10511,11 @@ C++ includes: gdcmSpectroscopy.h ";
 // File: classgdcm_1_1SplitMosaicFilter.xml
 %feature("docstring") gdcm::SplitMosaicFilter "
 
-SplitMosaicFilter class Class to reshuffle bytes for a SIEMENS Mosaic
-image Siemens CSA Image Header CSA:= Common Siemens Architecture,
-sometimes also known as Common syngo Architecture.
+SplitMosaicFilter class.
+
+Class to reshuffle bytes for a SIEMENS Mosaic image Siemens CSA Image
+Header CSA:= Common Siemens Architecture, sometimes also known as
+Common syngo Architecture
 
 C++ includes: gdcmSplitMosaicFilter.h ";
 
@@ -10615,10 +10764,12 @@ ordering of chunks that are written. ";
 // File: classgdcm_1_1StrictScanner.xml
 %feature("docstring") gdcm::StrictScanner "
 
-StrictScanner This filter is meant for quickly browsing a FileSet (a
-set of files on disk). Special consideration are taken so as to read
-the mimimum amount of information in each file in order to retrieve
-the user specified set of DICOM Attribute.
+StrictScanner.
+
+This filter is meant for quickly browsing a FileSet (a set of files on
+disk). Special consideration are taken so as to read the mimimum
+amount of information in each file in order to retrieve the user
+specified set of DICOM Attribute.
 
 This filter is dealing with both VRASCII and VRBINARY element, thanks
 to the help of StringFilter
@@ -10801,10 +10952,11 @@ TDelimiter, TMaxLength, TPadChar >::Truncate() const ";
 // File: classgdcm_1_1StringFilter.xml
 %feature("docstring") gdcm::StringFilter "
 
-StringFilter StringFilter is the class that make gdcm2.x looks more
-like gdcm1 and transform the binary blob contained in a DataElement
-into a string, typically this is a nice feature to have for wrapped
-language.
+StringFilter.
+
+StringFilter is the class that make gdcm2.x looks more like gdcm1 and
+transform the binary blob contained in a DataElement into a string,
+typically this is a nice feature to have for wrapped language
 
 C++ includes: gdcmStringFilter.h ";
 
@@ -10947,8 +11099,9 @@ Remove the observer with this tag value. ";
 // File: classgdcm_1_1Surface.xml
 %feature("docstring") gdcm::Surface "
 
-This class defines a SURFACE IE. This members are taken from required
-surface mesh module attributes.
+This class defines a SURFACE IE.
+
+This members are taken from required surface mesh module attributes.
 
 See:  PS 3.3 A.1.2.18 , A.57 and C.27
 
@@ -11170,7 +11323,9 @@ gdcm::Surface::SetVectorDimensionality(const unsigned short dim) ";
 // File: classgdcm_1_1SurfaceHelper.xml
 %feature("docstring") gdcm::SurfaceHelper "
 
-SurfaceHelper Helper class for Surface object.
+SurfaceHelper.
+
+Helper class for Surface object
 
 C++ includes: gdcmSurfaceHelper.h ";
 
@@ -11178,8 +11333,9 @@ C++ includes: gdcmSurfaceHelper.h ";
 // File: classgdcm_1_1SurfaceReader.xml
 %feature("docstring") gdcm::SurfaceReader "
 
-This class defines a SURFACE IE reader. It reads surface mesh module
-attributes.
+This class defines a SURFACE IE reader.
+
+It reads surface mesh module attributes.
 
 See:  PS 3.3 A.1.2.18 , A.57 and C.27
 
@@ -11201,8 +11357,9 @@ Read. ";
 // File: classgdcm_1_1SurfaceWriter.xml
 %feature("docstring") gdcm::SurfaceWriter "
 
-This class defines a SURFACE IE writer. It writes surface mesh module
-attributes.
+This class defines a SURFACE IE writer.
+
+It writes surface mesh module attributes.
 
 See:  PS 3.3 A.1.2.18 , A.57 and C.27
 
@@ -11364,14 +11521,15 @@ gdcmULTransitionTable.h ";
 %feature("docstring") gdcm::Tag "
 
 Class to represent a DICOM Data Element ( Attribute) Tag (Group,
-Element). Basically an uint32_t which can also be expressed as two
-uint16_t (group and element)
+Element).
 
-DATA ELEMENT TAG: A unique identifier for a Data Element composed of
-an ordered pair of numbers (a Group Number followed by an Element
-Number). GROUP NUMBER: The first number in the ordered pair of numbers
-that makes up a Data Element Tag. ELEMENT NUMBER: The second number in
-the ordered pair of numbers that makes up a Data Element Tag.
+Basically an uint32_t which can also be expressed as two uint16_t
+(group and element) DATA ELEMENT TAG: A unique identifier for a Data
+Element composed of an ordered pair of numbers (a Group Number
+followed by an Element Number). GROUP NUMBER: The first number in the
+ordered pair of numbers that makes up a Data Element Tag. ELEMENT
+NUMBER: The second number in the ordered pair of numbers that makes up
+a Data Element Tag.
 
 C++ includes: gdcmTag.h ";
 
@@ -11673,7 +11831,9 @@ gdcm::TransferSyntax::IsValid() const ";
 // File: classgdcm_1_1network_1_1TransferSyntaxSub.xml
 %feature("docstring") gdcm::network::TransferSyntaxSub "
 
-TransferSyntaxSub Table 9-15 TRANSFER SYNTAX SUB-ITEM FIELDS.
+TransferSyntaxSub.
+
+Table 9-15 TRANSFER SYNTAX SUB-ITEM FIELDS
 
 TODO what is the goal of :
 
@@ -11795,9 +11955,11 @@ and internal state is set to 0 ";
 // File: classgdcm_1_1network_1_1ULAction.xml
 %feature("docstring") gdcm::network::ULAction "
 
-ULAction A ULConnection in a given ULState can perform certain
-ULActions. This base class provides the interface for running those
-ULActions on a given ULConnection.
+ULAction.
+
+A ULConnection in a given ULState can perform certain ULActions. This
+base class provides the interface for running those ULActions on a
+given ULConnection.
 
 Essentially, the ULConnectionManager will take this object, determined
 from the current ULState of the ULConnection, and pass the
@@ -12101,13 +12263,15 @@ EEventID &outRaisedEvent) ";
 // File: classgdcm_1_1network_1_1ULBasicCallback.xml
 %feature("docstring") gdcm::network::ULBasicCallback "
 
-ULBasicCallback This is the most basic of callbacks for how the
-ULConnectionManager handles incoming datasets. DataSets are just
-concatenated to the mDataSets vector, and the result can be pulled out
-of the vector by later code. Alternatives to this method include
-progress updates, saving to disk, etc. This class is NOT THREAD SAFE.
-Access the dataset vector after the entire set of datasets has been
-returned by the ULConnectionManager.
+ULBasicCallback.
+
+This is the most basic of callbacks for how the ULConnectionManager
+handles incoming datasets. DataSets are just concatenated to the
+mDataSets vector, and the result can be pulled out of the vector by
+later code. Alternatives to this method include progress updates,
+saving to disk, etc. This class is NOT THREAD SAFE. Access the dataset
+vector after the entire set of datasets has been returned by the
+ULConnectionManager.
 
 C++ includes: gdcmULBasicCallback.h ";
 
@@ -12135,9 +12299,10 @@ DataSet &inDataSet) ";
 // File: classgdcm_1_1network_1_1ULConnection.xml
 %feature("docstring") gdcm::network::ULConnection "
 
-ULConnection This is the class that contains the socket to another
-machine, and passes data through itself, as well as maintaining a
-sense of state.
+ULConnection.
+
+This is the class that contains the socket to another machine, and
+passes data through itself, as well as maintaining a sense of state.
 
 The ULConnectionManager tells the ULConnection what data can actually
 be sent.
@@ -12298,11 +12463,13 @@ gdcm::network::ULConnectionCallback::SetImplicitFlag(const bool imp)
 // File: classgdcm_1_1network_1_1ULConnectionInfo.xml
 %feature("docstring") gdcm::network::ULConnectionInfo "
 
-ULConnectionInfo this class contains all the information about a
-particular connection as established by the user. That is, it's: User
-Information Calling AE Title Called AE Title IP address/computer name
-IP Port A connection must be established with this information, that's
-subsequently placed into various primitives for actual communication.
+ULConnectionInfo.
+
+this class contains all the information about a particular connection
+as established by the user. That is, it's: User Information Calling AE
+Title Called AE Title IP address/computer name IP Port A connection
+must be established with this information, that's subsequently placed
+into various primitives for actual communication.
 
 C++ includes: gdcmULConnectionInfo.h ";
 
@@ -12347,10 +12514,12 @@ inMaxPDULength) ";
 // File: classgdcm_1_1network_1_1ULConnectionManager.xml
 %feature("docstring") gdcm::network::ULConnectionManager "
 
-ULConnectionManager The ULConnectionManager performs actions on the
-ULConnection given inputs from the user and from the state of what's
-going on around the connection (ie, timeouts of the ARTIM timer,
-responses from the peer across the connection, etc).
+ULConnectionManager.
+
+The ULConnectionManager performs actions on the ULConnection given
+inputs from the user and from the state of what's going on around the
+connection (ie, timeouts of the ARTIM timer, responses from the peer
+across the connection, etc).
 
 Its inputs are ULEvents, and it performs ULActions.
 
@@ -12482,7 +12651,9 @@ callback based API ";
 // File: classgdcm_1_1network_1_1ULEvent.xml
 %feature("docstring") gdcm::network::ULEvent "
 
-ULEvent base class for network events.
+ULEvent.
+
+base class for network events.
 
 An event consists of the event ID and the data associated with that
 event.
@@ -12603,11 +12774,10 @@ bool readvalues=true) ";
 // File: classgdcm_1_1UNExplicitImplicitDataElement.xml
 %feature("docstring") gdcm::UNExplicitImplicitDataElement "
 
-Class to read/write a DataElement as ExplicitImplicit Data Element
-This class gather two known bugs:
+Class to read/write a DataElement as ExplicitImplicit Data Element.
 
-GDCM 1.2.0 would rewrite VR=UN Value Length on 2 bytes instead of 4
-bytes
+This class gather two known bugs: GDCM 1.2.0 would rewrite VR=UN Value
+Length on 2 bytes instead of 4 bytes
 
 GDCM 1.2.0 would also rewrite DataElement as Implicit when the VR
 would not be known this would only happen in some very rare cases.
@@ -12695,7 +12865,9 @@ C++ includes: gdcmUsage.h ";
 // File: classgdcm_1_1network_1_1UserInformation.xml
 %feature("docstring") gdcm::network::UserInformation "
 
-UserInformation Table 9-16 USER INFORMATION ITEM FIELDS.
+UserInformation.
+
+Table 9-16 USER INFORMATION ITEM FIELDS
 
 TODO what is the goal of :
 
@@ -12745,7 +12917,9 @@ const ";
 // File: classgdcm_1_1UUIDGenerator.xml
 %feature("docstring") gdcm::UUIDGenerator "
 
-Class for generating unique UUID generate DCE 1.1 uid.
+Class for generating unique UUID.
+
+generate DCE 1.1 uid
 
 C++ includes: gdcmUUIDGenerator.h ";
 
@@ -12898,16 +13072,16 @@ gdcm::VM::GetLength() const ";
 // File: classgdcm_1_1VR.xml
 %feature("docstring") gdcm::VR "
 
-VR class This is adapted from DICOM standard The biggest difference is
-the INVALID VR and the composite one that differ from standard (more
-like an addition) This allow us to represent all the possible case
-express in the DICOMV3 dict.
+VR class.
 
-VALUE REPRESENTATION ( VR) Specifies the data type and format of the
-Value(s) contained in the Value Field of a Data Element. VALUE
-REPRESENTATION FIELD: The field where the Value Representation of a
-Data Element is stored in the encoding of a Data Element structure
-with explicit VR.
+This is adapted from DICOM standard The biggest difference is the
+INVALID VR and the composite one that differ from standard (more like
+an addition) This allow us to represent all the possible case express
+in the DICOMV3 dict VALUE REPRESENTATION ( VR) Specifies the data type
+and format of the Value(s) contained in the Value Field of a Data
+Element. VALUE REPRESENTATION FIELD: The field where the Value
+Representation of a Data Element is stored in the encoding of a Data
+Element structure with explicit VR.
 
 C++ includes: gdcmVR.h ";
 
@@ -13882,8 +14056,10 @@ C++ includes: gdcmWaveform.h ";
 // File: classgdcm_1_1WLMFindQuery.xml
 %feature("docstring") gdcm::WLMFindQuery "
 
-PatientRootQuery contains: the class which will produce a dataset for
-c-find with patient root.
+PatientRootQuery.
+
+contains: the class which will produce a dataset for c-find with
+patient root
 
 C++ includes: gdcmWLMFindQuery.h ";
 
@@ -13927,8 +14103,10 @@ and study level can be passed along as well. ";
 // File: classgdcm_1_1Writer.xml
 %feature("docstring") gdcm::Writer "
 
-Writer ala DOM (Document Object Model) This class is a non-validating
-writer, it will only performs well- formedness check only.
+Writer ala DOM (Document Object Model)
+
+This class is a non-validating writer, it will only performs well-
+formedness check only.
 
 Detailled description here To avoid GDCM being yet another broken
 DICOM lib we try to be user level and avoid writing illegal stuff (odd
@@ -15219,6 +15397,9 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: DumpADAC_8cxx-example.xml
+
+
+// File: DumpCSA_8cs-example.xml
 
 
 // File: DumpExamCard_8cxx-example.xml
