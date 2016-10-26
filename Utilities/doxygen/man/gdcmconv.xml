@@ -372,7 +372,7 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 <para>For dicom3tools use: dcdump</para>
 </listitem>
 </itemizedlist>
-For reference, gdcmconv &#8211;raw will act as dcmdjpeg +cn +px, since it never tries to convert color space.</para>
+For reference, gdcmconv --raw will act as dcmdjpeg +cn +px, since it never tries to convert color space.</para>
 </refsection>
 <refsection xml:id="gdcmconv_1vim">
 <title>VIM: vimdiff</title>
