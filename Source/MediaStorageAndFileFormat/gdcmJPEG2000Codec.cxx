@@ -278,7 +278,6 @@ struct myfile
 
 void gdcm_error_callback(const char* msg, void* )
 {
-  (void)f;
   fprintf( stderr, "%s", msg );
 }
 
