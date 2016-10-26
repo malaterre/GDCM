@@ -752,6 +752,10 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
   return success;
 }
 
+static inline bool isasciiupper( char c ) {
+  return c >= 'A' && c <= 'Z';
+}
+
 // This function re-implements code from:
 // http://www.dclunie.com/medical-image-faq/html/part2.html#DICOMTransferSyntaxDetermination
 // The above code does not work well for random file. It implicitly assumes we
@@ -798,7 +802,7 @@ bool Reader::CanRead() const
       if (b[4] < b[7]) bigendian=true;
       }
     // else littleendian
-    if (isupper(b[4]) && isupper(b[5])) explicitvr=true;
+    if (isasciiupper(b[4]) && isasciiupper(b[5])) explicitvr=true;
     }
   SwapCode sc = SwapCode::Unknown;
   TransferSyntax::NegociatedType nts = TransferSyntax::Unknown;
