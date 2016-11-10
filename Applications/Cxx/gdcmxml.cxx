@@ -497,7 +497,7 @@ static void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool
         LoadValueASCII(VR::AS);
         LoadValueASCII(VR::CS);
         LoadValueASCII(VR::DA);
-        LoadValueFloat(VR::DS);
+        LoadValueDouble(VR::DS);
         LoadValueASCII(VR::DT);
         LoadValueInteger(VR::IS);
         LoadValueASCII(VR::LO);
