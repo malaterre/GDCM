@@ -37,6 +37,7 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x0011,0x0006,"MEDISO-1",VR::LO,VM::VM1,"UUID (variant=RFC 4122,version=4).",false },
   {0x0075,0x0000,"LLTech, Light-CT Viewer group",VR::CS,VM::VM1,"Enable MPR",false },
   {0x0075,0x0001,"LLTech, Light-CT Viewer group",VR::LO,VM::VM1,"Imaged surface",false },
   {0x0075,0x0002,"LLTech, Light-CT Viewer group",VR::LO,VM::VM1,"Imaged depth",false },
