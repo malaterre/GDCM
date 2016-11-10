@@ -37,7 +37,15 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
-  {0x0011,0x0006,"MEDISO-1",VR::LO,VM::VM1,"UUID (variant=RFC 4122,version=4).",false },
+  {0x0009,0x00ee,"MEDISO-1",VR::DT,VM::VM1,"?",false }, // ftp://dicom.nema.org/MEDICAL/dicom/DataSets/WG30/Mediso/PETCT/Rat%20C-2-3%20PETCT/Compliance/testratc23enhancedpet2.dcm.dcdump.txt
+  {0x0009,0x00ef,"MEDISO-1",VR::DT,VM::VM1,"?",false },
+  {0x0009,0x00f0,"MEDISO-1",VR::FD,VM::VM1,"?",false },
+  {0x0009,0x00f1,"MEDISO-1",VR::FD,VM::VM1,"?",false },
+  {0x0009,0x00f2,"MEDISO-1",VR::FD,VM::VM1,"?",false },
+  {0x0009,0x00f3,"MEDISO-1",VR::FD,VM::VM1,"?",false },
+  {0x0009,0x00fa,"MEDISO-1",VR::ST,VM::VM1,"?",false },
+  {0x0009,0x00fb,"MEDISO-1",VR::US,VM::VM1,"?",false },
+  {0x0011,0x0006,"MEDISO-1",VR::LO,VM::VM1,"UUID (variant=RFC 4122,version=4)",false },
   {0x0075,0x0000,"LLTech, Light-CT Viewer group",VR::CS,VM::VM1,"Enable MPR",false },
   {0x0075,0x0001,"LLTech, Light-CT Viewer group",VR::LO,VM::VM1,"Imaged surface",false },
   {0x0075,0x0002,"LLTech, Light-CT Viewer group",VR::LO,VM::VM1,"Imaged depth",false },
