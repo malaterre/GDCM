@@ -135,7 +135,7 @@ static int TestCurve2Read(const char* filename, bool verbose = false)
       const char *buffer = (char*)&points[0];
       size_t len = sizeof(float) * 3 * npts;
       const char *ref = info[idx].datamd5;
-      gdcm::Testing::ComputeMD5(buffer, len, digest);
+      gdcm::Testing::ComputeMD5(buffer, (unsigned long)len, digest);
       if( verbose )
         {
         std::cout << "ref=" << ref << std::endl;

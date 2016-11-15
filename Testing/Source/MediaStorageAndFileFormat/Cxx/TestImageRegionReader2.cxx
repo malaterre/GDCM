@@ -88,7 +88,7 @@ static int TestImageRegionRead(const char* filename, bool verbose = false)
     of.write( buffer, len );
     of.close();
 #endif
-  gdcm::Testing::ComputeMD5(buffer, len, digest);
+  gdcm::Testing::ComputeMD5(buffer, (unsigned long)len, digest);
   if( verbose )
     {
     std::cout << "ref=" << ref << std::endl;

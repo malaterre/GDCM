@@ -77,7 +77,7 @@ static int TestReadOverlay(const char* filename, bool verbose = false)
         ++ret;
         }
       char digest1[33];
-      if( !gdcm::Testing::ComputeMD5(&overlay[0], len, digest1) )
+      if( !gdcm::Testing::ComputeMD5(&overlay[0], (unsigned long) len, digest1) )
         {
         std::cerr << "ComputeMD5: Problem with Overlay: #" << ovidx << std::endl;
         ++ret;
@@ -93,7 +93,7 @@ static int TestReadOverlay(const char* filename, bool verbose = false)
         ++ret;
         }
       char digest2[33];
-      if( !gdcm::Testing::ComputeMD5(soverlay2.c_str(), soverlay2.size(), digest2) )
+      if( !gdcm::Testing::ComputeMD5(soverlay2.c_str(), (unsigned long)soverlay2.size(), digest2) )
         {
         std::cerr << "ComputeMD5: Problem with Overlay: #" << ovidx << std::endl;
         ++ret;
