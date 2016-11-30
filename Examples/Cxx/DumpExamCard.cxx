@@ -46,8 +46,8 @@ static bool compfn(const char *s1, const char *s2)
 }
 
 static const char *PDFStrings[] = { // Keep me ordered please
-  "COILSTATE",
-  "HARDWARE_CONFIG",
+  "COILSTATE", // series of string ?
+  "HARDWARE_CONFIG", // series of number ?
   "PDF_CONTROL_GEN_PARS",
   "PDF_CONTROL_PREP_PARS",
   "PDF_CONTROL_RECON_PARS",
@@ -137,8 +137,9 @@ struct header
     numparams = 0;
     uint32_t bla;
     is.read( (char*)&bla, sizeof(bla) );
-    nstrings = bla;
-    numparams = bla;
+    assert( bla == 0x2 );
+    nstrings = 1;
+    numparams = 1;
     } else {
     // indirect
     is.read( (char*)&nints,sizeof(nints));
@@ -179,9 +180,14 @@ struct param
   int32_t /*std::streamoff*/ offset;
   param_type gettype() const { return (param_type)type; }
   uint32_t getdim() const { return dim; }
-  void read_direct_string( std::istream & is ) {
+  void read_direct_int( std::istream & is ) {
     uint32_t bla;
-    //is.read( (char*)&bla, sizeof(bla) );
+    int max = 9;
+    std::vector<uint32_t> v;
+    for( int i = 0; i < max; ++i ) {
+      is.read( (char*)&bla, sizeof(bla) );
+      v.push_back( bla );
+    }
     is.read( (char*)&bla, sizeof(bla) );
     char name[32];
     memset(name,0,sizeof(name));
@@ -189,7 +195,22 @@ struct param
     is.read( name, bla);
     size_t l = strlen(name);
     assert( l == bla );
-    memcpy( this->name, name, l );
+    char * ptr = strdup( name );
+    v4.ptr = ptr;
+    type = param_string;
+    dim = 1;
+    offset = 0; // important !
+  }
+  void read_direct_string( std::istream & is ) {
+    uint32_t bla;
+    is.read( (char*)&bla, sizeof(bla) );
+    char name[32];
+    memset(name,0,sizeof(name));
+    assert( bla < sizeof(name) );
+    is.read( name, bla);
+    size_t l = strlen(name);
+    assert( l == bla );
+    memcpy( this->name, name, bla );
     is.read( (char*)&bla, sizeof(bla) );
     assert( bla == 0x1 );
     is.read( (char*)&bla, sizeof(bla) );
@@ -266,10 +287,10 @@ struct param
       break;
     case param_integer:
         {
+        int32_t v;
         for( uint32_t idx = 0; idx < dim; ++idx )
           {
           if( idx ) os << ",";
-          int32_t v;
           is.read( (char*)&v, sizeof(v) );
           os << v;
           }
@@ -277,18 +298,23 @@ struct param
       break;
     case param_string:
         {
+        int size = 81;
         std::string v;
-        v.resize( dim );
-        is.read( &v[0], dim );
-        os << v;
+        v.resize( size );
+        for( uint32_t idx = 0; idx < dim; ++idx )
+          {
+          if( idx ) os << ";";
+          is.read( &v[0], size );
+          os << v.c_str();
+          }
         }
       break;
     case param_enum:
         {
+        int32_t v;
         for( uint32_t idx = 0; idx < dim; ++idx )
           {
           if( idx ) os << ",";
-          int32_t v;
           is.read( (char*)&v, sizeof(v) );
           os << v;
           }
@@ -296,7 +322,7 @@ struct param
       break;
       }
     } else {
-#if 0
+#if 1
       // direct
       assert ( type == param_string );
       char * ptr = v4.ptr;
@@ -434,9 +460,9 @@ Wotsit ?
       std::stringstream ss;
       ss << fn0 << "_" << c++;
       if( h.v1 == 0x01 )
-        ss << ".bad";
+        ss << ".direct";
       else
-        ss << ".good";
+        ss << ".indirect";
       std::cout << "fn0=" << ss.str() << " Len= " << bv->GetLength() << std::endl;
       std::ofstream out( ss.str().c_str() );
       out.write( bv->GetPointer(), bv->GetLength() );
@@ -449,10 +475,21 @@ Wotsit ?
 
       std::vector< param > params;
       if( h.v1 == 0x01 ) {
-        for( uint32_t i = 0; i < h.getnparams(); ++i ) {
-        param p;
-        //p.read_direct_string( is );
-        params.push_back( p );
+        for( uint32_t i = 0; i < 1 /* h.getnparams()*/; ++i ) {
+          param p;
+          if( s0 == "HARDWARE_CONFIG " )
+            {
+            p.read_direct_int( is );
+            }
+          else if( s0 == "COILSTATE " )
+            {
+            p.read_direct_string( is );
+            }
+          else
+            {
+            assert(0);
+            }
+          params.push_back( p );
         }
       } else {
       assert( is.tellg() == std::streampos(0x20) );
