@@ -46,6 +46,8 @@ static bool compfn(const char *s1, const char *s2)
 }
 
 static const char *PDFStrings[] = { // Keep me ordered please
+  "COILSTATE",
+  "HARDWARE_CONFIG",
   "PDF_CONTROL_GEN_PARS",
   "PDF_CONTROL_PREP_PARS",
   "PDF_CONTROL_RECON_PARS",
@@ -53,6 +55,7 @@ static const char *PDFStrings[] = { // Keep me ordered please
   "PDF_EXAM_PARS",
   "PDF_HARDWARE_PARS",
   "PDF_PREP_PARS",
+  "PDF_PRESCAN_COIL_PARS",
   "PDF_SPT_PARS",
 };
 
@@ -68,10 +71,10 @@ static bool isvalidpdfstring( const char *pdfstring )
 typedef enum
 {
   param_float = 0,
-  param_integer,
-  param_string,
+  param_integer = 1, // 1 << 0
+  param_string = 2, // 1 << 1
   param_3, // ??
-  param_enum,
+  param_enum = 4, // 1 << 2
 } param_type;
 
 static const char *gettypenamefromtype( int i)
@@ -122,6 +125,22 @@ struct header
   void read( std::istream & is )
     {
     is.read( (char*)&v1,sizeof(v1));
+    if( v1 == 0x01 ) {
+    // direct (FIXME how should we detect this, much like TIFF ???)
+    nints = 0;
+    v3 = 0;
+    v4 = 0;
+    nfloats = 0;
+    v6 = 0;
+    nstrings = 0;
+    v8 = 0;
+    numparams = 0;
+    uint32_t bla;
+    is.read( (char*)&bla, sizeof(bla) );
+    nstrings = bla;
+    numparams = bla;
+    } else {
+    // indirect
     is.read( (char*)&nints,sizeof(nints));
     is.read( (char*)&v3,sizeof(v3));
     assert( v3 == 0 ); // looks like this is always 0
@@ -132,6 +151,7 @@ struct header
     is.read( (char*)&v8,sizeof(v8));
     assert( v8 == 8 );
     is.read( (char*)&numparams,sizeof(numparams));
+    }
     }
   void print( std::ostream & os )
     {
@@ -153,10 +173,49 @@ struct param
   int8_t boolean;
   int32_t type;
   uint32_t dim;
-  uint32_t v4;
-  /*int32_t*/ std::streamoff offset;
+  union {
+  uint32_t val;
+  char * ptr; } v4;
+  int32_t /*std::streamoff*/ offset;
   param_type gettype() const { return (param_type)type; }
   uint32_t getdim() const { return dim; }
+  void read_direct_string( std::istream & is ) {
+    uint32_t bla;
+    //is.read( (char*)&bla, sizeof(bla) );
+    is.read( (char*)&bla, sizeof(bla) );
+    char name[32];
+    memset(name,0,sizeof(name));
+    assert( bla < sizeof(name) );
+    is.read( name, bla);
+    size_t l = strlen(name);
+    assert( l == bla );
+    memcpy( this->name, name, l );
+    is.read( (char*)&bla, sizeof(bla) );
+    assert( bla == 0x1 );
+    is.read( (char*)&bla, sizeof(bla) );
+    char value[32];
+    memset(value,0,sizeof(value));
+    assert( bla < sizeof(value) );
+    is.read( value, bla);
+    is.read( (char*)&bla, sizeof(bla) );
+    assert( bla == 0 ); // trailing stuff ?
+    is.read( (char*)&bla, sizeof(bla) );
+    assert( bla == 0 ); // trailing stuff ?
+    const uint32_t cur = (uint32_t)is.tellg();
+    std::cerr << "offset:" << cur << std::endl;
+    if( cur == 65 )
+      is.read( (char*)&bla, 1 );
+    else if( cur == 122 )
+      is.read( (char*)&bla, 2 );
+    else
+      assert(0);
+    type = param_string;
+    dim = 1;
+    // FIXME: store the value in v4 for now:
+    char * ptr = strdup( value );
+    v4.ptr = ptr;
+    offset = 0; // important !
+  }
   void read( std::istream & is )
     {
     is.read( name, 32 + 1);
@@ -165,14 +224,15 @@ struct param
     // we need to print only until the first \0 character:
     assert( strlen( name ) <= 32 ); // sigh
     is.read( (char*)&boolean,1);
-    assert( boolean == 0 || boolean == 1 ); // some kind of bool...
+    assert( boolean == 0 || boolean == 1 || boolean == 0x69 ); // some kind of bool...
     is.read( (char*)&type, sizeof( type ) );
     assert( gettypenamefromtype( type ) );
     is.read( (char*)&dim, sizeof( dim ) );
-    is.read( (char*)&v4, sizeof( v4 ) );
+    is.read( (char*)&v4.val, sizeof( v4.val ) );
     //assert( v4 == 0 ); // always 0 ? sometimes not...
-    const std::streamoff cur = is.tellg();
+    const uint32_t cur = (uint32_t)is.tellg();
     is.read( (char*)&offset, sizeof( offset ) );
+    assert( offset != 0 );
     offset += cur;
     }
 
@@ -182,11 +242,12 @@ struct param
     os << (int)boolean << ",";
     os << type << ",";
     os << dim << ",";
-    os << v4 << ",";
+    os << v4.val << ",";
     os << offset << std::endl;
     }
   void printvalue( std::ostream & os, std::istream & is ) const
     {
+    if( offset ) {
     is.seekg( offset );
     switch( type )
       {
@@ -234,6 +295,17 @@ struct param
         }
       break;
       }
+    } else {
+#if 0
+      // direct
+      assert ( type == param_string );
+      char * ptr = v4.ptr;
+        //std::string v;
+        //v.resize( dim );
+        //is.read( &v[0], dim );
+        os << ptr;
+#endif
+    }
 
     }
   void printxml( std::ostream & os, std::istream & is ) const
@@ -349,13 +421,6 @@ Wotsit ?
 
     if( s1 == "IEEE_PDF" )
       {
-      //  std::cout << "Len= " << bv->GetLength() << std::endl;
-#if 0
-      std::string fn = gdcm::LOComp::Trim( s.c_str() ); // remove trailing space
-      std::ofstream out( fn.c_str() );
-      out.write( bv->GetPointer(), bv->GetLength() );
-      out.close();
-#endif
 
       std::istringstream is;
       std::string dup( bv->GetPointer(), bv->GetLength() );
@@ -363,15 +428,36 @@ Wotsit ?
 
       header h;
       h.read( is );
-#if 0
-      std::cout << s0.c_str() << std::endl;
+#if 1
+      static int c = 0;
+      std::string fn0 = gdcm::LOComp::Trim( s1.c_str() ); // remove trailing space
+      std::stringstream ss;
+      ss << fn0 << "_" << c++;
+      if( h.v1 == 0x01 )
+        ss << ".bad";
+      else
+        ss << ".good";
+      std::cout << "fn0=" << ss.str() << " Len= " << bv->GetLength() << std::endl;
+      std::ofstream out( ss.str().c_str() );
+      out.write( bv->GetPointer(), bv->GetLength() );
+      out.close();
+#endif
+#if 1
+      std::cout << dup.c_str() << std::endl;
       h.print( std::cout );
 #endif
 
+      std::vector< param > params;
+      if( h.v1 == 0x01 ) {
+        for( uint32_t i = 0; i < h.getnparams(); ++i ) {
+        param p;
+        //p.read_direct_string( is );
+        params.push_back( p );
+        }
+      } else {
       assert( is.tellg() == std::streampos(0x20) );
       is.seekg( 0x20 );
 
-      std::vector< param > params;
       param p;
       for( uint32_t i = 0; i < h.getnparams(); ++i )
         {
@@ -379,6 +465,7 @@ Wotsit ?
         //p.print( std::cout );
         params.push_back( p );
         }
+      }
 
       std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
       bool b1 = isvalidpdfstring( fn.c_str() );
