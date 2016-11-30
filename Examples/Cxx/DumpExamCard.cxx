@@ -171,7 +171,7 @@ struct header
 struct param
 {
   char name[32+1];
-  int8_t boolean;
+  uint8_t boolean;
   int32_t type;
   uint32_t dim;
   union {
@@ -239,13 +239,18 @@ struct param
   }
   void read( std::istream & is )
     {
-    is.read( name, 32 + 1);
-    //assert( name[32] == 0 ); // fails sometimes...
+    is.read( name, 32 + 0);
+    name[32] = 0;
+    int nlen = (int)strlen( name );
+    for( int i = nlen; i <= 32; ++i )
+      assert( name[i] == 0x0 );
     // This is always the same issue the string can contains garbarge from previous run,
     // we need to print only until the first \0 character:
-    assert( strlen( name ) <= 32 ); // sigh
+    //assert( strlen( name ) <= 32 ); // sigh
     is.read( (char*)&boolean,1);
-    assert( boolean == 0 || boolean == 1 || boolean == 0x69 ); // some kind of bool...
+    //assert( boolean == 0x94 || boolean == 0xff || boolean == 0x3a || boolean == 0x0 );
+    is.read( (char*)&boolean,1); // again ?
+    assert( boolean == 0 || boolean == 1 || boolean == 0x69 ); // some kind of bool, or digital trash ?
     is.read( (char*)&type, sizeof( type ) );
     assert( gettypenamefromtype( type ) );
     is.read( (char*)&dim, sizeof( dim ) );
@@ -377,7 +382,7 @@ Wotsit ?
   */
   bool ret = false;
 
-  //  (2005,1137) PN (LO) [PDF_CONTROL_GEN_PARS]                    # 20,1 ?
+  //  (2005,1137) PN (LO) [PDF_CONTROL_GEN_PARS]                    # 20,1 Protocol Data Name
   const gdcm::PrivateTag pt0(0x2005,0x37,"Philips MR Imaging DD 002");
   if( !ds.FindDataElement( pt0 ) ) return false;
   const gdcm::DataElement &de0 = ds.GetDataElement( pt0 );
@@ -385,11 +390,22 @@ Wotsit ?
   const gdcm::ByteValue * bv0 = de0.GetByteValue();
   std::string s0( bv0->GetPointer() , bv0->GetLength() );
 
-  // (2005,1139) LO [IEEE_PDF]                                     # 8,1 ?
+  // (2005,1139) LO [IEEE_PDF]                                     # 8,1 Protocol Data Type
   const gdcm::PrivateTag pt1(0x2005,0x39,"Philips MR Imaging DD 002");
   if( !ds.FindDataElement( pt1 ) ) return false;
   const gdcm::DataElement &de1 = ds.GetDataElement( pt1 );
 
+  // (2005,1143) SL 53                                             # 4,1 Protocol Data Block Length (non-padded)
+  const gdcm::PrivateTag pt2(0x2005,0x43,"Philips MR Imaging DD 002");
+  if( !ds.FindDataElement( pt2 ) ) return false;
+  const gdcm::DataElement &de2 = ds.GetDataElement( pt2 );
+
+  // (2005,1147) CS [Y ]                                           # 2,1 Protocol Data Boolean
+  const gdcm::PrivateTag pt3(0x2005,0x47,"Philips MR Imaging DD 002");
+  if( !ds.FindDataElement( pt3 ) ) return false;
+  const gdcm::DataElement &de3 = ds.GetDataElement( pt3 );
+
+  // (2005,1144) OW 00\00\00\00\05\00\00\00\35\2e\31\2e\37\00         # 54,1 Protocol Data Block
   const gdcm::PrivateTag pt(0x2005,0x44,"Philips MR Imaging DD 002");
   if( !ds.FindDataElement( pt ) ) return false;
   const gdcm::DataElement &de = ds.GetDataElement( pt );
@@ -443,17 +459,21 @@ Wotsit ?
     {
     if( de1.IsEmpty() ) return false;
     const gdcm::ByteValue * bv1 = de1.GetByteValue();
+    gdcm::Element<gdcm::VR::SL,gdcm::VM::VM1> dlen = {};
+    dlen.SetFromDataElement( de2 );
     std::string s1( bv1->GetPointer() , bv1->GetLength() );
 
     if( s1 == "IEEE_PDF" )
       {
 
       std::istringstream is;
-      std::string dup( bv->GetPointer(), bv->GetLength() );
+      assert( bv->GetLength() == dlen.GetValue() || bv->GetLength() == dlen.GetValue() + 1 );
+      std::string dup( bv->GetPointer(), dlen.GetValue() /*bv->GetLength()*/ );
       is.str( dup );
 
       header h;
       h.read( is );
+      //assert( is.peek() && is.eof() );
 #if 1
       static int c = 0;
       std::string fn0 = gdcm::LOComp::Trim( s1.c_str() ); // remove trailing space
