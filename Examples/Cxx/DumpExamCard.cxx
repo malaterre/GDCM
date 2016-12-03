@@ -239,23 +239,17 @@ struct param
   }
   void read( std::istream & is )
     {
-    is.read( name, 32 + 0);
-    name[32] = 0;
-    int nlen = (int)strlen( name );
-    for( int i = nlen; i <= 32; ++i )
-      assert( name[i] == 0x0 );
+    is.read( name, 32 + 1);
     // This is always the same issue the string can contains garbarge from previous run,
     // we need to print only until the first \0 character:
-    //assert( strlen( name ) <= 32 ); // sigh
+    assert( strlen( name ) <= 32 );
     is.read( (char*)&boolean,1);
-    //assert( boolean == 0x94 || boolean == 0xff || boolean == 0x3a || boolean == 0x0 );
-    is.read( (char*)&boolean,1); // again ?
     assert( boolean == 0 || boolean == 1 || boolean == 0x69 ); // some kind of bool, or digital trash ?
     is.read( (char*)&type, sizeof( type ) );
     assert( gettypenamefromtype( type ) );
-    is.read( (char*)&dim, sizeof( dim ) );
+    is.read( (char*)&dim, sizeof( dim ) ); // number of elements
     is.read( (char*)&v4.val, sizeof( v4.val ) );
-    //assert( v4 == 0 ); // always 0 ? sometimes not...
+    assert( v4.val == 0 ); // always 0 ? sometimes not...
     const uint32_t cur = (uint32_t)is.tellg();
     is.read( (char*)&offset, sizeof( offset ) );
     assert( offset != 0 );
@@ -679,7 +673,9 @@ int main(int argc, char *argv[])
 
     gdcm::DataSet &nestedds = item.GetNestedDataSet();
 
-    if( !ProcessNested( nestedds ) ) return 1;
+    if( !ProcessNested( nestedds ) ) {
+      std::cerr << "Error processing Item #" << i << std::endl;
+    }
     }
 
   return 0;

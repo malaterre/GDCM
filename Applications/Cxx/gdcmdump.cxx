@@ -212,9 +212,13 @@ static int DumpPMS_MRSDS(const gdcm::DataSet & ds)
       {
       s4 = std::string( bv4->GetPointer(), bv4->GetLength() );
       }
-    std::istringstream is( s3 );
     std::cout << "PMS/Item name: [" << s1 << "/" << s2 << "/" << s4 << "]" << std::endl;
-    ProcessSDSData( is );
+    if( bv3 ) {
+      std::istringstream is( s3 );
+      ProcessSDSData( is );
+    } else {
+    std::cout << " EMPTY !" << std::endl;
+    }
     }
   return 0;
 }
