@@ -26,11 +26,23 @@
      PURPOSE.  See the above copyright notice for more information.
 </xsl:comment>
 
-  <xsl:apply-templates select="*/*/dk:table[@xml:id='table_6-1']" />
+  <xsl:apply-templates select="*/*/dk:table[@xml:id='table_6-1']" mode="m1"/>
+  <xsl:apply-templates select="*/*/*/*/*/dk:table[@xml:id='table_9.3-1']" mode="m2"/>
 </xsl:template>
 
-<xsl:template match="dk:tr">
-  <xsl:variable name="tag" select="dk:td[1]/dk:para/text()"/>
+<xsl:template match="dk:tr" mode="m2">
+  <xsl:variable name="name" select="dk:td[1]/dk:para/text()"/>
+  <xsl:variable name="tag" select="translate(dk:td[2]/dk:para/text(),'ABCDEF','abcdef')"/>
+  <xsl:variable name="group" select="substring-after(substring-before($tag,','), '(')"/>
+  <xsl:variable name="element" select="substring-after(substring-before($tag,')'), ',')"/>
+  <xsl:variable name="keyword" select="translate(dk:td[3]/dk:para/text(),'&#x200B;','')"/>
+  <xsl:variable name="vr" select="dk:td[3]/dk:para/text()"/>
+  <xsl:variable name="vm" select="dk:td[4]/dk:para/text()"/>
+  <entry group="{$group}" element="{$element}" keyword="{$keyword}" vr="{$vr}" vm="{$vm}" retired="false" name="{$name}"/>
+</xsl:template>
+
+<xsl:template match="dk:tr" mode="m1">
+  <xsl:variable name="tag" select="translate(dk:td[1]/dk:para/text(),'ABCDEF','abcdef')"/>
   <xsl:variable name="group" select="substring-after(substring-before($tag,','), '(')"/>
   <xsl:variable name="element" select="substring-after(substring-before($tag,')'), ',')"/>
   <xsl:variable name="name" select="dk:td[2]/dk:para/text()"/>
@@ -47,6 +59,11 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
+<!--
+  <xsl:variable name="vm">
+    <xsl:apply-templates select="dk:td[5]/node()"/>
+  </xsl:variable>
+-->
   <xsl:variable name="ret" select="dk:td[6]/dk:para/text()"/>
   <!--xsl:if test="$group != ''"-->
   <entry group="{$group}" element="{$element}" keyword="{$keyword}" vr="{$vr}" vm="{$vm}" retired="{$ret}" name="{$name}"/>
@@ -56,9 +73,15 @@
 <!-- remove thread -->
 <xsl:template match="dk:thead"/>
 
-<xsl:template match="dk:emphasis">
-   <xsl:value-of select="."/>
+<!--
+<xsl:template match="dk:para">
+   <xsl:apply-templates select="./node()"/>
 </xsl:template>
+
+<xsl:template match="dk:emphasis">
+   <xsl:value-of select="./text()"/>
+</xsl:template>
+-->
 
 <xsl:template match="dk:tbody">
    <xsl:apply-templates select="*"/>
