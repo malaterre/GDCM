@@ -382,7 +382,7 @@ int main(int argc, char *argv[])
       {
         gdcm::IPPSorter s;
         s.SetComputeZSpacing( true );
-        s.SetZSpacingTolerance( 1e-1 );
+        s.SetZSpacingTolerance( 1e-3 );
         bool b = s.Sort( files );
         if( !b )
           {
