@@ -71,32 +71,37 @@
   <xsl:variable name="retString">
     <xsl:apply-templates select="dk:td[6]/dk:para/dk:emphasis | dk:td[6]/dk:para[not(dk:emphasis)]"/>
   </xsl:variable>
-  <xsl:variable name="ret" select="$retString = 'RET'"/>
-<!--
-  <xsl:choose>
-  <xsl:when test="$ret">
-  <entry group="{$group}" element="{$element}" keyword="{$keyword}" vr="{$vr}" vm="{$vm}" retired="{$ret}" name="{$name}"/>
-  </xsl:when>
-  <xsl:otherwise>
--->
+  <!--
+  (0018,9445) -> RET - See Note (should be the only attribute without known vr/vm, with 0028,0020)
+  -->
+  <xsl:variable name="ret" select="$retString = 'RET' or starts-with($retString, 'RET')"/>
+  <xsl:if test="$group != ''">
   <entry group="{$group}" element="{$element}">
     <xsl:if test="$keyword != ''">
     <xsl:attribute name="keyword"><xsl:value-of select="$keyword"/></xsl:attribute>
     </xsl:if>
-    <xsl:attribute name="vr"><xsl:value-of select="$vr"/></xsl:attribute>
-    <xsl:attribute name="vm"><xsl:value-of select="$vm"/></xsl:attribute>
+    <xsl:if test="$vr != ''">
+    <xsl:attribute name="vr">
+        <xsl:call-template name="process-vr">
+          <xsl:with-param name="text" select="normalize-space($vr)"/>
+        </xsl:call-template>
+    </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="$vm != ''">
+    <xsl:attribute name="vm">
+        <xsl:call-template name="process-vm">
+          <xsl:with-param name="text" select="normalize-space($vm)"/>
+        </xsl:call-template>
+    </xsl:attribute>
+    </xsl:if>
     <xsl:if test="$ret">
     <xsl:attribute name="retired"><xsl:value-of select="$ret"/></xsl:attribute>
     </xsl:if>
     <xsl:if test="$name != ''">
-    <xsl:attribute name="name"><xsl:value-of select="$name"/></xsl:attribute>
+    <xsl:attribute name="name"><xsl:value-of select="translate($name,'&#x200B;','')"/></xsl:attribute>
     </xsl:if>
-
   </entry>
-<!--
-  </xsl:otherwise>
-  </xsl:choose>
--->
+  </xsl:if>
 </xsl:template>
 
 <!-- remove thread -->
@@ -173,4 +178,47 @@ Manual changes:
     </xsl:template>
 
 
+<!--
+  template to process VR from PDF representation into GDCM representation
+-->
+  <xsl:template name="process-vr">
+    <xsl:param name="text"/>
+    <xsl:choose>
+      <xsl:when test="$text='See Note'">
+        <xsl:value-of select="''"/>
+      </xsl:when>
+      <xsl:when test="$text='US or OW'">
+        <xsl:value-of select="'US_OW'"/>
+      </xsl:when>
+      <xsl:when test="$text='US or SS or OW'">
+        <xsl:value-of select="'US_SS_OW'"/>
+      </xsl:when>
+      <xsl:when test="$text='US or SSor OW'">
+        <xsl:value-of select="'US_SS_OW'"/>
+      </xsl:when>
+      <xsl:when test="$text='US or SS'">
+        <xsl:value-of select="'US_SS'"/>
+      </xsl:when>
+      <xsl:when test="$text='OW or OB'">
+        <xsl:value-of select="'OB_OW'"/>
+      </xsl:when>
+      <xsl:when test="$text='OB or OW'">
+        <xsl:value-of select="'OB_OW'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <xsl:template name="process-vm">
+    <xsl:param name="text"/>
+    <xsl:choose>
+      <xsl:when test="$text='1-n or 1'">
+        <xsl:value-of select="'1-n'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 </xsl:stylesheet>
