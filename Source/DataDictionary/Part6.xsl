@@ -28,9 +28,123 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 </xsl:comment>
+<xsl:text>
+</xsl:text>
+<xsl:comment>
+This file was automatically created from a docbook version of PS 3.6-2011, which was then process by Part67.xsl
+
+Manual changes:
+
+1. DateTime -> Date Time (0008,002a)
+</xsl:comment>
+<xsl:text disable-output-escaping="yes">
+&lt;!DOCTYPE doc [
+  &lt;!ENTITY part7 SYSTEM "Part7.xml"&gt;
+  ]&gt;
+</xsl:text>
+<dicts edition="2011">
+<xsl:text disable-output-escaping="yes">
+  &amp;part7;
+</xsl:text>
   <xsl:apply-templates select="*/*/dk:table[@xml:id='table_6-1']" mode="m1"/>
+  <xsl:apply-templates select="*/*/dk:table[@xml:id='table_7-1']" mode="m1"/>
+  <xsl:apply-templates select="*/*/dk:table[@xml:id='table_8-1']" mode="m1"/>
+  <xsl:apply-templates select="*/*/dk:table[@xml:id='table_A-1']" mode="m3"/>
+  <xsl:apply-templates select="*/*/dk:table[@xml:id='table_A-2']" mode="m4"/>
+<!--
   <xsl:apply-templates select="*/*/*/*/*/dk:table[@xml:id='table_9.3-1']" mode="m2"/>
+-->
+<xsl:text>
+</xsl:text>
+</dicts>
 </xsl:template>
+
+<xsl:template match="dk:tr" mode="m4">
+  <xsl:variable name="value" select="translate(dk:td[1]/dk:para[not(dk:emphasis)] | dk:td[1]/dk:para/dk:emphasis,'&#x200B;','')"/>
+  <xsl:variable name="nameStr0" select="dk:td[2]/dk:para/dk:emphasis | dk:td[2]/dk:para[not(dk:emphasis)]"/>
+  <xsl:variable name="nameStr" select="translate($nameStr0,'&#x200B;','')"/>
+  <xsl:variable name="name">
+      <xsl:choose>
+        <xsl:when test="contains($nameStr,'(Retired)')">
+            <xsl:value-of select="normalize-space(substring-before($nameStr,'(Retired)'))"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="normalize-space($nameStr)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="type" select="dk:td[3]/dk:para[not(dk:emphasis)] | dk:td[3]/dk:para/dk:emphasis"/>
+  <xsl:variable name="part">
+      <xsl:choose>
+        <xsl:when test="dk:td[4]/dk:para[not(dk:emphasis)]/dk:olink/@targetdoc | dk:td[4]/dk:para/dk:emphasis/dk:olink/@targetdoc">
+            <xsl:value-of select="dk:td[4]/dk:para[not(dk:emphasis)]/dk:olink/@targetdoc | dk:td[4]/dk:para/dk:emphasis/dk:olink/@targetdoc"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="dk:td[4]/dk:para[not(dk:emphasis)]/text() | dk:td[4]/dk:para/dk:emphasis/text()"/>
+        </xsl:otherwise>
+      </xsl:choose>
+
+  </xsl:variable>
+  <xsl:variable name="retired">
+      <xsl:choose>
+        <xsl:when test="contains($nameStr,'(Retired)')">
+            <xsl:value-of select="'true'"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="'false'"/>
+        </xsl:otherwise>
+      </xsl:choose>
+  </xsl:variable>
+  <xsl:if test="$value != ''">
+  <uid value="{$value}" name="{$name}" normative-reference="{$type}"/>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="dk:tr" mode="m3">
+  <xsl:variable name="value" select="translate(dk:td[1]/dk:para[not(dk:emphasis)] | dk:td[1]/dk:para/dk:emphasis,'&#x200B;','')"/>
+  <xsl:variable name="nameStr0" select="dk:td[2]/dk:para/dk:emphasis | dk:td[2]/dk:para[not(dk:emphasis)]"/>
+  <xsl:variable name="nameStr" select="translate($nameStr0,'&#x200B;','')"/>
+  <xsl:variable name="name">
+      <xsl:choose>
+        <xsl:when test="contains($nameStr,'(Retired)')">
+            <xsl:value-of select="normalize-space(substring-before($nameStr,'(Retired)'))"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="normalize-space($nameStr)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="type" select="dk:td[3]/dk:para[not(dk:emphasis)] | dk:td[3]/dk:para/dk:emphasis"/>
+<!--
+  <xsl:variable name="part1" select="dk:td[4]/dk:para[not(dk:emphasis)]/dk:olink/@targetdoc | dk:td[4]/dk:para/dk:emphasis/dk:olink/@targetdoc"/>
+  <xsl:variable name="part2" select="dk:td[4]/dk:para[not(dk:emphasis)]/text() | dk:td[4]/dk:para/dk:emphasis/text()"/>
+-->
+  <xsl:variable name="part">
+      <xsl:choose>
+        <xsl:when test="dk:td[4]/dk:para[not(dk:emphasis)]/dk:olink/@targetdoc | dk:td[4]/dk:para/dk:emphasis/dk:olink/@targetdoc">
+            <xsl:value-of select="dk:td[4]/dk:para[not(dk:emphasis)]/dk:olink/@targetdoc | dk:td[4]/dk:para/dk:emphasis/dk:olink/@targetdoc"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="dk:td[4]/dk:para[not(dk:emphasis)]/text() | dk:td[4]/dk:para/dk:emphasis/text()"/>
+        </xsl:otherwise>
+      </xsl:choose>
+
+  </xsl:variable>
+  <xsl:variable name="retired">
+      <xsl:choose>
+        <xsl:when test="contains($nameStr,'(Retired)')">
+            <xsl:value-of select="'true'"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="'false'"/>
+        </xsl:otherwise>
+      </xsl:choose>
+  </xsl:variable>
+  <xsl:if test="$value != ''">
+  <uid value="{$value}" name="{$name}" type="{$type}" part="{$part}" retired="{$retired}"/>
+  </xsl:if>
+</xsl:template>
+
 
 <xsl:template match="dk:tr" mode="m2">
   <xsl:variable name="name" select="dk:td[1]/dk:para/text()"/>
@@ -122,31 +236,51 @@
 </xsl:template>
 
 <xsl:template match="dk:caption" mode="m1"/>
+<xsl:template match="dk:caption" mode="m2"/>
+<xsl:template match="dk:caption" mode="m3"/>
+<xsl:template match="dk:caption" mode="m4"/>
 
 <xsl:template match="dk:table[@xml:id='table_6-1']" mode="m1">
-<xsl:text>
-</xsl:text>
-<xsl:comment>
-This file was automatically created from a docbook version of PS 3.6-2011, which was then process by Part67.xsl
-
-Manual changes:
-
-1. DateTime -> Date Time (0008,002a)
-</xsl:comment>
-<xsl:text disable-output-escaping="yes">
-&lt;!DOCTYPE doc [
-  &lt;!ENTITY part7 SYSTEM "Part7.xml"&gt;
-  ]&gt;
-</xsl:text>
   <xsl:variable name="caption" select="dk:caption"/>
-<dicts edition="2011">
-<xsl:text disable-output-escaping="yes">
-  &amp;part7;
-</xsl:text>
   <dict ref="6" name="{$caption}">
    <xsl:apply-templates select="*" mode="m1"/>
 </dict>
-</dicts>
+</xsl:template>
+
+<xsl:template match="dk:table[@xml:id='table_7-1']" mode="m1">
+  <xsl:variable name="caption" select="dk:caption"/>
+<xsl:text>
+</xsl:text>
+  <dict ref="7" name="{$caption}">
+   <xsl:apply-templates select="*" mode="m1"/>
+</dict>
+</xsl:template>
+
+<xsl:template match="dk:table[@xml:id='table_8-1']" mode="m1">
+  <xsl:variable name="caption" select="dk:caption"/>
+<xsl:text>
+</xsl:text>
+  <dict ref="8" name="{$caption}">
+   <xsl:apply-templates select="*" mode="m1"/>
+</dict>
+</xsl:template>
+
+<xsl:template match="dk:table[@xml:id='table_A-1']" mode="m3">
+  <xsl:variable name="caption" select="dk:caption"/>
+<xsl:text>
+</xsl:text>
+  <table ref="Table A-1" name="{$caption}">
+   <xsl:apply-templates select="*" mode="m3"/>
+</table>
+</xsl:template>
+
+<xsl:template match="dk:table[@xml:id='table_A-2']" mode="m4">
+  <xsl:variable name="caption" select="dk:caption"/>
+<xsl:text>
+</xsl:text>
+  <table ref="Table A-2" name="{$caption}">
+   <xsl:apply-templates select="*" mode="m4"/>
+</table>
 </xsl:template>
 
 <!--
