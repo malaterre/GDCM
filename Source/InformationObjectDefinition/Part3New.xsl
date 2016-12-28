@@ -27,12 +27,12 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
 <xsl:template match="dk:caption" mode="module"/>
 <xsl:template match="dk:caption" mode="macro"/>
 <xsl:template match="dk:caption" mode="iod"/>
+<xsl:template match="dk:caption" mode="iod3"/>
 
 <xsl:template match="dk:table">
   <xsl:variable name="caption" select="dk:caption"/>
   <xsl:choose>
-<!--
-  <xsl:when test="contains($caption,'Macro')">
+  <xsl:when test="contains($caption,'Macro') and not(contains($caption,'Without The Use'))">
   <macro table="{@label}" name="{$caption}">
    <xsl:apply-templates mode="macro"/>
   </macro>
@@ -42,10 +42,14 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
    <xsl:apply-templates mode="module"/>
   </module>
   </xsl:when>
--->
-  <xsl:when test="contains($caption,'IOD Modules')">
+  <xsl:when test="contains($caption,'IOD Modules') and count(dk:thead/dk:tr/dk:th) = 4">
   <iod table="{@label}" name="{$caption}">
    <xsl:apply-templates mode="iod"/>
+  </iod>
+  </xsl:when>
+  <xsl:when test="contains($caption,'IOD Modules') and count(dk:thead/dk:tr/dk:th) = 3">
+  <iod table="{@label}" name="{$caption}">
+   <xsl:apply-templates mode="iod3"/>
   </iod>
   </xsl:when>
   </xsl:choose>
@@ -53,28 +57,83 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
 
 <xsl:template match="dk:thead/dk:tr" mode="macro"/>
 <xsl:template match="dk:tbody/dk:tr" mode="macro">
+  <xsl:variable name="num_nodes" select="count(*)"/>
+<!-- counting the number of element avoid issue with: BASIC CODED ENTRY ATTRIBUTES as seen in Table 8.8-1a -->
+  <xsl:if test="$num_nodes = 4">
   <xsl:variable name="name" select="dk:td[1]/dk:para"/>
   <xsl:variable name="tag" select="dk:td[2]/dk:para"/> <!-- keep upper case for now -->
   <xsl:variable name="group" select="substring-after(substring-before($tag,','), '(')"/>
   <xsl:variable name="element" select="substring-after(substring-before($tag,')'), ',')"/>
   <xsl:variable name="type" select="dk:td[3]/dk:para"/>
-  <xsl:variable name="description" select="dk:td[4]/dk:para"/> <!--fixme -->
+  <xsl:variable name="description">
+<!--
+    <xsl:apply-templates select="dk:td[4]/dk:para" mode="module"/>
+-->
+    <xsl:apply-templates select="dk:td[4]/*" mode="module"/> <!-- fixme macro ? -->
+  </xsl:variable>
   <entry group="{$group}" element="{$element}" name="{$name}" type="{$type}">
      <description><xsl:value-of select="$description"/></description>
   </entry>
+  </xsl:if>
+  <!-- yes a macro can also reference another macro -->
+  <xsl:if test="$num_nodes = 2">
+  <xsl:variable name="ref">
+    <xsl:apply-templates select="dk:td[1]/dk:para/dk:emphasis" mode="module"/>
+  </xsl:variable>
+  <xsl:variable name="description" >
+    <xsl:apply-templates select="dk:td[2]/dk:para/dk:emphasis" mode="module"/>
+  </xsl:variable>
+  <include ref="{$ref}" description="{$description}"/>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="dk:thead/dk:tr" mode="module"/>
 <xsl:template match="dk:tbody/dk:tr" mode="module">
+  <xsl:variable name="num_nodes" select="count(*)"/>
+  <xsl:if test="$num_nodes = 4">
   <xsl:variable name="name" select="dk:td[1]/dk:para"/>
   <xsl:variable name="tag" select="dk:td[2]/dk:para"/> <!-- keep upper case for now -->
   <xsl:variable name="group" select="substring-after(substring-before($tag,','), '(')"/>
   <xsl:variable name="element" select="substring-after(substring-before($tag,')'), ',')"/>
   <xsl:variable name="type" select="dk:td[3]/dk:para"/>
-  <xsl:variable name="description" select="dk:td[4]/dk:para"/> <!--fixme -->
+  <xsl:variable name="description">
+    <xsl:apply-templates select="dk:td[4]/dk:para" mode="module"/>
+  </xsl:variable>
   <entry group="{$group}" element="{$element}" name="{$name}" type="{$type}">
      <description><xsl:value-of select="$description"/></description>
   </entry>
+  </xsl:if>
+  <xsl:if test="$num_nodes = 2">
+  <xsl:variable name="ref">
+    <xsl:apply-templates select="dk:td[1]/dk:para/dk:emphasis" mode="module"/>
+  </xsl:variable>
+  <xsl:variable name="description" select="dk:td[2]/dk:para/dk:emphasis"/>
+  <include ref="{$ref}" description="{$description}"/>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="dk:variablelist" mode="module">
+<!--
+  <xsl:value-of select="dk:title"/>
+-->
+  <xsl:apply-templates mode="module"/>
+</xsl:template>
+
+<xsl:template match="dk:varlistentry" mode="module">
+  <xsl:value-of select="dk:term"/>
+</xsl:template>
+
+<xsl:key name="tables" match="dk:table" use="@xml:id" />
+
+<xsl:template match="dk:xref" mode="module">
+  <xsl:text>'</xsl:text>
+  <xsl:value-of select="key('tables', @linkend)/dk:caption" />
+  <xsl:text>' Table </xsl:text>
+  <xsl:value-of select="translate(@linkend,'table_','')"/>
+</xsl:template>
+
+<xsl:template match="dk:olink" mode="module">
+  <xsl:value-of select="translate(@targetptr,'sect_','')"/>
 </xsl:template>
 
 <xsl:template match="dk:thead/dk:tr" mode="iod"/>
@@ -105,9 +164,24 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
   <entry ie="{$ie}" name="{$module}" ref="{$ref}" usage="{$usage}"/>
 </xsl:template>
 
+<xsl:template match="dk:thead/dk:tr" mode="iod3"/>
+<xsl:template match="dk:tbody/dk:tr" mode="iod3">
+  <xsl:variable name="module" select="dk:td[1]/dk:para"/>
+  <xsl:variable name="reference" select="dk:td[2]/dk:para/dk:xref/@linkend"/>
+  <xsl:variable name="ref" select="translate($reference,'sect_','')"/>
+  <xsl:variable name="description" select="dk:td[3]/dk:para"/>
+  <entry name="{$module}" ref="{$ref}">
+    <xsl:if test="$description != ''">
+    <xsl:attribute name="description"><xsl:value-of select="$description"/></xsl:attribute>
+    </xsl:if>
+  </entry>
+</xsl:template>
+
+<!--
 <xsl:template match="dk:para" mode="iod">
   <xsl:apply-templates mode="iod"/>
 </xsl:template>
+-->
 
 <xsl:key name="sections" match="dk:section" use="@xml:id" />
 <xsl:template match="dk:xref" mode="iod">
@@ -115,10 +189,10 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
   <xsl:message><xsl:text>bla</xsl:text></xsl:message>
 -->
 <!--
-  <xsl:value-of select="//dk:section[@xml:id=@linkend]/dk:title"/>
--->
   <xsl:value-of select="key('sections', @linkend)/dk:title" />
-  <xsl:value-of select="@linkend"/>
+-->
+  <xsl:text>Section </xsl:text>
+  <xsl:value-of select="translate(@linkend,'sect_','')"/>
 </xsl:template>
 
 <!--
