@@ -31,6 +31,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
 <xsl:template match="dk:table">
   <xsl:variable name="caption" select="dk:caption"/>
   <xsl:choose>
+<!--
   <xsl:when test="contains($caption,'Macro')">
   <macro table="{@label}" name="{$caption}">
    <xsl:apply-templates mode="macro"/>
@@ -41,6 +42,7 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
    <xsl:apply-templates mode="module"/>
   </module>
   </xsl:when>
+-->
   <xsl:when test="contains($caption,'IOD Modules')">
   <iod table="{@label}" name="{$caption}">
    <xsl:apply-templates mode="iod"/>
@@ -77,14 +79,47 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
 
 <xsl:template match="dk:thead/dk:tr" mode="iod"/>
 <xsl:template match="dk:tbody/dk:tr" mode="iod">
-  <xsl:variable name="ie" select="dk:td[1]/dk:para"/>
-  <xsl:variable name="module" select="dk:td[2]/dk:para"/>
-  <xsl:variable name="reference" select="dk:td[3]/dk:para/dk:xref/@linkend"/>
+  <xsl:variable name="num_nodes" select="count(*)"/>
+  <xsl:variable name="offset" select="$num_nodes - 3"/>
+  <xsl:variable name="ie">
+     <xsl:if test="$offset = 1">
+       <xsl:value-of select="dk:td[1]/dk:para"/>
+     </xsl:if>
+     <xsl:if test="$offset = 0">
+<!--
+       <xsl:value-of select="preceding::dk:td[4]/dk:para"/>
+       <xsl:value-of select="(preceding-sibling::*/dk:td[@rowspan != 1])[1]/dk:para"/>
+-->
+       <xsl:value-of select="preceding-sibling::dk:tr[count(dk:td) = 4 and dk:td[@rowspan != 1]][1]/dk:td[1]/dk:para"/>
+     </xsl:if>
+  </xsl:variable>
+  <xsl:variable name="module" select="dk:td[1 + $offset]/dk:para"/>
+  <xsl:variable name="reference" select="dk:td[2 + $offset]/dk:para/dk:xref/@linkend"/>
   <xsl:variable name="ref" select="translate($reference,'sect_','')"/>
-  <xsl:variable name="usage" select="dk:td[4]/dk:para"/>
+<!--
+  <xsl:variable name="usage" select="dk:td[3 + $offset]/dk:para"/>
+-->
+  <xsl:variable name="usage">
+    <xsl:apply-templates select="dk:td[3 + $offset]/dk:para" mode="iod"/>
+  </xsl:variable>
   <entry ie="{$ie}" name="{$module}" ref="{$ref}" usage="{$usage}"/>
 </xsl:template>
 
+<xsl:template match="dk:para" mode="iod">
+  <xsl:apply-templates mode="iod"/>
+</xsl:template>
+
+<xsl:key name="sections" match="dk:section" use="@xml:id" />
+<xsl:template match="dk:xref" mode="iod">
+<!--
+  <xsl:message><xsl:text>bla</xsl:text></xsl:message>
+-->
+<!--
+  <xsl:value-of select="//dk:section[@xml:id=@linkend]/dk:title"/>
+-->
+  <xsl:value-of select="key('sections', @linkend)/dk:title" />
+  <xsl:value-of select="@linkend"/>
+</xsl:template>
 
 <!--
 <xsl:template match="@*|node()">
