@@ -159,7 +159,18 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
   <xsl:variable name="usage" select="dk:td[3 + $offset]/dk:para"/>
 -->
   <xsl:variable name="usage">
+<!--
     <xsl:apply-templates select="dk:td[3 + $offset]/dk:para" mode="iod"/>
+-->
+    <xsl:for-each select="dk:td[3 + $offset]/*">
+      <xsl:apply-templates select="node()" mode="iod"/>
+<!--
+      <xsl:value-of select="normalize-space(.)"/>
+-->
+      <xsl:if test="position() != last()">
+        <xsl:text>.</xsl:text>
+      </xsl:if>
+    </xsl:for-each>
   </xsl:variable>
   <entry ie="{$ie}" name="{$module}" ref="{$ref}" usage="{$usage}"/>
 </xsl:template>
@@ -177,11 +188,9 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
   </entry>
 </xsl:template>
 
-<!--
 <xsl:template match="dk:para" mode="iod">
   <xsl:apply-templates mode="iod"/>
 </xsl:template>
--->
 
 <xsl:key name="sections" match="dk:section" use="@xml:id" />
 <xsl:template match="dk:xref" mode="iod">
