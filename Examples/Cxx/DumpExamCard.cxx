@@ -189,13 +189,13 @@ struct param
       v.push_back( bla );
     }
     is.read( (char*)&bla, sizeof(bla) );
-    char name[32];
-    memset(name,0,sizeof(name));
-    assert( bla < sizeof(name) );
-    is.read( name, bla);
-    size_t l = strlen(name);
+    char name0[32];
+    memset(name0,0,sizeof(name0));
+    assert( bla < sizeof(name0) );
+    is.read( name0, bla);
+    size_t l = strlen(name0);
     assert( l == bla );
-    char * ptr = strdup( name );
+    char * ptr = strdup( name0 );
     v4.ptr = ptr;
     type = param_string;
     dim = 1;
@@ -204,13 +204,13 @@ struct param
   void read_direct_string( std::istream & is ) {
     uint32_t bla;
     is.read( (char*)&bla, sizeof(bla) );
-    char name[32];
-    memset(name,0,sizeof(name));
-    assert( bla < sizeof(name) );
-    is.read( name, bla);
-    size_t l = strlen(name);
+    char name0[32];
+    memset(name0,0,sizeof(name0));
+    assert( bla < sizeof(name0) );
+    is.read( name0, bla);
+    size_t l = strlen(name0);
     assert( l == bla );
-    memcpy( this->name, name, bla );
+    memcpy( this->name, name0, bla );
     is.read( (char*)&bla, sizeof(bla) );
     assert( bla == 0x1 );
     is.read( (char*)&bla, sizeof(bla) );
@@ -398,6 +398,7 @@ Wotsit ?
   const gdcm::PrivateTag pt3(0x2005,0x47,"Philips MR Imaging DD 002");
   if( !ds.FindDataElement( pt3 ) ) return false;
   const gdcm::DataElement &de3 = ds.GetDataElement( pt3 );
+  (void)de3;
 
   // (2005,1144) OW 00\00\00\00\05\00\00\00\35\2e\31\2e\37\00         # 54,1 Protocol Data Block
   const gdcm::PrivateTag pt(0x2005,0x44,"Philips MR Imaging DD 002");
@@ -453,7 +454,7 @@ Wotsit ?
     {
     if( de1.IsEmpty() ) return false;
     const gdcm::ByteValue * bv1 = de1.GetByteValue();
-    gdcm::Element<gdcm::VR::SL,gdcm::VM::VM1> dlen = {};
+    gdcm::Element<gdcm::VR::SL,gdcm::VM::VM1> dlen = {0l};
     dlen.SetFromDataElement( de2 );
     std::string s1( bv1->GetPointer() , bv1->GetLength() );
 
@@ -461,7 +462,7 @@ Wotsit ?
       {
 
       std::istringstream is;
-      assert( bv->GetLength() == dlen.GetValue() || bv->GetLength() == dlen.GetValue() + 1 );
+      assert( bv->GetLength() == (size_t)dlen.GetValue() || bv->GetLength() == (size_t)(dlen.GetValue() + 1) );
       std::string dup( bv->GetPointer(), dlen.GetValue() /*bv->GetLength()*/ );
       is.str( dup );
 
