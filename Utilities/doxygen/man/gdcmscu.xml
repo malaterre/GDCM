@@ -295,7 +295,7 @@
 (0010,0020) ?? (LO) [* ]                                          # 2,1 Patient ID
 </literallayout></para>
 
-<para>The Specific Character Set was set to &quot;ISO_IR 192&quot; as the locale encoding of the system was found automatically by gdcmscu to be UTF-8.</para>
+<para>The Specific Character Set was set to <quote>ISO_IR 192</quote> as the locale encoding of the system was found automatically by gdcmscu to be UTF-8.</para>
 
 <para>This means that the following command line will properly setup the Query with the appropriate Charset to be executed correctly:</para>
 

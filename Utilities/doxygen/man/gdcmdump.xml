@@ -28,7 +28,7 @@ gdcmdump [options] dcm_directory
 
 <para>The <emphasis role="bold">gdcmdump</emphasis> command line program dumps a DICOM file to the console. For those familiar with dcmdump (DCMTK) output, gdcmdump has some minor differences. Namely: <itemizedlist>
 <listitem>
-<para>For Implicit Transfer Syntax gdcmdump will print <emphasis role="bold"></emphasis>?? instead of the dictionary VR</para>
+<para>For Implicit Transfer Syntax gdcmdump will print <emphasis role="bold">??</emphasis> instead of the dictionary VR</para>
 </listitem>
 </itemizedlist>
 gdcmdump has a limited private dictionary that is used to lookup private element whenever possible.</para>
@@ -94,7 +94,7 @@ dcm_directory   DICOM input directory
 <refsection xml:id="gdcmdump_1implicit">
 <title>Printing Implicit Transfer Syntax</title>
 
-<para>The VR are not found in the file, thus are presented with a &quot;(??)&quot;, and right next to it (if found) the correct VR.</para>
+<para>The VR are not found in the file, thus are presented with a <quote>(??)</quote>, and right next to it (if found) the correct VR.</para>
 
 <para>Eg.:</para>
 
