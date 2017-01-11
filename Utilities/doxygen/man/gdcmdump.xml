@@ -28,7 +28,7 @@ gdcmdump [options] dcm_directory
 
 <para>The <emphasis role="bold">gdcmdump</emphasis> command line program dumps a DICOM file to the console. For those familiar with dcmdump (DCMTK) output, gdcmdump has some minor differences. Namely: <itemizedlist>
 <listitem>
-<para>For Implicit Transfer Syntax gdcmdump will print <emphasis role="bold"></emphasis>?? instead of the dictionary VR</para>
+<para>For Implicit Transfer Syntax gdcmdump will print <emphasis role="bold">??</emphasis> instead of the dictionary VR</para>
 </listitem>
 </itemizedlist>
 gdcmdump has a limited private dictionary that is used to lookup private element whenever possible.</para>
@@ -94,7 +94,7 @@ dcm_directory   DICOM input directory
 <refsection xml:id="gdcmdump_1implicit">
 <title>Printing Implicit Transfer Syntax</title>
 
-<para>The VR are not found in the file, thus are presented with a &quot;(??)&quot;, and right next to it (if found) the correct VR.</para>
+<para>The VR are not found in the file, thus are presented with a <quote>(??)</quote>, and right next to it (if found) the correct VR.</para>
 
 <para>Eg.:</para>
 
@@ -191,22 +191,22 @@ Image shadow data (0029,xx10)
 <para><literallayout>$ gdcmdump --pdb GE_MR_0025xx1bProtocolDataBlock.dcm
 </literallayout></para>
 
-<para><literallayout>ENTRY &quot;Head First&quot;
-POSITION &quot;Supine&quot;
-ANREF &quot;NA&quot;
-COIL &quot;HEAD&quot;
-PLANE &quot;OBLIQUE&quot;
-SEDESCFLAG &quot;1&quot;
-SEDESC &quot;AX FSE T2&quot;
-IMODE &quot;2D&quot;
-PSEQ &quot;FSE-XL&quot;
-IOPT &quot;FC, EDR, TRF, Fast&quot;
-PLUG &quot;22&quot;
-FILTCHOICE &quot;None&quot;
-BWRT &quot;-1&quot;
-TRICKSIMG &quot;1&quot;
-TAG_SPACE &quot;7&quot;
-TAG_TYPE &quot;None&quot;
+<para><literallayout>ENTRY "Head First"
+POSITION "Supine"
+ANREF "NA"
+COIL "HEAD"
+PLANE "OBLIQUE"
+SEDESCFLAG "1"
+SEDESC "AX FSE T2"
+IMODE "2D"
+PSEQ "FSE-XL"
+IOPT "FC, EDR, TRF, Fast"
+PLUG "22"
+FILTCHOICE "None"
+BWRT "-1"
+TRICKSIMG "1"
+TAG_SPACE "7"
+TAG_TYPE "None"
 ...
 </literallayout></para>
 </refsection>

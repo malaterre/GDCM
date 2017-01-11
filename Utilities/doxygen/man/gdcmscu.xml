@@ -83,7 +83,7 @@
      --series            C-FIND Query on Series Info.
      --image             C-FIND Query on Image Info.
      --key   %d,%d[=%s]  0123,4567=VALUE for specifying search criteria (wildcard allowed)
-                         With --key, leave blank (ie, --key 10,20=&quot;&quot; or --key 10,20) to retrieve values
+                         With --key, leave blank (ie, --key 10,20="" or --key 10,20) to retrieve values
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmscu_1cmove_options">
@@ -181,17 +181,17 @@
 
 <para><emphasis role="bold">gdcmscu</emphasis> also allow querying a DICOM server. This is the C-FIND operation, for example to find all DICOM Instance where PatientsName match a particular pattern, usage is simply:</para>
 
-<para><literallayout>$ gdcmscu --find --patient dicom.example.com 11112 --patientroot --key 10,10,&quot;A*&quot;
+<para><literallayout>$ gdcmscu --find --patient dicom.example.com 11112 --patientroot --key 10,10,"A*"
 </literallayout></para>
 
 <para>We also support a DCMTK compatible convention:</para>
 
-<para><literallayout>$ gdcmscu --find --patient dicom.example.com 11112 --patientroot --key 10,10=&quot;A*&quot;
+<para><literallayout>$ gdcmscu --find --patient dicom.example.com 11112 --patientroot --key 10,10="A*"
 </literallayout></para>
 
 <para>When an attribute is set without a value it will be part of the output result:</para>
 
-<para><literallayout>$ gdcmscu --find --patient dicom.example.com 11112 --call MI2B2 --patientroot -k 10,10=&quot;A*&quot; -k 10,20
+<para><literallayout>$ gdcmscu --find --patient dicom.example.com 11112 --call MI2B2 --patientroot -k 10,10="A*" -k 10,20
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmscu_1cmove_usage">
@@ -199,7 +199,7 @@
 
 <para>C-MOVE is the operation to retrieve a DICOM instance from a remote DICOM server. Most of the time, it is a subsequent operation after a C-FIND query. To retrieve a DICOM instance where PatientID is ABCD1234, simply execute:</para>
 
-<para><literallayout>$ gdcmscu --move --patient --aetitle ACME1 --call ACME_STORE dicom.example.com 5678 --patientroot -k 10,20=&quot;ABCD1234&quot; --port-scp 1234
+<para><literallayout>$ gdcmscu --move --patient --aetitle ACME1 --call ACME_STORE dicom.example.com 5678 --patientroot -k 10,20="ABCD1234" --port-scp 1234
 </literallayout></para>
 
 <para>WARNING For this operation to work you need information from the DICOM server you are communicating with. Only the DICOM server you are sending a C-MOVE query will be responsible for sending back incoming associations (the actual C-STORE SCP). Therefore you need to make sure that you mapping of (AE-TITLE,PortNumber) is properly set on the DICOM server side as well as the port for incoming association (&#8211;port-scp).</para>
@@ -211,12 +211,12 @@
 
 <para>The flag &#8211;patientroot is just simply a wrapper around the syntax &#8211;key 8,52=PATIENT For instance one would write using DCMTK syntax:</para>
 
-<para><literallayout>$ findscu --patient dicom.example.com 11112 --key 8,52=PATIENT --key 10,10=&quot;F*&quot;
+<para><literallayout>$ findscu --patient dicom.example.com 11112 --key 8,52=PATIENT --key 10,10="F*"
 </literallayout></para>
 
 <para>This would become using GDCM syntax:</para>
 
-<para><literallayout>$ gdcmscu --find --patient dicom.example.com 11112 --patientroot --key 10,10=&quot;F*&quot;
+<para><literallayout>$ gdcmscu --find --patient dicom.example.com 11112 --patientroot --key 10,10="F*"
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmscu_1debugging">
@@ -276,7 +276,7 @@
 
 <para>It is also possible to store the query:</para>
 
-<para><literallayout>gdcmscu --find --patient --patientroot dicom.example.com 11112 --key 10,20=&quot;*&quot; --key 10,10 --store-query query.dcm
+<para><literallayout>gdcmscu --find --patient --patientroot dicom.example.com 11112 --key 10,20="*" --key 10,10 --store-query query.dcm
 </literallayout></para>
 
 <para>One can then check the DataSet values send for the query:</para>
@@ -295,11 +295,11 @@
 (0010,0020) ?? (LO) [* ]                                          # 2,1 Patient ID
 </literallayout></para>
 
-<para>The Specific Character Set was set to &quot;ISO_IR 192&quot; as the locale encoding of the system was found automatically by gdcmscu to be UTF-8.</para>
+<para>The Specific Character Set was set to <quote>ISO_IR 192</quote> as the locale encoding of the system was found automatically by gdcmscu to be UTF-8.</para>
 
 <para>This means that the following command line will properly setup the Query with the appropriate Charset to be executed correctly:</para>
 
-<para><literallayout>$ gdcmscu --find --patient --patientroot dicom.example.com 11112 --key 10,10=&quot;*Jérôme*&quot;
+<para><literallayout>$ gdcmscu --find --patient --patientroot dicom.example.com 11112 --key 10,10="*Jérôme*"
 </literallayout></para>
 
 <para>The query is always executed on the server side (SCP), some implementations does not support string matching with different Character Set.</para>

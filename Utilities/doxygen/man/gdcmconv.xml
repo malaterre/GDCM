@@ -380,7 +380,7 @@ For reference, gdcmconv --raw will act as dcmdjpeg +cn +px, since it never tries
 <para>You can setup your favorite editor to compare the output, for instance in vim:</para>
 
 <para><literallayout><computeroutput>autocmd&#32;BufReadPre&#32;*.dcm&#32;set&#32;ro
-autocmd&#32;BufReadPost&#32;*.dcm&#32;silent&#32;%!dcmdump&#32;-M&#32;+uc&#32;&quot;%&quot;
+autocmd&#32;BufReadPost&#32;*.dcm&#32;silent&#32;%!dcmdump&#32;-M&#32;+uc&#32;"%"
 </computeroutput></literallayout></para>
 
 <para>then simply do:</para>

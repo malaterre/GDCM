@@ -158,7 +158,7 @@ Orientation Label: SAGITTAL
 <para><literallayout>$ gdcminfo --check-compression gdcmData/MAROTECH_CT_JP2Lossy.dcm
 </literallayout></para>
 
-<para>The tool returns: &quot;Encapsulated Stream was found to be: lossy&quot;</para>
+<para>The tool returns: <quote>Encapsulated Stream was found to be: lossy</quote></para>
 
 <para>Pay attention that this tool also checks the Image Lossy Compression attribute (0028,2110). This means <option>--check-compression</option> will also returns a value of lossy if a predecessor was found to be lossy compressed.</para>
 </refsection>
