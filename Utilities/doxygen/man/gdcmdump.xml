@@ -191,22 +191,22 @@ Image shadow data (0029,xx10)
 <para><literallayout>$ gdcmdump --pdb GE_MR_0025xx1bProtocolDataBlock.dcm
 </literallayout></para>
 
-<para><literallayout>ENTRY &quot;Head First&quot;
-POSITION &quot;Supine&quot;
-ANREF &quot;NA&quot;
-COIL &quot;HEAD&quot;
-PLANE &quot;OBLIQUE&quot;
-SEDESCFLAG &quot;1&quot;
-SEDESC &quot;AX FSE T2&quot;
-IMODE &quot;2D&quot;
-PSEQ &quot;FSE-XL&quot;
-IOPT &quot;FC, EDR, TRF, Fast&quot;
-PLUG &quot;22&quot;
-FILTCHOICE &quot;None&quot;
-BWRT &quot;-1&quot;
-TRICKSIMG &quot;1&quot;
-TAG_SPACE &quot;7&quot;
-TAG_TYPE &quot;None&quot;
+<para><literallayout>ENTRY "Head First"
+POSITION "Supine"
+ANREF "NA"
+COIL "HEAD"
+PLANE "OBLIQUE"
+SEDESCFLAG "1"
+SEDESC "AX FSE T2"
+IMODE "2D"
+PSEQ "FSE-XL"
+IOPT "FC, EDR, TRF, Fast"
+PLUG "22"
+FILTCHOICE "None"
+BWRT "-1"
+TRICKSIMG "1"
+TAG_SPACE "7"
+TAG_TYPE "None"
 ...
 </literallayout></para>
 </refsection>

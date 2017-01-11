@@ -47,13 +47,13 @@ file-out  output filename (can be absent)
 <refsection xml:id="gdcmxml_1options_dicom2xml">
 <title>Options for DICOM to XML:</title>
 
-<para><literallayout>  -B --loadBulkData   Loads bulk data into a binary file named &quot;UUID&quot; (by default UUID are written).
+<para><literallayout>  -B --loadBulkData   Loads bulk data into a binary file named "UUID" (by default UUID are written).
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmxml_1options_xml2dicom">
 <title>Options for XML to DICOM:</title>
 
-<para><literallayout>  -B --loadBulkData   Loads bulk data from a binary file named as the &quot;UUID&quot; in XML file (by default UUID are written).
+<para><literallayout>  -B --loadBulkData   Loads bulk data from a binary file named as the "UUID" in XML file (by default UUID are written).
   -T --TransferSyntax Loads transfer syntax from file (default is LittleEndianImplicit)
 </literallayout></para>
 </refsection>
