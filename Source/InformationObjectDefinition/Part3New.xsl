@@ -67,9 +67,14 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
   <xsl:variable name="type" select="dk:td[3]/dk:para"/>
   <xsl:variable name="description">
 <!--
-    <xsl:apply-templates select="dk:td[4]/dk:para" mode="module"/>
+    <xsl:apply-templates select="dk:td[4]/*" mode="module"/>
 -->
-    <xsl:apply-templates select="dk:td[4]/*" mode="module"/> <!-- fixme macro ? -->
+    <xsl:for-each select="dk:td[4]/*">
+      <xsl:apply-templates select="node()" mode="module"/>
+      <xsl:if test="position() != last()">
+        <xsl:text> </xsl:text>
+      </xsl:if>
+    </xsl:for-each>
   </xsl:variable>
   <entry group="{$group}" element="{$element}" name="{$name}" type="{$type}">
      <description><xsl:value-of select="$description"/></description>
@@ -81,9 +86,13 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
     <xsl:apply-templates select="dk:td[1]/dk:para/dk:emphasis" mode="module"/>
   </xsl:variable>
   <xsl:variable name="description" >
-    <xsl:apply-templates select="dk:td[2]/dk:para/dk:emphasis" mode="module"/>
+    <xsl:apply-templates select="dk:td[2]/dk:para[not(dk:emphasis)] | dk:td[2]/dk:para/dk:emphasis" mode="module"/>
   </xsl:variable>
-  <include ref="{$ref}" description="{$description}"/>
+  <include ref="{$ref}">
+    <xsl:if test="$description != ''">
+      <xsl:attribute name="description"><xsl:value-of select="$description"/></xsl:attribute>
+    </xsl:if>
+  </include>
   </xsl:if>
 </xsl:template>
 
@@ -159,14 +168,9 @@ $ xsltproc ma2html.xsl ModuleAttributes.xml
   <xsl:variable name="usage" select="dk:td[3 + $offset]/dk:para"/>
 -->
   <xsl:variable name="usage">
-<!--
-    <xsl:apply-templates select="dk:td[3 + $offset]/dk:para" mode="iod"/>
--->
+    <!-- the following is a hack since we only want to execute when two para and no trailing dot is found: -->
     <xsl:for-each select="dk:td[3 + $offset]/*">
       <xsl:apply-templates select="node()" mode="iod"/>
-<!--
-      <xsl:value-of select="normalize-space(.)"/>
--->
       <xsl:if test="position() != last()">
         <xsl:text>.</xsl:text>
       </xsl:if>
