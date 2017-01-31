@@ -106,9 +106,6 @@ endif()
 # Do C99
 APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/C99/COPYING)
 
-# Do wxVTK
-APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/wxWidgets/Copyright.txt)
-
 #if(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 ##  file(GLOB header_files "*.h" "*.txx")
 #  install(FILES

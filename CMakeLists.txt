@@ -657,12 +657,6 @@ if(GDCM_STANDALONE)
     subdirs(Utilities/VTK)
   endif()
 endif()
-#-----------------------------------------------------------------------------
-option(GDCM_USE_WXWIDGETS "wxWidgets bridge ?" OFF)
-mark_as_advanced(GDCM_USE_WXWIDGETS)
-if(GDCM_USE_WXWIDGETS)
-  subdirs(Utilities/wxWidgets)
-endif()
 
 #-----------------------------------------------------------------------------
 if(GDCM_STANDALONE)
