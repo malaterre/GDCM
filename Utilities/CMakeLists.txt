@@ -99,10 +99,6 @@ if(GDCM_USE_PVRG)
   endif()
 endif()
 
-if(GDCM_USE_RLE)
-  subdirs(rle)
-endif()
-
 # Do C99
 APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/C99/COPYING)
 
