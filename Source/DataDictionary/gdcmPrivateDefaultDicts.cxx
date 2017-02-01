@@ -7315,7 +7315,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0033,0x0024,"SIEMENS MED NM",VR::FL,VM::VM1,"Backprojection angle head 1",false },
   {0x0033,0x0025,"SIEMENS MED NM",VR::FL,VM::VM1,"Backprojection angle head 2",false },
   {0x0033,0x0028,"SIEMENS MED NM",VR::SL,VM::VM1,"Number of point sources used for NCO and MHR",false },
-  {0x0033,0x0029,"SIEMENS MED NM",VR::FL,VM::VM1,"Crystal thickness",false },
+  {0x0033,0x0029,"SIEMENS MED NM",VR::FL,VM::VM2,"Crystal thickness",false },
   {0x0033,0x0030,"SIEMENS MED NM",VR::LO,VM::VM1,"Preset name used for acquisition",false },
   {0x0033,0x0031,"SIEMENS MED NM",VR::FL,VM::VM1,"Camera config angle",false },
   {0x0033,0x0032,"SIEMENS MED NM",VR::LO,VM::VM1,"Crystal type Startburst or not",false },
