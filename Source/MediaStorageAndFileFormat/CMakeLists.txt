@@ -92,16 +92,8 @@ set(MSFF_SRCS
   gdcmSurfaceReader.cxx
   gdcmSurfaceHelper.cxx
   gdcmSegmentHelper.cxx
+  gdcmJPEG2000Codec.cxx
   )
-if(OPENJPEG_VERSION VERSION_LESS 2.0)
-  list(APPEND MSFF_SRCS
-    gdcmJPEG2000Codec.cxx
-  )
-else ()
-  list(APPEND MSFF_SRCS
-    gdcmOpenJPEG2Codec.cxx
-  )
-endif()
 
   list(APPEND MSFF_SRCS
     ${GDCM_SOURCE_DIR}/Utilities/gdcmrle/rle.cxx
