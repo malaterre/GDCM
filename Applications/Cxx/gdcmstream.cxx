@@ -27,10 +27,10 @@
 #include "gdcmUIDGenerator.h"
 #include "gdcmVersion.h"
 
-#ifdef OPENJPEG_MAJOR_VERSION
-#if OPENJPEG_MAJOR_VERSION == 1
+#ifdef OPENJPEG_VERSION_MAJOR
+#if OPENJPEG_VERSION_MAJOR == 1
 #include "gdcm_openjpeg.h"
-#elif OPENJPEG_MAJOR_VERSION == 2
+#elif OPENJPEG_VERSION_MAJOR == 2
 #define USE_OPJ_DEPRECATED // opj_setup_decoder
 #include "gdcm_openjpeg2.h"
 #else

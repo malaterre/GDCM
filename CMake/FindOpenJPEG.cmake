@@ -22,7 +22,6 @@
 find_package(PkgConfig)
 pkg_check_modules(OPENJPEG libopenjpeg1)
 if(OPENJPEG_FOUND)
-    set(OPENJPEG_MAJOR_VERSION 1)
     set(OPENJPEG_INCLUDE_DIR ${OPENJPEG_INCLUDE_DIRS})
     set(OPENJPEG_LIBRARIES ${OPENJPEG_LDFLAGS})
 else()
@@ -31,7 +30,10 @@ find_package(OpenJPEG QUIET NO_MODULE)
 mark_as_advanced(OpenJPEG_DIR)
 
 if( NOT OpenJPEG_DIR )
-set(OPENJPEG_MAJOR_VERSION 2) # FIXME ?
+set(OPENJPEG_VERSION_MAJOR 2) # FIXME ?
+set(OPENJPEG_VERSION_MINOR 0) # FIXME ?
+set(OPENJPEG_VERSION_PATCH 0) # FIXME ?
+set(OPENJPEG_VERSION "${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}.${OPENJPEG_VERSION_PATCH}")
 find_path(OPENJPEG_INCLUDE_DIR
   NAMES openjpeg.h #openjpeg-1.0/openjpeg.h
   PATHS /usr/local/include
@@ -43,11 +45,13 @@ find_path(OPENJPEG_INCLUDE_DIR
 find_library(OPENJPEG_LIBRARY
   NAMES openjpeg
   )
-
+endif()
+endif()
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(OpenJPEG DEFAULT_MSG
+find_package_handle_standard_args(OpenJPEG REQUIRED_VARS
   OPENJPEG_LIBRARY
   OPENJPEG_INCLUDE_DIR
+  VERSION_VAR OPENJPEG_VERSION
 )
 
 if(OPENJPEG_FOUND)
@@ -59,5 +63,3 @@ mark_as_advanced(
   OPENJPEG_LIBRARY
   OPENJPEG_INCLUDE_DIR
   )
-endif()
-endif()

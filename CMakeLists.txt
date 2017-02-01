@@ -364,10 +364,7 @@ else()
 endif()
 
 if(GDCM_USE_SYSTEM_OPENJPEG)
-  # For some reason I cannot specify the version I want.
-  # find_package(OpenJPEG 2.0 REQUIRED)
-  # oh well we should handle both 1.0 and 2.0 anyway...
-  find_package(OpenJPEG REQUIRED)
+  find_package(OpenJPEG 2.0 REQUIRED)
   set(GDCM_OPENJPEG_LIBRARIES ${OPENJPEG_LIBRARIES})
 else()
   set(GDCM_OPENJPEG_LIBRARIES gdcmopenjp2)
