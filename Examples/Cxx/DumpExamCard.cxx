@@ -126,32 +126,32 @@ struct header
     {
     is.read( (char*)&v1,sizeof(v1));
     if( v1 == 0x01 ) {
-    // direct (FIXME how should we detect this, much like TIFF ???)
-    nints = 0;
-    v3 = 0;
-    v4 = 0;
-    nfloats = 0;
-    v6 = 0;
-    nstrings = 0;
-    v8 = 0;
-    numparams = 0;
-    uint32_t bla;
-    is.read( (char*)&bla, sizeof(bla) );
-    assert( bla == 0x2 );
-    nstrings = 1;
-    numparams = 1;
+      // direct (FIXME how should we detect this, much like TIFF ???)
+      nints = 0;
+      v3 = 0;
+      v4 = 0;
+      nfloats = 0;
+      v6 = 0;
+      nstrings = 0;
+      v8 = 0;
+      numparams = 0;
+      uint32_t bla;
+      is.read( (char*)&bla, sizeof(bla) );
+      assert( bla == 0x2 || bla == 0x3 );
+      nstrings = 1;
+      numparams = 1;
     } else {
-    // indirect
-    is.read( (char*)&nints,sizeof(nints));
-    is.read( (char*)&v3,sizeof(v3));
-    assert( v3 == 0 ); // looks like this is always 0
-    is.read( (char*)&v4,sizeof(v4));
-    is.read( (char*)&nfloats,sizeof(nfloats));
-    is.read( (char*)&v6,sizeof(v6));
-    is.read( (char*)&nstrings,sizeof(nstrings));
-    is.read( (char*)&v8,sizeof(v8));
-    assert( v8 == 8 );
-    is.read( (char*)&numparams,sizeof(numparams));
+      // indirect
+      is.read( (char*)&nints,sizeof(nints));
+      is.read( (char*)&v3,sizeof(v3));
+      assert( v3 == 0 ); // looks like this is always 0
+      is.read( (char*)&v4,sizeof(v4));
+      is.read( (char*)&nfloats,sizeof(nfloats));
+      is.read( (char*)&v6,sizeof(v6));
+      is.read( (char*)&nstrings,sizeof(nstrings));
+      is.read( (char*)&v8,sizeof(v8));
+      assert( v8 == 8 );
+      is.read( (char*)&numparams,sizeof(numparams));
     }
     }
   void print( std::ostream & os )
@@ -225,6 +225,8 @@ struct param
     const uint32_t cur = (uint32_t)is.tellg();
     std::cerr << "offset:" << cur << std::endl;
     if( cur == 65 )
+      is.read( (char*)&bla, 1 );
+    else if( cur == 66 )
       is.read( (char*)&bla, 1 );
     else if( cur == 122 )
       is.read( (char*)&bla, 2 );
@@ -507,16 +509,16 @@ Wotsit ?
           params.push_back( p );
         }
       } else {
-      assert( is.tellg() == std::streampos(0x20) );
-      is.seekg( 0x20 );
+        assert( is.tellg() == std::streampos(0x20) );
+        is.seekg( 0x20 );
 
-      param p;
-      for( uint32_t i = 0; i < h.getnparams(); ++i )
-        {
-        p.read( is );
-        //p.print( std::cout );
-        params.push_back( p );
-        }
+        param p;
+        for( uint32_t i = 0; i < h.getnparams(); ++i )
+          {
+          p.read( is );
+          //p.print( std::cout );
+          params.push_back( p );
+          }
       }
 
       std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space

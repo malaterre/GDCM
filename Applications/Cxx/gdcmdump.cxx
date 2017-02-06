@@ -144,11 +144,54 @@ static void printbinary(std::istream &is, PDFElement const & pdfel )
   printvalue(is, type, numels, pos);
 }
 
+static void ProcessSDSDataInt( std::istream & is )
+{
+  (void)is;
+  std::cerr << "TODO" << std::endl;
+}
+
+// see read_direct_string / read_direct_int
+static void ProcessSDSDataString( std::istream & is )
+{
+  (void)is;
+#if 0
+  int32_t v1;
+  is.read( (char*)&v1,sizeof(v1));
+  assert( v1 == 0x1 );
+  uint32_t bla;
+  is.read( (char*)&bla, sizeof(bla) );
+  char name0[32];
+  memset(name0,0,sizeof(name0));
+  assert( bla < sizeof(name0) );
+  is.read( name0, bla);
+  size_t l = strlen(name0);
+  assert( l == bla );
+  std::cerr << "name0:" << name0 << std::endl;
+
+  is.read( (char*)&bla, sizeof(bla) );
+  assert( bla == 0x1 );
+  is.read( (char*)&bla, sizeof(bla) );
+  char value[32];
+  memset(value,0,sizeof(value));
+  assert( bla < sizeof(value) );
+  is.read( value, bla);
+  is.read( (char*)&bla, sizeof(bla) );
+  assert( bla == 0 ); // trailing stuff ?
+  is.read( (char*)&bla, sizeof(bla) );
+  assert( bla == 0 ); // trailing stuff ?
+  const uint32_t cur = (uint32_t)is.tellg();
+  std::cerr << "offset:" << cur << std::endl;
+#else
+  std::cerr << "TODO" << std::endl;
+#endif
+}
+
 static void ProcessSDSData( std::istream & is )
 {
   // havent been able to figure out what was the begin meant for
   is.seekg( 0x20 - 8 );
   uint32_t version = 0;
+  assert( sizeof(uint32_t) == 4 );
   is.read( (char*)&version, sizeof(version) );
   assert( version == 8 );
   uint32_t numel = 0;
@@ -215,9 +258,19 @@ static int DumpPMS_MRSDS(const gdcm::DataSet & ds)
     std::cout << "PMS/Item name: [" << s1 << "/" << s2 << "/" << s4 << "]" << std::endl;
     if( bv3 ) {
       std::istringstream is( s3 );
-      ProcessSDSData( is );
+      char v1 = is.peek();
+      if( v1 == 0x1 ) {
+        if( s1 == "HARDWARE_CONFIG " )
+          ProcessSDSDataInt( is );
+        else if( s1 == "COILSTATE " )
+          ProcessSDSDataString( is );
+        else
+          assert(0);
+      } else {
+        ProcessSDSData( is );
+      }
     } else {
-    std::cout << " EMPTY !" << std::endl;
+      std::cout << " EMPTY !" << std::endl;
     }
     }
   return 0;
