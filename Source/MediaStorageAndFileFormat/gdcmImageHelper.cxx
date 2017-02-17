@@ -2139,12 +2139,12 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     }
     // cleanup root (famous MR -> EMR case) 
     {
-    Attribute<0x0028,0x1052> at1;
-    ds.Remove(at1.GetTag());
-    Attribute<0x0028,0x1053> at2;
-    ds.Remove(at2.GetTag());
-    Attribute<0x0028,0x1053> at3;
-    ds.Remove(at3.GetTag());
+    const Tag t1(0x0028,0x1052);
+    ds.Remove(t1);
+    const Tag t2(0x0028,0x1053);
+    ds.Remove(t2);
+    const Tag t3(0x0028,0x1053);
+    ds.Remove(t3);
     }
     return;
     }
