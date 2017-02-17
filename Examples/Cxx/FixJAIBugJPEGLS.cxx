@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     if (JpegLsReadHeader(buffer, totalLen, &metadata) != OK)
       {
       std::cerr << "Cant parse jpegls" << std::endl;
-      return false;
+      return 1;
       }
 
     std::cout << metadata.width << std::endl;

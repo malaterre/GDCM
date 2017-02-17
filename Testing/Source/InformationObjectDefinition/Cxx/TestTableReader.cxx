@@ -17,7 +17,7 @@
 // generated file:
 #include "gdcmTables.h"
 
-void TestReadTable(const char *filename)
+void TestReadTable(const char *filename, bool dump = false )
 {
   gdcm::Defs defs;
   gdcm::TableReader tr(defs);
@@ -26,12 +26,15 @@ void TestReadTable(const char *filename)
 
 
   const gdcm::Modules &modules = defs.GetModules();
+  if(dump)
   std::cout << modules << std::endl;
 
   const gdcm::Macros &macros = defs.GetMacros();
+  if(dump)
   std::cout << macros << std::endl;
 
   const gdcm::IODs &iods = defs.GetIODs();
+  if(dump)
   std::cout << iods << std::endl;
 }
 
@@ -40,7 +43,7 @@ int TestTableReader(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    TestReadTable(filename);
+    TestReadTable(filename, true);
     return 0;
     }
 
