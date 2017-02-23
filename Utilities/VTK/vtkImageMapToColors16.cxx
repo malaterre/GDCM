@@ -66,7 +66,12 @@ vtkImageMapToColors16::~vtkImageMapToColors16()
 }
 
 //----------------------------------------------------------------------------
-unsigned long vtkImageMapToColors16::GetMTime()
+#ifdef VTK_HAS_MTIME_TYPE
+vtkMTimeType
+#else
+unsigned long
+#endif
+vtkImageMapToColors16::GetMTime()
 {
   unsigned long t1, t2;
 

@@ -85,7 +85,11 @@ public:
 
   // Description:
   // We need to check the modified time of the lookup table too.
+#ifdef VTK_HAS_MTIME_TYPE
+  virtual vtkMTimeType GetMTime();
+#else
   virtual unsigned long GetMTime();
+#endif
 
 protected:
   vtkImageMapToColors16();
