@@ -81,13 +81,11 @@ public:
 
   // Description:
   // We need to check the modified time of the lookup table too.
-  virtual
-#if VTK_MAJOR_VERSION >= 8 || ( VTK_MAJOR_VERSION == 7 && VTK_MINOR_VERSION >= 1 )
-  vtkMTimeType
+#ifdef VTK_HAS_MTIME_TYPE
+  virtual vtkMTimeType GetMTime();
 #else
-  unsigned long
+  virtual unsigned long GetMTime();
 #endif
-  GetMTime();
 
 protected:
   vtkImageMapToColors16();

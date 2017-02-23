@@ -62,7 +62,7 @@ vtkImageMapToColors16::~vtkImageMapToColors16()
 }
 
 //----------------------------------------------------------------------------
-#if VTK_MAJOR_VERSION >= 8 || ( VTK_MAJOR_VERSION == 7 && VTK_MINOR_VERSION >= 1 )
+#ifdef VTK_HAS_MTIME_TYPE
 vtkMTimeType
 #else
 unsigned long
