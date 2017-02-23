@@ -146,7 +146,8 @@ rsync -e ssh gdcm-$version.tar.bz2                      "malat,gdcm@frs.sourcefo
 check_exit_value $? "rsync did not return properly" || exit 1
 rsync -e ssh Utilities/doxygen/gdcm-$version-doc.tar.gz "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
 check_exit_value $? "rsync did not return properly" || exit 1
-rsync -e ssh $basedir/gdcm/Utilities/Release/README.md "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
+sed "s/vVERSION/v$version/" $basedir/gdcm/Utilities/Release/README.md > $basedir/README.md
+rsync -e ssh $basedir/README.md "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
 check_exit_value $? "rsync did not return properly" || exit 1
 
 rsync -a -r Utilities/doxygen/html malat,gdcm@web.sourceforge.net:htdocs/$dirversion
