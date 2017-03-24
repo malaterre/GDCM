@@ -1277,6 +1277,8 @@ int main (int argc, char *argv[])
       writer.SetFileName( outfilenamei );
       //writer.SetFile( filter.GetFile() );
       writer.SetFile( reader.GetFile() );
+      const gdcm::TransferSyntax &ts = image.GetTransferSyntax();
+
 
       //
       //writer.SetImage( filter.GetImage() );
@@ -1284,6 +1286,16 @@ int main (int argc, char *argv[])
       slice = filter.GetImage();
       slice.SetOrigin( new_origin );
       slice.SetNumberOfDimensions( 2 );
+      // FIXME: for now we do not know how to recompress the image...
+      if( ts.IsExplicit() )
+        {
+        slice.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+        }
+      else
+        {
+        slice.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+        }
+ 
       assert( slice.GetPixelFormat() == filter.GetImage().GetPixelFormat() );
       slice.SetSpacing(2, filter.GetImage().GetSpacing(2) );
       //slice.Print( std::cout );
