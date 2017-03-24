@@ -144,7 +144,15 @@ bool SplitMosaicFilter::Split()
   pixeldata.SetByteValue( &outbuf[0], outbufSize );
 
   Image &image = GetImage();
-
+  const gdcm::TransferSyntax &ts = image.GetTransferSyntax();
+  if( ts.IsExplicit() )
+     {
+     image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+     }
+   else
+     {
+     image.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+     }
   image.SetNumberOfDimensions( 3 );
   image.SetDimension(0, dims[0] );
   image.SetDimension(1, dims[1] );
