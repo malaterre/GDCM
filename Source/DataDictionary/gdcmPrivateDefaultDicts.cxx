@@ -37,6 +37,9 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x8ff1,0x0010,"SSI Image enhancement Group",VR::LO,VM::VM1,"SSI Image enhancement Group Version",false },
+  {0x8ff1,0x0020,"SSI Image enhancement Group",VR::IS,VM::VM256,"RGB LUT",false },
+  {0x8ff1,0x0024,"SSI Image enhancement Group",VR::LO,VM::VM1,"LUT Description",false },
   {0x0009,0x00ee,"MEDISO-1",VR::DT,VM::VM1,"?",false }, // ftp://dicom.nema.org/MEDICAL/dicom/DataSets/WG30/Mediso/PETCT/Rat%20C-2-3%20PETCT/Compliance/testratc23enhancedpet2.dcm.dcdump.txt
   {0x0009,0x00ef,"MEDISO-1",VR::DT,VM::VM1,"?",false },
   {0x0009,0x00f0,"MEDISO-1",VR::FD,VM::VM1,"?",false },
