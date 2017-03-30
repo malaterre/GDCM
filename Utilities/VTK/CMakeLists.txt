@@ -16,9 +16,9 @@ if(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
   )
 endif()
 
-if( ${VTK_VERSION_MAJOR} LESS 6 )
+#if( ${VTK_VERSION_MAJOR} LESS 7 )
   include(${VTK_USE_FILE})
-endif()
+#endif()
 
 if( ${VTK_MAJOR_VERSION} GREATER 5 )
   list(APPEND vtkgdcm_SRCS
