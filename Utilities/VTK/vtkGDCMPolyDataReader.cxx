@@ -505,7 +505,9 @@ refinstanceuid.GetValue().c_str() );
 
       if( contgeotype.GetValue() == "CLOSED_PLANAR " )
         {
-        assert( nestedds2.FindDataElement( gdcm::Tag(0x3006,0x0016) ) );
+        // http://dicom.nema.org/medical/dicom/current/output/chtml/part03/sect_C.8.8.6.html
+        if( nestedds2.FindDataElement( gdcm::Tag(0x3006,0x0016) ) )
+        {
         const gdcm::DataElement &contourimagesequence = nestedds2.GetDataElement( gdcm::Tag(0x3006,0x0016) );
         gdcm::SmartPointer<gdcm::SequenceOfItems> contourimagesequence_sqi = contourimagesequence.GetValueAsSQ();
         assert( contourimagesequence_sqi && contourimagesequence_sqi->GetNumberOfItems() == 1 );
@@ -519,6 +521,7 @@ refinstanceuid.GetValue().c_str() );
 
         this->RTStructSetProperties->AddContourReferencedFrameOfReference( pd,
           classat.GetValue(), instat.GetValue() );
+        }
         }
 
       //newPts->SetNumberOfPoints( at.GetNumberOfValues() / 3 );
