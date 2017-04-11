@@ -110,7 +110,7 @@ if(NOT BUILD_SHARED_LIBS)
                               )
   set_source_files_properties(gdcmJPEGLSCodec.cxx
                               PROPERTIES
-                              COMPILE_FLAGS -DCHARLS_STATIC
+                              COMPILE_DEFINITIONS CHARLS_STATIC
                               )
 else()
   set_source_files_properties(gdcmJPEGLSCodec.cxx
