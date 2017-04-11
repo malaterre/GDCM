@@ -108,6 +108,10 @@ if(NOT BUILD_SHARED_LIBS)
                               PROPERTIES
                               COMPILE_FLAGS -DOPJ_STATIC
                               )
+  set_source_files_properties(gdcmJPEGLSCodec.cxx
+                              PROPERTIES
+                              COMPILE_FLAGS -DCHARLS_STATIC
+                              )
 else()
   set_source_files_properties(gdcmJPEGLSCodec.cxx
                               PROPERTIES
