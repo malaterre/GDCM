@@ -103,7 +103,7 @@ size_t ImageRegionReader::ComputeBufferLength() const
     full.SetDomain(0, dims[0] - 1,
                    0, dims[1] - 1,
                    0, dims[2] - 1 );
-    if( full.IsValid() )
+    if(! full.IsValid() )
     {
       gdcmDebugMacro( "Sorry not a valid extent. Giving up" );
       return 0;
