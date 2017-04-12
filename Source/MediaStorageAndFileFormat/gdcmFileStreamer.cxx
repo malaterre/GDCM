@@ -319,6 +319,7 @@ public:
         // no attribute found, easy case !
         }
       }
+    assert( pFile == NULL );
     pFile = fopen(outfilename, "r+b");
     assert( pFile );
     CurrentDataLenth = 0;
@@ -597,7 +598,9 @@ public:
       }
 
     const size_t pclen = dicomdata.size();
+    assert( pFile == NULL );
     pFile = fopen(outfilename, "r+b");
+    assert( pFile );
 
     if( !prepare_file( pFile, (off64_t)thepcpos, pclen ) )
       {
@@ -797,10 +800,13 @@ bool FileStreamer::InitializeCopy()
       Reader reader;
       reader.SetFileName( filename );
       if( !reader.Read() ) return false;
-      Writer writer;
-      writer.SetFileName( outfilename );
-      writer.SetFile( reader.GetFile() );
-      if( !writer.Write() ) return false;
+      if( strcmp( filename, outfilename ) )
+        {
+        Writer writer;
+        writer.SetFileName( outfilename );
+        writer.SetFile( reader.GetFile() );
+        if( !writer.Write() ) return false;
+        }
       }
     else
       {
@@ -808,10 +814,13 @@ bool FileStreamer::InitializeCopy()
       assert( outfilename );
       std::ifstream is( filename, std::ios::binary );
       if( !is.good() ) return false;
-      std::ofstream of( outfilename, std::ios::binary );
-      if( !of.good() ) return false;
-      of << is.rdbuf();
-      of.close();
+      if( strcmp( filename, outfilename ) )
+        {
+        std::ofstream of( outfilename, std::ios::binary );
+        if( !of.good() ) return false;
+        of << is.rdbuf();
+        of.close();
+        }
       is.close();
       }
     this->Internals->InitializeCopy = true;
