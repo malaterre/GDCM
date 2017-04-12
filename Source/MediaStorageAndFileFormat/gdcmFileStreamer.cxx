@@ -358,26 +358,10 @@ public:
         return false;
         }
       // insert new data in between
-      FSeeko(pFile, thepos, SEEK_SET);
-      std::stringstream ss;
       const Tag tag = t;
-      if( TS.GetSwapCode() == SwapCode::BigEndian )
-        tag.Write<SwapperDoOp>(ss);
-      else
-        tag.Write<SwapperNoOp>(ss);
-      if( TS.GetNegociatedType() == TransferSyntax::Explicit )
-        {
-        VR un = VR::UN;
-        un.Write(ss);
-        }
       const VL vl = 0; // will be updated later (UpdateDataElement)
-      if( TS.GetSwapCode() == SwapCode::BigEndian )
-        vl.Write<SwapperDoOp>(ss);
-      else
-        vl.Write<SwapperNoOp>(ss);
-      const std::string dicomdata = ss.str();
-      fwrite(dicomdata.c_str(), 1, dicomdata.size(), pFile);
-      assert( dicomdata.size() == dicomlen );
+      const size_t ddsize = WriteHelper( thepos, tag, vl );
+      assert( ddsize == dicomlen );
       thepos += dicomlen;
       }
     else
@@ -729,29 +713,35 @@ private:
         }
       vlpos -= 4; // Tag
       gdcmAssertAlwaysMacro( vlpos >= 0 );
-      FSeeko(pFile, vlpos, SEEK_SET);
-      std::stringstream ss;
       const Tag tag = t;
-      if( TS.GetSwapCode() == SwapCode::BigEndian )
-        tag.Write<SwapperDoOp>(ss);
-      else
-        tag.Write<SwapperNoOp>(ss);
-      if( TS.GetNegociatedType() == TransferSyntax::Explicit )
-        {
-        VR un = VR::UN;
-        un.Write(ss);
-        }
       gdcmAssertAlwaysMacro( CurrentDataLenth < std::numeric_limits<uint32_t>::max() );
       const VL vl = (uint32_t)CurrentDataLenth;
-      if( TS.GetSwapCode() == SwapCode::BigEndian )
-        vl.Write<SwapperDoOp>(ss);
-      else
-        vl.Write<SwapperNoOp>(ss);
-      const std::string dicomdata = ss.str();
-      fwrite(dicomdata.c_str(), 1, dicomdata.size(), pFile);
+      size_t ret = WriteHelper( vlpos, tag, vl );
+      (void)ret;
       CurrentDataLenth = 0;
       }
     return true;
+    }
+  size_t WriteHelper( off64_t offset, const Tag & tag, const VL & vl )
+    {
+    FSeeko(pFile, offset, SEEK_SET);
+    std::stringstream ss;
+    if( TS.GetSwapCode() == SwapCode::BigEndian )
+      tag.Write<SwapperDoOp>(ss);
+    else
+      tag.Write<SwapperNoOp>(ss);
+    if( TS.GetNegociatedType() == TransferSyntax::Explicit )
+      {
+      VR un = VR::UN;
+      un.Write(ss);
+      }
+    if( TS.GetSwapCode() == SwapCode::BigEndian )
+      vl.Write<SwapperDoOp>(ss);
+    else
+      vl.Write<SwapperNoOp>(ss);
+    const std::string dicomdata = ss.str();
+    fwrite(dicomdata.c_str(), 1, dicomdata.size(), pFile);
+    return dicomdata.size();
     }
 };
 
