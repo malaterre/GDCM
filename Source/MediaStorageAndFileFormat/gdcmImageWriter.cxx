@@ -61,11 +61,21 @@ MediaStorage ImageWriter::ComputeTargetMediaStorage()
   if( ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage )
   {
-    ms = ImageHelper::ComputeMediaStorageFromModality( ms.GetModality(),
+    MediaStorage tmpms;
+    tmpms = ImageHelper::ComputeMediaStorageFromModality( ms.GetModality(),
         PixelData->GetNumberOfDimensions(),
         PixelData->GetPixelFormat(),
         PixelData->GetPhotometricInterpretation(),
         GetImage().GetIntercept(), GetImage().GetSlope() );
+    // detect invalid case
+    if(tmpms == MediaStorage::SecondaryCaptureImageStorage )
+    {
+      // we do not want to go back to SecondaryCaptureImageStorage from one of the MultiframeGrayscale*SecondaryCaptureImageStorage family
+    }
+    else
+    {
+      ms = tmpms;
+    }
   }
   return ms;
 }
