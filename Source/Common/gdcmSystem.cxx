@@ -140,6 +140,8 @@ const char * System::GetCWD()
 
 bool System::MakeDirectory(const char *path)
 {
+  if( !path || !*path )
+    return false;
   if(System::FileExists(path))
     {
     return true;
