@@ -79,7 +79,19 @@ void ImageRegionReader::SetRegion(Region const & region)
 
 Region const &ImageRegionReader::GetRegion() const
 {
-  return *Internals->GetRegion();
+  if( Internals->GetRegion() )
+    {
+    return *Internals->GetRegion();
+    }
+  else
+    {
+    static BoxRegion full;
+    std::vector<unsigned int> dims = ImageHelper::GetDimensionsValue(GetFile());
+    full.SetDomain(0, dims[0] - 1,
+                   0, dims[1] - 1,
+                   0, dims[2] - 1 );
+    return full;
+    }
 }
 
 size_t ImageRegionReader::ComputeBufferLength() const
@@ -96,7 +108,7 @@ size_t ImageRegionReader::ComputeBufferLength() const
     npixels = this->Internals->GetRegion()->Area();
     }
   else
-  {
+    {
     std::vector<unsigned int> dims = ImageHelper::GetDimensionsValue(GetFile());
     BoxRegion full;
     // Use BoxRegion to do robust computation
@@ -109,7 +121,7 @@ size_t ImageRegionReader::ComputeBufferLength() const
       return 0;
      }
     npixels = full.Area();
-  }
+    }
   const PixelFormat pixelInfo = ImageHelper::GetPixelFormatValue(GetFile());
   const size_t bytesPerPixel = pixelInfo.GetPixelSize();
   return npixels*bytesPerPixel;
