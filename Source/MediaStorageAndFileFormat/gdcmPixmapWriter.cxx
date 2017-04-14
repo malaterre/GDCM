@@ -493,9 +493,15 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
 
   // Pixel Data
   DataElement depixdata( Tag(0x7fe0,0x0010) );
-  const Value &v = PixelData->GetDataElement().GetValue();
-  depixdata.SetValue( v );
-  const ByteValue *bvpixdata = depixdata.GetByteValue();
+  gdcm::DataElement & pde = PixelData->GetDataElement();
+  const ByteValue *bvpixdata = NULL;
+  // Sometime advanced user may use a gdcm::ImageRegionReader to feed an empty gdcm::Image
+  if( !pde.IsEmpty() )
+    {
+    const Value &v = PixelData->GetDataElement().GetValue();
+    depixdata.SetValue( v );
+    bvpixdata = depixdata.GetByteValue();
+    }
   const TransferSyntax &ts = PixelData->GetTransferSyntax();
   assert( ts.IsExplicit() || ts.IsImplicit() );
 
@@ -616,7 +622,11 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
     depixdata.SetVR( VR::OB );
     }
   depixdata.SetVL( vl );
-  ds.Replace( depixdata );
+  // Advanced user may have passed an empty image
+  if( !pde.IsEmpty() )
+    {
+    ds.Replace( depixdata );
+    }
 
   // Do Icon Image
   DoIconImage(ds, GetPixmap());

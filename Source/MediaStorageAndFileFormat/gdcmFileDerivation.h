@@ -63,6 +63,11 @@ public:
   /// Specify the Derivation Description. Eg "lossy conversion"
   void SetDerivationDescription( const char *dd );
 
+  /// Specify if Derivation history should be appended (default false)
+  /// When false, this is an error if input already has a derivation history
+  /// When true, both Purpose of Reference Code Value and Derivation Code Sequence Code Value can have their history appended.
+  void SetAppendDerivationHistory(bool b);
+
   /// Change
   bool Derive();
 
