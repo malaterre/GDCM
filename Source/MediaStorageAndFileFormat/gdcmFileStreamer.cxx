@@ -455,7 +455,11 @@ public:
       cols.SetFromDataSet( ds );
       ba.SetFromDataSet( ds );
       nframes.SetFromDataSet( ds );
-      assert( ba.GetValue() % 8 == 0 );
+      if( ba.GetValue() % 8 != 0 )
+        {
+        gdcmErrorMacro( "old ACR NEMA file: " << ba.GetValue() );
+        return false;
+        }
       const size_t computedlength = spp.GetValue() * nframes.GetValue() * rows.GetValue() * cols.GetValue() * ( ba.GetValue() / 8 );
       if( computedlength != currentdatalenth )
         {
