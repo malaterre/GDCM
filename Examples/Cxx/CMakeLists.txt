@@ -32,6 +32,8 @@ mark_as_advanced(QT_QMAKE_EXECUTABLE)
 endif()
 
 set(EXAMPLES_SRCS
+  EmptyMask
+  TemplateEmptyImage
   MakeTemplate
   FixOrientation
   DumpGEMSMovieGroup
