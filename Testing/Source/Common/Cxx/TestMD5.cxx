@@ -238,6 +238,7 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "e49c403278663d9739014ad1d57c276f" , "IllegalGroup2ImplicitTS.dcm" },
 { "299df0175ea4d3ab1f02651f88ffe9f3" , "JPEG_LS_InvalidEscapeSequence_COM_padding.dcm" },
 { "9add5fd3c83cc0946633e792f448f732" , "LengthOfItemLarger.dcm" },
+{ "b9fdef839a6b6ab33486bfd6b35de3a8" , "GE_MR_0025xx1bProtocolDataBlockXML.dcm" },
 
 { NULL, NULL}
 };

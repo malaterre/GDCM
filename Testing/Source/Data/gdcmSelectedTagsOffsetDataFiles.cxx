@@ -232,6 +232,7 @@ static const StreamOffset gdcmSelectedTagsOffsetDataFiles[] = {
 { "IllegalGroup2ImplicitTS.dcm", 2264 },
 { "JPEG_LS_InvalidEscapeSequence_COM_padding.dcm", 752 },
 { "LengthOfItemLarger.dcm", 12748 },
+{ "GE_MR_0025xx1bProtocolDataBlockXML.dcm",6462 },
 { "dicomdir_Acusson_WithPrivate_WithSR",3826 },
 { "dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents",37218 },
 { "dicomdir_Pms_With_heavy_embedded_sequence",3003414 },
