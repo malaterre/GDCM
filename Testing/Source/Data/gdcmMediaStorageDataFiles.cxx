@@ -248,6 +248,7 @@ static const char * const gdcmMediaStorageDataFiles[][2] = {
 { "IllegalGroup2ImplicitTS.dcm" , "1.2.840.10008.5.1.4.1.1.1" },
 { "JPEG_LS_InvalidEscapeSequence_COM_padding.dcm" , "1.2.840.10008.5.1.4.1.1.7" },
 { "LengthOfItemLarger.dcm" , "1.2.840.10008.5.1.4.1.1.4" },
+{ "GE_MR_0025xx1bProtocolDataBlockXML.dcm" , "1.2.840.10008.5.1.4.1.1.4" },
 
 /* Stopping condition */
 { 0 ,0 }

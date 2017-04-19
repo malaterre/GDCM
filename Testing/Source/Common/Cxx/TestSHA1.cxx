@@ -234,6 +234,7 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "197e47b5afeeeb75eccafe04e5a1bb0af1a7957a" , "JPEGNote_empty.dcm" },
 { "08828e913a7a1ebbc0129c42974b64ce702814b6" , "JPEGNote_missing.dcm" },
 { "99c169688190a66100b61319eaeefb3db1936125" , "RLEDebianBug816607Orig.dcm" },
+{ "f18f91631b59f0242b5daca547878e4c5cbf6a5b" , "GE_MR_0025xx1bProtocolDataBlockXML.dcm" },
 
 { NULL, NULL}
 };

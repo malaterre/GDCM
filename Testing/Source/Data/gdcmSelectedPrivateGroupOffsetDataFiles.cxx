@@ -230,6 +230,7 @@ static const StreamOffset gdcmSelectedPrivateGroupOffsetDataFiles[] = {
 { "IllegalGroup2ImplicitTS.dcm", 1088 },
 { "JPEG_LS_InvalidEscapeSequence_COM_padding.dcm", 534 },
 { "LengthOfItemLarger.dcm", 1044 },
+{ "GE_MR_0025xx1bProtocolDataBlockXML.dcm",1358},
 { "dicomdir_With_embedded_icons",7125212 },
 { "dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents",37218 },
 { "dicomdir_Acusson_WithPrivate_WithSR",3826 },

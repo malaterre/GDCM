@@ -441,6 +441,7 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 1,"JPEGNote_bogus.dcm" },
 { 0,"RLEDebianBug816607Orig.dcm" },
 { 0,"IllegalGroup2ImplicitTS.dcm" },
+{ 0,"GE_MR_0025xx1bProtocolDataBlockXML.dcm" },
 { 0, NULL }
 };
 

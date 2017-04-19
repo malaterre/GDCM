@@ -38,6 +38,7 @@ static bool EmptyMaskDICOMFile( gdcm::UIDGenerator & uid, const gdcm::Scanner & 
     gdcm::ImageRegionReader irr;
     irr.SetFileName( filename );
     const bool b3 = irr.ReadInformation();
+    (void)b3;
     size_t buflen = irr.ComputeBufferLength();
 
     // Step 2: DERIVED object
@@ -69,18 +70,18 @@ static bool EmptyMaskDICOMFile( gdcm::UIDGenerator & uid, const gdcm::Scanner & 
     gdcm::Anonymizer ano;
     ano.SetFile( fd.GetFile() );
     ano.RemoveGroupLength();
-    const bool b4 = ano.Replace (t2, uid.Generate());
+    ano.Replace (t2, uid.Generate());
     const char * oldseriesuid =  s.GetValue (filename, t3);
     const char * oldframerefuid =  s.GetValue (filename, t4);
     if( oldseriesuid )
     {
       std::map< std::string, std::string >::const_iterator it1 = seriesuidhash.find( oldseriesuid );
-      const bool b5 = ano.Replace (t3, it1->second.c_str() );
+      ano.Replace (t3, it1->second.c_str() );
     }
     if( oldframerefuid )
     {
       std::map< std::string, std::string >::const_iterator it2 = framerefuidhash.find( oldframerefuid );
-      const bool b6 = ano.Replace (t4, it2->second.c_str() );
+      ano.Replace (t4, it2->second.c_str() );
     }
 
     {
@@ -169,10 +170,11 @@ int main(int, char *argv[])
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "EmptyMask" );
   const char * dirname = argv[1];
   const char * outdir = argv[2];
-  const bool b = gdcm::System::FileIsDirectory( dirname );
-  const bool b1 = gdcm::System::MakeDirectory( outdir );
+  gdcm::System::FileIsDirectory( dirname );
+  gdcm::System::MakeDirectory( outdir );
   gdcm::Directory d;
   const unsigned int nfiles = d.Load( dirname, true );
+  (void)nfiles;
   gdcm::Directory::FilenamesType const & filenames = d.GetFilenames();
 
   gdcm::Trace::WarningOff();
@@ -184,6 +186,7 @@ int main(int, char *argv[])
   s.AddTag( t3 );
   s.AddTag( t4 );
   const bool b2 = s.Scan( filenames );
+  (void)b2;
   gdcm::UIDGenerator uid;
   int ret = 0;
   std::map< std::string, std::string > seriesuidhash;
@@ -222,7 +225,7 @@ int main(int, char *argv[])
     if( !EmptyMaskDICOMFile( uid, s, seriesuidhash, framerefuidhash, outfile.c_str(), filename ) )
     {
       std::cerr << "Failure to EmptyMask" << std::endl;
-      const bool b7 = gdcm::System::RemoveFile(outfile.c_str());
+      gdcm::System::RemoveFile(outfile.c_str());
       ret = 1;
     }
   }

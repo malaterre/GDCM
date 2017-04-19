@@ -698,6 +698,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "464960d948dff0ded72b0380080f18a3" , "JPEGNote_missing.dcm" },
 { "161e9fd986ea87adf2596e8e16641f11" , "JPEGNote_bogus.dcm" },
 
+{ "ad8f1164f0517ee150bf510d5dba5cc6" , "GE_MR_0025xx1bProtocolDataBlockXML.dcm" },
 
 
 /* Stopping condition */

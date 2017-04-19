@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
   char date[22];
   const size_t datelen = 8;
   int res = gdcm::System::GetCurrentDateTime(date);
+  (void)res;
   kwd::ContentDate contentdate;
   // Do not copy the whole cstring:
   contentdate.SetValue( gdcm::DAComp( date, datelen ) );
