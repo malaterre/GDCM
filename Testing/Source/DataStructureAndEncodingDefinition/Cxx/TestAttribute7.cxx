@@ -15,6 +15,7 @@
 
 int TestAttribute7(int, char *[])
 {
+{
   const char bytes[] = "\030\000e\020";
   gdcm::DataElement de( gdcm::Tag(0x28,0x9)  );
   de.SetVR( gdcm::VR::INVALID );
@@ -27,6 +28,30 @@ int TestAttribute7(int, char *[])
   gdcm::Attribute<0x3004, 0x0014> tissue;
   //std::cout << tissue.GetVR() << std::endl;
   if( tissue.GetVR() != gdcm::VR::CS ) return 1;
+}
+
+{
+  gdcm::Attribute<0x8,0x8> imagetype;
+  imagetype.SetNumberOfValues(0);
+  if( imagetype.GetNumberOfValues() != 0 ) return 1;
+
+  const char bytes[] = "ORIGINAL\\PRIMARY";
+  gdcm::DataElement de( gdcm::Tag(0x8,0x8)  );
+  de.SetVR( gdcm::VR::INVALID );
+  de.SetByteValue( bytes, strlen(bytes) );
+  gdcm::DataSet ds;
+  imagetype.SetFromDataSet( ds );
+  if( imagetype.GetNumberOfValues() != 0 ) return 1;
+  ds.Insert( de );
+  imagetype.SetFromDataSet( ds );
+  if( imagetype.GetNumberOfValues() != 2 ) return 1;
+  imagetype.SetNumberOfValues(0);
+  if( imagetype.GetNumberOfValues() != 0 ) return 1;
+  imagetype.SetFromDataSet( ds );
+  if( imagetype.GetNumberOfValues() != 2 ) return 1;
+
+
+}
 
 
   return 0;
