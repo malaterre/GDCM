@@ -121,10 +121,10 @@ endif()
 
 # internal utilities to generate t1_luts.h (part of the jp2 lib)
 # no need to install:
-add_executable(t1_generate_luts t1_generate_luts.c)
-if(UNIX)
-  target_link_libraries(t1_generate_luts m)
-endif()
+#add_executable(t1_generate_luts t1_generate_luts.c)
+#if(UNIX)
+#  target_link_libraries(t1_generate_luts m)
+#endif()
 
 # Experimental option; let's how cppcheck performs
 # Implementation details:
