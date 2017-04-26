@@ -63,7 +63,8 @@ static bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::
   if( !subds.FindDataElement(tpms) ) return false;
   //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
-  assert( sqi2 );
+  if( sqi2 && !sqi2->IsEmpty() )
+  {
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
   //
@@ -79,6 +80,8 @@ static bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::
   ori.push_back( at.GetValue(2) );
 
   return true;
+  }
+  return false;
 }
 
 static bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &dircos)
