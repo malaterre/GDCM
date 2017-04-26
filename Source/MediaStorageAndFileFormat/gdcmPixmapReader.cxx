@@ -181,7 +181,7 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
     //const SequenceOfItems* sq = iconimagesq.GetSequenceOfItems();
     SmartPointer<SequenceOfItems> sq = iconimagesq.GetValueAsSQ();
     // Is SQ empty ?
-    if( !sq ) return;
+    if( !sq || sq->IsEmpty() ) return;
     SequenceOfItems::ConstIterator it = sq->Begin();
     const DataSet &ds = it->GetNestedDataSet();
 
