@@ -972,12 +972,14 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       const DataElement &priv_rescaleslope = ds.GetDataElement( tpriv_rescaleslope );
       Element<VR::DS,VM::VM1> el_ri = {{ 0 }};
       el_ri.SetFromDataElement( priv_rescaleintercept );
-      Element<VR::DS,VM::VM1> el_rs = {{ 0 }};
+      Element<VR::DS,VM::VM1> el_rs = {{ 1 }};
       el_rs.SetFromDataElement( priv_rescaleslope );
       if( PMSRescaleInterceptSlope )
       {
         interceptslope[0] = el_ri.GetValue();
         interceptslope[1] = el_rs.GetValue();
+        if( interceptslope[1] == 0 )
+          interceptslope[1] = 1;
         gdcmWarningMacro( "PMS Modality LUT loaded for MR Image Storage: [" << interceptslope[0] << "," << interceptslope[1] << "]" );
       }
       }
