@@ -38,7 +38,7 @@ int TestAttribute7(int, char *[])
   const char bytes[] = "ORIGINAL\\PRIMARY";
   gdcm::DataElement de( gdcm::Tag(0x8,0x8)  );
   de.SetVR( gdcm::VR::INVALID );
-  de.SetByteValue( bytes, strlen(bytes) );
+  de.SetByteValue( bytes, (uint32_t)strlen(bytes) );
   gdcm::DataSet ds;
   imagetype.SetFromDataSet( ds );
   if( imagetype.GetNumberOfValues() != 0 ) return 1;

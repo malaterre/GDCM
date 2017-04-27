@@ -139,11 +139,11 @@ static bool EmptyMaskDICOMFile( gdcm::UIDGenerator & uid, const gdcm::Scanner & 
       return false;
     }
     {
-      const int chunk = 4096;
+      const size_t chunk = 4096;
       char bytes[chunk] = {};
-      const int nchunks = buflen / chunk;
-      const int remain = buflen % chunk;
-      for( int i = 0; i < nchunks; ++i )
+      const size_t nchunks = buflen / chunk;
+      const size_t remain = buflen % chunk;
+      for( size_t i = 0; i < nchunks; ++i )
       {
         // Read the source file into a byte array.
         fs.AppendToDataElement( pixeldata, bytes, chunk );

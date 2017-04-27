@@ -34,6 +34,7 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "Nested struct not currently supported"
   "bootstrap class path not set in conjunction with"
   "warning CS1699"
+  "has been explicitly marked deprecated here"
   )
 
 # Disable dynamic analysis on some tests:
