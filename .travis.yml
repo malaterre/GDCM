@@ -49,7 +49,8 @@ matrix:
       env:
         - CFLAGS="-Wall -Wextra" # -m64 -fsanitize=address,undefined
         - CXXFLAGS="-Wall -Wextra" # -m64 -fsanitize=address,undefined
-        - CMAKE_EXTRA="-DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF"
+          # http://stackoverflow.com/questions/15678153/homebrew-python-on-mac-os-x-10-8-fatal-python-error-pythreadstate-get-no-cu
+        - CMAKE_EXTRA="-DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python2.7"
         - B_NAME=default
         - CPACK_NAME=Darwin
 
