@@ -49,8 +49,9 @@ matrix:
       env:
         - CFLAGS="-Wall -Wextra" # -m64 -fsanitize=address,undefined
         - CXXFLAGS="-Wall -Wextra" # -m64 -fsanitize=address,undefined
-          # http://stackoverflow.com/questions/15678153/homebrew-python-on-mac-os-x-10-8-fatal-python-error-pythreadstate-get-no-cu
-        - CMAKE_EXTRA="-DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python2.7"
+        # http://stackoverflow.com/questions/15678153/homebrew-python-on-mac-os-x-10-8-fatal-python-error-pythreadstate-get-no-cu
+        #- CMAKE_EXTRA="-DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF -DPYTHON_EXECUTABLE:FILEPATH=/usr/bin/python2.7"
+        - CMAKE_EXTRA="-DGDCM_WRAP_PYTHON:BOOL=ON -DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF"
         - B_NAME=default
         - CPACK_NAME=Darwin
 
@@ -64,6 +65,9 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then mv Testing/Data Testing/Data.old; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update                     ; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install swig python3       ; fi
+  # https://github.com/travis-ci/travis-ci/issues/2312
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then virtualenv env -p python3       ; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then source env/bin/activate         ; fi
   # kakadu setup for linux/system:
   - if [ "$B_NAME" == "system" ]; then wget http://kakadusoftware.com/wp-content/uploads/2014/06/KDU77_Demo_Apps_for_Linux-x86-64_150710.zip; fi
   - if [ "$B_NAME" == "system" ]; then unzip KDU77_Demo_Apps_for_Linux-x86-64_150710.zip; fi
