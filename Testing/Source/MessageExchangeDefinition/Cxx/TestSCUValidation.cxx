@@ -27,7 +27,8 @@
 
 static const char AETitle[] = "ANY";
 static const char PeerAETitle[] = "ANY";
-static const char ComputerName[] = "213.165.94.158"; // www.dicomserver.co.uk
+//static const char ComputerName[] = "213.165.94.158"; // www.dicomserver.co.uk
+static const char ComputerName[] = "88.202.185.144"; // www.dicomserver.co.uk
 static int port = 11112;
 
 static gdcm::network::ULConnectionManager *GetConnectionManager(gdcm::BaseRootQuery* theQuery)
