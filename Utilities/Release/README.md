@@ -3,7 +3,7 @@ GDCM binaries have moved !
 
 They are now automatically uploaded to github:
 
-[github release](https://github.com/malaterre/GDCM/releases)
+[github release](https://github.com/malaterre/GDCM/releases/tag/vVERSION)
 
 They are build using travis and appveyor automatically
 
