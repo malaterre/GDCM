@@ -7369,6 +7369,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0039,0x0000,"SIEMENS MED NM",VR::LT,VM::VM1,"Toshiba CBF activity results",false },
   {0x0041,0x0001,"SIEMENS MED NM",VR::SL,VM::VM1,"?",false },
   {0x0041,0x0002,"SIEMENS MED NM",VR::SL,VM::VM1,"?",false },
+  {0x0041,0x0003,"SIEMENS MED NM",VR::FL,VM::VM1,"?",false },
   {0x0041,0x0005,"SIEMENS MED NM",VR::FD,VM::VM1_n,"?",false },
   {0x0041,0x0006,"SIEMENS MED NM",VR::FD,VM::VM1_n,"?",false },
   {0x0041,0x0007,"SIEMENS MED NM",VR::FD,VM::VM1_n,"?",false },
