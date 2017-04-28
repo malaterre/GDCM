@@ -51,6 +51,8 @@ dcm_directory   DICOM input directory
   -p --print          print value instead of simply dumping (default).
   -c --color          print in color.
   -C --csa            print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER).
+     --csa-asl        print decoded SIEMENS CSA MR_ASL (base64).
+     --csa-diffusion  print decoded SIEMENS CSA MRDiffusion (base64).
   -P --pdb            print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01).
      --elscint        print ELSCINT Protocol Information (01f7,26,ELSCINT1).
      --vepro          print VEPRO Protocol Information (0055,20,VEPRO VIF 3.0 DATA).
@@ -179,6 +181,87 @@ Image shadow data (0029,xx10)
 7 - &apos;Filter1&apos; VM 1, VR IS, SyngoDT 6, NoOfItems 0, Data
 8 - &apos;Filter2&apos; VM 1, VR IS, SyngoDT 6, NoOfItems 0, Data
 ...
+</literallayout></para>
+</refsection>
+<refsection xml:id="gdcmdump_1siemens_csaasl">
+<title>SIEMENS CSA Header: MR_ASL</title>
+
+<para>Using this option it is possible to dump a decoded (base64) version of MR_ASL contained in the CSA header.</para>
+
+<para>Eg.:</para>
+
+<para><literallayout>$ gdcmdump --csa-asl ASL.dcm
+</literallayout></para>
+
+<para><literallayout>
+(0018,9251) SQ (Sequence with undefined length)                   # u/l,1 MR Arterial Spin Labeling Sequence 
+  (fffe,e000) na (Item with undefined length) 
+    (0018,9252) LO [2D pulsed ASL (EP2D)]                         # 20,1 ASL Technique Description 
+    (0018,9257) CS [LABEL ]                                       # 6,1 ASL Context 
+    (0018,9259) CS [NO]                                           # 2,1 ASL Crusher Flag 
+    (0018,925c) CS [YES ]                                         # 4,1 ASL Bolus Cut-off Flag 
+    (0018,925d) SQ (Sequence with undefined length)               # u/l,1 ASL Bolus Cut-off Timing Sequence 
+      (fffe,e000) na (Item with undefined length) 
+        (0018,925e) LO [Q2TIPS]                                   # 6,1 ASL Bolus Cut-off Technique 
+        (0018,925f) IS (UL) [1990]                                # 4,1 ASL Bolus Cut-off Delay Time 
+      (fffe,e00d) 
+    (fffe,e0dd) 
+    (0018,9260) SQ (Sequence with undefined length)               # u/l,1 ASL Slab Sequence 
+      (fffe,e000) na (Item with undefined length) 
+        (0018,9253) US 1                                          # 2,1 ASL Slab Number 
+        (0018,9254) FD 109.5                                      # 8,1 ASL Slab Thickness 
+        (0018,9255) FD 0\0\1                                      # 24,3 ASL Slab Orientation 
+        (0018,9256) FD 0\-23.9333\-70.9189                        # 24,3 ASL Mid Slab Position 
+        (0018,9258) IS (UL) [10]                                  # 2,1 ASL Pulse Train Duration 
+      (fffe,e00d) 
+    (fffe,e0dd) 
+  (fffe,e00d) 
+(fffe,e0dd) 
+</literallayout></para>
+<para>This is completely equivalent to doing (by hand):</para>
+<para><literallayout>
+$ gdcmdump --csa asl.dcm | grep -A 6 MR_ASL 
+98 - 'MR_ASL' VM 1, VR UT, SyngoDT 27, NoOfItems 6, Data 'GABRklNRAAD//////v8A4P////8YAFKSTE8UADJEIHB1bHNlZCBBU0wgKEVQMkQpGABXkkNT 
+BgBMQUJFTCAYAGCSU1EAAP/////+/wDg/////xgAU5JVUwIAAQAYAFSSRkQIAAAAAAAAYFtA 
+GABVkkZEGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8D8YAFaSRkQYAAAAAAAAAAAAAAAAYOvu 
+N8AAAACAzrpRwBgAWJJJUwIAMTD+/w3gAAAAAP7/3eAAAAAAGABZkkNTAgBOTxgAXJJDUwQA 
+WUVTIBgAXZJTUQAA//////7/AOD/////GABekkxPBgBRMlRJUFMYAF+SSVMEADE5OTD+/w3g 
+AAAAAP7/3eAAAAAA/v8N4AAAAAD+/93gAAAAAA== 
+' 
+$  echo 'GABRklNRAAD//////v8A4P////8YAFKSTE8UADJEIHB1bHNlZCBBU0wgKEVQMkQpGABXkkNT 
+BgBMQUJFTCAYAGCSU1EAAP/////+/wDg/////xgAU5JVUwIAAQAYAFSSRkQIAAAAAAAAYFtA 
+GABVkkZEGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8D8YAFaSRkQYAAAAAAAAAAAAAAAAYOvu 
+N8AAAACAzrpRwBgAWJJJUwIAMTD+/w3gAAAAAP7/3eAAAAAAGABZkkNTAgBOTxgAXJJDUwQA 
+WUVTIBgAXZJTUQAA//////7/AOD/////GABekkxPBgBRMlRJUFMYAF+SSVMEADE5OTD+/w3g 
+AAAAAP7/3eAAAAAA/v8N4AAAAAD+/93gAAAAAA== 
+' | base64 -d > asl.dcm
+$ dcmdump -f asl.dcm
+</literallayout></para>
+<para>One should pay attention that currently two attributes (0018,925f) and (0018,9258) are using a VR that is different from what the DICOM standard specifies.</para>
+</refsection>
+<refsection xml:id="gdcmdump_1siemens_csadiffusion">
+<title>SIEMENS CSA Header: MRDiffusion</title>
+
+<para>Using this option it is possible to dump a decoded (base64) version of MRDiffusion contained in the CSA header.</para>
+
+<para>Eg.:</para>
+
+<para><literallayout>$ gdcmdump --csa-diffusion DIFFUSION.dcm
+</literallayout></para>
+
+<para><literallayout># Dicom-File-Format
+
+# Dicom-Meta-Information-Header
+# Used TransferSyntax: 
+
+# Dicom-Data-Set
+# Used TransferSyntax: Unknown Transfer Syntax
+(0018,9117) SQ (Sequence with undefined length)                   # u/l,1 MR Diffusion Sequence
+  (fffe,e000) na (Item with undefined length)
+    (0018,9075) CS [ISOTROPIC ]                                   # 10,1 Diffusion Directionality
+    (0018,9087) FD 0                                              # 8,1 Diffusion b-value
+  (fffe,e00d)
+(fffe,e0dd)
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmdump_1gems_pdb">

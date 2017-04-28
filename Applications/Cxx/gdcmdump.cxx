@@ -48,6 +48,7 @@
 #include "gdcmSequenceOfItems.h"
 #include "gdcmASN1.h"
 #include "gdcmAttribute.h"
+#include "gdcmBase64.h"
 
 #include <string>
 #include <iostream>
@@ -821,6 +822,58 @@ static int PrintPDB(const std::string & filename, bool verbose)
   return ret;
 }
 
+static int PrintCSABase64(const std::string & filename, const char * name)
+{
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+  {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+  }
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+
+  gdcm::CSAHeader csa;
+  const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
+  if( !ds.FindDataElement( t1 ) ) return 1;
+  csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
+
+  if( csa.FindCSAElementByName(name) )
+  {
+    const gdcm::CSAElement & el = csa.GetCSAElementByName(name);
+    if( el.IsEmpty() ) return 1;
+    const gdcm::ByteValue* bv = el.GetByteValue();
+    std::string str( bv->GetPointer(), bv->GetLength() );
+    str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
+    size_t dl = gdcm::Base64::GetDecodeLength( str.c_str(), str.size() );
+    std::vector<char> buf;
+    buf.resize( dl );
+    size_t dl2 = gdcm::Base64::Decode( &buf[0], buf.size(), str.c_str(), str.size() );
+    if( dl != dl2 ) return 1;
+    std::stringstream ss;
+    ss.str( std::string(&buf[0], buf.size()) );
+    gdcm::File file;
+    gdcm::DataSet &ds2 = file.GetDataSet();
+    gdcm::DataElement xde;
+    try
+    {
+      while( xde.Read<gdcm::ExplicitDataElement,gdcm::SwapperNoOp>( ss ) )
+      {
+        ds2.Insert( xde );
+      }
+      assert( ss.eof() );
+    }
+    catch(std::exception &)
+    {
+      return 1;
+    }
+    gdcm::Printer p;
+    p.SetFile( file );
+    p.Print(std::cout);
+  }
+  return 0;
+}
+
 static int PrintCSA(const std::string & filename)
 {
   gdcm::Reader reader;
@@ -934,6 +987,8 @@ static void PrintHelp()
   std::cout << "  -p --print          print value instead of simply dumping (default)." << std::endl;
   std::cout << "  -c --color          print in color." << std::endl;
   std::cout << "  -C --csa            print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
+  std::cout << "     --csa-asl        print decoded SIEMENS CSA MR_ASL (base64)." << std::endl;
+  std::cout << "     --csa-diffusion  print decoded SIEMENS CSA MRDiffusion (base64)." << std::endl;
   std::cout << "  -P --pdb            print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
   std::cout << "     --elscint        print ELSCINT Protocol Information (01f7,26,ELSCINT1)." << std::endl;
   std::cout << "     --vepro          print VEPRO Protocol Information (0055,20,VEPRO VIF 3.0 DATA)." << std::endl;
@@ -963,6 +1018,9 @@ int main (int argc, char *argv[])
   int dump = 0;
   int print = 0;
   int printcsa = 0;
+  int printcsabase64 = 0;
+  int printcsaasl = 0;
+  int printcsadiffusion = 0;
   int printpdb = 0;
   int printelscint = 0;
   int printvepro = 0;
@@ -1010,6 +1068,8 @@ int main (int argc, char *argv[])
         {"vepro", 0, &printvepro, 1},
         {"sds", 0, &printsds, 1},
         {"ct3", 0, &printct3, 1},
+        {"csa-asl", 0, &printcsaasl, 1},
+        {"csa-diffusion", 0, &printcsadiffusion, 1},
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:xrpdcCPAVWDEhvI";
@@ -1181,6 +1241,18 @@ int main (int argc, char *argv[])
     std::cerr << "Not handled for now" << std::endl;
     }
 
+  const char * csaname = NULL;
+  if( printcsaasl )
+  {
+    printcsabase64 = 1;
+    csaname = "MR_ASL";
+  }
+  else if( printcsadiffusion )
+  {
+    printcsabase64 = 1;
+    csaname = "MRDiffusion";
+  }
+
   // else
   int res = 0;
   if( !gdcm::System::FileExists(filename.c_str()) )
@@ -1226,6 +1298,10 @@ int main (int argc, char *argv[])
       else if( printcsa )
         {
         res += PrintCSA(*it);
+        }
+      else if( printcsabase64 )
+        {
+        res += PrintCSABase64(*it, csaname);
         }
       else if( dump )
         {
@@ -1273,6 +1349,10 @@ int main (int argc, char *argv[])
     else if( printcsa )
       {
       res += PrintCSA(filename);
+      }
+    else if( printcsabase64 )
+      {
+      res += PrintCSABase64(filename, csaname);
       }
     else if( dump )
       {
