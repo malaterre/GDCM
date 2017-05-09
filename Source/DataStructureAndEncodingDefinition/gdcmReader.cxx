@@ -768,8 +768,8 @@ bool Reader::CanRead() const
 {
   // fastpath
   std::istream &is = *Stream;
-  assert( is.good() );
-  assert( is.tellg() == std::streampos(0) );
+  if( is.bad() ) return false;
+  if( is.tellg() != std::streampos(0) ) return false;
     {
     is.seekg( 128, std::ios::beg ); // we ignore return value as we test is.good()
     char b[4];
