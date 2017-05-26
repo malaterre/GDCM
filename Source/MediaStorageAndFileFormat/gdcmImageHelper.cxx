@@ -426,7 +426,9 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::XRay3DCraniofacialImageStorage
-   || ms == MediaStorage::SegmentationStorage )
+   || ms == MediaStorage::SegmentationStorage
+   || ms == MediaStorage::IVOCTForProcessing
+   || ms == MediaStorage::IVOCTForPresentation)
     {
     const Tag t1(0x5200,0x9229);
     const Tag t2(0x5200,0x9230);
@@ -548,7 +550,9 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::XRay3DCraniofacialImageStorage
-   || ms == MediaStorage::SegmentationStorage )
+   || ms == MediaStorage::SegmentationStorage
+   || ms == MediaStorage::IVOCTForPresentation
+   || ms == MediaStorage::IVOCTForProcessing )
     {
     const Tag t1(0x5200,0x9229);
     const Tag t2(0x5200,0x9230);
@@ -860,7 +864,9 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::XRay3DCraniofacialImageStorage
-   || ms == MediaStorage::SegmentationStorage )
+   || ms == MediaStorage::SegmentationStorage
+   || ms == MediaStorage::IVOCTForProcessing
+   || ms == MediaStorage::IVOCTForPresentation )
     {
       const Tag tfgs(0x5200,0x9230);
       if( ds.FindDataElement( tfgs ) )
@@ -1041,6 +1047,8 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   case MediaStorage::PhilipsPrivateMRSyntheticImageStorage:
   case MediaStorage::VLPhotographicImageStorage: // VL Image IOD
   case MediaStorage::VLMicroscopicImageStorage:
+  case MediaStorage::IVOCTForProcessing:
+  case MediaStorage::IVOCTForPresentation:
     // (0028,0030) DS [2.0\2.0]                                #   8, 2 PixelSpacing
     t = Tag(0x0028,0x0030);
     break;
@@ -1192,7 +1200,9 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
     || ms == MediaStorage::XRay3DAngiographicImageStorage
     || ms == MediaStorage::XRay3DCraniofacialImageStorage
-    || ms == MediaStorage::SegmentationStorage )
+    || ms == MediaStorage::SegmentationStorage
+    || ms == MediaStorage::IVOCTForProcessing
+    || ms == MediaStorage::IVOCTForPresentation)
     {
     // <entry group="5200" element="9230" vr="SQ" vm="1" name="Per-frame Functional Groups Sequence"/>
     const Tag t1(0x5200,0x9229);
@@ -1462,7 +1472,9 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::XRay3DCraniofacialImageStorage
-   || ms == MediaStorage::SegmentationStorage )
+   || ms == MediaStorage::SegmentationStorage
+   || ms == MediaStorage::IVOCTForPresentation
+   || ms == MediaStorage::IVOCTForProcessing )
     {
 /*
     (0028,9110) SQ (Sequence with undefined length #=1)     # u/l, 1 PixelMeasuresSequence
@@ -1775,7 +1787,9 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
    && ms != MediaStorage::XRay3DCraniofacialImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedPETImageStorage
-   && ms != MediaStorage::EnhancedCTImageStorage )
+   && ms != MediaStorage::EnhancedCTImageStorage
+   && ms != MediaStorage::IVOCTForPresentation
+   && ms != MediaStorage::IVOCTForProcessing )
     {
     // FIXME: should I remove the ipp tag ???
     return;
@@ -1788,7 +1802,9 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
    || ms == MediaStorage::XRay3DCraniofacialImageStorage
    || ms == MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
-   || ms == MediaStorage::SegmentationStorage )
+   || ms == MediaStorage::SegmentationStorage
+   || ms == MediaStorage::IVOCTForPresentation
+   || ms == MediaStorage::IVOCTForProcessing )
     {
 /*
     (0020,9113) SQ (Sequence with undefined length #=1)     # u/l, 1 PlanePositionSequence
@@ -1900,7 +1916,9 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
    && ms != MediaStorage::XRay3DCraniofacialImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
    && ms != MediaStorage::EnhancedPETImageStorage
-   && ms != MediaStorage::EnhancedCTImageStorage )
+   && ms != MediaStorage::EnhancedCTImageStorage
+   && ms != MediaStorage::IVOCTForPresentation
+   && ms != MediaStorage::IVOCTForProcessing )
     {
     // FIXME: should I remove the iop tag ???
     return;
@@ -1932,7 +1950,9 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
    || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::XRay3DCraniofacialImageStorage
-   || ms == MediaStorage::SegmentationStorage )
+   || ms == MediaStorage::SegmentationStorage
+   || ms == MediaStorage::IVOCTForPresentation
+   || ms == MediaStorage::IVOCTForProcessing )
     {
 /*
     (0020,9116) SQ (Sequence with undefined length #=1)     # u/l, 1 PlaneOrientationSequence
@@ -2043,7 +2063,9 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
    && ms != MediaStorage::EnhancedPETImageStorage
    && ms != MediaStorage::XRay3DAngiographicImageStorage
    && ms != MediaStorage::XRay3DCraniofacialImageStorage
-   && ms != MediaStorage::SegmentationStorage )
+   && ms != MediaStorage::SegmentationStorage
+   && ms != MediaStorage::IVOCTForPresentation
+   && ms != MediaStorage::IVOCTForProcessing )
     {
     if( img.GetIntercept() != 0. || img.GetSlope() != 1. )
       {
