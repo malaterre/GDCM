@@ -70,7 +70,7 @@ bool OpenSSLCryptographicMessageSyntax::SetPassword(const char * pass, size_t pa
   return true;
 }
 
-bool OpenSSLCryptographicMessageSyntax::Encrypt(char *output, size_t &outlen, const char *array, size_t len) const
+bool OpenSSLCryptographicMessageSyntax::Encrypt(char * /*output*/, size_t &/*outlen*/, const char * /*array*/, size_t /*len*/) const
 {
   BIO *in = NULL, *out = NULL;
   CMS_ContentInfo *cms = NULL;
@@ -170,7 +170,7 @@ err:
   return ret;
 }
 
-bool OpenSSLCryptographicMessageSyntax::Decrypt(char *output, size_t &outlen, const char *array, size_t len) const
+bool OpenSSLCryptographicMessageSyntax::Decrypt(char * /*output*/, size_t & /*outlen*/, const char * /*array*/, size_t /*len*/) const
 {
   BIO *in = NULL, *out = NULL;
   CMS_ContentInfo *cms = NULL;
