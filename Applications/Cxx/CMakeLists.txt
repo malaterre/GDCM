@@ -42,6 +42,7 @@ endif()
 
 set(GDCM_EXECUTABLE_NAME
   gdcmdump
+  gdcmdumpjson
   gdcmdiff
   gdcmraw
   gdcmscanner

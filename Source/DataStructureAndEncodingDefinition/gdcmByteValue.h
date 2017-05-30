@@ -59,6 +59,7 @@ public:
   // Either the VR: eg LO (private tag)
   void PrintASCII(std::ostream &os, VL maxlength ) const;
 
+
   void PrintHex(std::ostream &os, VL maxlength) const;
 
   // Either from Element Number (== 0x0000)
@@ -195,6 +196,8 @@ public:
   /**To Print Values in Native DICOM format **/
   void PrintPNXML(std::ostream &os) const;
   void PrintASCIIXML(std::ostream &os) const;
+  void PrintASCIIJSON(std::ostream &os ) const;
+  bool isFloat(std::string& s) const;
   void PrintHexXML(std::ostream &os) const;
 protected:
   void Print(std::ostream &os) const {
