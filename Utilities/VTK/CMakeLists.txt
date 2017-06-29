@@ -78,6 +78,7 @@ else()
     vtkRenderingCore
     vtkRenderingFreeType
     vtkRenderingFreeTypeOpenGL
+    vtkFiltersParallelDIY2
   )
   if(("${VTK_MAJOR_VERSION}" EQUAL 6) OR ("${VTK_RENDERING_BACKEND}" STREQUAL "OpenGL"))
     list(APPEND vtkgdcm_COND_LIBS vtkRenderingOpenGL)
