@@ -33,6 +33,7 @@ endif()
 
 set(EXAMPLES_SRCS
   EmptyMask
+  DumpSiemensBase64
   TemplateEmptyImage
   MakeTemplate
   DeriveSeries
