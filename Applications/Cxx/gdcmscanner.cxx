@@ -28,6 +28,7 @@
  */
 
 #include "gdcmScanner.h"
+#include "gdcmStrictScanner.h"
 #include "gdcmTrace.h"
 #include "gdcmVersion.h"
 #include "gdcmSimpleSubjectWatcher.h"
@@ -69,6 +70,38 @@ static void PrintHelp()
   std::cout << "  -v --version    print version." << std::endl;
 }
 
+typedef std::vector<gdcm::Tag> VectorTags;
+typedef std::vector<gdcm::PrivateTag> VectorPrivateTags;
+template < typename TScanner >
+static int DoIt(
+  gdcm::Directory const & d,
+  bool const & print ,
+    VectorTags const & tags,
+  VectorPrivateTags const & privatetags)
+{
+  gdcm::SmartPointer<TScanner> ps = new TScanner;
+  TScanner &s = *ps;
+  //gdcm::SimpleSubjectWatcher watcher(ps, "Scanner");
+  for( VectorTags::const_iterator it = tags.begin(); it != tags.end(); ++it)
+    {
+    s.AddTag( *it );
+    }
+  for( VectorPrivateTags::const_iterator it = privatetags.begin(); it != privatetags.end(); ++it)
+    {
+    s.AddPrivateTag( *it );
+    }
+  bool b = s.Scan( d.GetFilenames() );
+  if( !b )
+    {
+    std::cerr << "Scanner failed" << std::endl;
+    return 1;
+    }
+  if (print) s.Print( std::cout );
+
+  return 0;
+}
+
+
 int main(int argc, char *argv[])
 {
   int c;
@@ -77,13 +110,12 @@ int main(int argc, char *argv[])
   bool print = false;
   bool recursive = false;
   std::string dirname;
-  typedef std::vector<gdcm::Tag> VectorTags;
-  typedef std::vector<gdcm::PrivateTag> VectorPrivateTags;
   VectorTags tags;
   VectorPrivateTags privatetags;
   gdcm::Tag tag;
   gdcm::PrivateTag privatetag;
 
+  int strict = 0;
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -100,6 +132,7 @@ int main(int argc, char *argv[])
         {"recursive", 1, 0, 0},
         {"print", 1, 0, 0},
         {"private-tag", 1, 0, 0},
+        {"strict", 0, &strict, 1},
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -260,24 +293,7 @@ int main(int argc, char *argv[])
   if( verbose ) d.Print( std::cout );
   std::cout << "done retrieving file list " << nfiles << " files found." <<  std::endl;
 
-  gdcm::SmartPointer<gdcm::Scanner> ps = new gdcm::Scanner;
-  gdcm::Scanner &s = *ps;
-  //gdcm::SimpleSubjectWatcher watcher(ps, "Scanner");
-  for( VectorTags::const_iterator it = tags.begin(); it != tags.end(); ++it)
-    {
-    s.AddTag( *it );
-    }
-  for( VectorPrivateTags::const_iterator it = privatetags.begin(); it != privatetags.end(); ++it)
-    {
-    s.AddPrivateTag( *it );
-    }
-  bool b = s.Scan( d.GetFilenames() );
-  if( !b )
-    {
-    std::cerr << "Scanner failed" << std::endl;
-    return 1;
-    }
-  if (print) s.Print( std::cout );
-
-  return 0;
+  if( strict )
+    return DoIt<gdcm::StrictScanner>(d,print,tags,privatetags);
+  return DoIt<gdcm::Scanner>(d,print,tags,privatetags);
 }
