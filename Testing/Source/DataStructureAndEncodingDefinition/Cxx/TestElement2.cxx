@@ -36,5 +36,19 @@ int TestElement2(int, char *[])
   t.Print( std::cout );
   std::cout << std::endl;
 
+  gdcm::Element<gdcm::VR::US, gdcm::VM::VM1_2> ref2; // = {{1}};
+  ref2.SetLength(2);
+  ref2.SetValue(1);
+  ref2.Print(std::cout);
+  std::cout << std::endl;
+
+  gdcm::Element<gdcm::VR::US, gdcm::VM::VM1_2> ref3; // = {{1}};
+  ref3.SetLength(4);
+  ref3.SetValue(0,1);
+  ref3.SetValue(1,2);
+  ref3.Print(std::cout);
+  std::cout << std::endl;
+
+
   return 0;
 }
