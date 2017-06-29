@@ -52,6 +52,7 @@ set(MSFF_TEST_SRCS
   TestDecoder
   TestRescaler1
   TestRescaler2
+  TestRescalerOptim
   TestDumper
   TestDictPrinter
   TestApplicationEntity
