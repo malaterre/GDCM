@@ -34,7 +34,7 @@ set(GDCM_PACKAGE_CONTACT "GDCM Developers <gdcm-developers@lists.sourceforge.net
 
 #----------------------------------------------------------------------------
 set(GDCM_MAJOR_VERSION 2)
-set(GDCM_MINOR_VERSION 7)
+set(GDCM_MINOR_VERSION 9)
 set(GDCM_BUILD_VERSION 0)
 set(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
