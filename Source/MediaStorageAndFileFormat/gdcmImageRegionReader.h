@@ -59,6 +59,7 @@ protected:
   bool Read();
 
 private:
+  BoxRegion ComputeBoundingBox();
   bool ReadRAWIntoBuffer(char *buffer, size_t buflen);
   bool ReadRLEIntoBuffer(char *buffer, size_t buflen);
   bool ReadJPEG2000IntoBuffer(char *buffer, size_t buflen);
