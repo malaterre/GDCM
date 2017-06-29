@@ -23,8 +23,10 @@ namespace gdcm
 
 // parameter 'size' is in bytes
 template <typename TOut, typename TIn>
-void RescaleFunction(TOut *out, const TIn *in, double intercept, double slope, size_t size)
+void RescaleFunction(TOut * __restrict__ out_, const TIn * __restrict__ in_, double intercept, double slope, size_t size)
 {
+  TOut * out = (TOut*)__builtin_assume_aligned (out_, 16);
+  const TIn * in = (const TIn*)__builtin_assume_aligned (in_, 16);
   size /= sizeof(TIn);
   for(size_t i = 0; i != size; ++i)
     {
@@ -58,9 +60,11 @@ struct FImpl
   // TODO: add template parameter for intercept/slope so that we can have specialized instantiation
   // when 1. both are int, 2. slope is 1, 3. intercept is 0
   // Detail: casting from float to int is soooo slow
-  static void InverseRescaleFunction( TOut *out, const TIn *in,
+  static void InverseRescaleFunction( TOut * __restrict__ out_, const TIn * __restrict__ in_,
     double intercept, double slope, size_t size) // users, go ahead and specialize this
     {
+    TOut * out = (TOut *)__builtin_assume_aligned (out_, 16);
+    const TIn * in = (const TIn *)__builtin_assume_aligned (in_, 16);
     // If you read the code down below you'll see a specialized function for float, thus
     // if we reach here it pretty much means slope/intercept were integer type
     assert( intercept == (int)intercept );

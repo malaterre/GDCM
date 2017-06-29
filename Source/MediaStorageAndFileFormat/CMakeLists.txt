@@ -101,6 +101,14 @@ set(MSFF_SRCS
     ${GDCM_SOURCE_DIR}/Utilities/gdcmrle/io.cxx
   )
 
+if(GDCM_OPTIM_USE_SSE2)
+  set_source_files_properties(gdcmRescaler.cxx
+                              PROPERTIES
+                              COMPILE_FLAGS "-msse2  -ftree-vectorize -fopt-info-vec-optimized"
+                              #COMPILE_FLAGS "-msse2  -ftree-vectorize -fopt-info-vec-all"
+                              )
+endif()
+
 # Do the proper thing when building static...if only there was configured
 # headers or def files instead
 if(NOT BUILD_SHARED_LIBS)
