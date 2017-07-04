@@ -18,8 +18,8 @@ date
 echo ""
 
 major=2
-minor=6
-patch=9
+minor=8
+patch=0
 dirversion="$major.$minor"
 version="$major.$minor.$patch"
 version2="$major-$minor-$patch"
