@@ -977,7 +977,7 @@ static const char *CharsetAliasToName(const char *alias)
       }
     }
   // We need to tell the user...
-  gdcmWarningMacro( "Could not find Charset from alias: " + alias );
+  gdcmWarningMacro( std::string("Could not find Charset from alias: ") + alias );
   return NULL;
 }
 #endif //_WIN32
