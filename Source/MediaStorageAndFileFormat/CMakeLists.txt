@@ -1,6 +1,7 @@
 # Define the srcs for Media Storage And FileFormat
 # MSFF
 set(MSFF_SRCS
+  gdcmEmptyMaskGenerator.cxx
   gdcmFileStreamer.cxx
   gdcmJSON.cxx
   gdcmFileChangeTransferSyntax.cxx
