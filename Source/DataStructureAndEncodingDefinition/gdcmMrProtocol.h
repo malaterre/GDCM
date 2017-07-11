@@ -37,16 +37,33 @@ class GDCM_EXPORT MrProtocol
 {
   friend std::ostream& operator<<(std::ostream &_os, const MrProtocol &d);
 public :
-  MrProtocol( const ByteValue * bv, int version );
+  MrProtocol( const ByteValue * bv, const char * str, int version );
   ~MrProtocol();
 
   void Print(std::ostream &os) const;
 
   int GetVersion() const;
 
-  const char * GetMrProtocolByName(const char *name);
+  const char * GetMrProtocolByName(const char *name) const;
 
-  bool FindMrProtocolByName(const char *name);
+  bool FindMrProtocolByName(const char *name) const;
+
+  struct Vector3
+  {
+    double dSag;
+    double dCor;
+    double dTra;
+  };
+  struct Slice
+  {
+    Vector3 Normal;
+    Vector3 Position;
+  };
+  struct SliceArray
+  {
+    std::vector< Slice > Slices;
+  };
+  bool GetSliceArray( MrProtocol::SliceArray & sa ) const;
 
 private:
   struct Element;
