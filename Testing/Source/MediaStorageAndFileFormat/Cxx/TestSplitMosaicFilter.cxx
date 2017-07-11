@@ -89,6 +89,19 @@ int TestSplitMosaicFilter(int argc, char *argv[])
     std::cerr << "Could not split << " << filename << std::endl;
     return 1;
     }
+  unsigned int modims[3];
+  b = filter.ComputeMOSAICDimensions( modims );
+  if( !b )
+    {
+    std::cerr << "Could not ComputeMOSAICDimensions << " << filename << std::endl;
+    return 1;
+    }
+  const unsigned int ref[3] = { 64u, 64u, 31u };
+  if( modims[0] != ref[0] || modims[1] != ref[1] || modims[2] != ref[2] )
+  {
+    std::cerr << "Invalid ComputeMOSAICDimensions << " << filename << std::endl;
+    return 1;
+  }
 
 //  const gdcm::Image &image = filter.GetImage();
 
