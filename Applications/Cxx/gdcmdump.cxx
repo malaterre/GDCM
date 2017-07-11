@@ -964,6 +964,30 @@ static int PrintCSA(const std::string & filename)
   return ret;
 }
 
+static int PrintMrProtocol(const std::string & filename)
+{
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+  {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+  }
+
+  gdcm::CSAHeader csa;
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  const gdcm::MrProtocol *mrprot = csa.GetMrProtocol(ds);
+  if( mrprot )
+  {
+    std::cout << *mrprot;
+  }
+  else
+  {
+    std::cout << "Could not find MrProtocol/MrPhoenixProtocol ASCII section" << std::endl;
+  }
+
+  return 0;
+}
 
 
 static void PrintVersion()
@@ -989,6 +1013,7 @@ static void PrintHelp()
   std::cout << "  -C --csa            print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
   std::cout << "     --csa-asl        print decoded SIEMENS CSA MR_ASL (base64)." << std::endl;
   std::cout << "     --csa-diffusion  print decoded SIEMENS CSA MRDiffusion (base64)." << std::endl;
+  std::cout << "     --mrprotocol     print SIEMENS CSA MrProtocol only (within ASCCONV BEGIN/END)." << std::endl;
   std::cout << "  -P --pdb            print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
   std::cout << "     --elscint        print ELSCINT Protocol Information (01f7,26,ELSCINT1)." << std::endl;
   std::cout << "     --vepro          print VEPRO Protocol Information (0055,20,VEPRO VIF 3.0 DATA)." << std::endl;
@@ -1018,6 +1043,7 @@ int main (int argc, char *argv[])
   int dump = 0;
   int print = 0;
   int printcsa = 0;
+  int printmrprotocol = 0;
   int printcsabase64 = 0;
   int printcsaasl = 0;
   int printcsadiffusion = 0;
@@ -1070,6 +1096,7 @@ int main (int argc, char *argv[])
         {"ct3", 0, &printct3, 1},
         {"csa-asl", 0, &printcsaasl, 1},
         {"csa-diffusion", 0, &printcsadiffusion, 1},
+        {"mrprotocol", 0, &printmrprotocol, 1},
         {0, 0, 0, 0} // required
     };
     static const char short_options[] = "i:xrpdcCPAVWDEhvI";
@@ -1299,6 +1326,10 @@ int main (int argc, char *argv[])
         {
         res += PrintCSA(*it);
         }
+      else if( printmrprotocol )
+        {
+        res += PrintMrProtocol(*it);
+        }
       else if( printcsabase64 )
         {
         res += PrintCSABase64(*it, csaname);
@@ -1349,6 +1380,10 @@ int main (int argc, char *argv[])
     else if( printcsa )
       {
       res += PrintCSA(filename);
+      }
+    else if( printmrprotocol )
+      {
+      res += PrintMrProtocol(filename);
       }
     else if( printcsabase64 )
       {
