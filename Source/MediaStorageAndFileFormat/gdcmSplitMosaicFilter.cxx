@@ -61,7 +61,6 @@ bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
   int numberOfImagesInMosaic = 0;
   if( csa.LoadFromDataElement( ds.GetDataElement( t1 ) ) )
   {
-    // SliceThickness ??
     if( csa.FindCSAElementByName( "NumberOfImagesInMosaic" ) )
     {
       const CSAElement &csael4 = csa.GetCSAElementByName( "NumberOfImagesInMosaic" );
@@ -79,15 +78,18 @@ bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
     // oh well, let try harder:
     // (0019,100a) US 72   # 2,1 NumberOfImagesInMosaic
     PrivateTag t2 (0x0019,0x0a, "SIEMENS MR HEADER");
-    const DataElement &de = ds.GetDataElement( t2 );
-    const ByteValue * bv = de.GetByteValue();
-    if( bv )
+    if( ds.FindDataElement( t2 ) )
     {
-      Element<VR::US, VM::VM1> el1 = {{0}};
-      std::istringstream is;
-      is.str( std::string( bv->GetPointer(), bv->GetLength() ) );
-      el1.Read( is );
-      numberOfImagesInMosaic = el1.GetValue();
+      const DataElement &de = ds.GetDataElement( t2 );
+      const ByteValue * bv = de.GetByteValue();
+      if( bv )
+      {
+        Element<VR::US, VM::VM1> el1 = {{0}};
+        std::istringstream is;
+        is.str( std::string( bv->GetPointer(), bv->GetLength() ) );
+        el1.Read( is );
+        numberOfImagesInMosaic = el1.GetValue();
+      }
     }
   }
   if( !numberOfImagesInMosaic )
@@ -106,6 +108,105 @@ bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
   dims[1] /= div;
   dims[2] = numberOfImagesInMosaic;
   return true;
+}
+
+bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double dims[3] )
+{
+  CSAHeader csa;
+  DataSet& ds = GetFile().GetDataSet();
+
+  bool snvfound = false;
+  const PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
+  static const char snvstr[] = "SliceNormalVector";
+  if( csa.LoadFromDataElement( ds.GetDataElement( t1 ) ) )
+  {
+    if( csa.FindCSAElementByName( snvstr ) )
+    {
+      const CSAElement &snv_csa = csa.GetCSAElementByName( snvstr );
+      if( !snv_csa.IsEmpty() )
+      {
+        const ByteValue * bv = snv_csa.GetByteValue();
+        const std::string str(bv->GetPointer(), bv->GetLength());
+        std::istringstream is;
+        is.str( str );
+        char sep;
+        double *snv = dims;
+        if( is >> snv[0] >> sep >> snv[1] >> sep >> snv[2] )
+        {
+          snvfound = true;
+        }
+
+      }
+    }
+  }
+  return snvfound;
+}
+
+bool SplitMosaicFilter::ComputeMOSAICSlicePosition( double pos[3] )
+{
+  CSAHeader csa;
+  DataSet& ds = GetFile().GetDataSet();
+
+  bool posfound[3] = { false, false, false };
+  const PrivateTag &t1 = csa.GetCSASeriesHeaderInfoTag();
+  //static const char mrphoenix[] = "MrPhoenixProtocol";
+  static const char mrphoenix[] = "MrProtocol";
+  if( csa.LoadFromDataElement( ds.GetDataElement( t1 ) ) )
+  {
+    if( csa.FindCSAElementByName( mrphoenix ) )
+    {
+      const CSAElement &mr_csa = csa.GetCSAElementByName( mrphoenix );
+      if( !mr_csa.IsEmpty() )
+      {
+        const ByteValue * bv = mr_csa.GetByteValue();
+        const std::string str(bv->GetPointer(), bv->GetLength());
+        //std::cout << str << std::endl;
+        std::istringstream is;
+        is.str( str );
+        std::string tmp;
+        while( std::getline( is, tmp ) ) 
+        {
+          const std::string ref1 = "sSliceArray.asSlice[0].sPosition.dSag";
+          const std::string ref2 = "sSliceArray.asSlice[0].sPosition.dCor";
+          const std::string ref3 = "sSliceArray.asSlice[0].sPosition.dTra";
+          /*
+           * sSliceArray.asSlice[0].sPosition.dSag    = 2.24891108
+           * sSliceArray.asSlice[0].sPosition.dCor    = -52.65585315
+           * sSliceArray.asSlice[0].sPosition.dTra    = -26.94105767
+           */
+          const std::string::size_type equalPos = tmp.find( '=' );
+          if(tmp.substr(0, ref1.size()) == ref1)
+          {
+            if ( equalPos != std::string::npos )
+            {
+              std::string value = tmp.substr( equalPos + 1 );
+              pos[0] = atof( value.c_str() );
+              posfound[0] = true;
+            }
+          }
+          else if(tmp.substr(0, ref2.size()) == ref2)
+          {
+            if ( equalPos != std::string::npos )
+            {
+              std::string value = tmp.substr( equalPos + 1 );
+              pos[1] = atof( value.c_str() );
+              posfound[1] = true;
+            }
+          }
+          else if(tmp.substr(0, ref3.size()) == ref3)
+          {
+            if ( equalPos != std::string::npos )
+            {
+              std::string value = tmp.substr( equalPos + 1 );
+              pos[2] = atof( value.c_str() );
+              posfound[2] = true;
+            }
+          }
+        }
+      }
+    }
+  }
+  return posfound[0] && posfound[1] && posfound[2];
 }
 
 bool SplitMosaicFilter::Split()
