@@ -68,10 +68,13 @@ int TestSplitMosaicFilter2(int argc, char *argv[])
     return 1;
   }
 
-  const double refnormal[3] = {-0.08193696,0.08808136,0.99273763};
+  // SliceNormalVector is slightly less precise that sNormal:
+  //const double refnormal[3] = {-0.08193696,0.08808136,0.99273763};
+  // Value as read from sNormal (sSlice)
+  const double refnor[3] = { -0.08193693363, 0.08808135446, 0.992737636 };
   const double eps = 1e-6;
   gdcm::DirectionCosines dc;
-  const double dot = dc.Dot( slicenormal, refnormal );
+  const double dot = dc.Dot( slicenormal, refnor );
   if( std::fabs( 1.0 - dot ) > eps )
   {
     std::cerr << "Invalid ComputeMOSAICSliceNormal: " << filename << std::endl;
@@ -96,10 +99,77 @@ int TestSplitMosaicFilter2(int argc, char *argv[])
     }
   }
 
+  gdcm::CSAHeader csa;
+  gdcm::DataSet & ds = reader.GetFile().GetDataSet();
+  const gdcm::MrProtocol *mrprot = csa.GetMrProtocol(ds);
+  if( mrprot == NULL )
+  {
+    std::cerr << "No MrProtocol" << filename << std::endl;
+    return 1;
+  }
 
+  gdcm::MrProtocol::SliceArray sa;
+  b = mrprot->GetSliceArray(sa);
+  if( !b || sa.Slices.size() != 31 )
+  {
+    return 1;
+  }
+
+  gdcm::MrProtocol::Slice & slice0 = sa.Slices[0];
+  gdcm::MrProtocol::Vector3 & p0 = slice0.Position;
+  double pos0[3];
+  pos0[0] = p0.dSag;
+  pos0[1] = p0.dCor;
+  pos0[2] = p0.dTra;
+  for( int i = 0; i < 3; ++i ) 
+  {
+    if( std::fabs( refpos[i] - pos0[i] ) > eps )
+    {
+      std::cerr << "Invalid slice0: " << filename << std::endl;
+      return 1;
+    }
+  }
+
+  gdcm::MrProtocol::Slice & slice1 = sa.Slices[1];
+  gdcm::MrProtocol::Vector3 & p1 = slice1.Position;
+  double pos1[3];
+  pos1[0] = p1.dSag;
+  pos1[1] = p1.dCor;
+  pos1[2] = p1.dTra;
+  double altnor[3];
+  for( int i = 0; i < 3; ++i ) 
+  {
+    altnor[i] = pos1[i] - pos0[i];
+  }
+  dc.Normalize( altnor );
+  const double dot2 = dc.Dot( altnor, refnor );
+  if( std::fabs( 1.0 - dot2 ) > eps )
+  {
+    std::cerr << "Incompatible alt " << filename << std::endl;
+    return 1;
+  }
+
+  for( int k = 0; k < 31; ++k )
+  {
+    gdcm::MrProtocol::Slice & slice = sa.Slices[k];
+    gdcm::MrProtocol::Vector3 & nor = slice.Normal;
+    double normal[3];
+    normal[0] = nor.dSag;
+    normal[1] = nor.dCor;
+    normal[2] = nor.dTra;
+    for( int i = 0; i < 3; ++i ) 
+    {
+      if( std::fabs( refnor[i] - normal[i] ) > eps )
+      {
+        std::cerr << "Invalid normal: " << filename << std::endl;
+        return 1;
+      }
+    }
+  }
+
+ 
   gdcm::Anonymizer ano;
   ano.SetFile( reader.GetFile() );
-  gdcm::CSAHeader csa;
   const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
   ano.Remove( t1 );
 
@@ -109,7 +179,6 @@ int TestSplitMosaicFilter2(int argc, char *argv[])
  
   // alternate code path:
   gdcm::PrivateTag t2 (0x0019,0x0a, "SIEMENS MR HEADER");
-  gdcm::DataSet & ds = reader.GetFile().GetDataSet();
   if( ds.FindDataElement( t2 ) )
   {
     return 1;
