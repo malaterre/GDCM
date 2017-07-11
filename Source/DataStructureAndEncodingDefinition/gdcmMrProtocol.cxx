@@ -14,6 +14,7 @@
 #include "gdcmMrProtocol.h"
 
 #include <map>
+#include <string>
 
 namespace gdcm
 {
@@ -27,6 +28,11 @@ struct MrProtocol::Internals {
   int version;
 };
 
+static inline bool starts_with(const std::string& s1, const std::string& s2)
+{
+  return s2.size() <= s1.size() && s1.compare(0, s2.size(), s2) == 0;
+}
+
 MrProtocol::MrProtocol( const ByteValue * bv, int version )
 {
   if( bv )
@@ -37,8 +43,17 @@ MrProtocol::MrProtocol( const ByteValue * bv, int version )
     Pimpl = new MrProtocol::Internals;
     Pimpl->version = version;
     MyMapType &mymap = Pimpl->mymap;
+    static const char begin[] = "### ASCCONV BEGIN ###";
+    static const char end[] = "### ASCCONV END ###";
+    bool hasstarted = false;
     while( std::getline(is, s ) )
     {
+      if( !hasstarted )
+      {
+        hasstarted = starts_with(s, begin);
+      }
+      if( !hasstarted ) continue;
+      if( starts_with(s, end) ) break;
       std::string::size_type pos = s.find( '=' );
       if( pos != std::string::npos )
       {
@@ -46,7 +61,6 @@ MrProtocol::MrProtocol( const ByteValue * bv, int version )
         sub1.erase( sub1.find_last_not_of(' ') + 1);
         std::string sub2 = s.substr(pos+1); // skip the '=' char
         sub2.erase( 0, sub2.find_first_not_of(' '));
-        //std::cout << sub1 << std::endl;
         mymap.insert( MyMapType::value_type(sub1, sub2) );
       }
       else
