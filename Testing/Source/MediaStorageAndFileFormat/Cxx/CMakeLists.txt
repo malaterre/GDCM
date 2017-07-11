@@ -139,6 +139,7 @@ if(GDCM_DATA_EXTRA_ROOT)
   set(MSFF_TEST_SRCS
     ${MSFF_TEST_SRCS}
     TestSplitMosaicFilter
+    TestSplitMosaicFilter2
     TestOverlay2
     TestImageRegionReader4
     )
