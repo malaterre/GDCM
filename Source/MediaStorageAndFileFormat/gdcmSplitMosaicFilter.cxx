@@ -259,6 +259,20 @@ bool SplitMosaicFilter::Split()
   image.SetDimension(1, dims[1] );
   image.SetDimension(2, dims[2] );
 
+  // Fix origin/direction:
+  double origin[3];
+  if( !ComputeMOSAICSlicePosition( origin ) )
+  {
+    return false;
+  }
+  image.SetOrigin( origin );
+  double normal[3];
+  if( !ComputeMOSAICSliceNormal( normal ) )
+  {
+    return false;
+  }
+  //image.SetDirectionCosines( normal );
+
   PhotometricInterpretation pi;
   pi = PhotometricInterpretation::MONOCHROME2;
 
