@@ -31,6 +31,7 @@
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"
 #include "gdcmImageHelper.h"
+#include "gdcmSplitMosaicFilter.h"
 
 #ifdef GDCM_USE_SYSTEM_POPPLER
 #include <poppler/poppler-config.h>
@@ -319,6 +320,7 @@ static void PrintHelp()
 //  std::cout << "  -b --check-big-endian   check if file is ." << std::endl;
   std::cout << "     --force-rescale    force rescale." << std::endl;
   std::cout << "     --force-spacing    force spacing." << std::endl;
+  std::cout << "     --mosaic           dump image information of MOSAIC." << std::endl;
 
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
@@ -334,6 +336,7 @@ static void PrintHelp()
   int deflated = 0; // check deflated
   int checkcompression = 0;
   int md5sum = 0;
+  int mosaic = 0;
 
 static int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs )
 {
@@ -382,27 +385,42 @@ static int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs
       std::cerr << "Could not read image from: " << filename << std::endl;
       return 1;
       }
-    //const gdcm::File &file = reader.GetFile();
-    //const gdcm::DataSet &ds = file.GetDataSet();
+    gdcm::SplitMosaicFilter filter;
+    const gdcm::Image *pimage = NULL;
     const gdcm::Image &image = reader.GetImage();
-    const double *dircos = image.GetDirectionCosines();
+    if( mosaic )
+    {
+      filter.SetImage( image );
+      filter.SetFile( reader.GetFile() );
+      if( !filter.Split() )
+      {
+      std::cerr << "Could not split mosaic : " << filename << std::endl;
+      return 1;
+      }
+      pimage = &filter.GetImage();
+    }
+    else
+    {
+    pimage = &image;
+    }
+    const double *dircos = pimage->GetDirectionCosines();
     gdcm::Orientation::OrientationType type = gdcm::Orientation::GetType(dircos);
     const char *label = gdcm::Orientation::GetLabel( type );
-    image.Print( std::cout );
+    pimage->Print( std::cout );
     std::cout << "Orientation Label: " << label << std::endl;
     if( checkcompression )
       {
-      bool lossy = image.IsLossy();
+      bool lossy = pimage->IsLossy();
       std::cout << "Encapsulated Stream was found to be: " << (lossy ? "lossy" : "lossless") << std::endl;
       }
 
     if( md5sum )
       {
-      char *buffer = new char[ image.GetBufferLength() ];
-      if( image.GetBuffer( buffer ) )
+      char *buffer = new char[ pimage->GetBufferLength() ];
+      if( pimage->GetBuffer( buffer ) )
         {
         char digest[33] = {};
-        gdcm::MD5::Compute( buffer, image.GetBufferLength(), digest );
+        gdcm::MD5::Compute( buffer, pimage->GetBufferLength(), digest );
         std::cout << "md5sum: " << digest << std::endl;
         }
       else
@@ -563,6 +581,7 @@ int main(int argc, char *argv[])
         {"check-compression", 0, &checkcompression, 1},
         {"force-rescale", 0, &forcerescale, 1},
         {"force-spacing", 0, &forcespacing, 1},
+        {"mosaic", 0, &mosaic, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
