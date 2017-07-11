@@ -1298,7 +1298,7 @@ const MrProtocol *CSAHeader::GetMrProtocol( const DataSet & ds )
       const gdcm::CSAElement &csael = GetCSAElementByName( candidate );
       if( !csael.IsEmpty() )
       {
-        static const gdcm::MrProtocol mrpto(csael.GetByteValue(), mrprotocolversion);
+        static const gdcm::MrProtocol mrpto(csael.GetByteValue(), candidate, mrprotocolversion);
         ret = &mrpto;
       }
     }
