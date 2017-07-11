@@ -84,11 +84,19 @@ void DirectionCosines::Cross(double z[3]) const
   z[0] = Zx; z[1] = Zy; z[2] = Zz;
 }
 
+static inline double DotImpl(const double x[3], const double y[3])
+{
+  return x[0]*y[0] + x[1]*y[1] + x[2]*y[2];
+}
+
+double DirectionCosines::Dot(const double x[3], const double y[3])
+{
+  return DotImpl(x, y);
+}
+
 double DirectionCosines::Dot() const
 {
-  const double *x = Values;
-  const double *y = x+3;
-  return x[0]*y[0] + x[1]*y[1] + x[2]*y[2];
+  return DotImpl(Values, Values+3);
 }
 
 // static function is within gdcm:: namespace, so should not pollute too much on UNIX

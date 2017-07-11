@@ -40,6 +40,9 @@ public:
   /// Compute Dot
   double Dot() const;
 
+  /// Compute Dot
+  static double Dot(const double x[3], const double y[3]);
+
   /// Normalize in-place
   void Normalize();
 
