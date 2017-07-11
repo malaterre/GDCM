@@ -30,37 +30,37 @@ namespace gdcm {
 
 struct EmptyMaskGenerator::impl
 {
-  static const gdcm::Tag TSOPClassUID;
-  static const gdcm::Tag TSOPInstanceUID;
-  static const gdcm::Tag TSeriesInstanceUID;
-  static const gdcm::Tag TFrameOfReferenceUID;
+  static const Tag TSOPClassUID;
+  static const Tag TSOPInstanceUID;
+  static const Tag TSeriesInstanceUID;
+  static const Tag TFrameOfReferenceUID;
 
   SOPClassUIDMode mode;
   std::string inputdir;
   std::string outputdir;
-  gdcm::UIDGenerator uid;
+  UIDGenerator uid;
   std::map< std::string, std::string > seriesuidhash;
   std::map< std::string, std::string > framerefuidhash;
-  gdcm::Scanner s;
-  bool collectuids(gdcm::Tag const & tag, std::map< std::string, std::string > & hash);
+  Scanner s;
+  bool collectuids(Tag const & tag, std::map< std::string, std::string > & hash);
   bool setup(const char * dirname, const char * outdir);
-  bool setmask( gdcm::File & file );
-  bool derive( const char * filename, gdcm::File & file );
-  bool anonymizeattributes( const char * filename, gdcm::File & file );
-  bool populateattributes( const char * filename, gdcm::File const & orifile, gdcm::File & file );
-  bool setts( gdcm::File & file );
+  bool setmask( File & file );
+  bool derive( const char * filename, File & file );
+  bool anonymizeattributes( const char * filename, File & file );
+  bool populateattributes( const char * filename, File const & orifile, File & file );
+  bool setts( File & file );
   bool run(const char * filename, const char * outfile);
 };
 
-const gdcm::Tag EmptyMaskGenerator::impl::TSOPClassUID = gdcm::Tag(0x0008,0x0016);
-const gdcm::Tag EmptyMaskGenerator::impl::TSOPInstanceUID = gdcm::Tag(0x0008,0x0018);
-const gdcm::Tag EmptyMaskGenerator::impl::TSeriesInstanceUID = gdcm::Tag(0x0020,0x000e);
-const gdcm::Tag EmptyMaskGenerator::impl::TFrameOfReferenceUID = gdcm::Tag(0x0020,0x0052);
+const Tag EmptyMaskGenerator::impl::TSOPClassUID = Tag(0x0008,0x0016);
+const Tag EmptyMaskGenerator::impl::TSOPInstanceUID = Tag(0x0008,0x0018);
+const Tag EmptyMaskGenerator::impl::TSeriesInstanceUID = Tag(0x0020,0x000e);
+const Tag EmptyMaskGenerator::impl::TFrameOfReferenceUID = Tag(0x0020,0x0052);
 
-bool EmptyMaskGenerator::impl::collectuids( gdcm::Tag const & tag, std::map< std::string, std::string > & hash)
+bool EmptyMaskGenerator::impl::collectuids( Tag const & tag, std::map< std::string, std::string > & hash)
 {
-  gdcm::Scanner::ValuesType vt = s.GetValues(tag);
-  for( gdcm::Scanner::ValuesType::const_iterator it = vt.begin();
+  Scanner::ValuesType vt = s.GetValues(tag);
+  for( Scanner::ValuesType::const_iterator it = vt.begin();
     it != vt.end(); ++it )
     {
     const char * newuid = uid.Generate();
@@ -69,10 +69,10 @@ bool EmptyMaskGenerator::impl::collectuids( gdcm::Tag const & tag, std::map< std
   return true;
 }
 
-bool EmptyMaskGenerator::impl::setmask( gdcm::File & file )
+bool EmptyMaskGenerator::impl::setmask( File & file )
 {
-  gdcm::DataSet& ds = file.GetDataSet();
-  namespace kwd = gdcm::Keywords;
+  DataSet& ds = file.GetDataSet();
+  namespace kwd = Keywords;
   kwd::ImageType imtype;
   kwd::ImageType copy;
   imtype.SetFromDataSet( ds );
@@ -85,7 +85,7 @@ bool EmptyMaskGenerator::impl::setmask( gdcm::File & file )
     copy.SetValue(i, imtype.GetValue(i) );
     }
   // Make up non empty values:
-  static const gdcm::CSComp values[] = {"DERIVED","SECONDARY","OTHER"};
+  static const CSComp values[] = {"DERIVED","SECONDARY","OTHER"};
   for( unsigned int i = nvalues; i < 3u;  ++i )
     {
     copy.SetValue(i, values[i] );
@@ -98,11 +98,11 @@ bool EmptyMaskGenerator::impl::setmask( gdcm::File & file )
 
 bool EmptyMaskGenerator::impl::setup(const char * dirname, const char * outdir)
 {
-  if( !gdcm::System::FileIsDirectory( dirname ) )
+  if( !System::FileIsDirectory( dirname ) )
     return false;
-  if( !gdcm::System::MakeDirectory( outdir ) )
+  if( !System::MakeDirectory( outdir ) )
     return false;
-  gdcm::Directory d;
+  Directory d;
   // recursive search by default
   const unsigned int nfiles = d.Load( dirname, true );
   if( nfiles == 0 )
@@ -110,14 +110,14 @@ bool EmptyMaskGenerator::impl::setup(const char * dirname, const char * outdir)
     gdcmDebugMacro( "No files found in: " << dirname );
     return false;
     }
-  gdcm::Directory::FilenamesType const & filenames = d.GetFilenames();
+  Directory::FilenamesType const & filenames = d.GetFilenames();
 
   s.AddTag( TSOPClassUID );
   s.AddTag( TSOPInstanceUID );
   s.AddTag( TSeriesInstanceUID );
   s.AddTag( TFrameOfReferenceUID );
   // reduce verbosity when looping over a set of files:
-  gdcm::Trace::WarningOff();
+  Trace::WarningOff();
   if( !s.Scan( filenames ) )
     {
     gdcmDebugMacro( "Scanner failure for directory: " << dirname );
@@ -131,9 +131,9 @@ bool EmptyMaskGenerator::impl::setup(const char * dirname, const char * outdir)
   return true;
 }
 
-bool EmptyMaskGenerator::impl::derive( const char * filename, gdcm::File & file )
+bool EmptyMaskGenerator::impl::derive( const char * filename, File & file )
 {
-  gdcm::FileDerivation fd;
+  FileDerivation fd;
   const char * referencedsopclassuid = s.GetValue (filename, TSOPClassUID);
   const char * referencedsopinstanceuid = s.GetValue (filename, TSOPInstanceUID);
   if( !fd.AddReference( referencedsopclassuid, referencedsopinstanceuid ) )
@@ -160,13 +160,13 @@ bool EmptyMaskGenerator::impl::derive( const char * filename, gdcm::File & file 
   return true;
 }
 
-bool EmptyMaskGenerator::impl::anonymizeattributes( const char * filename, gdcm::File & file )
+bool EmptyMaskGenerator::impl::anonymizeattributes( const char * filename, File & file )
 {
-  gdcm::Anonymizer ano;
+  Anonymizer ano;
   ano.SetFile( file );
   ano.RemoveGroupLength();
   ano.RemovePrivateTags();
-  namespace kwd = gdcm::Keywords;
+  namespace kwd = Keywords;
   ano.Remove( kwd::WindowCenter::GetTag() );
   ano.Remove( kwd::WindowWidth::GetTag() );
   if( !ano.Replace (TSOPInstanceUID, uid.Generate()) ) return false;
@@ -185,27 +185,27 @@ bool EmptyMaskGenerator::impl::anonymizeattributes( const char * filename, gdcm:
   return true;
 }
 
-bool EmptyMaskGenerator::impl::populateattributes( const char * filename, gdcm::File const & orifile, gdcm::File & file )
+bool EmptyMaskGenerator::impl::populateattributes( const char * filename, File const & orifile, File & file )
 {
-  namespace kwd = gdcm::Keywords;
-  gdcm::DataSet & ds = file.GetDataSet();
+  namespace kwd = Keywords;
+  DataSet & ds = file.GetDataSet();
 
   // ContentDate
   char date[22];
   const size_t datelen = 8;
-  gdcm::System::GetCurrentDateTime(date);
+  System::GetCurrentDateTime(date);
   kwd::ContentDate contentdate;
   // Do not copy the whole cstring:
-  contentdate.SetValue( gdcm::DAComp( date, datelen ) );
+  contentdate.SetValue( DAComp( date, datelen ) );
   ds.Insert( contentdate.GetAsDataElement() );
   // ContentTime
   const size_t timelen = 6 + 1 + 6; // time + milliseconds
   kwd::ContentTime contenttime;
   // Do not copy the whole cstring:
-  contenttime.SetValue( gdcm::TMComp(date+datelen, timelen) );
+  contenttime.SetValue( TMComp(date+datelen, timelen) );
   ds.Insert( contenttime.GetAsDataElement() );
 
-  const gdcm::DataSet & orids = orifile.GetDataSet();
+  const DataSet & orids = orifile.GetDataSet();
   kwd::SeriesInstanceUID seriesinstanceuid;
   seriesinstanceuid.SetValue( uid.Generate() ); // In case original instance is missing Series Instance UID
   kwd::SeriesNumber seriesnumber = { 1 };
@@ -273,20 +273,20 @@ bool EmptyMaskGenerator::impl::populateattributes( const char * filename, gdcm::
   ds.Insert( plutshape.GetAsDataElement() );
   kwd::SOPClassUID sopclassuid;
   // gdcm will pick the Word in case Byte class is not compatible:
-  gdcm::MediaStorage ms = gdcm::MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage;
+  MediaStorage ms = MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage;
   sopclassuid.SetValue( ms.GetString() );
   ds.Insert( sopclassuid.GetAsDataElement() );
   return true;
 }
 
-bool EmptyMaskGenerator::impl::setts( gdcm::File & file )
+bool EmptyMaskGenerator::impl::setts( File & file )
 {
-  gdcm::FileMetaInformation & fmi = file.GetHeader();
-  const gdcm::TransferSyntax & orits = fmi.GetDataSetTransferSyntax();
-  gdcm::TransferSyntax::TSType newts = gdcm::TransferSyntax::ImplicitVRLittleEndian;
+  FileMetaInformation & fmi = file.GetHeader();
+  const TransferSyntax & orits = fmi.GetDataSetTransferSyntax();
+  TransferSyntax::TSType newts = TransferSyntax::ImplicitVRLittleEndian;
   if( orits.IsExplicit() )
     {
-    newts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
+    newts = TransferSyntax::ExplicitVRLittleEndian;
     }
   fmi.Clear();
   fmi.SetDataSetTransferSyntax( newts );
@@ -301,7 +301,7 @@ bool EmptyMaskGenerator::impl::run(const char * filename, const char * outfile)
     return false;
     }
 
-  gdcm::ImageRegionReader irr;
+  ImageRegionReader irr;
   irr.SetFileName( filename );
   if( !irr.ReadInformation() )
     {
@@ -309,9 +309,9 @@ bool EmptyMaskGenerator::impl::run(const char * filename, const char * outfile)
     return false;
     }
   size_t buflen = irr.ComputeBufferLength();
-  gdcm::Image & img = irr.GetImage();
-  if( img.GetPhotometricInterpretation() != gdcm::PhotometricInterpretation::MONOCHROME1
-   && img.GetPhotometricInterpretation() != gdcm::PhotometricInterpretation::MONOCHROME2 )
+  Image & img = irr.GetImage();
+  if( img.GetPhotometricInterpretation() != PhotometricInterpretation::MONOCHROME1
+   && img.GetPhotometricInterpretation() != PhotometricInterpretation::MONOCHROME2 )
     {
     gdcmErrorMacro( "Cannot process PhotometricInterpretation from: " << filename );
     return false;
@@ -319,7 +319,7 @@ bool EmptyMaskGenerator::impl::run(const char * filename, const char * outfile)
 
   if( mode == UseOriginalSOPClassUID )
     {
-    gdcm::File & file = irr.GetFile();
+    File & file = irr.GetFile();
     // derive operation needs to operate on original attributes (before anonymization):
     if( !derive( filename, file ) ) return false;
     // copy original attributes:
@@ -327,7 +327,7 @@ bool EmptyMaskGenerator::impl::run(const char * filename, const char * outfile)
     if( !setmask( file ) ) return false;
     if( !setts( file ) ) return false;
 
-    gdcm::Writer w;
+    Writer w;
     w.SetFile( file );
     w.SetFileName( outfile );
     if( !w.Write() )
@@ -337,22 +337,22 @@ bool EmptyMaskGenerator::impl::run(const char * filename, const char * outfile)
     }
   else if ( mode == UseGrayscaleSecondaryImageStorage )
     {
-    gdcm::ImageWriter w;
-    gdcm::File & file = w.GetFile();
+    ImageWriter w;
+    File & file = w.GetFile();
     if( !derive( filename, file ) ) return false;
     // create attributes:
     if( !populateattributes( filename, irr.GetFile(), file ) ) return false;
     if( !setmask( file ) ) return false;
     if( !setts( file ) ) return false;
 
-    gdcm::PixelFormat & pf = img.GetPixelFormat();
+    PixelFormat & pf = img.GetPixelFormat();
     pf.SetPixelRepresentation(0); // always overwrite to unsigned
     img.SetSlope(1);
     img.SetIntercept(0);
     w.SetImage( img );
     w.SetFileName( outfile );
     // sentinel, SC is never acceptable:
-    if( w.ComputeTargetMediaStorage() == gdcm::MediaStorage::SecondaryCaptureImageStorage )
+    if( w.ComputeTargetMediaStorage() == MediaStorage::SecondaryCaptureImageStorage )
       {
       gdcmErrorMacro( "Failure to compute MediaStorage: " << filename );
       return false;
@@ -369,10 +369,10 @@ bool EmptyMaskGenerator::impl::run(const char * filename, const char * outfile)
     }
 
   // now create the empty pixel data element, a chunk at a time:
-  gdcm::FileStreamer fs;
+  FileStreamer fs;
   fs.SetTemplateFileName(outfile);
   fs.SetOutputFileName(outfile);
-  gdcm::Tag pixeldata (0x7fe0, 0x0010);
+  Tag pixeldata (0x7fe0, 0x0010);
   fs.CheckDataElement( pixeldata ); // double check generated output
   if( !fs.StartDataElement( pixeldata ) )
     {
@@ -437,11 +437,11 @@ bool EmptyMaskGenerator::Execute()
     return false;
     }
   bool success = true;
-  gdcm::Directory::FilenamesType const & filenames = pimpl->s.GetFilenames();
-  for( gdcm::Directory::FilenamesType::const_iterator it =  filenames.begin(); it != filenames.end(); ++it )
+  Directory::FilenamesType const & filenames = pimpl->s.GetFilenames();
+  for( Directory::FilenamesType::const_iterator it =  filenames.begin(); it != filenames.end(); ++it )
     {
     const char * filename = it->c_str();
-    gdcm::Filename fn( filename );
+    Filename fn( filename );
     std::string outfile = outdir;
     outfile += '/';
     outfile += fn.GetName();
@@ -449,7 +449,7 @@ bool EmptyMaskGenerator::Execute()
       {
       gdcmErrorMacro( "Failure to EmptyMask" );
       // Since we may have failed in the middle of writing of the file, remove it:
-      if( gdcm::System::FileExists(outfile.c_str()) && !gdcm::System::RemoveFile(outfile.c_str()) )
+      if( System::FileExists(outfile.c_str()) && !System::RemoveFile(outfile.c_str()) )
         {
         gdcmErrorMacro( "Failure to RemoveFile: " << outfile );
         // may want to call exit() here, since we failed to remove a file we created in this process:

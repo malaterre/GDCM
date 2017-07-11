@@ -142,9 +142,9 @@ bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double slicenormalvector[3] )
 
   if( snvfound )
     {
-    gdcm::Attribute<0x20,0x37> iop;
+    Attribute<0x20,0x37> iop;
     iop.SetFromDataSet( ds );
-    gdcm::DirectionCosines dc( iop.GetValues() );
+    DirectionCosines dc( iop.GetValues() );
     double z[3];
     dc.Cross (z);
     const double snv_dot = dc.Dot( slicenormalvector, z );
@@ -162,15 +162,15 @@ bool SplitMosaicFilter::ComputeMOSAICSlicePosition( double pos[3] )
   CSAHeader csa;
   DataSet& ds = GetFile().GetDataSet();
 
-  const gdcm::MrProtocol *mrprot = csa.GetMrProtocol(ds);
+  const MrProtocol *mrprot = csa.GetMrProtocol(ds);
   if( !mrprot ) return false;
 
-  gdcm::MrProtocol::SliceArray sa;
+  MrProtocol::SliceArray sa;
   bool b = mrprot->GetSliceArray(sa);
   if( !b ) return false;
 
-  gdcm::MrProtocol::Slice & slice0 = sa.Slices[0];
-  gdcm::MrProtocol::Vector3 & p0 = slice0.Position;
+  MrProtocol::Slice & slice0 = sa.Slices[0];
+  MrProtocol::Vector3 & p0 = slice0.Position;
   pos[0] = p0.dSag;
   pos[1] = p0.dCor;
   pos[2] = p0.dTra;
@@ -214,14 +214,14 @@ bool SplitMosaicFilter::Split()
   pixeldata.SetByteValue( &outbuf[0], outbufSize );
 
   Image &image = GetImage();
-  const gdcm::TransferSyntax &ts = image.GetTransferSyntax();
+  const TransferSyntax &ts = image.GetTransferSyntax();
   if( ts.IsExplicit() )
      {
-     image.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+     image.SetTransferSyntax( TransferSyntax::ExplicitVRLittleEndian );
      }
    else
      {
-     image.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+     image.SetTransferSyntax( TransferSyntax::ImplicitVRLittleEndian );
      }
   image.SetNumberOfDimensions( 3 );
   image.SetDimension(0, dims[0] );
