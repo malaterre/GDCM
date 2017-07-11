@@ -28,7 +28,7 @@ static bool reorganize_mosaic_invert(unsigned short *input,
         {
         size_t outputidx = x + y*outputdims[0] + z*outputdims[0]*outputdims[1];
         size_t inputidx = (x + (z%square)*outputdims[0]) +
-          (y + (z/square)*outputdims[0])*inputdims[0];
+          (y + (z/square)*outputdims[1])*inputdims[0];
         input[ inputidx ] = output[ outputidx ];
         }
       }
