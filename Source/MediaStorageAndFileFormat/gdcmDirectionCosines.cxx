@@ -105,6 +105,18 @@ static inline double Norm(const double x[3])
   return sqrt(x[0]*x[0] + x[1]*x[1] + x[2]*x[2]);
 }
 
+void DirectionCosines::Normalize(double v[3])
+{
+  double den;
+  if ( (den = Norm(v)) != 0.0 )
+    {
+    for (int i=0; i < 3; i++)
+      {
+      v[i] /= den;
+      }
+    }
+}
+
 void DirectionCosines::Normalize()
 {
   double *x = Values;
