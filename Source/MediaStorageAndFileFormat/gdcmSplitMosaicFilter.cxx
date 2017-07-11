@@ -15,6 +15,7 @@
 #include "gdcmCSAHeader.h"
 #include "gdcmAttribute.h"
 #include "gdcmImageHelper.h"
+#include "gdcmDirectionCosines.h"
 
 #include <math.h>
 
@@ -110,7 +111,7 @@ bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
   return true;
 }
 
-bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double dims[3] )
+bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double slicenormalvector[3] )
 {
   CSAHeader csa;
   DataSet& ds = GetFile().GetDataSet();
@@ -130,15 +131,29 @@ bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double dims[3] )
         std::istringstream is;
         is.str( str );
         char sep;
-        double *snv = dims;
+        double *snv = slicenormalvector;
         if( is >> snv[0] >> sep >> snv[1] >> sep >> snv[2] )
         {
           snvfound = true;
         }
-
       }
     }
   }
+
+  if( snvfound )
+    {
+    gdcm::Attribute<0x20,0x37> iop;
+    iop.SetFromDataSet( ds );
+    gdcm::DirectionCosines dc( iop.GetValues() );
+    double z[3];
+    dc.Cross (z);
+    const double snv_dot = dc.Dot( slicenormalvector, z );
+    if( (1. - snv_dot) > 1e-6 )
+      {
+      gdcmDebugMacro("Inverted direction");
+      }
+    }
+
   return snvfound;
 }
 
