@@ -162,66 +162,20 @@ bool SplitMosaicFilter::ComputeMOSAICSlicePosition( double pos[3] )
   CSAHeader csa;
   DataSet& ds = GetFile().GetDataSet();
 
-  bool posfound[3] = { false, false, false };
-  const PrivateTag &t1 = csa.GetCSASeriesHeaderInfoTag();
-  //static const char mrphoenix[] = "MrPhoenixProtocol";
-  static const char mrphoenix[] = "MrProtocol";
-  if( csa.LoadFromDataElement( ds.GetDataElement( t1 ) ) )
-  {
-    if( csa.FindCSAElementByName( mrphoenix ) )
-    {
-      const CSAElement &mr_csa = csa.GetCSAElementByName( mrphoenix );
-      if( !mr_csa.IsEmpty() )
-      {
-        const ByteValue * bv = mr_csa.GetByteValue();
-        const std::string str(bv->GetPointer(), bv->GetLength());
-        //std::cout << str << std::endl;
-        std::istringstream is;
-        is.str( str );
-        std::string tmp;
-        while( std::getline( is, tmp ) ) 
-        {
-          const std::string ref1 = "sSliceArray.asSlice[0].sPosition.dSag";
-          const std::string ref2 = "sSliceArray.asSlice[0].sPosition.dCor";
-          const std::string ref3 = "sSliceArray.asSlice[0].sPosition.dTra";
-          /*
-           * sSliceArray.asSlice[0].sPosition.dSag    = 2.24891108
-           * sSliceArray.asSlice[0].sPosition.dCor    = -52.65585315
-           * sSliceArray.asSlice[0].sPosition.dTra    = -26.94105767
-           */
-          const std::string::size_type equalPos = tmp.find( '=' );
-          if(tmp.substr(0, ref1.size()) == ref1)
-          {
-            if ( equalPos != std::string::npos )
-            {
-              std::string value = tmp.substr( equalPos + 1 );
-              pos[0] = atof( value.c_str() );
-              posfound[0] = true;
-            }
-          }
-          else if(tmp.substr(0, ref2.size()) == ref2)
-          {
-            if ( equalPos != std::string::npos )
-            {
-              std::string value = tmp.substr( equalPos + 1 );
-              pos[1] = atof( value.c_str() );
-              posfound[1] = true;
-            }
-          }
-          else if(tmp.substr(0, ref3.size()) == ref3)
-          {
-            if ( equalPos != std::string::npos )
-            {
-              std::string value = tmp.substr( equalPos + 1 );
-              pos[2] = atof( value.c_str() );
-              posfound[2] = true;
-            }
-          }
-        }
-      }
-    }
-  }
-  return posfound[0] && posfound[1] && posfound[2];
+  const gdcm::MrProtocol *mrprot = csa.GetMrProtocol(ds);
+  if( !mrprot ) return false;
+
+  gdcm::MrProtocol::SliceArray sa;
+  bool b = mrprot->GetSliceArray(sa);
+  if( !b ) return false;
+
+  gdcm::MrProtocol::Slice & slice0 = sa.Slices[0];
+  gdcm::MrProtocol::Vector3 & p0 = slice0.Position;
+  pos[0] = p0.dSag;
+  pos[1] = p0.dCor;
+  pos[2] = p0.dTra;
+
+  return true;
 }
 
 bool SplitMosaicFilter::Split()
