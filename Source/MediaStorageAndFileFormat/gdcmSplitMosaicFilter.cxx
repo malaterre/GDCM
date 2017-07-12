@@ -196,11 +196,11 @@ bool SplitMosaicFilter::ComputeMOSAICSlicePosition( double pos[3], bool inverted
   CSAHeader csa;
   DataSet& ds = GetFile().GetDataSet();
 
-  const MrProtocol *mrprot = csa.GetMrProtocol(ds);
-  if( !mrprot ) return false;
+  MrProtocol mrprot;
+  if( !csa.GetMrProtocol(ds, mrprot) ) return false;
 
   MrProtocol::SliceArray sa;
-  bool b = mrprot->GetSliceArray(sa);
+  bool b = mrprot.GetSliceArray(sa);
   if( !b ) return false;
 
   int size = sa.Slices.size();

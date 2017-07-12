@@ -976,10 +976,10 @@ static int PrintMrProtocol(const std::string & filename)
 
   gdcm::CSAHeader csa;
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
-  const gdcm::MrProtocol *mrprot = csa.GetMrProtocol(ds);
-  if( mrprot )
+  gdcm::MrProtocol mrprot;
+  if( csa.GetMrProtocol(ds, mrprot))
   {
-    std::cout << *mrprot;
+    std::cout << mrprot;
   }
   else
   {

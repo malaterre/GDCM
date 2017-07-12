@@ -37,9 +37,10 @@ class GDCM_EXPORT MrProtocol
 {
   friend std::ostream& operator<<(std::ostream &_os, const MrProtocol &d);
 public :
-  MrProtocol( const ByteValue * bv, const char * str, int version );
+  MrProtocol();
   ~MrProtocol();
 
+  bool Load( const ByteValue * bv, const char * str, int version );
   void Print(std::ostream &os) const;
 
   int GetVersion() const;

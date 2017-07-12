@@ -1261,15 +1261,17 @@ const PrivateTag & CSAHeader::GetCSADataInfo()
   return t3;
 }
 
-const MrProtocol *CSAHeader::GetMrProtocol( const DataSet & ds )
+bool CSAHeader::GetMrProtocol( const DataSet & ds, MrProtocol & mrProtocol )
 {
   if(!ds.FindDataElement( t2 ) )
-    return 0;
-  LoadFromDataElement( ds.GetDataElement( t2 ) );
+    return false;
+  if( !LoadFromDataElement( ds.GetDataElement( t2 ) ) )
+    return false;
 
   //  28 - 'MrProtocolVersion' VM 1, VR IS, SyngoDT 6, NoOfItems 6, Data '21710006'
   int mrprotocolversion = 0;
   static const char version[] = "MrProtocolVersion";
+  // This is not an error if we do not find the version:
   if( FindCSAElementByName( version ) )
   {
     const CSAElement &csavers = GetCSAElementByName( version );
@@ -1287,7 +1289,7 @@ const MrProtocol *CSAHeader::GetMrProtocol( const DataSet & ds )
     "MrPhoenixProtocol" 
   };
   static const int n = sizeof candidates / sizeof * candidates;
-  const MrProtocol *ret = NULL;
+  bool found = false;
   for( int i = 0; i < n; ++i )
   {
     const char * candidate = candidates[i];
@@ -1298,12 +1300,14 @@ const MrProtocol *CSAHeader::GetMrProtocol( const DataSet & ds )
       const gdcm::CSAElement &csael = GetCSAElementByName( candidate );
       if( !csael.IsEmpty() )
       {
-        static const gdcm::MrProtocol mrpto(csael.GetByteValue(), candidate, mrprotocolversion);
-        ret = &mrpto;
+        if( mrProtocol.Load(csael.GetByteValue(), candidate, mrprotocolversion) )
+        {
+          found = true;
+        }
       }
     }
   }
-  return ret;
+  return found;
 }
 
 } // end namespace gdcm

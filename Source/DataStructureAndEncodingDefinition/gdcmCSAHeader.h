@@ -119,7 +119,8 @@ public :
   /// \warning Case Sensitive
   bool FindCSAElementByName(const char *name);
 
-  const MrProtocol *GetMrProtocol( const DataSet & ds );
+  /// Retrieve the ASCII portion stored within the MrProtocol/MrPhoenixProtocol:
+  bool GetMrProtocol( const DataSet & ds, MrProtocol & mrProtocol );
 
 protected:
   const CSAElement& GetCSAEEnd() const;

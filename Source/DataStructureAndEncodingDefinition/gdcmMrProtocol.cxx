@@ -34,17 +34,23 @@ static inline bool starts_with(const std::string& s1, const std::string& s2)
   return s2.size() <= s1.size() && s1.compare(0, s2.size(), s2) == 0;
 }
 
-MrProtocol::MrProtocol( const ByteValue * bv, const char * csastr, int version )
+MrProtocol::MrProtocol()
+{
+  Pimpl = new MrProtocol::Internals;
+}
+
+bool MrProtocol::Load( const ByteValue * bv, const char * csastr, int version )
 {
   if( bv )
   {
     std::string str(bv->GetPointer(), bv->GetLength());
     std::istringstream is(str);
     std::string s;
-    Pimpl = new MrProtocol::Internals;
     Pimpl->version = version;
     if( csastr ) Pimpl->csastr = csastr;
+    else Pimpl->csastr = "";
     MyMapType &mymap = Pimpl->mymap;
+    mymap.clear();
     static const char begin[] = "### ASCCONV BEGIN ###";
     static const char end[] = "### ASCCONV END ###";
     bool hasstarted = false;
@@ -74,8 +80,12 @@ MrProtocol::MrProtocol( const ByteValue * bv, const char * csastr, int version )
   }
   else
   {
-    Pimpl = NULL;
+    Pimpl->version = 0;
+    Pimpl->csastr = "";
+    Pimpl->mymap.clear();
+    return false;
   }
+  return true;
 }
 
 MrProtocol::~MrProtocol()
@@ -85,9 +95,7 @@ MrProtocol::~MrProtocol()
 
 int MrProtocol::GetVersion() const
 {
-  if( Pimpl )
-    return Pimpl->version;
-  return 0;
+  return Pimpl->version;
 }
 
 static inline std::string trim(std::string str)
@@ -99,7 +107,6 @@ static inline std::string trim(std::string str)
 
 void MrProtocol::Print(std::ostream &os) const
 {
-  if( Pimpl )
   {
     os << Pimpl->csastr << " / Version: " << Pimpl->version << std::endl;
     os << std::endl;

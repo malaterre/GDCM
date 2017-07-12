@@ -540,10 +540,10 @@ One can find it also in the protocol:
     return 1;
     }
 
-  const gdcm::MrProtocol *mrprot = csa.GetMrProtocol(ds);
-  if( mrprot != NULL )
+  gdcm::MrProtocol mrprot;
+  if(  csa.GetMrProtocol(ds, mrprot) )
   {
-    std::cout << *mrprot << std::endl;
+    std::cout << mrprot << std::endl;
   }
 
   return 0;

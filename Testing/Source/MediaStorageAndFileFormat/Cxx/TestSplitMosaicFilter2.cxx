@@ -102,15 +102,15 @@ int TestSplitMosaicFilter2(int argc, char *argv[])
 
   gdcm::CSAHeader csa;
   gdcm::DataSet & ds = reader.GetFile().GetDataSet();
-  const gdcm::MrProtocol *mrprot = csa.GetMrProtocol(ds);
-  if( mrprot == NULL )
+  gdcm::MrProtocol mrprot;
+  if( !csa.GetMrProtocol(ds, mrprot))
   {
     std::cerr << "No MrProtocol" << filename << std::endl;
     return 1;
   }
 
   gdcm::MrProtocol::SliceArray sa;
-  b = mrprot->GetSliceArray(sa);
+  b = mrprot.GetSliceArray(sa);
   if( !b || sa.Slices.size() != 31 )
   {
     return 1;
