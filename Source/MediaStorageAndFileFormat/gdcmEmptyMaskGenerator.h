@@ -14,6 +14,8 @@
 #ifndef GDCMEMPTYMASKGENERATOR_H
 #define GDCMEMPTYMASKGENERATOR_H
 
+#include "gdcmSubject.h"
+
 namespace gdcm {
 /**
  * \brief EmptyMaskGenerator
@@ -45,7 +47,7 @@ namespace gdcm {
  *   preserve the original Frame of Reference UID, altough it would have made
  *   sense here.
  */
-class EmptyMaskGenerator
+class GDCM_EXPORT EmptyMaskGenerator
 {
 public:
   EmptyMaskGenerator();
@@ -70,7 +72,7 @@ public:
   bool Execute();
 
 private:
-  class impl;
+  struct impl;
   // PIMPL idiom
   impl* pimpl;
 };
