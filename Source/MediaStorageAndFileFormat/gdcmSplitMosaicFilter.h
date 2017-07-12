@@ -47,6 +47,12 @@ public:
   /// stored in the MOSAIC header.
   bool ComputeMOSAICDimensions(unsigned int dims[3]);
 
+  /// Extract the value for SliceNormalVector (CSA header)
+  bool ComputeMOSAICSliceNormal( double dims[3], bool & inverted );
+
+  /// Extract the value for ImagePositionPatient (requires inverted flag)
+  bool ComputeMOSAICSlicePosition( double pos[3], bool inverted );
+
   void SetImage(const Image& image);
   const Image &GetImage() const { return *I; }
   Image &GetImage() { return *I; }

@@ -163,6 +163,13 @@ Orientation Label: SAGITTAL
 <para>Pay attention that this tool also checks the Image Lossy Compression attribute (0028,2110). This means <option>--check-compression</option> will also returns a value of lossy if a predecessor was found to be lossy compressed.</para>
 </refsection>
 </refsection>
+<refsection xml:id="gdcminfo_1mosaic">
+<title>Checking image as if MOSAIC</title>
+<para>Dump the image as if MOSAIC. If the input is really MOSAIC image, then print the information of the true underlying MOSAIC volume.</para>
+<para><literallayout>$ gdcminfo --mosaic siemens_mosaic.dcm
+</literallayout></para>
+
+</refsection>
 <refsection xml:id="gdcminfo_1see_also">
 <title>SEE ALSO</title>
 

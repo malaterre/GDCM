@@ -17,6 +17,7 @@
 #include "gdcmTypes.h"
 #include "gdcmDataSet.h"
 #include "gdcmCSAElement.h"
+#include "gdcmMrProtocol.h"
 
 namespace gdcm
 {
@@ -111,6 +112,9 @@ public :
   /// Return true if the CSA element matching 'name' is found or not
   /// \warning Case Sensitive
   bool FindCSAElementByName(const char *name);
+
+  /// Retrieve the ASCII portion stored within the MrProtocol/MrPhoenixProtocol:
+  bool GetMrProtocol( const DataSet & ds, MrProtocol & mrProtocol );
 
 protected:
   const CSAElement& GetCSAEEnd() const;

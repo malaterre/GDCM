@@ -540,5 +540,11 @@ One can find it also in the protocol:
     return 1;
     }
 
+  gdcm::MrProtocol mrprot;
+  if(  csa.GetMrProtocol(ds, mrprot) )
+  {
+    std::cout << mrprot << std::endl;
+  }
+
   return 0;
 }

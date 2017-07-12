@@ -103,6 +103,7 @@ set(MSFF_TEST_SRCS
 if(GDCM_DATA_ROOT)
   set(MSFF_TEST_SRCS
     ${MSFF_TEST_SRCS}
+    TestSplitMosaicFilter3
     TestStrictScanner1
     TestStrictScanner2
     TestScanner1
@@ -139,6 +140,7 @@ if(GDCM_DATA_EXTRA_ROOT)
   set(MSFF_TEST_SRCS
     ${MSFF_TEST_SRCS}
     TestSplitMosaicFilter
+    TestSplitMosaicFilter2
     TestOverlay2
     TestImageRegionReader4
     )
