@@ -72,7 +72,7 @@ public:
   bool Execute();
 
 private:
-  class impl;
+  struct impl;
   // PIMPL idiom
   impl* pimpl;
 };
