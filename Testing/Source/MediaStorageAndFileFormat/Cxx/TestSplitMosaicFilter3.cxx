@@ -21,29 +21,10 @@
 #include "gdcmElement.h"
 #include "gdcmDirectionCosines.h"
 
-int TestSplitMosaicFilter2(int argc, char *argv[])
+int TestSplitMosaicFilter3(int , char *[])
 {
-  std::string filename;
-  if( argc == 2 )
-    {
-    filename = argv[1];
-    }
-  else
-    {
-    const char *extradataroot = gdcm::Testing::GetDataExtraRoot();
-    if( !extradataroot )
-      {
-      return 1;
-      }
-    if( !gdcm::System::FileIsDirectory(extradataroot) )
-      {
-      std::cerr << "No such directory: " << extradataroot <<  std::endl;
-      return 1;
-      }
-
-    filename = extradataroot;
-    filename += "/gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm";
-    }
+  const char *directory = gdcm::Testing::GetDataRoot();
+  std::string filename = std::string(directory) + "/SIEMENS_MOSAIC_12BitsStored-16BitsJPEG.dcm";
   gdcm::SplitMosaicFilter s;
   if( !gdcm::System::FileExists(filename.c_str()) )
     {
@@ -69,10 +50,7 @@ int TestSplitMosaicFilter2(int argc, char *argv[])
     return 1;
   }
 
-  // SliceNormalVector is slightly less precise that sNormal:
-  //const double refnormal[3] = {-0.08193696,0.08808136,0.99273763};
-  // Value as read from sNormal (sSlice)
-  const double refnor[3] = { -0.08193693363, 0.08808135446, 0.992737636 };
+  const double refnor[3] = { -0.03737130908,-0.314588168,0.9484923141 };
   const double eps = 1e-6;
   gdcm::DirectionCosines dc;
   const double dot = dc.Dot( slicenormal, refnor );
@@ -90,7 +68,8 @@ int TestSplitMosaicFilter2(int argc, char *argv[])
     return 1;
   }
 
-  const double refpos[3] = { 2.24891108,-52.65585315,-26.94105767 };
+  const double refpos[3] = { -10.48860023,-7.82515782,-28.87523447 };
+
   for( int i = 0; i < 3; ++i ) 
   {
     if( std::fabs( refpos[i] - slicepos[i] ) > eps )
@@ -111,8 +90,9 @@ int TestSplitMosaicFilter2(int argc, char *argv[])
 
   gdcm::MrProtocol::SliceArray sa;
   b = mrprot->GetSliceArray(sa);
-  if( !b || sa.Slices.size() != 31 )
+  if( !b || sa.Slices.size() != 18 )
   {
+    std::cerr << "Size" << filename << std::endl;
     return 1;
   }
 
@@ -150,7 +130,7 @@ int TestSplitMosaicFilter2(int argc, char *argv[])
     return 1;
   }
 
-  for( int k = 0; k < 31; ++k )
+  for( int k = 0; k < 18; ++k )
   {
     gdcm::MrProtocol::Slice & slice = sa.Slices[k];
     gdcm::MrProtocol::Vector3 & nor = slice.Normal;
@@ -176,40 +156,13 @@ int TestSplitMosaicFilter2(int argc, char *argv[])
 
   unsigned int modims[3];
   b = filter.ComputeMOSAICDimensions( modims );
-  if( b ) return 1;
- 
-  // alternate code path:
-  gdcm::PrivateTag t2 (0x0019,0x0a, "SIEMENS MR HEADER");
-  if( ds.FindDataElement( t2 ) )
+  if(! b )
   {
+    std::cerr << "ComputeMOSAICDimensions: " << filename << std::endl;
     return 1;
-  }
-  else
-  {
-    // Create a fake one:
-    std::string creator = ds.GetPrivateCreator( t2 );
-    if( !creator.empty() ) return 1;
-    gdcm::Tag t3 (0x0019,0x10);
-    ano.Replace( t3, t2.GetOwner() );
-    gdcm::Element<gdcm::VR::US, gdcm::VM::VM1> elem;
-    elem.SetValue( 31 );
-    gdcm::DataElement de = elem.GetAsDataElement();
-    de.SetTag( t2 );
-    const uint16_t el = de.GetTag().GetElement();
-    de.GetTag().SetElement( 0x1000 + el );
-    if( de.GetVR() != gdcm::VR::US ) return 1;
-    ds.Insert( de );
-    creator = ds.GetPrivateCreator( de.GetTag() );
-    if( creator.empty() ) return 1;
   }
 
-  b = filter.ComputeMOSAICDimensions( modims );
-  if( !b )
-    {
-    std::cerr << "Could not ComputeMOSAICDimensions " << filename << std::endl;
-    return 1;
-    }
-  const unsigned int ref[3] = { 64u, 64u, 31u };
+  const unsigned int ref[3] = { 64u, 64u, 18u };
   if( modims[0] != ref[0] || modims[1] != ref[1] || modims[2] != ref[2] )
   {
     std::cerr << "Invalid ComputeMOSAICDimensions " << filename << std::endl;

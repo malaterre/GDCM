@@ -203,9 +203,30 @@ bool SplitMosaicFilter::ComputeMOSAICSlicePosition( double pos[3], bool inverted
   bool b = mrprot->GetSliceArray(sa);
   if( !b ) return false;
 
+  int size = sa.Slices.size();
+#if 0
+  {
+    double z[3];
+    for( int i = 0; i < size; ++i )
+    {
+      MrProtocol::Slice & slice = sa.Slices[i];
+      MrProtocol::Vector3 & p = slice.Position;
+      z[0] = p.dSag;
+      z[1] = p.dCor;
+      z[2] = p.dTra;
+      const double snv_dot = DirectionCosines::Dot( slicenormalvector, z );
+      if( (1. - snv_dot) < 1e-6 )
+      {
+        gdcmErrorMacro("Invalid direction found");
+        return false;
+      }
+    }
+  }
+#endif
+
   int index = 0;
   if( inverted )
-    index = sa.Slices.size() - 1;
+    index = size - 1;
   MrProtocol::Slice & slice = sa.Slices[index];
   MrProtocol::Vector3 & p = slice.Position;
   pos[0] = p.dSag;
