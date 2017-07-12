@@ -46,6 +46,26 @@ static bool reorganize_mosaic(const unsigned short *input, const unsigned int *i
     }
   return true;
 }
+
+static bool reorganize_mosaic_invert(const unsigned short *input, const unsigned int *inputdims,
+  unsigned int square, const unsigned int *outputdims, unsigned short *output )
+{
+  for(unsigned int x = 0; x < outputdims[0]; ++x)
+    {
+    for(unsigned int y = 0; y < outputdims[1]; ++y)
+      {
+      for(unsigned int z = 0; z < outputdims[2]; ++z)
+        {
+        const size_t outputidx = x + y*outputdims[0] + (outputdims[2]-1-z)*outputdims[0]*outputdims[1];
+        const size_t inputidx = (x + (z%square)*outputdims[0]) +
+          (y + (z/square)*outputdims[1])*inputdims[0];
+        output[ outputidx ] = input[ inputidx ];
+        }
+      }
+    }
+  return true;
+}
+
 }
 
 void SplitMosaicFilter::SetImage(const Image& image)
@@ -140,20 +160,6 @@ bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double slicenormalvector[3] )
     }
   }
 
-  if( snvfound )
-    {
-    Attribute<0x20,0x37> iop;
-    iop.SetFromDataSet( ds );
-    DirectionCosines dc( iop.GetValues() );
-    double z[3];
-    dc.Cross (z);
-    const double snv_dot = dc.Dot( slicenormalvector, z );
-    if( (1. - snv_dot) > 1e-6 )
-      {
-      gdcmDebugMacro("Inverted direction");
-      }
-    }
-
   return snvfound;
 }
 
@@ -188,12 +194,46 @@ bool SplitMosaicFilter::Split()
     {
     return false;
     }
-  unsigned int div = (unsigned int )ceil(sqrt( (double)dims[2]) );
-
+  const unsigned int div = (unsigned int )ceil(sqrt( (double)dims[2]) );
+  double origin[3];
+  if( !ComputeMOSAICSlicePosition( origin ) )
+  {
+    return false;
+  }
+  double normal[3];
+  if( !ComputeMOSAICSliceNormal( normal ) )
+  {
+    return false;
+  }
+  bool inverted;
+  {
+    Attribute<0x20,0x37> iop;
+    iop.SetFromDataSet( ds );
+    DirectionCosines dc( iop.GetValues() );
+    double z[3];
+    dc.Cross (z);
+    const double snv_dot = dc.Dot( normal, z );
+    if( (1. - snv_dot) < 1e-6 )
+    {
+      gdcmDebugMacro("Same direction");
+      inverted = false;
+    }
+    else if( (-1. - snv_dot) < 1e-6 )
+    {
+      gdcmDebugMacro("Inverted direction");
+      inverted = true;
+    }
+    else
+    {
+      gdcmErrorMacro( "Unexpected normal: dot is: " << snv_dot );
+      return false;
+    }
+  }
+ 
   const Image &inputimage = GetImage();
   if( inputimage.GetPixelFormat() != PixelFormat::UINT16 )
     {
-    gdcmDebugMacro( "Expecting UINT16 PixelFormat" );
+    gdcmErrorMacro( "Expecting UINT16 PixelFormat" );
     return false;
     }
   unsigned long l = inputimage.GetBufferLength();
@@ -205,9 +245,19 @@ bool SplitMosaicFilter::Split()
   std::vector<char> outbuf;
   outbuf.resize(l);
 
-  bool b = details::reorganize_mosaic(
-    (unsigned short*)&buf[0], inputimage.GetDimensions(), div, dims,
-    (unsigned short*)&outbuf[0] );
+  bool b;
+  if( inverted )
+  {
+    b = details::reorganize_mosaic_invert(
+        (unsigned short*)&buf[0], inputimage.GetDimensions(), div, dims,
+        (unsigned short*)&outbuf[0] );
+  }
+  else
+  {
+    b = details::reorganize_mosaic(
+        (unsigned short*)&buf[0], inputimage.GetDimensions(), div, dims,
+        (unsigned short*)&outbuf[0] );
+  }
   if( !b ) return false;
 
   VL::Type outbufSize = (VL::Type)outbuf.size();
@@ -228,19 +278,8 @@ bool SplitMosaicFilter::Split()
   image.SetDimension(1, dims[1] );
   image.SetDimension(2, dims[2] );
 
-  // Fix origin/direction:
-  double origin[3];
-  if( !ComputeMOSAICSlicePosition( origin ) )
-  {
-    return false;
-  }
+  // Fix origin (direction is ok since we reorganize the tiles):
   image.SetOrigin( origin );
-  double normal[3];
-  if( !ComputeMOSAICSliceNormal( normal ) )
-  {
-    return false;
-  }
-  //image.SetDirectionCosines( normal );
 
   PhotometricInterpretation pi;
   pi = PhotometricInterpretation::MONOCHROME2;
