@@ -48,10 +48,10 @@ public:
   bool ComputeMOSAICDimensions(unsigned int dims[3]);
 
   /// Extract the value for SliceNormalVector (CSA header)
-  bool ComputeMOSAICSliceNormal( double dims[3] );
+  bool ComputeMOSAICSliceNormal( double dims[3], bool & inverted );
 
   /// Extract the value for ImagePositionPatient
-  bool ComputeMOSAICSlicePosition( double pos[3] );
+  bool ComputeMOSAICSlicePosition( double pos[3], bool inverted );
 
   void SetImage(const Image& image);
   const Image &GetImage() const { return *I; }

@@ -131,11 +131,12 @@ bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
   return true;
 }
 
-bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double slicenormalvector[3] )
+bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double slicenormalvector[3], bool & inverted )
 {
   CSAHeader csa;
   DataSet& ds = GetFile().GetDataSet();
 
+  double normal[3];
   bool snvfound = false;
   const PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
   static const char snvstr[] = "SliceNormalVector";
@@ -151,7 +152,7 @@ bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double slicenormalvector[3] )
         std::istringstream is;
         is.str( str );
         char sep;
-        double *snv = slicenormalvector;
+        double *snv = normal;
         if( is >> snv[0] >> sep >> snv[1] >> sep >> snv[2] )
         {
           snvfound = true;
@@ -159,53 +160,7 @@ bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double slicenormalvector[3] )
       }
     }
   }
-
-  return snvfound;
-}
-
-bool SplitMosaicFilter::ComputeMOSAICSlicePosition( double pos[3] )
-{
-  CSAHeader csa;
-  DataSet& ds = GetFile().GetDataSet();
-
-  const MrProtocol *mrprot = csa.GetMrProtocol(ds);
-  if( !mrprot ) return false;
-
-  MrProtocol::SliceArray sa;
-  bool b = mrprot->GetSliceArray(sa);
-  if( !b ) return false;
-
-  MrProtocol::Slice & slice0 = sa.Slices[0];
-  MrProtocol::Vector3 & p0 = slice0.Position;
-  pos[0] = p0.dSag;
-  pos[1] = p0.dCor;
-  pos[2] = p0.dTra;
-
-  return true;
-}
-
-bool SplitMosaicFilter::Split()
-{
-  bool success = true;
-  DataSet& ds = GetFile().GetDataSet();
-
-  unsigned int dims[3] = {0,0,0};
-  if( ! ComputeMOSAICDimensions( dims ) )
-    {
-    return false;
-    }
-  const unsigned int div = (unsigned int )ceil(sqrt( (double)dims[2]) );
-  double origin[3];
-  if( !ComputeMOSAICSlicePosition( origin ) )
-  {
-    return false;
-  }
-  double normal[3];
-  if( !ComputeMOSAICSliceNormal( normal ) )
-  {
-    return false;
-  }
-  bool inverted;
+  if( snvfound )
   {
     Attribute<0x20,0x37> iop;
     iop.SetFromDataSet( ds );
@@ -230,6 +185,59 @@ bool SplitMosaicFilter::Split()
     }
   }
  
+  for( int i = 0; i < 3; ++i)
+    slicenormalvector[i] = normal[i];
+
+  return snvfound;
+}
+
+bool SplitMosaicFilter::ComputeMOSAICSlicePosition( double pos[3], bool inverted )
+{
+  CSAHeader csa;
+  DataSet& ds = GetFile().GetDataSet();
+
+  const MrProtocol *mrprot = csa.GetMrProtocol(ds);
+  if( !mrprot ) return false;
+
+  MrProtocol::SliceArray sa;
+  bool b = mrprot->GetSliceArray(sa);
+  if( !b ) return false;
+
+  int index = 0;
+  if( inverted )
+    index = sa.Slices.size() - 1;
+  MrProtocol::Slice & slice = sa.Slices[index];
+  MrProtocol::Vector3 & p = slice.Position;
+  pos[0] = p.dSag;
+  pos[1] = p.dCor;
+  pos[2] = p.dTra;
+
+  return true;
+}
+
+bool SplitMosaicFilter::Split()
+{
+  bool success = true;
+  DataSet& ds = GetFile().GetDataSet();
+
+  unsigned int dims[3] = {0,0,0};
+  if( ! ComputeMOSAICDimensions( dims ) )
+    {
+    return false;
+    }
+  const unsigned int div = (unsigned int )ceil(sqrt( (double)dims[2]) );
+  bool inverted;
+  double normal[3];
+  if( !ComputeMOSAICSliceNormal( normal, inverted ) )
+  {
+    return false;
+  }
+  double origin[3];
+  if( !ComputeMOSAICSlicePosition( origin, inverted ) )
+  {
+    return false;
+  }
+
   const Image &inputimage = GetImage();
   if( inputimage.GetPixelFormat() != PixelFormat::UINT16 )
     {
