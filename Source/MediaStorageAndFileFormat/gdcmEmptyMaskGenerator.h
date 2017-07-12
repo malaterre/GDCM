@@ -14,6 +14,8 @@
 #ifndef GDCMEMPTYMASKGENERATOR_H
 #define GDCMEMPTYMASKGENERATOR_H
 
+#include "gdcmSubject.h"
+
 namespace gdcm {
 /**
  * \brief EmptyMaskGenerator
