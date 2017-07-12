@@ -45,7 +45,7 @@ namespace gdcm {
  *   preserve the original Frame of Reference UID, altough it would have made
  *   sense here.
  */
-class EmptyMaskGenerator
+class GDCM_EXPORT EmptyMaskGenerator
 {
 public:
   EmptyMaskGenerator();
