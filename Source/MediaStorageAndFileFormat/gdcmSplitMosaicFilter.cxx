@@ -191,7 +191,7 @@ bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double slicenormalvector[3], b
   return snvfound;
 }
 
-bool SplitMosaicFilter::ComputeMOSAICSlicePosition( double pos[3], bool inverted )
+bool SplitMosaicFilter::ComputeMOSAICSlicePosition( double pos[3], bool )
 {
   CSAHeader csa;
   DataSet& ds = GetFile().GetDataSet();
@@ -226,8 +226,6 @@ bool SplitMosaicFilter::ComputeMOSAICSlicePosition( double pos[3], bool inverted
 #endif
 
   size_t index = 0;
-  if( inverted )
-    index = size - 1;
   MrProtocol::Slice & slice = sa.Slices[index];
   MrProtocol::Vector3 & p = slice.Position;
   pos[0] = p.dSag;
