@@ -53,6 +53,7 @@ bool MD5::Compute(const char *buffer, size_t buf_len, char digest_str[33])
   digest_str[2*16] = '\0';
   return true;
 #else
+  (void)digest_str;
   return false;
 #endif
 }
