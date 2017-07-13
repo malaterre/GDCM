@@ -48,7 +48,6 @@ protected:
   friend class QueryFactory;
   BaseQuery();
 
-  std::string mHelpDescription; //used when generating the help output
   std::string mSopInstanceUID;
 
   void SetSearchParameter(const Tag& inTag, const DictEntry& inDictEntry, const std::string& inValue);
