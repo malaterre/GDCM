@@ -756,7 +756,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
     assert( refvr & VR::VRASCII );
     if( bv )
       {
-      unsigned int count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
+      size_t count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
       guessvm = VM::GetVMTypeFromLength(count, 1); // hackish...
       }
     }

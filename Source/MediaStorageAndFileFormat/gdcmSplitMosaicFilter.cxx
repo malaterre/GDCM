@@ -203,7 +203,8 @@ bool SplitMosaicFilter::ComputeMOSAICSlicePosition( double pos[3], bool inverted
   bool b = mrprot.GetSliceArray(sa);
   if( !b ) return false;
 
-  int size = sa.Slices.size();
+  size_t size = sa.Slices.size();
+  if( !size ) return false;
 #if 0
   {
     double z[3];
@@ -224,7 +225,7 @@ bool SplitMosaicFilter::ComputeMOSAICSlicePosition( double pos[3], bool inverted
   }
 #endif
 
-  int index = 0;
+  size_t index = 0;
   if( inverted )
     index = size - 1;
   MrProtocol::Slice & slice = sa.Slices[index];
