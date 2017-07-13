@@ -217,7 +217,7 @@ bool EmptyMaskGenerator::impl::populateattributes( const char * filename, File c
     seriesinstanceuid.SetValue( it->second.c_str() );
     std::map< std::string, std::string >::difference_type diff =
       std::distance(seriesuidhash.begin(),it);
-    seriesnumber.SetValue( 1 + diff ); // Start at one
+    seriesnumber.SetValue( 1 + (int)diff ); // Start at one
     }
   ds.Insert( seriesinstanceuid.GetAsDataElement() );
   ds.Insert( seriesnumber.GetAsDataElement() );
@@ -380,11 +380,11 @@ bool EmptyMaskGenerator::impl::run(const char * filename, const char * outfile)
     return false;
     }
     {
-    const int chunk = 4096;
+    const unsigned int chunk = 4096u;
     char bytes[chunk] = {};
-    const int nchunks = buflen / chunk;
-    const int remain = buflen % chunk;
-    for( int i = 0; i < nchunks; ++i )
+    const unsigned int nchunks = (unsigned int)( buflen / chunk);
+    const unsigned int remain = buflen % chunk;
+    for( unsigned int i = 0; i < nchunks; ++i )
       {
       // Read the source file into a byte array.
       fs.AppendToDataElement( pixeldata, bytes, chunk );
