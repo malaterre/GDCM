@@ -274,6 +274,7 @@ bool SplitMosaicFilter::Split()
   outbuf.resize(l);
 
   bool b;
+/*
   if( inverted )
   {
     b = details::reorganize_mosaic_invert(
@@ -281,6 +282,7 @@ bool SplitMosaicFilter::Split()
         (unsigned short*)&outbuf[0] );
   }
   else
+*/
   {
     b = details::reorganize_mosaic(
         (unsigned short*)&buf[0], inputimage.GetDimensions(), div, dims,
