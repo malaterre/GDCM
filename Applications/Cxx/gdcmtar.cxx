@@ -37,6 +37,8 @@
 #include "gdcmScanner.h"
 #include "gdcmIPPSorter.h"
 #include "gdcmAttribute.h"
+#include "gdcmAnonymizer.h"
+#include "gdcmTagKeywords.h"
 
 #include <string>
 #include <iostream>
@@ -1265,6 +1267,13 @@ int main (int argc, char *argv[])
     const double *origin = image.GetOrigin();
     double zspacing = image.GetSpacing(2);
 
+    gdcm::Anonymizer ano;
+    ano.SetFile( reader.GetFile() );
+    // Remove CSA header
+    ano.RemovePrivateTags();
+
+    namespace kwd = gdcm::Keywords;
+    gdcm::DataSet & ds = reader.GetFile().GetDataSet();
     for(unsigned int i = 0; i < dims[2]; ++i)
       {
       double new_origin[3];
@@ -1276,6 +1285,12 @@ int main (int argc, char *argv[])
         }
 
       const char *outfilenamei = fg.GetFilename(i);
+      kwd::SliceLocation sl;
+      sl.SetValue( new_origin[2] );
+      ds.Replace( sl.GetAsDataElement() );
+      kwd::InstanceNumber in;
+      in.SetValue( 1 + i ); // Start at 1
+      ds.Replace( in.GetAsDataElement() );
       gdcm::ImageWriter writer;
       writer.SetFileName( outfilenamei );
       //writer.SetFile( filter.GetFile() );

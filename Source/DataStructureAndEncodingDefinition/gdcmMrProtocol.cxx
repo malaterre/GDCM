@@ -51,7 +51,11 @@ bool MrProtocol::Load( const ByteValue * bv, const char * csastr, int version )
     else Pimpl->csastr = "";
     MyMapType &mymap = Pimpl->mymap;
     mymap.clear();
-    static const char begin[] = "### ASCCONV BEGIN ###";
+    // Need to handle both:
+    // ### ASCCONV BEGIN ###
+    // as well as:
+    // ### ASCCONV BEGIN object=MrProtDataImpl@MrProtocolData version=41310008 converter=%MEASCONST%/ConverterList/Prot_Converter.txt ###
+    static const char begin[] = "### ASCCONV BEGIN ";
     static const char end[] = "### ASCCONV END ###";
     bool hasstarted = false;
     while( std::getline(is, s ) )
@@ -66,9 +70,9 @@ bool MrProtocol::Load( const ByteValue * bv, const char * csastr, int version )
       if( pos != std::string::npos )
       {
         std::string sub1 = s.substr(0, pos);
-        sub1.erase( sub1.find_last_not_of(' ') + 1);
+        sub1.erase( sub1.find_last_not_of(" \t") + 1);
         std::string sub2 = s.substr(pos+1); // skip the '=' char
-        sub2.erase( 0, sub2.find_first_not_of(' '));
+        sub2.erase( 0, sub2.find_first_not_of(" \t"));
         mymap.insert( MyMapType::value_type(sub1, sub2) );
       }
       else

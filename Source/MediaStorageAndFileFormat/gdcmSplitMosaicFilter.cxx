@@ -16,6 +16,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmImageHelper.h"
 #include "gdcmDirectionCosines.h"
+#include "gdcmAnonymizer.h"
 
 #include <math.h>
 
@@ -47,6 +48,7 @@ static bool reorganize_mosaic(const unsigned short *input, const unsigned int *i
   return true;
 }
 
+#ifdef SNVINVERT
 static bool reorganize_mosaic_invert(const unsigned short *input, const unsigned int *inputdims,
   unsigned int square, const unsigned int *outputdims, unsigned short *output )
 {
@@ -65,6 +67,7 @@ static bool reorganize_mosaic_invert(const unsigned short *input, const unsigned
     }
   return true;
 }
+#endif
 
 }
 
@@ -175,12 +178,12 @@ bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double slicenormalvector[3], b
     }
     else if( (-1. - snv_dot) < 1e-6 )
     {
-      gdcmDebugMacro("Inverted direction");
+      gdcmWarningMacro("SliceNormalVector is opposite direction");
       inverted = true;
     }
     else
     {
-      gdcmErrorMacro( "Unexpected normal: dot is: " << snv_dot );
+      gdcmErrorMacro( "Unexpected normal for SliceNormalVector, dot is: " << snv_dot );
       return false;
     }
   }
@@ -274,6 +277,7 @@ bool SplitMosaicFilter::Split()
   outbuf.resize(l);
 
   bool b;
+#ifdef SNVINVERT
   if( inverted )
   {
     b = details::reorganize_mosaic_invert(
@@ -281,6 +285,7 @@ bool SplitMosaicFilter::Split()
         (unsigned short*)&outbuf[0] );
   }
   else
+#endif
   {
     b = details::reorganize_mosaic(
         (unsigned short*)&buf[0], inputimage.GetDimensions(), div, dims,
