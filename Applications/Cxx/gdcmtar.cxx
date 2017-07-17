@@ -39,6 +39,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmAnonymizer.h"
 #include "gdcmTagKeywords.h"
+#include "gdcmMrProtocol.h"
 
 #include <string>
 #include <iostream>
@@ -1248,8 +1249,7 @@ int main (int argc, char *argv[])
     const unsigned int *dims = image.GetDimensions();
     const gdcm::DataElement &pixeldata = image.GetDataElement();
     const gdcm::ByteValue *bv = pixeldata.GetByteValue();
-    unsigned long slice_len = image.GetBufferLength() / dims[2];
-    //assert( image.GetBufferLength() == bv->GetLength() );
+    size_t slice_len = image.GetBufferLength() / dims[2];
 
     gdcm::FilenameGenerator fg;
     fg.SetNumberOfFilenames( dims[2] );
@@ -1267,21 +1267,45 @@ int main (int argc, char *argv[])
     const double *origin = image.GetOrigin();
     double zspacing = image.GetSpacing(2);
 
+    gdcm::CSAHeader csa;
+    gdcm::DataSet & ds = reader.GetFile().GetDataSet();
+
+    gdcm::MrProtocol mrprot;
+    if( !csa.GetMrProtocol(ds, mrprot) ) return 1;
+
+    gdcm::MrProtocol::SliceArray sa;
+    b = mrprot.GetSliceArray(sa);
+    if( !b ) return 1;
+
+    size_t size = sa.Slices.size();
+    if( !size ) return 1;
+
     gdcm::Anonymizer ano;
     ano.SetFile( reader.GetFile() );
     // Remove CSA header
     ano.RemovePrivateTags();
 
+    double slicePos[3];
     namespace kwd = gdcm::Keywords;
-    gdcm::DataSet & ds = reader.GetFile().GetDataSet();
     for(unsigned int i = 0; i < dims[2]; ++i)
       {
+      gdcm::MrProtocol::Slice & protSlice = sa.Slices[i];
+      gdcm::MrProtocol::Vector3 & protV = protSlice.Position;
+      slicePos[0] = protV.dSag;
+      slicePos[1] = protV.dCor;
+      slicePos[2] = protV.dTra;
+
       double new_origin[3];
       for (int j = 0; j < 3; j++)
         {
         // the n'th slice is n * z-spacing aloung the IOP-derived
         // z-axis
         new_origin[j] = origin[j] + normal[j] * i * zspacing;
+        if( std::fabs(slicePos[j] - new_origin[j]) > 1e-3 )
+          {
+          gdcmErrorMacro("Invalid position found");
+          return 1;
+          }
         }
 
       const char *outfilenamei = fg.GetFilename(i);
