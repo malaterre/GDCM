@@ -345,11 +345,6 @@ bool SplitMosaicFilter::Split()
   de.SetVR( Attribute<0x0008, 0x0016>::GetVR() );
   ds.Replace( de );
 
-  // Cleanup output otherwise may confuse reader upon re-reading generated files
-  Anonymizer ano;
-  ano.SetFile( GetFile() );
-  if( !ano.RemovePrivateTags() ) return false;
-
   return success;
 }
 
