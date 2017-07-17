@@ -26,7 +26,6 @@
 // "There is no option to suppress all SWIG warning messages."
 #pragma SWIG nowarn=302,303,312,362,383,389,401,503,504,509,510,514,516
 %{
-#define SWIG_PYTHON_STRICT_BYTE_CHAR
 #include <cstddef> // ptrdiff_t
 #include "gdcmTypes.h"
 #include "gdcmASN1.h"
