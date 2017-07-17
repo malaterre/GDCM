@@ -176,12 +176,12 @@ bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double slicenormalvector[3], b
     }
     else if( (-1. - snv_dot) < 1e-6 )
     {
-      gdcmDebugMacro("Inverted direction");
+      gdcmWarningMacro("SliceNormalVector is opposite direction");
       inverted = true;
     }
     else
     {
-      gdcmErrorMacro( "Unexpected normal: dot is: " << snv_dot );
+      gdcmErrorMacro( "Unexpected normal for SliceNormalVector, dot is: " << snv_dot );
       return false;
     }
   }
