@@ -1286,14 +1286,19 @@ int main (int argc, char *argv[])
     ano.RemovePrivateTags();
 
     double slicePos[3];
+    double sliceNor[3];
     namespace kwd = gdcm::Keywords;
     for(unsigned int i = 0; i < dims[2]; ++i)
       {
       gdcm::MrProtocol::Slice & protSlice = sa.Slices[i];
       gdcm::MrProtocol::Vector3 & protV = protSlice.Position;
+      gdcm::MrProtocol::Vector3 & protN = protSlice.Normal;
       slicePos[0] = protV.dSag;
       slicePos[1] = protV.dCor;
       slicePos[2] = protV.dTra;
+      sliceNor[0] = protN.dSag;
+      sliceNor[1] = protN.dCor;
+      sliceNor[2] = protN.dTra;
 
       double new_origin[3];
       for (int j = 0; j < 3; j++)
@@ -1305,6 +1310,12 @@ int main (int argc, char *argv[])
           {
           gdcmErrorMacro("Invalid position found");
           return 1;
+          }
+        const double snv_dot = gdcm::DirectionCosines::Dot( normal, sliceNor );
+        if( (1. - snv_dot) < 1e-6 )
+          {
+          gdcmErrorMacro("Invalid direction found");
+          return false;
           }
         }
 
