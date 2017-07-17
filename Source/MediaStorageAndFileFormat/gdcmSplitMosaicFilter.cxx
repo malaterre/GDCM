@@ -48,6 +48,7 @@ static bool reorganize_mosaic(const unsigned short *input, const unsigned int *i
   return true;
 }
 
+#ifdef SNVINVERT
 static bool reorganize_mosaic_invert(const unsigned short *input, const unsigned int *inputdims,
   unsigned int square, const unsigned int *outputdims, unsigned short *output )
 {
@@ -66,6 +67,7 @@ static bool reorganize_mosaic_invert(const unsigned short *input, const unsigned
     }
   return true;
 }
+#endif
 
 }
 
@@ -275,7 +277,7 @@ bool SplitMosaicFilter::Split()
   outbuf.resize(l);
 
   bool b;
-/*
+#ifdef SNVINVERT
   if( inverted )
   {
     b = details::reorganize_mosaic_invert(
@@ -283,7 +285,7 @@ bool SplitMosaicFilter::Split()
         (unsigned short*)&outbuf[0] );
   }
   else
-*/
+#endif
   {
     b = details::reorganize_mosaic(
         (unsigned short*)&buf[0], inputimage.GetDimensions(), div, dims,
