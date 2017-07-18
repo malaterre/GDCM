@@ -68,6 +68,7 @@ static void PrintHelp()
   std::cout << "     --enhance    enhance (default)" << std::endl;
   std::cout << "  -U --unenhance  unenhance" << std::endl;
   std::cout << "  -M --mosaic     Split SIEMENS Mosaic image into multiple frames." << std::endl;
+  std::cout << "     --mosaic-private When splitting SIEMENS Mosaic image into multiple frames, ppreserve private attributes (advanced user only)." << std::endl;
   std::cout << "  -p --pattern    Specify trailing file pattern." << std::endl;
   std::cout << "     --root-uid        Root UID." << std::endl;
   //std::cout << "     --resources-path     Resources path." << std::endl;
@@ -960,6 +961,7 @@ int main (int argc, char *argv[])
   std::string root;
   int resourcespath = 0;
   int mosaic = 0;
+  int mosaic_private = 0;
   int enhance = 1;
   int unenhance = 0;
   std::string xmlpath;
@@ -984,6 +986,7 @@ int main (int argc, char *argv[])
         {"unenhance", 0, &unenhance, 1},               // unenhance
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
         //{"resources-path", 0, &resourcespath, 1},
+        {"mosaic-private", 0, &mosaic_private, 1}, // keep private attributes
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -1280,20 +1283,34 @@ int main (int argc, char *argv[])
     size_t size = sa.Slices.size();
     if( !size ) return 1;
 
-    gdcm::Anonymizer ano;
-    ano.SetFile( reader.GetFile() );
-    // Remove CSA header
-    ano.RemovePrivateTags();
+    if( !mosaic_private )
+    {
+      gdcm::Anonymizer ano;
+      ano.SetFile( reader.GetFile() );
+      // Remove CSA header
+      ano.RemovePrivateTags();
+    }
 
     double slicePos[3];
+    double sliceNor[3];
     namespace kwd = gdcm::Keywords;
+    gdcm::UIDGenerator ug;
+
+    kwd::InstanceNumber instart;
+    instart.Set(ds);
+    int istart = instart.GetValue();
+
     for(unsigned int i = 0; i < dims[2]; ++i)
       {
       gdcm::MrProtocol::Slice & protSlice = sa.Slices[i];
       gdcm::MrProtocol::Vector3 & protV = protSlice.Position;
+      gdcm::MrProtocol::Vector3 & protN = protSlice.Normal;
       slicePos[0] = protV.dSag;
       slicePos[1] = protV.dCor;
       slicePos[2] = protV.dTra;
+      sliceNor[0] = protN.dSag;
+      sliceNor[1] = protN.dCor;
+      sliceNor[2] = protN.dTra;
 
       double new_origin[3];
       for (int j = 0; j < 3; j++)
@@ -1306,14 +1323,24 @@ int main (int argc, char *argv[])
           gdcmErrorMacro("Invalid position found");
           return 1;
           }
+        const double snv_dot = gdcm::DirectionCosines::Dot( normal, sliceNor );
+        if( std::fabs(1. - snv_dot) > 1e-6 )
+          {
+          gdcmErrorMacro("Invalid direction found");
+          return false;
+          }
         }
+
+      kwd::SOPInstanceUID sid;
+      sid.SetValue( ug.Generate() );
+      ds.Replace( sid.GetAsDataElement() );
 
       const char *outfilenamei = fg.GetFilename(i);
       kwd::SliceLocation sl;
       sl.SetValue( new_origin[2] );
       ds.Replace( sl.GetAsDataElement() );
       kwd::InstanceNumber in;
-      in.SetValue( 1 + i ); // Start at 1
+      in.SetValue( istart + i ); // Start at mosaic instance number
       ds.Replace( in.GetAsDataElement() );
       gdcm::ImageWriter writer;
       writer.SetFileName( outfilenamei );
