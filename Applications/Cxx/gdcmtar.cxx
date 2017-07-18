@@ -1318,7 +1318,7 @@ int main (int argc, char *argv[])
           return 1;
           }
         const double snv_dot = gdcm::DirectionCosines::Dot( normal, sliceNor );
-        if( (1. - snv_dot) < 1e-6 )
+        if( std::fabs(1. - snv_dot) > 1e-6 )
           {
           gdcmErrorMacro("Invalid direction found");
           return false;
