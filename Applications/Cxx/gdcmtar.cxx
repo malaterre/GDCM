@@ -68,6 +68,7 @@ static void PrintHelp()
   std::cout << "     --enhance    enhance (default)" << std::endl;
   std::cout << "  -U --unenhance  unenhance" << std::endl;
   std::cout << "  -M --mosaic     Split SIEMENS Mosaic image into multiple frames." << std::endl;
+  std::cout << "     --mosaic-private When splitting SIEMENS Mosaic image into multiple frames, ppreserve private attributes (advanced user only)." << std::endl;
   std::cout << "  -p --pattern    Specify trailing file pattern." << std::endl;
   std::cout << "     --root-uid        Root UID." << std::endl;
   //std::cout << "     --resources-path     Resources path." << std::endl;
@@ -960,6 +961,7 @@ int main (int argc, char *argv[])
   std::string root;
   int resourcespath = 0;
   int mosaic = 0;
+  int mosaic_private = 0;
   int enhance = 1;
   int unenhance = 0;
   std::string xmlpath;
@@ -984,6 +986,7 @@ int main (int argc, char *argv[])
         {"unenhance", 0, &unenhance, 1},               // unenhance
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
         //{"resources-path", 0, &resourcespath, 1},
+        {"mosaic-private", 0, &mosaic_private, 1}, // keep private attributes
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -1280,10 +1283,13 @@ int main (int argc, char *argv[])
     size_t size = sa.Slices.size();
     if( !size ) return 1;
 
-    gdcm::Anonymizer ano;
-    ano.SetFile( reader.GetFile() );
-    // Remove CSA header
-    ano.RemovePrivateTags();
+    if( !mosaic_private )
+    {
+      gdcm::Anonymizer ano;
+      ano.SetFile( reader.GetFile() );
+      // Remove CSA header
+      ano.RemovePrivateTags();
+    }
 
     double slicePos[3];
     double sliceNor[3];
