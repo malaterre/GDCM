@@ -1288,6 +1288,12 @@ int main (int argc, char *argv[])
     double slicePos[3];
     double sliceNor[3];
     namespace kwd = gdcm::Keywords;
+    gdcm::UIDGenerator ug;
+
+    kwd::InstanceNumber instart;
+    instart.Set(ds);
+    int istart = instart.GetValue();
+
     for(unsigned int i = 0; i < dims[2]; ++i)
       {
       gdcm::MrProtocol::Slice & protSlice = sa.Slices[i];
@@ -1319,12 +1325,16 @@ int main (int argc, char *argv[])
           }
         }
 
+      kwd::SOPInstanceUID sid;
+      sid.SetValue( ug.Generate() );
+      ds.Replace( sid.GetAsDataElement() );
+
       const char *outfilenamei = fg.GetFilename(i);
       kwd::SliceLocation sl;
       sl.SetValue( new_origin[2] );
       ds.Replace( sl.GetAsDataElement() );
       kwd::InstanceNumber in;
-      in.SetValue( 1 + i ); // Start at 1
+      in.SetValue( istart + i ); // Start at mosaic instance number
       ds.Replace( in.GetAsDataElement() );
       gdcm::ImageWriter writer;
       writer.SetFileName( outfilenamei );
