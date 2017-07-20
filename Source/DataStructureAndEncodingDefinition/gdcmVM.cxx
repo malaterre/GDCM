@@ -324,7 +324,7 @@ bool VM::IsValid(int vm1, VMType vm2)
 
 // This function should not be used in production code.
 // Indeed this only return a 'guess' at the VM (ie. a lower bound)
-VM::VMType VM::GetVMTypeFromLength(unsigned int length, unsigned int size)
+VM::VMType VM::GetVMTypeFromLength(size_t length, unsigned int size)
 {
   // Check first of length is a indeed a multiple of size and that length is != 0
   if ( !length || length % size ) return VM::VM0;

@@ -125,7 +125,7 @@ public:
   bool Compatible(VM const &vm) const;
 
   ///
-  static VMType GetVMTypeFromLength(unsigned int length, unsigned int size);
+  static VMType GetVMTypeFromLength(size_t length, unsigned int size);
   static size_t GetNumberOfElementsFromArray(const char *array, size_t length);
 
   VM(VMType type = VM0):VMField(type) {}
