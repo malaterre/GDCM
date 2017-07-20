@@ -65,12 +65,12 @@ static void PrintHelp()
   std::cout << "  -i --input     DICOM filename" << std::endl;
   std::cout << "  -o --output    DICOM filename" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "     --enhance    enhance (default)" << std::endl;
-  std::cout << "  -U --unenhance  unenhance" << std::endl;
-  std::cout << "  -M --mosaic     Split SIEMENS Mosaic image into multiple frames." << std::endl;
-  std::cout << "     --mosaic-private When splitting SIEMENS Mosaic image into multiple frames, ppreserve private attributes (advanced user only)." << std::endl;
-  std::cout << "  -p --pattern    Specify trailing file pattern." << std::endl;
-  std::cout << "     --root-uid        Root UID." << std::endl;
+  std::cout << "     --enhance        Enhance (default)" << std::endl;
+  std::cout << "  -U --unenhance      Unenhance" << std::endl;
+  std::cout << "  -M --mosaic         Split SIEMENS Mosaic image into multiple frames." << std::endl;
+  std::cout << "     --mosaic-private When splitting SIEMENS Mosaic image into multiple frames, preserve private attributes (advanced user only)." << std::endl;
+  std::cout << "  -p --pattern        Specify trailing file pattern." << std::endl;
+  std::cout << "     --root-uid       Root UID." << std::endl;
   //std::cout << "     --resources-path     Resources path." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
@@ -1327,7 +1327,7 @@ int main (int argc, char *argv[])
         if( std::fabs(1. - snv_dot) > 1e-6 )
           {
           gdcmErrorMacro("Invalid direction found");
-          return false;
+          return 1;
           }
         }
 

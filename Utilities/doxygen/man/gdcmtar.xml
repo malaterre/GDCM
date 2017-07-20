@@ -40,12 +40,12 @@ file-out  DICOM output filename
 <refsection xml:id="gdcmtar_1specific_options">
 <title>specific options</title>
 
-<para><literallayout>     --enhance    enhance (default)
-  -U --unenhance  unenhance
-  -M --mosaic     Split SIEMENS Mosaic image into multiple frames.
-     --mosaic-private When splitting SIEMENS Mosaic image into multiple frames, ppreserve private attributes (advanced user only).
-  -p --pattern    Specify trailing file pattern.
-     --root-uid        Root UID.
+<para><literallayout>     --enhance        Enhance (default)
+  -U --unenhance      Unenhance
+  -M --mosaic         Split SIEMENS Mosaic image into multiple frames.
+     --mosaic-private When splitting SIEMENS Mosaic image into multiple frames, preserve private attributes (advanced user only).
+  -p --pattern        Specify trailing file pattern.
+     --root-uid       Root UID.
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmtar_1general_options">
@@ -139,7 +139,7 @@ NumberOfDimensions: 2
 Dimensions: (64,64,1)
 ...
 </literallayout></para>
-<para>By default all private attributes are removed since they may not match the newly generated SOP Instance. One way to preserver the private attributes is to use the --mosaic-private command line option</para>
+<para>By default all private attributes are removed since they may not match the newly generated SOP Instance. One way to preserve the private attributes is to use the --mosaic-private command line option</para>
 <para><literallayout>$ gdcmtar --mosaic --mosaic-private -i MR-sonata-3D-as-Tile.dcm -o mosaic --pattern %03d.dcm
 </literallayout></para>
 
