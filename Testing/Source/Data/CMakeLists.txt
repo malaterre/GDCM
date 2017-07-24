@@ -68,6 +68,8 @@ set(BLACK_LIST_READER
   LengthOfItemLarger.dcm
 # https://github.com/team-charls/charls/issues/16
   JPEG_LS_InvalidEscapeSequence_COM_padding.dcm
+# MITRA_CORNELL
+  MITRA_CORNELL.dcm
 )
 if(NOT GDCM_USE_PVRG)
   set(BLACK_LIST_READER
