@@ -65,6 +65,7 @@ set(EXAMPLES_SRCS
   LargeVRDSExplicit
   ExtractEncryptedContent
   ReadAndDumpDICOMDIR
+  #ReadAndDumpDICOMDIR2 # commented out since requires C++11
   GenerateStandardSOPClasses
   ClinicalTrialAnnotate
   CheckBigEndianBug
