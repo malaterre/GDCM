@@ -1311,6 +1311,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         el.Read( ss );
         for(unsigned int i = 0; i < el.GetLength(); ++i)
           sp.push_back( el.GetValue(i) );
+        std::swap( sp[0], sp[1]);
         assert( sp.size() == (unsigned int)entry.GetVM() );
         }
       break;
