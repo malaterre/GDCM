@@ -65,6 +65,7 @@ set(EXAMPLES_SRCS
   LargeVRDSExplicit
   ExtractEncryptedContent
   ReadAndDumpDICOMDIR
+  ReadAndDumpDICOMDIR2
   GenerateStandardSOPClasses
   ClinicalTrialAnnotate
   CheckBigEndianBug
