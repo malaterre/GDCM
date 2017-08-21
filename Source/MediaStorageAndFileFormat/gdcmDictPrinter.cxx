@@ -80,7 +80,7 @@ VM GuessVMType(DataElement const &de)
           {
           assert( bv && "not bv" );
           const char *array = bv->GetPointer();
-          unsigned int c = VM::GetNumberOfElementsFromArray(array, vl);
+          size_t c = VM::GetNumberOfElementsFromArray(array, vl);
           vm = VM::GetVMTypeFromLength( c, 1 );
           }
         }
