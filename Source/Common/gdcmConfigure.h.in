@@ -166,4 +166,7 @@
 
 #cmakedefine GDCM_ALWAYS_TRACE_MACRO
 
+/* ITK Specific */
+#cmakedefine GDCM_USE_COREFOUNDATION_LIBRARY
+
 #endif

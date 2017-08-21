@@ -543,7 +543,10 @@ set(GDCM_EXECUTABLE_DIR ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_CFG_INTDIR})
 #-----------------------------------------------------------------------------
 # we need to link against CoreFoundation so that we can use CFBundle to get the executable path.
 if(APPLE)
-  find_library(COREFOUNDATION_LIBRARY CoreFoundation )
+  option(GDCM_USE_COREFOUNDATION_LIBRARY "Use COREFOUNDATION_LIBRARY?" ON)
+  if(GDCM_USE_COREFOUNDATION_LIBRARY)
+    find_library(COREFOUNDATION_LIBRARY CoreFoundation )
+  endif()
 endif()
 
 #-----------------------------------------------------------------------------
