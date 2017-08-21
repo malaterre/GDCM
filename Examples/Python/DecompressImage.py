@@ -31,6 +31,11 @@ if __name__ == "__main__":
   if not r.Read():
     sys.exit(1)
 
+  # check GetFragment API:
+  pd = r.GetFile().GetDataSet().GetDataElement(gdcm.Tag(0x7fe0, 0x0010))
+  frags = pd.GetSequenceOfFragments();
+  frags.GetFragment(0);
+
   image = gdcm.Image()
   ir = r.GetImage()
 
