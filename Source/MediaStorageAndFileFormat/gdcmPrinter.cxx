@@ -757,7 +757,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
     if( bv )
       {
       size_t count = VM::GetNumberOfElementsFromArray(bv->GetPointer(), bv->GetLength());
-      guessvm = VM::GetVMTypeFromLength(count, 1); // hackish...
+      guessvm = VM::GetVMTypeFromLength((unsigned int)count, 1); // hackish...
       }
     }
   else if( refvr & VR::VRBINARY )
