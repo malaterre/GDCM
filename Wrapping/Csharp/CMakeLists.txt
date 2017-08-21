@@ -28,6 +28,9 @@ SWIG_LINK_LIBRARIES(gdcmsharpglue gdcmMSFF
   gdcmMEXD
 )
 set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
+if(UNIX)
+set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
+endif()
 set_property(TARGET ${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTY NO_SONAME 1)
 
 # Module are always place in the library destination but for poor win32 user I
