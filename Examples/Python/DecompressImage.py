@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
   #  Just for fun:
   dircos =  ir.GetDirectionCosines()
-  t = gdcm.Orientation.GetType(dircos)
+  t = gdcm.Orientation.GetType(tuple(dircos))
   l = gdcm.Orientation.GetLabel(t)
   print "Orientation label:",l
 
