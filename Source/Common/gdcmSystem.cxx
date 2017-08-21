@@ -42,9 +42,9 @@
 #elif defined(GDCM_HAVE__SNPRINTF)
 #define snprintf _snprintf
 #endif
-#ifdef __APPLE__
+#ifdef GDCM_USE_COREFOUNDATION_LIBRARY
 #include <CoreFoundation/CoreFoundation.h>
-#endif // __APPLE__
+#endif
 
 #if defined(_WIN32) && (defined(_MSC_VER) || defined(__WATCOMC__) ||defined(__BORLANDC__) || defined(__MINGW32__))
 #include <io.h>
@@ -421,7 +421,7 @@ const char *System::GetCurrentProcessFileName()
     {
     return buf;
     }
-#elif defined(__APPLE__)
+#elif defined(GDCM_USE_COREFOUNDATION_LIBRARY)
   static char buf[PATH_MAX];
   Boolean success = false;
   CFURLRef pathURL = CFBundleCopyExecutableURL(CFBundleGetMainBundle());
@@ -490,7 +490,7 @@ const char *System::GetCurrentModuleFileName()
 
 const char *System::GetCurrentResourcesDirectory()
 {
-#ifdef __APPLE__
+#ifdef GDCM_USE_COREFOUNDATION_LIBRARY
   static char path[PATH_MAX];
   Boolean success = false;
   CFURLRef pathURL = CFBundleCopyResourcesDirectoryURL(CFBundleGetMainBundle());
