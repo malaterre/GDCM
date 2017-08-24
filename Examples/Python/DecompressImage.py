@@ -36,8 +36,9 @@ if __name__ == "__main__":
   frags = pd.GetSequenceOfFragments();
   frags.GetFragment(0);
 
-  image = gdcm.Image()
   ir = r.GetImage()
+  w = gdcm.ImageWriter()
+  image = w.GetImage()
 
   image.SetNumberOfDimensions( ir.GetNumberOfDimensions() );
   dims = ir.GetDimensions();
@@ -66,7 +67,6 @@ if __name__ == "__main__":
   pixeldata.SetByteValue( str1, gdcm.VL( len(str1) ) )
   image.SetDataElement( pixeldata )
 
-  w = gdcm.ImageWriter()
   w.SetFileName( file2 )
   w.SetFile( r.GetFile() )
   w.SetImage( image )
