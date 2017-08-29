@@ -77,11 +77,11 @@ public :
     ZEROED_OUT
   } CSAHeaderType;
 
-  GDCM_LEGACY(template <typename TSwap>
-  std::istream &Read(std::istream &is));
+  template <typename TSwap>
+  GDCM_LEGACY(std::istream &Read(std::istream &is));
 
-  GDCM_LEGACY(template <typename TSwap>
-  const std::ostream &Write(std::ostream &os) const);
+  template <typename TSwap>
+  GDCM_LEGACY(const std::ostream &Write(std::ostream &os) const);
 
   /// Decode the CSAHeader from element 'de'
   bool LoadFromDataElement(DataElement const &de);
