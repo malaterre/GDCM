@@ -35,6 +35,8 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "bootstrap class path not set in conjunction with"
   "warning CS1699"
   "has been explicitly marked deprecated here"
+  # clang-6.0: warning: the object size sanitizer has no effect at -O0, but is explicitly enabled: -fsanitize=float-cast-overflow,integer-divide-by-zero,null,object-size,return,shift,signed-integer-overflow,unreachable,vla-bound [-Winvalid-command-line-argument]
+  "the object size sanitizer has no effect at"
   )
 
 # Disable dynamic analysis on some tests:
