@@ -553,12 +553,12 @@ std::string StringFilter::FromString(const Tag&t, const char * value, size_t len
     return s;
     }
   VL::Type castLen = (VL::Type)len;
-  VL::Type count = VM::GetNumberOfElementsFromArray(value, castLen);
+  size_t count = VM::GetNumberOfElementsFromArray(value, castLen);
   VL vl = vm.GetLength() * vr.GetSizeof();
   if( vm.GetLength() == 0 )
     {
     // VM1_n
-    vl = count * vr.GetSizeof();
+    vl = (VL)( (VL)count * vr.GetSizeof());
 #if !defined(NDEBUG)
     VM check  = VM::GetVMTypeFromLength(count, 1);
     assert( vm.Compatible( check ) );
