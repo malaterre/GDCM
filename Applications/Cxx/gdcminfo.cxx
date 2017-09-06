@@ -194,7 +194,11 @@ static std::string getInfoDate(Dict *infoDict, const char *key)
   //char buf[256];
   std::string out;
 
+#ifdef LIBPOPPLER_NEW_OBJECT_API
+  if ((obj = infoDict->lookup((char*)key)).isString())
+#else
   if (infoDict->lookup((char*)key, &obj)->isString())
+#endif
     {
     s = obj.getString()->getCString();
     if (s[0] == 'D' && s[1] == ':')
@@ -242,7 +246,9 @@ static std::string getInfoDate(Dict *infoDict, const char *key)
         out = date;
       }
     }
+#ifndef LIBPOPPLER_NEW_OBJECT_API
   obj.free();
+#endif
   return out;
 }
 
@@ -256,7 +262,11 @@ static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uM
   int i, n;
   std::string out;
 
+#ifdef LIBPOPPLER_NEW_OBJECT_API
+  if ((obj = infoDict->lookup((char*)key)).isString())
+#else
   if (infoDict->lookup((char*)key, &obj)->isString())
+#endif
     {
     s1 = obj.getString();
     if ((s1->getChar(0) & 0xff) == 0xfe &&
@@ -288,7 +298,9 @@ static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uM
       out.append( std::string(buf, n) );
       }
     }
+#ifndef LIBPOPPLER_NEW_OBJECT_API
   obj.free();
+#endif
   return out;
 }
 #endif
@@ -452,7 +464,11 @@ static int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs
     MemStream *appearStream;
 
     appearStream = new MemStream((char*)bv->GetPointer(), 0,
+#ifdef LIBPOPPLER_NEW_OBJECT_API
+      bv->GetLength(), std::move(appearDict));
+#else
       bv->GetLength(), &appearDict);
+#endif
     GooString *ownerPW, *userPW;
     ownerPW = NULL;
     userPW = NULL;
@@ -480,7 +496,11 @@ static int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs
     Object info;
     if (doc->isOk())
       {
+#ifdef LIBPOPPLER_NEW_OBJECT_API
+      info = doc->getDocInfo();
+#else
       doc->getDocInfo(&info);
+#endif
       if (info.isDict())
         {
         title        = getInfoString(info.getDict(), "Title",    uMap);
@@ -491,7 +511,9 @@ static int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs
         producer     = getInfoString(info.getDict(), "Producer", uMap);
         creationdate = getInfoDate(  info.getDict(), "CreationDate"  );
         moddate      = getInfoDate(  info.getDict(), "ModDate"       );
+#ifndef LIBPOPPLER_NEW_OBJECT_API
         info.free();
+#endif
         }
 #ifdef LIBPOPPLER_CATALOG_HAS_STRUCTTREEROOT
       const char *tagged = doc->getStructTreeRoot() ? "yes" : "no";

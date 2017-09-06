@@ -84,6 +84,12 @@ if(GDCM_USE_SYSTEM_POPPLER)
   if(LIBPOPPLER_CATALOG_HAS_STRUCTTREEROOT)
     list(APPEND libpoppler_flags -DLIBPOPPLER_CATALOG_HAS_STRUCTTREEROOT)
   endif()
+  CHECK_CXX_SOURCE_COMPILES(
+      "\#include <poppler/Object.h>\nint main() { Object o(42); }"
+    LIBPOPPLER_NEW_OBJECT_API)
+if(LIBPOPPLER_NEW_OBJECT_API)
+    list(APPEND libpoppler_flags -DLIBPOPPLER_NEW_OBJECT_API)
+  endif()
   if(libpoppler_flags)
     string(REPLACE ";" " " libpoppler_flags_string "${libpoppler_flags}")
     set_source_files_properties(
