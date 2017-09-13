@@ -984,6 +984,7 @@ static int PrintMrProtocol(const std::string & filename)
   else
   {
     std::cout << "Could not find MrProtocol/MrPhoenixProtocol ASCII section" << std::endl;
+    return 1;
   }
 
   return 0;
