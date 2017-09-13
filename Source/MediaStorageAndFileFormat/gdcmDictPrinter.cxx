@@ -23,6 +23,7 @@ namespace gdcm
 //-----------------------------------------------------------------------------
 DictPrinter::DictPrinter()
 {
+  PrintStyle = XML;
 }
 
 //-----------------------------------------------------------------------------
@@ -429,7 +430,7 @@ std::string GetOwner(DataSet const &ds, DataElement const &de)
    return ds.GetPrivateCreator(de.GetTag());
 }
 
-void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const DataElement &de)
+void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const DataElement &de, PrintStyles ps)
 {
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
@@ -466,17 +467,33 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
       }
     VM vm = GuessVMType(de);
 
-    os <<
-      "<entry group=\"" << std::hex << std::setw(4) << std::setfill('0') <<
-      t.GetGroup() << "\" element=\"" << std::setw(4) << ((uint16_t)(t.GetElement() << 8) >> 8) << "\" ";
-
-    os <<  "vr=\"" << pvr << "\" vm=\"" << vm << "\" ";
-    //os <<  "\" retired=\"false\";
+    if( ps == XML )
+    {
+      os <<
+        "<entry group=\"" << std::hex << std::setw(4) << std::setfill('0') <<
+        t.GetGroup() << "\" element=\"" << std::setw(4) << ((uint16_t)(t.GetElement() << 8) >> 8) << "\" ";
+      os <<  "vr=\"" << pvr << "\" vm=\"" << vm << "\" ";
     if( de.GetTag().IsPrivate() )
       {
       os << "name=\"?\" owner=\"" << owner
         << /*"\"  version=\"" << version << */ "\"/>\n";
       }
+    }
+    else if ( ps == CXX )
+    {
+      os <<
+        "{0x" << std::hex << std::setw(4) << std::setfill('0') <<
+        t.GetGroup() << ",0x" << std::setw(4) << ((uint16_t)(t.GetElement() << 8) >> 8) << ",";
+      if( de.GetTag().IsPrivate() )
+      {
+        os << "\"" << owner
+          << "\",";
+      }
+      std::string vm_str = VM::GetVMString(vm);
+      std::replace( vm_str.begin(), vm_str.end(), '-', '_');
+      os << "VR::" << pvr << ",VM::VM" << vm_str << ",\"??\",false},\n";
+    }
+
     //os << "\n  <description>?</description>\n";
     //os << "</entry>\n";
     //os << "/>\n";
@@ -513,7 +530,7 @@ void DictPrinter::PrintDataSet2(std::ostream& os, const DataSet &ds)
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
-    PrintDataElement2(os, ds, de);
+    PrintDataElement2(os, ds, de, PrintStyle);
     }
 }
 

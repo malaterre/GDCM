@@ -29,11 +29,28 @@ public:
   DictPrinter();
   ~DictPrinter();
 
+  typedef enum {
+    XML, // default
+    CXX
+  } PrintStyles;
+
   void Print(std::ostream& os);
 
+  /// Set PrintStyle value
+  void SetStyle(PrintStyles ps) {
+    PrintStyle = ps;
+  }
+
+  /// Get PrintStyle value
+  PrintStyles GetPrintStyle() const {
+    return PrintStyle;
+  }
+
 protected:
-  void PrintDataElement2(std::ostream& os, const DataSet &ds, const DataElement &ide);
+  void PrintDataElement2(std::ostream& os, const DataSet &ds, const DataElement &ide, PrintStyles ps);
   void PrintDataSet2(std::ostream& os, const DataSet &ds);
+private:
+  PrintStyles PrintStyle;
 };
 
 } // end namespace gdcm
