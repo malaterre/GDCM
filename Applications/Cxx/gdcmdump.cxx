@@ -977,17 +977,31 @@ static int PrintMrProtocol(const std::string & filename)
   gdcm::CSAHeader csa;
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
   gdcm::MrProtocol mrprot;
+  const gdcm::PrivateTag att1(0x21,0x19,"SIEMENS MR SDS 01");
+  bool found = false;
   if( csa.GetMrProtocol(ds, mrprot))
   {
-    std::cout << mrprot;
+    found = true;
+  }
+  else if( ds.FindDataElement( att1) )
+  {
+    const gdcm::DataElement &data = ds.GetDataElement( att1 );
+    const gdcm::ByteValue *bv = data.GetByteValue();
+    static const char csastr[] = "PhoenixMetaProtocol"; // FIXME
+    if( mrprot.Load( bv, csastr, -1))
+      found = true;
   }
   else
   {
-    std::cout << "Could not find MrProtocol/MrPhoenixProtocol ASCII section" << std::endl;
-    return 1;
+    found = false;
   }
 
-  return 0;
+  if( found )
+    std::cout << mrprot;
+  else
+    std::cerr << "Could not find MrProtocol/MrPhoenixProtocol ASCII section" << std::endl;
+
+  return found ? 0 : 1;
 }
 
 
