@@ -467,7 +467,7 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
       }
     VM vm = GuessVMType(de);
 
-    if( ps == XML )
+    if( PrintStyle == XML )
     {
       os <<
         "<entry group=\"" << std::hex << std::setw(4) << std::setfill('0') <<
@@ -479,7 +479,7 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
         << /*"\"  version=\"" << version << */ "\"/>\n";
       }
     }
-    else if ( ps == CXX )
+    else if ( PrintStyle == CXX )
     {
       os <<
         "{0x" << std::hex << std::setw(4) << std::setfill('0') <<
