@@ -93,9 +93,18 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       return false;
       }
     }
-  if( frames.size() > 1 ) // Should I really tolerate no Frame of Reference UID ?
+  const size_t fsize = frames.size(); // Should I really tolerate issue with Frame of Reference UID ?
+  if( fsize == 1 ) // by the book
     {
-    gdcmDebugMacro( "More than one Frame Of Reference UID" );
+    // TODO: need to check not empty ? technically PMS used to send MR Image Storage with empty FoR
+    }
+  else if( fsize == 0 || fsize == filenames.size() ) // Should I really tolerate no Frame of Reference UID ?
+    {
+    gdcmWarningMacro( "Odd number of Frame Of Reference UID (continuing with caution): " << fsize );
+    }
+  else
+    {
+    gdcmErrorMacro( "Sorry your setup with Frame Of Reference UID does not make any sense: " << fsize );
     return false;
     }
 

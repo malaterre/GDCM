@@ -63,6 +63,18 @@ bool MrProtocol::Load( const ByteValue * bv, const char * csastr, int version )
       if( !hasstarted )
       {
         hasstarted = starts_with(s, begin);
+        if( hasstarted ) {
+          if( version == -1 ) {
+            // find version if not specified:
+            static const char vers[] = "version=";
+            std::string::size_type p = s.find(vers);
+            if ( p != std::string::npos) {
+              const char *v = s.c_str() + p + sizeof(vers) - 1;
+              Pimpl->version = atoi(v);
+            }
+          }
+          continue; // do not insert ASCCONV begin
+        }
       }
       if( !hasstarted ) continue;
       if( starts_with(s, end) ) break;

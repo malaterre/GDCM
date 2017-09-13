@@ -43,7 +43,11 @@ static std::string getInfoDate(Dict *infoDict, const char *key)
   //char buf[256];
   std::string out;
 
+#ifdef LIBPOPPLER_NEW_OBJECT_API
+  if ((obj = infoDict->lookup((char*)key)).isString())
+#else
   if (infoDict->lookup((char*)key, &obj)->isString())
+#endif
     {
     s = obj.getString()->getCString();
     if (s[0] == 'D' && s[1] == ':')
@@ -91,7 +95,9 @@ static std::string getInfoDate(Dict *infoDict, const char *key)
         out = date;
       }
     }
+#ifndef LIBPOPPLER_NEW_OBJECT_API
   obj.free();
+#endif
   return out;
 }
 
@@ -105,7 +111,11 @@ static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uM
   int i, n;
   std::string out;
 
+#ifdef LIBPOPPLER_NEW_OBJECT_API
+  if ((obj = infoDict->lookup((char*)key)).isString())
+#else
   if (infoDict->lookup((char*)key, &obj)->isString())
+#endif
     {
     s1 = obj.getString();
     if ((s1->getChar(0) & 0xff) == 0xfe &&
@@ -137,7 +147,9 @@ static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uM
       out.append( std::string(buf, n) );
       }
     }
+#ifndef LIBPOPPLER_NEW_OBJECT_API
   obj.free();
+#endif
   unicode = unicode || isUnicode;
   return out;
 }
@@ -340,7 +352,9 @@ int main (int argc, char *argv[])
   //ownerPW = new GooString( "toto" );
   Object obj;
 
+#ifndef LIBPOPPLER_NEW_OBJECT_API
   obj.initNull();
+#endif
   doc = new PDFDoc(fileName, ownerPW, userPW);
 
   if (doc->isEncrypted())
@@ -386,7 +400,11 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
   GBool isUnicode = gFalse;
   if (doc->isOk())
     {
+#ifdef LIBPOPPLER_NEW_OBJECT_API
+    info = doc->getDocInfo();
+#else
     doc->getDocInfo(&info);
+#endif
     if (info.isDict())
       {
       title        = getInfoString(info.getDict(), "Title",    uMap, isUnicode);
@@ -397,7 +415,9 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
       producer     = getInfoString(info.getDict(), "Producer", uMap, isUnicode);
       creationdate = getInfoDate(  info.getDict(), "CreationDate"  );
       moddate      = getInfoDate(  info.getDict(), "ModDate"       );
+#ifndef LIBPOPPLER_NEW_OBJECT_API
       info.free();
+#endif
       }
     }
 

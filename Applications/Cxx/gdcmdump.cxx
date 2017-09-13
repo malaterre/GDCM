@@ -49,6 +49,7 @@
 #include "gdcmASN1.h"
 #include "gdcmAttribute.h"
 #include "gdcmBase64.h"
+#include "gdcmTagKeywords.h"
 
 #include <string>
 #include <iostream>
@@ -977,16 +978,55 @@ static int PrintMrProtocol(const std::string & filename)
   gdcm::CSAHeader csa;
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
   gdcm::MrProtocol mrprot;
+  const gdcm::PrivateTag att1(0x21,0x19,"SIEMENS MR SDS 01");
+  const gdcm::PrivateTag att2(0x21,0xfe,"SIEMENS MR SDS 01");
+  bool found = false;
+  namespace kwd = gdcm::Keywords;
+  kwd::SharedFunctionalGroupsSequence sfgs;
   if( csa.GetMrProtocol(ds, mrprot))
   {
-    std::cout << mrprot;
+    found = true;
   }
-  else
+  else if( ds.FindDataElement( att1) )
   {
-    std::cout << "Could not find MrProtocol/MrPhoenixProtocol ASCII section" << std::endl;
+    const gdcm::DataElement &data = ds.GetDataElement( att1 );
+    const gdcm::ByteValue *bv = data.GetByteValue();
+    static const char csastr[] = "PhoenixMetaProtocol"; // FIXME
+    if( mrprot.Load( bv, csastr, -1))
+      found = true;
+  }
+  // SIEMENS now supports Enhanced MR
+  else if( ds.FindDataElement( sfgs.GetTag() ) )
+  {
+    const gdcm::DataElement &shared = ds.GetDataElement( sfgs.GetTag() );
+    gdcm::SmartPointer<gdcm::SequenceOfItems> sqi = shared.GetValueAsSQ();
+    if( sqi != NULL && sqi->GetNumberOfItems() == 1 ) {
+      gdcm::Item &item = sqi->GetItem(1);
+      gdcm::DataSet & subds = item.GetNestedDataSet();
+      if( subds.FindDataElement( att2) ) {
+        const gdcm::DataElement &privsq = subds.GetDataElement( att2 );
+        gdcm::SmartPointer<gdcm::SequenceOfItems> sqi2 = privsq.GetValueAsSQ();
+        if( sqi2 != NULL && sqi2->GetNumberOfItems() == 1 ) {
+          gdcm::Item &item2 = sqi2->GetItem(1);
+          gdcm::DataSet & subds2 = item2.GetNestedDataSet();
+          if( subds2.FindDataElement( att1) ) {
+            const gdcm::DataElement &data = subds2.GetDataElement( att1 );
+            const gdcm::ByteValue *bv = data.GetByteValue();
+            static const char csastr[] = "PhoenixMetaProtocol"; // FIXME
+            if( mrprot.Load( bv, csastr, -1))
+              found = true;
+          }
+        }
+      }
+    }
   }
 
-  return 0;
+  if( found )
+    std::cout << mrprot;
+  else
+    std::cerr << "Could not find MrProtocol/MrPhoenixProtocol ASCII section" << std::endl;
+
+  return found ? 0 : 1;
 }
 
 
