@@ -109,7 +109,12 @@ before_build:
   - ctest -D ExperimentalStart -C %CONFIG%
 
 # scripts to run after build
-#after_build:
+after_build:
+  # create NSIS installer
+  - cpack -G NSIS -C %CONFIG%
+  # create binary zip
+  - cpack -G ZIP -C %CONFIG%
+  # no need for source release on github
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
@@ -129,9 +134,9 @@ test_script:
 #---------------------------------#
 
 artifacts:
-  - path: GDCM-2.9.0-$(B_NAME).exe
+  - path: GDCM-*-$(B_NAME).exe
     name: installer
-  - path: GDCM-2.9.0-$(B_NAME).zip
+  - path: GDCM-*-$(B_NAME).zip
     name: zip_executable
     type: zip
 
@@ -140,12 +145,7 @@ artifacts:
 #---------------------------------#
 
 # scripts to run before deployment
-before_deploy:
-  # create NSIS installer
-  - cpack -G NSIS -C %CONFIG%
-  # create binary zip
-  - cpack -G ZIP -C %CONFIG%
-  # no need for source release on github
+#before_deploy:
 
 # scripts to run after deployment
 #after_deploy:
@@ -162,9 +162,7 @@ deploy:
   - provider: GitHub
     auth_token:
       secure: 7HmfZp9O7bVdQo2hRk6FjOUs7jJosftv2rZ6JPBNzjPcAOMXDTvLqv3lvzdAzBfy
-    #release: v$(appveyor_build_version) # name of the tag used
-    release: v2.9.0 # name of the tag used
-    #release: $(appveyor_repo_tag_name)
+    release: v2.9.0
     description: 'Beta release of GDCM v$(appveyor_build_version)'
     # github automatically does source zip/tarball for us
     artifact: installer,zip_executable
