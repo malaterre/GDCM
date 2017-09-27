@@ -430,7 +430,7 @@ std::string GetOwner(DataSet const &ds, DataElement const &de)
    return ds.GetPrivateCreator(de.GetTag());
 }
 
-void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const DataElement &de, PrintStyles ps)
+void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const DataElement &de)
 {
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
@@ -530,7 +530,7 @@ void DictPrinter::PrintDataSet2(std::ostream& os, const DataSet &ds)
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
-    PrintDataElement2(os, ds, de, PrintStyle);
+    PrintDataElement2(os, ds, de);
     }
 }
 
