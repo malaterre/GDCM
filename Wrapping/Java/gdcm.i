@@ -310,8 +310,7 @@ EXTEND_CLASS_PRINT(gdcm::PixelFormat)
 //%include "enumtypesafe.swg" // optional as typesafe enums are the default
 
 EXTEND_CLASS_PRINT(gdcm::MediaStorage)
-//%rename(__getitem__) gdcm::Tag::operator[];
-//%rename(this ) gdcm::Tag::operator[];
+%rename(equals) gdcm::Tag::operator==;
 %include "gdcmTag.h"
 EXTEND_CLASS_PRINT(gdcm::Tag)
 %include "gdcmPrivateTag.h"
