@@ -77,10 +77,10 @@ add_custom_command(
 # 2. now that the *.class have been generated construct the jar file. We can
 # only rely on the gdcm.java / gdcm.class to build dependencie, I am pretty
 # sure it will break parallel builds... oh well
-  COMMAND ${Java_JAR_EXECUTABLE} ARGS cvf ${GDCM_LIBRARY_DIR}/gdcm.jar gdcm/*.class
+  COMMAND ${Java_JAR_EXECUTABLE} ARGS cf ${GDCM_LIBRARY_DIR}/gdcm.jar gdcm/*.class
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
   DEPENDS "${swig_generated_file_fullname}"
-  COMMENT "javac *.java; jar cvf -> gdcm.jar"
+  COMMENT "javac *.java; jar cf -> gdcm.jar"
 )
 
 # 3. ok now add the target
