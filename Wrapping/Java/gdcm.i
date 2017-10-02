@@ -311,8 +311,29 @@ EXTEND_CLASS_PRINT(gdcm::PixelFormat)
 
 EXTEND_CLASS_PRINT(gdcm::MediaStorage)
 %rename(equals) gdcm::Tag::operator==;
+%typemap(javacode) gdcm::Tag %{
+  @Override
+  public boolean equals(java.lang.Object obj) {
+    boolean equal = false;
+    if (obj instanceof $javaclassname)
+      equal = (($javaclassname)obj).equals(this);
+    return equal;
+  }
+%}
 %include "gdcmTag.h"
 EXTEND_CLASS_PRINT(gdcm::Tag)
+%extend gdcm::Tag {
+  //boolean equals(Object t) {
+  //  return *self == t;
+  //}
+  int hashCode() {
+    return (int)self->GetElementTag();
+  }
+  //int compareTo(Tag t) {
+  //  return *self < t;
+  //}
+};
+
 %include "gdcmPrivateTag.h"
 EXTEND_CLASS_PRINT(gdcm::PrivateTag)
 
