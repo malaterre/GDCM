@@ -1,6 +1,7 @@
 find_package(SWIG REQUIRED)
 include(${SWIG_USE_FILE})
 option(GDCM_AUTOLOAD_GDCMJNI "Automatically load gdcmjni" ON)
+option(GDCM_JAVA_INCLUDE_SRC "Add source (*.java) to jar file" OFF)
 
 include_directories(
   "${GDCM_BINARY_DIR}/Source/Common"
@@ -65,6 +66,10 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     PROPERTIES COMPILE_FLAGS "-fno-strict-aliasing")
 endif()
 
+if(GDCM_JAVA_INCLUDE_SRC)
+  set(GDCM_JAVA_SRCS "gdcm/*.java")
+endif()
+
 add_custom_command(
   OUTPUT ${GDCM_LIBRARY_DIR}/gdcm.jar
 # 1. run the custom command only when the gdcmJAVA_wrap.cxx has been generated
@@ -77,10 +82,10 @@ add_custom_command(
 # 2. now that the *.class have been generated construct the jar file. We can
 # only rely on the gdcm.java / gdcm.class to build dependencie, I am pretty
 # sure it will break parallel builds... oh well
-  COMMAND ${Java_JAR_EXECUTABLE} ARGS cvf ${GDCM_LIBRARY_DIR}/gdcm.jar gdcm/*.class
+  COMMAND ${Java_JAR_EXECUTABLE} ARGS cf ${GDCM_LIBRARY_DIR}/gdcm.jar gdcm/*.class ${GDCM_JAVA_SRCS}
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
   DEPENDS "${swig_generated_file_fullname}"
-  COMMENT "javac *.java; jar cvf -> gdcm.jar"
+  COMMENT "javac *.java; jar cf -> gdcm.jar"
 )
 
 # 3. ok now add the target

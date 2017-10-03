@@ -290,7 +290,7 @@ if(GDCM_WRAP_CSHARP)
     set(CMAKE_SWIG_FLAGS "-namespace vtkgdcm -dllimport vtkgdcmsharpglue")
     separate_arguments(CMAKE_SWIG_FLAGS)
     SWIG_ADD_MODULE(vtkgdcmsharpglue csharp vtkgdcm.i)
-    SWIG_LINK_LIBRARIES(vtkgdcmsharpglue vtkgdcm)
+    target_link_libraries(${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME} LINK_PRIVATE vtkgdcm)
     # Stupid cmake-swig module is doing that for us, when not needed
     if(UNIX)
       set_target_properties(${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
