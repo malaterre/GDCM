@@ -322,10 +322,9 @@ EXTEND_CLASS_PRINT(gdcm::MediaStorage)
 %}
 %include "gdcmTag.h"
 EXTEND_CLASS_PRINT(gdcm::Tag)
+%javamethodmodifiers gdcm::Tag::hashCode %{@Override
+  public%};
 %extend gdcm::Tag {
-  //boolean equals(Object t) {
-  //  return *self == t;
-  //}
   int hashCode() {
     return (int)self->GetElementTag();
   }
