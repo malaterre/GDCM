@@ -328,9 +328,11 @@ EXTEND_CLASS_PRINT(gdcm::Tag)
   int hashCode() {
     return (int)self->GetElementTag();
   }
-  //int compareTo(Tag t) {
-  //  return *self < t;
-  //}
+  int compareTo(Tag t) {
+    if( *self == t ) return 0;
+    if( *self < t ) return -1;
+    return 1;
+  }
 };
 
 %include "gdcmPrivateTag.h"
