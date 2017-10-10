@@ -2,7 +2,7 @@
 
   Program: GDCM (Grassroots DICOM). A DICOM library
 
-  Copyright (c) 2006-2011 Mathieu Malaterre
+  Copyright (c) 2006-2017 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -78,7 +78,7 @@ VR ComputeVRImplicitLittleEndian(DataSet const &ds, const Tag& tag)
 
 VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
 {
-  const Global& g = GlobalInstance;
+  const Global& g = Global::GetInstance();
   const Dicts &dicts = g.GetDicts();
   //const Dict &d = dicts.GetPublicDict();
 

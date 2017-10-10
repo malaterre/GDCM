@@ -2,7 +2,7 @@
 
   Program: GDCM (Grassroots DICOM). A DICOM library
 
-  Copyright (c) 2006-2011 Mathieu Malaterre
+  Copyright (c) 2006-2017 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -119,7 +119,7 @@ bool Anonymizer::Replace( Tag const &t, const char *value )
 bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
 {
   if( t.GetGroup() < 0x0008 ) return false;
-  static const Global &g = GlobalInstance;
+  static const Global &g = Global::GetInstance();
   static const Dicts &dicts = g.GetDicts();
   DataSet &ds = F->GetDataSet();
   // Let's do the private tag:
@@ -266,7 +266,7 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
 
 static bool Anonymizer_RemoveRetired(File const &file, DataSet &ds)
 {
-  static const Global &g = GlobalInstance;
+  static const Global &g = Global::GetInstance();
   static const Dicts &dicts = g.GetDicts();
   static const Dict &pubdict = dicts.GetPublicDict();
   DataSet::Iterator it = ds.Begin();

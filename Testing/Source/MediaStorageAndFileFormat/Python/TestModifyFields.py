@@ -2,7 +2,7 @@
 #
 #  Program: GDCM (Grassroots DICOM). A DICOM library
 #
-#  Copyright (c) 2006-2011 Mathieu Malaterre
+#  Copyright (c) 2006-2017 Mathieu Malaterre
 #  All rights reserved.
 #  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 #
@@ -50,7 +50,7 @@ def TestModifyFields(filename):
   # <entry group="0012" element="0063" vr="LO" vm="1-n" name="De-identification Method"/>
   deidmethod = gdcm.Tag(0x0012,0x0063)
   # retrieve the supreme global instance, sum of all knowledge in da whole universe:
-  dicomdicts = gdcm.GlobalInstance.GetDicts()
+  dicomdicts = gdcm.Global::GetInstance().GetDicts()
   dictel = dicomdicts.GetDictEntry( deidmethod )
   #print dictel.GetVR()
   deid = gdcm.DataElement( deidmethod )

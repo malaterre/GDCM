@@ -2,7 +2,7 @@
 
   Program: GDCM (Grassroots DICOM). A DICOM library
 
-  Copyright (c) 2006-2011 Mathieu Malaterre
+  Copyright (c) 2006-2017 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -18,6 +18,7 @@
 
 #include <limits.h> // PATH_MAX
 #include <string.h> // strcpy
+#include <atomic>
 #ifdef _WIN32
 #include <windows.h> // MAX_PATH
 #endif
@@ -25,9 +26,11 @@
 namespace gdcm
 {
 
+static Global GlobalInstance;
+
 // Must NOT be initialized.  Default initialization to zero is
 // necessary.
-unsigned int GlobalCount;
+std::atomic<unsigned int> GlobalCount;
 
 class GlobalInternal
 {
@@ -39,7 +42,7 @@ public:
 
   // Ressource paths:
   // By default only construct two paths:
-  // - The official install dir (need to keep in sinc with cmakelist variable
+  // - The official install dir (need to keep in sync with cmakelist variable
   // - a dynamic one, so that gdcm is somewhat rellocatable
   // - on some system where it make sense the path where the Resource should be located
   void LoadDefaultPaths()
@@ -73,7 +76,8 @@ public:
 
 Global::Global()
 {
-  if(++GlobalCount == 1)
+  unsigned int old = std::atomic_fetch_add(&GlobalCount, 1U);
+  if(old == 0)
     {
     assert( Internals == NULL ); // paranoid
     Internals = new GlobalInternal;
@@ -91,7 +95,8 @@ Global::Global()
 
 Global::~Global()
 {
-  if(--GlobalCount == 0)
+  unsigned int old = std::atomic_fetch_sub(&GlobalCount, 1U);
+  if(old == 1)
     {
     //Internals->GlobalDicts.Unload();
     delete Internals;

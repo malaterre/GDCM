@@ -2,7 +2,7 @@
 
   Program: GDCM (Grassroots DICOM). A DICOM library
 
-  Copyright (c) 2006-2011 Mathieu Malaterre
+  Copyright (c) 2006-2017 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -297,7 +297,7 @@ static void DataElementToJSONArray( const VR::VRType vr, const DataElement & de,
 // FIXME: once again everything is loaded into memory
 static void ProcessNestedDataSet( const DataSet & ds, json_object *my_object, const bool preferkeyword )
 {
-  const Global& g = GlobalInstance;
+  const Global& g = Global::GetInstance();
   const Dicts &dicts = g.GetDicts();
   const Dict &d = dicts.GetPublicDict(); (void)d;
 
@@ -565,7 +565,7 @@ static inline bool CheckTagKeywordConsistency( const char *name, const Tag & the
     return t == thetag;
     }
   // else keyword:
-  const Global& g = GlobalInstance;
+  const Global& g = Global::GetInstance();
   const Dicts &dicts = g.GetDicts();
   const Dict &d = dicts.GetPublicDict();
   const char * keyword = d.GetKeywordFromTag(thetag);

@@ -2,7 +2,7 @@
 
   Program: GDCM (Grassroots DICOM). A DICOM library
 
-  Copyright (c) 2006-2011 Mathieu Malaterre
+  Copyright (c) 2006-2017 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -23,7 +23,7 @@ int TestDicts(int, char *[])
   //const gdcm::Dict &d = dicts.GetPublicDict();
   //std::cout << d << std::endl;
 
-  const gdcm::Global& g = gdcm::GlobalInstance;
+  const gdcm::Global& g = gdcm::Global::GetInstance();
   // get the Part 6 dicts from it:
   const gdcm::Dicts &ds = g.GetDicts();
   const gdcm::Dict &pub = ds.GetPublicDict();
