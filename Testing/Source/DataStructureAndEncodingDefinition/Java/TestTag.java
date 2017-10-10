@@ -42,5 +42,17 @@ public class TestTag
       s.add(t3);
       if( s.size() != 2 )
         throw new Exception("Invalid size: " + s.size() );
+      //System.out.println("compareTo: " + t1.compareTo(t2));
+      //System.out.println("compareTo: " + t2.compareTo(t1));
+      //System.out.println("compareTo: " + t1.compareTo(t3));
+      //System.out.println("compareTo: " + t3.compareTo(t1));
+      if( t1.compareTo(t2) != 0 )
+        throw new Exception("Invalid compareTo: " + t1 + " vs " + t2 );
+      if( t2.compareTo(t1) != 0 )
+        throw new Exception("Invalid compareTo: " + t1 + " vs " + t2 );
+      if( t1.compareTo(t3) >= 0 )
+        throw new Exception("Invalid compareTo: " + t1 + " vs " + t3 );
+      if( t3.compareTo(t1) <= 0 )
+        throw new Exception("Invalid compareTo: " + t1 + " vs " + t3 );
     }
 }
