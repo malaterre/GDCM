@@ -3,6 +3,7 @@ include(${SWIG_USE_FILE})
 option(GDCM_AUTOLOAD_GDCMJNI "Automatically load gdcmjni" ON)
 option(GDCM_JAVA_INCLUDE_SRC "Add source (*.java) to jar file" OFF)
 option(GDCM_BUILD_FULL_JAVA_JAR "Build gdcm jar with encapsulated gdcmjni" OFF)
+mark_as_advanced(GDCM_AUTOLOAD_GDCMJNI GDCM_JAVA_INCLUDE_SRC GDCM_BUILD_FULL_JAVA_JAR)
 
 include_directories(
   "${GDCM_BINARY_DIR}/Source/Common"
