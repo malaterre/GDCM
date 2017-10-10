@@ -244,11 +244,45 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 // Need to be located *after* gdcmConfigure.h
 #ifdef GDCM_AUTOLOAD_GDCMJNI
 %pragma(java) jniclasscode=%{
+private final static String GDCMJNI = "gdcmjni";
  static {
    try {
-       System.loadLibrary("gdcmjni");
+     // System.out.println(System.getProperty("java.library.path"));
+     System.loadLibrary(GDCMJNI);
    } catch (UnsatisfiedLinkError e) {
-     System.err.println("Native code library failed to load. \n" + e);
+     //System.err.println("Native code library failed to load. \n" + e);
+     loadFromJar();
+   }
+ }
+
+ // https://stackoverflow.com/questions/1611357/how-to-make-a-jar-file-that-includes-dll-files
+ private static void loadFromJar() {
+   String path = "GDCM_" + new java.util.Date().getTime();
+   loadLib(path, GDCMJNI);
+ }
+
+/**
+ * Puts library to temp dir and loads to memory
+ */
+ private static void loadLib(String path, String name) {
+   name = "/lib" + name + ".so"; // FIXME window
+   try {
+     java.io.InputStream in = gdcmJNI.class.getResourceAsStream(name);
+     // always write to different location
+     java.io.File fileOut = new java.io.File(System.getProperty("java.io.tmpdir") + "/" + path + name);
+     // create intermediate directory:
+     fileOut.getParentFile().mkdirs();
+     byte[] buffer = new byte[1024];
+     int read = -1;
+     java.io.FileOutputStream fos = new java.io.FileOutputStream(fileOut);
+     while((read = in.read(buffer)) != -1) {
+       fos.write(buffer, 0, read);
+     }
+     in.close();
+     fos.close();
+     System.load(fileOut.getAbsolutePath());
+   } catch (Exception e) {
+     System.err.println("Jar code library failed to load. \n" + e);
      System.exit(1);
    }
  }
