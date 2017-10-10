@@ -239,6 +239,15 @@ public class ScanDirectory
       {
       throw new Exception("Could not scan");
       }
+    String fn0 = fns.get(0);
+    TagToValue mappings = s.GetMapping( fn0 );
+    System.out.println( "mappings size: " + mappings.size() );
+    for( Tag tag : tagarray ) {
+      if( mappings.has_key( tag ) ) {
+        String val = mappings.get( tag );
+        System.out.println( "tag/val: " + tag + "->" + val );
+      }
+    }
 
     for( long idx = 0; idx < fns.size(); ++idx )
       {
