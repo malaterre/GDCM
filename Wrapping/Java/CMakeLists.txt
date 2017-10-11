@@ -106,6 +106,7 @@ endif()
 # 3. ok now add the target
 add_custom_target(GDCMJavaJar ALL
   DEPENDS ${GDCM_LIBRARY_DIR}/gdcm.jar
+  ${SWIG_MODULE_gdcmjni_REAL_NAME}
   ${GDCM_JAVA_JAR_FULL}
   COMMENT "building gdcm.jar"
 )
