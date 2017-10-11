@@ -354,9 +354,12 @@ EXTEND_CLASS_PRINT(gdcm::MediaStorage)
     return equal;
   }
 %}
+%typemap(javainterfaces) gdcm::Tag "Comparable<Tag>"
 %include "gdcmTag.h"
 EXTEND_CLASS_PRINT(gdcm::Tag)
 %javamethodmodifiers gdcm::Tag::hashCode %{@Override
+  public%};
+%javamethodmodifiers gdcm::Tag::compareTo %{@Override
   public%};
 %extend gdcm::Tag {
   int hashCode() {
