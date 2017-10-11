@@ -2,6 +2,7 @@
 set(GDCM_JAVA_TEST_SRCS
   TestReader
   TestTag
+  TestReaderUpToTag
   )
 
 # Do not change anything after here:
