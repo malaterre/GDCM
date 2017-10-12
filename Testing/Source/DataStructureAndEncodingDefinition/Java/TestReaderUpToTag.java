@@ -16,20 +16,37 @@
 import gdcm.*;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
 
 public class TestReaderUpToTag
 {
+  private static void PrintTagSet( Set<Tag> s ) {
+    for( Tag t : s ) {
+      System.out.println("Print: " + t);
+    }
+  }
   public static void main(String[] args) throws Exception {
 
     long nfiles = Testing.GetNumberOfFileNames();
 
     Tag tags[] = {
       new Tag(0x8,0x8),
+      new Tag(0x8,0x16),
+      new Tag(0x8,0x18),
+      new Tag(0x8,0x60),
+      new Tag(0x10,0x20),
+      new Tag(0x28,0x2),
+      new Tag(0x28,0x10),
+      new Tag(0x28,0x11),
       new Tag(0x10,0x10) };
     SortedSet<Tag> tagSet = new TreeSet<Tag>();
     for( Tag tag : tags ) {
       tagSet.add( tag );
     }
+    PrintTagSet( tagSet );
     Tag last = tagSet.last();
     System.out.println("last: " + last);
     TagSetType skip = new TagSetType();
@@ -38,7 +55,9 @@ public class TestReaderUpToTag
     Trace.DebugOff();
     Trace.WarningOff();
     StringFilter sf = new StringFilter();
+    List<Set<Tag>> l = new ArrayList<Set<Tag>>();
     for( long i = 0; i < nfiles; ++i ) {
+      Set<Tag> s = new HashSet<Tag>();
       String filename = Testing.GetFileName( i );
       if( filename.contains( "ExplicitVRforPublicElementsImplicitVRforShadowElements" )
           || filename.contains( "SIEMENS_SOMATOM-12-ACR_NEMA-ZeroLengthUs" )
@@ -55,11 +74,20 @@ public class TestReaderUpToTag
         DataSet ds = file.GetDataSet();
         for( Tag tag : tags ) {
           if( ds.FindDataElement( tag ) ) {
+            s.add( tag );
             DataElement de = ds.GetDataElement( tag );
             System.out.println("de: " + tag + " -> " + sf.ToString( de ) );
           }
         }
       }
+      l.add( s );
+      PrintTagSet( s );
+    }
+    System.gc ();
+    System.runFinalization ();
+    for( long i = 0; i < nfiles; ++i ) {
+      Set<Tag> s = l.get( (int)i );
+      PrintTagSet( s );
     }
   }
 }
