@@ -345,6 +345,8 @@ EXTEND_CLASS_PRINT(gdcm::PixelFormat)
 
 EXTEND_CLASS_PRINT(gdcm::MediaStorage)
 %rename(equals) gdcm::Tag::operator==;
+//%typemap(javain, pgcppname="(Tag)$javainput") const gdcm::Tag& _val "$javaclassname.getCPtr((Tag)$javainput)"
+//%typemap(jstype) const gdcm::Tag& _val "java.lang.Object"
 %typemap(javacode) gdcm::Tag %{
   @Override
   public boolean equals(java.lang.Object obj) {
@@ -354,9 +356,11 @@ EXTEND_CLASS_PRINT(gdcm::MediaStorage)
     return equal;
   }
 %}
-%typemap(javainterfaces) gdcm::Tag "Comparable<Tag>"
+%typemap(javainterfaces) gdcm::Tag "Comparable<Tag>";
 %include "gdcmTag.h"
 EXTEND_CLASS_PRINT(gdcm::Tag)
+%javamethodmodifiers gdcm::Tag::equals %{@Override
+  public%};
 %javamethodmodifiers gdcm::Tag::hashCode %{@Override
   public%};
 %javamethodmodifiers gdcm::Tag::compareTo %{@Override
@@ -371,6 +375,8 @@ EXTEND_CLASS_PRINT(gdcm::Tag)
     return 1;
   }
 };
+%typemap(javacode) gdcm::Tag;
+%typemap(javainterfaces) gdcm::Tag;
 
 %include "gdcmPrivateTag.h"
 EXTEND_CLASS_PRINT(gdcm::PrivateTag)
