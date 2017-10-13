@@ -28,10 +28,8 @@ public class TestReaderUpToTag
       System.out.println("Print: " + t);
     }
   }
-  public static void main(String[] args) throws Exception {
 
-    long nfiles = Testing.GetNumberOfFileNames();
-
+  private static SortedSet<Tag> getTagSet() {
     Tag tags[] = {
       new Tag(0x8,0x8),
       new Tag(0x8,0x16),
@@ -46,6 +44,14 @@ public class TestReaderUpToTag
     for( Tag tag : tags ) {
       tagSet.add( tag );
     }
+    return tagSet;
+  }
+
+  public static void main(String[] args) throws Exception {
+
+    long nfiles = Testing.GetNumberOfFileNames();
+
+    SortedSet<Tag> tagSet = getTagSet();
     PrintTagSet( tagSet );
     Tag last = tagSet.last();
     System.out.println("last: " + last);
@@ -59,7 +65,7 @@ public class TestReaderUpToTag
     for( long i = 0; i < nfiles; ++i ) {
       Set<Tag> s = new HashSet<Tag>();
       String filename = Testing.GetFileName( i );
-      if( filename.contains( "ExplicitVRforPublicElementsImplicitVRforShadowElements" )
+      if( true || filename.contains( "ExplicitVRforPublicElementsImplicitVRforShadowElements" )
           || filename.contains( "SIEMENS_SOMATOM-12-ACR_NEMA-ZeroLengthUs" )
         ) {
         Reader reader = new Reader();
@@ -72,7 +78,7 @@ public class TestReaderUpToTag
         File file = reader.GetFile();
         sf.SetFile( file );
         DataSet ds = file.GetDataSet();
-        for( Tag tag : tags ) {
+        for( Tag tag : tagSet ) {
           if( ds.FindDataElement( tag ) ) {
             s.add( tag );
             DataElement de = ds.GetDataElement( tag );
@@ -81,13 +87,14 @@ public class TestReaderUpToTag
         }
       }
       l.add( s );
-      PrintTagSet( s );
+   //   PrintTagSet( s );
+    System.gc ();
     }
     System.gc ();
     System.runFinalization ();
-    for( long i = 0; i < nfiles; ++i ) {
-      Set<Tag> s = l.get( (int)i );
+    for( Set<Tag> s : l ) {
       PrintTagSet( s );
     }
+    PrintTagSet( tagSet );
   }
 }
