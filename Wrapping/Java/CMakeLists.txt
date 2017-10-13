@@ -3,6 +3,7 @@ include(${SWIG_USE_FILE})
 option(GDCM_AUTOLOAD_GDCMJNI "Automatically load gdcmjni" ON)
 option(GDCM_JAVA_INCLUDE_SRC "Add source (*.java) to jar file" OFF)
 option(GDCM_BUILD_FULL_JAVA_JAR "Build gdcm jar with encapsulated gdcmjni" OFF)
+mark_as_advanced(GDCM_AUTOLOAD_GDCMJNI GDCM_JAVA_INCLUDE_SRC GDCM_BUILD_FULL_JAVA_JAR)
 
 include_directories(
   "${GDCM_BINARY_DIR}/Source/Common"
@@ -92,9 +93,9 @@ add_custom_command(
 if(GDCM_BUILD_FULL_JAVA_JAR)
   add_custom_command(
     OUTPUT ${GDCM_LIBRARY_DIR}/gdcm-${GDCM_VERSION}.jar
-    COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/java/lib
-    COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different $<TARGET_FILE:${SWIG_MODULE_gdcmjni_REAL_NAME}> ${CMAKE_CURRENT_BINARY_DIR}/java/lib
-    COMMAND ${Java_JAR_EXECUTABLE} ARGS cf ${GDCM_LIBRARY_DIR}/gdcm-${GDCM_VERSION}.jar gdcm/*.class ${GDCM_JAVA_SRCS} lib/*
+    #COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/java/lib
+    COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different $<TARGET_FILE:${SWIG_MODULE_gdcmjni_REAL_NAME}> ${CMAKE_CURRENT_BINARY_DIR}/java/
+    COMMAND ${Java_JAR_EXECUTABLE} ARGS cf ${GDCM_LIBRARY_DIR}/gdcm-${GDCM_VERSION}.jar gdcm/*.class ${GDCM_JAVA_SRCS} *gdcmjni*
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
     DEPENDS ${GDCM_LIBRARY_DIR}/gdcm.jar
     COMMENT "javac *.java; jar cf -> gdcm-${GDCM_VERSION}.jar"
@@ -105,6 +106,7 @@ endif()
 # 3. ok now add the target
 add_custom_target(GDCMJavaJar ALL
   DEPENDS ${GDCM_LIBRARY_DIR}/gdcm.jar
+  ${SWIG_MODULE_gdcmjni_REAL_NAME}
   ${GDCM_JAVA_JAR_FULL}
   COMMENT "building gdcm.jar"
 )
