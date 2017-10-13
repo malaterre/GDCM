@@ -246,18 +246,31 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 %pragma(java) jniclasscode=%{
 private final static String GDCMJNI = "gdcmjni";
  static {
-   try {
-     // System.out.println(System.getProperty("java.library.path"));
-     System.loadLibrary(GDCMJNI);
-   } catch (UnsatisfiedLinkError e) {
-     //System.err.println("Native code library failed to load. \n" + e);
+   if( isFullJar() ) {
      loadFromJar();
+   } else {
+     try {
+       // System.out.println(System.getProperty("java.library.path"));
+       System.loadLibrary(GDCMJNI);
+     } catch (UnsatisfiedLinkError e) {
+       System.err.println("Native code library failed to load. \n" + e);
+       System.exit(1);
+     }
    }
  }
 
  // https://stackoverflow.com/questions/1611357/how-to-make-a-jar-file-that-includes-dll-files
+ private static boolean isFullJar() {
+   final String name = "/lib" + GDCMJNI + ".so"; // FIXME window
+   final java.net.URL u = gdcmJNI.class.getResource(name);
+   if (u != null) {
+     return true;
+   }
+   return false;
+ }
+
  private static void loadFromJar() {
-   String path = "GDCM_" + new java.util.Date().getTime();
+   final String path = "GDCM_" + new java.util.Date().getTime();
    loadLib(path, GDCMJNI);
  }
 
