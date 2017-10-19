@@ -81,18 +81,21 @@ public:
     SS = 524288,
     ST = 1048576,
     TM = 2097152,
+    UC = 536870912, // 2^29
     UI = 4194304,
     UL = 8388608,
     UN = 16777216,
+    UR = 1073741824, // 2^30
     US = 33554432,
     UT = 67108864,
     OB_OW = OB | OW,
     US_SS = US | SS,
     US_SS_OW = US | SS | OW,
+    US_OW = US | OW,
     // The following do not have a VRString equivalent (ie cannot be found in PS 3.6)
     VL16 = AE | AS | AT | CS | DA | DS | DT | FD | FL | IS | LO | LT | PN | SH | SL | SS | ST | TM | UI | UL | US, // if( VR & VL16 ) => VR has its VL coded over 16bits
-    VL32 = OB | OW | OD | OF | OL | SQ | UN | UT, // if( VR & VL32 ) => VR has its VL coded over 32bits
-    VRASCII = AE | AS | CS | DA | DS | DT | IS | LO | LT | PN | SH | ST | TM | UI | UT,
+    VL32 = OB | OW | OD | OF | OL | SQ | UC | UN | UR | UT, // if( VR & VL32 ) => VR has its VL coded over 32bits
+    VRASCII = AE | AS | CS | DA | DS | DT | IS | LO | LT | PN | SH | ST | TM | UC | UI | UR | UT,
     VRBINARY = AT | FL | FD | OB | OD | OF | OL | OW | SL | SQ | SS | UL | UN | US, // FIXME: UN ?
     // PS 3.5:
     // Data Elements with a VR of SQ, OD, OF, OL, OW, OB or UN shall always have a Value Multiplicity of one.
