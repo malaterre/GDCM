@@ -103,6 +103,7 @@ public:
     VM3_n  =             VM3 | VM4 | VM5 | VM6 | VM8 | VM9 | VM16 | VM24 | VM32 | VM99 | VM256,
     VM4_4n =                   VM4                         | VM16 | VM24 | VM32        | VM256,
     VM6_6n =                               VM6             | VM12 | VM18 | VM24               ,
+    VM6_n  =                               VM6 | VM8 | VM9 | VM16 | VM24 | VM32 | VM99 | VM256,
     VM7_7n,
     VM30_30n,
     VM47_47n,
