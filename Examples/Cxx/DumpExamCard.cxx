@@ -74,7 +74,7 @@ typedef enum
   param_integer = 1, // 1 << 0
   param_string = 2, // 1 << 1
   param_3, // ??
-  param_enum = 4, // 1 << 2
+  param_enum = 4  // 1 << 2
 } param_type;
 
 static const char *gettypenamefromtype( int i)

@@ -94,6 +94,9 @@ if(GDCM_BUILD_FULL_JAVA_JAR)
   if(NOT GDCM_AUTOLOAD_GDCMJNI)
     message(FATAL_ERROR "Dont know how to handle full jar without autoload option")
   endif()
+  if(BUILD_SHARED_LIBS)
+    message(FATAL_ERROR "Dont know how to package gdcmjni with shared gdcm core libs.")
+  endif()
   add_custom_command(
     OUTPUT ${GDCM_LIBRARY_DIR}/gdcm-${GDCM_VERSION}.jar
     #COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/java/lib
