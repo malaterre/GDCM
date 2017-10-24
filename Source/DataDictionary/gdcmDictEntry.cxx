@@ -72,8 +72,8 @@ Problem with: 3DRenderingType vs ThreeDRenderingType
   while( found_the != std::string::npos )
     {
     // 'of the' is a special case
-    const std::string ofthe = str.substr( found_the - 3 < 0 ? 0 : found_the - 3, 8 );
-    const std::string forthe = str.substr( found_the - 4 < 0 ? 0 : found_the - 4, 9 );
+    const std::string ofthe = str.substr( found_the < 3 ? 0 : found_the - 3, 8 );
+    const std::string forthe = str.substr( found_the < 4 ? 0 : found_the - 4, 9 );
     if( ofthe == " of the " || ofthe == " on the "  )
       {
       found_the = str.find( " the ", found_the + 5 );
