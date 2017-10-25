@@ -263,7 +263,7 @@ public:
     }
 };
 
-#define VRDS16ILLEGAL
+//#define VRDS16ILLEGAL
 
 #ifdef VRDS16ILLEGAL
 template < typename Float >
@@ -282,40 +282,137 @@ std::string to_string ( Float data ) {
 }
 #else
 // http://stackoverflow.com/questions/32631178/writing-ieee-754-1985-double-as-ascii-on-a-limited-16-bytes-string
-static size_t shrink(char *fp_buffer) {
-  int lead, expo;
-  long long mant;
-  int n0, n1;
-  int n = sscanf(fp_buffer, "%d.%n%lld%ne%d", &lead, &n0, &mant, &n1, &expo);
-  assert(n == 3);
-  return sprintf(fp_buffer, "%d%0*llde%d", lead, n1 - n0, mant,
-          expo - (n1 - n0));
+
+static inline void clean(char *mant) {
+  char *ix = mant + strlen(mant) - 1;
+  while(('0' == *ix) && (ix > mant)) {
+    *ix-- = '\0';
+  }
+  if ('.' == *ix) {
+    *ix = '\0';
+  }
+}
+
+static int add1(char *buf, int n) {
+  if (n < 0) return 1;
+  if (buf[n] == '9') {
+    buf[n] = '0';
+    return add1(buf, n-1);
+  }
+  else {
+    buf[n] += 1;
+  }
+  return 0;
+}
+
+static int doround(char *buf, unsigned int n) {
+  char c;
+  if (n >= strlen(buf)) return 0;
+  c = buf[n];
+  buf[n] = 0;
+  if ((c >= '5') && (c <= '9')) return add1(buf, n-1);
+  return 0;
+}
+
+static int roundat(char *buf, unsigned int i, int iexp) {
+  if (doround(buf, i) != 0) {
+    iexp += 1;
+    switch(iexp) {
+    case -2:
+      strcpy(buf, ".01");
+      break;
+    case -1:
+      strcpy(buf, ".1");
+      break;
+    case 0:
+      strcpy(buf, "1.");
+      break;
+    case 1:
+      strcpy(buf, "10");
+      break;
+    case 2:
+      strcpy(buf, "100");
+      break;
+    default:
+      sprintf(buf, "1e%d", iexp);
+    }
+    return 1;
+  }
+  return 0;
 }
 
 template < typename Float >
-static int x16printf(char *dest, size_t width, Float value) {
-  if (!std::isfinite(value)) return 1;
+static void x16printf(char *buf, size_t size, Float f) {
+  char line[40];
+  char *mant = line + 1;
+  int iexp, lexp, i;
+  char exp[6];
 
-  if (width < 5) return 2;
-  if (std::signbit(value)) {
-    value = -value;
-    strcpy(dest++, "-");
-    width--;
+  if (f < 0) {
+    f = -f;
+    size -= 1;
+    *buf++ = '-';
   }
-  int precision = width - 2;
-  while (precision > 0) {
-    char buffer[width + 10];
-    // %.*e prints 1 digit, '.' and then `precision - 1` digits
-    snprintf(buffer, sizeof buffer, "%.*e", precision - 1, value);
-    size_t n = shrink(buffer);
-    if (n <= width) {
-      strcpy(dest, buffer);
-      return 0;
+  sprintf(line, "%1.16e", f);
+  if (line[0] == '-') {
+    f = -f;
+    size -= 1;
+    *buf++ = '-';
+    sprintf(line, "%1.16e", f);
+  }
+  *mant = line[0];
+  i = strcspn(mant, "eE");
+  mant[i] = '\0';
+  iexp = strtol(mant + i + 1, NULL, 10);
+  lexp = sprintf(exp, "e%d", iexp);
+  if ((iexp >= size) || (iexp < -3)) {
+    i = roundat(mant, size - 1 -lexp, iexp);
+    if(i == 1) {
+      strcpy(buf, mant);
+      return;
     }
-    if (n > width + 1) precision -= n - width - 1;
-    else precision--;
+    buf[0] = mant[0];
+    buf[1] = '.';
+    strncpy(buf + i + 2, mant + 1, size - 2 - lexp);
+    buf[size-lexp] = 0;
+    clean(buf);
+    strcat(buf, exp);
   }
-  return 3;
+  else if (iexp >= size - 2) {
+    roundat(mant, iexp + 1, iexp);
+    strcpy(buf, mant);
+  }
+  else if (iexp >= 0) {
+    i = roundat(mant, size - 1, iexp);
+    if (i == 1) {
+      strcpy(buf, mant);
+      return;
+    }
+    strncpy(buf, mant, iexp + 1);
+    buf[iexp + 1] = '.';
+    strncpy(buf + iexp + 2, mant + iexp + 1, size - iexp - 1);
+    buf[size] = 0;
+    clean(buf);
+  }
+  else {
+    int j;
+    i = roundat(mant, size + 1 + iexp, iexp);
+    if (i == 1) {
+      strcpy(buf, mant);
+      return;
+    }
+    buf[0] = '.';
+    for(j=0; j< -1 - iexp; j++) {
+      buf[j+1] = '0';
+    }
+    if ((i == 1) && (iexp != -1)) {
+      buf[-iexp] = '1';
+      buf++;
+    }
+    strncpy(buf - iexp, mant, size + 1 + iexp);
+    buf[size] = 0;
+    clean(buf);
+  }
 }
 #endif
 
