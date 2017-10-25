@@ -259,9 +259,28 @@ private final static String GDCMJNI = "gdcmjni";
    }
  }
 
+ // https://stackoverflow.com/questions/228477/how-do-i-programmatically-determine-operating-system-in-java
+ private static String OS = System.getProperty("os.name").toLowerCase();
+ private static boolean isWindows() {
+     return (OS.indexOf("win") >= 0);
+ }
+ private static boolean isUnix() {
+     return (OS.indexOf("nux") >= 0);
+ }
+ private static String getLibName() {
+   if( isWindows() ) {
+   final String name = "/" + GDCMJNI + ".dll";
+   return name;
+   } else if( isUnix() ) {
+   final String name = "/lib" + GDCMJNI + ".so";
+   return name;
+   }
+   return null;
+ }
+
  // https://stackoverflow.com/questions/1611357/how-to-make-a-jar-file-that-includes-dll-files
  private static boolean isFullJar() {
-   final String name = "/lib" + GDCMJNI + ".so"; // FIXME window
+   final String name = getLibName();
    final java.net.URL u = gdcmJNI.class.getResource(name);
    if (u != null) {
      return true;
@@ -278,7 +297,7 @@ private final static String GDCMJNI = "gdcmjni";
  * Puts library to temp dir and loads to memory
  */
  private static void loadLib(String path, String name) {
-   name = "/lib" + name + ".so"; // FIXME window
+   name = getLibName();
    try {
      java.io.InputStream in = gdcmJNI.class.getResourceAsStream(name);
      // always write to different location
