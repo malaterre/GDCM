@@ -97,23 +97,24 @@ if(GDCM_BUILD_FULL_JAVA_JAR)
   if(BUILD_SHARED_LIBS)
     message(FATAL_ERROR "Dont know how to package gdcmjni with shared gdcm core libs.")
   endif()
+  set(GDCM_JAVA_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR})
+  set(GDCM_JAVA_JAR_FULL gdcm-${GDCM_VERSION}-${GDCM_JAVA_SYSTEM_NAME}.jar)
   add_custom_command(
-    OUTPUT ${GDCM_LIBRARY_DIR}/gdcm-${GDCM_VERSION}.jar
+    OUTPUT ${GDCM_LIBRARY_DIR}/${GDCM_JAVA_JAR_FULL}
     #COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/java/lib
     COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different $<TARGET_FILE:${SWIG_MODULE_gdcmjni_REAL_NAME}> ${CMAKE_CURRENT_BINARY_DIR}/java/
-    COMMAND ${Java_JAR_EXECUTABLE} ARGS cf ${GDCM_LIBRARY_DIR}/gdcm-${GDCM_VERSION}.jar gdcm/*.class ${GDCM_JAVA_SRCS} *gdcmjni*
+    COMMAND ${Java_JAR_EXECUTABLE} ARGS cf ${GDCM_LIBRARY_DIR}/${GDCM_JAVA_JAR_FULL} gdcm/*.class ${GDCM_JAVA_SRCS} *gdcmjni*
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java
     DEPENDS ${GDCM_LIBRARY_DIR}/gdcm.jar
-    COMMENT "javac *.java; jar cf -> gdcm-${GDCM_VERSION}.jar"
+    COMMENT "javac *.java; jar cf -> ${GDCM_JAVA_JAR_FULL}"
   )
-  set(GDCM_JAVA_JAR_FULL ${GDCM_LIBRARY_DIR}/gdcm-${GDCM_VERSION}.jar)
 endif()
 
 # 3. ok now add the target
 add_custom_target(GDCMJavaJar ALL
   DEPENDS ${GDCM_LIBRARY_DIR}/gdcm.jar
   ${SWIG_MODULE_gdcmjni_REAL_NAME}
-  ${GDCM_JAVA_JAR_FULL}
+  ${GDCM_LIBRARY_DIR}/${GDCM_JAVA_JAR_FULL}
   COMMENT "building gdcm.jar"
 )
 
@@ -125,7 +126,7 @@ if(NOT GDCM_INSTALL_NO_LIBRARIES)
     DESTINATION ${GDCM_INSTALL_JARMODULE_DIR} COMPONENT JavaModule
   )
   if(GDCM_BUILD_FULL_JAVA_JAR)
-    install(FILES ${GDCM_LIBRARY_DIR2}/gdcm-${GDCM_VERSION}.jar
+    install(FILES ${GDCM_LIBRARY_DIR2}/${GDCM_JAVA_JAR_FULL}
       DESTINATION ${GDCM_INSTALL_JARMODULE_DIR} COMPONENT JavaModule
     )
   endif()
