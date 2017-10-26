@@ -145,7 +145,8 @@ int TestAttributeDS()
   gdcm::DataElement valid = pw.GetAsDataElement();
   std::ostringstream os;
   os << valid.GetValue();
-  size_t l = os.str().size();
+  std::string s = os.str();
+  size_t l = s.size();
   if( l > 16 )
     {
     return 1;
