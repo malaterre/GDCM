@@ -71,6 +71,7 @@ set(BLACK_LIST_READER
 # MITRA_CORNELL
   MITRA_CORNELL.dcm
   EmptyIcon_Bug417.dcm
+  EnhancedWithIPPPerFrameIOPShared.dcm
 )
 if(NOT GDCM_USE_PVRG)
   set(BLACK_LIST_READER
