@@ -70,6 +70,7 @@ set(BLACK_LIST_READER
   JPEG_LS_InvalidEscapeSequence_COM_padding.dcm
 # MITRA_CORNELL
   MITRA_CORNELL.dcm
+  EmptyIcon_Bug417.dcm
 )
 if(NOT GDCM_USE_PVRG)
   set(BLACK_LIST_READER
