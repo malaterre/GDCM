@@ -342,7 +342,7 @@ static int roundat(char *buf, unsigned int i, int iexp) {
 }
 
 template < typename Float >
-static void x16printf(char *buf, size_t size, Float f) {
+static void x16printf(char *buf, int size, Float f) {
   char line[40];
   char *mant = line + 1;
   int iexp, lexp, i;
