@@ -983,6 +983,7 @@ static int PrintMrProtocol(const std::string & filename)
   bool found = false;
   namespace kwd = gdcm::Keywords;
   kwd::SharedFunctionalGroupsSequence sfgs;
+  (void)sfgs;
   if( csa.GetMrProtocol(ds, mrprot))
   {
     found = true;
