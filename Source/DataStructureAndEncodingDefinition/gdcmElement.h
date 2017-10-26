@@ -426,7 +426,7 @@ template<> inline void EncodingImplementation<VR::VRASCII>::Write(const float * 
     _os << to_string(data[0]);
 #else
     char buf[16+1];
-    x16printf(buf, sizeof buf, data[0]);
+    x16printf(buf, 16, data[0]);
     _os << buf;
 #endif
     for(unsigned long i=1; i<length; ++i) {
@@ -434,7 +434,7 @@ template<> inline void EncodingImplementation<VR::VRASCII>::Write(const float * 
 #ifdef VRDS16ILLEGAL
       _os << "\\" << to_string(data[i]);
 #else
-      x16printf(buf, sizeof buf, data[i]);
+      x16printf(buf, 16, data[i]);
       _os << "\\" << buf;
 #endif
       }
@@ -448,7 +448,7 @@ template<> inline void EncodingImplementation<VR::VRASCII>::Write(const double* 
     _os << to_string(data[0]);
 #else
     char buf[16+1];
-    x16printf(buf, sizeof buf, data[0]);
+    x16printf(buf, 16, data[0]);
     _os << buf;
 #endif
     for(unsigned long i=1; i<length; ++i) {
@@ -456,7 +456,7 @@ template<> inline void EncodingImplementation<VR::VRASCII>::Write(const double* 
 #ifdef VRDS16ILLEGAL
       _os << "\\" << to_string(data[i]);
 #else
-      x16printf(buf, sizeof buf, data[i]);
+      x16printf(buf, 16, data[i]);
       _os << "\\" << buf;
 #endif
       }
