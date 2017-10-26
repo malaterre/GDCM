@@ -261,11 +261,11 @@ private final static String GDCMJNI = "gdcmjni";
 
  // https://stackoverflow.com/questions/228477/how-do-i-programmatically-determine-operating-system-in-java
  private static boolean isWindows() {
- static String OS = System.getProperty("os.name").toLowerCase();
+ final String OS = System.getProperty("os.name").toLowerCase();
      return (OS.indexOf("win") >= 0);
  }
  private static boolean isUnix() {
- static String OS = System.getProperty("os.name").toLowerCase();
+ final String OS = System.getProperty("os.name").toLowerCase();
      return (OS.indexOf("nux") >= 0);
  }
  private static String getLibName() {
