@@ -72,6 +72,7 @@ set(BLACK_LIST_READER
   MITRA_CORNELL.dcm
   EmptyIcon_Bug417.dcm
   EnhancedWithIPPPerFrameIOPShared.dcm
+  FUJI-ffff-MONO1-J2K.dcm
 )
 if(NOT GDCM_USE_PVRG)
   set(BLACK_LIST_READER
