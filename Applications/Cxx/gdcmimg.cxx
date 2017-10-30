@@ -1054,6 +1054,10 @@ int main (int argc, char *argv[])
       writer.SetCheckFileMetaInformation( (keepmeta > 0 ? false : true) );
       writer.SetFile( reader.GetFile() );
       if( !Populate( writer, jpeg, filenames ) ) return 1;
+      if( pinter )
+        {
+        writer.GetPixmap().SetPhotometricInterpretation( refpi );
+        }
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );
