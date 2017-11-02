@@ -2,7 +2,7 @@
 
   Program: GDCM (Grassroots DICOM). A DICOM library
 
-  Copyright (c) 2006-2011 Mathieu Malaterre
+  Copyright (c) 2006-2017 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -879,7 +879,7 @@ void Printer::PrintSQ(const SequenceOfItems *sqi, std::ostream & os, std::string
 
 void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string const & indent )
 {
-  const Global& g = GlobalInstance;
+  const Global& g = Global::GetInstance();
   const Dicts &dicts = g.GetDicts();
   const Dict &d = dicts.GetPublicDict(); (void)d;
 

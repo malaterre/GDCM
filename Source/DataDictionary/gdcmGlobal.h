@@ -2,7 +2,7 @@
 
   Program: GDCM (Grassroots DICOM). A DICOM library
 
-  Copyright (c) 2006-2011 Mathieu Malaterre
+  Copyright (c) 2006-2017 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -95,12 +95,6 @@ inline std::ostream& operator<<(std::ostream &os, const Global &g)
   (void)g;
   return os;
 }
-
-// This instance will show up in any translation unit that uses
-// Global or that has a singleton.  It will make sure
-// Global is initialized before it is used and is the last
-// static object destroyed.
-static Global GlobalInstance;
 
 } // end namespace gdcm
 

@@ -2,7 +2,7 @@
 
   Program: GDCM (Grassroots DICOM). A DICOM library
 
-  Copyright (c) 2006-2011 Mathieu Malaterre
+  Copyright (c) 2006-2017 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -1247,7 +1247,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
   if( spacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( spacingtag ) && !ds.GetDataElement( spacingtag ).IsEmpty() )
     {
     const DataElement& de = ds.GetDataElement( spacingtag );
-    const Global &g = GlobalInstance;
+    const Global &g = Global::GetInstance();
     const Dicts &dicts = g.GetDicts();
     const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
     const VR & vr = entry.GetVR();
@@ -1340,7 +1340,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
       }
     else
       {
-      const Global &g = GlobalInstance;
+      const Global &g = Global::GetInstance();
       const Dicts &dicts = g.GetDicts();
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();
@@ -1576,7 +1576,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
     if( currentspacing != Tag(0xffff,0xffff) )
       {
       DataElement de( currentspacing );
-      const Global &g = GlobalInstance;
+      const Global &g = Global::GetInstance();
       const Dicts &dicts = g.GetDicts();
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();
@@ -1634,7 +1634,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
     if( currentspacing != Tag(0xffff,0xffff) )
       {
       DataElement de( currentspacing );
-      const Global &g = GlobalInstance;
+      const Global &g = Global::GetInstance();
       const Dicts &dicts = g.GetDicts();
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();

@@ -2,7 +2,7 @@
 
   Program: GDCM (Grassroots DICOM). A DICOM library
 
-  Copyright (c) 2006-2011 Mathieu Malaterre
+  Copyright (c) 2006-2017 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -215,7 +215,7 @@ PyObject *DataElementToPyObject(DataElement const &de, VR const &vr)
 
 PyObject *PythonFilter::ToPyObject(const Tag& t) const
 {
-  const Global &g = GlobalInstance;
+  const Global &g = Global::GetInstance();
   const Dicts &dicts = g.GetDicts();
   const DataSet &ds = GetFile().GetDataSet();
   if( ds.IsEmpty() || !ds.FindDataElement(t) )

@@ -2,7 +2,7 @@
 
   Program: GDCM (Grassroots DICOM). A DICOM library
 
-  Copyright (c) 2006-2011 Mathieu Malaterre
+  Copyright (c) 2006-2017 Mathieu Malaterre
   All rights reserved.
   See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
@@ -432,7 +432,7 @@ std::string GetOwner(DataSet const &ds, DataElement const &de)
 
 void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const DataElement &de)
 {
-  const Global& g = GlobalInstance;
+  const Global& g = Global::GetInstance();
   const Dicts &dicts = g.GetDicts();
 
   //const SequenceOfItems *sqi = de.GetSequenceOfItems();
