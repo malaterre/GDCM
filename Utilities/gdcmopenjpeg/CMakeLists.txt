@@ -290,12 +290,6 @@ configure_file(
  )
 
 #-----------------------------------------------------------------------------
-# build documentation in doc subdir:
-if(BUILD_DOC)
-  add_subdirectory(doc)
-endif()
-
-#-----------------------------------------------------------------------------
 # Buld Testing
 option(BUILD_TESTING "Build the tests." OFF)
 if(BUILD_TESTING)
