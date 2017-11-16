@@ -1216,6 +1216,8 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     // Else.
     // How do I send an error ?
     sp.resize( 3 ); // FIXME !!
+    sp[0] = 1.;
+    sp[1] = 1.;
     sp[2] = 1.;
     gdcmWarningMacro( "Could not find Spacing" );
     return sp;
