@@ -302,7 +302,7 @@ private final static String GDCMJNI = "gdcmjni";
    try {
      java.io.InputStream in = gdcmJNI.class.getResourceAsStream(name);
      // always write to different location
-     java.io.File fileOut = new java.io.File(System.getProperty("java.io.tmpdir") + "/" + path + name);
+     final java.io.File fileOut = new java.io.File(System.getProperty("java.io.tmpdir") + "/" + path + name);
      // create intermediate directory:
      fileOut.getParentFile().mkdirs();
      byte[] buffer = new byte[1024];
@@ -314,6 +314,13 @@ private final static String GDCMJNI = "gdcmjni";
      in.close();
      fos.close();
      System.load(fileOut.getAbsolutePath());
+     Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+       public void run() {
+         // cleanup temp dir:
+         fileOut.delete();
+         fileOut.getParentFile().delete();
+       }
+     }));
    } catch (Exception e) {
      System.err.println("Jar code library failed to load. \n" + e);
      System.exit(1);
