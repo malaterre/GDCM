@@ -65,7 +65,7 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
     {
     char *copy = (char*)outref;
     const uint16_t in[] = { 1 };
-    const char *tempimage = (char*)in;
+    const char *tempimage = (const char*)in;
     size_t vtklen = sizeof(in);
     ir.SetPixelFormat( gdcm::PixelFormat::UINT16 );
     bool b = ir.Rescale(copy,tempimage,vtklen);
@@ -86,7 +86,7 @@ $10 = {Intercept = 6.0999999999999999e-05, Slope = 3.774114, PF = {SamplesPerPix
     std::cerr << (outref[0] - in[0]) << std::endl;
     return 1;
     }
-  const char *tempimage = (char*)in;
+  const char *tempimage = (const char*)in;
   size_t vtklen = sizeof(in);
   ir.InverseRescale(copy,tempimage,vtklen);
 

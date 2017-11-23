@@ -2572,7 +2572,7 @@ SmartPointer<LookupTable> ImageHelper::GetLUT(File const& f)
         {
         // LookupTableType::RED == 0
         lut->SetLUT( LookupTable::LookupTableType(i),
-          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+          (const unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
         //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
         }
       else
@@ -2591,7 +2591,7 @@ SmartPointer<LookupTable> ImageHelper::GetLUT(File const& f)
       if( lut_raw )
         {
         lut->SetLUT( LookupTable::LookupTableType(i),
-          (unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
+          (const unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
         //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
         }
       else

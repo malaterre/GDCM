@@ -70,7 +70,7 @@ int TestUnpacker12Bits(int, char *[])
   const size_t len = sizeof(values) / sizeof(*values);
   const size_t outlen = 16 * len / 12;
   char * output = new char[outlen];
-  bool b = gdcm::Unpacker12Bits::Unpack(output, (char*)values, len);
+  bool b = gdcm::Unpacker12Bits::Unpack(output, (const char*)values, len);
   if (!b) res = 1;
   if( b )
     {
@@ -93,7 +93,7 @@ int TestUnpacker12Bits(int, char *[])
   const unsigned short input[] = { 0x301, 0x452, 0x967, 0xab8 };
   unsigned char values[6] = {};
   const unsigned char ref[] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab };
-  bool b = gdcm::Unpacker12Bits::Pack((char*)values, (char*)input, 8); // 4 * sizeof(us) == 8
+  bool b = gdcm::Unpacker12Bits::Pack((char*)values, (const char*)input, 8); // 4 * sizeof(us) == 8
   if(!b)
     {
     return 1;

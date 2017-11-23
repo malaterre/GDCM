@@ -169,7 +169,7 @@ int TestTag(int , char * [])
   std::cout << " stored in RAM as :";
   for (i=0;i<sizeof(uint32_t);i++)
     {
-    std::cout << std::hex <<"[" <<(uint32_t)((uint8_t*)&tag)[i] << "] " ;
+    std::cout << std::hex <<"[" <<(uint32_t)((const uint8_t*)&tag)[i] << "] " ;
     }
   std::cout << std::endl;
 
@@ -180,11 +180,11 @@ int TestTag(int , char * [])
   std::cout << " stored in RAM as : ";
   for (i=0;i<sizeof(uint16_t);i++)
     {
-    std::cout << std::hex <<"[" <<(uint32_t)((uint8_t*)&group)[i] << "] " ;
+    std::cout << std::hex <<"[" <<(uint32_t)((const uint8_t*)&group)[i] << "] " ;
     }
   for (i=0;i<sizeof(uint16_t);i++)
     {
-    std::cout << std::hex <<"[" <<(uint32_t)((uint8_t*)&element)[i] << "] " ;
+    std::cout << std::hex <<"[" <<(uint32_t)((const uint8_t*)&element)[i] << "] " ;
     }
   std::cout << std::endl;
 
