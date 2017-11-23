@@ -209,7 +209,7 @@ static bool parsejp2_imp( const char * const stream, const size_t file_size, boo
     if( len32 == 1 ) /* 64bits ? */
       {
       bool b = read64(&cur, &cur_size, &len64);
-      assert( b );
+      assert( b ); (void)b;
       len64 -= 8;
       }
     if( marker == JP2C )
