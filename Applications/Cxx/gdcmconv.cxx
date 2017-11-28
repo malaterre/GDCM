@@ -141,7 +141,7 @@ static void PrintHelp()
   std::cout << "     --remove-retired      Remove retired tags." << std::endl;
   std::cout << "Image only Options:" << std::endl;
   std::cout << "  -l --apply-lut                      Apply LUT (non-standard, advanced user only)." << std::endl;
-  std::cout << "     --decompress-lut                 Decompress LUT (linearied segmented LUT)." << std::endl;
+  std::cout << "     --decompress-lut                 Decompress LUT (linearize segmented LUT)." << std::endl;
   std::cout << "  -P --photometric-interpretation %s  Change Photometric Interpretation (when possible)." << std::endl;
   std::cout << "  -w --raw                            Decompress image." << std::endl;
   std::cout << "  -d --deflated                       Compress using deflated (gzip)." << std::endl;
