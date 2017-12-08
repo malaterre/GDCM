@@ -1563,7 +1563,14 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
         }
       }
     }
-
+    // cleanup root (famous MR -> EMR case) 
+    {
+    const Tag t1(0x0018,0x0088);
+    ds.Remove(t1);
+    const Tag t2(0x0028,0x0030);
+    ds.Remove(t2);
+    }
+ 
     return;
     }
 
