@@ -93,6 +93,6 @@ static const char * const gdcmMD5DataBrokenImages[][2] = {
 // Two Items in a single Frame JPEG compressed DICOM image:
 { "cd00658f54dbd2d2a9d02d64c6f6497e" , "JPEGInvalidSecondFrag.dcm" },
 
-{ 0 ,0 }
+{ GDCM_NULLPTR ,GDCM_NULLPTR }
 };
 

@@ -27,11 +27,11 @@ class DataEvent : public AnyEvent
 public:
   typedef DataEvent Self;
   typedef AnyEvent Superclass;
-  DataEvent(const char *bytes = 0, size_t len = 0):Bytes(bytes),Length(len) {}
+  DataEvent(const char *bytes = GDCM_NULLPTR, size_t len = 0):Bytes(bytes),Length(len) {}
   virtual ~DataEvent() {}
   virtual const char * GetEventName() const { return "DataEvent"; }
   virtual bool CheckEvent(const ::gdcm::Event* e) const
-  { return (dynamic_cast<const Self*>(e) == NULL ? false : true) ; }
+  { return (dynamic_cast<const Self*>(e) == GDCM_NULLPTR ? false : true) ; }
   virtual ::gdcm::Event* MakeObject() const
     { return new Self; }
   DataEvent(const Self&s) : AnyEvent(s){};

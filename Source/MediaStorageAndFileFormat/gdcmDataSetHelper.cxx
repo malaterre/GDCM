@@ -83,7 +83,7 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
   //const Dict &d = dicts.GetPublicDict();
 
   std::string strowner;
-  const char *owner = 0;
+  const char *owner = GDCM_NULLPTR;
   const Tag& t = tag;
   if( t.IsPrivate() && !t.IsPrivateCreator() )
     {

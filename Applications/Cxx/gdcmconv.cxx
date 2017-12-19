@@ -490,24 +490,24 @@ int main (int argc, char *argv[])
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
-        {"input", 1, 0, 0},
-        {"output", 1, 0, 0},
-        {"group-length", 1, 0, 0}, // valid / create / remove
-        {"preamble", 1, 0, 0}, // valid / create / remove
-        {"padding", 1, 0, 0}, // valid (\0 -> space) / optimize (at most 1 byte of padding)
-        {"vr", 1, 0, 0}, // valid
-        {"sop", 1, 0, 0}, // default to SC...
-        {"iod", 1, 0, 0}, // valid
-        {"meta", 1, 0, 0}, // valid / create / remove
-        {"dataset", 1, 0, 0}, // valid / create / remove?
-        {"sequence", 1, 0, 0}, // defined / undefined
-        {"deflate", 1, 0, 0}, // 1 - 9 / best = 9 / fast = 1
-        {"tag", 1, 0, 0}, // need to specify a tag xxxx,yyyy = value to override default
-        {"name", 1, 0, 0}, // same as tag but explicit use of name
+        {"input", 1, GDCM_NULLPTR, 0},
+        {"output", 1, GDCM_NULLPTR, 0},
+        {"group-length", 1, GDCM_NULLPTR, 0}, // valid / create / remove
+        {"preamble", 1, GDCM_NULLPTR, 0}, // valid / create / remove
+        {"padding", 1, GDCM_NULLPTR, 0}, // valid (\0 -> space) / optimize (at most 1 byte of padding)
+        {"vr", 1, GDCM_NULLPTR, 0}, // valid
+        {"sop", 1, GDCM_NULLPTR, 0}, // default to SC...
+        {"iod", 1, GDCM_NULLPTR, 0}, // valid
+        {"meta", 1, GDCM_NULLPTR, 0}, // valid / create / remove
+        {"dataset", 1, GDCM_NULLPTR, 0}, // valid / create / remove?
+        {"sequence", 1, GDCM_NULLPTR, 0}, // defined / undefined
+        {"deflate", 1, GDCM_NULLPTR, 0}, // 1 - 9 / best = 9 / fast = 1
+        {"tag", 1, GDCM_NULLPTR, 0}, // need to specify a tag xxxx,yyyy = value to override default
+        {"name", 1, GDCM_NULLPTR, 0}, // same as tag but explicit use of name
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
         {"check-meta", 0, &checkmeta, 1}, // specific Root (not GDCM)
 // Image specific options:
-        {"pixeldata", 1, 0, 0}, // valid
+        {"pixeldata", 1, GDCM_NULLPTR, 0}, // valid
         {"apply-lut", 0, &lut, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"raw", 0, &raw, 1}, // default (implicit VR, LE) / Explicit LE / Explicit BE
         {"deflated", 0, &deflated, 1}, // DeflatedExplicitVRLittleEndian
@@ -517,8 +517,8 @@ int main (int argc, char *argv[])
         {"jpegls", 0, &jpegls, 1}, // JPEG-LS: lossy / lossless
         {"j2k", 0, &j2k, 1}, // J2K: lossy / lossless
         {"rle", 0, &rle, 1}, // lossless !
-        {"mpeg2", 0, 0, 0}, // lossy !
-        {"jpip", 0, 0, 0}, // ??
+        {"mpeg2", 0, GDCM_NULLPTR, 0}, // lossy !
+        {"jpip", 0, GDCM_NULLPTR, 0}, // ??
         {"split", 1, &split, 1}, // split fragments
         {"planar-configuration", 1, &planarconf, 1}, // Planar Configuration
         {"explicit", 0, &explicitts, 1}, //
@@ -552,7 +552,7 @@ int main (int argc, char *argv[])
         {"ignore-errors", 0, &ignoreerrors, 1},
         {"quiet", 0, &quiet, 1},
 
-        {0, 0, 0, 0}
+        {GDCM_NULLPTR, 0, GDCM_NULLPTR, 0}
     };
 
     c = getopt_long (argc, argv, "i:o:XMUClwdJKLRFYS:P:VWDEhvIr:q:t:n:e:",

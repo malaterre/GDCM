@@ -53,7 +53,7 @@ static const char *VRStrings[] = {
   "OB or OW",  // 30
   "US or SS",  // 31
   "US or SS or OW", //32
-  0
+  GDCM_NULLPTR
 };
 
 static VR::VRType VRValue[] = {
@@ -359,7 +359,7 @@ VR::VRType VR::GetVRType(const char *vr)
 {
   VRType r = VR::VR_END;
   if(!vr) return r;
-  for (int i = 0; VRStrings[i] != NULL; i++)
+  for (int i = 0; VRStrings[i] != GDCM_NULLPTR; i++)
     //if (strncmp(VRStrings[i],vr, strlen(VRStrings[i])) == 0)
     if (strcmp(VRStrings[i],vr) == 0)
       {
@@ -392,7 +392,7 @@ VR::VRType VR::GetVRType(const char *vr)
 
 bool VR::IsValid(const char *vr)
 {
-  for (int i = 1; VRStrings[i] != NULL; i++)
+  for (int i = 1; VRStrings[i] != GDCM_NULLPTR; i++)
     {
     const char *ref = VRStrings[i];
     // Use lazy evaluation instead of strncmp

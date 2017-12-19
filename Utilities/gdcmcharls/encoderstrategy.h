@@ -19,10 +19,10 @@ public:
 		 valcurrent(0),
 		 bitpos(0),
 		 _compressedLength(0),
-		 _position(0),
+		 _position(GDCM_NULLPTR),
 		 _isFFWritten(false),
 		 _bytesWritten(0),
-		 _compressedStream(NULL)
+		 _compressedStream(GDCM_NULLPTR)
 	{
 	}
 
@@ -52,7 +52,7 @@ protected:
 		bitpos = 32;
 		valcurrent = 0;
 
-		if (compressedStream->rawStream == NULL)
+		if (compressedStream->rawStream == GDCM_NULLPTR)
 		{
 			_position = compressedStream->rawData;
 			_compressedLength = compressedStream->count;
@@ -71,7 +71,7 @@ protected:
 	{
 		ASSERT(length < 32 && length >= 0);
 
-		ASSERT((_qdecoder.get() == NULL) || (length == 0 && value == 0) ||( _qdecoder->ReadLongValue(length) == value));
+		ASSERT((_qdecoder.get() == GDCM_NULLPTR) || (length == 0 && value == 0) ||( _qdecoder->ReadLongValue(length) == value));
 
 #ifndef NDEBUG
 		if (length < 32)
@@ -115,7 +115,7 @@ protected:
 		Flush();
 		ASSERT(bitpos == 0x20);
 
-		if (_compressedStream != NULL)
+		if (_compressedStream != GDCM_NULLPTR)
 		{
 			OverFlow();
 		}
@@ -123,7 +123,7 @@ protected:
 
 	void OverFlow()
 	{
-		if (_compressedStream == NULL)
+		if (_compressedStream == GDCM_NULLPTR)
 			throw JlsException(CompressedBufferTooSmall);
 
 		size_t bytesCount = _position-(BYTE*)&_buffer[0];

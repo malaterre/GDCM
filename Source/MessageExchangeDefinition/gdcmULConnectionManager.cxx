@@ -43,21 +43,21 @@ namespace network
 
 ULConnectionManager::ULConnectionManager()
 {
-  mConnection = NULL;
-  mSecondaryConnection = NULL;
+  mConnection = GDCM_NULLPTR;
+  mSecondaryConnection = GDCM_NULLPTR;
 }
 
 ULConnectionManager::~ULConnectionManager()
 {
-  if (mConnection != NULL)
+  if (mConnection != GDCM_NULLPTR)
     {
     delete mConnection;
-    mConnection = NULL;
+    mConnection = GDCM_NULLPTR;
     }
-  if (mSecondaryConnection != NULL)
+  if (mSecondaryConnection != GDCM_NULLPTR)
     {
     delete mSecondaryConnection;
-    mSecondaryConnection = NULL;
+    mSecondaryConnection = GDCM_NULLPTR;
     }
 }
 
@@ -80,7 +80,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
     return false;
     }
 
-  if (mConnection != NULL)
+  if (mConnection != GDCM_NULLPTR)
     {
     delete mConnection;
     }
@@ -189,9 +189,9 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
   //here's the thing
   //if there's nothing on the event loop, assume that it's done & the function can exit.
   //otherwise, keep rolling the event loop
-  ULEvent theEvent(eAASSOCIATERequestLocalUser, NULL);
+  ULEvent theEvent(eAASSOCIATERequestLocalUser, GDCM_NULLPTR);
   //no callback, assume that no data is transferred back, because there shouldn't be any
-  EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
+  EStateID theState = RunEventLoop(theEvent, mConnection, GDCM_NULLPTR, false);
 
   if(theState != eSta6TransferReady)
     {
@@ -200,7 +200,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
       = thePDUs.begin(); itor != thePDUs.end(); itor++)
       {
       //assert(*itor);
-      if (*itor == NULL) continue; //can have a nulled pdu, apparently
+      if (*itor == GDCM_NULLPTR) continue; //can have a nulled pdu, apparently
       (*itor)->Print(Trace::GetErrorStream());
       }
     }
@@ -211,7 +211,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
       = thePDUs.begin(); itor != thePDUs.end(); itor++)
       {
       assert(*itor);
-      if (*itor == NULL) continue; //can have a nulled pdu, apparently
+      if (*itor == GDCM_NULLPTR) continue; //can have a nulled pdu, apparently
       (*itor)->Print(Trace::GetDebugStream());
       }
     }
@@ -243,7 +243,7 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
     }
   gdcmDebugMacro( "SCP: First connection established on port " << inReturnPort );
 
-  if (mSecondaryConnection != NULL)
+  if (mSecondaryConnection != GDCM_NULLPTR)
     {
     gdcmDebugMacro( "delete mSecondaryConnection" );
     delete mSecondaryConnection;
@@ -264,7 +264,7 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
     }
   gdcmDebugMacro( "SCU: Second connection established on port " << inConnectPort );
 
-  if (mConnection!= NULL)
+  if (mConnection!= GDCM_NULLPTR)
     {
     gdcmDebugMacro( "delete mConnection" );
     delete mConnection;
@@ -325,10 +325,10 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
   //here's the thing
   //if there's nothing on the event loop, assume that it's done & the function can exit.
   //otherwise, keep rolling the event loop
-  ULEvent theEvent(eAASSOCIATERequestLocalUser, NULL);
+  ULEvent theEvent(eAASSOCIATERequestLocalUser, GDCM_NULLPTR);
   std::vector<DataSet> empty;
   //No data should be returned when connections are established
-  EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
+  EStateID theState = RunEventLoop(theEvent, mConnection, GDCM_NULLPTR, false);
 
   if (Trace::GetDebugFlag())
     {
@@ -352,7 +352,7 @@ std::vector<PresentationDataValue> ULConnectionManager::SendEcho(){
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCEchoPDU(*mConnection);//pass NULL for C-Echo
   ULEvent theEvent(ePDATArequest, theDataPDU);
 
-  EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
+  EStateID theState = RunEventLoop(theEvent, mConnection, GDCM_NULLPTR, false);
   //theEvent should contain the PDU for the echo!
 
   if (theState == eSta6TransferReady){//ie, finished the transitions
@@ -373,7 +373,7 @@ std::vector<DataSet> ULConnectionManager::SendMove(const BaseRootQuery* inRootQu
 bool ULConnectionManager::SendMove(const BaseRootQuery* inRootQuery,
   ULConnectionCallback* inCallback)
 {
-  if (mConnection == NULL)
+  if (mConnection == GDCM_NULLPTR)
     {
     gdcmErrorMacro( "mConnection is NULL" );
     return false;
@@ -394,7 +394,7 @@ std::vector<DataSet> ULConnectionManager::SendFind(const BaseRootQuery* inRootQu
 
 void ULConnectionManager::SendFind(const BaseRootQuery* inRootQuery, ULConnectionCallback* inCallback)
 {
-  if (mConnection == NULL)
+  if (mConnection == GDCM_NULLPTR)
     {
     return;
     }
@@ -412,11 +412,11 @@ std::vector<DataSet> ULConnectionManager::SendStore(const File &file, std::istre
 
 void ULConnectionManager::SendStore(const File & file, ULConnectionCallback* inCallback, std::istream * pStream /*= NULL*/, std::streampos dataSetOffset/*=0*/ )
 {
-  if (mConnection == NULL)
+  if (mConnection == GDCM_NULLPTR)
     {
     return;
     }
-  bool writeDataSet = pStream == NULL ;
+  bool writeDataSet = pStream == GDCM_NULLPTR ;
   std::vector<BasePDU*> theDataPDU = PDUFactory::CreateCStoreRQPDU(*mConnection, file, writeDataSet);
   const DataSet* inDataSet = &file.GetDataSet();
   DataSetEvent dse( inDataSet );
@@ -436,7 +436,7 @@ std::vector<DataSet> ULConnectionManager::SendNEventReport	(const BaseQuery* inQ
 
 void ULConnectionManager::SendNEventReport	(const BaseQuery* inQuery, ULConnectionCallback* inCallback)
 {
-  if (mConnection == NULL)
+  if (mConnection == GDCM_NULLPTR)
     {
     return;
     }
@@ -454,7 +454,7 @@ std::vector<DataSet> ULConnectionManager::SendNGet			(const BaseQuery* inQuery)
 
 void ULConnectionManager::SendNGet			(const BaseQuery* inQuery, ULConnectionCallback* inCallback)
 {
-  if (mConnection == NULL)
+  if (mConnection == GDCM_NULLPTR)
     {
     return;
     }
@@ -472,7 +472,7 @@ std::vector<DataSet> ULConnectionManager::SendNSet			(const BaseQuery* inQuery)
 
 void ULConnectionManager::SendNSet			(const BaseQuery* inQuery, ULConnectionCallback* inCallback)
 {
-  if (mConnection == NULL)
+  if (mConnection == GDCM_NULLPTR)
     {
     return;
     }
@@ -490,7 +490,7 @@ std::vector<DataSet> ULConnectionManager::SendNAction		(const BaseQuery* inQuery
 
 void ULConnectionManager::SendNAction		(const BaseQuery* inQuery, ULConnectionCallback* inCallback)
 {
-  if (mConnection == NULL)
+  if (mConnection == GDCM_NULLPTR)
     {
     return;
     }
@@ -508,7 +508,7 @@ std::vector<DataSet> ULConnectionManager::SendNCreate		(const BaseQuery* inQuery
 
 void ULConnectionManager::SendNCreate		(const BaseQuery* inQuery, ULConnectionCallback* inCallback)
 {
-  if (mConnection == NULL)
+  if (mConnection == GDCM_NULLPTR)
     {
     return;
     }
@@ -526,7 +526,7 @@ std::vector<DataSet> ULConnectionManager::SendNDelete		(const BaseQuery* inQuery
 
 void ULConnectionManager::SendNDelete		(const BaseQuery* inQuery, ULConnectionCallback* inCallback)
 {
-  if (mConnection == NULL)
+  if (mConnection == GDCM_NULLPTR)
     {
     return;
     }
@@ -537,7 +537,7 @@ void ULConnectionManager::SendNDelete		(const BaseQuery* inQuery, ULConnectionCa
 
 bool ULConnectionManager::BreakConnection(const double& inTimeOut){
   std::vector<DataSet> theResult;
-  if (mConnection == NULL){
+  if (mConnection == GDCM_NULLPTR){
     return false;
   }
   BasePDU* thePDU = PDUFactory::ConstructReleasePDU();
@@ -545,7 +545,7 @@ bool ULConnectionManager::BreakConnection(const double& inTimeOut){
   mConnection->GetTimer().SetTimeout(inTimeOut);
 
   //assume no data coming back when dying, no need for callback
-  EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
+  EStateID theState = RunEventLoop(theEvent, mConnection, GDCM_NULLPTR, false);
 
   return (theState == eSta1Idle);//ie, finished the transitions
 }
@@ -555,7 +555,7 @@ void ULConnectionManager::BreakConnectionNow(){
   ULEvent theEvent(eAABORTRequest, thePDU);
 
   //assume no data coming back when dying, no need for callback
-  EStateID theState = RunEventLoop(theEvent, mConnection, NULL, false);
+  EStateID theState = RunEventLoop(theEvent, mConnection, GDCM_NULLPTR, false);
   (void)theState;
 }
   
@@ -589,7 +589,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
     EStateID theCStoreStateID = eSta6TransferReady;
     bool secondConnectionEstablished = false;
     gdcmDebugMacro( "Before mSecondaryConnection.GetProtocol" );
-    if (mSecondaryConnection->GetProtocol() == NULL){
+    if (mSecondaryConnection->GetProtocol() == GDCM_NULLPTR){
       //establish the connection
       //can fail if is_readready doesn't return true, ie, the connection
       //wasn't opened on the other side because the other side isn't sending data yet
@@ -610,7 +610,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
     if (secondConnectionEstablished &&
       (mSecondaryConnection->GetState()== eSta1Idle ||
       mSecondaryConnection->GetState() == eSta2Open)){
-      ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+      ULEvent theCStoreEvent(eEventDoesNotExist, GDCM_NULLPTR);//have to fill this in, we're in passive mode now
       theCStoreStateID = RunEventLoop(theCStoreEvent, mSecondaryConnection, inCallback, true);
     }
     gdcmDebugMacro( "After mSecondaryConnection / RunEventLoop: " << (int)theCStoreStateID );
@@ -629,7 +629,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
         is.read( (char*)&itemtype, 1 );
 
         BasePDU* thePDU = PDUFactory::ConstructPDU(itemtype);
-        if (thePDU != NULL)
+        if (thePDU != GDCM_NULLPTR)
           {
           incomingPDUs.push_back(thePDU);
           thePDU->Read(is);
@@ -713,7 +713,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           }
           if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success){
             //check for other error fields
-            const ByteValue *err1 = NULL, *err2 = NULL;
+            const ByteValue *err1 = GDCM_NULLPTR, *err2 = GDCM_NULLPTR;
             gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
             switch (theVal){
               case 0xA701:
@@ -779,7 +779,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
             if (theCommandCode == 0x8021){//cmove response, so prep the retrieval loop on the back connection
 
               bool dataSetCountIncremented = true;//false once the number of incoming datasets doesn't change.
-              if (mSecondaryConnection->GetProtocol() == NULL){
+              if (mSecondaryConnection->GetProtocol() == GDCM_NULLPTR){
                 //establish the connection
                 //can fail if is_readready doesn't return true, ie, the connection
                 //wasn't opened on the other side because the other side isn't sending data yet
@@ -789,7 +789,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
                 if (secondConnectionEstablished &&
                   (mSecondaryConnection->GetState()== eSta1Idle ||
                   mSecondaryConnection->GetState() == eSta2Open)){
-                  ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+                  ULEvent theCStoreEvent(eEventDoesNotExist, GDCM_NULLPTR);//have to fill this in, we're in passive mode now
                   theCStoreStateID = RunEventLoop(theCStoreEvent, mSecondaryConnection, inCallback, true);
                 } else {//something broke, can't establish secondary move connection here
                   gdcmErrorMacro( "Unable to establish secondary connection with server, aborting." << std::endl);
@@ -798,7 +798,7 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
               }
               if (secondConnectionEstablished){
                 while (theCStoreStateID == eSta6TransferReady && dataSetCountIncremented){
-                  ULEvent theCStoreEvent(eEventDoesNotExist, NULL);//have to fill this in, we're in passive mode now
+                  ULEvent theCStoreEvent(eEventDoesNotExist, GDCM_NULLPTR);//have to fill this in, we're in passive mode now
                   //now, get data from across the network
                   theCStoreStateID = RunEventLoop(theCStoreEvent, mSecondaryConnection, inCallback, true);
                   if (inCallback){
@@ -828,14 +828,14 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
                 is.read( (char*)&itemtype, 1 );
                 //what happens if nothing's read?
                 thePDU = PDUFactory::ConstructPDU(itemtype);
-                if (itemtype != 0x4 && thePDU != NULL){ //ie, not a pdatapdu
+                if (itemtype != 0x4 && thePDU != GDCM_NULLPTR){ //ie, not a pdatapdu
                   std::vector<BasePDU*> interruptingPDUs;
                   currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(interruptingPDUs[0]));
                   currentEvent.SetPDU(interruptingPDUs);
                   interrupted= true;
                   break;
                 }
-                if (thePDU != NULL){
+                if (thePDU != GDCM_NULLPTR){
                   thePDU->Read(is);
                   theData.push_back(thePDU);
                 } else{
@@ -910,7 +910,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
     std::istream &is = *inWhichConnection->GetProtocol();
     //std::ostream &os = *inWhichConnection->GetProtocol();
 
-    BasePDU* theFirstPDU = NULL;// the first pdu read in during this event loop,
+    BasePDU* theFirstPDU = GDCM_NULLPTR;// the first pdu read in during this event loop,
     //used to make sure the presentation context ID is correct
 
     //read the connection, as that's an event as well.
@@ -931,7 +931,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
           gdcmDebugMacro( "Received ItemType #" << (int)itemtype );
           //what happens if nothing's read?
           theFirstPDU = PDUFactory::ConstructPDU(itemtype);
-          if (theFirstPDU != NULL){
+          if (theFirstPDU != GDCM_NULLPTR){
             incomingPDUs.push_back(theFirstPDU);
             theFirstPDU->Read(is);
             gdcmDebugMacro("PDU code: " << static_cast<int>(itemtype) << std::endl);
@@ -1012,7 +1012,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
               if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success)
                 {
                 //check for other error fields
-                const ByteValue *err1 = NULL, *err2 = NULL;
+                const ByteValue *err1 = GDCM_NULLPTR, *err2 = GDCM_NULLPTR;
                 gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
                 switch (theVal){
                   case 0xA701:
@@ -1086,7 +1086,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                   is.read( (char*)&itemtype, 1 );
                   //what happens if nothing's read?
                   thePDU = PDUFactory::ConstructPDU(itemtype);
-                  if (itemtype != 0x4 && thePDU != NULL){ //ie, not a pdatapdu
+                  if (itemtype != 0x4 && thePDU != GDCM_NULLPTR){ //ie, not a pdatapdu
                     std::vector<BasePDU*> interruptingPDUs;
                     interruptingPDUs.push_back(thePDU);
                     currentEvent.SetEvent(PDUFactory::DetermineEventByPDU(interruptingPDUs[0]));
@@ -1094,7 +1094,7 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
                     interrupted= true;
                     break;
                   }
-                  if (thePDU != NULL){
+                  if (thePDU != GDCM_NULLPTR){
                     thePDU->Read(is);
                     theData.push_back(thePDU);
                   } else{

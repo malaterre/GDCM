@@ -75,7 +75,7 @@ static const char * GDCM_TERMINAL_VT100_BACKGROUND_WHITE     = "";
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
-Printer::Printer():PrintStyle(Printer::VERBOSE_STYLE),F(0)
+Printer::Printer():PrintStyle(Printer::VERBOSE_STYLE),F(GDCM_NULLPTR)
 {
   MaxPrintLength = 0x100; // Need to be %2
 
@@ -458,11 +458,11 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
   const DataElement &de, std::ostream &out, std::string const & indent )
 {
   const ByteValue *bv = de.GetByteValue();
-  const SequenceOfItems *sqi = 0; //de.GetSequenceOfItems();
+  const SequenceOfItems *sqi = GDCM_NULLPTR; //de.GetSequenceOfItems();
   const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
 
   std::string strowner;
-  const char *owner = 0;
+  const char *owner = GDCM_NULLPTR;
   const Tag& t = de.GetTag();
   if( t.IsPrivate() && !t.IsPrivateCreator() )
     {
@@ -803,7 +803,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
   if( name && *name )
     {
     // No owner case !
-    if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && !t.IsPrivateCreator() )
+    if( t.IsPrivate() && (owner == GDCM_NULLPTR || *owner == 0 ) && !t.IsPrivateCreator() )
       {
       os << GDCM_TERMINAL_VT100_FOREGROUND_RED;
       os << " " << name;

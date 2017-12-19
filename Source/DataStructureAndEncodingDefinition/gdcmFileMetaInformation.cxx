@@ -413,7 +413,7 @@ bool ReadExplicitDataElement(std::istream &is, ExplicitDataElement &de)
     }
   //gdcmDebugMacro( "VL : " << vl );
   // Read the Value
-  ByteValue *bv = NULL;
+  ByteValue *bv = GDCM_NULLPTR;
   if( vr == VR::SQ )
     {
     assert(0 && "Should not happen");
@@ -480,7 +480,7 @@ bool ReadImplicitDataElement(std::istream &is, ImplicitDataElement &de)
     assert(0 && "Should not happen");
     return false;
     }
-  ByteValue *bv = 0;
+  ByteValue *bv = GDCM_NULLPTR;
   if( vl.IsUndefined() )
     {
     assert(0 && "Should not happen");

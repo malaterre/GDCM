@@ -121,7 +121,7 @@ static const CodeDefinition SourceImagePurposesofReference[] = {
 {"DCM",121322,"Source image for image processing operation"},
 {"DCM",121329,"Source image for montage"},
 {"DCM",121330,"Lossy compressed predecessor"},
-{NULL,0,NULL} // sentinel
+{GDCM_NULLPTR,0,GDCM_NULLPTR} // sentinel
 };
 
 // CID 7203 Image Derivation
@@ -172,7 +172,7 @@ static const CodeDefinition ImageDerivation[] = {
 { "DCM",113088,"Gaussian blur" },
 { "DCM",113089,"Unsharp mask" },
 { "DCM",113090,"Image stitching" },
-{NULL,0,NULL} // sentinel
+{GDCM_NULLPTR,0,GDCM_NULLPTR} // sentinel
 };
 
 // CID 7205 Purpose Of Reference to Alternate Representation
@@ -182,7 +182,7 @@ static const CodeDefinition PurposeOfReferencetoAlternateRepresentation[] = {
 { "DCM",121326,"Alternate SOP Class instance" },
 { "DCM",121327,"Full fidelity image" },
 { "DCM",121328,"Alternate Photometric Interpretation image" },
-{NULL,0,NULL} // sentinel
+{GDCM_NULLPTR,0,GDCM_NULLPTR} // sentinel
 };
 
 class FileDerivationInternals
@@ -216,7 +216,7 @@ const CodeDefinition * GetCodeDefinition( unsigned int codevalue, const CodeDefi
   if( cds->CodeValue )
     return cds;
   // else
-  return NULL;
+  return GDCM_NULLPTR;
 }
 
 void FileDerivation::SetDerivationDescription( const char *dd )

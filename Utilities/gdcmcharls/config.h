@@ -5,6 +5,8 @@
 
 #ifndef CHARLS_CONFIG
 #define CHARLS_CONFIG
+/* Use configuration from gdcm as well */
+#include "gdcmConfigure.h"
 
 #ifdef NDEBUG
 #  ifndef ASSERT

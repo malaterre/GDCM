@@ -87,7 +87,7 @@ std::vector<signed char> rgquant16Ll = CreateQLutLossless(16);
 template<class STRATEGY>
 std::auto_ptr<STRATEGY> JlsCodecFactory<STRATEGY>::GetCodec(const JlsParameters& info, const JlsCustomParameters& presets)
 {
-	STRATEGY* pstrategy = NULL;
+	STRATEGY* pstrategy = GDCM_NULLPTR;
 	if (presets.RESET != 0 && presets.RESET != BASIC_RESET)
 	{
 		DefaultTraitsT<BYTE,BYTE> traits((1 << info.bitspersample) - 1, info.allowedlossyerror); 
@@ -100,7 +100,7 @@ std::auto_ptr<STRATEGY> JlsCodecFactory<STRATEGY>::GetCodec(const JlsParameters&
 		pstrategy = GetCodecImpl(info);
 	}
 
-	if (pstrategy != NULL)
+	if (pstrategy != GDCM_NULLPTR)
 	{
 		pstrategy->SetPresets(presets);
 	}
@@ -119,10 +119,10 @@ STRATEGY* CreateCodec(const TRAITS& t, const STRATEGY*,const JlsParameters& info
 template<class STRATEGY>
 STRATEGY* JlsCodecFactory<STRATEGY>::GetCodecImpl(const JlsParameters& info)
 {	
-	STRATEGY* s = 0;
+	STRATEGY* s = GDCM_NULLPTR;
 
 	if (info.ilv == ILV_SAMPLE && info.components != 3)
-		return NULL;
+		return GDCM_NULLPTR;
 
 #ifndef DISABLE_SPECIALIZATIONS
 
@@ -163,7 +163,7 @@ STRATEGY* JlsCodecFactory<STRATEGY>::GetCodecImpl(const JlsParameters& info)
 
 		return CreateCodec(DefaultTraitsT<USHORT, USHORT>(maxval, info.allowedlossyerror), s, info); 	
 	}
-	return NULL;
+	return GDCM_NULLPTR;
 }
 
 

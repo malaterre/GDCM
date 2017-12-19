@@ -25,7 +25,7 @@
 using std::cerr;
 using std::endl;
 
-Fork::ForkProcess* Fork::ForkProcess::list = 0;
+Fork::ForkProcess* Fork::ForkProcess::list = GDCM_NULLPTR;
 Fork::KillForks Fork::killall;
 
 Fork::~Fork ()
@@ -42,18 +42,18 @@ Fork::KillForks::~KillForks ()
     if (cur->kill_child)
       delete cur;
 
-  while (Fork::ForkProcess::list && wait (0) > 0) {}
+  while (Fork::ForkProcess::list && wait (GDCM_NULLPTR) > 0) {}
 }
 
 Fork::ForkProcess::ForkProcess (bool kill, bool give_reason)
-  : kill_child (kill), reason (give_reason), next (0)
+  : kill_child (kill), reason (give_reason), next (GDCM_NULLPTR)
 {
-  if (list == 0) {
+  if (list == GDCM_NULLPTR) {
     struct sigaction sa;
     sa.sa_handler = (void(*)(int)) sighnd (&Fork::ForkProcess::reaper_nohang);
     sigemptyset (&sa.sa_mask);
     sa.sa_flags = SA_RESTART;
-    sigaction (SIGCHLD, &sa, 0);
+    sigaction (SIGCHLD, &sa, GDCM_NULLPTR);
   }
 
   pid = fork ();
@@ -70,14 +70,14 @@ Fork::ForkProcess::ForkProcess (bool kill, bool give_reason)
       delete p;
       p = nxt;
     }
-    list = 0;
+    list = GDCM_NULLPTR;
 
     if (kill_child) {
       struct sigaction sa;
       sa.sa_handler = (void(*)(int)) sighnd (&Fork::ForkProcess::commit_suicide);
       sigemptyset (&sa.sa_mask);
       sa.sa_flags = SA_RESTART;
-      sigaction (SIGTERM, &sa, 0);
+      sigaction (SIGTERM, &sa, GDCM_NULLPTR);
     }
   }
 }
@@ -153,7 +153,7 @@ void Fork::ForkProcess::reaper_nohang (int signo)
   int status;
   pid_t wpid;
   if ((wpid = waitpid (-1, &status, WNOHANG)) > 0) {
-    ForkProcess* prev = 0;
+    ForkProcess* prev = GDCM_NULLPTR;
     ForkProcess* cur  = list;
     while (cur) {
       if (cur->pid == wpid) {
@@ -198,7 +198,7 @@ void Fork::suicide_signal (int signo)
   sa.sa_handler = (void(*)(int)) sighnd (&Fork::ForkProcess::commit_suicide);
   sigemptyset (&sa.sa_mask);
   sa.sa_flags = 0;
-  if (sigaction (signo, &sa, 0) == -1)
+  if (sigaction (signo, &sa, GDCM_NULLPTR) == -1)
     perror ("Fork: Cannot commit suicide with the specified signal");
 }
 #endif //windows does not get fork

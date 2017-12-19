@@ -2,7 +2,7 @@
 find_package(DCMTK)
 find_package(DICOM3TOOLS)
 
-subdirs(
+add_subdirectory(
   Source
   )
 

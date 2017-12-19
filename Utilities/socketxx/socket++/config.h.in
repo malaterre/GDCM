@@ -3,6 +3,9 @@
 #define EXTERN_C_BEGIN @EXTERN_C_BEGIN@
 #define EXTERN_C_END @EXTERN_C_END@
 
+/* Use configuration from gdcm as well */
+#include "gdcmConfigure.h"
+
 /* Define whether or not system has strsignal */
 #cmakedefine SOCKETXX_HAVE_STRSIGNAL
 

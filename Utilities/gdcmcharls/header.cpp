@@ -69,7 +69,7 @@ void JpegImageDataSegment::Serialize(JpegStreamWriter& streamWriter)
 	std::auto_ptr<EncoderStrategy> qcodec = JlsCodecFactory<EncoderStrategy>().GetCodec(info, _info.custom);
 	ProcessLine* processLine = qcodec->CreateProcess(_rawStreamInfo);
 	ByteStreamInfo compressedData = streamWriter.OutputStream();
-	size_t cbyteWritten = qcodec->EncodeScan(std::auto_ptr<ProcessLine>(processLine), &compressedData, streamWriter._bCompare ? streamWriter.GetPos() : NULL);
+	size_t cbyteWritten = qcodec->EncodeScan(std::auto_ptr<ProcessLine>(processLine), &compressedData, streamWriter._bCompare ? streamWriter.GetPos() : GDCM_NULLPTR);
 	streamWriter.Seek(cbyteWritten);
 }
 
@@ -124,7 +124,7 @@ void JpegMarkerReader::Read(ByteStreamInfo rawPixels)
 
 	int64_t bytesPerPlane = (int64_t)(_rect.Width) * _rect.Height * ((_info.bitspersample + 7)/8);
 
-	if (rawPixels.rawData != NULL && int64_t(rawPixels.count) < bytesPerPlane * _info.components)
+	if (rawPixels.rawData != GDCM_NULLPTR && int64_t(rawPixels.count) < bytesPerPlane * _info.components)
 		throw JlsException(UncompressedBufferTooSmall);
 
 	int componentIndex = 0;
@@ -317,7 +317,7 @@ int JpegMarkerReader::ReadStartOfFrame()
 
 BYTE JpegMarkerReader::ReadByte()
 {
-	if (_byteStream.rawStream != NULL)
+	if (_byteStream.rawStream != GDCM_NULLPTR)
 		return (BYTE)_byteStream.rawStream->sbumpc();
 
 	if (_byteStream.count <= 0)
@@ -380,7 +380,7 @@ ByteStreamInfo FromStream(std::basic_streambuf<char>* stream)
 
 void SkipBytes(ByteStreamInfo* streamInfo, size_t count)
 {
-	if (streamInfo->rawData == NULL)
+	if (streamInfo->rawData == GDCM_NULLPTR)
 		return;
 
 	streamInfo->rawData += count;

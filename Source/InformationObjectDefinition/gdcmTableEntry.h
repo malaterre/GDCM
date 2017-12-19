@@ -27,8 +27,8 @@ namespace gdcm
 class TableEntry
 {
 public:
-  TableEntry(const char *attribute = 0,
-    Type const &type = Type(), const char * des = 0 ) :
+  TableEntry(const char *attribute = GDCM_NULLPTR,
+    Type const &type = Type(), const char * des = GDCM_NULLPTR ) :
     Attribute(attribute ? attribute : ""),TypeField(type),Description(des ? des : "") {}
   ~TableEntry() {}
 

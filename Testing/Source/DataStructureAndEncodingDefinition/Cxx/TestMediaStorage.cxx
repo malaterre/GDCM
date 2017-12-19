@@ -45,14 +45,14 @@ int TestMediaStorage(int argc, char *argv[])
   gdcm::MediaStorage::MSType mst;
   for ( mst = gdcm::MediaStorage::MediaStorageDirectoryStorage; mst < gdcm::MediaStorage::MS_END; mst = (gdcm::MediaStorage::MSType)(mst + 1) )
     {
-    if ( gdcm::MediaStorage::GetMSString(mst) == 0 )
+    if ( gdcm::MediaStorage::GetMSString(mst) == GDCM_NULLPTR )
       {
       std::cerr << "GetMSString" << std::endl;
       return 1;
       }
     }
   mst = gdcm::MediaStorage::MS_END;
-  if ( gdcm::MediaStorage::GetMSString(mst) != 0 )
+  if ( gdcm::MediaStorage::GetMSString(mst) != GDCM_NULLPTR )
     {
     std::cerr << "2: GetMSString" << std::endl;
     return 1;

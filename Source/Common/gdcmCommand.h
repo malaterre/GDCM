@@ -112,7 +112,7 @@ protected:
   T* m_This;
   TMemberFunctionPointer m_MemberFunction;
   TConstMemberFunctionPointer m_ConstMemberFunction;
-  MemberCommand():m_MemberFunction(0),m_ConstMemberFunction(0) {}
+  MemberCommand():m_MemberFunction(GDCM_NULLPTR),m_ConstMemberFunction(GDCM_NULLPTR) {}
   virtual ~MemberCommand(){}
 
 private:
@@ -174,7 +174,7 @@ public:
 protected:
   T* m_This;
   TMemberFunctionPointer m_MemberFunction;
-  SimpleMemberCommand():m_This(0),m_MemberFunction(0) {}
+  SimpleMemberCommand():m_This(GDCM_NULLPTR),m_MemberFunction(GDCM_NULLPTR) {}
   virtual ~SimpleMemberCommand() {}
 
 private:

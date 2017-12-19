@@ -169,4 +169,11 @@
 /* ITK Specific */
 #cmakedefine GDCM_USE_COREFOUNDATION_LIBRARY
 
+
+#if __cplusplus >= 201103L 
+#define GDCM_NULLPTR nullptr 
+#else 
+#define GDCM_NULLPTR NULL 
+#endif
+
 #endif

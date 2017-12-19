@@ -347,7 +347,7 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 
 ImageCodec * PNMCodec::Clone() const
 {
-  return NULL;
+  return GDCM_NULLPTR;
 }
 
 } // end namespace gdcm

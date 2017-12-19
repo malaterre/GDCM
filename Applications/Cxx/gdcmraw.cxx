@@ -94,9 +94,9 @@ int main(int argc, char *argv[])
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
-        {"input", 1, 0, 0},                 // i
-        {"output", 1, 0, 0},                // o
-        {"tag", 1, 0, 0},                   // t
+        {"input", 1, GDCM_NULLPTR, 0},                 // i
+        {"output", 1, GDCM_NULLPTR, 0},                // o
+        {"tag", 1, GDCM_NULLPTR, 0},                   // t
         {"split-frags", 0, &splitfrags, 1}, // f
 /*
  * pixel-data flag is important for image like DermaColorLossLess.dcm since the bytevalue is
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
  * would expect
  */
         {"pixel-data", 0, &pixeldata, 1},   // P
-        {"pattern", 1, 0, 0},               // p
+        {"pattern", 1, GDCM_NULLPTR, 0},               // p
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
 
-        {0, 0, 0, 0}
+        {GDCM_NULLPTR, 0, GDCM_NULLPTR, 0}
     };
 
     c = getopt_long (argc, argv, "i:o:t:Sp:PVWDEhv",

@@ -37,7 +37,7 @@ static gdcm::network::ULConnectionManager *GetConnectionManager(gdcm::BaseRootQu
   if( !generator.GenerateFromUID( theQuery->GetAbstractSyntaxUID() ) )
     {
     gdcmErrorMacro( "Failed to generate pres context." );
-    return NULL;
+    return GDCM_NULLPTR;
     }
 
   gdcm::network::ULConnectionManager *theManager =

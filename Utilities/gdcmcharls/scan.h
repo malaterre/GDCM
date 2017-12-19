@@ -119,7 +119,7 @@ public:
 		  T2(0),
 		  T3(0),
 		  _RUNindex(0),
-		  _pquant(0),
+		  _pquant(GDCM_NULLPTR),
 		  _bCompare(0)
 		  
 	  {
@@ -658,12 +658,12 @@ void JlsCodec<TRAITS,STRATEGY>::DoLine(SAMPLE*)
 
 		if (Qs != 0)
 		{
-			_currentLine[index] = DoRegular(Qs, _currentLine[index], GetPredictedValue(Ra, Rb, Rc), static_cast<STRATEGY*>(NULL));
+			_currentLine[index] = DoRegular(Qs, _currentLine[index], GetPredictedValue(Ra, Rb, Rc), static_cast<STRATEGY*>(GDCM_NULLPTR));
 			index++;
 		}
 		else
 		{
-			index += DoRunMode(index, static_cast<STRATEGY*>(NULL));
+			index += DoRunMode(index, static_cast<STRATEGY*>(GDCM_NULLPTR));
 			Rb = _previousLine[index-1];
 			Rd = _previousLine[index];
 		}
@@ -691,14 +691,14 @@ void JlsCodec<TRAITS,STRATEGY>::DoLine(Triplet<SAMPLE>*)
 		
 		if (Qs1 == 0 && Qs2 == 0 && Qs3 == 0)
 		{
-			index += DoRunMode(index, static_cast<STRATEGY*>(NULL));
+			index += DoRunMode(index, static_cast<STRATEGY*>(GDCM_NULLPTR));
 		}
 		else
 		{
 			Triplet<SAMPLE> Rx;
-			Rx.v1 = DoRegular(Qs1, _currentLine[index].v1, GetPredictedValue(Ra.v1, Rb.v1, Rc.v1), static_cast<STRATEGY*>(NULL));
-			Rx.v2 = DoRegular(Qs2, _currentLine[index].v2, GetPredictedValue(Ra.v2, Rb.v2, Rc.v2), static_cast<STRATEGY*>(NULL));
-			Rx.v3 = DoRegular(Qs3, _currentLine[index].v3, GetPredictedValue(Ra.v3, Rb.v3, Rc.v3), static_cast<STRATEGY*>(NULL));
+			Rx.v1 = DoRegular(Qs1, _currentLine[index].v1, GetPredictedValue(Ra.v1, Rb.v1, Rc.v1), static_cast<STRATEGY*>(GDCM_NULLPTR));
+			Rx.v2 = DoRegular(Qs2, _currentLine[index].v2, GetPredictedValue(Ra.v2, Rb.v2, Rc.v2), static_cast<STRATEGY*>(GDCM_NULLPTR));
+			Rx.v3 = DoRegular(Qs3, _currentLine[index].v3, GetPredictedValue(Ra.v3, Rb.v3, Rc.v3), static_cast<STRATEGY*>(GDCM_NULLPTR));
 			_currentLine[index] = Rx;
 			index++;
 		}
@@ -738,7 +738,7 @@ void JlsCodec<TRAITS,STRATEGY>::DoScan()
 			// initialize edge pixels used for prediction
 			_previousLine[_width]	= _previousLine[_width - 1];
 			_currentLine[-1]		= _previousLine[0];
-			DoLine((PIXEL*) NULL); // dummy arg for overload resolution
+			DoLine((PIXEL*) GDCM_NULLPTR); // dummy arg for overload resolution
 
 			rgRUNindex[component] = _RUNindex;
 			_previousLine += pixelstride;
@@ -762,7 +762,7 @@ ProcessLine* JlsCodec<TRAITS,STRATEGY>::CreateProcess(ByteStreamInfo info)
 {
 	if (!IsInterleaved())
 	{
-		return info.rawData != NULL ?
+		return info.rawData != GDCM_NULLPTR ?
 			static_cast<ProcessLine*>(new PostProcesSingleComponent(info.rawData, Info(), sizeof(typename TRAITS::PIXEL))) :
 			static_cast<ProcessLine*>(new PostProcesSingleStream(info.rawStream, Info(), sizeof(typename TRAITS::PIXEL)));
 	}
@@ -804,8 +804,8 @@ size_t JlsCodec<TRAITS,STRATEGY>::EncodeScan(std::auto_ptr<ProcessLine> processL
 {
 	STRATEGY::_processLine = processLine;
 
-	ByteStreamInfo info = { NULL, (BYTE*)pvoidCompare, compressedData->count };
-	if (pvoidCompare != NULL)
+	ByteStreamInfo info = { GDCM_NULLPTR, (BYTE*)pvoidCompare, compressedData->count };
+	if (pvoidCompare != GDCM_NULLPTR)
 	{
 		STRATEGY::_qdecoder.reset(new JlsCodec<TRAITS,DecoderStrategy>(traits, Info()));
 		STRATEGY::_qdecoder->Init(&info);

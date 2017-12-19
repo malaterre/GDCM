@@ -424,7 +424,7 @@ bool JPEGLSCodec::DecodeExtent(
 
   if( NumberOfDimensions == 2 )
     {
-    char *dummy_buffer = NULL;
+    char *dummy_buffer = GDCM_NULLPTR;
     std::vector<char> vdummybuffer;
     size_t buf_size = 0;
 

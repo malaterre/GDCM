@@ -113,7 +113,7 @@ bool SurfaceReader::ReadSurface(const Item & surfaceItem, const unsigned long id
   const unsigned short *  array     = recommendedDisplayCIELabValue.GetValues();
   unsigned short    CIELavValue[3]  = {0, 0, 0};
   unsigned int      i               = 0;
-  while (array != 0 && i < 3)
+  while (array != GDCM_NULLPTR && i < 3)
     CIELavValue[i++] = *(array++);
   surface->SetRecommendedDisplayCIELabValue( CIELavValue );
 

@@ -65,7 +65,7 @@ public:
     DataField = vl;
   }
   /// Check if CSA Element is empty
-  bool IsEmpty() const { return DataField == 0; }
+  bool IsEmpty() const { return DataField == GDCM_NULLPTR; }
 
   /// Set
   void SetByteValue(const char *array, VL length)

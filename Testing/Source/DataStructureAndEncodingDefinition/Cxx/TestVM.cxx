@@ -34,7 +34,7 @@ int TestVM(int, char *[])
   unsigned int count4 = gdcm::VM::GetNumberOfElementsFromArray(str4, (unsigned int)strlen(str4) );
   if( count4 != 0 ) return 1;
 
-  const char *str5 = 0;
+  const char *str5 = GDCM_NULLPTR;
   unsigned int count5 = gdcm::VM::GetNumberOfElementsFromArray(str5, 0);
   if( count5 != 0 ) return 1;
 

@@ -29,7 +29,7 @@ namespace gdcm
 
 JPEGCodec::JPEGCodec():BitSample(0)/*,Lossless(true)*/,Quality(100)
 {
-  Internal = NULL;
+  Internal = GDCM_NULLPTR;
 }
 
 JPEGCodec::~JPEGCodec()
@@ -100,8 +100,8 @@ void JPEGCodec::SetPixelFormat(PixelFormat const &pt)
 void JPEGCodec::SetupJPEGBitCodec(int bit)
 {
   BitSample = bit;
-  delete Internal; Internal = NULL;
-  assert( Internal == NULL );
+  delete Internal; Internal = GDCM_NULLPTR;
+  assert( Internal == GDCM_NULLPTR );
   // what should I do with those single bit images ?
   if ( BitSample <= 8 )
     {
@@ -124,7 +124,7 @@ void JPEGCodec::SetupJPEGBitCodec(int bit)
     gdcmWarningMacro( "Cannot instantiate JPEG codec for bit sample: " << bit );
     // Clearly make sure Internal will not be used
     delete Internal;
-    Internal = NULL;
+    Internal = GDCM_NULLPTR;
     }
 }
 

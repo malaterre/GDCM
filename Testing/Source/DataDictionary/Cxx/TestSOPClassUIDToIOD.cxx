@@ -25,10 +25,10 @@ int TestSOPClassUIDToIOD(int, char *[])
   if( std::string(s[1] ) != "Basic Directory IOD Modules" ) return 1;
 
   gdcm::SOPClassUIDToIOD::SOPClassUIDToIODType& s2 = gdcm::SOPClassUIDToIOD::GetSOPClassUIDToIOD(100);
-  std::cout << ( s2[0] == 0 ) << std::endl;
-  if( !(s2[0] == 0) ) return 1;
-  std::cout << ( s2[1] == 0 ) << std::endl;
-  if( !(s2[1] == 0) ) return 1;
+  std::cout << ( s2[0] == GDCM_NULLPTR ) << std::endl;
+  if( !(s2[0] == GDCM_NULLPTR) ) return 1;
+  std::cout << ( s2[1] == GDCM_NULLPTR ) << std::endl;
+  if( !(s2[1] == GDCM_NULLPTR) ) return 1;
 
   const char *sopclassuid = gdcm::SOPClassUIDToIOD::GetSOPClassUIDFromIOD( s[1] );
   const char *iod = gdcm::SOPClassUIDToIOD::GetIODFromSOPClassUID( s[0] );

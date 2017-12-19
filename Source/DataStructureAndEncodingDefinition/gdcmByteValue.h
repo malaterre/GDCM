@@ -35,7 +35,7 @@ using namespace gdcm;
 class GDCM_EXPORT ByteValue : public Value
 {
 public:
-  ByteValue(const char* array = 0, VL const &vl = 0):
+  ByteValue(const char* array = GDCM_NULLPTR, VL const &vl = 0):
     Internal(array, array+vl),Length(vl) {
       if( vl.IsOdd() )
         {
@@ -110,7 +110,7 @@ public:
   // Use that only if you understand what you are doing
   const char *GetPointer() const {
     if(!Internal.empty()) return &Internal[0];
-    return 0;
+    return GDCM_NULLPTR;
   }
   void Fill(char c) {
     //if( Internal.empty() ) return;

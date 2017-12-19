@@ -36,7 +36,7 @@ class FileChangeTransferSyntaxInternals
 {
 public:
   FileChangeTransferSyntaxInternals():
-    IC(NULL),
+    IC(GDCM_NULLPTR),
     InitializeCopy(false)
   {}
   ~FileChangeTransferSyntaxInternals()

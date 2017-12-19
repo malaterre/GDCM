@@ -241,7 +241,7 @@ static const char * const printmd5[][2] = {
 { "49542e6002129f42f86f25e840b6beed" , "GE_MR_0025xx1bProtocolDataBlockXML.dcm" },
 
 
-{ 0 ,0 }
+{ GDCM_NULLPTR ,GDCM_NULLPTR }
 };
 
 int TestPrint(const char *filename, bool verbose= false)
@@ -285,7 +285,7 @@ int TestPrint(const char *filename, bool verbose= false)
 
   unsigned int i = 0;
   const char *p = printmd5[i][1];
-  while( p != 0 )
+  while( p != GDCM_NULLPTR )
     {
     if( strcmp( name, p ) == 0 )
       {

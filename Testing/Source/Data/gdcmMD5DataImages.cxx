@@ -702,5 +702,5 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 
 /* Stopping condition */
-{ 0 ,0 }
+{ GDCM_NULLPTR ,GDCM_NULLPTR }
 };

@@ -59,7 +59,7 @@ int TestSurfaceWriter2(const char *subdir, const char* filename)
 
   // Modify data to test other writing/reading way
   SmartPointer< Segment >         segment = new Segment;
-  srand( (unsigned int)time(NULL));
+  srand( (unsigned int)time(GDCM_NULLPTR));
   SegmentHelper::BasicCodedEntry  processingAlgo("123", "TEST", "Test123");
     {
     SegmentReader::SegmentVector  segments = reader.GetSegments();

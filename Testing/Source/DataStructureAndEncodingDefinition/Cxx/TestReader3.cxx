@@ -137,7 +137,7 @@ public:
       p = egptr() + off;
       break;
     default:
-      p = 0;
+      p = GDCM_NULLPTR;
       break;
       }
     if(p>=eback() && p <= egptr())
@@ -211,7 +211,7 @@ int TestRead3(const char *subdir, const char * filename)
   off_t size = info.st_size;
 
   off_t offset = 0;
-  char* hint = 0;
+  char* hint = GDCM_NULLPTR;
   void* data = ::mmap( hint, size,
     readonly ? PROT_READ : (PROT_READ | PROT_WRITE),
     readonly ? MAP_PRIVATE : MAP_SHARED,
@@ -254,7 +254,7 @@ int TestReader3(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    if( strstr(filename, "IllegalGroup2ImplicitTS.dcm" ) == NULL )
+    if( strstr(filename, "IllegalGroup2ImplicitTS.dcm" ) == GDCM_NULLPTR )
       r += TestRead3( argv[0], filename );
     ++i;
     }

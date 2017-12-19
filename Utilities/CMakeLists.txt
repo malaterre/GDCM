@@ -1,3 +1,8 @@
+# Add the include paths
+include_directories(
+  "${GDCM_BINARY_DIR}/Source/Common"
+)
+
 # Wrapping and stuff
 
 # Do jpeg (8,12, 16 lossly lossless). From ijg
@@ -8,7 +13,7 @@ if(NOT GDCM_USE_SYSTEM_LJPEG)
   set(JPEG_INSTALL_BIN_DIR      ${GDCM_INSTALL_BIN_DIR})
   set(JPEG_INSTALL_LIB_DIR      ${GDCM_INSTALL_LIB_DIR})
   set(JPEG_INSTALL_INCLUDE_DIR  ${GDCM_INSTALL_INCLUDE_DIR}/gdcmjpeg)
-  subdirs(gdcmjpeg)
+  add_subdirectory(gdcmjpeg)
 endif()
 
 # Do expat
@@ -18,7 +23,7 @@ if(NOT GDCM_USE_SYSTEM_EXPAT)
   set(EXPAT_INSTALL_NO_LIBRARIES ${GDCM_INSTALL_NO_LIBRARIES})
   set(EXPAT_INSTALL_BIN_DIR      ${GDCM_INSTALL_BIN_DIR})
   set(EXPAT_INSTALL_LIB_DIR      ${GDCM_INSTALL_LIB_DIR})
-  subdirs(gdcmexpat)
+  add_subdirectory(gdcmexpat)
 endif()
 
 # Do openjpeg (jpeg2000 implementation)
@@ -29,7 +34,7 @@ if(NOT GDCM_USE_SYSTEM_OPENJPEG)
   set(OPENJPEG_INSTALL_BIN_DIR      ${GDCM_INSTALL_BIN_DIR})
   set(OPENJPEG_INSTALL_LIB_DIR      ${GDCM_INSTALL_LIB_DIR})
   set(OPENJPEG_INSTALL_INCLUDE_DIR  ${GDCM_INSTALL_INCLUDE_DIR}/gdcmopenjpeg)
-  subdirs(gdcmopenjpeg)
+  add_subdirectory(gdcmopenjpeg)
   mark_as_advanced(BUILD_JPIP BUILD_JPWL BUILD_CODEC BUILD_DOC BUILD_MJ2 BUILD_PKGCONFIG_FILES BUILD_SHARED_LIBS BUILD_THIRDPARTY OPJ_DATA_ROOT OPJ_DISABLE_TPSOT_FIX)
 endif()
 
@@ -42,7 +47,7 @@ if(NOT GDCM_USE_SYSTEM_CHARLS)
   set(CHARLS_INSTALL_BIN_DIR      ${GDCM_INSTALL_BIN_DIR})
   set(CHARLS_INSTALL_LIB_DIR      ${GDCM_INSTALL_LIB_DIR})
   set(CHARLS_INSTALL_INCLUDE_DIR  ${GDCM_INSTALL_INCLUDE_DIR}/gdcmcharls)
-  subdirs(gdcmcharls)
+  add_subdirectory(gdcmcharls)
 endif()
 endif()
 
@@ -54,7 +59,7 @@ if(NOT GDCM_USE_SYSTEM_MD5)
   set(MD5_INSTALL_NO_LIBRARIES ${GDCM_INSTALL_NO_LIBRARIES})
   set(MD5_INSTALL_BIN_DIR      ${GDCM_INSTALL_BIN_DIR})
   set(MD5_INSTALL_LIB_DIR      ${GDCM_INSTALL_LIB_DIR})
-  subdirs(gdcmmd5)
+  add_subdirectory(gdcmmd5)
 endif()
 endif()
 
@@ -65,7 +70,7 @@ if(NOT GDCM_USE_SYSTEM_ZLIB)
   set(ZLIB_INSTALL_NO_LIBRARIES ${GDCM_INSTALL_NO_LIBRARIES})
   set(ZLIB_INSTALL_BIN_DIR      ${GDCM_INSTALL_BIN_DIR})
   set(ZLIB_INSTALL_LIB_DIR      ${GDCM_INSTALL_LIB_DIR})
-  subdirs(gdcmzlib)
+  add_subdirectory(gdcmzlib)
 endif()
 
 # Do getopt
@@ -75,10 +80,10 @@ if(WIN32 AND NOT CYGWIN)
   set(GETOPT_INSTALL_NO_LIBRARIES ${GDCM_INSTALL_NO_LIBRARIES})
   set(GETOPT_INSTALL_BIN_DIR      ${GDCM_INSTALL_BIN_DIR})
   set(GETOPT_INSTALL_LIB_DIR      ${GDCM_INSTALL_LIB_DIR})
-  subdirs(getopt)
+  add_subdirectory(getopt)
 endif()
 
-subdirs(doxygen)
+add_subdirectory(doxygen)
 
 # you could be running mingw32 on linux in which case you do NOT want the gdcmuuid lib
 APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/gdcmuuid/COPYING)
@@ -88,14 +93,14 @@ if(NOT WIN32 AND NOT MINGW)
     set(UUID_INSTALL_NO_LIBRARIES ${GDCM_INSTALL_NO_LIBRARIES})
     set(UUID_INSTALL_BIN_DIR      ${GDCM_INSTALL_BIN_DIR})
     set(UUID_INSTALL_LIB_DIR      ${GDCM_INSTALL_LIB_DIR})
-    subdirs(gdcmuuid)
+    add_subdirectory(gdcmuuid)
   endif()
 endif()
 
 APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/pvrg/COPYING)
 if(GDCM_USE_PVRG)
   if(NOT GDCM_USE_SYSTEM_PVRG)
-    subdirs(pvrg)
+    add_subdirectory(pvrg)
   endif()
 endif()
 
@@ -116,7 +121,7 @@ APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/C99/COPYING)
 #endif()
 
 #if(GDCM_USE_KWSTYLE)
-  subdirs(KWStyle)
+  add_subdirectory(KWStyle)
 #endif()
 
 if(NOT GDCM_USE_SYSTEM_SOCKETXX)
@@ -125,7 +130,7 @@ if(NOT GDCM_USE_SYSTEM_SOCKETXX)
   set(SOCKETXX_INSTALL_BIN_DIR      ${GDCM_INSTALL_BIN_DIR})
   set(SOCKETXX_INSTALL_LIB_DIR      ${GDCM_INSTALL_LIB_DIR})
   set(SOCKETXX_INSTALL_INCLUDE_DIR  ${GDCM_INSTALL_INCLUDE_DIR}/socketxx)
-  subdirs(socketxx)
+  add_subdirectory(socketxx)
 endif()
 
 add_subdirectory(gdcmrle)

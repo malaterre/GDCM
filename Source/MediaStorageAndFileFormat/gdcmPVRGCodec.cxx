@@ -213,7 +213,7 @@ bool PVRGCodec::Code(DataElement const &in, DataElement &out)
 
 ImageCodec * PVRGCodec::Clone() const
 {
-  return NULL;
+  return GDCM_NULLPTR;
 }
 
 } // end namespace gdcm

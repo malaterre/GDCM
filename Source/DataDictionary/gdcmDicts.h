@@ -37,7 +37,7 @@ public:
   /// \warning owner need to be set to appropriate owner for call to work. see
   // DataSet::GetPrivateCreator
   /// NOT THREAD SAFE
-  const DictEntry &GetDictEntry(const Tag& tag, const char *owner = NULL) const;
+  const DictEntry &GetDictEntry(const Tag& tag, const char *owner = GDCM_NULLPTR) const;
 
   const DictEntry &GetDictEntry(const PrivateTag& tag) const;
 

@@ -20,6 +20,7 @@
 #include <sstream> // ostringstream
 #include <stdexcept> // logic_error
 #include <string>
+#include "gdcmConfigure.h"
 
 // Disable clang warning "dynamic exception specifications are deprecated".
 // We need to be C++03 and C++11 compatible, and if we remove the 'throw()'
@@ -54,9 +55,9 @@ class Exception : public std::exception
                                  const unsigned int lineNumber,
                                  const char* const func)
   {
-    assert(desc != NULL);
-    assert(file != NULL);
-    assert(func != NULL);
+    assert(desc != GDCM_NULLPTR);
+    assert(file != GDCM_NULLPTR);
+    assert(func != GDCM_NULLPTR);
     std::ostringstream oswhat;
     oswhat << file << ":" << lineNumber << " (" << func << "):\n";
     oswhat << desc;

@@ -42,7 +42,7 @@ int main(int , char *[])
 
   // 3. This solution is the most flexible solution as you can request using the same
   // API either a public tag or a private tag
-  const char *strowner = 0;
+  const char *strowner = GDCM_NULLPTR;
   const gdcm::DictEntry &entry3 = dicts.GetDictEntry(patient_name,strowner);
   std::cout << entry3 << std::endl;
 

@@ -221,7 +221,7 @@ ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     if(GDCM_VTK_DOCUMENTATION)
       set(BUILD_DOCUMENTATION 1)
     endif()
-    subdirs(vtk)
+    add_subdirectory(vtk)
   endif()
 endif()
 

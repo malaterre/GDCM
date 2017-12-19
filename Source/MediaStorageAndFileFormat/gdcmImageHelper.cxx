@@ -2631,7 +2631,7 @@ const ByteValue* ImageHelper::GetPointerFromElement(Tag const &tag, const File& 
     const DataElement &de = ds.GetDataElement( tag );
     return de.GetByteValue();
     }
-  return 0;
+  return GDCM_NULLPTR;
 }
 
 MediaStorage ImageHelper::ComputeMediaStorageFromModality(const char *modality,

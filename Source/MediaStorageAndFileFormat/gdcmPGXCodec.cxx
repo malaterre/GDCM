@@ -102,7 +102,7 @@ bool PGXCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 
 ImageCodec * PGXCodec::Clone() const
 {
-  return NULL;
+  return GDCM_NULLPTR;
 }
 
 } // end namespace gdcm

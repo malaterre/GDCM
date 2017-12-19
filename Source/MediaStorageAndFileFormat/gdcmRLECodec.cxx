@@ -326,9 +326,9 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
   unsigned long image_len = bvl / dims[2];
 
   // If 16bits, need to do the padded composite...
-  char *buffer = 0;
+  char *buffer = GDCM_NULLPTR;
   // if rgb (3 comp) need to the planar configuration
-  char *bufferrgb = 0;
+  char *bufferrgb = GDCM_NULLPTR;
   if( GetPixelFormat().GetBitsAllocated() > 8 )
     {
     //RequestPaddedCompositePixelCode = true;

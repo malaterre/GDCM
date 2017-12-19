@@ -460,11 +460,11 @@ int main (int argc, char *argv[])
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
-        {"input", 1, 0, 0},
-        {"output", 1, 0, 0},
+        {"input", 1, GDCM_NULLPTR, 0},
+        {"output", 1, GDCM_NULLPTR, 0},
         // provide convert-like command line args:
         {"depth", 1, &depth, 1},
-        {"size", 1, 0, 0},
+        {"size", 1, GDCM_NULLPTR, 0},
         {"region", 1, &bregion, 1},
         {"fill", 1, &fill, 1},
         {"study-uid", 1, &studyuid, 1},
@@ -488,7 +488,7 @@ int main (int argc, char *argv[])
         {"error", 0, &error, 1},
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
-        {0, 0, 0, 0}
+        {GDCM_NULLPTR, 0, GDCM_NULLPTR, 0}
     };
 
     // i -> input file

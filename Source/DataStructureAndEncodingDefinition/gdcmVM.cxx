@@ -57,7 +57,7 @@ static const char *VMStrings[] = {
   "7-7n",
   "30-30n",
   "47-47n",
-  0
+  GDCM_NULLPTR
 };
 
 unsigned int VM::GetLength() const
@@ -233,7 +233,7 @@ VM::VMType VM::GetVMType(const char *vm)
 {
   if(!vm) return VM::VM_END;
   if(!*vm) return VM::VM0; // ??
-  for (int i = 0; VMStrings[i] != NULL; i++)
+  for (int i = 0; VMStrings[i] != GDCM_NULLPTR; i++)
     {
     //if (strncmp(VMStrings[i],vm,strlen(VMStrings[i])) == 0)
     if (strcmp(VMStrings[i],vm) == 0)
