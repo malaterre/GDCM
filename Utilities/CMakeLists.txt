@@ -1,3 +1,8 @@
+# Add the include paths
+include_directories(
+  "${GDCM_BINARY_DIR}/Source/Common"
+)
+
 # Wrapping and stuff
 
 # Do jpeg (8,12, 16 lossly lossless). From ijg

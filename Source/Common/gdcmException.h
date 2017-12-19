@@ -20,6 +20,7 @@
 #include <sstream> // ostringstream
 #include <stdexcept> // logic_error
 #include <string>
+#include "gdcmConfigure.h"
 
 // Disable clang warning "dynamic exception specifications are deprecated".
 // We need to be C++03 and C++11 compatible, and if we remove the 'throw()'

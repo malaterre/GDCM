@@ -11,6 +11,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
+/* Use configuration from gdcm as well */
+#include "gdcmConfigure.h"
 #include "rle.h"
 #include "info.h"
 #include "io.h"
