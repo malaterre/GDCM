@@ -1,5 +1,5 @@
-subdirs(Cxx)
+add_subdirectory(Cxx)
 
 if(GDCM_WRAP_PYTHON)
-  subdirs(Python)
+  add_subdirectory(Python)
 endif()

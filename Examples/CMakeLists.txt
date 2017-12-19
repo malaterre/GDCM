@@ -2,18 +2,18 @@ cmake_minimum_required(VERSION 2.8.7)
 
 # Choose behavior based on whether we are building inside the GDCM tree.
 if(GDCM_BINARY_DIR)
-subdirs(Cxx)
+add_subdirectory(Cxx)
 
 if(GDCM_WRAP_PYTHON)
-  subdirs(Python)
+  add_subdirectory(Python)
 endif()
 
 if(GDCM_WRAP_CSHARP)
-  subdirs(Csharp)
+  add_subdirectory(Csharp)
 endif()
 
 if(GDCM_WRAP_JAVA)
-  subdirs(Java)
+  add_subdirectory(Java)
 endif()
 
 else()
@@ -25,6 +25,6 @@ else()
   find_package(GDCM REQUIRED)
   include(${GDCM_USE_FILE})
 
-  subdirs(Cxx)
+  add_subdirectory(Cxx)
 
 endif()

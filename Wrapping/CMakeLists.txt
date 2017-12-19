@@ -1,20 +1,20 @@
 # python
 if(GDCM_WRAP_PYTHON)
-  subdirs(Python)
+  add_subdirectory(Python)
 endif()
 # java
 if(GDCM_WRAP_JAVA)
-  subdirs(Java)
+  add_subdirectory(Java)
 endif()
 # php
 if(GDCM_WRAP_PHP)
-  subdirs(PHP)
+  add_subdirectory(PHP)
 endif()
 # perl
 if(GDCM_WRAP_PERL)
-  subdirs(Perl)
+  add_subdirectory(Perl)
 endif()
 # C#
 if(GDCM_WRAP_CSHARP)
-#  subdirs(Csharp)
+#  add_subdirectory(Csharp)
 endif()

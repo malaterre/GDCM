@@ -1,13 +1,13 @@
-subdirs(Cxx)
+add_subdirectory(Cxx)
 
 if(VTK_WRAP_PYTHON)
-  subdirs(Python)
+  add_subdirectory(Python)
 endif()
 
 if(GDCM_WRAP_JAVA)
   if(VTK_WRAP_JAVA)
     if(EXISTS ${GDCM_VTK_JAVA_JAR})
-      subdirs(Java)
+      add_subdirectory(Java)
     endif()
   endif()
 endif()
