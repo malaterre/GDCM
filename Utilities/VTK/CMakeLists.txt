@@ -814,15 +814,15 @@ if(GDCM_WRAP_PYTHON)
 endif()
 
 if(BUILD_TESTING)
-  subdirs(Testing)
+  add_subdirectory(Testing)
 endif()
 
 if(BUILD_APPLICATIONS)
-  subdirs(Applications)
+  add_subdirectory(Applications)
 endif()
 
 if(BUILD_EXAMPLES)
-  subdirs(Examples)
+  add_subdirectory(Examples)
 endif()
 
 if(GDCM_USE_PARAVIEW)
