@@ -197,7 +197,7 @@ static void display_element(std::ostream& os, const gdcm::DataElement& de,
     }
   else if (vr & gdcm::VR::VRASCII)
     {
-    if (de.GetByteValue() != NULL)
+    if (de.GetByteValue() != GDCM_NULLPTR)
       { // is this OK? it worked when de was a pointer, without the != NULL
       gdcm::VL vl = de.GetByteValue()->GetLength();
       // error: operands to ?: have different types 'gdcm::VL' and 'uint32_t'

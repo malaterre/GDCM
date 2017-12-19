@@ -24,7 +24,7 @@ static const char *TypeStrings[] = {
    "2C",
    "3",
    "UNKNOWN",
-   0
+   GDCM_NULLPTR
 };
 
 const char *Type::GetTypeString(TypeType type)
@@ -35,7 +35,7 @@ const char *Type::GetTypeString(TypeType type)
 Type::TypeType Type::GetTypeType(const char *type)
 {
   int i = 0;
-  while(TypeStrings[i] != 0)
+  while(TypeStrings[i] != GDCM_NULLPTR)
     {
     if( strcmp(type, TypeStrings[i]) == 0 )
       return (TypeType)i;

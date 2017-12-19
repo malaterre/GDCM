@@ -29,7 +29,7 @@ class ImageRegionReaderInternals
 public:
   ImageRegionReaderInternals()
     {
-    TheRegion = NULL;
+    TheRegion = GDCM_NULLPTR;
     Modified = false;
     FileOffset = -1;
     }

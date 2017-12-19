@@ -79,7 +79,7 @@ typedef enum
 
 static const char *gettypenamefromtype( int i)
 {
-  const char *ret = NULL;
+  const char *ret = GDCM_NULLPTR;
   param_type e = (param_type)i;
   switch( e )
     {

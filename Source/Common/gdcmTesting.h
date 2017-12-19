@@ -101,16 +101,16 @@ public :
 
   /// NOT THREAD SAFE
   /// Returns the temp directory as used in testing needing to output data:
-  static const char * GetTempDirectory(const char * subdir = 0);
+  static const char * GetTempDirectory(const char * subdir = GDCM_NULLPTR);
 
   /// NOT THREAD SAFE
-  static const wchar_t *GetTempDirectoryW(const wchar_t * subdir = 0);
+  static const wchar_t *GetTempDirectoryW(const wchar_t * subdir = GDCM_NULLPTR);
 
   /// NOT THREAD SAFE
-  static const char * GetTempFilename(const char *filename, const char * subdir = 0);
+  static const char * GetTempFilename(const char *filename, const char * subdir = GDCM_NULLPTR);
 
   /// NOT THREAD SAFE
-  static const wchar_t* GetTempFilenameW(const wchar_t *filename, const wchar_t* subdir = 0);
+  static const wchar_t* GetTempFilenameW(const wchar_t *filename, const wchar_t* subdir = GDCM_NULLPTR);
 
   static const char *GetSourceDirectory();
 };

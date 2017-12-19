@@ -104,14 +104,14 @@ const char* UIDGenerator::Generate()
   if( Unique.empty() || Unique.size() > 62 ) // 62 is simply the highest possible limit
     {
     // I cannot go any further...
-    return NULL;
+    return GDCM_NULLPTR;
     }
   unsigned char uuid[16];
   bool r = UIDGenerator::GenerateUUID(uuid);
   // This should only happen in some obscure cases. Since the creation of UUID failed
   // I should try to go any further and make sure the user's computer crash and burn
   // right away
-  if( !r ) return 0;
+  if( !r ) return GDCM_NULLPTR;
   char randbytesbuf[64];
   size_t len = System::EncodeBytes(randbytesbuf, uuid, sizeof(uuid));
   assert( len < 64 ); // programmer error
@@ -150,7 +150,7 @@ const char* UIDGenerator::Generate()
       // Technically this could only happen when root has a length >= 64 ... is it
       // even remotely possible ?
       gdcmWarningMacro( "Root is too long for current implementation" );
-      return NULL;
+      return GDCM_NULLPTR;
       }
     }
   // can now safely use randbytesbuf as is, no need to truncate any more:

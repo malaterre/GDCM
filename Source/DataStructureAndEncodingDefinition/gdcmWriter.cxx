@@ -32,7 +32,7 @@
 namespace gdcm
 {
 
-Writer::Writer():Stream(NULL),Ofstream(NULL),F(new File),CheckFileMetaInformation(true),WriteDataSetOnly(false)
+Writer::Writer():Stream(GDCM_NULLPTR),Ofstream(GDCM_NULLPTR),F(new File),CheckFileMetaInformation(true),WriteDataSetOnly(false)
 {
 }
 
@@ -41,8 +41,8 @@ Writer::~Writer()
   if (Ofstream)
     {
     delete Ofstream;
-    Ofstream = NULL;
-    Stream = NULL;
+    Ofstream = GDCM_NULLPTR;
+    Stream = GDCM_NULLPTR;
     }
 }
 

@@ -124,7 +124,7 @@ dict Array[] = {
   { 0x71, "R-R high tolerance" },
   { 0x72, "Prog specific results:" },
 
-  { 0x99, NULL }
+  { 0x99, GDCM_NULLPTR }
 };
 
 void printname( int , int , uint16_t v )

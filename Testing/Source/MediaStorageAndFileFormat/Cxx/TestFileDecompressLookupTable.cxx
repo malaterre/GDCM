@@ -33,7 +33,7 @@ static const char * const lutarray[][2] = {
     { "964ea27345a7004325896d34b257f289", "rle16sti.dcm" },
 
     // sentinel
-    { 0, 0 }
+    { GDCM_NULLPTR, GDCM_NULLPTR }
 };
 
 static int TestFileDecompressLookupTableFunc(const char *filename, bool verbose = false)
@@ -123,7 +123,7 @@ static int TestFileDecompressLookupTableFunc(const char *filename, bool verbose 
   const char *name = fn.GetName();
   unsigned int i = 0;
   const char *p = lutarray[i][1];
-  while( p != 0 )
+  while( p != GDCM_NULLPTR )
     {
     if( strcmp( name, p ) == 0 )
       {

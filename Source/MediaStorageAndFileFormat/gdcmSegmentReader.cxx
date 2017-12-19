@@ -90,7 +90,7 @@ bool SegmentReader::Read()
   {
     const char *    modality  = ms.GetModality();
     const DataSet & dsRoot    = F->GetDataSet();
-    if (modality != 0)
+    if (modality != GDCM_NULLPTR)
     { // Check modality
       String<> modalityStr( modality );
       if ( modalityStr.Trim() == "SEG" )

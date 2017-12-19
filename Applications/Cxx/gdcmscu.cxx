@@ -199,16 +199,16 @@ int main(int argc, char *argv[])
       {"error", 0, &error, 1},
       {"help", 0, &help, 1},
       {"version", 0, &version, 1},
-      {"hostname", 1, 0, 0},     // -h
-      {"aetitle", 1, 0, 0},     //
-      {"call", 1, 0, 0},     //
+      {"hostname", 1, GDCM_NULLPTR, 0},     // -h
+      {"aetitle", 1, GDCM_NULLPTR, 0},     //
+      {"call", 1, GDCM_NULLPTR, 0},     //
       {"port", 0, &port, 1}, // -p
-      {"input", 1, 0, 0}, // dcmfile-in
+      {"input", 1, GDCM_NULLPTR, 0}, // dcmfile-in
       {"echo", 0, &echomode, 1}, // --echo
       {"store", 0, &storemode, 1}, // --store
       {"find", 0, &findmode, 1}, // --find
       {"move", 0, &movemode, 1}, // --move
-      {"key", 1, 0, 0}, // (15) --key
+      {"key", 1, GDCM_NULLPTR, 0}, // (15) --key
       {"worklist", 0, &findworklist, 1}, // --worklist
       {"patientroot", 0, &findpatientroot, 1}, // --patientroot
       {"studyroot", 0, &findstudyroot, 1}, // --studyroot
@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
       {"image", 0, &imagequery, 1}, // --image
       {"log-file", 1, &logfile, 1}, // --log-file
       {"get", 0, &getmode, 1}, // --get
-      {0, 0, 0, 0} // required
+      {GDCM_NULLPTR, 0, GDCM_NULLPTR, 0} // required
     };
     static const char short_options[] = "i:H:p:L:VWDEhvk:o:r";
     c = getopt_long (argc, argv, short_options,

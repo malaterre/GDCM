@@ -47,7 +47,7 @@ static const ovel overlay3array[] = {
 //    {"31d58476326722793379fbcda55a4856", "0.dcm", 1 },
 
     // sentinel
-    { 0, 0, 0, Overlay::Invalid }
+    { GDCM_NULLPTR, GDCM_NULLPTR, 0, Overlay::Invalid }
 };
 
 static int TestReadOverlay(const char* filename, bool verbose = false)
@@ -100,12 +100,12 @@ static int TestReadOverlay(const char* filename, bool verbose = false)
         }
 
       Overlay::OverlayType reftype = Overlay::Invalid;
-      const char *refmd5 = NULL;
+      const char *refmd5 = GDCM_NULLPTR;
         {
         unsigned int i = 0;
         const char *p = overlay3array[i].fn;
         unsigned int idx = overlay3array[i].idx;
-        while( p != 0 )
+        while( p != GDCM_NULLPTR )
           {
           if( strcmp( name, p ) == 0 && ovidx == idx )
             {

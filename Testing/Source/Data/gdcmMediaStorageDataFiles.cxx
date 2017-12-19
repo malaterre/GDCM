@@ -251,5 +251,5 @@ static const char * const gdcmMediaStorageDataFiles[][2] = {
 { "GE_MR_0025xx1bProtocolDataBlockXML.dcm" , "1.2.840.10008.5.1.4.1.1.4" },
 
 /* Stopping condition */
-{ 0 ,0 }
+{ GDCM_NULLPTR ,GDCM_NULLPTR }
 };

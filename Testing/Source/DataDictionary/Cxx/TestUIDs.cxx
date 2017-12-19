@@ -334,7 +334,7 @@ static const char * const sopclassuids[][2] = {
 { "1.2.752.24.3.7.6","Sectra Compression (Private Syntax)" },
 { "1.2.752.24.3.7.7","Sectra Compression LS (Private Syntax)" },
 { "1.2.840.113619.5.2","Implicit VR Big Endian DLX (G.E Private)" },
-{ NULL, NULL}
+{ GDCM_NULLPTR, GDCM_NULLPTR}
 };
 
 // Custom list:
@@ -379,7 +379,7 @@ static const char * const sopclassuids2[] = {
 "1.3.46.670589.5.0.3",
 "1.3.46.670589.5.0.8",
 //"1.3.6.1.4.1.20468.1.10", // invalid
-NULL
+GDCM_NULLPTR
 };
 
 int TestUIDs(int, char *[])
@@ -428,7 +428,7 @@ int TestUIDs(int, char *[])
     }
   if( uid.GetName() ) return 1;
   // black box:
-  if( uid.SetFromUID( NULL ) )
+  if( uid.SetFromUID( GDCM_NULLPTR ) )
     {
     return 1;
     }

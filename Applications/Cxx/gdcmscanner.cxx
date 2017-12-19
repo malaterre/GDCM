@@ -127,11 +127,11 @@ int main(int argc, char *argv[])
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
-        {"dir", 1, 0, 0},
-        {"tag", 1, 0, 0},
-        {"recursive", 1, 0, 0},
-        {"print", 1, 0, 0},
-        {"private-tag", 1, 0, 0},
+        {"dir", 1, GDCM_NULLPTR, 0},
+        {"tag", 1, GDCM_NULLPTR, 0},
+        {"recursive", 1, GDCM_NULLPTR, 0},
+        {"print", 1, GDCM_NULLPTR, 0},
+        {"private-tag", 1, GDCM_NULLPTR, 0},
         {"strict", 0, &strict, 1},
 
 // General options !
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
 
-        {0, 0, 0, 0}
+        {GDCM_NULLPTR, 0, GDCM_NULLPTR, 0}
     };
 
     c = getopt_long (argc, argv, "d:t:rpP:VWDEhv",

@@ -31,11 +31,11 @@ class DataSetEvent : public AnyEvent
 public:
   typedef DataSetEvent Self;
   typedef AnyEvent Superclass;
-  DataSetEvent(DataSet const *ds = NULL):m_DataSet(ds) {}
+  DataSetEvent(DataSet const *ds = GDCM_NULLPTR):m_DataSet(ds) {}
   virtual ~DataSetEvent() {}
   virtual const char * GetEventName() const { return "DataSetEvent"; }
   virtual bool CheckEvent(const ::gdcm::Event* e) const
-  { return (dynamic_cast<const Self*>(e) == NULL ? false : true) ; }
+  { return (dynamic_cast<const Self*>(e) == GDCM_NULLPTR ? false : true) ; }
   virtual ::gdcm::Event* MakeObject() const
     { return new Self; }
   DataSetEvent(const Self&s) : AnyEvent(s){};

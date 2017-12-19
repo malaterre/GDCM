@@ -699,7 +699,7 @@ bool Bitmap::IsLossy() const
 bool Bitmap::ComputeLossyFlag()
 {
   bool lossyflag;
-  if( this->GetBufferInternal(0, lossyflag) )
+  if( this->GetBufferInternal(GDCM_NULLPTR, lossyflag) )
     {
     LossyFlag = lossyflag;
     return true;
@@ -909,7 +909,7 @@ bool Bitmap::GetBufferInternal(char *buffer, bool &lossyflag) const
   //if( !success ) success = TryDeltaEncodingCodec(buffer);
   if( !success )
     {
-    buffer = 0;
+    buffer = GDCM_NULLPTR;
     //throw Exception( "No codec found for this image");
     }
 

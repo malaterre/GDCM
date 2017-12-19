@@ -124,7 +124,7 @@ BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
 BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
   EQueryLevel inQueryLevel, const DataSet& ds, EQueryType queryType /*= eFind*/ )
 {
-  BaseRootQuery* outQuery = NULL;
+  BaseRootQuery* outQuery = GDCM_NULLPTR;
   if( queryType == eMove )
     outQuery = QueryFactory::ProduceQuery(inRootType, eMove, inQueryLevel);
   else if( queryType == eFind )
@@ -135,7 +135,7 @@ BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
   if (!outQuery)
     {
     gdcmErrorMacro( "Specify the query" );
-    return NULL;
+    return GDCM_NULLPTR;
     }
   outQuery->AddQueryDataSet(ds);
 

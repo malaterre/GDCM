@@ -34,7 +34,7 @@
 namespace gdcm
 {
 //-----------------------------------------------------------------------------
-XMLPrinter::XMLPrinter():PrintStyle(XMLPrinter::OnlyUUID),F(0)
+XMLPrinter::XMLPrinter():PrintStyle(XMLPrinter::OnlyUUID),F(GDCM_NULLPTR)
 {
 }
 
@@ -52,11 +52,11 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
 {
 
   const ByteValue *bv = de.GetByteValue();
-  const SequenceOfItems *sqi = 0;
+  const SequenceOfItems *sqi = GDCM_NULLPTR;
   const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
 
   std::string strowner;
-  const char *owner = 0;
+  const char *owner = GDCM_NULLPTR;
   const Tag& t = de.GetTag();
   UUIDGenerator UIDgen;
 
@@ -184,7 +184,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       os <<"keyword = \"";
 
       /*  No owner */
-      if( t.IsPrivate() && (owner == 0 || *owner == 0 ) && !t.IsPrivateCreator() )
+      if( t.IsPrivate() && (owner == GDCM_NULLPTR || *owner == 0 ) && !t.IsPrivateCreator() )
         {
         //os << name;
         //os = PrintXML_char(os,name);

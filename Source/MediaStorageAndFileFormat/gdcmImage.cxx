@@ -60,7 +60,7 @@ const double *Image::GetOrigin() const
   assert( NumberOfDimensions );
   if( !Origin.empty() )
     return &Origin[0];
-  return 0;
+  return GDCM_NULLPTR;
 }
 
 double Image::GetOrigin(unsigned int idx) const
@@ -101,7 +101,7 @@ const double *Image::GetDirectionCosines() const
   assert( NumberOfDimensions );
   if( !DirectionCosines.empty() )
     return &DirectionCosines[0];
-  return 0;
+  return GDCM_NULLPTR;
 }
 double Image::GetDirectionCosines(unsigned int idx) const
 {

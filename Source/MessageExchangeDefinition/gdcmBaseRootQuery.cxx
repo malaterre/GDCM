@@ -90,7 +90,7 @@ namespace gdcm
 
   QueryBase * BaseRootQuery::Construct( ERootType inRootType, EQueryLevel qlevel )
   {
-    QueryBase* qb = NULL;
+    QueryBase* qb = GDCM_NULLPTR;
     // Check no new extension:
     assert( inRootType == ePatientRootType || inRootType == eStudyRootType );
 

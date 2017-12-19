@@ -25,7 +25,7 @@ int TestPreamble(int, char *[])
   m_pFileMetaInformation->SetPreamble( *p );
   m_pFileMetaInformation->Clear();
   delete m_pFileMetaInformation;
-  m_pFileMetaInformation = NULL ;
+  m_pFileMetaInformation = GDCM_NULLPTR ;
     delete p;
   return 0;
 }

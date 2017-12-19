@@ -707,8 +707,8 @@ int main (int argc, char *argv[])
     int option_index = 0;
 
     static struct option long_options[] = {
-        {"input", 1, 0, 0},
-        {"output", 1, 0, 0},
+        {"input", 1, GDCM_NULLPTR, 0},
+        {"output", 1, GDCM_NULLPTR, 0},
         {"loadBulkData", 0, &loadBulkData, 1},
         {"TransferSyntax", 0, &loadTransferSyntax, 1},
         {"verbose", 0, &verbose, 1},
@@ -717,7 +717,7 @@ int main (int argc, char *argv[])
         {"error", 0, &error, 1},
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
-        {0, 0, 0, 0} // required
+        {GDCM_NULLPTR, 0, GDCM_NULLPTR, 0} // required
     };
     static const char short_options[] = "i:o:BTVWDEhv";
     c = getopt_long (argc, argv, short_options,

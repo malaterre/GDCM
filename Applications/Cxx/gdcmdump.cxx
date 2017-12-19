@@ -476,7 +476,7 @@ static bool ProcessData( const char *buf, size_t len )
 static int DumpVEPRO(const gdcm::DataSet & ds)
 {
   // 01f7,1026
-  const gdcm::ByteValue *bv2 = NULL;
+  const gdcm::ByteValue *bv2 = GDCM_NULLPTR;
   const gdcm::PrivateTag tdata1(0x55,0x0020,"VEPRO VIF 3.0 DATA");
   const gdcm::PrivateTag tdata2(0x55,0x0020,"VEPRO VIM 5.0 DATA");
   // Prefer VIF over VIM ?
@@ -1001,13 +1001,13 @@ static int PrintMrProtocol(const std::string & filename)
   {
     const gdcm::DataElement &shared = ds.GetDataElement( sfgs.GetTag() );
     gdcm::SmartPointer<gdcm::SequenceOfItems> sqi = shared.GetValueAsSQ();
-    if( sqi != NULL && sqi->GetNumberOfItems() == 1 ) {
+    if( sqi != GDCM_NULLPTR && sqi->GetNumberOfItems() == 1 ) {
       gdcm::Item &item = sqi->GetItem(1);
       gdcm::DataSet & subds = item.GetNestedDataSet();
       if( subds.FindDataElement( att2) ) {
         const gdcm::DataElement &privsq = subds.GetDataElement( att2 );
         gdcm::SmartPointer<gdcm::SequenceOfItems> sqi2 = privsq.GetValueAsSQ();
-        if( sqi2 != NULL && sqi2->GetNumberOfItems() == 1 ) {
+        if( sqi2 != GDCM_NULLPTR && sqi2->GetNumberOfItems() == 1 ) {
           gdcm::Item &item2 = sqi2->GetItem(1);
           gdcm::DataSet & subds2 = item2.GetNestedDataSet();
           if( subds2.FindDataElement( att1) ) {
@@ -1114,7 +1114,7 @@ int main (int argc, char *argv[])
           };
 */
     static struct option long_options[] = {
-        {"input", 1, 0, 0},
+        {"input", 1, GDCM_NULLPTR, 0},
         {"xml-dict", 0, &printdict, 1},
         {"recursive", 0, &recursive, 1},
         {"print", 0, &print, 1},
@@ -1138,7 +1138,7 @@ int main (int argc, char *argv[])
         {"csa-asl", 0, &printcsaasl, 1},
         {"csa-diffusion", 0, &printcsadiffusion, 1},
         {"mrprotocol", 0, &printmrprotocol, 1},
-        {0, 0, 0, 0} // required
+        {GDCM_NULLPTR, 0, GDCM_NULLPTR, 0} // required
     };
     static const char short_options[] = "i:xrpdcCPAVWDEhvI";
     c = getopt_long (argc, argv, short_options,
@@ -1309,7 +1309,7 @@ int main (int argc, char *argv[])
     std::cerr << "Not handled for now" << std::endl;
     }
 
-  const char * csaname = NULL;
+  const char * csaname = GDCM_NULLPTR;
   if( printcsaasl )
   {
     printcsabase64 = 1;

@@ -75,7 +75,7 @@ Global::Global()
 {
   if(++GlobalCount == 1)
     {
-    assert( Internals == NULL ); // paranoid
+    assert( Internals == GDCM_NULLPTR ); // paranoid
     Internals = new GlobalInternal;
     assert( Internals->GlobalDicts.IsEmpty() );
     // Fill in with default values now !
@@ -95,13 +95,13 @@ Global::~Global()
     {
     //Internals->GlobalDicts.Unload();
     delete Internals;
-    Internals = NULL; // paranoid
+    Internals = GDCM_NULLPTR; // paranoid
     }
 }
 
 bool Global::LoadResourcesFiles()
 {
-  assert( Internals != NULL ); // paranoid
+  assert( Internals != GDCM_NULLPTR ); // paranoid
   const char *filename = Locate( "Part3.xml" );
   if( filename )
     {
@@ -158,14 +158,14 @@ const char *Global::Locate(const char *resfile) const
       if( fullpath.size() >= sizeof(path) )
         {
         gdcmDebugMacro( "Impossible happen: path is too long" );
-        return NULL;
+        return GDCM_NULLPTR;
         }
       strcpy(path, fullpath.c_str() );
       return path;
       }
     }
   // no match sorry  :(
-  return NULL;
+  return GDCM_NULLPTR;
 }
 
 Dicts const &Global::GetDicts() const

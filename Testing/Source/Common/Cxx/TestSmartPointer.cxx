@@ -28,7 +28,7 @@ class Foo : public Object {
 
 class Containter {
 public:
-  Containter():Instance(0) {}
+  Containter():Instance(GDCM_NULLPTR) {}
   SmartPointer<Object> Instance;
 };
 
@@ -64,7 +64,7 @@ SmartPointer<Foo> TestReturn(int i)
     {
     return new Foo;
     }
-  return 0;
+  return SmartPointer<Foo>(0);
 }
 
 //class Object2 : public Foo {};

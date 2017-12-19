@@ -240,5 +240,5 @@ static const StreamOffset gdcmSelectedPrivateGroupOffsetDataFiles[] = {
 { "DICOMDIR_MR_B_VA12A",14853880 },
 
 /* Stopping condition */
-{ 0 ,0 },
+{ GDCM_NULLPTR ,0 },
 };

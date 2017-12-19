@@ -47,7 +47,7 @@ public:
     virtual const char* rfc_doc  () const = 0;
   };
 
-  protocol (): std::ios (0), iosockstream(NULL) {}  // NULL seems like a very bad idea
+  protocol (): std::ios (GDCM_NULLPTR), iosockstream(GDCM_NULLPTR) {}  // NULL seems like a very bad idea
 };
 
 #endif // PROTOCOL_H

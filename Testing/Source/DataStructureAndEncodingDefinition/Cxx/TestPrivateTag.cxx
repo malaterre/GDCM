@@ -49,7 +49,7 @@ int TestPrivateTag(int , char * [])
   const char str2[] = "1,65536,BLU";
   const char str3[] = "65536,2,BLU";
   const char str4[] = "65536,2";
-  if( pt.ReadFromCommaSeparatedString( NULL ) )
+  if( pt.ReadFromCommaSeparatedString( GDCM_NULLPTR ) )
     {
     return 1;
     }
@@ -78,8 +78,8 @@ int TestPrivateTag(int , char * [])
     return 1;
     }
 
-  gdcm::PrivateTag null(0x0,0x0,0);
-  if( null.GetOwner() == 0 )
+  gdcm::PrivateTag null(0x0,0x0,GDCM_NULLPTR);
+  if( null.GetOwner() == GDCM_NULLPTR )
     {
     return 1;
     }

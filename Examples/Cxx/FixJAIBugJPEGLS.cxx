@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
       0x00, 0x40
     };
 
-    const unsigned char *marker_lse = NULL;
+    const unsigned char *marker_lse = GDCM_NULLPTR;
     switch( metadata.bitspersample )
       {
     case 13:

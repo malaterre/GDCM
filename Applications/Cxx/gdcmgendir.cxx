@@ -79,8 +79,8 @@ int main(int argc, char *argv[])
   while (1) {
     int option_index = 0;
     static struct option long_options[] = {
-        {"input", 1, 0, 0},
-        {"output", 1, 0, 0},                // o
+        {"input", 1, GDCM_NULLPTR, 0},
+        {"output", 1, GDCM_NULLPTR, 0},                // o
         {"recursive", 0, &recursive, 1},
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
         {"resources-path", 1, &resourcespath, 1},
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
         {"error", 0, &error, 1},
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
-        {0, 0, 0, 0} // required
+        {GDCM_NULLPTR, 0, GDCM_NULLPTR, 0} // required
     };
     static const char short_options[] = "i:o:rVWDEhv";
     c = getopt_long (argc, argv, short_options,

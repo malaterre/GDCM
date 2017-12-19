@@ -189,7 +189,7 @@ int TestVR(int, char *[])
   if( vr != gdcm::VR::VR_END )
     return 1;
   const char *t = gdcm::VR::GetVRString(vr);
-  if( t != 0 )
+  if( t != GDCM_NULLPTR )
     return 1;
 
   s = "??"; //invalid

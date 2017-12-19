@@ -257,12 +257,12 @@ const char* Scanner::GetValue(const char *filename, Tag const &t) const
     {
     return ftv.find(t)->second;
     }
-  return NULL;
+  return GDCM_NULLPTR;
 }
 
 const char *Scanner::GetFilenameFromTagToValue(Tag const &t, const char *valueref) const
 {
-  const char *filenameref = 0;
+  const char *filenameref = GDCM_NULLPTR;
   if( valueref )
     {
     Directory::FilenamesType::const_iterator file = Filenames.begin();

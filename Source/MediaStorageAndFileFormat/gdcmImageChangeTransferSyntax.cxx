@@ -406,7 +406,7 @@ bool ImageChangeTransferSyntax::Change()
       {
       Bitmap &outbitmap = *Output;
       Pixmap *outpixmap = dynamic_cast<Pixmap*>( &outbitmap );
-      assert( outpixmap != NULL );
+      assert( outpixmap != GDCM_NULLPTR );
       if( !pixmap->GetIconImage().IsEmpty() )
         {
         // same goes for icon

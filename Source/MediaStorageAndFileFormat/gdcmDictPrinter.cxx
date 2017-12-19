@@ -396,7 +396,7 @@ static const OWNER_VERSION OwnerVersionTable[] ={
 { "XXXXXXXXX_xx", "ANO" }, // FIXME
 { "        MED NM", "ANO" }, // Clearly should be SIEMENS
 
-  { NULL, NULL },
+  { GDCM_NULLPTR, GDCM_NULLPTR },
 };
 
 std::string GetVersion(std::string const &owner)
@@ -439,7 +439,7 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
   //const SequenceOfFragments *sqf = de.GetSequenceOfFragments();
 
   std::string strowner;
-  const char *owner = 0;
+  const char *owner = GDCM_NULLPTR;
   const Tag& t = de.GetTag();
   if( t.IsPrivate() && !t.IsPrivateCreator() )
     {

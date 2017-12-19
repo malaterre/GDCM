@@ -21,7 +21,7 @@
 namespace gdcm
 {
         static const char * const TransferSyntaxStrings[][2] = {
-{NULL,NULL}, // Starts a 1, not 0
+{GDCM_NULLPTR,GDCM_NULLPTR}, // Starts a 1, not 0
 {"1.2.840.10008.1.1","Verification SOP Class"},
 {"1.2.840.10008.1.2","Implicit VR Little Endian: Default Transfer Syntax for DICOM"},
 {"1.2.840.10008.1.2.1","Explicit VR Little Endian"},
@@ -365,7 +365,7 @@ DICOM_Conformance_Statement_MR_R2.6.pdf
 {"1.2.840.10008.5.1.4.1.1.130", "Enhanced PET Image Storage" },
 {"1.2.840.10008.5.1.4.1.1.14.1","Intravascular Optical Coherence Tomography Image Storage - For Presentation"},
 {"1.2.840.10008.5.1.4.1.1.14.2","Intravascular Optical Coherence Tomography Image Storage - For Processing"},
-{ 0, 0 }
+{ GDCM_NULLPTR, GDCM_NULLPTR }
 };
 
 
@@ -380,8 +380,8 @@ const char * const * UIDs::GetTransferSyntaxString(unsigned int ts)
 {
   if( ts > 0 && ts <= UIDs::GetNumberOfTransferSyntaxStrings() ) return TransferSyntaxStrings[ts];
   // else return the {0x0, 0x0} sentinel (begin or end)
-  assert( *TransferSyntaxStrings[ UIDs::GetNumberOfTransferSyntaxStrings() + 1 ] == 0 );
-  assert( *TransferSyntaxStrings[ 0 ] == 0 );
+  assert( *TransferSyntaxStrings[ UIDs::GetNumberOfTransferSyntaxStrings() + 1 ] == GDCM_NULLPTR );
+  assert( *TransferSyntaxStrings[ 0 ] == GDCM_NULLPTR );
   return TransferSyntaxStrings[ UIDs::GetNumberOfTransferSyntaxStrings() + 1 ];
 }
 
@@ -409,7 +409,7 @@ bool UIDs::SetFromUID(const char *str)
 
   int i = 1; // Start at 1, not 0
   const char *p = uids[i][0];
-  while( p != 0 )
+  while( p != GDCM_NULLPTR )
     {
     if( strcmp( p, str ) == 0 )
       {

@@ -10146,7 +10146,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   //{0x3115,0x0000,"http://www.gemedicalsystems.com/it_solutions/rad_pacs/",VR::UL,VM::VM1,"Group Length 3115",true },
 
   {0xffff,0xffff,"GDCM Private Sentinel",VR::INVALID,VM::VM0,"",true }, // Dummy invalid element
-  {0xffff,0xffff,"",VR::INVALID,VM::VM0,0,true } // Gard (will NOT be added)
+  {0xffff,0xffff,"",VR::INVALID,VM::VM0,GDCM_NULLPTR,true } // Gard (will NOT be added)
 };
 
 /*
@@ -10172,11 +10172,11 @@ void PrivateDict::LoadDefault()
 {
    unsigned int i = 0;
    DICT_ENTRY n = DICOMV3DataDict[i];
-   while( n.name != 0 )
+   while( n.name != GDCM_NULLPTR )
    {
 //   if( n.group % 2 != 0 )
      {
-     assert( n.owner != 0 );
+     assert( n.owner != GDCM_NULLPTR );
      assert( n.name );
      assert( n.group % 2 != 0 || n.group == 0xffff );
      assert( n.element <= 0xff || n.element == 0xffff );

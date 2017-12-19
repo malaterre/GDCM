@@ -466,7 +466,7 @@ bool Anonymizer::CheckIfSequenceContainsAttributeToAnonymize(File const &file, S
       {
       const DataElement &de = *it;
       VR vr = DataSetHelper::ComputeVR(file, nested, de.GetTag() );
-      SmartPointer<SequenceOfItems> sqi2 = 0;
+      SmartPointer<SequenceOfItems> sqi2(0);
       if( vr == VR::SQ )
         {
         sqi2 = de.GetValueAsSQ();
@@ -558,7 +558,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     {
     const DataElement &de = *it;
     //const SequenceOfItems *sqi = de.GetSequenceOfItems();
-    SmartPointer<SequenceOfItems> sqi = 0;
+    SmartPointer<SequenceOfItems> sqi(0);
     VR vr = DataSetHelper::ComputeVR(*F, ds, de.GetTag() );
     if( vr == VR::SQ )
       {
@@ -945,7 +945,7 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
     DataElement de = *it; ++it;
     //const SequenceOfItems *sqi = de.GetSequenceOfItems();
     VR vr = DataSetHelper::ComputeVR(*F, ds, de.GetTag() );
-    SmartPointer<SequenceOfItems> sqi = 0;
+    SmartPointer<SequenceOfItems> sqi(0);
     if( vr == VR::SQ )
       {
       sqi = de.GetValueAsSQ();

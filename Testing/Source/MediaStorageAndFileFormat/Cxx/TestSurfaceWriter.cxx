@@ -82,7 +82,7 @@ int TestSurfaceWriter(const char *subdir, const char* filename)
   const char * ref        = Testing::GetMD5FromFile(filename);
   char         digest[33] = {};
   Testing::ComputeFileMD5(outfilename.c_str(), digest);
-  if( ref == 0 )
+  if( ref == GDCM_NULLPTR )
     {
     // new regression file needs a md5 sum
     std::cout << "Missing md5 " << digest << " for: " << outfilename <<  std::endl;

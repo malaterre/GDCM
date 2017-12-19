@@ -58,7 +58,7 @@ class SequenceOfFragments;
 class GDCM_EXPORT DataElement
 {
 public:
-  DataElement(const Tag& t = Tag(0), const VL& vl = 0, const VR &vr = VR::INVALID):TagField(t),ValueLengthField(vl),VRField(vr),ValueField(0) {}
+  DataElement(const Tag& t = Tag(0), const VL& vl = 0, const VR &vr = VR::INVALID):TagField(t),ValueLengthField(vl),VRField(vr),ValueField(GDCM_NULLPTR) {}
   //DataElement( Attribute const &att );
 
   friend std::ostream& operator<<(std::ostream &_os, const DataElement &_val);
@@ -100,17 +100,17 @@ public:
     ValueLengthField = vl.GetLength();
   }
   /// Check if Data Element is empty
-  bool IsEmpty() const { return ValueField == 0 || (GetByteValue() && GetByteValue()->IsEmpty()); }
+  bool IsEmpty() const { return ValueField == GDCM_NULLPTR || (GetByteValue() && GetByteValue()->IsEmpty()); }
 
   /// Make Data Element empty (no Value)
-  void Empty() { ValueField = 0; ValueLengthField = 0; }
+  void Empty() { ValueField = GDCM_NULLPTR; ValueLengthField = 0; }
 
   /// Clear Data Element (make Value empty and invalidate Tag & VR)
   void Clear()
     {
     TagField = 0;
     VRField = VR::INVALID;
-    ValueField = 0;
+    ValueField = GDCM_NULLPTR;
     ValueLengthField = 0;
     }
 

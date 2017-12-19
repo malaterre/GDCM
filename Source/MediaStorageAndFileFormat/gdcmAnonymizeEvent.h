@@ -35,7 +35,7 @@ public:
   virtual ~AnonymizeEvent() {}
   virtual const char * GetEventName() const { return "AnonymizeEvent"; }
   virtual bool CheckEvent(const ::gdcm::Event* e) const
-  { return (dynamic_cast<const Self*>(e) == NULL ? false : true) ; }
+  { return (dynamic_cast<const Self*>(e) == GDCM_NULLPTR ? false : true) ; }
   virtual ::gdcm::Event* MakeObject() const
     { return new Self; }
   AnonymizeEvent(const Self&s) : AnyEvent(s){};

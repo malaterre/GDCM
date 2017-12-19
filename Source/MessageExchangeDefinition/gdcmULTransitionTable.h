@@ -37,12 +37,12 @@ class ULEvent;
       ULAction* mAction;
       Transition(){
         mEnd = eStaDoesNotExist;
-        mAction = NULL;
+        mAction = GDCM_NULLPTR;
       }
       ~Transition(){
-        if (mAction != NULL){
+        if (mAction != GDCM_NULLPTR){
           delete mAction;
-          mAction = NULL;
+          mAction = GDCM_NULLPTR;
         }
       }
       Transition(int inEndState, ULAction* inAction){
@@ -64,7 +64,7 @@ class ULEvent;
       TableRow() {
         for(int stateIndex = 0; stateIndex < cMaxStateID; ++stateIndex)
           {
-          transitions[stateIndex] = NULL;
+          transitions[stateIndex] = GDCM_NULLPTR;
           }
       }
       ~TableRow() {

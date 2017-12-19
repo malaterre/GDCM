@@ -28,7 +28,7 @@ SerieHelper::SerieHelper()
   Trace::WarningOff();
   UseSeriesDetails = false;
   Clear();
-  UserLessThanFunction = 0;
+  UserLessThanFunction = GDCM_NULLPTR;
   DirectOrder = true;
   //LoadMode = 0;
 }
@@ -234,7 +234,7 @@ FileList *SerieHelper::GetFirstSingleSerieUIDFileSet()
   ItFileSetHt = SingleSerieUIDFileSetHT.begin();
   if ( ItFileSetHt != SingleSerieUIDFileSetHT.end() )
     return ItFileSetHt->second;
-  return NULL;
+  return GDCM_NULLPTR;
 }
 
 FileList *SerieHelper::GetNextSingleSerieUIDFileSet()
@@ -244,7 +244,7 @@ FileList *SerieHelper::GetNextSingleSerieUIDFileSet()
   ++ItFileSetHt;
   if ( ItFileSetHt != SingleSerieUIDFileSetHT.end() )
     return ItFileSetHt->second;
-  return NULL;
+  return GDCM_NULLPTR;
 }
 
 bool SerieHelper::UserOrdering(FileList *fileList)

@@ -13867,14 +13867,14 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
 
  // FIXME: need a dummy element
   {0xffff,0xffff,VR::INVALID,VM::VM0,"","",true }, // dummy
-  {0xffff,0xffff,VR::INVALID,VM::VM0,0,0,true } // Gard
+  {0xffff,0xffff,VR::INVALID,VM::VM0,GDCM_NULLPTR,GDCM_NULLPTR,true } // Gard
 };
 
 void Dict::LoadDefault()
 {
    unsigned int i = 0;
    DICT_ENTRY n = DICOMV3DataDict[i];
-   while( n.name != 0 )
+   while( n.name != GDCM_NULLPTR )
    {
       Tag t(n.group, n.element);
       DictEntry e( n.name, n.keyword, n.vr, n.vm, n.ret );

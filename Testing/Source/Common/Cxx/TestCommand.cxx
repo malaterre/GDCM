@@ -21,7 +21,7 @@ struct Watcher {};
 
 void foo(gdcm::Command *c)
 {
-  c->Execute((gdcm::Subject*)0, gdcm::AnyEvent() );
+  c->Execute((gdcm::Subject*)GDCM_NULLPTR, gdcm::AnyEvent() );
 }
 
 int TestCommand(int , char *[])

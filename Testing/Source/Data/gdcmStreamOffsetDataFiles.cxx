@@ -240,5 +240,5 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "GE_MR_0025xx1bProtocolDataBlockXML.dcm",6474 },
 
 /* Stopping condition */
-{ 0 ,0 },
+{ GDCM_NULLPTR ,0 },
 };

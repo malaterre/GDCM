@@ -70,7 +70,7 @@ std::istream &ExplicitDataElement::ReadPreValue(std::istream &is)
     // Reset ValueLengthField to avoid user error
     ValueLengthField = 0;
     // Set pointer to NULL to avoid user error
-    ValueField = 0;
+    ValueField = GDCM_NULLPTR;
     VRField = VR::INVALID;
     return is;
     }
@@ -183,7 +183,7 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is, bool readvalues)
   if( ValueLengthField == 0 )
     {
     // Simple fast path
-    ValueField = 0;
+    ValueField = GDCM_NULLPTR;
     return is;
     }
 
@@ -385,7 +385,7 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
   if( TagField == itemDelItem )
     {
     assert(0);
-    assert( ValueField == 0 );
+    assert( ValueField == GDCM_NULLPTR );
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
     if( ValueLengthField != 0 )
       {

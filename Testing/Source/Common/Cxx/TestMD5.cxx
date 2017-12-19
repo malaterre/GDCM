@@ -240,7 +240,7 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "9add5fd3c83cc0946633e792f448f732" , "LengthOfItemLarger.dcm" },
 { "b9fdef839a6b6ab33486bfd6b35de3a8" , "GE_MR_0025xx1bProtocolDataBlockXML.dcm" },
 
-{ NULL, NULL}
+{ GDCM_NULLPTR, GDCM_NULLPTR}
 };
 
 int TestMD5Func(const char* filename, const char *md5ref, bool verbose = false)
@@ -289,7 +289,7 @@ static const char *GetMD5Sum(const char *filename)
     ++i;
     }
   std::cerr << "Missing Md5 for: " << filename << std::endl;
-  return 0;
+  return GDCM_NULLPTR;
 }
 
 int TestMD5(int argc, char *argv[])

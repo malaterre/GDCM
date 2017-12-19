@@ -77,7 +77,7 @@ class CryptographicMessageSyntax;
 class GDCM_EXPORT Anonymizer : public Subject
 {
 public:
-  Anonymizer():F(new File),CMS(NULL) {}
+  Anonymizer():F(new File),CMS(GDCM_NULLPTR) {}
   ~Anonymizer();
 
   /// Make Tag t empty (if not found tag will be created)

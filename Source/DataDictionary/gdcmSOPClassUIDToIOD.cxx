@@ -121,7 +121,7 @@ namespace gdcm
 // private:
 { "1.3.12.2.1107.5.9.1" , "Siemens Non-image IOD Modules"}, // CSA Non-Image Storage
 
-{ 0, 0 }
+{ GDCM_NULLPTR, GDCM_NULLPTR }
 };
 
 unsigned int SOPClassUIDToIOD::GetNumberOfSOPClassToIOD()
@@ -180,18 +180,18 @@ SOPClassUIDToIOD::SOPClassUIDToIODType& SOPClassUIDToIOD::GetSOPClassUIDToIOD(un
   if( i < SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() )
     return SOPClassUIDToIODStrings[i];
   // else return the {0x0, 0x0} sentinel:
-  assert( *SOPClassUIDToIODStrings[ SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() ] == 0 );
+  assert( *SOPClassUIDToIODStrings[ SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() ] == GDCM_NULLPTR );
   return SOPClassUIDToIODStrings[ SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() ];
 
 }
 
 const char *SOPClassUIDToIOD::GetSOPClassUIDFromIOD(const char *iod)
 {
-  if(!iod) return NULL;
+  if(!iod) return GDCM_NULLPTR;
   unsigned int i = 0;
   SOPClassUIDToIODType *sopclassuidtoiods = GetSOPClassUIDToIODs();
   const char *p = sopclassuidtoiods[i][1];
-  while( p != 0 )
+  while( p != GDCM_NULLPTR )
     {
     if( strcmp( iod, p ) == 0 )
       {
@@ -207,11 +207,11 @@ const char *SOPClassUIDToIOD::GetSOPClassUIDFromIOD(const char *iod)
 
 const char *SOPClassUIDToIOD::GetIODFromSOPClassUID(const char *sopclassuid)
 {
-  if(!sopclassuid) return NULL;
+  if(!sopclassuid) return GDCM_NULLPTR;
   unsigned int i = 0;
   SOPClassUIDToIODType *sopclassuidtoiods = GetSOPClassUIDToIODs();
   const char *p = sopclassuidtoiods[i][0];
-  while( p != 0 )
+  while( p != GDCM_NULLPTR )
     {
     if( strcmp( sopclassuid, p ) == 0 )
       {

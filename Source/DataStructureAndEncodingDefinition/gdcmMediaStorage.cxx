@@ -143,14 +143,14 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.2.2", // Legacy Converted Enhanced CT Image Storage
   "1.2.840.10008.5.1.4.1.1.4.4", // Legacy Converted Enhanced MR Image Storage
   "1.2.840.10008.5.1.4.1.1.128.1", // Legacy Converted Enhanced PET Image Storage
-  0
+  GDCM_NULLPTR
 };
 
 MediaStorage::MSType MediaStorage::GetMSType(const char *str)
 {
   if(!str) return MS_END;
 
-  for(unsigned int i = 0; MSStrings[i] != 0; ++i)
+  for(unsigned int i = 0; MSStrings[i] != GDCM_NULLPTR; ++i)
     {
     if( strcmp(str, MSStrings[i]) == 0 )
       {
@@ -162,7 +162,7 @@ MediaStorage::MSType MediaStorage::GetMSType(const char *str)
   // string
   CodeString codestring = str;
   std::string cs = codestring.GetAsString();
-  for(unsigned int i = 0; MSStrings[i] != 0; ++i)
+  for(unsigned int i = 0; MSStrings[i] != GDCM_NULLPTR; ++i)
     {
     if( strcmp(cs.c_str(), MSStrings[i]) == 0 )
       {
@@ -329,7 +329,7 @@ static const MSModalityType MSModalityTypes[] = {
   {"MR", 3, 0},//LegacyConvertedEnhancedMRImageStorage,
   {"PT", 3, 0},//LegacyConvertedEnhancedPETImageStorage,
 
-  {NULL, 0, 0} //MS_END
+  {GDCM_NULLPTR, 0, 0} //MS_END
 };
 
 unsigned int MediaStorage::GetNumberOfMSType()
@@ -356,7 +356,7 @@ unsigned int MediaStorage::GetNumberOfModality()
 const char *MediaStorage::GetModality() const
 {
   if (!MSModalityTypes[MSField].Modality)
-    return NULL;
+    return GDCM_NULLPTR;
   assert( MSModalityTypes[MSField].Modality[0] != ' ' ); // FIXME
   return MSModalityTypes[MSField].Modality;
 }
@@ -397,7 +397,7 @@ const char* MediaStorage::GetFromDataSetOrHeader(DataSet const &ds, const Tag & 
     const ByteValue *sopclassuid = ds.GetDataElement( tag ).GetByteValue();
     // Empty SOP Class UID:
     // lifetechmed/A0038329.DCM
-    if( !sopclassuid || !sopclassuid->GetPointer() ) return 0;
+    if( !sopclassuid || !sopclassuid->GetPointer() ) return GDCM_NULLPTR;
     std::string sopclassuid_str(
       sopclassuid->GetPointer(),
       sopclassuid->GetLength() );
@@ -410,7 +410,7 @@ const char* MediaStorage::GetFromDataSetOrHeader(DataSet const &ds, const Tag & 
     ret = sopclassuid_str.c_str();
     return ret.c_str();
     }
-  return 0;
+  return GDCM_NULLPTR;
 }
 
 bool MediaStorage::SetFromDataSetOrHeader(DataSet const &ds, const Tag & tag)
@@ -545,7 +545,7 @@ bool MediaStorage::SetFromFile(File const &file)
   const FileMetaInformation &header = file.GetHeader();
   const char* header_ms_ptr = GetFromHeader(header);
   std::string copy1;
-  const char *header_ms_str = 0;
+  const char *header_ms_str = GDCM_NULLPTR;
   if( header_ms_ptr )
     {
     copy1 = header_ms_ptr;
@@ -554,7 +554,7 @@ bool MediaStorage::SetFromFile(File const &file)
   const DataSet &ds = file.GetDataSet();
   const char* ds_ms_ptr = GetFromDataSet(ds);
   std::string copy2;
-  const char *ds_ms_str = 0;
+  const char *ds_ms_str = GDCM_NULLPTR;
   if( ds_ms_ptr )
     {
     copy2 = ds_ms_ptr;

@@ -128,7 +128,7 @@ namespace
   // Note: This function recursively calls itself, in order to get a pointer
   // to an equivalent array of gdcm::DataElement objects.
   int TestDataElementEqualityComparison(
-    const gdcm::DataElement* const equivalentDataElements = NULL)
+    const gdcm::DataElement* const equivalentDataElements = GDCM_NULLPTR)
   {
     const unsigned int numberOfDataElements = 6;
 
@@ -145,7 +145,7 @@ namespace
 
     // Now all data elements of the array dataElements are different. 
 
-    if ( equivalentDataElements == NULL )
+    if ( equivalentDataElements == GDCM_NULLPTR )
     {
       return TestDataElementEqualityComparison(dataElements);
     }

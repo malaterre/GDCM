@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     {
     return 1;
     }
-  time_t time_start = time(0);
+  time_t time_start = time(GDCM_NULLPTR);
 
   gdcm::Trace::SetDebug( false );
   gdcm::Trace::SetWarning( false );
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 
   bool b0 = s.Scan( d.GetFilenames() );
   if( !b0 ) return 1;
-  time_t time_scanner = time(0);
+  time_t time_scanner = time(GDCM_NULLPTR);
 
   std::cout << "Finished loading data from : " << nfiles << " files" << std::endl;
 
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
   sqlite3* db;
   sqlite3_open("./dicom.db", &db);
 
-  if(db == 0)
+  if(db == GDCM_NULLPTR)
     {
     std::cerr << "Could not open database." << std::endl;
     return 1;
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
   int   ret;
 
   char *errmsg;
-  ret = sqlite3_exec(db, sql_stmt, 0, 0, &errmsg);
+  ret = sqlite3_exec(db, sql_stmt, GDCM_NULLPTR, GDCM_NULLPTR, &errmsg);
 
   if(ret != SQLITE_OK)
     {
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
       "insert into browser values (?,?)",  // stmt
       -1, // If than zero, then stmt is read up to the first nul terminator
       &stmt,
-      0  // Pointer to unused portion of stmt
+      GDCM_NULLPTR  // Pointer to unused portion of stmt
   )
     != SQLITE_OK)
     {
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
 
   sqlite3_close(db);
 
-  time_t time_sqlite = time(0);
+  time_t time_sqlite = time(GDCM_NULLPTR);
 
   std::cout << "Time to scan DICOM files: " << (time_scanner - time_start) << std::endl;
   std::cout << "Time to build SQLITE3: " << (time_sqlite - time_scanner) << std::endl;

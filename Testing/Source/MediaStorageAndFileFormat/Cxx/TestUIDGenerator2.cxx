@@ -38,7 +38,7 @@ void* func (void* argc)
       }
     uids->insert( s );
    }
-  return NULL;
+  return GDCM_NULLPTR;
 }
 
 int TestUIDGenerator2(int , char *[])
@@ -49,11 +49,11 @@ int TestUIDGenerator2(int , char *[])
   unsigned int i;
   for (i = 0; i < nthreads; i++)
     {
-    const int ret = pthread_create (&th[i], NULL, func, (void*)(uids+i));
+    const int ret = pthread_create (&th[i], GDCM_NULLPTR, func, (void*)(uids+i));
     if( ret ) return 1;
     }
   for (i = 0; i < nthreads; i++)
-    pthread_join (th[i], NULL);
+    pthread_join (th[i], GDCM_NULLPTR);
 
   std::vector<std::string> v_one(nuids*nthreads);
   std::vector<std::string>::iterator it = v_one.begin();

@@ -29,10 +29,10 @@ int TestSystem3(int, char *[])
   char *saveptr1;
 
   std::vector< std::string > v;
-  for (str1 = query; ; str1 = NULL)
+  for (str1 = query; ; str1 = GDCM_NULLPTR)
     {
     token = gdcm::System::StrTokR(str1, delim, &saveptr1);
-    if (token == NULL)
+    if (token == GDCM_NULLPTR)
       break;
     //std::cout << "[" << token << "]" << std::endl;
     v.push_back( token );
@@ -49,7 +49,7 @@ int TestSystem3(int, char *[])
   char *string = strdup( isostr );
   if(!string) return 1;
   char *copy = string;
-  while ((token = gdcm::System::StrSep(&string, delim)) != NULL)
+  while ((token = gdcm::System::StrSep(&string, delim)) != GDCM_NULLPTR)
     {
     //printf("token=%s\n", token);
     v.push_back( token );

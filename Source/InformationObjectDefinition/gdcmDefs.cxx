@@ -238,7 +238,7 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
       iodname = "VL Microscopic Image IOD Modules";
       break;
     default:
-      iodname = 0;
+      iodname = GDCM_NULLPTR;
     }
   return iodname;
 }
