@@ -353,12 +353,12 @@ static void x16printf(char *buf, int size, Float f) {
     size -= 1;
     *buf++ = '-';
   }
-  sprintf(line, "%1.16e", (double)f);
+  sprintf(line, "%1.16e", f);
   if (line[0] == '-') {
     f = -f;
     size -= 1;
     *buf++ = '-';
-    sprintf(line, "%1.16e", (double)f);
+    sprintf(line, "%1.16e", f);
   }
   *mant = line[0];
   i = strcspn(mant, "eE");
@@ -415,30 +415,6 @@ static void x16printf(char *buf, int size, Float f) {
   }
 }
 #endif
-
-/* Writing VR::DS is not that easy after all */
-// http://groups.google.com/group/comp.lang.c++/browse_thread/thread/69ccd26f000a0802
-template<> inline void EncodingImplementation<VR::VRASCII>::Write(const float * data, unsigned long length, std::ostream &_os)  {
-    assert( data );
-    assert( length );
-    assert( _os );
-#ifdef VRDS16ILLEGAL
-    _os << to_string(data[0]);
-#else
-    char buf[16+1];
-    x16printf(buf, 16, data[0]);
-    _os << buf;
-#endif
-    for(unsigned long i=1; i<length; ++i) {
-      assert( _os );
-#ifdef VRDS16ILLEGAL
-      _os << "\\" << to_string(data[i]);
-#else
-      x16printf(buf, 16, data[i]);
-      _os << "\\" << buf;
-#endif
-      }
-    }
 
 template<> inline void EncodingImplementation<VR::VRASCII>::Write(const double* data, unsigned long length, std::ostream &_os)  {
     assert( data );
