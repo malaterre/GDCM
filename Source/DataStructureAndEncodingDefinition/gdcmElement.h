@@ -361,7 +361,7 @@ static void x16printf(char *buf, int size, Float f) {
     sprintf(line, "%1.16e", f);
   }
   *mant = line[0];
-  i = strcspn(mant, "eE");
+  i = (int)strcspn(mant, "eE");
   mant[i] = '\0';
   iexp = strtol(mant + i + 1, NULL, 10);
   lexp = sprintf(exp, "e%d", iexp);
