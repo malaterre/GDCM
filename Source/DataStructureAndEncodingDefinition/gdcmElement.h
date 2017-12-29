@@ -353,12 +353,12 @@ static void x16printf(char *buf, int size, Float f) {
     size -= 1;
     *buf++ = '-';
   }
-  sprintf(line, "%1.16e", f);
+  sprintf(line, "%1.16e", (double)f);
   if (line[0] == '-') {
     f = -f;
     size -= 1;
     *buf++ = '-';
-    sprintf(line, "%1.16e", f);
+    sprintf(line, "%1.16e", (double)f);
   }
   *mant = line[0];
   i = strcspn(mant, "eE");
