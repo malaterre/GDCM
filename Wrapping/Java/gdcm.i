@@ -268,12 +268,19 @@ private final static String GDCMJNI = "gdcmjni";
  final String OS = System.getProperty("os.name").toLowerCase();
      return (OS.indexOf("nux") >= 0);
  }
+ private static boolean isMac() {
+ final String OS = System.getProperty("os.name").toLowerCase();
+     return (OS.indexOf("mac") >= 0);
+ }
  private static String getLibName() {
    if( isWindows() ) {
    final String name = "/" + GDCMJNI + ".dll";
    return name;
    } else if( isUnix() ) {
    final String name = "/lib" + GDCMJNI + ".so";
+   return name;
+   } else if( isMac() ) {
+   final String name = "/lib" + GDCMJNI + ".jnilib";
    return name;
    }
    return null;
