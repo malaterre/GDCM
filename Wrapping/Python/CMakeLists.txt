@@ -1,3 +1,7 @@
+# Special CMake Module required when doing Python Testing
+if(BUILD_TESTING AND GDCM_WRAP_PYTHON)
+  include(${GDCM_SOURCE_DIR}/CMake/UsePythonTest.cmake)
+endif()
 # Try to rebuild wrapping a little more often:
 include_regular_expression("^(gdcm).*$")
 # TODO:
@@ -90,7 +94,15 @@ endif()
 # well no, you cannot, it get rid of some important flags, and make the _gdcm.so incompatible with
 # the other gdcm lib. bad !!!
 #set (SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS ${SWIG_MODULE_${MODULE_NAME}_EXTRA_DEPS} ${CMAKE_CURRENT_SOURCE_DIR}/docstrings.i)
-SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcmswig.i gdcmPythonFilter.cxx)
+if (${CMAKE_VERSION} VERSION_LESS "3.8.0")
+  SWIG_ADD_MODULE(${GDCM_PYTHON_IMPLEMENTATION_NAME} python gdcmswig.i gdcmPythonFilter.cxx)
+else()
+  SWIG_ADD_LIBRARY(
+    ${GDCM_PYTHON_IMPLEMENTATION_NAME}
+    LANGUAGE python
+    SOURCES gdcmswig.i gdcmPythonFilter.cxx
+  )
+endif()
 SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMEXD gdcmMSFF gdcmIOD)
 # Apparently on my UNIX, python module (/usr/lib/pyshared/pythonX.Y/*/*.so) do not explicitly
 # link to python libraries...Leave default to always link to python libraries since
