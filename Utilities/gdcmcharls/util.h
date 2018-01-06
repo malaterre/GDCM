@@ -219,4 +219,11 @@ inline std::system_error CreateSystemError(charls::ApiResult errorCode, const st
     return std::system_error(static_cast<int>(errorCode), CharLSCategoryInstance(), message);
 }
 
+#if __cplusplus == 201103L
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args)
+{
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+#endif
 #endif
