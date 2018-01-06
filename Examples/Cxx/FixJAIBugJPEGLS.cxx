@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     }
 
 //  unsigned long totalLen = sf->ComputeByteLength();
-  std::vector<BYTE> rgbyteOutall;
+  std::vector<unsigned char> rgbyteOutall;
   for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
     {
     const gdcm::Fragment &frag = sf->GetFragment(i);
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
     vbuffer.resize( totalLen );
     char *buffer = &vbuffer[0];
     bv->GetBuffer(buffer, totalLen);
-    const BYTE* pbyteCompressed0 = (const BYTE*)buffer;
+    const unsigned char* pbyteCompressed0 = (const unsigned char*)buffer;
     while( totalLen > 0 && pbyteCompressed0[totalLen-1] != 0xd9 )
       {
       totalLen--;
@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
     JlsParameters params;
     JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params);
 
-    std::vector<BYTE> rgbyteOut;
+    std::vector<unsigned char> rgbyteOut;
     //rgbyteOut.resize( image.GetBufferLength() );
     rgbyteOut.resize(params.height *params.width * ((params.bitspersample + 7)
         / 8) * params.components);
