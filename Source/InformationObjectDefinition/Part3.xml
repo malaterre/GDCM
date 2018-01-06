@@ -21649,25 +21649,25 @@ See C.12.1.1.2 for Defined Terms.</description>
       <section ref="C.12.1.1.2" name="">Specific Character Set (0008,0005) identifies the Character Set that expands or replaces the Basic Graphic Set (ISO 646) for values of Data Elements that have Value Representation of SH, LO, ST, PN, LT or UT. See PS 3.5.
 If the Attribute Specific Character Set (0008,0005) is not present or has only a single value, Code Extension techniques are not used. Defined terms for the Attribute Specific Character Set (0008,0005), when single valued, are derived from the International Registration Number as per ISO 2375 (e.g., ISO_IR 100 for Latin alphabet No. 1). See Table C.12-2.
 Table C.12-2
- DEFINED TERMS FOR SINGLE-BYTE CHARACTER SETS WITHOUT CODE EXTENSIONS
+ DEFINED TERMS FOR SINGLE-unsigned char CHARACTER SETS WITHOUT CODE EXTENSIONS
 <unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="none"/><term value="Latin alphabet No. 1" meaning="ISO_IR 100"/><term value=""/><term value="Latin alphabet No. 2" meaning="ISO_IR 101"/><term value=""/><term value="Latin alphabet No. 3" meaning="ISO_IR 109"/><term value=""/><term value="Latin alphabet No. 4" meaning="ISO_IR 110"/><term value=""/><term value="Cyrillic" meaning="ISO_IR 144"/><term value=""/><term value="Arabic" meaning="ISO_IR 127"/><term value=""/><term value="Greek" meaning="ISO_IR 126"/><term value=""/><term value="Hebrew" meaning="ISO_IR 138"/><term value=""/><term value="Latin alphabet No. 5" meaning="ISO_IR 148"/><term value=""/><term value="Japanese" meaning="ISO_IR 13"/><term value=""/><term value="Thai" meaning="ISO_IR 166"/><term value=""/></unrecognized-rows>
 Note:  To use the single-byte code table of JIS X0201, the value of attribute Specific Character Set (0008,0005), value 1 should be ISO_IR 13. This means that ISO-IR 13 is designated as the G1 code element which is invoked in the GR area. It should be understood that, in addition, ISO-IR 14 is designated as the G0 code element and this is invoked in the GL area.
 
 If the attribute Specific Character Set (0008,0005) has more than one value, Code Extension techniques are used and Escape Sequences may be encountered in all character sets. Requirements for the use of Code Extension techniques are specified in PS 3.5. In order to indicate the presence of Code Extension, the Defined Terms for the repertoires have the prefix “ISO 2022”, e.g., ISO 2022 IR 100 for the Latin Alphabet No. 1. See Table 12-3 and Table 12-4. Table 12-3 describes single-byte character sets for value 1 to value n of the attribute Specific Character Set (0008,0005), and Table 12-4 describes multi-byte character sets for value 2 to value n of the attribute Specific Character Set (0008,0005).
 Note:  A prefix other than “ISO 2022” may be needed in the future if other Code Extension techniques are adopted.
 Table C.12-3
-DEFINED TERMS FOR SINGLE-BYTE CHARACTER SETS WITH CODE EXTENSIONS
+DEFINED TERMS FOR SINGLE-unsigned char CHARACTER SETS WITH CODE EXTENSIONS
 <unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="ISO 2022 IR 6"/><term value="No. 1" meaning="ISO 2022 IR 100"/><term value="No. 2" meaning="ISO 2022 IR 101"/><term value="No. 3" meaning="ISO 2022 IR 109"/><term value="No. 4" meaning="ISO 2022 IR 110"/><term value="Cyrillic" meaning="ISO 2022 IR 144"/><term value="Arabic" meaning="ISO 2022 IR 127"/><term value="Greek" meaning="ISO 2022 IR 126"/><term value="Hebrew" meaning="ISO 2022 IR 138"/><term value="No. 5" meaning="ISO 2022 IR 148"/><term value="Japanese" meaning="ISO 2022 IR 13"/><term value="Thai" meaning="ISO 2022 IR 166"/><term value=""/></unrecognized-rows>
 Note:  If the attribute Specific Character Set (0008,0005) has more than one value and value 1 is empty, it is assumed that value 1 is ISO 2022 IR 6.
 
 Table C.12-4
-DEFINED TERMS FOR MULTI-BYTE CHARACTER SETS WITH CODE EXTENSIONS
+DEFINED TERMS FOR MULTI-unsigned char CHARACTER SETS WITH CODE EXTENSIONS
 <unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Japanese" meaning="ISO 2022 IR 87"/><term value="" meaning="ISO 2022 IR 159"/><term value="Korean" meaning="ISO 2022 IR 149"/></unrecognized-rows>
 There are multi-byte character sets that prohibit the use of Code Extension Techniques. The Unicode character set used in ISO 10646, when encoded in UTF-8, and the GB18030 character set, encoded per the rules of GB18030, both prohibit the use of Code Extension Techniques. These character sets may only be specified as value 1 in the Specific Character Set (0008,0005) attribute and there shall only be one value. The minimal length UTF-8 encoding shall always be used for ISO 10646.
 Notes:  1. The ISO standards for 10646 now prohibit the use of anything but the minimum length encoding for UTF-8. UTF-8 permits multiple different encodings, but when used to encode Unicode characters in accordance with ISO 10646-1 and 10646-2 (with extensions) only the minimal encodings are legal.
   2. The representation for the characters in the DICOM Default Character Repertoire is the same single byte value for the Default Character Repertoire, ISO 10646 in UTF-8, and GB18030. It is also the 7-bit US-ASCII encoding.
 Table C.12-5
-DEFINED TERMS FOR MULTI-BYTE CHARACTER SETS WITHOUT CODE EXTENSIONS
+DEFINED TERMS FOR MULTI-unsigned char CHARACTER SETS WITHOUT CODE EXTENSIONS
 <unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Unicode in UTF-8" meaning="ISO_IR 192"/><term value="GB18030" meaning="GB18030"/></unrecognized-rows>
          </section>
     </entry>
@@ -27969,25 +27969,25 @@ Note: This File is not DICOM formatted (no Preamble, nor DICM Prefix and Meta In
       <section ref="C.12.1.1.2" name="">Specific Character Set (0008,0005) identifies the Character Set that expands or replaces the Basic Graphic Set (ISO 646) for values of Data Elements that have Value Representation of SH, LO, ST, PN, LT or UT. See PS 3.5.
 If the Attribute Specific Character Set (0008,0005) is not present or has only a single value, Code Extension techniques are not used. Defined terms for the Attribute Specific Character Set (0008,0005), when single valued, are derived from the International Registration Number as per ISO 2375 (e.g., ISO_IR 100 for Latin alphabet No. 1). See Table C.12-2.
 Table C.12-2
- DEFINED TERMS FOR SINGLE-BYTE CHARACTER SETS WITHOUT CODE EXTENSIONS
+ DEFINED TERMS FOR SINGLE-unsigned char CHARACTER SETS WITHOUT CODE EXTENSIONS
 <unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="none"/><term value="Latin alphabet No. 1" meaning="ISO_IR 100"/><term value=""/><term value="Latin alphabet No. 2" meaning="ISO_IR 101"/><term value=""/><term value="Latin alphabet No. 3" meaning="ISO_IR 109"/><term value=""/><term value="Latin alphabet No. 4" meaning="ISO_IR 110"/><term value=""/><term value="Cyrillic" meaning="ISO_IR 144"/><term value=""/><term value="Arabic" meaning="ISO_IR 127"/><term value=""/><term value="Greek" meaning="ISO_IR 126"/><term value=""/><term value="Hebrew" meaning="ISO_IR 138"/><term value=""/><term value="Latin alphabet No. 5" meaning="ISO_IR 148"/><term value=""/><term value="Japanese" meaning="ISO_IR 13"/><term value=""/><term value="Thai" meaning="ISO_IR 166"/><term value=""/></unrecognized-rows>
 Note:  To use the single-byte code table of JIS X0201, the value of attribute Specific Character Set (0008,0005), value 1 should be ISO_IR 13. This means that ISO-IR 13 is designated as the G1 code element which is invoked in the GR area. It should be understood that, in addition, ISO-IR 14 is designated as the G0 code element and this is invoked in the GL area.
 
 If the attribute Specific Character Set (0008,0005) has more than one value, Code Extension techniques are used and Escape Sequences may be encountered in all character sets. Requirements for the use of Code Extension techniques are specified in PS 3.5. In order to indicate the presence of Code Extension, the Defined Terms for the repertoires have the prefix “ISO 2022”, e.g., ISO 2022 IR 100 for the Latin Alphabet No. 1. See Table 12-3 and Table 12-4. Table 12-3 describes single-byte character sets for value 1 to value n of the attribute Specific Character Set (0008,0005), and Table 12-4 describes multi-byte character sets for value 2 to value n of the attribute Specific Character Set (0008,0005).
 Note:  A prefix other than “ISO 2022” may be needed in the future if other Code Extension techniques are adopted.
 Table C.12-3
-DEFINED TERMS FOR SINGLE-BYTE CHARACTER SETS WITH CODE EXTENSIONS
+DEFINED TERMS FOR SINGLE-unsigned char CHARACTER SETS WITH CODE EXTENSIONS
 <unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Default repertoire" meaning="ISO 2022 IR 6"/><term value="No. 1" meaning="ISO 2022 IR 100"/><term value="No. 2" meaning="ISO 2022 IR 101"/><term value="No. 3" meaning="ISO 2022 IR 109"/><term value="No. 4" meaning="ISO 2022 IR 110"/><term value="Cyrillic" meaning="ISO 2022 IR 144"/><term value="Arabic" meaning="ISO 2022 IR 127"/><term value="Greek" meaning="ISO 2022 IR 126"/><term value="Hebrew" meaning="ISO 2022 IR 138"/><term value="No. 5" meaning="ISO 2022 IR 148"/><term value="Japanese" meaning="ISO 2022 IR 13"/><term value="Thai" meaning="ISO 2022 IR 166"/><term value=""/></unrecognized-rows>
 Note:  If the attribute Specific Character Set (0008,0005) has more than one value and value 1 is empty, it is assumed that value 1 is ISO 2022 IR 6.
 
 Table C.12-4
-DEFINED TERMS FOR MULTI-BYTE CHARACTER SETS WITH CODE EXTENSIONS
+DEFINED TERMS FOR MULTI-unsigned char CHARACTER SETS WITH CODE EXTENSIONS
 <unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Japanese" meaning="ISO 2022 IR 87"/><term value="" meaning="ISO 2022 IR 159"/><term value="Korean" meaning="ISO 2022 IR 149"/></unrecognized-rows>
 There are multi-byte character sets that prohibit the use of Code Extension Techniques. The Unicode character set used in ISO 10646, when encoded in UTF-8, and the GB18030 character set, encoded per the rules of GB18030, both prohibit the use of Code Extension Techniques. These character sets may only be specified as value 1 in the Specific Character Set (0008,0005) attribute and there shall only be one value. The minimal length UTF-8 encoding shall always be used for ISO 10646.
 Notes:  1. The ISO standards for 10646 now prohibit the use of anything but the minimum length encoding for UTF-8. UTF-8 permits multiple different encodings, but when used to encode Unicode characters in accordance with ISO 10646-1 and 10646-2 (with extensions) only the minimal encodings are legal.
   2. The representation for the characters in the DICOM Default Character Repertoire is the same single byte value for the Default Character Repertoire, ISO 10646 in UTF-8, and GB18030. It is also the 7-bit US-ASCII encoding.
 Table C.12-5
-DEFINED TERMS FOR MULTI-BYTE CHARACTER SETS WITHOUT CODE EXTENSIONS
+DEFINED TERMS FOR MULTI-unsigned char CHARACTER SETS WITHOUT CODE EXTENSIONS
 <unrecognized-rows><term value="Character Set Description" meaning="Defined Term"/><term value="Unicode in UTF-8" meaning="ISO_IR 192"/><term value="GB18030" meaning="GB18030"/></unrecognized-rows>
          </section>
     </entry>
