@@ -237,7 +237,7 @@ bool KAKADUCodec::Code(DataElement const &in, DataElement &out)
 
 ImageCodec * KAKADUCodec::Clone() const
 {
-  return NULL;
+  return nullptr;
 }
 
 } // end namespace gdcm

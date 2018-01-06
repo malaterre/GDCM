@@ -82,7 +82,7 @@ bool checkbl( const char *filename )
     "SIEMENS_SOMATOM-12-ACR_NEMA-ZeroLengthUs.acr",
     "MR-MONO2-12-an2.acr",
     "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm",
-    NULL
+    nullptr
   };
   for( const char **bl = blacklist; *bl; ++bl )
     {

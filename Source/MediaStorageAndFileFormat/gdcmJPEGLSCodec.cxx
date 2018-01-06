@@ -156,7 +156,7 @@ bool JPEGLSCodec::DecodeByStreamsCommon(char *buffer, size_t totalLen, std::vect
   size_t cbyteCompressed = totalLen;
 
   JlsParameters params = {};
-  if(JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params, NULL) != ApiResult::OK )
+  if(JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params, nullptr) != ApiResult::OK )
     {
     gdcmDebugMacro( "Could not parse JPEG-LS header" );
     return false;
@@ -167,7 +167,7 @@ bool JPEGLSCodec::DecodeByStreamsCommon(char *buffer, size_t totalLen, std::vect
 
   rgbyteOut.resize(params.height *params.width * ((params.bitsPerSample + 7) / 8) * params.components);
 
-  ApiResult result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params, NULL);
+  ApiResult result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params, nullptr);
 
   if (result != ApiResult::OK)
     {
@@ -230,7 +230,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       size_t cbyteCompressed = totalLen;
 
       JlsParameters params = {};
-      if( JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params, NULL) != ApiResult::OK )
+      if( JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params, nullptr) != ApiResult::OK )
         {
         gdcmDebugMacro( "Could not parse JPEG-LS header" );
         return false;
@@ -242,7 +242,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
       std::vector<unsigned char> rgbyteOut;
       rgbyteOut.resize(params.height *params.width * ((params.bitsPerSample + 7) / 8) * params.components);
 
-      ApiResult result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params, NULL);
+      ApiResult result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params, nullptr);
       bool r = true;
 
       delete[] mybuffer;
@@ -338,7 +338,7 @@ bool JPEGLSCodec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & co
     }
 
 
-  ApiResult error = JpegLsEncode(outdata, outlen, &complen, indata, inlen, &params, NULL);
+  ApiResult error = JpegLsEncode(outdata, outlen, &complen, indata, inlen, &params, nullptr);
   if( error != ApiResult::OK )
     {
     gdcmErrorMacro( "Error compressing: " << (int)error );
@@ -427,7 +427,7 @@ bool JPEGLSCodec::DecodeExtent(
 
   if( NumberOfDimensions == 2 )
     {
-    char *dummy_buffer = NULL;
+    char *dummy_buffer = nullptr;
     std::vector<char> vdummybuffer;
     size_t buf_size = 0;
 

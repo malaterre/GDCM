@@ -63,18 +63,18 @@ class MY_API sockerr : public std::exception
     int  err;
     StringWrapper text;
     public:
-        sockerr (int e, const char *theop = NULL): err (e)
+        sockerr (int e, const char *theop = nullptr): err (e)
         {
-            if (theop != NULL)
+            if (theop != nullptr)
             {
                 text.text = theop;
             }
         }
         sockerr (int e, const char *theop, const char *specification) : err (e)
         {
-            if (theop != NULL)
+            if (theop != nullptr)
                 text.text = theop;
-            if (specification != NULL)
+            if (specification != nullptr)
             {
                 text.text += "(";
                 text.text += specification;
@@ -205,7 +205,7 @@ class MY_API sockbuf: public std::streambuf
 
             sockcnt(SOCKET s):
                 sock(s), cnt(1), stmo (-1), rtmo (-1), oob (false),
-                gend (0), pend (0) {}
+                gend (nullptr), pend (nullptr) {}
         };
 
         sockcnt* rep;  // counts the # refs to sock

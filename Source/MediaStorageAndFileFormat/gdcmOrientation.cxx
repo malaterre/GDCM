@@ -32,7 +32,7 @@ static const char *OrientationStrings[] = {
   "CORONAL",
   "SAGITTAL",
   "OBLIQUE",
-  NULL
+  nullptr
 };
 
 // http://public.kitware.com/pipermail/insight-users/2005-March/012246.html

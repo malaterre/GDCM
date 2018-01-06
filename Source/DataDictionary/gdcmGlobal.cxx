@@ -95,7 +95,7 @@ Global::~Global()
     {
     //Internals->GlobalDicts.Unload();
     delete Internals;
-    Internals = NULL; // paranoid
+    Internals = nullptr; // paranoid
     }
 }
 
@@ -158,14 +158,14 @@ const char *Global::Locate(const char *resfile) const
       if( fullpath.size() >= sizeof(path) )
         {
         gdcmDebugMacro( "Impossible happen: path is too long" );
-        return NULL;
+        return nullptr;
         }
       strcpy(path, fullpath.c_str() );
       return path;
       }
     }
   // no match sorry  :(
-  return NULL;
+  return nullptr;
 }
 
 Dicts const &Global::GetDicts() const

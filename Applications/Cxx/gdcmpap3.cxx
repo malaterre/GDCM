@@ -196,8 +196,8 @@ int main(int argc, char *argv[])
   while (1) {
     int option_index = 0;
     static struct option long_options[] = {
-        {"input", 1, 0, 0},
-        {"output", 1, 0, 0},
+        {"input", 1, nullptr, 0},
+        {"output", 1, nullptr, 0},
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
         {"split", 0, &split, 1},
         {"decomp-pap3", 0, &decomp_pap3, 1},
@@ -211,7 +211,7 @@ int main(int argc, char *argv[])
         {"help", 0, &help, 1},
         {"version", 0, &version, 1},
 
-        {0, 0, 0, 0}
+        {nullptr, 0, nullptr, 0}
     };
 
     c = getopt_long (argc, argv, "i:o:S:VWDEhv",

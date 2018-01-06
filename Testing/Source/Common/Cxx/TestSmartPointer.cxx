@@ -28,7 +28,7 @@ class Foo : public Object {
 
 class Containter {
 public:
-  Containter():Instance(0) {}
+  Containter():Instance(nullptr) {}
   SmartPointer<Object> Instance;
 };
 
@@ -64,7 +64,7 @@ SmartPointer<Foo> TestReturn(int i)
     {
     return new Foo;
     }
-  return 0;
+  return nullptr;
 }
 
 //class Object2 : public Foo {};

@@ -29,7 +29,7 @@ int TestTesting(int , char *[])
   if( md5[0] || md5[1] ) return 1;
 
   const char * const *null = gdcm::Testing::GetMD5DataImage(1000000000u);
-  if( null[0] != NULL || null[1] != NULL )
+  if( null[0] != nullptr || null[1] != nullptr )
     {
     return 1;
     }

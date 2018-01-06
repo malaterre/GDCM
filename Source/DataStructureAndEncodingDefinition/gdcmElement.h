@@ -363,7 +363,7 @@ static void x16printf(char *buf, int size, Float f) {
   *mant = line[0];
   i = (int)strcspn(mant, "eE");
   mant[i] = '\0';
-  iexp = strtol(mant + i + 1, NULL, 10);
+  iexp = strtol(mant + i + 1, nullptr, 10);
   lexp = sprintf(exp, "e%d", iexp);
   if ((iexp >= size) || (iexp < -3)) {
     i = roundat(mant, size - 1 -lexp, iexp);
@@ -575,12 +575,12 @@ class Element<TVR, VM::VM1_n>
   enum { ElementDisableCombinationsCheck = sizeof ( ElementDisableCombinations<TVR, VM::VM1_n> ) };
 public:
   // This the way to prevent default initialization
-  explicit Element() { Internal=0; Length=0; Save = false; }
+  explicit Element() { Internal=nullptr; Length=0; Save = false; }
   ~Element() {
     if( Save ) {
       delete[] Internal;
     }
-    Internal = 0;
+    Internal = nullptr;
   }
 
   static VR  GetVR()  { return (VR::VRType)TVR; }
@@ -630,7 +630,7 @@ public:
       //assert( (len / sizeof(Type)) * sizeof(Type) == len );
       // MR00010001.dcm is a tough kid: 0019,105a is supposed to be VR::FL, VM::VM3 but
       // length is 14 bytes instead of 12 bytes. Simply consider value is total garbage.
-      if( (len / sizeof(Type)) * sizeof(Type) != len ) { Internal = 0; Length = 0; }
+      if( (len / sizeof(Type)) * sizeof(Type) != len ) { Internal = nullptr; Length = 0; }
       else Internal = const_cast<Type*>(array);
       }
       Save = save;

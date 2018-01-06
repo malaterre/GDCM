@@ -112,7 +112,7 @@ protected:
   T* m_This;
   TMemberFunctionPointer m_MemberFunction;
   TConstMemberFunctionPointer m_ConstMemberFunction;
-  MemberCommand():m_MemberFunction(0),m_ConstMemberFunction(0) {}
+  MemberCommand():m_MemberFunction(nullptr),m_ConstMemberFunction(nullptr) {}
   virtual ~MemberCommand(){}
 
 private:
@@ -174,7 +174,7 @@ public:
 protected:
   T* m_This;
   TMemberFunctionPointer m_MemberFunction;
-  SimpleMemberCommand():m_This(0),m_MemberFunction(0) {}
+  SimpleMemberCommand():m_This(nullptr),m_MemberFunction(nullptr) {}
   virtual ~SimpleMemberCommand() {}
 
 private:
