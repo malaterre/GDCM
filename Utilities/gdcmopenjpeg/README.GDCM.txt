@@ -18,6 +18,6 @@ We only include enough of distribution to build the openjp2 library.
 Modifications
 -------------
 
-- only include the cmake & src/lib/openjp2 subdirs (+toplevel CMakeLists.txt)
+- only include the cmake & src/lib/openjp2 add_subdirectory (+toplevel CMakeLists.txt)
 - modify toplevel cmakelists.txt to fix compilations issues about missing directories
 - add a symbols mangling mechanism

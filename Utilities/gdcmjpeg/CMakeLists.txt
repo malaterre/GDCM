@@ -170,7 +170,9 @@ endforeach()
 # I could not get the depencencies in CMake to work properly so instead
 # have multiple directory for each target that will ensure proper recompilation
 # of the objects files
-subdirs(8 12 16)
+add_subdirectory(8)
+add_subdirectory(12)
+add_subdirectory(16)
 
 if(NOT JPEG_INSTALL_NO_DEVELOPMENT)
   file(GLOB header_files "*.h")

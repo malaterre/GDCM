@@ -202,7 +202,7 @@ if(NOT GDCM_HAVE_STDINT_H)
       "${GDCM_SOURCE_DIR}/Utilities/C99"
       )
     # Process the install rules from C99
-    subdirs(Utilities/C99)
+    add_subdirectory(Utilities/C99)
   endif()
 endif()
 
@@ -592,13 +592,13 @@ if(GDCM_DOCUMENTATION)
   endif()
 endif()
 
-# Need to subdirs in Source/Common before Wrapping
+# Need to add_subdirectory in Source/Common before Wrapping
 # to have gdcmConfigure.h around
-subdirs(Utilities)
+add_subdirectory(Utilities)
 add_subdirectory(Source)
 
 if(GDCM_STANDALONE)
-  subdirs(Wrapping)
+  add_subdirectory(Wrapping)
   if(GDCM_WRAP_CSHARP)
     add_subdirectory(Wrapping/Csharp)
   endif()
@@ -607,7 +607,7 @@ endif()
 if(GDCM_STANDALONE)
   # After Wrapping please
   if(BUILD_EXAMPLES)
-    subdirs(Examples)
+    add_subdirectory(Examples)
   endif()
 endif()
 
@@ -630,7 +630,7 @@ if(GDCM_STANDALONE)
     mark_as_advanced(DART_TESTING_TIMEOUT)
     enable_testing()
     include(CTest)
-    subdirs(Testing)
+    add_subdirectory(Testing)
     if(NOT GDCM_DATA_ROOT)
       message("If you want to build the test suite, you must set GDCM_DATA_ROOT (advanced option) "
       "to the full path name of the gdcmData directory; if you don't want, disable GDCM_BUILD_TESTING.\n"
@@ -662,7 +662,7 @@ if(GDCM_STANDALONE)
     mark_as_advanced(VTK_DIR)
     set(GDCM_VTK_DIR ${VTK_DIR})
     mark_as_advanced(GDCM_USE_PARAVIEW)
-    subdirs(Utilities/VTK)
+    add_subdirectory(Utilities/VTK)
   endif()
 endif()
 
@@ -671,7 +671,7 @@ if(GDCM_STANDALONE)
   option(GDCM_BUILD_APPLICATIONS "apps ?" OFF)
   set(BUILD_APPLICATIONS ${GDCM_BUILD_APPLICATIONS})
   if(BUILD_APPLICATIONS)
-    subdirs(Applications)
+    add_subdirectory(Applications)
   endif()
 else()
   set(BUILD_APPLICATIONS OFF)
@@ -1026,5 +1026,5 @@ if(GDCM_USE_VTK)
 endif()
 set(GDCM_LIBRARY_DIRS ${LIBRARY_OUTPUT_PATH})
 if(GDCM_STANDALONE)
-subdirs(CMake/ExportConfiguration)
+add_subdirectory(CMake/ExportConfiguration)
 endif()

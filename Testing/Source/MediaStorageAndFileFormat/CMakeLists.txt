@@ -1,14 +1,14 @@
 # Always
-subdirs(Cxx)
+add_subdirectory(Cxx)
 
 if(GDCM_WRAP_PYTHON)
-  subdirs(Python)
+  add_subdirectory(Python)
 endif()
 
 if(GDCM_WRAP_CSHARP)
-  subdirs(Csharp)
+  add_subdirectory(Csharp)
 endif()
 
 if(GDCM_WRAP_JAVA)
-  subdirs(Java)
+  add_subdirectory(Java)
 endif()
