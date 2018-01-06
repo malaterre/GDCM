@@ -62,8 +62,8 @@ if(WIN32)
   endif()
 endif()
 
-add_library(${CHARLS_LIBRARY_NAME} header.cpp  interface.cpp  jpegls.cpp
-  jpegmarkersegment.cpp  jpegstreamwriter.cpp
+add_library(${CHARLS_LIBRARY_NAME}
+  interface.cpp  jpegls.cpp  jpegmarkersegment.cpp  jpegstreamreader.cpp  jpegstreamwriter.cpp
   )
 set_target_properties( ${CHARLS_LIBRARY_NAME} PROPERTIES
                               VERSION ${CHARLS_MAJOR_VERSION}.${CHARLS_MINOR_VERSION}
