@@ -612,23 +612,6 @@ if(GDCM_STANDALONE)
 endif()
 
 #-----------------------------------------------------------------------------
-# Special CMake Module required when doing Python Testing
-if(GDCM_STANDALONE)
-  if(BUILD_TESTING AND GDCM_WRAP_PYTHON)
-    include(${GDCM_SOURCE_DIR}/CMake/UsePythonTest.cmake)
-  endif()
-
-# Special CMake Module required when doing C# Testing
-  if(BUILD_TESTING AND GDCM_WRAP_CSHARP)
-    include(${GDCM_SOURCE_DIR}/CMake/UseCSharpTest.cmake)
-  endif()
-
-# Special CMake Module required when doing Java Testing
-  if(BUILD_TESTING AND GDCM_WRAP_JAVA)
-    include(${GDCM_SOURCE_DIR}/CMake/UseJavaTest.cmake)
-  endif()
-endif()
-#-----------------------------------------------------------------------------
 # Need pthread for the following class:
 CHECK_INCLUDE_FILE("pthread.h"      GDCM_HAVE_PTHREAD_H)
 

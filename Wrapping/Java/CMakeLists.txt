@@ -1,3 +1,8 @@
+# Special CMake Module required when doing Java Testing
+if(BUILD_TESTING AND GDCM_WRAP_JAVA)
+  include(${GDCM_SOURCE_DIR}/CMake/UseJavaTest.cmake)
+endif()
+
 find_package(SWIG REQUIRED)
 include(${SWIG_USE_FILE})
 option(GDCM_AUTOLOAD_GDCMJNI "Automatically load gdcmjni" ON)

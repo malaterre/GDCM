@@ -1,3 +1,7 @@
+# Special CMake Module required when doing C# Testing
+if(BUILD_TESTING AND GDCM_WRAP_CSHARP)
+  include(${GDCM_SOURCE_DIR}/CMake/UseCSharpTest.cmake)
+endif()
 # C# Cmd line options:
 # http://msdn.microsoft.com/en-us/library/ms379563(VS.80).aspx
 # http://msdn.microsoft.com/en-us/library/aa288436(VS.71).aspx
