@@ -126,7 +126,7 @@ public:
         }
     }
 
-    void SetPresets(const JlsCustomParameters& presets)
+    void SetPresets(const JlsCustomParameters& presets) override
     {
         JlsCustomParameters presetDefault = ComputeDefault(traits.MAXVAL, traits.NEAR);
 
@@ -194,7 +194,7 @@ public:
     void DoScan();
 
 public:
-    ProcessLine* CreateProcess(ByteStreamInfo rawStreamInfo);
+    ProcessLine* CreateProcess(ByteStreamInfo rawStreamInfo) override;
     void InitDefault();
     void InitParams(int32_t t1, int32_t t2, int32_t t3, int32_t nReset);
 

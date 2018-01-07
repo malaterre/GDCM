@@ -90,9 +90,9 @@ class MY_API sockerr : public std::exception
             err = O.err;
             text = O.text;
         }
-        virtual ~sockerr() throw() {}
+        ~sockerr() throw() override {}
 
-        const char* what () const throw() { return "sockerr"; }
+        const char* what () const throw() override { return "sockerr"; }
         const char* operation () const { return text.text.c_str(); }
 
 //      int errno () const { return err; }
@@ -220,24 +220,24 @@ class MY_API sockbuf: public std::streambuf
                                        ios::openmode which = ios::in|ios::out);
 #endif
 
-        virtual int           sync ();
+        int           sync () override;
 
-        virtual std::streamsize    showmanyc ();
-        virtual std::streamsize    xsgetn (char_type* s, std::streamsize n);
-        virtual int_type      underflow ();
-        virtual int_type      uflow ();
+        std::streamsize    showmanyc () override;
+        std::streamsize    xsgetn (char_type* s, std::streamsize n) override;
+        int_type      underflow () override;
+        int_type      uflow () override;
 
-        virtual int_type      pbackfail (int_type c = eof);
+        int_type      pbackfail (int_type c = eof) override;
 
-        virtual std::streamsize    xsputn (const char_type* s, std::streamsize n);
-        virtual int_type      overflow (int_type c = eof);
+        std::streamsize    xsputn (const char_type* s, std::streamsize n) override;
+        int_type      overflow (int_type c = eof) override;
 
     public:
         sockbuf (const sockdesc& sd);
         sockbuf (int domain, type, int proto);
         sockbuf (const sockbuf&);
 //      sockbuf&        operator = (const sockbuf&);
-        virtual ~sockbuf ();
+        ~sockbuf () override;
 
         SOCKET sd () const { return rep->sock; }
         int pubsync () { return sync (); }
@@ -326,7 +326,7 @@ class MY_API isockstream: public std::istream
 
     public:
         isockstream(sockbuf* sb): std::ios (sb) , std::istream(sb) {}
-        virtual ~isockstream () {}
+        ~isockstream () override {}
 
         sockbuf* rdbuf () { return (sockbuf*)std::ios::rdbuf(); }
         sockbuf* operator -> () { return rdbuf(); }
@@ -338,7 +338,7 @@ class osockstream: public std::ostream
         //osockstream (): ostream(static_cast<>rdbuf()), ios (0) {}
     public:
         osockstream(sockbuf* sb): std::ios (sb) , std::ostream(sb) {}
-        virtual ~osockstream () {}
+        ~osockstream () override {}
         sockbuf* rdbuf () { return (sockbuf*)std::ios::rdbuf(); }
         sockbuf* operator -> () { return rdbuf(); }
 };
@@ -349,7 +349,7 @@ class MY_API iosockstream: public std::iostream
         iosockstream ();
     public:
         iosockstream(sockbuf* sb): std::ios(sb), std::iostream(sb) {}
-        virtual ~iosockstream () {}
+        ~iosockstream () override {}
 
         sockbuf* rdbuf () { return (sockbuf*)std::ios::rdbuf(); }
         sockbuf* operator -> () { return rdbuf(); }

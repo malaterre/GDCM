@@ -40,7 +40,7 @@ public:
   /// - hostname = localhost
   /// - port = 104
   ServiceClassUser();
-  ~ServiceClassUser();
+  ~ServiceClassUser() override;
 
   /// Set the name of the called hostname (hostname or IP address)
   void SetHostname( const char *hostname );

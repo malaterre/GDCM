@@ -109,7 +109,7 @@ public:
     setg(mem, mem, mem + length);
     setp(mem, mem + length);
   }
-  std::streampos seekpos(std::streampos pos, std::ios_base::openmode)
+  std::streampos seekpos(std::streampos pos, std::ios_base::openmode) override
     {
     char *p = eback() + pos;
     if(p>=eback() && p <=egptr())
@@ -122,7 +122,7 @@ public:
     }
 
   std::streampos seekoff(std::streamoff off,
-    std::ios_base::seekdir dir, std::ios_base::openmode)
+    std::ios_base::seekdir dir, std::ios_base::openmode) override
     {
     char *p;
     switch(dir)

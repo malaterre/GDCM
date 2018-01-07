@@ -39,7 +39,7 @@ public:
   ParseException()
   {
   }
-  virtual ~ParseException() throw() {}
+  ~ParseException() throw() override {}
 
   /** Assignment operator. */
   ParseException &operator= ( const ParseException &orig )

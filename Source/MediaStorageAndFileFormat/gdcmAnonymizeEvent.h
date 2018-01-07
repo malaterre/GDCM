@@ -32,11 +32,11 @@ public:
   typedef AnonymizeEvent Self;
   typedef AnyEvent Superclass;
   AnonymizeEvent(Tag const &tag = 0):m_Tag(tag) {}
-  virtual ~AnonymizeEvent() {}
-  virtual const char * GetEventName() const { return "AnonymizeEvent"; }
-  virtual bool CheckEvent(const ::gdcm::Event* e) const
+  ~AnonymizeEvent() override {}
+  const char * GetEventName() const override { return "AnonymizeEvent"; }
+  bool CheckEvent(const ::gdcm::Event* e) const override
   { return (dynamic_cast<const Self*>(e) == nullptr ? false : true) ; }
-  virtual ::gdcm::Event* MakeObject() const
+  ::gdcm::Event* MakeObject() const override
     { return new Self; }
   AnonymizeEvent(const Self&s) : AnyEvent(s){};
 

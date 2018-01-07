@@ -57,8 +57,8 @@ namespace gdcm
         typedef typename Segment<EntryType>::SegmentMap SegmentMap;
         DiscreteSegment(const EntryType* first)
             : Segment<EntryType>(first, first+2+*(first+1)) {}
-        virtual bool Expand(const SegmentMap&,
-            std::vector<EntryType>& expanded) const
+        bool Expand(const SegmentMap&,
+            std::vector<EntryType>& expanded) const override
         {
             std::copy(this->_first + 2, this->_last, std::back_inserter(expanded));
             return true;
@@ -72,8 +72,8 @@ namespace gdcm
         typedef typename Segment<EntryType>::SegmentMap SegmentMap;
         LinearSegment(const EntryType* first)
             : Segment<EntryType>(first, first+3) {}
-        virtual bool Expand(const SegmentMap&,
-            std::vector<EntryType>& expanded) const
+        bool Expand(const SegmentMap&,
+            std::vector<EntryType>& expanded) const override
         {
             if ( expanded.empty() ) {
                 // linear segment can't be the first segment.
@@ -101,8 +101,8 @@ namespace gdcm
         typedef typename Segment<EntryType>::SegmentMap SegmentMap;
         IndirectSegment(const EntryType* first)
             : Segment<EntryType>(first, first+2+4/sizeof(EntryType)) {}
-        virtual bool Expand(const SegmentMap& instances,
-            std::vector<EntryType>& expanded) const
+        bool Expand(const SegmentMap& instances,
+            std::vector<EntryType>& expanded) const override
         {
             if ( instances.empty() ) {
                 // some other segments are required as references.

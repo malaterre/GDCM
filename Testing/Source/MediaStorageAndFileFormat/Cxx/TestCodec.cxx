@@ -18,8 +18,8 @@ namespace gdcm
 class DummyCodec : public Codec
 {
 public:
-  bool CanDecode(TransferSyntax const &) const { return false; }
-  bool CanCode(TransferSyntax const &) const { return false; }
+  bool CanDecode(TransferSyntax const &) const override { return false; }
+  bool CanCode(TransferSyntax const &) const override { return false; }
 };
 }
 

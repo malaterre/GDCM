@@ -36,13 +36,13 @@ class GDCM_EXPORT ULWritingCallback : public ULConnectionCallback
   std::string mDirectoryName;
 public:
   ULWritingCallback() {};
-  virtual ~ULWritingCallback() {} //empty, for later inheritance
+  ~ULWritingCallback() override {} //empty, for later inheritance
 
   ///provide the directory into which all files are written.
   void SetDirectory(const std::string& inDirectoryName) { mDirectoryName = inDirectoryName; }
 
-  virtual void HandleDataSet(const DataSet& inDataSet);
-  virtual void HandleResponse(const DataSet& inDataSet);
+  void HandleDataSet(const DataSet& inDataSet) override;
+  void HandleResponse(const DataSet& inDataSet) override;
 };
 } // end namespace network
 } // end namespace gdcm

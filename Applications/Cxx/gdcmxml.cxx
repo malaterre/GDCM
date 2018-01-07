@@ -56,7 +56,7 @@ class SimpleFileXMLPrinter : public XMLPrinter
 {
 public:
   void HandleBulkData(const char *uuid, const TransferSyntax & ts,
-    const char *bulkdata, size_t bulklen)
+    const char *bulkdata, size_t bulklen) override
     {
     // Store Bulk Data
     std::ofstream out( uuid, std::ios::binary );

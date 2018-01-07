@@ -25,8 +25,8 @@ public:
   private:
     p_name pn;
 
-    void bind (sockAddr& sa) { sockbuf::bind (sa); }
-    void connect (sockAddr& sa) { sockbuf::connect (sa); }
+    void bind (sockAddr& sa) override { sockbuf::bind (sa); }
+    void connect (sockAddr& sa) override { sockbuf::connect (sa); }
 
   public:
     protocolbuf (sockinetbuf& si): sockinetbuf (si), pn (protocol::nil) {}
