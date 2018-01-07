@@ -365,7 +365,7 @@ else()
 endif()
 
 if(GDCM_USE_SYSTEM_CHARLS)
-  find_package(CharLS REQUIRED)
+  find_package(CharLS 2.0.0 REQUIRED)
   set(GDCM_CHARLS_LIBRARIES ${CHARLS_LIBRARIES})
 else()
   set(GDCM_CHARLS_LIBRARIES gdcmcharls)

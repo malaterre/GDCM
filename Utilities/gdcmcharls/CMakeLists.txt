@@ -15,8 +15,8 @@ endif()
 
 #-----------------------------------------------------------------------------
 # CHARLS version number
-set(CHARLS_MAJOR_VERSION 1)
-set(CHARLS_MINOR_VERSION 1)
+set(CHARLS_MAJOR_VERSION 2)
+set(CHARLS_MINOR_VERSION 0)
 set(CHARLS_BUILD_VERSION 0)
 set(CHARLS_VERSION
       "${CHARLS_MAJOR_VERSION}.${CHARLS_MINOR_VERSION}.${CHARLS_BUILD_VERSION}")
