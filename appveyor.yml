@@ -111,9 +111,9 @@ before_build:
 # scripts to run after build
 after_build:
   # create NSIS installer
-  - cpack -G NSIS -C %CONFIG%
+  - cpack -G NSIS -C %CONFIG% || true
   # create binary zip
-  - cpack -G ZIP -C %CONFIG%
+  - cpack -G ZIP -C %CONFIG% || true
   # no need for source release on github
 
 # to run your custom scripts instead of automatic MSBuild
