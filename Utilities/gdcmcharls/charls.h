@@ -9,7 +9,7 @@
 #include "publictypes.h"
 
 // Windows and building CharLS DLL itself.
-#if defined(WIN32) && defined(CHARLS_DLL_BUILD)
+#if defined(_WIN32) && defined(CHARLS_DLL_BUILD)
 #define CHARLS_IMEXPORT(returntype) __declspec(dllexport) returntype __stdcall
 #endif
 
