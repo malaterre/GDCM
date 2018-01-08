@@ -56,7 +56,7 @@ endif()
 
 if(WIN32)
   if(BUILD_SHARED_LIBS)
-    add_definitions(-DCHARLS_DLL)
+    add_definitions(-DCHARLS_DLL_BUILD)
   else()
     add_definitions(-DCHARLS_STATIC)
   endif()
