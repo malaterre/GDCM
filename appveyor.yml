@@ -23,13 +23,13 @@ cache:
 
 environment:
   matrix:
-  - VS_GEN: Visual Studio 11 2012
+  - VS_GEN: Visual Studio 12 2013
     CONFIG: Release
     B_NAME: Windows-x86
     DO_REL: true
     PYTHONHOME: C:\Python27
     JAVA_HOME: C:\Program Files (x86)\Java\jdk1.7.0
-  - VS_GEN: Visual Studio 11 2012 Win64
+  - VS_GEN: Visual Studio 12 2013 Win64
     CONFIG: Release
     B_NAME: Windows-x86_64
     DO_REL: true
