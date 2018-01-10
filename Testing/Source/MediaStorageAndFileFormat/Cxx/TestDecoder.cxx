@@ -18,7 +18,7 @@ namespace gdcm
 class DummyDecoder : public Decoder
 {
 public:
-  bool CanDecode(TransferSyntax const &) const { return false; }
+  bool CanDecode(TransferSyntax const &) const override { return false; }
 };
 }
 

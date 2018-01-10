@@ -31,12 +31,12 @@ class DataSetEvent : public AnyEvent
 public:
   typedef DataSetEvent Self;
   typedef AnyEvent Superclass;
-  DataSetEvent(DataSet const *ds = NULL):m_DataSet(ds) {}
-  virtual ~DataSetEvent() {}
-  virtual const char * GetEventName() const { return "DataSetEvent"; }
-  virtual bool CheckEvent(const ::gdcm::Event* e) const
-  { return (dynamic_cast<const Self*>(e) == NULL ? false : true) ; }
-  virtual ::gdcm::Event* MakeObject() const
+  DataSetEvent(DataSet const *ds = nullptr):m_DataSet(ds) {}
+  ~DataSetEvent() override {}
+  const char * GetEventName() const override { return "DataSetEvent"; }
+  bool CheckEvent(const ::gdcm::Event* e) const override
+  { return (dynamic_cast<const Self*>(e) == nullptr ? false : true) ; }
+  ::gdcm::Event* MakeObject() const override
     { return new Self; }
   DataSetEvent(const Self&s) : AnyEvent(s){};
 

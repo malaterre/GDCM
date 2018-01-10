@@ -241,7 +241,7 @@ namespace gdcm
 		if ( dataSetToValid.FindDataElement( itor->GetTag() ) )
 		  {
 		  SmartPointer<SequenceOfItems> pSqi = dataSetToValid.GetDataElement( itor->GetTag() ).GetValueAsSQ();
-		  SmartPointer<SequenceOfItems> pSqiRef = pSqi ? itor->GetValueAsSQ() : NULL ;
+		  SmartPointer<SequenceOfItems> pSqiRef = pSqi ? itor->GetValueAsSQ() : nullptr ;
 		  if ( pSqi && pSqiRef )
 			{
 			if( pSqi->GetNumberOfItems() < pSqiRef->GetNumberOfItems() )

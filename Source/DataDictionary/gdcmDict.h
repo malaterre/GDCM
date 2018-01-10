@@ -106,7 +106,7 @@ public:
       DictInternal.find(tag);
     if (it == DictInternal.end())
       {
-      return NULL;
+      return nullptr;
       }
     assert( DictInternal.count(tag) == 1 );
     return it->second.GetKeyword();

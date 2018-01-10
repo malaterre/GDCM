@@ -326,9 +326,9 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
   unsigned long image_len = bvl / dims[2];
 
   // If 16bits, need to do the padded composite...
-  char *buffer = 0;
+  char *buffer = nullptr;
   // if rgb (3 comp) need to the planar configuration
-  char *bufferrgb = 0;
+  char *bufferrgb = nullptr;
   if( GetPixelFormat().GetBitsAllocated() > 8 )
     {
     //RequestPaddedCompositePixelCode = true;
@@ -877,30 +877,30 @@ public:
   memsrc( const char * data, size_t datalen ):ptr(data),cur(data),len(datalen)
     {
     }
-  int read( char * out, int l )
+  int read( char * out, int l ) override
     {
     memcpy( out, cur, l );
     cur += l;
     assert( cur <= ptr + len );
     return l;
     }
-  streampos_t tell()
+  streampos_t tell() override
     {
     assert( cur <= ptr + len );
     return (streampos_t)(cur - ptr);
     }
-  bool seek(streampos_t pos)
+  bool seek(streampos_t pos) override
     {
     cur = ptr + pos;
     assert( cur <= ptr + len && cur >= ptr );
     return true;
     }
-  bool eof()
+  bool eof() override
     {
     assert( cur <= ptr + len );
     return cur == ptr + len;
     }
-  memsrc * clone()
+  memsrc * clone() override
     {
     memsrc * ret = new memsrc( ptr, len );
     return ret;
@@ -925,12 +925,12 @@ public:
   {
   start = os.tellp();
   }
-  int write( const char * in, int len )
+  int write( const char * in, int len ) override
     {
     stream.write(in, len );
     return len;
     }
-  bool seek( streampos_t abs_pos )
+  bool seek( streampos_t abs_pos ) override
     {
     stream.seekp( abs_pos + start );
     return true;

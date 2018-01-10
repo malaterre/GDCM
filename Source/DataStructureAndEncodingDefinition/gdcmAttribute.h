@@ -571,19 +571,19 @@ public:
   static VM  GetDictVM() { return GetVM(); }
 
   // This the way to prevent default initialization
-  explicit Attribute() { Internal=0; Length=0; Own = true; }
+  explicit Attribute() { Internal=nullptr; Length=0; Own = true; }
   ~Attribute() {
     if( Own ) {
       delete[] Internal;
     }
-    Internal = 0; // paranoid
+    Internal = nullptr; // paranoid
   }
 
   unsigned int GetNumberOfValues() const { return Length; }
 
   void SetNumberOfValues(unsigned int numel)
     {
-    SetValues(NULL, numel, true);
+    SetValues(nullptr, numel, true);
     }
 
   const ArrayType* GetValues() const {
@@ -624,7 +624,7 @@ public:
       {
       // yes !
       if( Own ) delete[] Internal;
-      Internal = 0;
+      Internal = nullptr;
       }
     Own = own;
     Length = numel;

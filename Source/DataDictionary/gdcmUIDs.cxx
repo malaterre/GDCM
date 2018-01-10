@@ -21,7 +21,7 @@
 namespace gdcm
 {
         static const char * const TransferSyntaxStrings[][2] = {
-{NULL,NULL}, // Starts a 1, not 0
+{nullptr,nullptr}, // Starts a 1, not 0
 {"1.2.840.10008.1.1","Verification SOP Class"},
 {"1.2.840.10008.1.2","Implicit VR Little Endian: Default Transfer Syntax for DICOM"},
 {"1.2.840.10008.1.2.1","Explicit VR Little Endian"},
@@ -369,7 +369,7 @@ DICOM_Conformance_Statement_MR_R2.6.pdf
 {"1.2.840.10008.5.1.4.1.1.4.4", "Legacy Converted Enhanced MR Image Storage" },
 {"1.2.840.10008.5.1.4.1.1.128.1", "Legacy Converted Enhanced PET Image Storage" },
  
-{ 0, 0 }
+{ nullptr, nullptr }
 };
 
 
@@ -413,7 +413,7 @@ bool UIDs::SetFromUID(const char *str)
 
   int i = 1; // Start at 1, not 0
   const char *p = uids[i][0];
-  while( p != 0 )
+  while( p != nullptr )
     {
     if( strcmp( p, str ) == 0 )
       {

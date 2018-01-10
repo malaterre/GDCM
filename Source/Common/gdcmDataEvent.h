@@ -27,12 +27,12 @@ class DataEvent : public AnyEvent
 public:
   typedef DataEvent Self;
   typedef AnyEvent Superclass;
-  DataEvent(const char *bytes = 0, size_t len = 0):Bytes(bytes),Length(len) {}
-  virtual ~DataEvent() {}
-  virtual const char * GetEventName() const { return "DataEvent"; }
-  virtual bool CheckEvent(const ::gdcm::Event* e) const
-  { return (dynamic_cast<const Self*>(e) == NULL ? false : true) ; }
-  virtual ::gdcm::Event* MakeObject() const
+  DataEvent(const char *bytes = nullptr, size_t len = 0):Bytes(bytes),Length(len) {}
+  ~DataEvent() override {}
+  const char * GetEventName() const override { return "DataEvent"; }
+  bool CheckEvent(const ::gdcm::Event* e) const override
+  { return (dynamic_cast<const Self*>(e) == nullptr ? false : true) ; }
+  ::gdcm::Event* MakeObject() const override
     { return new Self; }
   DataEvent(const Self&s) : AnyEvent(s){};
 

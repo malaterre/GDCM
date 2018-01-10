@@ -183,7 +183,7 @@ static bool AnonymizeOneFile(gdcm::Anonymizer &anon, const char *filename, const
   return true;
 }
 
-static bool GetRSAKeys(gdcm::CryptographicMessageSyntax &cms, const char *privpath = 0, const char *certpath = 0)
+static bool GetRSAKeys(gdcm::CryptographicMessageSyntax &cms, const char *privpath = nullptr, const char *certpath = nullptr)
 {
   if( privpath && *privpath )
     {
@@ -322,22 +322,22 @@ int main(int argc, char *argv[])
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
-        {"input", required_argument, NULL, 'i'},                 // i
-        {"output", required_argument, NULL, 'o'},                // o
+        {"input", required_argument, nullptr, 'i'},                 // i
+        {"output", required_argument, nullptr, 'o'},                // o
         {"root-uid", required_argument, &rootuid, 1}, // specific Root (not GDCM)
         {"resources-path", required_argument, &resourcespath, 1},
-        {"de-identify", no_argument, NULL, 'e'},
-        {"re-identify", no_argument, NULL, 'd'},
-        {"key", required_argument, NULL, 'k'},
-        {"certificate", required_argument, NULL, 'c'}, // 7
-        {"password", required_argument, NULL, 'p'},
+        {"de-identify", no_argument, nullptr, 'e'},
+        {"re-identify", no_argument, nullptr, 'd'},
+        {"key", required_argument, nullptr, 'k'},
+        {"certificate", required_argument, nullptr, 'c'}, // 7
+        {"password", required_argument, nullptr, 'p'},
 
         {"des3", no_argument, &des3, 1},
         {"aes128", no_argument, &aes128, 1},
         {"aes192", no_argument, &aes192, 1},
         {"aes256", no_argument, &aes256, 1},
 
-        {"recursive", no_argument, NULL, 'r'},
+        {"recursive", no_argument, nullptr, 'r'},
         {"dumb", no_argument, &dumb_mode, 1},
         {"empty", required_argument, &empty_tag, 1}, // 15
         {"remove", required_argument, &remove_tag, 1},
@@ -345,14 +345,14 @@ int main(int argc, char *argv[])
         {"continue", no_argument, &continuemode, 1},
         {"crypto", required_argument, &crypto_api, 1}, //19
 
-        {"verbose", no_argument, NULL, 'V'},
-        {"warning", no_argument, NULL, 'W'},
-        {"debug", no_argument, NULL, 'D'},
-        {"error", no_argument, NULL, 'E'},
-        {"help", no_argument, NULL, 'h'},
-        {"version", no_argument, NULL, 'v'},
+        {"verbose", no_argument, nullptr, 'V'},
+        {"warning", no_argument, nullptr, 'W'},
+        {"debug", no_argument, nullptr, 'D'},
+        {"error", no_argument, nullptr, 'E'},
+        {"help", no_argument, nullptr, 'h'},
+        {"version", no_argument, nullptr, 'v'},
 
-        {0, 0, 0, 0}
+        {nullptr, 0, nullptr, 0}
     };
 
     c = getopt_long (argc, argv, "i:o:rdek:c:p:VWDEhv",
@@ -605,7 +605,7 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-  gdcm::CryptoFactory* crypto_factory = NULL;
+  gdcm::CryptoFactory* crypto_factory = nullptr;
   if( deidentify || reidentify )
     {
     crypto_factory = gdcm::CryptoFactory::GetFactoryInstance(crypto_lib);
@@ -773,7 +773,7 @@ int main(int argc, char *argv[])
     }
 
   // Get private key/certificate
-  gdcm::CryptographicMessageSyntax *cms_ptr = NULL;
+  gdcm::CryptographicMessageSyntax *cms_ptr = nullptr;
   if( crypto_factory )
     {
     cms_ptr = crypto_factory->CreateCMSProvider();

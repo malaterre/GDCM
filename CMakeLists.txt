@@ -1,21 +1,9 @@
-cmake_minimum_required(VERSION 2.8.7)
-if(POLICY CMP0022)
-  cmake_policy(SET CMP0022 NEW)
-endif()
-if(POLICY CMP0025)
-  cmake_policy(SET CMP0025 NEW)
-endif()
-if(POLICY CMP0026)
-  cmake_policy(SET CMP0026 NEW)
-endif()
-if(POLICY CMP0042)
-  cmake_policy(SET CMP0042 NEW)
-endif()
-if( POLICY CMP0063 )
-  cmake_policy(SET CMP0063 NEW)
-endif()
+cmake_minimum_required(VERSION 3.8.2 FATAL_ERROR)
+
 project(GDCM)
-set(CMAKE_CXX_STANDARD 11)
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 11)
+endif()
 set(CMAKE_CXX_EXTENSIONS OFF)
 mark_as_advanced(CMAKE_BACKWARDS_COMPATIBILITY CMAKE_BUILD_TYPE CMAKE_INSTALL_PREFIX)
 set(GDCM_CMAKE_DIR "${GDCM_SOURCE_DIR}/CMake" CACHE INTERNAL "")
@@ -38,8 +26,8 @@ set(GDCM_PACKAGE_CONTACT "GDCM Developers <gdcm-developers@lists.sourceforge.net
 # VTK source tree for "DELAYLOAD"
 
 #----------------------------------------------------------------------------
-set(GDCM_MAJOR_VERSION 2)
-set(GDCM_MINOR_VERSION 9)
+set(GDCM_MAJOR_VERSION 3) # Version 3.0.0 will only support C++11 and greater
+set(GDCM_MINOR_VERSION 0)
 set(GDCM_BUILD_VERSION 0)
 set(GDCM_VERSION
   "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
@@ -116,13 +104,8 @@ else()
 endif()
 
 if(BUILD_SHARED_LIBS)
-if(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 2.6)
   set(NAMELINK_ONLY NAMELINK_ONLY)
   set(NAMELINK_SKIP NAMELINK_SKIP)
-else()
-  set(NAMELINK_ONLY)
-  set(NAMELINK_SKIP)
-endif()
 endif()
 
 

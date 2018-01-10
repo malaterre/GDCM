@@ -46,7 +46,7 @@ static const char * const iconimagearray[][2] = {
   { "a144b851c9262c97dde567d4d3781733" , "2929J888_8b_YBR_RLE_PlanConf0_breaker.dcm" },
 
   // sentinel
-  { 0, 0 }
+  { nullptr, nullptr }
 };
 
 int TestIconImageFilterFunc(const char *filename, bool verbose = false)
@@ -67,7 +67,7 @@ int TestIconImageFilterFunc(const char *filename, bool verbose = false)
 
   unsigned int i = 0;
   const char *p = iconimagearray[i][1];
-  while( p != 0 )
+  while( p != nullptr )
     {
     if( strcmp( name, p ) == 0 )
       {

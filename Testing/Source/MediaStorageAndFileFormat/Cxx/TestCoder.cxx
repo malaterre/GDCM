@@ -18,7 +18,7 @@ namespace gdcm
 class DummyCoder : public Coder
 {
 public:
-  bool CanCode(TransferSyntax const &) const { return false; }
+  bool CanCode(TransferSyntax const &) const override { return false; }
 };
 }
 

@@ -23,7 +23,7 @@
 static bool LoadFile(const char * filename, char* & buffer, size_t & bufLen)
 {
   FILE * f = fopen(filename, "rb");
-  if (f == NULL)
+  if (f == nullptr)
     {
     //gdcmErrorMacro("Couldn't open the file: " << filename);
     return false;

@@ -38,7 +38,7 @@ public :
 
 protected:
   Command();
-  ~Command();
+  ~Command() override;
 
 private:
   Command(const Command&);  // Not implemented.
@@ -90,7 +90,7 @@ public:
     }
 
   /**  Invoke the member function. */
-  virtual void Execute(Subject *caller, const Event & event )
+  void Execute(Subject *caller, const Event & event ) override
     {
     if( m_MemberFunction )
       {
@@ -99,7 +99,7 @@ public:
     }
 
   /**  Invoke the member function with a const object. */
-  virtual void Execute( const Subject *caller, const Event & event )
+  void Execute( const Subject *caller, const Event & event ) override
     {
     if( m_ConstMemberFunction )
       {
@@ -112,8 +112,8 @@ protected:
   T* m_This;
   TMemberFunctionPointer m_MemberFunction;
   TConstMemberFunctionPointer m_ConstMemberFunction;
-  MemberCommand():m_MemberFunction(0),m_ConstMemberFunction(0) {}
-  virtual ~MemberCommand(){}
+  MemberCommand():m_MemberFunction(nullptr),m_ConstMemberFunction(nullptr) {}
+  ~MemberCommand() override{}
 
 private:
   MemberCommand(const Self&); //purposely not implemented
@@ -156,14 +156,14 @@ public:
     }
 
   /** Invoke the callback function. */
-  virtual void Execute(Subject *,const Event & )
+  void Execute(Subject *,const Event & ) override
     {
     if( m_MemberFunction )
       {
       ((*m_This).*(m_MemberFunction))();
       }
     }
-  virtual void Execute(const Subject *,const Event & )
+  void Execute(const Subject *,const Event & ) override
     {
     if( m_MemberFunction )
       {
@@ -174,8 +174,8 @@ public:
 protected:
   T* m_This;
   TMemberFunctionPointer m_MemberFunction;
-  SimpleMemberCommand():m_This(0),m_MemberFunction(0) {}
-  virtual ~SimpleMemberCommand() {}
+  SimpleMemberCommand():m_This(nullptr),m_MemberFunction(nullptr) {}
+  ~SimpleMemberCommand() override {}
 
 private:
   SimpleMemberCommand(const Self&); //purposely not implemented

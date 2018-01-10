@@ -29,16 +29,16 @@ class JPEG16Codec : public JPEGCodec
 {
 public:
   JPEG16Codec();
-  ~JPEG16Codec();
+  ~JPEG16Codec() override;
 
-  bool DecodeByStreams(std::istream &is, std::ostream &os);
-  bool InternalCode(const char *input, unsigned long len, std::ostream &os);
+  bool DecodeByStreams(std::istream &is, std::ostream &os) override;
+  bool InternalCode(const char *input, unsigned long len, std::ostream &os) override;
 
-  bool GetHeaderInfo(std::istream &is, TransferSyntax &ts);
+  bool GetHeaderInfo(std::istream &is, TransferSyntax &ts) override;
 
 protected:
-  bool IsStateSuspension() const;
-  virtual bool EncodeBuffer(std::ostream &os, const char *data, size_t datalen);
+  bool IsStateSuspension() const override;
+  bool EncodeBuffer(std::ostream &os, const char *data, size_t datalen) override;
 
 private:
   JPEGInternals *Internals;

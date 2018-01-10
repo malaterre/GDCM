@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
   std::string dir1;
   if( argc < 2 )
     {
-    const char *extradataroot = NULL;
+    const char *extradataroot = nullptr;
 #ifdef GDCM_BUILD_TESTING
     extradataroot = gdcm::Testing::GetDataExtraRoot();
 #endif

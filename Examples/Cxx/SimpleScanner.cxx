@@ -35,7 +35,7 @@ class MyFileWatcher : public gdcm::SimpleSubjectWatcher
 public:
   MyFileWatcher(gdcm::Subject * s, const char *comment = ""):
     gdcm::SimpleSubjectWatcher(s,comment){}
-  void ShowFileName(gdcm::Subject *, const gdcm::Event &evt)
+  void ShowFileName(gdcm::Subject *, const gdcm::Event &evt) override
     {
     const gdcm::FileNameEvent &pe = dynamic_cast<const gdcm::FileNameEvent&>(evt);
     const char *fn = pe.GetFileName();

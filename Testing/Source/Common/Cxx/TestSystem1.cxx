@@ -23,7 +23,7 @@
 
 int TestGetTimeOfDay()
 {
-  time_t t = time(0);
+  time_t t = time(nullptr);
   char date[22];
   if( !gdcm::System::GetCurrentDateTime(date) )
     {

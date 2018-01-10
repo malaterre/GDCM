@@ -33,11 +33,11 @@ class GDCM_EXPORT Pixmap : public Bitmap
 {
 public:
   Pixmap();
-  ~Pixmap();
-  void Print(std::ostream &) const;
+  ~Pixmap() override;
+  void Print(std::ostream &) const override;
 
   /// returns if Overlays are stored in the unused bit of the pixel data:
-  bool AreOverlaysInPixelData() const;
+  bool AreOverlaysInPixelData() const override;
 
   /// Curve: group 50xx
   Curve& GetCurve(size_t i = 0) {

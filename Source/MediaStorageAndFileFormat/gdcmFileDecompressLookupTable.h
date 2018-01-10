@@ -31,7 +31,7 @@ class GDCM_EXPORT FileDecompressLookupTable : public Subject
 {
 public:
   FileDecompressLookupTable() {}
-  ~FileDecompressLookupTable() {}
+  ~FileDecompressLookupTable() override {}
 
   /// Decompress
   bool Change();

@@ -32,7 +32,7 @@ class GDCM_EXPORT Value : public Object
 {
 public:
   Value() {}
-  ~Value() {}
+  ~Value() override {}
 
   virtual VL GetLength() const = 0;
   virtual void SetLength(VL l) = 0;

@@ -44,7 +44,7 @@ void BitmapToBitmapFilter::SetInput(const Bitmap& image)
     }
   else
     {
-    Output = NULL;
+    Output = nullptr;
     assert( 0 );
     }
 }
