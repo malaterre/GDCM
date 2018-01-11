@@ -561,7 +561,8 @@ std::string StringFilter::FromString(const Tag&t, const char * value, size_t len
     // VM1_n
     vl = (VL)( count * vr.GetSizeof());
 #if !defined(NDEBUG)
-    VM check  = VM::GetVMTypeFromLength(count, 1);
+    VM check = VM::GetVMTypeFromLength(count, 1);
+    if( vm != VM::VM0 )
     assert( vm.Compatible( check ) );
 #endif
     }
