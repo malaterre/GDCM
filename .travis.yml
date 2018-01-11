@@ -23,6 +23,7 @@ matrix:
     - compiler: clang
       os: linux
       env:
+        - ASAN_OPTIONS=verbosity=1:log_threads=1
         - CFLAGS="-Wall -Wextra -m64 -fsanitize=address,undefined"
         - CXXFLAGS="-g -Wall -Wextra -m64 -fsanitize=address,undefined"
         - CMAKE_EXTRA="-DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF"
