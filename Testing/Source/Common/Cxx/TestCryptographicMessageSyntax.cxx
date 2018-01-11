@@ -235,7 +235,7 @@ int TestCryptographicMessageSyntax(int, char *[])
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   gdcm::CryptoFactory* osslp7 = gdcm::CryptoFactory::GetFactoryInstance(gdcm::CryptoFactory::OPENSSLP7);
-  std::auto_ptr<gdcm::CryptographicMessageSyntax> ocmsp7(osslp7->CreateCMSProvider());
+  std::unique_ptr<gdcm::CryptographicMessageSyntax> ocmsp7(osslp7->CreateCMSProvider());
   ocmsp7->ParseKeyFile(keypath.c_str());
   ocmsp7->ParseCertificateFile(certpath.c_str());
   bret = TestCMSProvider(*ocmsp7, "OpenSSL PKCS7") && bret;
@@ -247,7 +247,7 @@ int TestCryptographicMessageSyntax(int, char *[])
 #ifdef GDCM_USE_SYSTEM_OPENSSL
 #ifdef GDCM_HAVE_CMS_RECIPIENT_PASSWORD
   gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::GetFactoryInstance(gdcm::CryptoFactory::OPENSSL);
-  std::auto_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
+  std::unique_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
   ocms->ParseKeyFile(keypath.c_str());
   ocms->ParseCertificateFile(certpath.c_str());
   bret = TestCMSProvider(*ocms, "OpenSSL CMS") && bret;
@@ -259,7 +259,7 @@ int TestCryptographicMessageSyntax(int, char *[])
 
 #ifdef WIN32
   gdcm::CryptoFactory* capi = gdcm::CryptoFactory::GetFactoryInstance(gdcm::CryptoFactory::CAPI);
-  std::auto_ptr<gdcm::CryptographicMessageSyntax> ccms(capi->CreateCMSProvider());
+  std::unique_ptr<gdcm::CryptographicMessageSyntax> ccms(capi->CreateCMSProvider());
   ccms->ParseCertificateFile(certpath.c_str());
   ccms->ParseKeyFile(keypath.c_str());
   bret = TestCMSProvider(*ccms, "CAPI") && bret;
@@ -285,7 +285,7 @@ int TestPasswordBasedEncryption(int, char *[])
 
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   gdcm::CryptoFactory* ossl = gdcm::CryptoFactory::GetFactoryInstance(gdcm::CryptoFactory::OPENSSL);
-  std::auto_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
+  std::unique_ptr<gdcm::CryptographicMessageSyntax> ocms(ossl->CreateCMSProvider());
 
   ocms->SetPassword("password", strlen("password"));
   if (!TestCMSProvider(*ocms, "OpenSSL"))

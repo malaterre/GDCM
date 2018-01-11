@@ -25,7 +25,7 @@
 #include "gdcmGlobal.h"
 #include "gdcmSystem.h"
 
-#include <memory> // std::auto_ptr
+#include <memory> // std::unique_ptr
 
 namespace gdcm
 {
@@ -67,7 +67,7 @@ int TestAnonymize2(const char *subdir, const char *filename)
     std::cerr << "Crypto library not available" << std::endl;
     return 1;
     }
-  std::auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
+  std::unique_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
   gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
 
   if( !cms.ParseCertificateFile( certpath.c_str() ) )
@@ -132,7 +132,7 @@ int TestAnonymize2(const char *subdir, const char *filename)
     std::cerr << "Crypto library not available" << std::endl;
     return 1;
     }
-  std::auto_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
+  std::unique_ptr<gdcm::CryptographicMessageSyntax> cms_ptr(cryptoFactory->CreateCMSProvider());
   gdcm::CryptographicMessageSyntax& cms = *cms_ptr;
   if( !cms.ParseKeyFile( keypath.c_str() ) )
     {
