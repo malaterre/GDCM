@@ -1,6 +1,8 @@
 language: cpp
 # Use the faster container-based infrastructure.
-sudo: false
+#sudo: false
+# https://github.com/travis-ci/travis-ci/issues/9033
+sudo: true
 env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
