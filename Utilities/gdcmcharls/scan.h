@@ -198,7 +198,7 @@ public:
     void InitDefault();
     void InitParams(int32_t t1, int32_t t2, int32_t t3, int32_t nReset);
 
-#if defined(__clang__) && (__clang_major__ > 7)
+#if defined(__clang__) && (__clang_major__ > 5)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winconsistent-missing-override"
 #endif
@@ -206,7 +206,7 @@ public:
     size_t EncodeScan(std::unique_ptr<ProcessLine> rawData, ByteStreamInfo& compressedData, void* pvoidCompare);
     void DecodeScan(std::unique_ptr<ProcessLine> rawData, const JlsRect& size, ByteStreamInfo& compressedData, bool bCompare);
 
-#if defined(__clang__) && (__clang_major__ > 7)
+#if defined(__clang__) && (__clang_major__ > 5)
 #pragma clang diagnostic pop
 #endif
 
