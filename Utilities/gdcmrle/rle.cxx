@@ -279,8 +279,8 @@ int rle_encoder::encode_row( dest & d )
     n += ret;
 
     const bool b = d.seek( comp_pos[s] );
-    assert(b); (void)b;
-    d.write( &internals->outvalues[0], ret );
+    if( !b ) return -1;
+    if( d.write( &internals->outvalues[0], ret ) < 0 ) return -1;
     comp_pos[s] += ret;
     }
 
