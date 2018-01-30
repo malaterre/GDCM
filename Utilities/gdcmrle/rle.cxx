@@ -15,6 +15,7 @@
 #include "info.h"
 #include "io.h"
 
+#include <stdexcept>
 #include <vector>
 #include <algorithm> // req C++11
 #include <cstring> // memcpy
@@ -50,6 +51,8 @@ struct rle_encoder::internal
 
 rle_encoder::rle_encoder(source & s, image_info const & ii):internals(NULL)
 {
+  if( !ii.is_little_endian() )
+    throw std::runtime_error( "big endian is not supported" );
   internals = new internal;
   internals->img = ii;
 
