@@ -942,11 +942,14 @@ private:
 
 bool RLECodec::AppendFrameEncode( std::ostream & out, const char * data, size_t datalen )
 {
+  try {
   const PixelFormat & pf = this->GetPixelFormat();
+  unsigned int pc = this->GetPlanarConfiguration();
+  bool isLittleEndian = !this->GetNeedByteSwap();
   rle::pixel_info pi((unsigned char)pf.GetSamplesPerPixel(), (unsigned char)(pf.GetBitsAllocated()));
 
   const unsigned int * dimensions = this->GetDimensions();
-  rle::image_info ii(dimensions[0], dimensions[1], pi);
+  rle::image_info ii(dimensions[0], dimensions[1], pi, pc ? true : false, isLittleEndian);
   const int h = dimensions[1];
 
   memsrc src( data, datalen );
@@ -969,6 +972,10 @@ bool RLECodec::AppendFrameEncode( std::ostream & out, const char * data, size_t 
       return false;
       }
     }
+  } catch( std::exception & e ) {
+    gdcmErrorMacro( "invalid compression params (not supported for now)." );
+    return false;
+  }
 
   return true;
 }
