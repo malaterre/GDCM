@@ -5307,6 +5307,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2001,0x00da,"Philips Imaging DD 001",VR::CS,VM::VM1,"?",false },
   {0x2001,0x00f1,"Philips Imaging DD 001",VR::FL,VM::VM1_n,"Prospective Motion Correction",false },
   {0x2001,0x00f2,"Philips Imaging DD 001",VR::FL,VM::VM1_n,"Retrospective Motion Correction",false },
+  {0x2001,0x00f3,"Philips Imaging DD 001",VR::CS,VM::VM1,"Unknown Tag & Data",false },
   {0x2005,0x0014,"Philips Imaging DD 001",VR::CS,VM::VM1,"Diffusion",false },
   {0x2005,0x0020,"Philips Imaging DD 001",VR::SL,VM::VM1,"Number of Chemical Shifts",false },
   {0x2005,0x0030,"Philips Imaging DD 001",VR::FL,VM::VM1_n,"Repetition Time",false },
