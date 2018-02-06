@@ -980,7 +980,7 @@ bool RLECodec::AppendFrameEncode( std::ostream & out, const char * data, size_t 
       return false;
       }
     }
-  } catch( std::exception & e ) {
+  } catch( std::exception &  ) {
     gdcmErrorMacro( "invalid compression params (not supported for now)." );
     return false;
   }
