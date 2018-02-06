@@ -5773,6 +5773,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2005,0x0081,"Philips MR Imaging DD 004",VR::IS,VM::VM1,"MRScanoGramSurveyNumberOfImages", false },
   {0x2005,0x0082,"Philips MR Imaging DD 004",VR::UL,VM::VM1,"MRNumberOfProcedureCodes", false },
   {0x2005,0x0083,"Philips MR Imaging DD 004",VR::CS,VM::VM1_n,"?SortAttributes",false },
+  {0x2005,0x0084,"Philips MR Imaging DD 004",VR::SS,VM::VM1,"?MRNrSortAttributes",false },
   {0x2005,0x0085,"Philips MR Imaging DD 004",VR::CS,VM::VM1,"?ImageDisplayDirection",false },
   {0x2005,0x0086,"Philips MR Imaging DD 004",VR::CS,VM::VM1,"?InsetScanogram",false },
   {0x2005,0x0087,"Philips MR Imaging DD 004",VR::SS,VM::VM1,"?MRDisplayLayoutNrColumns",false },
