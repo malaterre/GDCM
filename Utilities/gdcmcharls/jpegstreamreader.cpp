@@ -393,3 +393,6 @@ int JpegStreamReader::ReadColorXForm()
             throw system_error(static_cast<int>(ApiResult::InvalidCompressedData), CharLSCategoryInstance());
     }
 }
+
+template class JlsCodecFactory<DecoderStrategy>;
+template class JlsCodecFactory<EncoderStrategy>;
