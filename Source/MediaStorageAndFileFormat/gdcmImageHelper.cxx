@@ -1249,7 +1249,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
   if( spacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( spacingtag ) && !ds.GetDataElement( spacingtag ).IsEmpty() )
     {
     const DataElement& de = ds.GetDataElement( spacingtag );
-    const Global &g = GlobalInstance;
+    const Global &g = Global::GetInstance();
     const Dicts &dicts = g.GetDicts();
     const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
     const VR & vr = entry.GetVR();
@@ -1342,7 +1342,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
       }
     else
       {
-      const Global &g = GlobalInstance;
+      const Global &g = Global::GetInstance();
       const Dicts &dicts = g.GetDicts();
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();
@@ -1585,7 +1585,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
     if( currentspacing != Tag(0xffff,0xffff) )
       {
       DataElement de( currentspacing );
-      const Global &g = GlobalInstance;
+      const Global &g = Global::GetInstance();
       const Dicts &dicts = g.GetDicts();
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();
@@ -1643,7 +1643,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
     if( currentspacing != Tag(0xffff,0xffff) )
       {
       DataElement de( currentspacing );
-      const Global &g = GlobalInstance;
+      const Global &g = Global::GetInstance();
       const Dicts &dicts = g.GetDicts();
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();

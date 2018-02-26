@@ -25,6 +25,8 @@
 namespace gdcm
 {
 
+static Global GlobalInstance;
+
 // Must NOT be initialized.  Default initialization to zero is
 // necessary.
 unsigned int GlobalCount;
@@ -39,7 +41,7 @@ public:
 
   // Ressource paths:
   // By default only construct two paths:
-  // - The official install dir (need to keep in sinc with cmakelist variable
+  // - The official install dir (need to keep in sync with cmakelist variable
   // - a dynamic one, so that gdcm is somewhat rellocatable
   // - on some system where it make sense the path where the Resource should be located
   void LoadDefaultPaths()

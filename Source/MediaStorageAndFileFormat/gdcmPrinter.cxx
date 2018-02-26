@@ -879,7 +879,7 @@ void Printer::PrintSQ(const SequenceOfItems *sqi, std::ostream & os, std::string
 
 void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string const & indent )
 {
-  const Global& g = GlobalInstance;
+  const Global& g = Global::GetInstance();
   const Dicts &dicts = g.GetDicts();
   const Dict &d = dicts.GetPublicDict(); (void)d;
 

@@ -23,7 +23,7 @@ int TestDicts(int, char *[])
   //const gdcm::Dict &d = dicts.GetPublicDict();
   //std::cout << d << std::endl;
 
-  const gdcm::Global& g = gdcm::GlobalInstance;
+  const gdcm::Global& g = gdcm::Global::GetInstance();
   // get the Part 6 dicts from it:
   const gdcm::Dicts &ds = g.GetDicts();
   const gdcm::Dict &pub = ds.GetPublicDict();

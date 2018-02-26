@@ -347,7 +347,7 @@ std::pair<std::string, std::string> StringFilter::ToStringPair(const Tag& t, Dat
 std::pair<std::string, std::string> StringFilter::ToStringPairInternal(const DataElement& de, DataSet const &ds) const
 {
   std::pair<std::string, std::string> ret;
-  const Global &g = GlobalInstance;
+  const Global &g = Global::GetInstance();
   const Dicts &dicts = g.GetDicts();
   if( ds.IsEmpty() )
     {
@@ -505,7 +505,7 @@ static inline size_t count_backslash(const char *s, size_t len)
 std::string StringFilter::FromString(const Tag&t, const char * value, size_t len)
 {
   if( !value || !len ) return "";
-  const Global &g = GlobalInstance;
+  const Global &g = Global::GetInstance();
   const Dicts &dicts = g.GetDicts();
   std::string strowner;
   const char *owner = nullptr;

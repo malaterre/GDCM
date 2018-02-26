@@ -432,7 +432,7 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, const TransferSyntax & ts, 
 
 void XMLPrinter::PrintDataSet(const DataSet &ds, const TransferSyntax & ts, std::ostream &os)
 {
-  const Global& g = GlobalInstance;
+  const Global& g = Global::GetInstance();
   const Dicts &dicts = g.GetDicts();
   const Dict &d = dicts.GetPublicDict(); (void)d;
 
