@@ -46,6 +46,8 @@ public:
 
 protected:
   bool ChangeMonochrome();
+  bool ChangeYBR2RGB();
+  bool ChangeRGB2YBR();
 
 private:
   PhotometricInterpretation PI;
@@ -56,7 +58,7 @@ private:
 template <typename T>
 void ImageChangePhotometricInterpretation::RGB2YBR(T ybr[3], const T rgb[3])
 {
-#if 1
+#if 0
   ybr[0] =   65.738 * rgb[0] +    129.057 * rgb[1] +    25.064 * rgb[2] + 16;
   ybr[1] =  -37.945 * rgb[0] +    -74.494 * rgb[1] +   112.439 * rgb[2] + 128;
   ybr[2] =  112.439 * rgb[0] +    -94.154 * rgb[1] +   -18.285 * rgb[2] + 128;
@@ -81,7 +83,7 @@ template <typename T>
 void ImageChangePhotometricInterpretation::YBR2RGB(T rgb[3], const T ybr[3])
 {
 
-#if 1
+#if 0
  rgb[0] = 298.082 * ((int)ybr[0]-16) +     0.    * ((int)ybr[1]-128) +   408.583 * ((int)ybr[2]-128) - 1. / 256;
  rgb[1] = 298.082 * ((int)ybr[0]-16) +  -100.291 * ((int)ybr[1]-128) +  -208.12  * ((int)ybr[2]-128) - 1. / 256;
  rgb[2] = 298.082 * ((int)ybr[0]-16) +   516.411 * ((int)ybr[1]-128) +     0.    * ((int)ybr[2]-128) - 1. / 256;
