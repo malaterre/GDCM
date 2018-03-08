@@ -168,7 +168,7 @@ static void PrintHelp()
   std::cout << "JPEG Options:" << std::endl;
   std::cout << "  -q --quality %*f           set quality." << std::endl;
   std::cout << "JPEG-LS Options:" << std::endl;
-  std::cout << "  -e --lossy-error %*i             set error." << std::endl;
+  std::cout << "  -e --allowed-error %*i             set allowed error." << std::endl;
   std::cout << "J2K Options:" << std::endl;
   std::cout << "  -r --rate    %*f           set rate." << std::endl;
   std::cout << "  -q --quality %*f           set quality." << std::endl;
