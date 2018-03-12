@@ -113,7 +113,7 @@ bool ImageChangePhotometricInterpretation::ChangeYBR2RGB()
 
   unsigned char rgb[3];
   unsigned char ybr[3];
-  for( int i = 0; i < len / 3; ++i ) {
+  for( unsigned long i = 0; i < len / 3; ++i ) {
     ybr[0] = p[ 3 * i + 0];
     ybr[1] = p[ 3 * i + 1];
     ybr[2] = p[ 3 * i + 2];
@@ -167,7 +167,7 @@ bool ImageChangePhotometricInterpretation::ChangeRGB2YBR()
 
   unsigned char rgb[3];
   unsigned char ybr[3];
-  for( int i = 0; i < len / 3; ++i ) {
+  for( unsigned long i = 0; i < len / 3; ++i ) {
     ybr[0] = p[ 3 * i + 0];
     ybr[1] = p[ 3 * i + 1];
     ybr[2] = p[ 3 * i + 2];
