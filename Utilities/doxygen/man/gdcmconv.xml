@@ -86,7 +86,7 @@ file-out  DICOM output filename
 <refsection xml:id="gdcmconv_1jpegls_options">
 <title>JPEG-LS options</title>
 
-<para><literallayout>  -e --lossy-error %*i       set error.
+<para><literallayout>  -e --allowed-error %*i       set allowed error.
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmconv_1j2k_options">

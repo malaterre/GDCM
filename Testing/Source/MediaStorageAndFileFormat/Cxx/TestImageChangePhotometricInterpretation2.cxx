@@ -14,6 +14,7 @@
 #include "gdcmImageChangePhotometricInterpretation.h"
 
 #include <math.h>
+#include <string.h>
 
 template <typename T>
 double diff(T rgb1[3], T rgb2[2])
