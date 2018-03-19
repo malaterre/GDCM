@@ -133,6 +133,15 @@ bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde, Bitmap c
     DataElement &de = output.GetDataElement();
     de.SetValue( out.GetValue() );
     UpdatePhotometricInterpretation( input, output );
+    if( input.GetPixelFormat().GetSamplesPerPixel() == 3 )
+    {
+      if( input.GetPlanarConfiguration() == 0 )
+      {
+        // http://dicom.nema.org/medical/dicom/current/output/chtml/part05/sect_G.2.html
+        // The use of separate segments implies that the Planar Configuration (0028,0006) will always be 1 for RLE compressed images.
+        output.SetPlanarConfiguration(1);
+      }
+    }
     return true;
     }
   return false;
