@@ -948,7 +948,7 @@ int main (int argc, char *argv[])
       gdcm::PhotometricInterpretation pi = refpi;
       if( spp )
         {
-        if( pixelspp == 3 ) pi = gdcm::PhotometricInterpretation::RGB;
+        if( pixelspp == 3 && !pinter ) pi = gdcm::PhotometricInterpretation::RGB;
         }
       rle.SetPhotometricInterpretation( pi );
 
