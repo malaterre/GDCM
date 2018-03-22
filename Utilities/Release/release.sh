@@ -129,34 +129,34 @@ check_exit_value $? "vtkgdcmDoxygenDoc did not return properly" || exit 1
 
 # Update default version:
 #https://sourceforge.net/p/forge/documentation/Using%20the%20Release%20API/
-#rsync -e ssh GDCM-$version-Linux-x86_64.tar.gz          "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
+#rsync -e ssh GDCM-$version-Linux-x86_64.tar.gz          "malat,gdcm@frs.sourceforge.net:/home/frs/project/gdcm/gdcm\ 2.x/GDCM\ $version"
 #check_exit_value $? "rsync did not return properly" || exit 1
-#rsync -e ssh GDCM-$version-Linux-x86_64.tar.bz2         "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
+#rsync -e ssh GDCM-$version-Linux-x86_64.tar.bz2         "malat,gdcm@frs.sourceforge.net:/home/frs/project/gdcm/gdcm\ 2.x/GDCM\ $version"
 #check_exit_value $? "rsync did not return properly" || exit 1
-#rsync -e ssh gdcm-$version.zip                          "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
+#rsync -e ssh gdcm-$version.zip                          "malat,gdcm@frs.sourceforge.net:/home/frs/project/gdcm/gdcm\ 2.x/GDCM\ $version"
 #check_exit_value $? "rsync did not return properly" || exit 1
-rsync -e ssh gdcm-$version.tar.gz                       "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
+rsync --protect-args -e ssh gdcm-$version.tar.gz                       "malat,gdcm@frs.sourceforge.net:/home/frs/project/gdcm/gdcm\ 2.x/GDCM\ $version"
 check_exit_value $? "rsync did not return properly" || exit 1
 
 def_prop="default=windows&default=mac&default=linux&default=bsd&default=solaris&default=android&default=others"
 def_path="https://sourceforge.net/projects/gdcm/files/gdcm%202.x/GDCM%20$version/gdcm-$version.tar.gz"
 curl -k -H "Accept: application/json" -X PUT -d $def_prop -d "api_key=$SFAPIKEY" $def_path
 
-rsync -e ssh gdcm-$version.tar.bz2                      "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
+rsync --protect-args -e ssh gdcm-$version.tar.bz2                      "malat,gdcm@frs.sourceforge.net:/home/frs/project/gdcm/gdcm\ 2.x/GDCM\ $version"
 check_exit_value $? "rsync did not return properly" || exit 1
-rsync -e ssh Utilities/doxygen/gdcm-$version-doc.tar.gz "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
+rsync --protect-args -e ssh Utilities/doxygen/gdcm-$version-doc.tar.gz "malat,gdcm@frs.sourceforge.net:/home/frs/project/gdcm/gdcm\ 2.x/GDCM\ $version"
 check_exit_value $? "rsync did not return properly" || exit 1
 sed "s/vVERSION/v$version/" $basedir/gdcm/Utilities/Release/README.md > $basedir/README.md
-rsync -e ssh $basedir/README.md "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
+rsync --protect-args -e ssh $basedir/README.md "malat,gdcm@frs.sourceforge.net:/home/frs/project/gdcm/gdcm\ 2.x/GDCM\ $version"
 check_exit_value $? "rsync did not return properly" || exit 1
 
-rsync -a -r Utilities/doxygen/html malat,gdcm@web.sourceforge.net:htdocs/$dirversion
+rsync --protect-args -a -r Utilities/doxygen/html malat,gdcm@web.sourceforge.net:htdocs/$dirversion
 check_exit_value $? "rsync recursive html did not return properly" || exit 1
-rsync -av Utilities/doxygen/gdcm-$version-doc.tar.gz malat,gdcm@web.sourceforge.net:htdocs/$dirversion
+rsync --protect-args -av Utilities/doxygen/gdcm-$version-doc.tar.gz malat,gdcm@web.sourceforge.net:htdocs/$dirversion
 check_exit_value $? "rsync tarball did not return properly" || exit 1
 # This need to be done last, sometime we cannot generated PDF, see #318
-rsync -av Utilities/doxygen/latex/gdcm-$version.pdf malat,gdcm@web.sourceforge.net:htdocs/$dirversion
+rsync --protect-args -av Utilities/doxygen/latex/gdcm-$version.pdf malat,gdcm@web.sourceforge.net:htdocs/$dirversion
 check_exit_value $? "rsync pdf did not return properly" || exit 1
 # same comment:
-rsync -e ssh Utilities/doxygen/latex/gdcm-$version.pdf  "malat,gdcm@frs.sourceforge.net:/home/frs/project/g/gd/gdcm/gdcm\ 2.x/GDCM\ $version"
+rsync --protect-args -e ssh Utilities/doxygen/latex/gdcm-$version.pdf  "malat,gdcm@frs.sourceforge.net:/home/frs/project/gdcm/gdcm\ 2.x/GDCM\ $version"
 check_exit_value $? "rsync did not return properly" || exit 1
