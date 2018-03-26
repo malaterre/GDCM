@@ -787,9 +787,9 @@ if(GDCM_WRAP_PYTHON)
     add_custom_command(
       TARGET    ${VTKGDCM_NAME}Python
       POST_BUILD
-      COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}
+      COMMAND   ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}/
       DEPENDS   "${CMAKE_CURRENT_SOURCE_DIR}/vtkgdcm.py"
-      COMMENT   "Copy vtkgdcm.py into ${LIBRARY_OUTPUT_PATH}"
+      COMMENT   "Copy vtkgdcm.py into ${LIBRARY_OUTPUT_PATH}/${CMAKE_CFG_INTDIR}/"
     )
     if(NOT GDCM_INSTALL_NO_LIBRARIES)
       install(TARGETS ${VTKGDCM_NAME}Python
