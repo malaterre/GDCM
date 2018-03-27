@@ -586,7 +586,11 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
   if( darray )
     {
     double tuple[3];
+#if VTK_MAJOR_VERSION > 7 || (VTK_MAJOR_VERSION == 7 && VTK_MINOR_VERSION >= 1)
+    darray->GetTypedTuple( 0, tuple );
+#else
     darray->GetTupleValue( 0, tuple );
+#endif
     intcolor[0] = (int32_t)(tuple[0] * 255.);
     intcolor[1] = (int32_t)(tuple[1] * 255.);
     intcolor[2] = (int32_t)(tuple[2] * 255.);
@@ -594,7 +598,11 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
   else if( farray )
     {
     float ftuple[3];
+#if VTK_MAJOR_VERSION > 7 || (VTK_MAJOR_VERSION == 7 && VTK_MINOR_VERSION >= 1)
+    farray->GetTypedTuple( 0, ftuple );
+#else
     farray->GetTupleValue( 0, ftuple );
+#endif
     intcolor[0] = (int32_t)(ftuple[0] * 255.);
     intcolor[1] = (int32_t)(ftuple[1] * 255.);
     intcolor[2] = (int32_t)(ftuple[2] * 255.);
