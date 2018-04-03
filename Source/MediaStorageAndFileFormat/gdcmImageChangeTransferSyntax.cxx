@@ -91,7 +91,7 @@ bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Bitmap c
     codec.SetPlanarConfiguration( input.GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( input.GetPhotometricInterpretation() );
     codec.SetPixelFormat( input.GetPixelFormat() );
-    codec.SetNeedOverlayCleanup( input.AreOverlaysInPixelData() );
+    codec.SetNeedOverlayCleanup( input.AreOverlaysInPixelData() || input.UnusedBitsPresentInPixelData() );
     DataElement out;
     //bool r = codec.Code(input.GetDataElement(), out);
     bool r = codec.Code(pixelde, out);
@@ -121,7 +121,7 @@ bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde, Bitmap c
     codec.SetPlanarConfiguration( input.GetPlanarConfiguration() );
     codec.SetPhotometricInterpretation( input.GetPhotometricInterpretation() );
     codec.SetPixelFormat( input.GetPixelFormat() );
-    codec.SetNeedOverlayCleanup( input.AreOverlaysInPixelData() );
+    codec.SetNeedOverlayCleanup( input.AreOverlaysInPixelData() || input.UnusedBitsPresentInPixelData() );
     DataElement out;
     //bool r = codec.Code(input.GetDataElement(), out);
     bool r = codec.Code(pixelde, out);
@@ -181,7 +181,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap 
     codec->SetPlanarConfiguration( input.GetPlanarConfiguration() );
     codec->SetPhotometricInterpretation( input.GetPhotometricInterpretation() );
     codec->SetPixelFormat( input.GetPixelFormat() );
-    codec->SetNeedOverlayCleanup( input.AreOverlaysInPixelData() );
+    codec->SetNeedOverlayCleanup( input.AreOverlaysInPixelData() || input.UnusedBitsPresentInPixelData() );
     // let's check we are not trying to compress 16bits with JPEG/Lossy/8bits
     if( !input.GetPixelFormat().IsCompatible( ts ) )
       {
@@ -251,7 +251,7 @@ bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde, Bitma
     //codec.SetNumberOfDimensions( input.GetNumberOfDimensions() );
     codec->SetPlanarConfiguration( input.GetPlanarConfiguration() );
     codec->SetPhotometricInterpretation( input.GetPhotometricInterpretation() );
-    codec->SetNeedOverlayCleanup( input.AreOverlaysInPixelData() );
+    codec->SetNeedOverlayCleanup( input.AreOverlaysInPixelData() || input.UnusedBitsPresentInPixelData() );
     DataElement out;
     //bool r = codec.Code(input.GetDataElement(), out);
     bool r = codec->Code(pixelde, out);
@@ -287,7 +287,7 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Bit
     codec->SetNumberOfDimensions( input.GetNumberOfDimensions() );
     codec->SetPlanarConfiguration( input.GetPlanarConfiguration() );
     codec->SetPhotometricInterpretation( input.GetPhotometricInterpretation() );
-    codec->SetNeedOverlayCleanup( input.AreOverlaysInPixelData() );
+    codec->SetNeedOverlayCleanup( input.AreOverlaysInPixelData() || input.UnusedBitsPresentInPixelData() );
     DataElement out;
     //bool r = codec.Code(input.GetDataElement(), out);
     bool r = codec->Code(pixelde, out);
