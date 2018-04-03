@@ -147,6 +147,8 @@ bool FileChangeTransferSyntax::Change()
         {
         is.read( data, datalen );
         assert( is.good() );
+        b = Internals->IC->CleanupUnusedBits(data, datalen);
+        if( !b ) return false;
         b = Internals->IC->AppendRowEncode(os, data, datalen);
         if( !b ) return false;
         Internals->Progress += progresstick;
@@ -189,6 +191,8 @@ bool FileChangeTransferSyntax::Change()
         {
         is.read( data, datalen );
         assert( is.good() );
+        b = Internals->IC->CleanupUnusedBits(data, datalen);
+        if( !b ) return false;
         b = Internals->IC->AppendFrameEncode(os, data, datalen);
         if( !b ) return false;
         Internals->Progress += progresstick;
