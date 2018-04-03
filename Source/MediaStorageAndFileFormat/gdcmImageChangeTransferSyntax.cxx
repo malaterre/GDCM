@@ -254,7 +254,22 @@ bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde, Bitma
     codec->SetNeedOverlayCleanup( input.AreOverlaysInPixelData() || input.UnusedBitsPresentInPixelData() );
     DataElement out;
     //bool r = codec.Code(input.GetDataElement(), out);
-    bool r = codec->Code(pixelde, out);
+    bool r;
+    if( input.AreOverlaysInPixelData() || input.UnusedBitsPresentInPixelData() )
+      {
+      const ByteValue *bv = pixelde.GetByteValue();
+      assert( bv );
+      gdcm::DataElement tmp;
+      tmp.SetByteValue( bv->GetPointer(), bv->GetLength());
+      bv = tmp.GetByteValue();
+      r = codec->CleanupUnusedBits((char*)bv->GetPointer(), bv->GetLength());
+      if(!r) return false;
+      r = codec->Code(tmp, out);
+      }
+    else
+      {
+      r = codec->Code(pixelde, out);
+      }
     if(!r) return false;
     output.SetPlanarConfiguration( 0 );
 
