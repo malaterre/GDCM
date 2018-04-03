@@ -96,6 +96,7 @@ bool FileChangeTransferSyntax::Change()
   codec->SetPlanarConfiguration( pc );
   codec->SetPhotometricInterpretation( pi );
   codec->SetNeedByteSwap( needbyteswap );
+  codec->SetNeedOverlayCleanup( pf.GetBitsAllocated() != pf.GetBitsStored() );
   codec->SetPixelFormat( pf ); // need to be last !
 
   VL vl;
