@@ -877,11 +877,6 @@ bool Bitmap::TryRLECodec(char *buffer, bool &lossyflag ) const
     codec.SetBufferLength( len );
     DataElement out;
     bool r = codec.Decode(PixelData, out);
-    if( ts == TransferSyntax::RLELossless )
-    {
-      Bitmap *i = (Bitmap*)this;
-    i->SetPlanarConfiguration( 0 );
-    }
     if( !r ) return false;
     const ByteValue *outbv = out.GetByteValue();
     //unsigned long check = outbv->GetLength();  // FIXME
