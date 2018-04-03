@@ -32,6 +32,7 @@
 #include "gdcmDirectory.h"
 #include "gdcmImageHelper.h"
 #include "gdcmSplitMosaicFilter.h"
+#include "gdcmImageChangePlanarConfiguration.h"
 
 #ifdef GDCM_USE_SYSTEM_POPPLER
 #include <poppler/poppler-config.h>
@@ -429,6 +430,17 @@ static int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs
     if( md5sum )
       {
       char *buffer = new char[ pimage->GetBufferLength() ];
+      gdcm::ImageChangePlanarConfiguration icpc;
+      icpc.SetPlanarConfiguration( 0 );
+      icpc.SetInput( *pimage );
+      bool b = icpc.Change();
+      if( !b )
+        {
+        std::cerr << "Could not change the Planar Configuration: " << filename << std::endl;
+        return 1;
+        }
+      pimage = &icpc.GetOutput();
+
       if( pimage->GetBuffer( buffer ) )
         {
         char digest[33] = {};
