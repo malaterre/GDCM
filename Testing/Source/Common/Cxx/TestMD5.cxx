@@ -67,7 +67,7 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "f03d1b8dc233c8c902c9fb4800ec6fe2"  , "D_CLUNIE_RG2_JPLY.dcm" },
 { "2fbc6e918c2d4ad7115addf46d870e78"  , "D_CLUNIE_RG2_RLE.dcm" },
 { "9966b6dbec23248fb2b6da9e7769ba20"  , "D_CLUNIE_RG3_JPLL.dcm" },
-{ "d06de3e3b941dce6c2c2c896fe42584b"  , "D_CLUNIE_RG3_JPLY.dcm" },
+{ "6867e0e4f8a1feb871a1ee8dcfac838e"  , "D_CLUNIE_RG3_JPLY.dcm" },
 { "4ed3c3920c7763b883c234bf8bf95662"  , "D_CLUNIE_RG3_RLE.dcm" },
 { "41dc2884a4f98d484da80c2bdb7e5fcc"  , "D_CLUNIE_SC1_JPLY.dcm" },
 { "ec344a1d113d5070cabebf17c0fa3330"  , "D_CLUNIE_SC1_RLE.dcm" },
