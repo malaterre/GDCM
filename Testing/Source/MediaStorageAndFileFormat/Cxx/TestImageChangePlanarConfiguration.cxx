@@ -38,10 +38,11 @@ int TestImageChangePlanarConfigurationFunc(const char *filename, bool verbose = 
     }
   const gdcm::Image &image = reader.GetImage();
 
-  //unsigned int pc = image.GetPlanarConfiguration();
+  unsigned int oldpc = image.GetPlanarConfiguration();
+  assert( oldpc == 1 || oldpc == 0 );
 
   gdcm::ImageChangePlanarConfiguration pcfilt;
-  pcfilt.SetPlanarConfiguration(1);
+  pcfilt.SetPlanarConfiguration( !oldpc );
   pcfilt.SetInput( image );
   bool b = pcfilt.Change();
   if( !b )
@@ -96,7 +97,7 @@ int TestImageChangePlanarConfigurationFunc(const char *filename, bool verbose = 
   bool res2;
     {
     gdcm::ImageChangePlanarConfiguration icpc;
-    icpc.SetPlanarConfiguration( 0 );
+    icpc.SetPlanarConfiguration( oldpc );
     icpc.SetInput( img );
     if( !icpc.Change() )
       {
