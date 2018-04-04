@@ -215,7 +215,7 @@ PyObject *DataElementToPyObject(DataElement const &de, VR const &vr)
 
 PyObject *PythonFilter::ToPyObject(const Tag& t) const
 {
-  const Global &g = GlobalInstance;
+  const Global &g = Global::GetInstance();
   const Dicts &dicts = g.GetDicts();
   const DataSet &ds = GetFile().GetDataSet();
   if( ds.IsEmpty() || !ds.FindDataElement(t) )

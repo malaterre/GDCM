@@ -96,12 +96,6 @@ inline std::ostream& operator<<(std::ostream &os, const Global &g)
   return os;
 }
 
-// This instance will show up in any translation unit that uses
-// Global or that has a singleton.  It will make sure
-// Global is initialized before it is used and is the last
-// static object destroyed.
-static Global GlobalInstance;
-
 } // end namespace gdcm
 
 #endif //GDCMGLOBAL_H

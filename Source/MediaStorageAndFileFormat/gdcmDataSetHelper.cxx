@@ -78,7 +78,7 @@ VR ComputeVRImplicitLittleEndian(DataSet const &ds, const Tag& tag)
 
 VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
 {
-  const Global& g = GlobalInstance;
+  const Global& g = Global::GetInstance();
   const Dicts &dicts = g.GetDicts();
   //const Dict &d = dicts.GetPublicDict();
 

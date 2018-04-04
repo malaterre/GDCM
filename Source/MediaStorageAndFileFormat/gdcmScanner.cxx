@@ -50,7 +50,7 @@ void Scanner::AddSkipTag( Tag const & t )
 // Warning: API is passing a public tag (no way to specify private tag)
 void Scanner::AddPrivateTag( PrivateTag const & t )
 {
-  static const Global &g = GlobalInstance;
+  static const Global &g = Global::GetInstance();
   static const Dicts &dicts = g.GetDicts();
   const DictEntry &entry = dicts.GetDictEntry( t );
   //std::cout << "Debug: " << entry << std::endl;
@@ -73,7 +73,7 @@ void Scanner::AddPrivateTag( PrivateTag const & t )
 
 void Scanner::AddTag( Tag const & t )
 {
-  static const Global &g = GlobalInstance;
+  static const Global &g = Global::GetInstance();
   static const Dicts &dicts = g.GetDicts();
   const DictEntry &entry = dicts.GetDictEntry( t );
   // Is this tag an ASCII on ?
