@@ -39,11 +39,11 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 384 288 1 8 3 */
 //{ "2a922d5c606354612bfdbece1421d863" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
 //{ "22b32f23beb118f7b64c13bf04bc2809" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
-{ "2d7a28cae6c3b3183284d1b4ae08307f" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
+{ "22b32f23beb118f7b64c13bf04bc2809" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
 /* gdcm 768 576 1 8 3 */
 //{ "f9bb8a37acabdf8b0cfa4fd1b471e6aa" , "ACUSON-24-YBR_FULL-RLE.dcm" },
 //{ "435c66f7e113d11d226d500294aae865" , "ACUSON-24-YBR_FULL-RLE.dcm" },
-{ "429f31f0b70bd515b3feeda5dea5eac0" , "ACUSON-24-YBR_FULL-RLE.dcm" },
+{ "435c66f7e113d11d226d500294aae865" , "ACUSON-24-YBR_FULL-RLE.dcm" },
 /* gdcm 768 576 25 8 3 */
 { "e36350b0711fd34eb86c386164554679" , "ACUSON-8-YBR_FULL-JPEG-TrailingInfo.dcm" },
 /* gdcm 608 420 1 8 1 */
@@ -650,7 +650,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "6bf95a48f366bdf8af3a198c7b723c77" , "SinglePrecisionSC.dcm" },
 
-{ "a870a7a7cab8c17646d118ae146be588" , "MR16BitsAllocated_8BitsStored.dcm" },
+{ "42cb593979fcc4630f965c31caaf4ec1" , "MR16BitsAllocated_8BitsStored.dcm" },
 
 { "da153c2f438d6dd4277e0c6ad2aeae74" , "OsirixFake16BitsStoredFakeSpacing.dcm" },
 { "1c485e1ac2b2bdbeeba14391b8c1e0c8" , "JPEGDefinedLengthSequenceOfFragments.dcm" },
@@ -661,7 +661,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "5e9085c66976d2f5f9989d88bf7a90c4" , "D_CLUNIE_CT1_JLSN.dcm" },
 
 { "9eb513314b2fcf25d895e18ffb2ead0b" , "UnexpectedSequenceDelimiterInFixedLengthSequence.dcm" },
-{ "12d1567ed81236cf3b01dc12766581a0" , "IM-0001-0066.CommandTag00.dcm" },
+{ "fb8119f30ec32ff575789caa969180ca" , "IM-0001-0066.CommandTag00.dcm" },
 { "6f26e552a1b71d386483118779d192ad" , "NM_Kakadu44_SOTmarkerincons.dcm" },
 { "56238d3665ebdb0251d1161fb7f4edc6" , "GDCMJ2K_TextGBR.dcm" },
 { "f8a1f4ce85b51527267e670a8aa0c308" , "PhilipsInteraSeqTermInvLen.dcm" },

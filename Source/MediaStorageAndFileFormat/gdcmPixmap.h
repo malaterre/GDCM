@@ -38,6 +38,8 @@ public:
 
   /// returns if Overlays are stored in the unused bit of the pixel data:
   bool AreOverlaysInPixelData() const override;
+  /// returns if there are unused bits in the pixel data
+  bool UnusedBitsPresentInPixelData() const override;
 
   /// Curve: group 50xx
   Curve& GetCurve(size_t i = 0) {

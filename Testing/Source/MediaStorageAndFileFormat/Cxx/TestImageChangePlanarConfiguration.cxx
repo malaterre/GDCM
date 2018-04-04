@@ -15,6 +15,7 @@
 #include "gdcmImageReader.h"
 #include "gdcmImageWriter.h"
 #include "gdcmTesting.h"
+#include "gdcmFilename.h"
 #include "gdcmSystem.h"
 
 int TestImageChangePlanarConfigurationFunc(const char *filename, bool verbose = false)
@@ -37,9 +38,11 @@ int TestImageChangePlanarConfigurationFunc(const char *filename, bool verbose = 
     }
   const gdcm::Image &image = reader.GetImage();
 
-  //unsigned int pc = image.GetPlanarConfiguration();
+  unsigned int oldpc = image.GetPlanarConfiguration();
+  assert( oldpc == 1 || oldpc == 0 );
 
   gdcm::ImageChangePlanarConfiguration pcfilt;
+  pcfilt.SetPlanarConfiguration( !oldpc );
   pcfilt.SetInput( image );
   bool b = pcfilt.Change();
   if( !b )
@@ -73,6 +76,86 @@ int TestImageChangePlanarConfigurationFunc(const char *filename, bool verbose = 
     std::cerr << "Failed to write: " << outfilename << std::endl;
     return 1;
     }
+
+  // Let's read that file back in !
+  gdcm::ImageReader reader2;
+
+  reader2.SetFileName( outfilename.c_str() );
+  if ( !reader2.Read() )
+    {
+    std::cerr << "Could not even reread our generated file : " << outfilename << std::endl;
+    return 1;
+    }
+  // Check that after decompression we still find the same thing:
+  int res = 0;
+  const gdcm::Image &img = reader2.GetImage();
+  unsigned int newpc = img.GetPlanarConfiguration();
+  //std::cerr << "Success to read image from file: " << filename << std::endl;
+  unsigned long len = img.GetBufferLength();
+
+  char* buffer = new char[len];
+  bool res2;
+    {
+    gdcm::ImageChangePlanarConfiguration icpc;
+    icpc.SetPlanarConfiguration( oldpc );
+    icpc.SetInput( img );
+    if( !icpc.Change() )
+      {
+      return 1;
+      }
+    res2 = icpc.GetOutput().GetBuffer(buffer);
+    }
+  if( !res2 )
+    {
+    std::cerr << "could not get buffer: " << outfilename << std::endl;
+    return 1;
+    }
+  // On big Endian system we have byteswapped the buffer (duh!)
+  // Since the md5sum is byte based there is now way it would detect
+  // that the file is written in big endian word, so comparing against
+  // a md5sum computed on LittleEndian would fail. Thus we need to
+  // byteswap (again!) here:
+#ifdef GDCM_WORDS_BIGENDIAN
+  if( img.GetPixelFormat().GetBitsAllocated() == 16 )
+    {
+    assert( !(len % 2) );
+    assert( img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1
+      || img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME2 );
+    gdcm::ByteSwap<unsigned short>::SwapRangeFromSwapCodeIntoSystem(
+      (unsigned short*)buffer, gdcm::SwapCode::LittleEndian, len/2);
+    }
+#endif
+  const char *ref = gdcm::Testing::GetMD5FromFile(filename);
+  // FIXME: PC=1
+  gdcm::Filename fn( filename );
+  if( strcmp(fn.GetName(), "ACUSON-24-YBR_FULL-RLE-b.dcm" ) == 0) ref = "2d7a28cae6c3b3183284d1b4ae08307f";
+  if( strcmp(fn.GetName(), "ACUSON-24-YBR_FULL-RLE.dcm" ) == 0) ref = "429f31f0b70bd515b3feeda5dea5eac0";
+
+  char digest[33];
+  gdcm::Testing::ComputeMD5(buffer, len, digest);
+  if( !ref )
+    {
+    // new regression image needs a md5 sum
+    std::cerr << "Missing md5 " << digest << " for: " << filename <<  std::endl;
+    //assert(0);
+    res = 1;
+    }
+  else if( strcmp(digest, ref) )
+    {
+    std::cerr << "Problem reading image from: " << filename << std::endl;
+    std::cerr << "Found " << digest << " instead of " << ref << std::endl;
+    res = 1;
+    }
+  if(res)
+    {
+    std::cerr << "problem with: " << outfilename << std::endl;
+    }
+  if( verbose )
+    {
+    std::cout << "file was written in: " << outfilename << std::endl;
+    }
+
+  delete[] buffer;
 
   return 0;
 }

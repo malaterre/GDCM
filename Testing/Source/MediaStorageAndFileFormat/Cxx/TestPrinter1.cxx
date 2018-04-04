@@ -70,7 +70,7 @@ static const char * const printmd5[][2] = {
 { "1f0e2edba097f4491b7d45fed604729d" , "D_CLUNIE_RG2_JPLY.dcm" } ,
 { "403e0e40507608cdcd61ee461de91226" , "D_CLUNIE_RG2_RLE.dcm" } ,
 { "73ecf348f874e7fb69f5dbfb4637979e" , "D_CLUNIE_RG3_JPLL.dcm" } ,
-{ "b97b49d7f0bc3a3c3cb421292d8f13b5" , "D_CLUNIE_RG3_JPLY.dcm" } ,
+{ "f454ce36a97e4d4164a628e686a9977b" , "D_CLUNIE_RG3_JPLY.dcm" } ,
 { "ec7dcf6857238547f0fb43f51317b05f" , "D_CLUNIE_RG3_RLE.dcm" } ,
 { "af35b9ad269b8a37df3d25389655272e" , "D_CLUNIE_SC1_JPLY.dcm" } ,
 { "50f92b02a370e2858632dfde330a2881" , "D_CLUNIE_SC1_RLE.dcm" } ,

@@ -19,6 +19,7 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmTesting.h"
 #include "gdcmByteSwap.h"
+#include "gdcmImageChangePlanarConfiguration.h"
 
 namespace gdcm
 {
@@ -47,6 +48,7 @@ int TestImageChangeTransferSyntaxRLE(const char *filename, bool verbose = false)
     }
 
   const gdcm::Image &image = reader.GetImage();
+  unsigned int oldpc = image.GetPlanarConfiguration();
 
   gdcm::ImageChangeTransferSyntax change;
   change.SetTransferSyntax( gdcm::TransferSyntax::RLELossless );
@@ -96,10 +98,27 @@ int TestImageChangeTransferSyntaxRLE(const char *filename, bool verbose = false)
   // Check that after decompression we still find the same thing:
   int res = 0;
   const gdcm::Image &img = reader2.GetImage();
+  unsigned int newpc = img.GetPlanarConfiguration();
   //std::cerr << "Success to read image from file: " << filename << std::endl;
   unsigned long len = img.GetBufferLength();
+
   char* buffer = new char[len];
-  bool res2 = img.GetBuffer(buffer);
+  bool res2;
+  if( oldpc != newpc )
+    {
+    gdcm::ImageChangePlanarConfiguration icpc;
+    icpc.SetPlanarConfiguration( oldpc );
+    icpc.SetInput( img );
+    if( !icpc.Change() )
+      {
+      return 1;
+      }
+    res2 = icpc.GetOutput().GetBuffer(buffer);
+    }
+  else
+    {
+    res2 = img.GetBuffer(buffer);
+    }
   if( !res2 )
     {
     std::cerr << "could not get buffer: " << outfilename << std::endl;
