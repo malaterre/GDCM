@@ -39,11 +39,11 @@ static const char * const gdcmMD5DataImages[][2] = {
 /* gdcm 384 288 1 8 3 */
 //{ "2a922d5c606354612bfdbece1421d863" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
 //{ "22b32f23beb118f7b64c13bf04bc2809" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
-{ "2d7a28cae6c3b3183284d1b4ae08307f" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
+{ "22b32f23beb118f7b64c13bf04bc2809" , "ACUSON-24-YBR_FULL-RLE-b.dcm" },
 /* gdcm 768 576 1 8 3 */
 //{ "f9bb8a37acabdf8b0cfa4fd1b471e6aa" , "ACUSON-24-YBR_FULL-RLE.dcm" },
 //{ "435c66f7e113d11d226d500294aae865" , "ACUSON-24-YBR_FULL-RLE.dcm" },
-{ "429f31f0b70bd515b3feeda5dea5eac0" , "ACUSON-24-YBR_FULL-RLE.dcm" },
+{ "435c66f7e113d11d226d500294aae865" , "ACUSON-24-YBR_FULL-RLE.dcm" },
 /* gdcm 768 576 25 8 3 */
 { "e36350b0711fd34eb86c386164554679" , "ACUSON-8-YBR_FULL-JPEG-TrailingInfo.dcm" },
 /* gdcm 608 420 1 8 1 */
