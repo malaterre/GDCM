@@ -169,6 +169,7 @@ void Bitmap::SetPlanarConfiguration(unsigned int pc)
       || ts == TransferSyntax::JPEG2000Lossless
       || ts == TransferSyntax::JPEG2000
       || ts == TransferSyntax::JPIPReferenced
+      || ts == TransferSyntax::RLELossless // FIXME internally GDCM produce per-pixel output
     )
       {
       // PS 3.6 - 2011 8.2.4 JPEG 2000 IMAGE COMPRESSION
