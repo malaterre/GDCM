@@ -23,6 +23,12 @@
 // CharLS includes
 #include "gdcm_charls.h"
 
+#include <cstring>
+
+using BYTE=unsigned char;
+#define ILV_LINE charls::InterleaveMode::Line;
+#define ILV_NONE charls::InterleaveMode::None;
+
 #if defined(__GNUC__) && GCC_VERSION < 50101
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #endif
