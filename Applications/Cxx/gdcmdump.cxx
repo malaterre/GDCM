@@ -816,7 +816,7 @@ static int PrintPDB(const std::string & filename, bool verbose)
     }
   if( !found )
     {
-    std::cout << "no pdb tag found" << std::endl;
+    std::cerr << "no pdb tag found" << std::endl;
     ret = 1;
     }
 
@@ -901,7 +901,7 @@ static int PrintCSA(const std::string & filename)
     found = true;
     if( csa.GetFormat() == gdcm::CSAHeader::ZEROED_OUT )
       {
-      std::cout << "CSA Header has been zero-out (contains only 0)" << std::endl;
+      std::cerr << "CSA Header has been zero-out (contains only 0)" << std::endl;
       ret = 1;
       }
     else if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
@@ -920,7 +920,7 @@ static int PrintCSA(const std::string & filename)
     found = true;
     if( csa.GetFormat() == gdcm::CSAHeader::ZEROED_OUT )
       {
-      std::cout << "CSA Header has been zero-out (contains only 0)" << std::endl;
+      std::cerr << "CSA Header has been zero-out (contains only 0)" << std::endl;
       ret = 1;
       }
     else if( csa.GetFormat() == gdcm::CSAHeader::DATASET_FORMAT )
@@ -939,7 +939,7 @@ static int PrintCSA(const std::string & filename)
     found = true;
     if( csa.GetFormat() == gdcm::CSAHeader::ZEROED_OUT )
       {
-      std::cout << "CSA Header has been zero-out (contains only 0)" << std::endl;
+      std::cerr << "CSA Header has been zero-out (contains only 0)" << std::endl;
       ret = 1;
       }
     else if( csa.GetFormat() == gdcm::CSAHeader::INTERFILE )
@@ -958,7 +958,7 @@ static int PrintCSA(const std::string & filename)
     }
   if( !found )
     {
-    std::cout << "no csa tag found" << std::endl;
+    std::cerr << "no csa tag found" << std::endl;
     ret = 1;
     }
 
