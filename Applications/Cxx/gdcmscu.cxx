@@ -283,6 +283,7 @@ int main(int argc, char *argv[])
             std::string str;
             //ss >> str;
             std::getline(ss, str); // do not skip whitespace
+            if( str.size() % 2 == 1 ) str += " ";
             keys.push_back( std::make_pair(tag, str) );
           }
           else if( option_index == 20 ) /* port-scp */
