@@ -773,12 +773,12 @@ std::vector<unsigned int> ImageHelper::GetDimensionsValue(const File& f)
 #endif
     {
       {
-      Attribute<0x0028,0x0011> at = { 0 };
+      Attribute<0x0028,0x0011> at = { 0 }; // Columns
       at.SetFromDataSet( ds );
       theReturn[0] = at.GetValue();
       }
       {
-      Attribute<0x0028,0x0010> at = { 0 };
+      Attribute<0x0028,0x0010> at = { 0 }; // Rows
       at.SetFromDataSet( ds );
       theReturn[1] = at.GetValue();
       }
