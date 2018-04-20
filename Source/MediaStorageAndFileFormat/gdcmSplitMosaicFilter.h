@@ -70,6 +70,9 @@ public:
   /// Get the Acquisition Matrix (non zero value):
   static bool GetAcquisitionSize(unsigned int size[2], DataSet const & ds);
 
+  /// Return the value for NumberOfImagesInMosaic, or compute it from Acquisition Size
+  static unsigned int GetNumberOfImagesInMosaic( File const & file );
+
 protected:
 
 private:

@@ -122,13 +122,13 @@ bool SplitMosaicFilter::GetAcquisitionSize(unsigned int size[2], DataSet const &
   return found;
 }
 
-bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
+unsigned int SplitMosaicFilter::GetNumberOfImagesInMosaic( File const & file )
 {
+  unsigned int numberOfImagesInMosaic = 0;
+  DataSet const &ds = file.GetDataSet();
   CSAHeader csa;
-  DataSet& ds = GetFile().GetDataSet();
 
   const PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
-  int numberOfImagesInMosaic = 0;
   if( csa.LoadFromDataElement( ds.GetDataElement( t1 ) ) )
   {
     if( csa.FindCSAElementByName( "NumberOfImagesInMosaic" ) )
@@ -165,7 +165,7 @@ bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
   }
 
   std::vector<unsigned int> colrow =
-    ImageHelper::GetDimensionsValue( GetFile() );
+    ImageHelper::GetDimensionsValue( file );
 
   // try super harder. Pay attention that trailing black image cannot be removed here.
   if( !numberOfImagesInMosaic )
@@ -184,12 +184,21 @@ bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
       }
     }
   }
+  return numberOfImagesInMosaic;
+}
+
+bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
+{
+  unsigned int numberOfImagesInMosaic = GetNumberOfImagesInMosaic( GetFile() );
 
   if( !numberOfImagesInMosaic )
   {
     gdcmErrorMacro( "Could not find/compute NumberOfImagesInMosaic" );
     return false;
   }
+
+  std::vector<unsigned int> colrow =
+    ImageHelper::GetDimensionsValue( GetFile() );
 
   dims[0] = colrow[0];
   dims[1] = colrow[1];
