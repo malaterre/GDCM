@@ -182,6 +182,10 @@ unsigned int SplitMosaicFilter::GetNumberOfImagesInMosaic( File const & file )
         // MultiFrame will contain trailing empty slices:
         gdcmWarningMacro( "NumberOfImagesInMosaic was not found. Volume will be padded with black image." );
       }
+      else
+      {
+        gdcmErrorMacro( "NumberOfImagesInMosaic cannot be computed from Img Acq: " << mosaicSize[0] << "," << mosaicSize[1] );
+      }
     }
   }
   return numberOfImagesInMosaic;
