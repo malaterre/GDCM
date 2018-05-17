@@ -182,7 +182,22 @@ unsigned int SplitMosaicFilter::GetNumberOfImagesInMosaic( File const & file )
       }
       else
       {
-        gdcmErrorMacro( "NumberOfImagesInMosaic cannot be computed from Img Acq: " << mosaicSize[0] << "," << mosaicSize[1] );
+        // assume interpolation:
+        unsigned int mosSize = std::max( mosaicSize[0], mosaicSize[1] );
+        if( colrow[0] % mosSize == 0 &&
+         colrow[1] % mosSize == 0 )
+        {
+          gdcmDebugMacro( "Matrix Acquisition does not match exactly. Using max value." );
+          numberOfImagesInMosaic = 
+            colrow[0] / mosSize *
+            colrow[1] / mosSize;
+          // MultiFrame will contain trailing empty slices:
+          gdcmWarningMacro( "NumberOfImagesInMosaic was not found. Volume will be padded with black image." );
+        }
+        else
+        {
+           gdcmErrorMacro( "NumberOfImagesInMosaic cannot be computed from Img Acq: " << mosaicSize[0] << "," << mosaicSize[1] );
+        }
       }
     }
   }
