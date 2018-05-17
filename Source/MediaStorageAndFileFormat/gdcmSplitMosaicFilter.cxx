@@ -249,12 +249,12 @@ bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double slicenormalvector[3], b
     double z[3];
     dc.Cross (z);
     const double snv_dot = dc.Dot( normal, z );
-    if( (1. - snv_dot) < 1e-6 )
+    if( fabs(1. - snv_dot) < 1e-6 )
     {
       gdcmDebugMacro("Same direction");
       inverted = false;
     }
-    else if( (-1. - snv_dot) < 1e-6 )
+    else if( fabs(-1. - snv_dot) < 1e-6 )
     {
       gdcmWarningMacro("SliceNormalVector is opposite direction");
       inverted = true;
