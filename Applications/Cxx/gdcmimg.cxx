@@ -858,7 +858,8 @@ int main (int argc, char *argv[])
       || gdcm::System::StrCaseCmp(inputextension,".rawl") == 0  // kakadu convention for raw little endian
       || gdcm::System::StrCaseCmp(inputextension,".gray") == 0  // imagemagick convention
       || gdcm::System::StrCaseCmp(inputextension,".bin") == 0   // openjp3d convention for raw little endian
-      || gdcm::System::StrCaseCmp(inputextension,".rgb") == 0 ) // imagemagick convention
+      || gdcm::System::StrCaseCmp(inputextension,".rgb") == 0   // imagemagick convention
+      || gdcm::System::StrCaseCmp(inputextension,".yuv") == 0 ) // ffmpeg convention
       {
       if( !size[0] || !size[1] )
         {
@@ -891,7 +892,7 @@ int main (int argc, char *argv[])
       raw.SetPixelFormat( pf );
       if( spp )
         {
-        if( pixelspp == 3 ) pi = gdcm::PhotometricInterpretation::RGB;
+        if( pixelspp == 3 && !pinter ) pi = gdcm::PhotometricInterpretation::RGB;
         }
       raw.SetPhotometricInterpretation( pi );
       raw.SetNeedByteSwap( false );
