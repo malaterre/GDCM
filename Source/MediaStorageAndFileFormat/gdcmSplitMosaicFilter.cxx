@@ -47,7 +47,6 @@ static bool reorganize_mosaic(const unsigned short *input, const unsigned int *i
   return true;
 }
 
-#ifdef SNVINVERT
 static bool reorganize_mosaic_invert(const unsigned short *input, const unsigned int *inputdims,
   unsigned int square, const unsigned int *outputdims, unsigned short *output )
 {
@@ -66,7 +65,6 @@ static bool reorganize_mosaic_invert(const unsigned short *input, const unsigned
     }
   return true;
 }
-#endif
 
 }
 
@@ -182,6 +180,25 @@ unsigned int SplitMosaicFilter::GetNumberOfImagesInMosaic( File const & file )
         // MultiFrame will contain trailing empty slices:
         gdcmWarningMacro( "NumberOfImagesInMosaic was not found. Volume will be padded with black image." );
       }
+      else
+      {
+        // assume interpolation:
+        unsigned int mosSize = std::max( mosaicSize[0], mosaicSize[1] );
+        if( colrow[0] % mosSize == 0 &&
+         colrow[1] % mosSize == 0 )
+        {
+          gdcmDebugMacro( "Matrix Acquisition does not match exactly. Using max value." );
+          numberOfImagesInMosaic = 
+            colrow[0] / mosSize *
+            colrow[1] / mosSize;
+          // MultiFrame will contain trailing empty slices:
+          gdcmWarningMacro( "NumberOfImagesInMosaic was not found. Volume will be padded with black image." );
+        }
+        else
+        {
+           gdcmErrorMacro( "NumberOfImagesInMosaic cannot be computed from Img Acq: " << mosaicSize[0] << "," << mosaicSize[1] );
+        }
+      }
     }
   }
   return numberOfImagesInMosaic;
@@ -247,12 +264,12 @@ bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double slicenormalvector[3], b
     double z[3];
     dc.Cross (z);
     const double snv_dot = dc.Dot( normal, z );
-    if( (1. - snv_dot) < 1e-6 )
+    if( fabs(1. - snv_dot) < 1e-6 )
     {
       gdcmDebugMacro("Same direction");
       inverted = false;
     }
-    else if( (-1. - snv_dot) < 1e-6 )
+    else if( fabs(-1. - snv_dot) < 1e-6 )
     {
       gdcmWarningMacro("SliceNormalVector is opposite direction");
       inverted = true;
@@ -358,7 +375,6 @@ bool SplitMosaicFilter::Split()
   outbuf.resize(l);
 
   bool b;
-#ifdef SNVINVERT
   if( inverted )
   {
     b = details::reorganize_mosaic_invert(
@@ -366,7 +382,6 @@ bool SplitMosaicFilter::Split()
         (unsigned short*)&outbuf[0] );
   }
   else
-#endif
   {
     b = details::reorganize_mosaic(
         (unsigned short*)&buf[0], inputimage.GetDimensions(), div, dims,
