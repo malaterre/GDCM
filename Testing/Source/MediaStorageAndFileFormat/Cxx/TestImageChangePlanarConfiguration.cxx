@@ -89,7 +89,7 @@ int TestImageChangePlanarConfigurationFunc(const char *filename, bool verbose = 
   // Check that after decompression we still find the same thing:
   int res = 0;
   const gdcm::Image &img = reader2.GetImage();
-  unsigned int newpc = img.GetPlanarConfiguration();
+  //unsigned int newpc = img.GetPlanarConfiguration();
   //std::cerr << "Success to read image from file: " << filename << std::endl;
   unsigned long len = img.GetBufferLength();
 
