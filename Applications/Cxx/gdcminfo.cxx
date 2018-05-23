@@ -429,6 +429,7 @@ static int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs
 
     if( md5sum )
       {
+      int ret = 0;
       char *buffer = new char[ pimage->GetBufferLength() ];
       gdcm::ImageChangePlanarConfiguration icpc;
       icpc.SetPlanarConfiguration( 0 );
@@ -449,9 +450,11 @@ static int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs
         }
       else
         {
-        std::cout << "Problem decompressing file: " << filename << std::endl;
+        std::cerr << "Problem decompressing file: " << filename << std::endl;
+        ret = 1;
         }
       delete[] buffer;
+      return ret;
       }
     }
   else if ( ms == gdcm::MediaStorage::EncapsulatedPDFStorage )
