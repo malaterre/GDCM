@@ -39,7 +39,7 @@ public:
 
   LookupTable();
   ~LookupTable();
-  void Print(std::ostream &) const {}
+  void Print(std::ostream &) const;
 
   /// Allocate the LUT
   void Allocate( unsigned short bitsample = 8 );
