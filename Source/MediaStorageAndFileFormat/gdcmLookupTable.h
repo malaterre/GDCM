@@ -39,7 +39,7 @@ public:
 
   LookupTable();
   ~LookupTable() override;
-  void Print(std::ostream &) const override {}
+  void Print(std::ostream &) const override;
 
   /// Allocate the LUT
   void Allocate( unsigned short bitsample = 8 );
