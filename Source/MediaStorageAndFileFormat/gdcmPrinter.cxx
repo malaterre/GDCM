@@ -600,7 +600,8 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
       StringFilterCase(FL);
       StringFilterCase(FD);
       //StringFilterCase(OB);
-      StringFilterCase(OF);
+      //StringFilterCase(OD);
+      //StringFilterCase(OF);
       //StringFilterCase(OW);
       StringFilterCase(SL);
       //StringFilterCase(SQ);
@@ -610,6 +611,8 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
       StringFilterCase(US);
       //StringFilterCase(UT);
     case VR::OB:
+    case VR::OD:
+    case VR::OF:
     case VR::OW:
     case VR::OB_OW:
     case VR::UN:
@@ -764,7 +767,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
     {
     assert( refvr != VR::INVALID );
     assert( refvr & VR::VRBINARY );
-    if( refvr & VR::OB_OW || refvr == VR::SQ )
+    if( refvr & VR::OB_OW || refvr == VR::OD || refvr == VR::OF || refvr == VR::SQ )
       {
       guessvm = VM::VM1;
       }
