@@ -76,6 +76,12 @@ public:
   /// the outputbuffer should be at least 3 times the size of inlen
   bool Decode(char *outputbuffer, size_t outlen, const char *inputbuffer, size_t inlen) const;
 
+  /// Return whether 16 bits LUT is in RGB 8 bits space
+  bool IsRGB8() const;
+
+  /// Decode into RGB 8 bits space
+  bool Decode8(char *outputbuffer, size_t outlen, const char *inputbuffer, size_t inlen) const;
+
   LookupTable(LookupTable const &lut):Object(lut)
     {
     assert(0);
