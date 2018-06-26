@@ -141,6 +141,7 @@ static void PrintHelp()
   std::cout << "     --remove-retired      Remove retired tags." << std::endl;
   std::cout << "Image only Options:" << std::endl;
   std::cout << "  -l --apply-lut                      Apply LUT (non-standard, advanced user only)." << std::endl;
+  std::cout << "  -8 --apply-lut8                     Apply LUT/RGB8 (non-standard, advanced user only)." << std::endl;
   std::cout << "     --decompress-lut                 Decompress LUT (linearize segmented LUT)." << std::endl;
   std::cout << "  -P --photometric-interpretation %s  Change Photometric Interpretation (when possible)." << std::endl;
   std::cout << "  -w --raw                            Decompress image." << std::endl;
@@ -438,6 +439,7 @@ int main (int argc, char *argv[])
   int implicit = 0;
   int quiet = 0;
   int lut = 0;
+  int lut8 = 0;
   int decompress_lut = 0;
   int raw = 0;
   int deflated = 0;
@@ -534,6 +536,7 @@ int main (int argc, char *argv[])
         {"photometric-interpretation", 1, &photometricinterpretation, 1}, //
         {"with-private-dict", 0, &changeprivatetags, 1}, //
         {"decompress-lut", 0, &decompress_lut, 1}, // linearized segmented LUT
+        {"apply-lut8", 0, &lut8, 1},
 // j2k :
         {"rate", 1, &rate, 1}, //
         {"quality", 1, &quality, 1}, // will also work for regular jpeg compressor
@@ -555,7 +558,7 @@ int main (int argc, char *argv[])
         {nullptr, 0, nullptr, 0}
     };
 
-    c = getopt_long (argc, argv, "i:o:XMUClwdJKLRFYS:P:VWDEhvIr:q:t:n:e:",
+    c = getopt_long (argc, argv, "i:o:XMUCl8wdJKLRFYS:P:VWDEhvIr:q:t:n:e:",
       long_options, &option_index);
     if (c == -1)
       {
@@ -672,6 +675,11 @@ int main (int argc, char *argv[])
     case 'l':
       lut = 1;
       break;
+
+    case '8':
+      lut8 = 1;
+      break;
+
 
     case 'w':
       raw = 1;
@@ -1097,7 +1105,7 @@ int main (int argc, char *argv[])
       return 1;
       }
   }
-  else if( lut )
+  else if( lut || lut8 )
     {
     gdcm::PixmapReader reader;
     reader.SetFileName( filename.c_str() );
@@ -1110,6 +1118,7 @@ int main (int argc, char *argv[])
 
     gdcm::ImageApplyLookupTable lutfilt;
     lutfilt.SetInput( image );
+    lutfilt.SetRGB8( lut8 );
     bool b = lutfilt.Apply();
     if( !b )
       {
