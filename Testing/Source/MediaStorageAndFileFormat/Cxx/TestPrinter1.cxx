@@ -164,7 +164,7 @@ static const char * const printmd5[][2] = {
 { "5797c9dfe94e4a4bccfbf81ab0aaa957" , "MR-SIEMENS-DICOM-WithOverlays.dcm" } ,
 { "df28467760104edc923d0625a0e2a778" , "MR-SIEMENS-DICOM-WithOverlays-extracted-overlays.dcm" } ,
 { "bf324a1c91d3a09d9136f54f5910e570" , "MR_SIEMENS_forceLoad29-1010_29-1020.dcm" } ,
-{ "acbf80a7c610b44caebd52bc22de74f9" , "MR_Spectroscopy_SIEMENS_OF.dcm" } ,
+{ "4b0a24992d94eb6c0ae5e4bb617e1718" , "MR_Spectroscopy_SIEMENS_OF.dcm" } ,
 { "1a5646a7b05840813c067d8c8dfa507e" , "NM-MONO2-16-13x-heart.dcm" } ,
 { "8d8c3b8eb830b57b162e7c9f2d64b214" , "OsirixFake16BitsStoredFakeSpacing.dcm" } ,
 { "bf793beb0e96f2399e467409e3cf5311" , "OT-MONO2-8-a7.dcm" } ,
