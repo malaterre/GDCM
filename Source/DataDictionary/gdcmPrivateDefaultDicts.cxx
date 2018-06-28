@@ -6059,7 +6059,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x200b,0x009f,"Philips RAD Imaging DD 097",VR::SQ,VM::VM1,"?",false },
   {0x200b,0x00a0,"Philips RAD Imaging DD 097",VR::LT,VM::VM1,"?",false },
   {0x200b,0x00a1,"Philips RAD Imaging DD 097",VR::CS,VM::VM1,"?bool?",false },
-  {0x0029,0x0050,"Philips US Imaging 60",VR::CS,VM::VM1,"?COLOR?",false },
+  {0x0029,0x0050,"Philips US Imaging 60",VR::CS,VM::VM1,"?COLOR/CPA/NONE?",false },
   {0x0031,0x0030,"Philips US Imaging 60",VR::UL,VM::VM1,"Private data",false },
   {0x0031,0x0031,"Philips US Imaging 60",VR::UL,VM::VM1,"Private data",false },
   {0x0031,0x0032,"Philips US Imaging 60",VR::UL,VM::VM1,"Private data",false },
