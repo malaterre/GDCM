@@ -60,7 +60,7 @@ namespace gdcm
 {"1.2.840.10008.5.1.4.1.1.12.2.1" , "Enhanced X Ray RF Image IOD Modules"},
 {"1.2.840.10008.5.1.4.1.1.13.1.1" , "X Ray 3D Angiographic Image IOD Modules"},
 {"1.2.840.10008.5.1.4.1.1.13.1.2" , "X-Ray 3D Craniofacial Image"},
-{"1.2.840.10008.5.1.4.1.1.13.1.3" , "IOD defined in PS 3.3"},
+{"1.2.840.10008.5.1.4.1.1.13.1.3" , "Breast Tomosynthesis Image IOD Modules"},
 {"1.2.840.10008.5.1.4.1.1.20" , "NM Image IOD Modules"},
 {"1.2.840.10008.5.1.4.1.1.66" , "Raw Data IOD Modules"},
 {"1.2.840.10008.5.1.4.1.1.66.1" , "Spatial Registration IOD Modules"},
