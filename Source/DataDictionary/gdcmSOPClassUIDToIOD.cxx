@@ -112,6 +112,9 @@ namespace gdcm
 {"1.2.840.10008.5.1.4.1.1.481.9" , "RT Ion Beams Treatment Record IOD Modules"},
 {"1.2.840.10008.5.1.4.38.1" , "Hanging Protocol IOD Modules"},
 {"1.2.840.10008.5.1.4.39.1" , "Color Palette IOD"},
+{"1.2.840.10008.5.1.4.1.1.2.2", "Legacy Converted Enhanced CT Image IOD Modules"},
+{"1.2.840.10008.5.1.4.1.1.4.4", "Legacy Converted Enhanced MR Image IOD Modules"},
+{"1.2.840.10008.5.1.4.1.1.128.1", "Legacy Converted Enhanced PET Image IOD Modules"},
 // Deprecated:
 {"1.2.840.10008.3.1.2.3.3" , "Modality Performed Procedure Step IOD Modules" },
 {"1.2.840.10008.5.1.4.1.1.5" , "NM Image IOD Modules"},
