@@ -600,8 +600,8 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
       StringFilterCase(FL);
       StringFilterCase(FD);
       //StringFilterCase(OB);
-      //StringFilterCase(OD);
-      //StringFilterCase(OF);
+      StringFilterCase(OD);
+      StringFilterCase(OF);
       //StringFilterCase(OW);
       StringFilterCase(SL);
       //StringFilterCase(SQ);
@@ -611,8 +611,6 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
       StringFilterCase(US);
       //StringFilterCase(UT);
     case VR::OB:
-    case VR::OD:
-    case VR::OF:
     case VR::OW:
     case VR::OB_OW:
     case VR::UN:
