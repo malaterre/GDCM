@@ -661,7 +661,7 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
     //  ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
     {
     //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0100) );
-    Attribute<0x0028,0x0100> at = { 8 };
+    Attribute<0x0028,0x0100> at = { 0 };
     at.SetFromDataSet( ds );
     pf.SetBitsAllocated( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0100), ss, conversion ) );
@@ -672,7 +672,7 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
     //  ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
     {
     //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0101) );
-    Attribute<0x0028,0x0101> at = { 8 };
+    Attribute<0x0028,0x0101> at = { 0 };
     at.SetFromDataSet( ds );
     pf.SetBitsStored( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0101), ss, conversion ) );
@@ -683,7 +683,7 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
     //  ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
     {
     //const DataElement& de = ds.GetDataElement( Tag(0x0028, 0x0102) );
-    Attribute<0x0028,0x0102> at = { 7 };
+    Attribute<0x0028,0x0102> at = { 0 };
     at.SetFromDataSet( ds );
     pf.SetHighBit( at.GetValue() );
     //assert( at.GetValue() == ReadUSFromTag( Tag(0x0028, 0x0102), ss, conversion ) );
