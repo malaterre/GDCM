@@ -174,14 +174,14 @@ std::string DirectoryHelper::RetrieveSOPInstanceUIDFromZPosition(double inZPos,
   std::vector<DataSet>::const_iterator itor;
   Tag thePosition(0x0020, 0x0032);
   Tag theSOPInstanceUID(0x0008, 0x0018);
-  Tag theSliceThickness(0x0018, 0x0050);
+  Tag theSpacingBetweenSlice(0x0018, 0x0088);
   double interSlice = 0.01;
-  if (inDS.begin() != inDS.end() && inDS.begin()->FindDataElement(theSliceThickness))
+  if (inDS.begin() != inDS.end() && inDS.begin()->FindDataElement(theSpacingBetweenSlice))
     {
-    DataElement tmpDe = inDS.begin()->GetDataElement(theSliceThickness);
-    Attribute<0x0018,0x0050> tmpAt;
+    DataElement tmpDe = inDS.begin()->GetDataElement(theSpacingBetweenSlice);
+    Attribute<0x0018,0x0088> tmpAt;
     tmpAt.SetFromDataElement(tmpDe);
-    interSlice = tmpAt.GetValue()/2.0;
+    interSlice = fabs(tmpAt.GetValue())/2.0;
     }
   std::string blank;//return only if there's a problem
   for (itor = inDS.begin(); itor != inDS.end(); itor++)
