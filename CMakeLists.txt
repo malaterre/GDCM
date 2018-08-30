@@ -594,6 +594,11 @@ endif()
 
 # Need to subdirs in Source/Common before Wrapping
 # to have gdcmConfigure.h around
+if(GDCM_STANDALONE)
+  set(BUILD_APPLICATIONS ${GDCM_BUILD_APPLICATIONS})
+else()
+  set(BUILD_APPLICATIONS OFF)
+endif()
 subdirs(Utilities)
 add_subdirectory(Source)
 
