@@ -539,7 +539,7 @@ public:
 
       if (event == vtkCommand::ResetWindowLevelEvent)
         {
-#if (VTK_MAJOR_VERSION >= 8)
+#if VTK_MAJOR_VERSION > 7 || (VTK_MAJOR_VERSION == 7 && VTK_MINOR_VERSION >= 1)
         this->IV->GetInputAlgorithm()->UpdateInformation();
         this->IV->GetInputInformation()->Set(
             vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(),
