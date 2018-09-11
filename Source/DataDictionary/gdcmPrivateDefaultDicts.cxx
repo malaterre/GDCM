@@ -1462,6 +1462,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0019,0x0027,"DLX_SERIE_01",VR::DS,VM::VM1,"Image chain FWHM psf mm min",false },
   {0x0019,0x0028,"DLX_SERIE_01",VR::DS,VM::VM1,"Image chain FWHM psf mm max",false },
   {0x0015,0x008f,"DL_INTERNAL_USE",VR::IS,VM::VM1,"?",false },
+  {0x4453,0x0000,"DR Systems, Inc.",VR::LO,VM::VM1,"?kind of identifier?",false },
   {0x4453,0x0001,"DR Systems, Inc.",VR::LO,VM::VM1,"DR Exam ID",false },
   {0x4453,0x0002,"DR Systems, Inc.",VR::LO,VM::VM1,"DR Image Type",false },
   {0x4453,0x0004,"DR Systems, Inc.",VR::LO,VM::VM1,"DR File Type",false },
