@@ -2895,7 +2895,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0011,0x0063,"GEMS_GENIE_1",VR::FD,VM::VM3,"Spatial Offset",false },
   {0x0011,0x0064,"GEMS_GENIE_1",VR::FD,VM::VM3,"Spatial Orientation",false },
   {0x0011,0x0065,"GEMS_GENIE_1",VR::LO,VM::VM1,"Reference Dataset UID",false },
-  {0x0011,0x0066,"GEMS_GENIE_1",VR::SH,VM::VM1,"Starcam Reference Dataset",false },
+  {0x0011,0x0066,"GEMS_GENIE_1",VR::LO,VM::VM1,"Starcam Reference Dataset",false },
   {0x0011,0x0067,"GEMS_GENIE_1",VR::SL,VM::VM1,"Reference Frame Number",false },
   {0x0011,0x0068,"GEMS_GENIE_1",VR::SL,VM::VM1,"Cursor Length",false },
   {0x0011,0x0069,"GEMS_GENIE_1",VR::SL,VM::VM1,"Number of Cursors",false },
