@@ -2937,7 +2937,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0013,0x0011,"GEMS_GENIE_1",VR::SL,VM::VM1,"Source Translator",false },
   {0x0013,0x0012,"GEMS_GENIE_1",VR::SL,VM::VM1,"RAL Flags",false },
   {0x0013,0x0013,"GEMS_GENIE_1",VR::SQ,VM::VM1,"Xeleris Frame Sequence",false },
-  {0x0013,0x0014,"GEMS_GENIE_1",VR::SL,VM::VM1,"Original Image Num",false },
+  {0x0013,0x0014,"GEMS_GENIE_1",VR::SL,VM::VM1_n,"Original Image Num",false },
   {0x0013,0x0015,"GEMS_GENIE_1",VR::FD,VM::VM1,"Fscalar",false },
   {0x0013,0x0016,"GEMS_GENIE_1",VR::SL,VM::VM1,"AutoTrack Peak",false },
   {0x0013,0x0017,"GEMS_GENIE_1",VR::SL,VM::VM1,"AutoTrack Width",false },
