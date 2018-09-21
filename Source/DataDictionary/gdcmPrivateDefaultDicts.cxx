@@ -2818,7 +2818,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0009,0x0030,"GEMS_GENIE_1",VR::LO,VM::VM1,"?",false },
   {0x0009,0x0033,"GEMS_GENIE_1",VR::FD,VM::VM1,"Rotational Continuous Speed",false },
   {0x0009,0x0034,"GEMS_GENIE_1",VR::SL,VM::VM1,"Gantry Motion Type (retired)",false },
-  {0x0009,0x0035,"GEMS_GENIE_1",VR::SL,VM::VM1,"Gantry Locus Type",false },
+  {0x0009,0x0035,"GEMS_GENIE_1",VR::UL,VM::VM1,"Gantry Locus Type",false },
   {0x0009,0x0037,"GEMS_GENIE_1",VR::SL,VM::VM1,"Starting Heart Rate",false },
   {0x0009,0x0038,"GEMS_GENIE_1",VR::SL,VM::VM1,"RR Window Width",false },
   {0x0009,0x0039,"GEMS_GENIE_1",VR::SL,VM::VM1,"RR Window Offset",false },
