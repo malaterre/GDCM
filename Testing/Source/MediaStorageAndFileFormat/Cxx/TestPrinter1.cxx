@@ -259,7 +259,13 @@ int TestPrint(const char *filename, bool verbose= false)
   std::ostringstream out;
   if( verbose )
     print.Print( std::cout );
+#if _MSC_VER <= 1800 // Visual Studio 2013
+  auto old_exponent_format = _set_output_format(_TWO_DIGIT_EXPONENT);
+#endif
   print.Print( out );
+#if _MSC_VER <= 1800 // Visual Studio 2013
+  _set_output_format(old_exponent_format);
+#endif
 
   gdcm::Filename fn( filename );
   const char *name = fn.GetName();
