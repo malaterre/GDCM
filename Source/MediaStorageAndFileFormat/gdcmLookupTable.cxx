@@ -16,6 +16,7 @@
 #include <vector>
 #include <set>
 #include <iomanip>
+#include <algorithm>
 
 #include <string.h>
 
