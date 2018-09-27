@@ -298,6 +298,7 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
     case VR::OW:
     case VR::OB_OW:
     case VR::UN:
+    case VR::US_OW: 
     case VR::US_SS_OW: 
         {
         if ( bv )

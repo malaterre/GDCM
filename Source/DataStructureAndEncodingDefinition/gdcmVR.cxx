@@ -53,6 +53,7 @@ static const char *VRStrings[] = {
   "OB or OW",  // 30
   "US or SS",  // 31
   "US or SS or OW", //32
+  "US or OW", //33
   nullptr
 };
 
@@ -252,8 +253,11 @@ int VR::GetIndex(VRType vr)
   case US_SS_OW:
     l =  32;
     break;
+  case US_OW:
+    l =  33;
+    break;
   case VR_END:
-    l = 33;
+    l = 34;
     break;
   default:
       {
@@ -351,6 +355,7 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
        && r != VR::OB_OW
        && r != VR::US_SS
        && r != VR::US_SS_OW
+       && r != VR::US_OW
        && r != VR::VR_END );
   return r;
 }
@@ -378,6 +383,9 @@ VR::VRType VR::GetVRType(const char *vr)
         r = US_SS_OW;
         break;
       case 33:
+        r = US_OW;
+        break;
+      case 34:
         r = VR_END; assert(0);
         break;
       default:
