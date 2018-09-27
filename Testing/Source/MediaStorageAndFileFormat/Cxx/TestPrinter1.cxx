@@ -238,7 +238,7 @@ static const char * const printmd5[][2] = {
 { "807bf2aef3bc1885217c8a12d2d2bc19" , "JPEGNote_bogus.dcm" },
 { "669cc0e807673ebe57124739a1874f35" , "RLEDebianBug816607Orig.dcm" },
 { "1daa9bb53a8ce090041472f528248686" , "IllegalGroup2ImplicitTS.dcm" },
-{ "49542e6002129f42f86f25e840b6beed" , "GE_MR_0025xx1bProtocolDataBlockXML.dcm" },
+{ "14c982413ba9bce288c2af88f4f751b6" , "GE_MR_0025xx1bProtocolDataBlockXML.dcm" },
 
 
 { 0 ,0 }
