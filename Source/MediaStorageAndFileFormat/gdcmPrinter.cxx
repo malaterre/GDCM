@@ -614,6 +614,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
     case VR::OW:
     case VR::OB_OW:
     case VR::UN:
+    case VR::US_OW: // TODO: check with ModalityLUT.dcm
     case VR::US_SS_OW: // TODO: check with ModalityLUT.dcm
       /*
       VR::US_SS_OW:

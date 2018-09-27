@@ -219,7 +219,7 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
       vr = VR::INVALID;
       }
     }
-  else if( vr == VR::US_SS_OW )
+  else if( vr == VR::US_SS_OW || vr == VR::US_OW )
     {
     vr = VR::OW;
     }
