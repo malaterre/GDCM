@@ -2037,6 +2037,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0053,0x0068,"GEHC_CT_ADVAPP_001",VR::IS,VM::VM1,"Row Number Anotation Flag",false },
   {0x0053,0x006a,"GEHC_CT_ADVAPP_001",VR::IS,VM::VM1,"ODMFlag",false },
   {0x0053,0x006b,"GEHC_CT_ADVAPP_001",VR::IS,VM::VM1,"ODMReductionPercent",false },
+  {0x0053,0x006f,"GEHC_CT_ADVAPP_001",VR::IS,VM::VM1,"ASiR Auto Guidance Dose Reduction Percent",false },
   {0x0053,0x009d,"GEHC_CT_ADVAPP_001",VR::LO,VM::VM1,"MARsAnnotation",false },
   {0x0009,0x0010,"GEIIS",VR::SQ,VM::VM1,"GE IIS Thumbnail Sequence",false },
   {0x0009,0x0012,"GEIIS",VR::IS,VM::VM1,"?",false },
