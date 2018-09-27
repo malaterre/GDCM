@@ -1808,6 +1808,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x07a5,0x0056,"ELSCINT1",VR::CS,VM::VM1,"?",false },
   {0x07a5,0x0063,"ELSCINT1",VR::CS,VM::VM1_n,"?",false },
   {0x07a5,0x0069,"ELSCINT1",VR::LO,VM::VM1,"?",false },
+  {0x07a5,0x00ae,"ELSCINT1",VR::IS,VM::VM1,"?",false },
   {0x07a5,0x00c8,"ELSCINT1",VR::CS,VM::VM1,"?",false },
   {0x5001,0x0070,"ELSCINT1",VR::SQ,VM::VM1,"?",false },
   {0x5001,0x0071,"ELSCINT1",VR::SH,VM::VM1,"?",false },
