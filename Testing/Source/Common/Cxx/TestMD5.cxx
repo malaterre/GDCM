@@ -239,6 +239,9 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "299df0175ea4d3ab1f02651f88ffe9f3" , "JPEG_LS_InvalidEscapeSequence_COM_padding.dcm" },
 { "9add5fd3c83cc0946633e792f448f732" , "LengthOfItemLarger.dcm" },
 { "b9fdef839a6b6ab33486bfd6b35de3a8" , "GE_MR_0025xx1bProtocolDataBlockXML.dcm" },
+{ "fd6ba97f247f5b8ef70f407f5c1b5f11" , "EmptyIcon_Bug417.dcm" },
+{ "271d71dde59c0cad76baab36c909a43a" , "EnhancedWithIPPPerFrameIOPShared.dcm" },
+{ "2fd5ad3e9265861be43b6a341314cc52" , "FUJI-ffff-MONO1-J2K.dcm" },
 
 { nullptr, nullptr}
 };
