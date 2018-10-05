@@ -64,7 +64,7 @@ if __name__ == "__main__":
           if nestedds2.FindDataElement( tcm ):
             cm = nestedds2.GetDataElement( tcm )
             mystr = "GDCM was here"
-            cm.SetByteValue( mystr, gdcm.VL( len(mystr) ) )
+            cm.SetByteStringValue( mystr )
 
   w = gdcm.Writer()
   w.SetFile( f )

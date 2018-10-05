@@ -22,19 +22,6 @@
 // http://matt.eifelle.com/2008/11/04/exposing-an-array-interface-with-swig-for-a-cc-structure/
 
 %module(docstring="A DICOM library",directors=1) gdcmswig
-
-%typemap(in) (const char* array, gdcm::VL length) {
-  $1 = PyString_AsString($input);
-  if ($1 == NULL) {
-    SWIG_exception_fail(SWIG_TypeError, "in method '$symname', argument $argnum expected byte string.");
-  }
-  Py_ssize_t length = PyString_Size($input);
-  if (length >= 0 && static_cast<uint32_t>(length) != static_cast<size_t>(length)) {
-    SWIG_exception_fail(SWIG_OverflowError, "in method '$symname', array in argument $argnum is too large.");
-  }
-  $2 = gdcm::VL(length);
-}
-
 // http://www.swig.org/Doc1.3/Warnings.html
 // "There is no option to suppress all SWIG warning messages."
 #pragma SWIG nowarn=302,303,312,362,383,389,401,503,504,509,510,514,516
@@ -341,7 +328,24 @@ EXTEND_CLASS_PRINT(gdcm::ByteValue)
 %include "gdcmSmartPointer.h"
 %template(SmartPtrSQ) gdcm::SmartPointer<gdcm::SequenceOfItems>;
 %template(SmartPtrFrag) gdcm::SmartPointer<gdcm::SequenceOfFragments>;
+%typemap(in) (const char* array, uint32_t length) {
+  $1 = PyString_AsString($input);
+  if ($1 == NULL) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '$symname', argument $argnum expected byte string.");
+  }
+  Py_ssize_t length = PyString_Size($input);
+  if (static_cast<size_t>(length) > std::numeric_limits<uint32_t>::max()) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_OverflowError), "in method '$symname', array in argument $argnum is too large.");
+  }
+  $2 = static_cast<uint32_t>(length);
+}
 %include "gdcmDataElement.h"
+%extend gdcm::DataElement
+{
+    void SetByteStringValue(const char *array, uint32_t length) {
+        self->SetByteValue(array, gdcm::VL(length));
+    }
+}
 EXTEND_CLASS_PRINT(gdcm::DataElement)
 %include "gdcmItem.h"
 EXTEND_CLASS_PRINT(gdcm::Item)
@@ -462,6 +466,12 @@ EXTEND_CLASS_PRINT(gdcm::PDBHeader)
 EXTEND_CLASS_PRINT(gdcm::MrProtocol)
 %include "gdcmCSAElement.h"
 EXTEND_CLASS_PRINT(gdcm::CSAElement)
+%extend gdcm::CSAElement
+{
+    void SetByteStringValue(const char *array, uint32_t length) {
+        self->SetByteValue(array, gdcm::VL(length));
+    }
+}
 %include "gdcmCSAHeader.h"
 EXTEND_CLASS_PRINT(gdcm::CSAHeader)
 %include "gdcmSequenceOfFragments.h"
