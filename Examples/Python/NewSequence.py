@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
   # Create a dataelement
   de = gdcm.DataElement(gdcm.Tag(0x0010, 0x2180))
-  de.SetByteValue("Occupation", gdcm.VL(len("Occupation")))
+  de.SetByteStringValue("Occupation")
   de.SetVR(gdcm.VR(gdcm.VR.SH))
 
   # Create an item

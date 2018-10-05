@@ -1,4 +1,4 @@
-############################################################################
+###########################################################################
 #
 #  Program: GDCM (Grassroots DICOM). A DICOM library
 #
@@ -35,15 +35,14 @@ def TestModifyFields(filename):
     de = ds.GetDataElement( replacetag )
     #print dir(de)
     patname = "This^is^an^example"
-    vl = gdcm.VL( len(patname) )
-    de.SetByteValue( patname, vl )
+    de.SetByteStringValue( patname )
 
   # let's insert a new dataelement
   # <entry group="0012" element="0062" vr="CS" vm="1" name="Patient Identity Removed"/>
   pir = gdcm.DataElement( gdcm.Tag(0x0012,0x0062) )
   pir.SetVR( gdcm.VR( gdcm.VR.CS ) ) # specify the VR explicitly
   yes = "YES"
-  pir.SetByteValue( yes, gdcm.VL(len(yes)) )
+  pir.SetByteStringValue( yes )
   ds.Insert( pir )
 
   # try again but pretend we don't know the VR
@@ -56,8 +55,8 @@ def TestModifyFields(filename):
   deid = gdcm.DataElement( deidmethod )
   deid.SetVR( dictel.GetVR() )
   methodstr = "Well known Company"
-  #deid.SetByteValue( methodstr, gdcm.VL(len(methodstr)) )
-  deid.SetByteValue( methodstr, gdcm.VL(len(methodstr)) )
+  #deid.SetByteStringValue( methodstr )
+  deid.SetByteStringValue( methodstr )
   ds.Insert( deid )
 
   #w = gdcm.Writer()

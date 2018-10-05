@@ -29,7 +29,7 @@ tag = gdcm.Tag(0x10,0x10)
 de = gdcm.DataElement(tag)
 
 # Search all patient name where string match 'F*'
-de.SetByteValue('F*',gdcm.VL(2))
+de.SetByteStringValue('F*')
 
 ds = gdcm.DataSet()
 ds.Insert(de)
