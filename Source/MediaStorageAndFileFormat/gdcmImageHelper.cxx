@@ -911,8 +911,14 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
     {
     const Tag t1(0x5200,0x9229);
     const Tag t2(0x5200,0x9230);
+    const Tag t3(0x0018,0x9530); 
+      // t3: X-Ray 3D Angiographic Image Functional Group Macros defines
+      // Pixel Value Transformation Macro as User Option. Indeed, 
+      // Slope/Intercept have been found in X-Ray 3D Reconstruction Sequence
+      // sometimes.
     if( GetInterceptSlopeValueFromSequence(ds,t1, interceptslope)
-     || GetInterceptSlopeValueFromSequence(ds,t2, interceptslope) )
+     || GetInterceptSlopeValueFromSequence(ds,t2, interceptslope) 
+     || GetInterceptSlopeValueFromSequence(ds,t3, interceptslope) )
       {
       assert( interceptslope.size() == 2 );
       return interceptslope;
