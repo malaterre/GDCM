@@ -920,7 +920,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
 
     // Workaround to get intercept/slope from some Philips
     // XRay3DAngiographic files
-    if (ms == MediaStorage::XRay3DAngiographicImageStorage)
+    if (ms == MediaStorage::XRay3DAngiographicImageStorage && ForceRescaleInterceptSlope)
       {
       const Tag t3(0x0018,0x9530);
       if(ds.FindDataElement( t3 ))
