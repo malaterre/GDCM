@@ -98,6 +98,7 @@ static bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& t
   if( !subds.FindDataElement(tpms) ) return false;
   //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
+  if( !(sqi2 && sqi2->GetNumberOfItems()) ) return false;
   assert( sqi2 && sqi2->GetNumberOfItems() );
   // Take it from the first item
   const Item &item2 = sqi2->GetItem(1);
@@ -199,6 +200,7 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
   if( !ds.FindDataElement( tfgs ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
+  if( !sqi ) return false;
   assert( sqi );
   double normal[3];
   DirectionCosines dc( &cosines[0] );
