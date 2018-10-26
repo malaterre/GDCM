@@ -200,6 +200,10 @@
 using namespace gdcm;
 %}
 
+#if SWIG_VERSION < 0x030011
+#define override
+#endif
+
 //%insert("runtime") %{
 //#include "myheader.h"
 //%}
