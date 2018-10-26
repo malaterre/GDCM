@@ -238,6 +238,9 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "JPEG_LS_InvalidEscapeSequence_COM_padding.dcm", 764 },
 { "LengthOfItemLarger.dcm", 12748 },
 { "GE_MR_0025xx1bProtocolDataBlockXML.dcm",6474 },
+{ "EmptyIcon_Bug417.dcm",4482 },
+{ "EnhancedWithIPPPerFrameIOPShared.dcm",23224 },
+{ "FUJI-ffff-MONO1-J2K.dcm",2052 },
 
 /* Stopping condition */
 { nullptr ,0 },
