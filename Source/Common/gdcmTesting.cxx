@@ -442,6 +442,9 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 0,"RLEDebianBug816607Orig.dcm" },
 { 0,"IllegalGroup2ImplicitTS.dcm" },
 { 0,"GE_MR_0025xx1bProtocolDataBlockXML.dcm" },
+{ 0,"EmptyIcon_Bug417.dcm" },
+{ 0,"EnhancedWithIPPPerFrameIOPShared.dcm" },
+{ 0,"FUJI-ffff-MONO1-J2K.dcm" },
 { 0, nullptr }
 };
 
