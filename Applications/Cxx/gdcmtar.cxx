@@ -523,7 +523,7 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
     // construct the target name:
     std::string targetname = targetdir;
 
-    targetdir += "/old/";
+    targetdir += "/old";
 
     // make sure the dir exist first:
     if( !gdcm::System::MakeDirectory( targetdir.c_str() ) )
@@ -779,10 +779,10 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
   if( !unsorted.empty() )
     {
     std::string targetdir3 = outfilename;
-    targetdir3 += "/unhandled/";
+    targetdir3 += "/unhandled";
     if( !gdcm::System::MakeDirectory( targetdir3.c_str() ) )
       {
-      std::cerr << "Could not create dir: " << outfilename << std::endl;
+      std::cerr << "Could not create dir: " << targetdir3 << std::endl;
       return 1;
       }
     std::cerr << "Could not process the following files (please report): " << std::endl;
