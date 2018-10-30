@@ -13,10 +13,35 @@
 =========================================================================*/
 #include "gdcmFileMetaInformation.h"
 
+#include "gdcmReader.h"
+#include "gdcmTesting.h"
+
 int TestFileMetaInformation(int argc, char *argv[])
 {
-  (void)argc;
-  (void)argv;
+  std::string dataroot = gdcm::Testing::GetDataRoot();
+  std::string filename = dataroot + "/012345.002.050.dcm";
+
+  gdcm::Reader reader;
+  reader.SetFileName(filename.c_str());
+  if ( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  const gdcm::File& fi = reader.GetFile();
+  const gdcm::FileMetaInformation& hd = fi.GetHeader();
+
+  std::stringstream ss;
+  hd.Write(ss);
+  gdcm::FileMetaInformation hd2;
+
+  // FAIL
+  //hd2.Read(ss);
+  
+  // WORKS
+  //ss.ignore(132);
+  //hd2.Read(ss);
 
   return 0;
 }
