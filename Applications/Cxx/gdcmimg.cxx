@@ -70,8 +70,12 @@
 #include <getopt.h>
 #include <string.h>
 
+#ifndef GDCM_HAVE_ATOLL
 #ifdef _MSC_VER
 #define atoll _atoi64
+#else
+#define atoll atol
+#endif
 #endif
 
 static unsigned int readsize(const char *str, unsigned int * size)
