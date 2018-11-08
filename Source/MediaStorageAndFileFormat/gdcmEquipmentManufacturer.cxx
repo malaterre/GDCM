@@ -25,11 +25,14 @@ struct Mapping
   const char* const *strings;
 };
 
-static const char* const gems[] = {"GE MEDICAL SYSTEMS"} ;
-static const char* const pms[] = { "Philips Medical Systems", "Philips Healthcare", "Philips Medical Systems, Inc." };
-static const char* const siemens[] = { "SIEMENS" };
+static const char* const fuji[] = {"FUJI", "FUJI PHOTO FILM Co., ltd.","FUJIFILM Corporation","FUJI PHOTO FILM CO. LTD."};
+static const char* const gems[] = {"GE MEDICAL SYSTEMS", "GE_MEDICAL_SYSTEMS", "GE Healthcare", "G.E. Medical Systems","GE Vingmed Ultrasound","\"GE Healthcare\""/*sigh*/};
+static const char* const hitachi[] = {"Hitachi Medical Corporation","ALOKA CO., LTD."};
+static const char* const kodak[] = {"Kodak"};
+static const char* const pms[] = { "Philips Medical Systems", "Philips Healthcare", "Philips Medical Systems, Inc.","Philips","Picker International, Inc." };
+static const char* const siemens[] = { "SIEMENS", "Siemens Health Services","Acuson" };
 static const char* const marconi[] = { "Marconi Medical Systems, Inc." };
-static const char* const toshiba[] = { "TOSHIBA_MEC" };
+static const char* const toshiba[] = { "TOSHIBA_MEC", "Toshiba" };
 
 #define ARRAY_SIZE( X ) \
   sizeof(X) / sizeof(*X)
@@ -38,7 +41,10 @@ static const char* const toshiba[] = { "TOSHIBA_MEC" };
   { X, ARRAY_SIZE(Y), Y }
 
 static const Mapping mappings[] = {
+  MAPPING( EquipmentManufacturer::FUJI, fuji ),
   MAPPING( EquipmentManufacturer::GEMS, gems ),
+  MAPPING( EquipmentManufacturer::HITACHI, hitachi ),
+  MAPPING( EquipmentManufacturer::KODAK, kodak ),
   MAPPING( EquipmentManufacturer::PMS, pms ),
   MAPPING( EquipmentManufacturer::SIEMENS, siemens ),
   MAPPING( EquipmentManufacturer::MARCONI, marconi ),
@@ -56,9 +62,29 @@ EquipmentManufacturer::Type EquipmentManufacturer::Compute( DataSet const & ds )
   {
     for( size_t i = 0; i < mapping->nstrings; ++i )
     {
-      if( strcmp( mapping->strings[i], manufacturer.c_str() ) == 0 )
+      // case insensitive to handle: "GE MEDICAL SYSTEMS" vs "GE Medical Systems"
+      if( strcasecmp( mapping->strings[i], manufacturer.c_str() ) == 0 )
         return mapping->type;
     }
+  }
+
+  // try against with well known private tag:
+  gdcm::Tag gems_iden_01(0x0009,0x0010);
+  if( ds.FindDataElement( gems_iden_01 ) )
+  {
+    const gdcm::DataElement & de = ds.GetDataElement( gems_iden_01 );
+    gdcm::Element<VR::LO, VM::VM1> priv_creator;
+    priv_creator.SetFromDataElement( de );
+    if( priv_creator.GetValue() == "GEMS_IDEN_01" ) return GEMS;
+  }
+
+  gdcm::Tag elscint1(0x00e1,0x0010);
+  if( ds.FindDataElement( elscint1 ) )
+  {
+    const gdcm::DataElement & de = ds.GetDataElement( elscint1 );
+    gdcm::Element<VR::LO, VM::VM1> priv_creator;
+    priv_creator.SetFromDataElement( de );
+    if( priv_creator.GetValue() == "ELSCINT1" ) return GEMS;
   }
 
   return UNKNOWN;

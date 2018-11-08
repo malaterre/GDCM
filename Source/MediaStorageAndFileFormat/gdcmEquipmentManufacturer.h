@@ -31,7 +31,10 @@ public:
 
   typedef enum {
     UNKNOWN = 0,
+    FUJI,
     GEMS,
+    HITACHI,
+    KODAK,
     MARCONI,
     PMS,
     SIEMENS,
