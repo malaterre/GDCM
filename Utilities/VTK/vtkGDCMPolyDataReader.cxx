@@ -258,7 +258,7 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     {
     return 0;
     }
-    assert( sqi0->GetNumberOfItems() == 1 );
+  //assert( sqi0->GetNumberOfItems() == 1 );
   for(unsigned int pd = 0; pd < sqi0->GetNumberOfItems(); ++pd)
     {
     const gdcm::Item & item0 = sqi0->GetItem(pd+1); // Item start at #1
