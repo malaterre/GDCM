@@ -236,8 +236,8 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   std::string type, str;
   std::getline(is,type);
   PhotometricInterpretation pi;
-  if( type == "P4" ) // P4 => mono B/W
-    pi = PhotometricInterpretation::MONOCHROME2;
+  if( type == "P4" ) // P4 => mono W/B !
+    pi = PhotometricInterpretation::MONOCHROME1;
   else if( type == "P5" )
     pi = PhotometricInterpretation::MONOCHROME2;
   else if( type == "P6" ) // P3 => ASCII
