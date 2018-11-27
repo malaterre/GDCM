@@ -1119,6 +1119,7 @@ int main (int argc, char *argv[])
     {
     if(  gdcm::System::StrCaseCmp(outputextension,".pgm") == 0
       || gdcm::System::StrCaseCmp(outputextension,".pnm") == 0
+      || gdcm::System::StrCaseCmp(outputextension,".pbm") == 0
       || gdcm::System::StrCaseCmp(outputextension,".ppm") == 0 )
       {
       gdcm::PNMCodec pnm;

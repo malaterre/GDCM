@@ -46,10 +46,15 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
   std::ofstream os(filename, std::ios::binary);
   const unsigned int *dims = this->GetDimensions();
   const PhotometricInterpretation &pi = this->GetPhotometricInterpretation();
+  const PixelFormat& pf = GetPixelFormat();
   if( pi == PhotometricInterpretation::MONOCHROME2
     || pi == PhotometricInterpretation::MONOCHROME1 ) // warning viz will be surprising
     {
-    os << "P5\n";
+    // FIXME possible mismatch pi vs pf (eg. pbm with mono2)
+    if( pf == PixelFormat::SINGLEBIT)
+      os << "P4\n";
+    else
+      os << "P5\n";
     }
   else if( pi == PhotometricInterpretation::RGB
     || pi == PhotometricInterpretation::PALETTE_COLOR )
@@ -70,22 +75,22 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
     return false;
     }
 
-  const PixelFormat& pf = GetPixelFormat();
   switch(pf)
     {
+  case PixelFormat::SINGLEBIT:
+    break;
   case PixelFormat::UINT8:
   //case PixelFormat::INT8:
-    os << "255";
+    os << "255\n";
     break;
   case PixelFormat::UINT16:
   //case PixelFormat::INT16:
-    os << "65535";
+    os << "65535\n";
     break;
   default:
     gdcmErrorMacro( "Unhandled PF: " << pf );
     return false;
     }
-  os << "\n";
 
   const ByteValue *bv = out.GetByteValue();
   // FIXME: PNM Codec cannot handle encapsulated syntax... sigh
