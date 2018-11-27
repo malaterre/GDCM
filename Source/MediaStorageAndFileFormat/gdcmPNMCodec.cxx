@@ -236,7 +236,9 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   std::string type, str;
   std::getline(is,type);
   PhotometricInterpretation pi;
-  if( type == "P5" )
+  if( type == "P4" ) // P4 => mono B/W
+    pi = PhotometricInterpretation::MONOCHROME2;
+  else if( type == "P5" )
     pi = PhotometricInterpretation::MONOCHROME2;
   else if( type == "P6" ) // P3 => ASCII
     pi = PhotometricInterpretation::RGB;
@@ -255,7 +257,10 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   unsigned int dims[3] = {};
   is >> dims[0]; is >> dims[1];
   unsigned int maxval;
-  is >> maxval;
+  if( type == "P4" )
+    maxval = 1;
+  else
+    is >> maxval;
   // http://netpbm.sourceforge.net/doc/pgm.html
   // some kind of empty line...
   if( is.peek() == '\n' )
@@ -266,7 +271,12 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   //assert(len < INT_MAX);
   //assert(pos < INT_MAX);
   size_t m = ((size_t)len - (size_t)pos ) / ( dims[0]*dims[1] );
-  if( m * dims[0] * dims[1] != (size_t)len - pos )
+  bool cond;
+  if( type == "P4" )
+    cond = dims[0] * dims[1] != ((size_t)len - (size_t)pos) * 8;
+  else
+    cond = m * dims[0] * dims[1] != (size_t)len - (size_t)pos;
+  if( cond )
     {
     std::cerr << "Problem computing length" << std::endl;
     std::cerr << "Pos: " << len - pos << std::endl;
@@ -302,7 +312,11 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
 #else
   const int nbits = log2( maxval );
   // handle case where nbits = 0 also:
-  if( nbits > 0 && nbits <= 8 )
+  if( nbits > 0 && nbits <= 1 )
+    {
+    pf.SetBitsAllocated( 1 );
+    }
+  else if( nbits > 1 && nbits <= 8 )
     {
     pf.SetBitsAllocated( 8 );
     pf.SetBitsStored( (unsigned short)nbits );
@@ -332,11 +346,11 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   //image.SetTransferSyntax( TransferSyntax::ExplicitVRBigEndian ); // PGM are big endian
   //image.SetTransferSyntax( TransferSyntax::ExplicitVRLittleEndian ); // PGM are big endian
   //image.SetTransferSyntax( TransferSyntax::ImplicitVRBigEndianPrivateGE ); // PGM are big endian
-  if( pf.GetBitsAllocated() == 8 )
+  if( pf.GetBitsAllocated() > 8 )
+    ts = TransferSyntax::ImplicitVRBigEndianPrivateGE;
+  else
     //ts = TransferSyntax::ImplicitVRLittleEndian; // nicer to handle than private GE
     ts = TransferSyntax::ExplicitVRLittleEndian; // nicer to handle than private GE
-  else
-    ts = TransferSyntax::ImplicitVRBigEndianPrivateGE;
 
   SetPhotometricInterpretation( pi );
   SetPixelFormat( pf );
