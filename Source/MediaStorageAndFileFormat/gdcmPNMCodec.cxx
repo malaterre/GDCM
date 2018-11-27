@@ -272,8 +272,10 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   //assert(pos < INT_MAX);
   size_t m = ((size_t)len - (size_t)pos ) / ( dims[0]*dims[1] );
   bool cond;
-  if( type == "P4" )
-    cond = dims[0] * dims[1] != ((size_t)len - (size_t)pos) * 8;
+  if( type == "P4" ) {
+    const size_t bytesPerRow = dims[0] / 8 + (dims[0] % 8 != 0 ? 1 : 0);
+    cond = bytesPerRow * dims[1] != ((size_t)len - (size_t)pos);
+  }
   else
     cond = m * dims[0] * dims[1] != (size_t)len - (size_t)pos;
   if( cond )
