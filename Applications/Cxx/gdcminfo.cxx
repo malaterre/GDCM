@@ -258,7 +258,7 @@ static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uM
 {
   Object obj;
   const GooString *s1;
-  GBool isUnicode;
+  bool isUnicode;
   Unicode u;
   char buf[8];
   int i, n;
@@ -274,12 +274,12 @@ static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uM
     if ((s1->getChar(0) & 0xff) == 0xfe &&
       (s1->getChar(1) & 0xff) == 0xff)
       {
-      isUnicode = gTrue;
+      isUnicode = true;
       i = 2;
       }
     else
       {
-      isUnicode = gFalse;
+      isUnicode = false;
       i = 0;
       }
     while (i < obj.getString()->getLength())
@@ -539,10 +539,10 @@ static int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs
       int pages = doc->getNumPages();
       const char *encrypted = doc->isEncrypted() ? "yes" : "no";
       //  printf("yes (print:%s copy:%s change:%s addNotes:%s)\n",
-      //   doc->okToPrint(gTrue) ? "yes" : "no",
-      //   doc->okToCopy(gTrue) ? "yes" : "no",
-      //   doc->okToChange(gTrue) ? "yes" : "no",
-      //   doc->okToAddNotes(gTrue) ? "yes" : "no");
+      //   doc->okToPrint(true) ? "yes" : "no",
+      //   doc->okToCopy(true) ? "yes" : "no",
+      //   doc->okToChange(true) ? "yes" : "no",
+      //   doc->okToAddNotes(true) ? "yes" : "no");
 
       // print linearization info
       const char *optimized = doc->isLinearized() ? "yes" : "no";
