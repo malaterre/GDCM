@@ -258,7 +258,7 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
     {
     return 0;
     }
-    assert( sqi0->GetNumberOfItems() == 1 );
+  //assert( sqi0->GetNumberOfItems() == 1 );
   for(unsigned int pd = 0; pd < sqi0->GetNumberOfItems(); ++pd)
     {
     const gdcm::Item & item0 = sqi0->GetItem(pd+1); // Item start at #1
@@ -322,7 +322,6 @@ int vtkGDCMPolyDataReader::RequestData_RTStructureSetStorage(gdcm::Reader const 
       return 0;
       }
 
-    assert( sqi0000->GetNumberOfItems() != 1 );
     for(unsigned int pd000 = 0; pd000 < sqi0000->GetNumberOfItems(); ++pd000)
       {
       const gdcm::Item & item = sqi0000->GetItem(pd000+1); // Item start at #1
@@ -490,7 +489,7 @@ refinstanceuid.GetValue().c_str() );
       //const gdcm::ByteValue *bv = contourdata.GetByteValue();
       gdcm::Attribute<0x3006,0x0042> contgeotype;
       contgeotype.SetFromDataSet( nestedds2 );
-      assert( contgeotype.GetValue() == "CLOSED_PLANAR " || contgeotype.GetValue() == "POINT " );
+      assert( contgeotype.GetValue() == "CLOSED_PLANAR " || contgeotype.GetValue() == "POINT " || contgeotype.GetValue() == "OPEN_NONPLANAR" );
 
       gdcm::Attribute<0x3006,0x0046> numcontpoints;
       numcontpoints.SetFromDataSet( nestedds2 );
@@ -503,7 +502,7 @@ refinstanceuid.GetValue().c_str() );
       gdcm::Attribute<0x3006,0x0050> at;
       at.SetFromDataElement( contourdata );
 
-      if( contgeotype.GetValue() == "CLOSED_PLANAR " )
+      if( contgeotype.GetValue() == "CLOSED_PLANAR " || contgeotype.GetValue() == "OPEN_NONPLANAR" )
         {
         // http://dicom.nema.org/medical/dicom/current/output/chtml/part03/sect_C.8.8.6.html
         if( nestedds2.FindDataElement( gdcm::Tag(0x3006,0x0016) ) )
