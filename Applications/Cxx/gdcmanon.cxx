@@ -611,7 +611,7 @@ int main(int argc, char *argv[])
     crypto_factory = gdcm::CryptoFactory::GetFactoryInstance(crypto_lib);
     if (!crypto_factory)
       {
-      std::cerr << "Requested cryptoraphic library not configured." << std::endl;
+      std::cerr << "Requested cryptographic library not configured." << std::endl;
       return 1;
       }
     }
