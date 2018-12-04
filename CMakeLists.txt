@@ -1,15 +1,50 @@
-cmake_minimum_required(VERSION 3.8.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.9.2 FATAL_ERROR)
 
-project(GDCM)
+set(GDCM_MAX_VALIDATED_CMAKE_VERSION "3.13.1")
+if("${CMAKE_VERSION}" VERSION_LESS_EQUAL "${GDCM_MAX_VALIDATED_CMAKE_VERSION}")
+  # As of 2018-12-04 GDCM has been validated to build with cmake version 3.13.1 new policies.
+  # Set and use the newest cmake policies that are validated to work
+  set(GDCM_CMAKE_POLICY_VERSION "${CMAKE_VERSION}")
+else()
+  set(GDCM_CMAKE_POLICY_VERSION "${GDCM_MAX_VALIDATED_CMAKE_VERSION}")
+endif()
+cmake_policy(VERSION ${GDCM_CMAKE_POLICY_VERSION}) 
+
+# GDCM version 3.0.0 will only support C++11 and greater
+if(CMAKE_CXX_STANDARD EQUAL "98" )
+   message(FATAL_ERROR "CMAKE_CXX_STANDARD:STRING=98 is not supported in GDCM version 3.0.0 and greater.")
+endif()
+
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 11)
 endif()
-set(CMAKE_CXX_EXTENSIONS OFF)
+if(NOT CMAKE_CXX_STANDARD_REQUIRED)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+endif()
+if(NOT CMAKE_CXX_EXTENSIONS)
+  set(CMAKE_CXX_EXTENSIONS OFF)
+endif()
+
+#----------------------------------------------------------------------------
+
+project(GDCM
+  VERSION 3.0.0
+  LANGUAGES CXX C
+)
+## NOTE: the "DESCRIPTION" feature of project() was introduced in cmake 3.10.0
+set(PROJECT_DESCRIPTION "GDCM - Grassroots DICOM. GDCM is yet another DICOM library.")
+
+## Set aliases for backwards compatibility.  GDCM_VERSION_XXX are configured by the project() command 
+set(GDCM_MAJOR_VERSION ${GDCM_VERSION_MAJOR})
+set(GDCM_MINOR_VERSION ${GDCM_VERSION_MINOR})
+set(GDCM_BUILD_VERSION ${GDCM_VERSION_PATCH})
+set(GDCM_VERSION "${GDCM_VERSION_MAJOR}.${GDCM_VERSION_MINOR}.${GDCM_VERSION_PATCH}") # ${GDCM_VERSION_TWEAK}
+
 mark_as_advanced(CMAKE_BACKWARDS_COMPATIBILITY CMAKE_BUILD_TYPE CMAKE_INSTALL_PREFIX)
 set(GDCM_CMAKE_DIR "${GDCM_SOURCE_DIR}/CMake" CACHE INTERNAL "")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${GDCM_CMAKE_DIR}")
 
-set(GDCM_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grassroots DICOM. GDCM is yet another DICOM library.")
+set(GDCM_PACKAGE_DESCRIPTION_SUMMARY ${PROJECT_DESCRIPTION})
 set(GDCM_PACKAGE_CONTACT "GDCM Developers <gdcm-developers@lists.sourceforge.net>")
 
 # TODO
@@ -25,22 +60,16 @@ set(GDCM_PACKAGE_CONTACT "GDCM Developers <gdcm-developers@lists.sourceforge.net
 # See the CVS version of files in VTK/GUISupport/MFC for details. Or grep the
 # VTK source tree for "DELAYLOAD"
 
-#----------------------------------------------------------------------------
-set(GDCM_MAJOR_VERSION 3) # Version 3.0.0 will only support C++11 and greater
-set(GDCM_MINOR_VERSION 0)
-set(GDCM_BUILD_VERSION 0)
-set(GDCM_VERSION
-  "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 # let advanced user the option to define GDCM_API_VERSION:
 if(NOT DEFINED GDCM_API_VERSION)
-  set(GDCM_API_VERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}")
+  set(GDCM_API_VERSION "${GDCM_VERSION_MAJOR}.${GDCM_VERSION_MINOR}")
 endif()
 set(GDCM_LIBRARY_PROPERTIES ${GDCM_LIBRARY_PROPERTIES}
   VERSION "${GDCM_VERSION}"
   SOVERSION "${GDCM_API_VERSION}"
 )
 #set(GDCM_EXECUTABLE_PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES}
-#  VERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}"
+#  VERSION "${GDCM_VERSION_MAJOR}.${GDCM_VERSION_MINOR}"
 #)
 set(GDCM_EXECUTABLE_PROPERTIES)
 if(GDCM_NO_EXECUTABLE_PROPERTIES)
@@ -69,7 +98,7 @@ APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt)
 APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/CMake/COPYING-CMAKE-SCRIPTS)
 
 #-----------------------------------------------------------------------------
-if(GDCM_MINOR_VERSION MATCHES "[02468]$")
+if(GDCM_VERSION_MINOR MATCHES "[02468]$")
   # Are we building a release branch / tag (read: even number)?
   # By default dashboard are expected to run with Design by Contract on
   # to trigger any of the assert, but on the other hand no user really
@@ -216,7 +245,7 @@ endif()
 # Install directories
 
 string(TOLOWER ${PROJECT_NAME} projectname)
-set(subdir "${projectname}-${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}")
+set(subdir "${projectname}-${GDCM_VERSION_MAJOR}.${GDCM_VERSION_MINOR}")
 
 if(NOT GDCM_INSTALL_BIN_DIR)
   set(GDCM_INSTALL_BIN_DIR "bin")
@@ -689,9 +718,9 @@ if(GDCM_STANDALONE) # disabled for ITK distribution of gdcm
   set(CPACK_PACKAGE_VENDOR "GDCM")
   set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt")
   set(CPACK_RESOURCE_FILE_LICENSE    "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt")
-  set(CPACK_PACKAGE_VERSION_MAJOR "${GDCM_MAJOR_VERSION}")
-  set(CPACK_PACKAGE_VERSION_MINOR "${GDCM_MINOR_VERSION}")
-  set(CPACK_PACKAGE_VERSION_PATCH "${GDCM_BUILD_VERSION}")
+  set(CPACK_PACKAGE_VERSION_MAJOR "${GDCM_VERSION_MAJOR}")
+  set(CPACK_PACKAGE_VERSION_MINOR "${GDCM_VERSION_MINOR}")
+  set(CPACK_PACKAGE_VERSION_PATCH "${GDCM_VERSION_PATCH}")
   set(CPACK_PACKAGE_INSTALL_DIRECTORY "GDCM ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
   set(CPACK_SOURCE_PACKAGE_FILE_NAME "gdcm-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
