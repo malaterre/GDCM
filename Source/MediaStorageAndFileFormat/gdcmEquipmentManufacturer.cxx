@@ -14,6 +14,7 @@
 #include "gdcmEquipmentManufacturer.h"
 
 #include "gdcmAttribute.h"
+#include "gdcmSystem.h"
 
 namespace gdcm
 {
@@ -63,7 +64,7 @@ EquipmentManufacturer::Type EquipmentManufacturer::Compute( DataSet const & ds )
     for( size_t i = 0; i < mapping->nstrings; ++i )
     {
       // case insensitive to handle: "GE MEDICAL SYSTEMS" vs "GE Medical Systems"
-      if( strcasecmp( mapping->strings[i], manufacturer.c_str() ) == 0 )
+      if( System::StrCaseCmp( mapping->strings[i], manufacturer.c_str() ) == 0 )
         return mapping->type;
     }
   }
