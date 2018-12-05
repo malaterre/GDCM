@@ -16,7 +16,7 @@
 #include "gdcmReader.h"
 #include "gdcmTesting.h"
 
-int TestFileMetaInformation(int argc, char *argv[])
+int TestFileMetaInformation(int, char *[])
 {
   std::string dataroot = gdcm::Testing::GetDataRoot();
   std::string filename = dataroot + "/012345.002.050.dcm";

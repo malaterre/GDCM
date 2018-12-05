@@ -1118,7 +1118,7 @@ int main (int argc, char *argv[])
 
     gdcm::ImageApplyLookupTable lutfilt;
     lutfilt.SetInput( image );
-    lutfilt.SetRGB8( lut8 );
+    lutfilt.SetRGB8( lut8 != 0 );
     bool b = lutfilt.Apply();
     if( !b )
       {
