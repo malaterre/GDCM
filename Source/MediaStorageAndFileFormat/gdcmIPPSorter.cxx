@@ -258,7 +258,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
 {
   SortedFilenames::const_iterator it2 = sorted.begin();
   double prev = it2->first;
-  Filenames.push_back( it2->second );
+  Filenames.emplace_back(it2->second );
   if( sorted.size() > 1 )
     {
     bool spacingisgood = true;
@@ -269,7 +269,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       {
       //std::cout << it2->first << " " << it2->second << std::endl;
       current = it2->first;
-      Filenames.push_back( it2->second );
+      Filenames.emplace_back(it2->second );
       if( fabs((current - prev) - zspacing) > ZTolerance )
         {
         gdcmDebugMacro( "ZTolerance test failed. You need to decrease ZTolerance." );

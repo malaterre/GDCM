@@ -128,7 +128,7 @@ int TestSCUFunctions(int argc, char *argv[])
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
     {
-    theFilenames.push_back( filename );
+    theFilenames.emplace_back(filename );
     ++i;
     }
 
@@ -148,8 +148,8 @@ int TestSCUFunctions(int argc, char *argv[])
     }
 
   std::vector< gdcm::UIComp > validuids;
-  validuids.push_back( "1.2.840.10008.1.2" );
-  validuids.push_back( "1.2.840.10008.1.2.1" );
+  validuids.emplace_back("1.2.840.10008.1.2" );
+  validuids.emplace_back("1.2.840.10008.1.2.1" );
   //validuids.push_back( "1.2.840.10008.1.2.2" );
   // remove any file without SOP Instance UID
   for(
@@ -223,14 +223,14 @@ int TestSCUFunctions(int argc, char *argv[])
         {
         theSearchString += " "; //to make sure everything is double spaced
         }
-      keys.push_back(std::make_pair(theTag, theSearchString));
+      keys.emplace_back(theTag, theSearchString);
       }
     else
       {
       continue;
       }
     std::string theEmptyString;
-    keys.push_back(std::make_pair(theIDTag, theEmptyString));
+    keys.emplace_back(theIDTag, theEmptyString);
 
     gdcm::BaseRootQuery *theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(gdcm::ePatientRootType, gdcm::ePatient, keys);
@@ -266,7 +266,7 @@ int TestSCUFunctions(int argc, char *argv[])
         bv->GetBuffer(theBuf, theBufferLen);
         std::string theSearchString(theBuf, theBuf + theBufferLen);
         delete [] theBuf;
-        keys.push_back(std::make_pair(theIDTag, theSearchString));
+        keys.emplace_back(theIDTag, theSearchString);
 
         gdcm::DataElement de2 = ds.GetDataElement(theIDTag);
         de2.SetVR( gdcm::VR::INVALID );

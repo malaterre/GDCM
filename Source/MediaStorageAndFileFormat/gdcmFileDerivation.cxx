@@ -245,7 +245,7 @@ bool FileDerivation::AddReference(const char *referencedsopclassuid, const char 
     return false;
     }
   //
-  Internals->References.push_back( std::make_pair( referencedsopclassuid, referencedsopinstanceuid) );
+  Internals->References.emplace_back( referencedsopclassuid, referencedsopinstanceuid );
   return true;
 }
 

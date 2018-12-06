@@ -197,7 +197,7 @@ void IconImageFilter::ExtractIconImages()
 
       // Pass TransferSyntax:
       pixeldata.SetTransferSyntax( ts );
-      Internals->icons.push_back( pixeldata );
+      Internals->icons.emplace_back(pixeldata );
       }
     }
 
@@ -336,7 +336,7 @@ void IconImageFilter::ExtractIconImages()
 #endif
       pixeldata.SetDataElement( de );
       }
-    Internals->icons.push_back( pixeldata );
+    Internals->icons.emplace_back(pixeldata );
     }
 
   // AFAIK this icon SQ is undocumented , but I found it in:
@@ -455,7 +455,7 @@ void IconImageFilter::ExtractIconImages()
       TransferSyntax tstype = TransferSyntax::GetTSType( at.GetValue() );
       pixeldata.SetTransferSyntax( tstype );
       }
-    Internals->icons.push_back( pixeldata );
+    Internals->icons.emplace_back(pixeldata );
     }
 }
 
@@ -535,7 +535,7 @@ void IconImageFilter::ExtractVeproIconImages()
     pixeldata.SetPixelFormat( pf );
     pixeldata.SetPhotometricInterpretation( PhotometricInterpretation::MONOCHROME2 );
 
-    Internals->icons.push_back( pixeldata );
+    Internals->icons.emplace_back(pixeldata );
     }
 }
 
