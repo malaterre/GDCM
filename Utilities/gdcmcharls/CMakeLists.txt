@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 2.8.7)
+if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
+  cmake_minimum_required(VERSION 2.8.7)
+endif()
 
 if(NOT CHARLS_NAMESPACE)
   set(CHARLS_NAMESPACE "CHARLS")

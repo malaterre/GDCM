@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 2.8.7)
+if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
+  cmake_minimum_required(VERSION 2.8.7)
+endif()
 if(POLICY CMP0022)
   cmake_policy(SET CMP0022 NEW)
 endif()
