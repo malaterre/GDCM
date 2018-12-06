@@ -702,7 +702,7 @@ int main (int argc, char *argv[])
   int error = 0;
   int help = 0;
   int version = 0;
-  while (1) {
+  while (true) {
 
     int option_index = 0;
 

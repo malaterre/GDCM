@@ -193,7 +193,7 @@ int main(int argc, char *argv[])
   int help = 0;
   int version = 0;
 
-  while (1) {
+  while (true) {
     int option_index = 0;
     static struct option long_options[] = {
         {"input", 1, nullptr, 0},

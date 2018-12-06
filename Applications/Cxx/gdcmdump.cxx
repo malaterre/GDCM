@@ -1102,7 +1102,7 @@ int main (int argc, char *argv[])
   int recursive = 0;
   int printasn1 = 0;
   int mapuidnames = 0;
-  while (1) {
+  while (true) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
 /*

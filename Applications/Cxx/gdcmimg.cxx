@@ -460,7 +460,7 @@ int main (int argc, char *argv[])
   // Too early for UID Generation
   std::string series_uid; // = uid.Generate();
   std::string study_uid; // = uid.Generate();
-  while (1) {
+  while (true) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
