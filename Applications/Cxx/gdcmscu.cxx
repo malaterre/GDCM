@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
   gdcm::Tag tag;
   std::vector< std::pair<gdcm::Tag, std::string> > keys;
   
-  while (1) {
+  while (true) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     /*

@@ -959,7 +959,7 @@ the File-set.
   const char *mediastoragesopinstanceuid = uid.Generate();
   if( !UIDGenerator::IsValid( mediastoragesopinstanceuid ) )
     {
-    return 1;
+    return true;
     }
   at2.SetValue( mediastoragesopinstanceuid );
   h.Insert( at2.GetAsDataElement() );

@@ -31,7 +31,7 @@ int main()
   std::set<std::string> uids;
   uint64_t wrap = 0;
   uint64_t c = 0;
-  while(1)
+  while(true)
     {
     const char *unique = uid.Generate();
     //std::cout << unique << std::endl;

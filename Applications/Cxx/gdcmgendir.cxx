@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
   int descriptor = 0;
   std::string descriptor_str;
   std::string root;
-  while (1) {
+  while (true) {
     int option_index = 0;
     static struct option long_options[] = {
         {"input", 1, nullptr, 0},

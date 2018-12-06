@@ -608,7 +608,7 @@ int main(int argc, char *argv[])
   int version = 0;
   int debug = 0;
   int error = 0;
-  while (1) {
+  while (true) {
     int option_index = 0;
     static struct option long_options[] = {
         {"input", 1, nullptr, 0},

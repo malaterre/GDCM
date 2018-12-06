@@ -54,7 +54,7 @@ class Fork {
  public:
   Fork (Fork&) = delete;
   Fork& operator = (Fork&) = delete;
-  Fork (bool kill = 0, bool reason = 0)
+  Fork (bool kill = false, bool reason = false)
     : process (new ForkProcess (kill, reason)) {}
   ~Fork ();
 

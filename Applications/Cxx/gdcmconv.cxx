@@ -488,7 +488,7 @@ int main (int argc, char *argv[])
   int jpeglserror = 0;
   int jpeglserror_value = 0;
 
-  while (1) {
+  while (true) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
