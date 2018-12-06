@@ -33,17 +33,18 @@ public:
   typedef AnyEvent Superclass;
   AnonymizeEvent(Tag const &tag = 0):m_Tag(tag) {}
   ~AnonymizeEvent() override = default;
+  AnonymizeEvent(const Self&s) : AnyEvent(s){};
+  void operator=(const Self&) = delete;
+
   const char * GetEventName() const override { return "AnonymizeEvent"; }
   bool CheckEvent(const ::gdcm::Event* e) const override
   { return (dynamic_cast<const Self*>(e) == nullptr ? false : true) ; }
   ::gdcm::Event* MakeObject() const override
     { return new Self; }
-  AnonymizeEvent(const Self&s) : AnyEvent(s){};
 
   void SetTag(const Tag& t ) { m_Tag = t; }
   Tag const & GetTag() const { return m_Tag; }
 private:
-  void operator=(const Self&) = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete;
   Tag m_Tag;
 };
 

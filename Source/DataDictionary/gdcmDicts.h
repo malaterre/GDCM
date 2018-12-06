@@ -31,6 +31,8 @@ class GDCM_EXPORT Dicts
 public:
   Dicts();
   ~Dicts();
+  Dicts &operator=(const Dicts &_val) = delete;
+  Dicts(const Dicts &_val) = delete;
 
   /// works for both public and private dicts:
   /// owner is null for public dict
@@ -75,8 +77,6 @@ private:
   PrivateDict ShadowDict;
 
   CSAHeaderDict CSADict;
-  Dicts &operator=(const Dicts &_val) = delete; // purposely not implemented
-  Dicts(const Dicts &_val) = delete; // purposely not implemented
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const Dicts &d)

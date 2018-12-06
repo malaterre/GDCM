@@ -51,10 +51,9 @@ class Fork {
 
   ForkProcess* process;
 
-  Fork (Fork&) = delete;             // no copy constructor definition provided
-  Fork& operator = (Fork&) = delete; // no assignment operator definition provided
-
  public:
+  Fork (Fork&) = delete;
+  Fork& operator = (Fork&) = delete;
   Fork (bool kill = 0, bool reason = 0)
     : process (new ForkProcess (kill, reason)) {}
   ~Fork ();
