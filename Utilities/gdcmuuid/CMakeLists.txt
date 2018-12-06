@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8.7)
+cmake_policy(VERSION ${GDCM_CMAKE_POLICY_VERSION}) 
 
 if(NOT UUID_NAMESPACE)
   set(UUID_NAMESPACE "UUID")
