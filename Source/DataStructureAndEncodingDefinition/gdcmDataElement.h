@@ -164,13 +164,7 @@ public:
     return GetTag() < de.GetTag();
     }
   DataElement &operator=(const DataElement &de)
-    {
-    TagField = de.TagField;
-    ValueLengthField = de.ValueLengthField;
-    VRField = de.VRField;
-    ValueField = de.ValueField; // Pointer copy
-    return *this;
-    }
+    = default;
 
   bool operator==(const DataElement &de) const
     {

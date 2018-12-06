@@ -18,8 +18,8 @@
 namespace gdcm
 {
 
-Orientation::Orientation() {}
-Orientation::~Orientation() {}
+Orientation::Orientation() = default;
+Orientation::~Orientation() = default;
 
 void Orientation::Print(std::ostream &os) const
 {

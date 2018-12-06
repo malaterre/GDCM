@@ -27,8 +27,7 @@ public:
     }
 
     virtual ~EncoderStrategy() 
-    {
-    }
+    = default;
 
     int32_t PeekByte();
 

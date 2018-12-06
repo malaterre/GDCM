@@ -28,7 +28,7 @@ namespace gdcm
     template <typename EntryType>
     class Segment {
     public:
-        virtual ~Segment() {}
+        virtual ~Segment() = default;
         typedef std::map<const EntryType*, const Segment*> SegmentMap;
         virtual bool Expand(const SegmentMap& instances,
             std::vector<EntryType>& expanded) const = 0;
@@ -170,12 +170,10 @@ namespace gdcm
     }
 
 SegmentedPaletteColorLookupTable::SegmentedPaletteColorLookupTable()
-{
-}
+= default;
 
 SegmentedPaletteColorLookupTable::~SegmentedPaletteColorLookupTable()
-{
-}
+= default;
 
 void SegmentedPaletteColorLookupTable::SetLUT(LookupTableType type, const unsigned char *array,
     unsigned int length)

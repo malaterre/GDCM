@@ -26,8 +26,7 @@ PNMCodec::PNMCodec():BufferLength(0)
 }
 
 PNMCodec::~PNMCodec()
-{
-}
+= default;
 
 bool PNMCodec::CanDecode(TransferSyntax const &) const
 {

@@ -22,9 +22,9 @@ namespace gdcm
 class GDCM_EXPORT CryptographicMessageSyntax
 {
 public:
-  CryptographicMessageSyntax() {}
+  CryptographicMessageSyntax() = default;
 
-  virtual ~CryptographicMessageSyntax() {}
+  virtual ~CryptographicMessageSyntax() = default;
 
   typedef enum {
     DES3_CIPHER,   // Triple DES

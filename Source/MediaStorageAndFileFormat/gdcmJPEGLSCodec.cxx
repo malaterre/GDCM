@@ -34,8 +34,7 @@ JPEGLSCodec::JPEGLSCodec():BufferLength(0)/*,Lossless(true)*/,LossyError(0)
 }
 
 JPEGLSCodec::~JPEGLSCodec()
-{
-}
+= default;
 
 void JPEGLSCodec::SetLossless(bool l)
 {

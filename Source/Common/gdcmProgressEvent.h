@@ -32,7 +32,7 @@ public:
   typedef ProgressEvent Self;
   typedef AnyEvent Superclass;
   ProgressEvent(double p = 0):m_Progress(p) {}
-  ~ProgressEvent() override {}
+  ~ProgressEvent() override = default;
   const char * GetEventName() const override { return "ProgressEvent"; }
   bool CheckEvent(const ::gdcm::Event* e) const override
     { return dynamic_cast<const Self*>(e) ? true : false; }

@@ -113,7 +113,7 @@ protected:
   TMemberFunctionPointer m_MemberFunction;
   TConstMemberFunctionPointer m_ConstMemberFunction;
   MemberCommand():m_MemberFunction(nullptr),m_ConstMemberFunction(nullptr) {}
-  ~MemberCommand() override{}
+  ~MemberCommand() override= default;
 
 private:
   MemberCommand(const Self&); //purposely not implemented
@@ -175,7 +175,7 @@ protected:
   T* m_This;
   TMemberFunctionPointer m_MemberFunction;
   SimpleMemberCommand():m_This(nullptr),m_MemberFunction(nullptr) {}
-  ~SimpleMemberCommand() override {}
+  ~SimpleMemberCommand() override = default;
 
 private:
   SimpleMemberCommand(const Self&); //purposely not implemented

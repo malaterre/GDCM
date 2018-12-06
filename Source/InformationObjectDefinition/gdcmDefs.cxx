@@ -24,12 +24,10 @@ namespace gdcm
 {
 
 Defs::Defs()
-{
-}
+= default;
 
 Defs::~Defs()
-{
-}
+= default;
 
 void Defs::LoadDefaults()
 {

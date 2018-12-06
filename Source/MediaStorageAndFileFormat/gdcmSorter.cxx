@@ -31,8 +31,7 @@ Sorter::Sorter()
 }
 
 Sorter::~Sorter()
-{
-}
+= default;
 
 void Sorter::SetTagsToRead( std::set<Tag> const & tags )
 {

@@ -56,7 +56,7 @@ Bitmap::Bitmap():
   LossyFlag(false)
 {}
 
-Bitmap::~Bitmap() {}
+Bitmap::~Bitmap() = default;
 
 /*
  * Internal implementation everything assume that NumberOfDimensions was set

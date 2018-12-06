@@ -18,12 +18,10 @@ namespace gdcm
 {
 
 SegmentWriter::SegmentWriter()
-{
-}
+= default;
 
 SegmentWriter::~SegmentWriter()
-{
-}
+= default;
 
 unsigned int SegmentWriter::GetNumberOfSegments() const
 {

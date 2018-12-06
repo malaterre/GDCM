@@ -20,7 +20,7 @@ class Fork {
  public:
   class KillForks {
   public:
-    KillForks () {}
+    KillForks () = default;
     ~KillForks ();
   };
 

@@ -37,8 +37,7 @@ TagPath::TagPath():Path()
 }
 
 TagPath::~TagPath()
-{
-}
+= default;
 
 void TagPath::Print(std::ostream &os) const
 {
