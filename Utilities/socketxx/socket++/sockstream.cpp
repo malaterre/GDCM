@@ -577,7 +577,7 @@ sockbuf::sockdesc sockbuf::accept (sockAddr& sa)
   if ((int)(soc = ::accept (rep->sock, sa.addr (),
                        &len)) == -1)
     throw sockerr (errno, "sockbuf::sockdesc", sockname.text.c_str());
-  return sockdesc (soc);
+  return {soc};
 }
 
 sockbuf::sockdesc sockbuf::accept ()
@@ -585,7 +585,7 @@ sockbuf::sockdesc sockbuf::accept ()
   int soc = -1;
   if ((int)(soc = ::accept (rep->sock, nullptr, nullptr)) == -1)
     throw sockerr (errno, "sockbuf::sockdesc", sockname.text.c_str());
-  return sockdesc (soc);
+  return {soc};
 }
 
 int sockbuf::read (void* buf, int len)

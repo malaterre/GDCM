@@ -143,7 +143,7 @@ public:
     if(p>=eback() && p <= egptr())
       {
       setg(eback(),p,egptr());
-      return std::streampos(p-egptr());
+      return {p-egptr()};
       }
     else
       return -1;
