@@ -27,6 +27,9 @@ class Event;
 class GDCM_EXPORT Command : public Subject
 {
 public :
+  Command(const Command&) = delete;
+  void operator=(const Command&) = delete;
+
   /// Abstract method that defines the action to be taken by the command.
   virtual void Execute(Subject *caller, const Event & event ) = 0;
 
@@ -39,10 +42,6 @@ public :
 protected:
   Command();
   ~Command() override;
-
-private:
-  Command(const Command&) = delete;  // Not implemented.
-  void operator=(const Command&) = delete;  // Not implemented.
 };
 
 /** \class MemberCommand
@@ -56,6 +55,7 @@ template <class T>
 class MemberCommand : public Command
 {
 public:
+
   /** pointer to a member function that takes a Subject* and the event */
   typedef  void (T::*TMemberFunctionPointer)(Subject*, const Event &);
   typedef  void (T::*TConstMemberFunctionPointer)(const Subject*,
@@ -64,6 +64,9 @@ public:
   /** Standard class typedefs. */
   typedef MemberCommand       Self;
   //typedef SmartPointer<Self>  Pointer;
+
+  MemberCommand(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Method for creation through the object factory. */
   static SmartPointer<MemberCommand> New()
@@ -115,10 +118,6 @@ protected:
   MemberCommand():m_MemberFunction(nullptr),m_ConstMemberFunction(nullptr) {}
   ~MemberCommand() override= default;
 
-private:
-  MemberCommand(const Self&) = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete; //purposely not implemented
-  void operator=(const Self&) = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete; //purposely not implemented
-
 };
 
 /** \class SimpleMemberCommand
@@ -131,12 +130,16 @@ template <typename T>
 class SimpleMemberCommand : public Command
 {
 public:
+
   /** A method callback. */
   typedef  void (T::*TMemberFunctionPointer)();
 
   /** Standard class typedefs. */
   typedef SimpleMemberCommand   Self;
   //typedef SmartPointer<Self>    Pointer;
+
+  SimpleMemberCommand(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Run-time type information (and related methods). */
   //gdcmTypeMacro(SimpleMemberCommand,Command);
@@ -176,10 +179,6 @@ protected:
   TMemberFunctionPointer m_MemberFunction;
   SimpleMemberCommand():m_This(nullptr),m_MemberFunction(nullptr) {}
   ~SimpleMemberCommand() override = default;
-
-private:
-  SimpleMemberCommand(const Self&) = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete; //purposely not implemented
-  void operator=(const Self&) = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete; //purposely not implemented
 };
 
 } // end namespace gdcm

@@ -60,9 +60,6 @@ class Subject;
  *
  */
 class ULAction {
-    private:
-      //cannot copy a ULAction
-      ULAction(const ULAction& inAction) = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete;
 
     protected:
 
@@ -71,6 +68,9 @@ class ULAction {
       ULAction() = default;
       //make sure destructors are virtual to avoid memory leaks
       virtual ~ULAction() = default;
+      //cannot copy a ULAction
+      ULAction(const ULAction& inAction) = delete;
+      void operator=(const ULAction&) = delete;
 
       virtual EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent) = 0;
