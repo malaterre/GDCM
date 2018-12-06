@@ -68,9 +68,9 @@ class ULAction {
 
 
     public:
-      ULAction() {};
+      ULAction() = default;
       //make sure destructors are virtual to avoid memory leaks
-      virtual ~ULAction() {};
+      virtual ~ULAction() = default;
 
       virtual EStateID PerformAction(Subject *s, ULEvent& inEvent, ULConnection& inConnection,
         bool& outWaitingForEvent, EEventID& outRaisedEvent) = 0;

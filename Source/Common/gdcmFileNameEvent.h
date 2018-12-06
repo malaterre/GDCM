@@ -32,7 +32,7 @@ public:
   typedef FileNameEvent Self;
   typedef AnyEvent Superclass;
   FileNameEvent(const char *s = ""):m_FileName(s) {}
-  ~FileNameEvent() override {}
+  ~FileNameEvent() override = default;
   const char * GetEventName() const override { return "FileNameEvent"; }
   bool CheckEvent(const ::gdcm::Event* e) const override
     { return dynamic_cast<const Self*>(e) ? true : false; }

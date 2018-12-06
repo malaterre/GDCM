@@ -218,8 +218,8 @@ class GDCM_EXPORT PrivateDict
   typedef std::map<PrivateTag, DictEntry> MapDictEntry;
   friend std::ostream& operator<<(std::ostream& os, const PrivateDict &val);
 public:
-  PrivateDict() {}
-  ~PrivateDict() {}
+  PrivateDict() = default;
+  ~PrivateDict() = default;
   void AddDictEntry(const PrivateTag &tag, const DictEntry &de)
     {
 #ifndef NDEBUG

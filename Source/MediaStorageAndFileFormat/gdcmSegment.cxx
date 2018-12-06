@@ -84,8 +84,7 @@ Segment::Segment():
 }
 
 Segment::~Segment()
-{
-}
+= default;
 
 unsigned short Segment::GetSegmentNumber() const
 {

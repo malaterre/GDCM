@@ -29,8 +29,7 @@ StringFilter::StringFilter():F(new File)
 }
 //-----------------------------------------------------------------------------
 StringFilter::~StringFilter()
-{
-}
+= default;
 
 void StringFilter::SetDicts(const Dicts &dicts)
 {

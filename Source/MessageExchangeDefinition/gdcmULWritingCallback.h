@@ -35,8 +35,8 @@ class GDCM_EXPORT ULWritingCallback : public ULConnectionCallback
 {
   std::string mDirectoryName;
 public:
-  ULWritingCallback() {};
-  ~ULWritingCallback() override {} //empty, for later inheritance
+  ULWritingCallback() = default;
+  ~ULWritingCallback() override = default; //empty, for later inheritance
 
   ///provide the directory into which all files are written.
   void SetDirectory(const std::string& inDirectoryName) { mDirectoryName = inDirectoryName; }

@@ -31,8 +31,8 @@ namespace gdcm
 class GDCM_EXPORT Testing
 {
 public :
-  Testing() {};
-  ~Testing() {};
+  Testing() = default;;
+  ~Testing() = default;;
 
   /// MD5 stuff
   /// digest_str needs to be at least : strlen = [2*16+1];

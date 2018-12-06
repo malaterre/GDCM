@@ -87,8 +87,7 @@ static Tag BasicApplicationLevelConfidentialityProfileAttributes[] = {
 
 
 Anonymizer::~Anonymizer()
-{
-}
+= default;
 
 bool Anonymizer::Empty( Tag const &t)
 {

@@ -28,8 +28,7 @@ DictPrinter::DictPrinter()
 
 //-----------------------------------------------------------------------------
 DictPrinter::~DictPrinter()
-{
-}
+= default;
 
 VM GuessVMType(DataElement const &de)
 {

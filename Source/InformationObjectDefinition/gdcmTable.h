@@ -29,8 +29,8 @@ class Table
 {
 public:
   typedef std::map<Tag, TableEntry> MapTableEntry;
-  Table() {}
-  ~Table() {}
+  Table() = default;
+  ~Table() = default;
 
   friend std::ostream& operator<<(std::ostream& _os, const Table &_val);
 

@@ -32,7 +32,7 @@
 class ProcessLine
 {
 public:
-    virtual ~ProcessLine() {}
+    virtual ~ProcessLine() = default;
     virtual void NewLineDecoded(const void* pSrc, int pixelCount, int sourceStride) = 0;
     virtual void NewLineRequested(void* pDest, int pixelCount, int destStride) = 0;
 };

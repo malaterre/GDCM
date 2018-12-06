@@ -26,8 +26,7 @@ public:
     }
 
     virtual ~DecoderStrategy()
-    {
-    }
+    = default;
 
     virtual ProcessLine* CreateProcess(ByteStreamInfo rawStreamInfo) = 0;
 

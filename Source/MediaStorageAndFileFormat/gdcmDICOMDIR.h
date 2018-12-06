@@ -26,7 +26,7 @@ namespace gdcm
 class GDCM_EXPORT DICOMDIR
 {
 public:
-  DICOMDIR() {}
+  DICOMDIR() = default;
   DICOMDIR(const FileSet& fs):_FS(fs) {}
 
 private:

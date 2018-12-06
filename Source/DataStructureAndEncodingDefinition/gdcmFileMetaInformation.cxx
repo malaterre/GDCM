@@ -56,7 +56,7 @@ const char * FileMetaInformation::GetGDCMSourceApplicationEntityTitle()
 
 // Keep cstor and dstor here to keep API minimal (see dllexport issue with gdcmstrict::)
 FileMetaInformation::FileMetaInformation():DataSetTS(TransferSyntax::TS_END),MetaInformationTS(TransferSyntax::Unknown),DataSetMS(MediaStorage::MS_END) {}
-FileMetaInformation::~FileMetaInformation() {}
+FileMetaInformation::~FileMetaInformation() = default;
 
 void FileMetaInformation::SetImplementationClassUID(const char * imp)
 {

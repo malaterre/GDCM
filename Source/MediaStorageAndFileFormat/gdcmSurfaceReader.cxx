@@ -20,12 +20,10 @@ namespace gdcm
 {
 
 SurfaceReader::SurfaceReader()
-{
-}
+= default;
 
 SurfaceReader::~SurfaceReader()
-{
-}
+= default;
 
 unsigned long SurfaceReader::GetNumberOfSurfaces() const
 {

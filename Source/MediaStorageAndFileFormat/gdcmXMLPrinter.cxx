@@ -40,8 +40,7 @@ XMLPrinter::XMLPrinter():PrintStyle(XMLPrinter::OnlyUUID),F(nullptr)
 
 //-----------------------------------------------------------------------------
 XMLPrinter::~XMLPrinter()
-{
-}
+= default;
 
 // Carried forward from Printer Class
 // SIEMENS_GBS_III-16-ACR_NEMA_1.acr is a tough kid: 0009,1131 is supposed to be VR::UL, but

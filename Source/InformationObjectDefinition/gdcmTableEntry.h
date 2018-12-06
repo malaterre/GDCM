@@ -30,7 +30,7 @@ public:
   TableEntry(const char *attribute = nullptr,
     Type const &type = Type(), const char * des = nullptr ) :
     Attribute(attribute ? attribute : ""),TypeField(type),Description(des ? des : "") {}
-  ~TableEntry() {}
+  ~TableEntry() = default;
 
 private:
   std::string Attribute;

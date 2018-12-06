@@ -32,8 +32,7 @@ PixmapWriter::PixmapWriter():PixelData(new Pixmap)
 }
 
 PixmapWriter::~PixmapWriter()
-{
-}
+= default;
 
 void PixmapWriter::SetPixmap(Pixmap const &img)
 {

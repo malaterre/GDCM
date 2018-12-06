@@ -32,7 +32,7 @@ public:
   typedef AnonymizeEvent Self;
   typedef AnyEvent Superclass;
   AnonymizeEvent(Tag const &tag = 0):m_Tag(tag) {}
-  ~AnonymizeEvent() override {}
+  ~AnonymizeEvent() override = default;
   const char * GetEventName() const override { return "AnonymizeEvent"; }
   bool CheckEvent(const ::gdcm::Event* e) const override
   { return (dynamic_cast<const Self*>(e) == nullptr ? false : true) ; }

@@ -28,8 +28,7 @@ namespace gdcm
 
 
 StrictScanner::~StrictScanner()
-{
-}
+= default;
 
 void StrictScanner::ClearTags()
 {

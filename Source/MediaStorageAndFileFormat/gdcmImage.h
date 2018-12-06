@@ -55,7 +55,7 @@ public:
   Spacing.resize( 3 /*NumberOfDimensions*/, 1 ); // fill with 1
 
   }
-  ~Image() override {}
+  ~Image() override = default;
 
   /// Return a 3-tuples specifying the spacing
   /// NOTE: 3rd value can be an aribtrary 1 value when the spacing was not specified (ex. 2D image).

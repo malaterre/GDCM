@@ -77,8 +77,7 @@ MeshPrimitive::MeshPrimitive():
 }
 
 MeshPrimitive::~MeshPrimitive()
-{
-}
+= default;
 
 MeshPrimitive::MPType MeshPrimitive::GetPrimitiveType() const
 {

@@ -32,8 +32,7 @@ PVRGCodec::PVRGCodec()
 }
 
 PVRGCodec::~PVRGCodec()
-{
-}
+= default;
 
 bool PVRGCodec::CanDecode(TransferSyntax const &ts) const
 {
