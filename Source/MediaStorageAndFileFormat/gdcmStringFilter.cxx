@@ -159,7 +159,7 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
       if (subtoken == nullptr)
         break;
       //printf(" --> %s\n", subtoken);
-      subtokens.push_back( subtoken );
+      subtokens.emplace_back(subtoken );
       }
     if( subtokens[0] == "DicomNativeModel" )
       {

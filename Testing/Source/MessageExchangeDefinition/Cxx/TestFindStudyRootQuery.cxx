@@ -46,7 +46,7 @@ int TestFindStudyRootQuery(int , char *[])
     }
     {
     std::vector< std::pair<gdcm::Tag, std::string> > keys;
-    keys.push_back( std::make_pair( gdcm::Tag(0x10,0x10), "PATIENT" ) ) ;
+    keys.emplace_back( gdcm::Tag(0x10,0x10), "PATIENT" ) ;
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
     if( theQuery->ValidateQuery( true ) )
@@ -57,7 +57,7 @@ int TestFindStudyRootQuery(int , char *[])
     }
     {
     std::vector< std::pair<gdcm::Tag, std::string> > keys;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0x10), "studyid" ) ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0x10), "studyid" ) ;
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
     if( theQuery->ValidateQuery( true ) )
@@ -68,7 +68,7 @@ int TestFindStudyRootQuery(int , char *[])
     }
     {
     std::vector< std::pair<gdcm::Tag, std::string> > keys;
-    keys.push_back( std::make_pair( gdcm::Tag(0x8,0x90), "physician" ) ) ;
+    keys.emplace_back( gdcm::Tag(0x8,0x90), "physician" ) ;
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
     if( theQuery->ValidateQuery( true ) )
@@ -79,7 +79,7 @@ int TestFindStudyRootQuery(int , char *[])
     }
     {
     std::vector< std::pair<gdcm::Tag, std::string> > keys;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xd), "studyuid" ) ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0xd), "studyuid" ) ;
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
     if( !theQuery->ValidateQuery( true ) )
@@ -105,7 +105,7 @@ int TestFindStudyRootQuery(int , char *[])
     }
     {
     std::vector< std::pair<gdcm::Tag, std::string> > keys;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xd), "1.2.3" ) ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0xd), "1.2.3" ) ;
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
     if( theQuery->ValidateQuery( true ) )
@@ -116,8 +116,8 @@ int TestFindStudyRootQuery(int , char *[])
     }
     {
     std::vector< std::pair<gdcm::Tag, std::string> > keys;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xd), "1.2.3" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x8,0x60), "" ) ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0xd), "1.2.3" ) ;
+    keys.emplace_back( gdcm::Tag(0x8,0x60), "" ) ;
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
     if( theQuery->ValidateQuery( true ) )
@@ -128,8 +128,8 @@ int TestFindStudyRootQuery(int , char *[])
     }
     {
     std::vector< std::pair<gdcm::Tag, std::string> > keys;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xd), "1.2.3" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xe), "4.5.6" ) ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0xd), "1.2.3" ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0xe), "4.5.6" ) ;
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
     if( !theQuery->ValidateQuery( true ) )
@@ -140,9 +140,9 @@ int TestFindStudyRootQuery(int , char *[])
     }
     {
     std::vector< std::pair<gdcm::Tag, std::string> > keys;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xd), "1.2.3" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xe), "4.5.6" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x8,0x60), "" ) ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0xd), "1.2.3" ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0xe), "4.5.6" ) ;
+    keys.emplace_back( gdcm::Tag(0x8,0x60), "" ) ;
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
     if( !theQuery->ValidateQuery( true ) )
@@ -153,9 +153,9 @@ int TestFindStudyRootQuery(int , char *[])
     }
     {
     std::vector< std::pair<gdcm::Tag, std::string> > keys;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xd), "1.2.3" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xe), "4.5.6" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x8,0x20), "" ) ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0xd), "1.2.3" ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0xe), "4.5.6" ) ;
+    keys.emplace_back( gdcm::Tag(0x8,0x20), "" ) ;
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
     if( theQuery->ValidateQuery( true ) )
@@ -170,9 +170,9 @@ int TestFindStudyRootQuery(int , char *[])
   theLevel = gdcm::eImage;
     {
     std::vector< std::pair<gdcm::Tag, std::string> > keys;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xd), "1.2.3" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xe), "4.5.6" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x8,0x18), "7.8.9" ) ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0xd), "1.2.3" ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0xe), "4.5.6" ) ;
+    keys.emplace_back( gdcm::Tag(0x8,0x18), "7.8.9" ) ;
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
     if( !theQuery->ValidateQuery( true ) )
@@ -184,10 +184,10 @@ int TestFindStudyRootQuery(int , char *[])
 
     {
     std::vector< std::pair<gdcm::Tag, std::string> > keys;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xd), "1.2.3" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xe), "4.5.6" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x8,0x18), "7.8.9" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0x13), "" ) ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0xd), "1.2.3" ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0xe), "4.5.6" ) ;
+    keys.emplace_back( gdcm::Tag(0x8,0x18), "7.8.9" ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0x13), "" ) ;
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
     if( !theQuery->ValidateQuery( true ) )
@@ -199,11 +199,11 @@ int TestFindStudyRootQuery(int , char *[])
 
     {
     std::vector< std::pair<gdcm::Tag, std::string> > keys;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xd), "1.2.3" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0xe), "4.5.6" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x8,0x18), "7.8.9" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0x13), "" ) ) ;
-    keys.push_back( std::make_pair( gdcm::Tag(0x20,0x11), "" ) ) ; // series level
+    keys.emplace_back( gdcm::Tag(0x20,0xd), "1.2.3" ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0xe), "4.5.6" ) ;
+    keys.emplace_back( gdcm::Tag(0x8,0x18), "7.8.9" ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0x13), "" ) ;
+    keys.emplace_back( gdcm::Tag(0x20,0x11), "" ) ; // series level
     gdcm::SmartPointer<gdcm::BaseRootQuery> theQuery =
       gdcm::CompositeNetworkFunctions::ConstructQuery(theRoot, theLevel ,keys);
     if( theQuery->ValidateQuery( true ) )

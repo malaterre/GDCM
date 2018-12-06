@@ -449,7 +449,7 @@ int main(int argc, char *argv[])
             std::string str;
             //ss >> str;
             std::getline(ss, str); // do not skip whitespace
-            replace_tags_value.push_back( std::make_pair(tag, str) );
+            replace_tags_value.emplace_back(tag, str );
             }
           else if( option_index == 19 ) /* crypto */
             {
@@ -547,7 +547,7 @@ int main(int argc, char *argv[])
     while (optind < argc)
       {
       //printf ("%s\n", argv[optind++]);
-      files.push_back( argv[optind++] );
+      files.emplace_back(argv[optind++] );
       }
     //printf ("\n");
     if( files.size() == 2
