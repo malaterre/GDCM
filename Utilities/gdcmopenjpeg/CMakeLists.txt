@@ -8,7 +8,6 @@
 # e.g.:
 # set(OPENJPEG_NAMESPACE "GDCMOPENJPEG")
 cmake_minimum_required(VERSION 2.8.2)
-cmake_policy(VERSION ${GDCM_CMAKE_POLICY_VERSION}) 
 
 if(COMMAND CMAKE_POLICY)
   cmake_policy(SET CMP0003 NEW)
