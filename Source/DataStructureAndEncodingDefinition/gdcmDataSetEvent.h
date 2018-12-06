@@ -42,7 +42,7 @@ public:
 
   DataSet const & GetDataSet() const { return *m_DataSet; }
 private:
-  void operator=(const Self&);
+  void operator=(const Self&) = delete = delete;
   const DataSet *m_DataSet;
 };
 

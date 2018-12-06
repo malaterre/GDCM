@@ -41,8 +41,8 @@ protected:
   ~Command() override;
 
 private:
-  Command(const Command&);  // Not implemented.
-  void operator=(const Command&);  // Not implemented.
+  Command(const Command&) = delete;  // Not implemented.
+  void operator=(const Command&) = delete;  // Not implemented.
 };
 
 /** \class MemberCommand
@@ -116,8 +116,8 @@ protected:
   ~MemberCommand() override= default;
 
 private:
-  MemberCommand(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MemberCommand(const Self&) = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete; //purposely not implemented
+  void operator=(const Self&) = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete; //purposely not implemented
 
 };
 
@@ -178,8 +178,8 @@ protected:
   ~SimpleMemberCommand() override = default;
 
 private:
-  SimpleMemberCommand(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SimpleMemberCommand(const Self&) = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete; //purposely not implemented
+  void operator=(const Self&) = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete; //purposely not implemented
 };
 
 } // end namespace gdcm

@@ -43,7 +43,7 @@ public:
   void SetTag(const Tag& t ) { m_Tag = t; }
   Tag const & GetTag() const { return m_Tag; }
 private:
-  void operator=(const Self&);
+  void operator=(const Self&) = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete = delete;
   Tag m_Tag;
 };
 

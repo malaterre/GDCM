@@ -70,8 +70,8 @@ private:
   Modules Part3Modules;
   IODs Part3IODs;
 
-  Defs &operator=(const Defs &val); // purposely not implemented
-  Defs(const Defs &val); // purposely not implemented
+  Defs &operator=(const Defs &val) = delete; // purposely not implemented
+  Defs(const Defs &val) = delete; // purposely not implemented
 };
 
 

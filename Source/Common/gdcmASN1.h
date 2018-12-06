@@ -41,8 +41,8 @@ protected:
 private:
   ASN1Internals *Internals;
 private:
-  ASN1(const ASN1&);  // Not implemented.
-  void operator=(const ASN1&);  // Not implemented.
+  ASN1(const ASN1&) = delete;  // Not implemented.
+  void operator=(const ASN1&) = delete;  // Not implemented.
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

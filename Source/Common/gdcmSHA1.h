@@ -42,8 +42,8 @@ public :
 private:
   SHA1Internals *Internals;
 private:
-  SHA1(const SHA1&);  // Not implemented.
-  void operator=(const SHA1&);  // Not implemented.
+  SHA1(const SHA1&) = delete;  // Not implemented.
+  void operator=(const SHA1&) = delete;  // Not implemented.
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

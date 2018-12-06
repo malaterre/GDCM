@@ -57,8 +57,8 @@ public:
     }
 
 private:
-  Table &operator=(const Table &_val); // purposely not implemented
-  Table(const Table&_val); // purposely not implemented
+  Table &operator=(const Table &_val) = delete = delete = delete; // purposely not implemented
+  Table(const Table&_val) = delete = delete = delete; // purposely not implemented
 
   MapTableEntry TableInternal;
 };

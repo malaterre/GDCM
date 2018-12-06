@@ -184,8 +184,8 @@ protected:
   void LoadDefault();
 
 private:
-  Dict &operator=(const Dict &_val); // purposely not implemented
-  Dict(const Dict &_val); // purposely not implemented
+  Dict &operator=(const Dict &_val) = delete; // purposely not implemented
+  Dict(const Dict &_val) = delete; // purposely not implemented
 
   MapDictEntry DictInternal;
 };
@@ -320,8 +320,8 @@ protected:
   void LoadDefault();
 
 private:
-  PrivateDict &operator=(const PrivateDict &_val); // purposely not implemented
-  PrivateDict(const PrivateDict &_val); // purposely not implemented
+  PrivateDict &operator=(const PrivateDict &_val) = delete; // purposely not implemented
+  PrivateDict(const PrivateDict &_val) = delete; // purposely not implemented
 
   MapDictEntry DictInternal;
 };

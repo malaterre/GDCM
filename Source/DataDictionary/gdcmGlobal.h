@@ -83,8 +83,8 @@ protected:
   const char *Locate(const char *resfile) const;
 
 private:
-  Global &operator=(const Global &_val); // purposely not implemented
-  Global(const Global &_val); // purposely not implemented
+  Global &operator=(const Global &_val) = delete; // purposely not implemented
+  Global(const Global &_val) = delete; // purposely not implemented
   // PIMPL:
   // but we could have also directly exposed a Dicts *Internals;
   static GlobalInternal *Internals;

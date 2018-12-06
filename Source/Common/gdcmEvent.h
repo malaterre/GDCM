@@ -47,7 +47,7 @@ public :
 
 protected:
 private:
-  void operator=(const Event&);  // Not implemented.
+  void operator=(const Event&) = delete;  // Not implemented.
 };
 
 /// Generic inserter operator for Event and its subclasses.
