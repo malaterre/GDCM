@@ -39,6 +39,16 @@ bool PNMCodec::CanCode(TransferSyntax const &) const
 }
 
 
+static uint8_t reverseBitsByte(uint8_t x)
+{
+  uint8_t b = 0;
+  for (int i = 0; i < 8; ++i) {
+    b <<= 1;
+    b |= (x & 1);
+    x >>= 1;
+  }
+  return b;
+}
 
 bool PNMCodec::Write(const char *filename, const DataElement &out) const
 {
@@ -113,6 +123,15 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
     if( pf.GetBitsAllocated() == 16 )
       {
       bv->Write<SwapperDoOp, uint16_t>( os );
+      }
+    else if( pf.GetBitsAllocated() == 1 )
+      {
+      const uint8_t *x = (const uint8_t*) bv->GetPointer();
+      for( size_t i = 0; i < bv->GetLength(); i++ )
+        {
+        uint8_t b = reverseBitsByte(x[i]);
+        os.write((char*)&b, 1);
+        }
       }
     else
       {
