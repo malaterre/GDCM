@@ -73,8 +73,8 @@ protected:
   void LoadDefault();
 
 private:
-  CSAHeaderDict &operator=(const CSAHeaderDict &_val); // purposely not implemented
-  CSAHeaderDict(const CSAHeaderDict &_val); // purposely not implemented
+  CSAHeaderDict &operator=(const CSAHeaderDict &_val) = delete; // purposely not implemented
+  CSAHeaderDict(const CSAHeaderDict &_val) = delete; // purposely not implemented
 
   MapCSAHeaderDictEntry CSAHeaderDictInternal;
 };

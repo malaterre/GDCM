@@ -43,7 +43,7 @@ public:
   void SetProgress(double p) { m_Progress = p; }
   double GetProgress() const { return m_Progress; }
 private:
-  void operator=(const Self&);
+  void operator=(const Self&) = delete = delete = delete = delete = delete = delete = delete = delete = delete;
   double m_Progress;
 };
 

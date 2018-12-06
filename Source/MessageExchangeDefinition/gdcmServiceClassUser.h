@@ -112,8 +112,8 @@ private:
     network::ULConnectionCallback* inCallback);
 
 private:
-  ServiceClassUser(const ServiceClassUser&);
-  void operator=(const ServiceClassUser &);
+  ServiceClassUser(const ServiceClassUser&) = delete;
+  void operator=(const ServiceClassUser &) = delete;
 
 private:
   ServiceClassUserInternals *Internals;

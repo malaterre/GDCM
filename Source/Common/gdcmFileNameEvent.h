@@ -43,7 +43,7 @@ public:
   void SetFileName(const char *f) { m_FileName = f; }
   const char *GetFileName() const { return m_FileName.c_str(); }
 private:
-  void operator=(const Self&);
+  void operator=(const Self&) = delete = delete = delete = delete = delete;
   std::string m_FileName;
 };
 

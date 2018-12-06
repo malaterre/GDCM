@@ -50,8 +50,8 @@ public:
   virtual CipherTypes GetCipherType() const = 0;
 
 private:
-  CryptographicMessageSyntax(const CryptographicMessageSyntax&);  // Not implemented.
-  void operator=(const CryptographicMessageSyntax&);  // Not implemented.
+  CryptographicMessageSyntax(const CryptographicMessageSyntax&) = delete = delete = delete = delete = delete;  // Not implemented.
+  void operator=(const CryptographicMessageSyntax&) = delete = delete = delete = delete = delete;  // Not implemented.
 };
 
 } // end namespace gdcm

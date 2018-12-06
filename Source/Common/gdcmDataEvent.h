@@ -46,7 +46,7 @@ public:
   //std::string GetValueAsString() const { return; }
 
 private:
-  void operator=(const Self&);
+  void operator=(const Self&) = delete = delete = delete = delete = delete = delete = delete = delete = delete;
   const char *Bytes;
   size_t Length;
 };

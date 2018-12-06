@@ -79,8 +79,8 @@ private:
 
   bool m_TestAbort;
 
-  SimpleSubjectWatcher(const SimpleSubjectWatcher&);  // Not implemented.
-  void operator=(const SimpleSubjectWatcher&);  // Not implemented.
+  SimpleSubjectWatcher(const SimpleSubjectWatcher&) = delete;  // Not implemented.
+  void operator=(const SimpleSubjectWatcher&) = delete;  // Not implemented.
 };
 } // end namespace gdcm
 //-----------------------------------------------------------------------------

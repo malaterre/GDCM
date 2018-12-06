@@ -75,8 +75,8 @@ private:
   PrivateDict ShadowDict;
 
   CSAHeaderDict CSADict;
-  Dicts &operator=(const Dicts &_val); // purposely not implemented
-  Dicts(const Dicts &_val); // purposely not implemented
+  Dicts &operator=(const Dicts &_val) = delete; // purposely not implemented
+  Dicts(const Dicts &_val) = delete; // purposely not implemented
 };
 //-----------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream &os, const Dicts &d)
