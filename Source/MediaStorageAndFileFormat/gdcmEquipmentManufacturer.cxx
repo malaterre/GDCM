@@ -79,6 +79,15 @@ EquipmentManufacturer::Type EquipmentManufacturer::Compute( DataSet const & ds )
     if( priv_creator.GetValue() == "GEMS_IDEN_01" ) return GEMS;
   }
 
+  gdcm::PrivateTag siemens_manu(0x0021,0x0022,"SIEMENS MR SDS 01");
+  if( ds.FindDataElement( siemens_manu ) )
+  {
+    const gdcm::DataElement & de = ds.GetDataElement( siemens_manu );
+    gdcm::Element<VR::SH, VM::VM1> value;
+    value.SetFromDataElement( de );
+    if( value.GetValue().Trim() == "SIEMENS" ) return SIEMENS;
+  }
+
   gdcm::Tag elscint1(0x00e1,0x0010);
   if( ds.FindDataElement( elscint1 ) )
   {

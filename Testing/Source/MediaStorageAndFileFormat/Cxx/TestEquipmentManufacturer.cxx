@@ -90,6 +90,10 @@ static int TestEquipmentManufacturerFunc(const char* filename, bool verbose = fa
 
   const gdcm::DataSet & ds = file.GetDataSet();
   gdcm::EquipmentManufacturer::Type manufacturer = gdcm::EquipmentManufacturer::Compute( ds );
+  if( verbose )
+    {
+    std::cout << "Found: " << manufacturer << std::endl;
+    }
   if( manufacturer == gdcm::EquipmentManufacturer::UNKNOWN )
     {
     std::cerr << "Unknown: " << filename << std::endl;
