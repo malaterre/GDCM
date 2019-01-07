@@ -47,6 +47,21 @@ int TestGetTimeOfDay()
   return 0;
 }
 
+int TestMakeDirectory()
+{
+  std::string tmpdir = gdcm::Testing::GetTempDirectory();
+  if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ))  return 1;
+  const char subpath[] = "TestSystem1";
+  std::string subdir = gdcm::Testing::GetTempDirectory(subpath);
+  if( !gdcm::System::MakeDirectory( subdir.c_str() ))  return 1;
+  if( !gdcm::System::FileIsDirectory( subdir.c_str() ))  return 1;
+  const char multipath[] = "TestSystem42/another/dir";
+  std::string subdir2 = gdcm::Testing::GetTempDirectory(multipath);
+  if( !gdcm::System::MakeDirectory( subdir2.c_str() ))  return 1;
+  if( !gdcm::System::FileIsDirectory( subdir2.c_str() ))  return 1;
+  return 0;
+}
+
 int TestSystem1(int, char *[])
 {
   const char s1[] = "HELLO, wORLD !";
@@ -365,6 +380,7 @@ return 1;
 }
   int res = 0;
   res +=  TestGetTimeOfDay();
+  res +=  TestMakeDirectory();
 
   const char * testfilesize = gdcm::Testing::GetTempFilename( "filesize.bin" );
 if( gdcm::System::FileExists( testfilesize ) )
