@@ -51,15 +51,15 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
-    std::cerr << "Could not read : " << filename << std::endl;
+    std::cerr << "Could not read : " << filename;
     if( continuemode )
       {
-      std::cerr << "Skipping from anonymization process (continue mode)." << std::endl;
+      std::cerr << " -> Skipping from anonymization process (continue mode)." << std::endl;
       return true;
       }
     else
       {
-      std::cerr << "Check [--continue] option for skipping files." << std::endl;
+      std::cerr << " -> Check [--continue] option for skipping files." << std::endl;
       return false;
       }
     }
