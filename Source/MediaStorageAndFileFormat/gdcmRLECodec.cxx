@@ -297,7 +297,7 @@ bool DoInvertPlanarConfiguration(T *output, const T *input, uint32_t inputlength
     b += 3;
     }
   assert( b == input + length + 2);
-  assert ( pout = output + length );
+  assert ( pout == output + length );
   return true;
 }
 
