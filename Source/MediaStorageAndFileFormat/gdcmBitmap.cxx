@@ -286,7 +286,9 @@ unsigned long Bitmap::GetBufferLength() const
     {
     assert( PF.GetSamplesPerPixel() == 1 );
     const size_t bytesPerRow = Dimensions[0] / 8 + (Dimensions[0] % 8 != 0 ? 1 : 0);
-    const unsigned int save = bytesPerRow * Dimensions[1];
+    unsigned int save = bytesPerRow * Dimensions[1];
+    if( NumberOfDimensions > 2 )
+      save *= Dimensions[2];
     if(Dimensions[0] % 8 == 0 )
       assert( save * 8 == mul );
     mul = save;
