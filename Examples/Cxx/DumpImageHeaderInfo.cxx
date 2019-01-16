@@ -58,7 +58,7 @@ std::istream & element::read( std::istream & is )
   os << str << " (" << l << ")" << std::endl;
   std::vector<char> bytes;
   bytes.resize( l - 16 );
-  if( bytes.size() )
+  if( !bytes.empty() )
     {
     is.read( &bytes[0], l - 16 );
     }
