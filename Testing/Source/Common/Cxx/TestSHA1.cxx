@@ -66,7 +66,7 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "c6188f2ae06a55d596d4d6b4d914b404f7bf5786" , "D_CLUNIE_RG2_JPLY.dcm" },
 { "5035a6298cf8590932605cb4bb10f128df971fcb" , "D_CLUNIE_RG2_RLE.dcm" },
 { "d2a56de2e035095c3dea9be80878f9607c63728d" , "D_CLUNIE_RG3_JPLL.dcm" },
-{ "41abc80638b12a2601e7764805a9c4ddc385bdc5" , "D_CLUNIE_RG3_JPLY.dcm" },
+{ "c90b8543259ca7189fa76201f864c2f32e6ebef3" , "D_CLUNIE_RG3_JPLY.dcm" },
 { "eb417a88c6b3fe6c5768ab705990fc0d54558816" , "D_CLUNIE_RG3_RLE.dcm" },
 { "8e27c853a156038e1f6daebb04f2c9059ebfbd82" , "D_CLUNIE_SC1_JPLY.dcm" },
 { "6a6ca811ae87ae1ca4549f49724b58562eea714b" , "D_CLUNIE_SC1_RLE.dcm" },
@@ -235,6 +235,7 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "08828e913a7a1ebbc0129c42974b64ce702814b6" , "JPEGNote_missing.dcm" },
 { "99c169688190a66100b61319eaeefb3db1936125" , "RLEDebianBug816607Orig.dcm" },
 { "f18f91631b59f0242b5daca547878e4c5cbf6a5b" , "GE_MR_0025xx1bProtocolDataBlockXML.dcm" },
+{ "8c46efd571b33264d7c0bed14fb6dd0282330b92" , "JPEGLS_CharLS_10742.dcm" },
 
 { NULL, NULL}
 };
