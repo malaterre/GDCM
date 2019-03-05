@@ -50,7 +50,7 @@ static std::string getInfoDate(Dict *infoDict, const char *key)
 #endif
     {
     const GooString* gs = obj.getString();
-    s = gs->getCString();
+    s = gs->c_str();
     if (s[0] == 'D' && s[1] == ':')
       {
       s += 2;
