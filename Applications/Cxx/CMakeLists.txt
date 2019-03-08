@@ -87,8 +87,14 @@ if(GDCM_USE_SYSTEM_POPPLER)
   CHECK_CXX_SOURCE_COMPILES(
       "\#include <poppler/Object.h>\nint main() { Object o(42); }"
     LIBPOPPLER_NEW_OBJECT_API)
-if(LIBPOPPLER_NEW_OBJECT_API)
+  if(LIBPOPPLER_NEW_OBJECT_API)
     list(APPEND libpoppler_flags -DLIBPOPPLER_NEW_OBJECT_API)
+  endif()
+  CHECK_CXX_SOURCE_COMPILES(
+	  "\#include <poppler/goo/GooString.h>\nint main() { GooString gs; gs.getCString(); return 0; }"
+	  LIBPOPPLER_GOOSTRING_HAS_GETCSTRING)
+  if(LIBPOPPLER_GOOSTRING_HAS_GETCSTRING)
+    list(APPEND libpoppler_flags -DLIBPOPPLER_GOOSTRING_HAS_GETCSTRING)
   endif()
   if(libpoppler_flags)
     string(REPLACE ";" " " libpoppler_flags_string "${libpoppler_flags}")
