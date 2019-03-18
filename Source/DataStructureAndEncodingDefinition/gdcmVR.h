@@ -73,6 +73,7 @@ public:
     OD = 134217728, // 2^27
     OF = 8192,
     OL = 268435456, // 2^28
+    OV = 2147483648, // 2^31
     OW = 16384,
     PN = 32768,
     SH = 65536,
@@ -80,6 +81,7 @@ public:
     SQ = 262144,
     SS = 524288,
     ST = 1048576,
+    SV = 4294967296, // 2^32
     TM = 2097152,
     UC = 536870912, // 2^29
     UI = 4194304,
@@ -88,21 +90,22 @@ public:
     UR = 1073741824, // 2^30
     US = 33554432,
     UT = 67108864,
+    UV = 8589934592, // 2^33
     OB_OW = OB | OW,
     US_SS = US | SS,
     US_SS_OW = US | SS | OW,
     US_OW = US | OW,
     // The following do not have a VRString equivalent (ie cannot be found in PS 3.6)
     VL16 = AE | AS | AT | CS | DA | DS | DT | FD | FL | IS | LO | LT | PN | SH | SL | SS | ST | TM | UI | UL | US, // if( VR & VL16 ) => VR has its VL coded over 16bits
-    VL32 = OB | OW | OD | OF | OL | SQ | UC | UN | UR | UT, // if( VR & VL32 ) => VR has its VL coded over 32bits
+    VL32 = OB | OW | OD | OF | OL | OV | SQ | SV | UC | UN | UR | UT | UV, // if( VR & VL32 ) => VR has its VL coded over 32bits
     VRASCII = AE | AS | CS | DA | DS | DT | IS | LO | LT | PN | SH | ST | TM | UC | UI | UR | UT,
-    VRBINARY = AT | FL | FD | OB | OD | OF | OL | OW | SL | SQ | SS | UL | UN | US, // FIXME: UN ?
+    VRBINARY = AT | FL | FD | OB | OD | OF | OL | OV | OW | SL | SQ | SS | SV | UL | UN | US | UV, // FIXME: UN ?
     // PS 3.5:
     // Data Elements with a VR of SQ, OD, OF, OL, OW, OB or UN shall always have a Value Multiplicity of one.
     // GDCM is adding a couple more: AS, LT, ST, UT
-    VR_VM1 = AS | LT | ST | UT | SQ | OF | OL | OD | OW | OB | UN, // All those VR have a VM1
+    VR_VM1 = AS | LT | ST | UT | SQ | OF | OL | OV | OD | OW | OB | UN, // All those VR have a VM1
     VRALL = VRASCII | VRBINARY,
-    VR_END = OL+1  // Invalid VR, need to be max(VRType)+1
+    VR_END = UV+1  // Invalid VR, need to be max(VRType)+1
   } VRType;
 
   static const char *GetVRString(VRType vr);
@@ -236,9 +239,9 @@ inline std::ostream &operator<<(std::ostream &_os, const VR &val)
 #ifndef SWIG
 
 // Tells whether VR Type is ASCII or Binary
-template<int T> struct VRToEncoding;
+template<long int T> struct VRToEncoding;
 // Convert from VR Type to real underlying type
-template<int T> struct VRToType;
+template<long int T> struct VRToType;
 #define TYPETOENCODING(type,rep, rtype)         \
   template<> struct VRToEncoding<VR::type>    \
   { enum { Mode = VR::rep }; };                 \
@@ -266,6 +269,8 @@ typedef String<'\\',64> LTComp;
 typedef String<'\\',64> PNComp;
 typedef String<'\\',64> SHComp;
 typedef String<'\\',64> STComp;
+typedef String<'\\',4294967294> UCComp;
+typedef String<'\\',4294967294> URComp;
 typedef String<'\\',16> TMComp;
 typedef String<'\\',64,0> UIComp;
 typedef String<'\\',64> UTComp;
@@ -288,6 +293,7 @@ TYPETOENCODING(OB,VRBINARY,uint8_t)
 TYPETOENCODING(OD,VRBINARY,double)
 TYPETOENCODING(OF,VRBINARY,float)
 TYPETOENCODING(OL,VRBINARY,uint32_t)
+TYPETOENCODING(OV,VRBINARY,uint64_t)
 TYPETOENCODING(OW,VRBINARY,uint16_t)
 TYPETOENCODING(PN,VRASCII ,PNComp)
 TYPETOENCODING(SH,VRASCII ,SHComp)
@@ -295,12 +301,16 @@ TYPETOENCODING(SL,VRBINARY,int32_t)
 TYPETOENCODING(SQ,VRBINARY,unsigned char) // FIXME
 TYPETOENCODING(SS,VRBINARY,int16_t)
 TYPETOENCODING(ST,VRASCII ,STComp)
+TYPETOENCODING(SV,VRBINARY,int64_t)
 TYPETOENCODING(TM,VRASCII ,TMComp)
+TYPETOENCODING(UC,VRASCII ,UCComp)
 TYPETOENCODING(UI,VRASCII ,UIComp)
 TYPETOENCODING(UL,VRBINARY,uint32_t)
 TYPETOENCODING(UN,VRBINARY,uint8_t) // FIXME ?
+TYPETOENCODING(UR,VRASCII,URComp)
 TYPETOENCODING(US,VRBINARY,uint16_t)
 TYPETOENCODING(UT,VRASCII ,UTComp)
+TYPETOENCODING(UV,VRBINARY,uint64_t)
 
 #define VRTypeTemplateCase(type) \
   case VR::type: \
@@ -326,6 +336,7 @@ inline unsigned int VR::GetSize() const
     VRTypeTemplateCase(OD)
     VRTypeTemplateCase(OF)
     VRTypeTemplateCase(OL)
+    VRTypeTemplateCase(OV)
     VRTypeTemplateCase(OW)
     VRTypeTemplateCase(PN)
     VRTypeTemplateCase(SH)
@@ -333,12 +344,16 @@ inline unsigned int VR::GetSize() const
     VRTypeTemplateCase(SQ)
     VRTypeTemplateCase(SS)
     VRTypeTemplateCase(ST)
+    VRTypeTemplateCase(SV)
     VRTypeTemplateCase(TM)
+    VRTypeTemplateCase(UC)
     VRTypeTemplateCase(UI)
     VRTypeTemplateCase(UL)
     VRTypeTemplateCase(UN)
+    VRTypeTemplateCase(UR)
     VRTypeTemplateCase(US)
     VRTypeTemplateCase(UT)
+    VRTypeTemplateCase(UV)
     case VR::US_SS:
       return 2;
 

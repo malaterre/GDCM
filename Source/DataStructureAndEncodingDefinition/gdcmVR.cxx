@@ -50,10 +50,15 @@ static const char *VRStrings[] = {
   "UT",        // 27
   "OD",        // 28
   "OL",        // 29
-  "OB or OW",  // 30
-  "US or SS",  // 31
-  "US or SS or OW", //32
-  "US or OW", //33
+  "UC",        // 30
+  "UR",        // 31
+  "OV",        // 32
+  "SV",        // 33
+  "UV",        // 34
+  "OB or OW",  // 35
+  "US or SS",  // 36
+  "US or SS or OW", //37
+  "US or OW", //38
   nullptr
 };
 
@@ -88,6 +93,11 @@ static VR::VRType VRValue[] = {
     VR::UT ,
     VR::OD ,
     VR::OL ,
+    VR::UC ,
+    VR::UR ,
+    VR::OV ,
+    VR::SV ,
+    VR::UV ,
 };
 
 bool VR::IsVRFile() const
@@ -111,6 +121,7 @@ bool VR::IsVRFile() const
   case VR::OD:
   case VR::OF:
   case VR::OL:
+  case VR::OV:
   case VR::OW:
   case VR::PN:
   case VR::SH:
@@ -118,12 +129,16 @@ bool VR::IsVRFile() const
   case VR::SQ:
   case VR::SS:
   case VR::ST:
+  case VR::SV:
   case VR::TM:
+  case VR::UC:
   case VR::UI:
   case VR::UL:
   case VR::UN:
+  case VR::UR:
   case VR::US:
   case VR::UT:
+  case VR::UV:
     return true;
   default:
     return false;
@@ -185,6 +200,9 @@ unsigned int VR::GetSizeof() const
   case VR::OL:
     size = sizeof(VRToType<VR::OL>::Type);
     break;
+  case VR::OV:
+    size = sizeof(VRToType<VR::OV>::Type);
+    break;
   case VR::OW:
     size = sizeof(VRToType<VR::OW>::Type);
     break;
@@ -206,8 +224,14 @@ unsigned int VR::GetSizeof() const
   case VR::ST:
     size = sizeof(VRToType<VR::ST>::Type);
     break;
+  case VR::SV:
+    size = sizeof(VRToType<VR::SV>::Type);
+    break;
   case VR::TM:
     size = sizeof(VRToType<VR::TM>::Type);
+    break;
+  case VR::UC:
+    size = sizeof(VRToType<VR::UC>::Type);
     break;
   case VR::UI:
     size = sizeof(VRToType<VR::UI>::Type);
@@ -218,11 +242,17 @@ unsigned int VR::GetSizeof() const
   case VR::UN:
     size = sizeof(VRToType<VR::UN>::Type);
     break;
+  case VR::UR:
+    size = sizeof(VRToType<VR::UR>::Type);
+    break;
   case VR::US:
     size = sizeof(VRToType<VR::US>::Type);
     break;
   case VR::UT:
     size = sizeof(VRToType<VR::UT>::Type);
+    break;
+  case VR::UV:
+    size = sizeof(VRToType<VR::UV>::Type);
     break;
   case VR::US_SS:
     size = sizeof(VRToType<VR::US>::Type); // why not ?
@@ -245,19 +275,19 @@ int VR::GetIndex(VRType vr)
     l = 0;
     break;
   case OB_OW:
-    l =  30;
+    l =  35;
     break;
   case US_SS:
-    l =  31;
+    l =  36;
     break;
   case US_SS_OW:
-    l =  32;
+    l =  37;
     break;
   case US_OW:
-    l =  33;
+    l =  38;
     break;
   case VR_END:
-    l = 34;
+    l = 39;
     break;
   default:
       {
@@ -280,7 +310,7 @@ const char *VR::GetVRStringFromFile(VRType vr)
 {
 #if 1
   static const int N = sizeof(VRValue) / sizeof(VRType);
-  assert( N == 30 );
+  assert( N == 35 );
   static VRType *start = VRValue;
   static VRType *end   = VRValue+N;
   const VRType *p =
@@ -315,7 +345,7 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
  */
 #if 0
   static const int N = sizeof(VRValue) / sizeof(VRType);
-  assert( N == 30 );
+  assert( N == 35 );
   static const char **start = VRStrings+1;
   static const char **end   = VRStrings+N;
   //std::cerr << "VR=" << vr << std::endl;
@@ -373,19 +403,19 @@ VR::VRType VR::GetVRType(const char *vr)
       case 0:
         r = INVALID;
         break;
-      case 30:
+      case 35:
         r = OB_OW;
         break;
-      case 31:
+      case 36:
         r = US_SS;
         break;
-      case 32:
+      case 37:
         r = US_SS_OW;
         break;
-      case 33:
+      case 38:
         r = US_OW;
         break;
-      case 34:
+      case 39:
         r = VR_END; assert(0);
         break;
       default:
@@ -406,7 +436,7 @@ bool VR::IsValid(const char *vr)
     // Use lazy evaluation instead of strncmp
     if (ref[0] == vr[0] && ref[1] == vr[1] )
       {
-      assert( i < 30 ); // FIXME
+      assert( i < 35 ); // FIXME
       return true;
       }
     }
@@ -443,8 +473,8 @@ VRTemplateCase(CS,rep) \
 VRTemplateCase(DA,rep) \
 VRTemplateCase(DS,rep) \
 VRTemplateCase(DT,rep) \
-VRTemplateCase(FL,rep) \
 VRTemplateCase(FD,rep) \
+VRTemplateCase(FL,rep) \
 VRTemplateCase(IS,rep) \
 VRTemplateCase(LO,rep) \
 VRTemplateCase(LT,rep) \
@@ -452,6 +482,7 @@ VRTemplateCase(OB,rep) \
 VRTemplateCase(OD,rep) \
 VRTemplateCase(OF,rep) \
 VRTemplateCase(OL,rep) \
+VRTemplateCase(OV,rep) \
 VRTemplateCase(OW,rep) \
 VRTemplateCase(PN,rep) \
 VRTemplateCase(SH,rep) \
@@ -459,12 +490,16 @@ VRTemplateCase(SL,rep) \
 VRTemplateCase(SQ,rep) \
 VRTemplateCase(SS,rep) \
 VRTemplateCase(ST,rep) \
+VRTemplateCase(SV,rep) \
 VRTemplateCase(TM,rep) \
+VRTemplateCase(UC,rep) \
 VRTemplateCase(UI,rep) \
 VRTemplateCase(UL,rep) \
 VRTemplateCase(UN,rep) \
+VRTemplateCase(UR,rep) \
 VRTemplateCase(US,rep) \
-VRTemplateCase(UT,rep)
+VRTemplateCase(UT,rep) \
+VRTemplateCase(UV,rep)
 
 bool VR::IsASCII(VRType vr)
 {

@@ -38,7 +38,7 @@ namespace gdcm_ns
  *
  * \note TODO
  */
-template<int T> class EncodingImplementation;
+template<long int T> class EncodingImplementation;
 
 
 /**
@@ -48,7 +48,7 @@ template<int T> class EncodingImplementation;
  * Invalid combinations have specialized declarations with no
  * definition.
  */
-template <int TVR, int TVM>
+template <long int TVR, int TVM>
 class ElementDisableCombinations {};
 template <>
 class  ElementDisableCombinations<VR::OB, VM::VM1_n> {};
@@ -65,7 +65,7 @@ class ElementDisableCombinations<VR::OW, TVM>;
  *
  * \note TODO
  */
-template<int TVR, int TVM>
+template<long int TVR, int TVM>
 class Element
 {
   enum { ElementDisableCombinationsCheck = sizeof ( ElementDisableCombinations<TVR, TVM> ) };
@@ -569,7 +569,7 @@ class Element<VR::PN, TVM> : public StringElement<TVM>
 #endif
 
 // Implementation for the undefined length (dynamically allocated array)
-template<int TVR>
+template<long int TVR>
 class Element<TVR, VM::VM1_n>
 {
   enum { ElementDisableCombinationsCheck = sizeof ( ElementDisableCombinations<TVR, VM::VM1_n> ) };
@@ -786,7 +786,7 @@ private:
 //class Element<VR::OB, TVM > : public Element<VR::OB, VM::VM1_n> {};
 
 // Partial specialization for derivatives of 1-n : 2-n, 3-n ...
-template<int TVR>
+template<long int TVR>
 class Element<TVR, VM::VM1_2> : public Element<TVR, VM::VM1_n>
 {
 public:
@@ -796,7 +796,7 @@ public:
     Parent::SetLength(len);
   }
 };
-template<int TVR>
+template<long int TVR>
 class Element<TVR, VM::VM2_n> : public Element<TVR, VM::VM1_n>
 {
   enum { ElementDisableCombinationsCheck = sizeof ( ElementDisableCombinations<TVR, VM::VM2_n> ) };
@@ -807,7 +807,7 @@ public:
     Parent::SetLength(len);
   }
 };
-template<int TVR>
+template<long int TVR>
 class Element<TVR, VM::VM2_2n> : public Element<TVR, VM::VM2_n>
 {
   enum { ElementDisableCombinationsCheck = sizeof ( ElementDisableCombinations<TVR, VM::VM2_2n> ) };
@@ -818,7 +818,7 @@ public:
     Parent::SetLength(len);
   }
 };
-template<int TVR>
+template<long int TVR>
 class Element<TVR, VM::VM3_n> : public Element<TVR, VM::VM1_n>
 {
   enum { ElementDisableCombinationsCheck = sizeof ( ElementDisableCombinations<TVR, VM::VM3_n> ) };
@@ -829,7 +829,7 @@ public:
     Parent::SetLength(len);
   }
 };
-template<int TVR>
+template<long int TVR>
 class Element<TVR, VM::VM3_3n> : public Element<TVR, VM::VM3_n>
 {
   enum { ElementDisableCombinationsCheck = sizeof ( ElementDisableCombinations<TVR, VM::VM3_3n> ) };
