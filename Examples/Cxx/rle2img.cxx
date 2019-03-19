@@ -141,9 +141,15 @@ int main(int argc, char *argv [])
     }
   if( !isrgb && !isrle ) return 1;
 
-  const gdcm::PrivateTag tcompressedpixeldata(0x07a1,0x000a,"ELSCINT1");
-  if( !ds.FindDataElement( tcompressedpixeldata) ) return 1;
-  const gdcm::DataElement& compressionpixeldata = ds.GetDataElement( tcompressedpixeldata);
+  // check if compressed pixel data reside in private or standard tag
+  const gdcm::PrivateTag tprivatepixeldata(0x07a1,0x100a,"ELSCINT1");
+  const gdcm::Tag tstandardpixeldata(0x7fe0, 0x0010);
+  gdcm::Tag tpixeldata;
+  if(ds.FindDataElement(tprivatepixeldata)) tpixeldata = tprivatepixeldata;
+  else if(ds.FindDataElement(tstandardpixeldata)) tpixeldata = tstandardpixeldata;
+  if(!ds.FindDataElement(tpixeldata)) return 1;
+
+  const gdcm::DataElement& compressionpixeldata = ds.GetDataElement( tpixeldata);
   if ( compressionpixeldata.IsEmpty() ) return 1;
   const gdcm::ByteValue * bv2 = compressionpixeldata.GetByteValue();
 
@@ -152,7 +158,16 @@ int main(int argc, char *argv [])
   gdcm::Attribute<0x0028,0x0011> at2;
   at2.SetFromDataSet( ds );
 
-  gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
+  gdcm::DataElement pixeldata;
+  // if standard voxel data element does not exist, create it
+  if( !reader.GetFile().GetDataSet().FindDataElement( tpixeldata ) )
+  {
+    pixeldata = gdcm::DataElement( tpixeldata, 0, gdcm::VR::OW );
+  }
+  else{
+    pixeldata = reader.GetFile().GetDataSet().GetDataElement( tpixeldata );
+  }
+
   pixeldata.SetVR( gdcm::VR::OW );
   gdcm::VL bv2l = bv2->GetLength();
   gdcm::VL at1l = at1.GetValue() * at2.GetValue() * 2; /* sizeof(unsigned short) == 2 */
@@ -170,7 +185,15 @@ int main(int argc, char *argv [])
   // TODO we should check that decompress byte buffer match the expected size (row*col*...)
 
   // Add the pixel data element
-  reader.GetFile().GetDataSet().Replace( pixeldata );
+  if( reader.GetFile().GetDataSet().FindDataElement( tpixeldata ) )
+  {
+    reader.GetFile().GetDataSet().Replace( pixeldata );
+  }
+  else
+  {
+    reader.GetFile().GetDataSet().ReplaceEmpty( pixeldata );
+  }
+
 
   reader.GetFile().GetHeader().SetDataSetTransferSyntax(
     gdcm::TransferSyntax::ExplicitVRLittleEndian);
@@ -178,11 +201,16 @@ int main(int argc, char *argv [])
   writer.SetFile( reader.GetFile() );
 
   // Cleanup stuff:
-  // remove the compressed pixel data:
-  // FIXME: should I remove more private tags ? all of them ?
-  // oh well this is just an example
-  // use gdcm::Anonymizer::RemovePrivateTags if needed...
-  writer.GetFile().GetDataSet().Remove( compressionpixeldata.GetTag() );
+  // This makes the code equivalent to Philips workstation IntelliSpace Portal
+  if( writer.GetFile().GetDataSet().FindDataElement( tcompressiontype ) )
+  {
+    writer.GetFile().GetDataSet().Remove( gdcm::Tag(0x07a1,0x1011) );
+  }
+  if( writer.GetFile().GetDataSet().FindDataElement( tprivatepixeldata ) )
+  {
+    writer.GetFile().GetDataSet().Remove( gdcm::Tag(0x07a1,0x100a) );
+  }
+
   std::string outfilename;
   if (argc > 2)
      outfilename = argv[2];
