@@ -56,6 +56,10 @@ public:
 
   void SetNumberOfResolutions(unsigned int nres);
 
+  /// Set Number of threads
+  /// @param nThreads : number of threads for codec, if negative value is set determine how many virtual threads are available
+  void SetNumberOfThreads(int nThreads);
+
   void SetReversible(bool res);
 
 protected:
@@ -81,6 +85,7 @@ private:
   bool CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & complen, const char * indata, size_t inlen );
   bool GetHeaderInfo(const char * dummy_buffer, size_t len, TransferSyntax &ts);
   JPEG2000Internals *Internals;
+  int nNumberOfThreads;
 };
 
 } // end namespace gdcm
