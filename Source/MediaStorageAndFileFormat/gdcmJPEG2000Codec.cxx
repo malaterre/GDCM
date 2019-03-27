@@ -394,12 +394,14 @@ class JPEG2000Internals
 {
 public:
   JPEG2000Internals()
+  : nNumberOfThreads( -1 )
     {
     memset(&coder_param, 0, sizeof(coder_param));
     opj_set_default_encoder_parameters(&coder_param);
     }
 
   opj_cparameters coder_param;
+  int nNumberOfThreads;
 };
 
 void JPEG2000Codec::SetRate(unsigned int idx, double rate)
@@ -448,11 +450,11 @@ void JPEG2000Codec::SetNumberOfThreads( int nThreads)
 {
   if( nThreads < 0 )
   {
-    nNumberOfThreads = opj_get_num_cpus();
-	nNumberOfThreads = nNumberOfThreads == 1 ? 0 : nNumberOfThreads ;
+    Internals->nNumberOfThreads = opj_get_num_cpus();
+	Internals->nNumberOfThreads = Internals->nNumberOfThreads == 1 ? 0 : Internals->nNumberOfThreads ;
   }
   else
-    nNumberOfThreads = nThreads ;
+    Internals->nNumberOfThreads = nThreads ;
 }
 
 void JPEG2000Codec::SetReversible(bool res)
@@ -462,7 +464,6 @@ void JPEG2000Codec::SetReversible(bool res)
 }
 
 JPEG2000Codec::JPEG2000Codec()
-: nNumberOfThreads( -1 )
 {
   Internals = new JPEG2000Internals;
   SetNumberOfThreads( -1 );
@@ -667,7 +668,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     gdcmErrorMacro( "Impossible happen" );
     return std::make_pair<char*,size_t>(0,0);
     }
-  opj_codec_set_threads(dinfo, nNumberOfThreads);
+  opj_codec_set_threads(dinfo, Internals->nNumberOfThreads);
   int reversible;
   myfile mysrc;
   myfile *fsrc = &mysrc;
@@ -1243,7 +1244,7 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
   /* get a J2K compressor handle */
   cinfo = opj_create_compress(CODEC_J2K);
 
-  opj_codec_set_threads(cinfo, nNumberOfThreads);
+  opj_codec_set_threads(cinfo, Internals->nNumberOfThreads);
 
   /* setup the encoder parameters using the current image and using user parameters */
   opj_setup_encoder(cinfo, &parameters, image);
@@ -1419,7 +1420,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     return false;
     }
   
-  opj_codec_set_threads(dinfo, nNumberOfThreads);
+  opj_codec_set_threads(dinfo, Internals->nNumberOfThreads);
 
   myfile mysrc;
   myfile *fsrc = &mysrc;

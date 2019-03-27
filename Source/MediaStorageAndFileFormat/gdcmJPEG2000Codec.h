@@ -85,7 +85,6 @@ private:
   bool CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & complen, const char * indata, size_t inlen );
   bool GetHeaderInfo(const char * dummy_buffer, size_t len, TransferSyntax &ts);
   JPEG2000Internals *Internals;
-  int nNumberOfThreads;
 };
 
 } // end namespace gdcm
