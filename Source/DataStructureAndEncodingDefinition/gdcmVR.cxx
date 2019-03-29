@@ -309,7 +309,7 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
  * You need to compile with -DNDEBUG
  * Running TestReader on gdcmData, leads to 2.2% improvement
  */
-#if 1
+#if 0
   static const int N = sizeof(VRValue) / sizeof(VRType);
   assert( N == 30 );
   static const char **start = VRStrings+1;
