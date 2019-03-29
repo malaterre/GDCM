@@ -273,6 +273,11 @@ int TestVR(int, char *[])
 
   if( TestEnumString("OD", gdcm::VR::OD ) == 1 ) return 1;
   if( TestEnumString("OL", gdcm::VR::OL ) == 1 ) return 1;
+  if( TestEnumString("UC", gdcm::VR::UC ) == 1 ) return 1;
+  if( TestEnumString("UR", gdcm::VR::UR ) == 1 ) return 1;
+  if( TestEnumString("OV", gdcm::VR::OV ) == 1 ) return 1;
+  if( TestEnumString("SV", gdcm::VR::SV ) == 1 ) return 1;
+  if( TestEnumString("UV", gdcm::VR::UV ) == 1 ) return 1;
 
   return 0;
 }
