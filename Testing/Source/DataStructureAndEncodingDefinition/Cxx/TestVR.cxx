@@ -257,6 +257,8 @@ int TestVR(int, char *[])
   //else if( gdcm::VR::US_SS_OW <= gdcm::VR::UT ) return 1;
   //else if( gdcm::VR::VL32 <= gdcm::VR::UT ) return 1;
 
+  gdcm::VR::VRType od = gdcm::VR::GetVRTypeFromFile("OD");
+  if( od != gdcm::VR::OD ) return 1;
 
   return 0;
 }
