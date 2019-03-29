@@ -264,10 +264,10 @@ unsigned int VR::GetSizeof() const
   return size;
 }
 
-int VR::GetIndex(VRType vr)
+long VR::GetIndex(VRType vr)
 {
   if( vr == VR::VL32 ) return 0;
-  int l;
+  long l;
   assert( vr <= VR_END );
   switch(vr)
     {
@@ -291,7 +291,7 @@ int VR::GetIndex(VRType vr)
     break;
   default:
       {
-      int a = (int)vr;
+      long a = (long)vr;
       for (l = 0; a > 1; ++l)
         a >>= 1;
       l++;
@@ -375,7 +375,7 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
     // Use lazy evaluation instead of strncmp
     if (ref[0] == vr[0] && ref[1] == vr[1] )
       {
-      r = (VR::VRType)(1 << (i-1));
+      r = (VR::VRType)(1L << (i-1));
       break;
       }
     }
@@ -420,7 +420,7 @@ VR::VRType VR::GetVRType(const char *vr)
         break;
       default:
         assert( vr[2] == 0 );
-        r = (VR::VRType)(1 << (i-1));
+        r = (VR::VRType)(1L << (i-1));
         }
       break; // found one value, we can exit the for loop
       }
