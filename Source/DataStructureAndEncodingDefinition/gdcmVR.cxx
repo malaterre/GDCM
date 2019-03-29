@@ -345,6 +345,19 @@ VR::VRType VR::GetVRTypeFromFile(const char *vr)
       break;
       }
     }
+  if( r == VR::VR_END )
+    {
+    // https://groups.google.com/d/msg/comp.protocols.dicom/0ata_3lpjF4/xlkjOKRGBwAJ
+    // http://dicom.nema.org/medical/dicom/current/output/chtml/part05/chapter_E.html
+    if( vr[0] >= ' ' && vr[0] <= '~'
+     && vr[1] >= ' ' && vr[1] <= '~' ) // FIXME Control Char LF/FF/CR TAB and ESC should be accepted
+      {
+      // newly added VR ?
+      // we are not capable of preserving the original VR. this is accepted behavior
+      return VR::UN;
+      }
+    return VR::INVALID;
+    }
 #endif
   // postcondition
   assert( r != VR::INVALID
