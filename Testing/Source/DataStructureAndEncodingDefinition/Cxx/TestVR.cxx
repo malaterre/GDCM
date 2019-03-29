@@ -15,6 +15,20 @@
 
 #include <string>
 
+static int TestEnumString(std::string const & rep, gdcm::VR::VRType vr)
+{
+  const std::string & odstr = rep;
+  gdcm::VR::VRType od = gdcm::VR::GetVRTypeFromFile(odstr.c_str());
+  if( od != vr ) return 1;
+  const char *odcstr = gdcm::VR::GetVRStringFromFile(vr);
+  if( odstr != odcstr ) return 1;
+  od = gdcm::VR::GetVRType(odstr.c_str());
+  if( od != vr ) return 1;
+  odcstr = gdcm::VR::GetVRString(vr);
+  if( !gdcm::VR::IsValid(odstr.c_str())) return 1;
+  return 0;
+}
+
 // Not used...
 int verify()
 {
@@ -207,7 +221,7 @@ int TestVR(int, char *[])
   vr = gdcm::VR::AE;
   if( vr & gdcm::VR::VRASCII )
     {
-    std::cout << vr << "is ASCII\n";
+    std::cout << vr << " is ASCII\n";
     }
   else
     {
@@ -216,7 +230,7 @@ int TestVR(int, char *[])
   vr = gdcm::VR::UI;
   if( vr & gdcm::VR::VRASCII )
     {
-    std::cout << vr << "is ASCII\n";
+    std::cout << vr << " is ASCII\n";
     }
   else
     {
@@ -225,7 +239,7 @@ int TestVR(int, char *[])
   vr = gdcm::VR::OB;
   if( vr & gdcm::VR::VRBINARY )
     {
-    std::cout << vr << "is Binary\n";
+    std::cout << vr << " is Binary\n";
     }
   else
     {
@@ -257,6 +271,8 @@ int TestVR(int, char *[])
   //else if( gdcm::VR::US_SS_OW <= gdcm::VR::UT ) return 1;
   //else if( gdcm::VR::VL32 <= gdcm::VR::UT ) return 1;
 
+  if( TestEnumString("OD", gdcm::VR::OD ) == 1 ) return 1;
+  if( TestEnumString("OL", gdcm::VR::OL ) == 1 ) return 1;
 
   return 0;
 }
