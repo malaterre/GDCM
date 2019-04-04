@@ -13058,13 +13058,6 @@ enum:long long { VRType = VR::LO };
 enum { VMType = VM::VM1 };
 static const char* GetVMString() { return "1"; }
 };
-template <> struct TagToType<0x0028,0x3006> {
-static const char* GetVRString() { return "US_OW"; }
-typedef VRToType<VR::US_OW>::Type Type;
-enum:long long { VRType = VR::US_OW };
-enum { VMType = VM::VM1_n };
-static const char* GetVMString() { return "1-n"; }
-};
 template <> struct TagToType<0x0028,0x3010> {
 static const char* GetVRString() { return "SQ"; }
 typedef VRToType<VR::SQ>::Type Type;
