@@ -54,7 +54,7 @@ namespace gdcm
 class GDCM_EXPORT VR
 {
 public:
-  typedef enum {
+  typedef enum:long long {
     // Warning: Do not write if ( vr & VR::INVALID ) but if ( vr == VR::INVALID )
     INVALID = 0, // For Item/(Seq) Item Delimitation Item
     AE = 1,
@@ -224,7 +224,7 @@ public:
 
 private:
   // Internal function that map a VRType to an index in the VRStrings table
-  static long GetIndex(VRType vr);
+  static long long GetIndex(VRType vr);
   VRType VRField;
 };
 //-----------------------------------------------------------------------------
@@ -239,12 +239,12 @@ inline std::ostream &operator<<(std::ostream &_os, const VR &val)
 #ifndef SWIG
 
 // Tells whether VR Type is ASCII or Binary
-template<long int T> struct VRToEncoding;
+template<long long T> struct VRToEncoding;
 // Convert from VR Type to real underlying type
-template<long int T> struct VRToType;
+template<long long T> struct VRToType;
 #define TYPETOENCODING(type,rep, rtype)         \
   template<> struct VRToEncoding<VR::type>    \
-  { enum { Mode = VR::rep }; };                 \
+  { enum:long long { Mode = VR::rep }; };                 \
   template<> struct VRToType<VR::type>        \
   { typedef rtype Type; };
 
