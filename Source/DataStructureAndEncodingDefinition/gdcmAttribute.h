@@ -86,7 +86,7 @@ class Attribute
 {
 public:
   typedef typename VRToType<TVR>::Type ArrayType;
-  enum:long long { VMType = VMToLength<TVM>::Length };
+  enum { VMType = VMToLength<TVM>::Length };
   ArrayType Internal[VMToLength<TVM>::Length];
 
   // Make sure that user specified VR/VM are compatible with the public dictionary:
@@ -319,7 +319,7 @@ class Attribute<Group,Element,TVR,VM::VM1>
 {
 public:
   typedef typename VRToType<TVR>::Type ArrayType;
-  enum:long long { VMType = VMToLength<VM::VM1>::Length };
+  enum { VMType = VMToLength<VM::VM1>::Length };
   //ArrayType Internal[VMToLength<TVM>::Length];
   ArrayType Internal;
   GDCM_STATIC_ASSERT( VMToLength<VM::VM1>::Length == 1 );
