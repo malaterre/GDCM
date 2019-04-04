@@ -239,12 +239,12 @@ inline std::ostream &operator<<(std::ostream &_os, const VR &val)
 #ifndef SWIG
 
 // Tells whether VR Type is ASCII or Binary
-template<long int T> struct VRToEncoding;
+template<long long T> struct VRToEncoding;
 // Convert from VR Type to real underlying type
-template<long int T> struct VRToType;
+template<long long T> struct VRToType;
 #define TYPETOENCODING(type,rep, rtype)         \
   template<> struct VRToEncoding<VR::type>    \
-  { enum { Mode = VR::rep }; };                 \
+  { enum:long long { Mode = VR::rep }; };                 \
   template<> struct VRToType<VR::type>        \
   { typedef rtype Type; };
 
