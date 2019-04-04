@@ -463,10 +463,10 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       {
       assert( cinfo.num_components == 3 );
       PI = PhotometricInterpretation::YBR_FULL_422;
-  if( cinfo.process == JPROC_LOSSLESS )
-      PI = PhotometricInterpretation::RGB; // wotsit ?
+      if( cinfo.process == JPROC_LOSSLESS )
+        PI = PhotometricInterpretation::RGB; // wotsit ?
       this->PF.SetSamplesPerPixel( 3 );
-  this->PlanarConfiguration = 1;
+      this->PlanarConfiguration = 1;
       }
     else if( cinfo.jpeg_color_space == JCS_CMYK )
       {
