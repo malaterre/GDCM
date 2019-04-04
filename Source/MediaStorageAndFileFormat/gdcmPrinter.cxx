@@ -609,8 +609,12 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
       //StringFilterCase(UN);
       StringFilterCase(US);
       //StringFilterCase(UT);
+      StringFilterCase(SV);
+      StringFilterCase(UV);
     case VR::OB:
     case VR::OW:
+    case VR::OL:
+    case VR::OV:
     case VR::OB_OW:
     case VR::UN:
     case VR::US_OW: // TODO: check with ModalityLUT.dcm

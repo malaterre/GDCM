@@ -293,8 +293,12 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
       StringFilterCase(SS);
       StringFilterCase(UL);
       StringFilterCase(US);
+      StringFilterCase(SV);
+      StringFilterCase(UV);
     case VR::OB:
     case VR::OW:
+    case VR::OL:
+    case VR::OV:
     case VR::OB_OW:
     case VR::UN:
     case VR::US_OW: 
