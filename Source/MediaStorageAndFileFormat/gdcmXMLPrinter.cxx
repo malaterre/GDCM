@@ -373,7 +373,33 @@ VR XMLPrinter::PrintDataElement(std::ostream &os, const Dicts &dicts, const Data
         assert( de.IsEmpty() );
         }
       break;
-    default:
+    /* ASCII are treated elsewhere but we do not want to use default: here to get warnings */
+    /* hopefully compiler is smart and remove dead switch/case */
+    case VR::AE:
+    case VR::AS:
+    case VR::CS:
+    case VR::DA:
+    case VR::DS:
+    case VR::DT:
+    case VR::IS:
+    case VR::LO:
+    case VR::LT:
+    case VR::PN:
+    case VR::SH:
+    case VR::ST:
+    case VR::TM:
+    case VR::UC:
+    case VR::UI:
+    case VR::UR:
+    case VR::UT:
+    /* others */
+    case VR::VL16:
+    case VR::VL32:
+    case VR::VRASCII:
+    case VR::VRBINARY:
+    case VR::VR_VM1:
+    case VR::VRALL:
+    case VR::VR_END:
       assert(0 && "No Match! Impossible!!");
       break;
       }
