@@ -300,7 +300,7 @@ static int add1(char *buf, int n) {
     return add1(buf, n-1);
   }
   else {
-    buf[n] += 1;
+    buf[n] = (char)(buf[n] + 1);
   }
   return 0;
 }
@@ -363,7 +363,7 @@ static void x16printf(char *buf, int size, Float f) {
   *mant = line[0];
   i = (int)strcspn(mant, "eE");
   mant[i] = '\0';
-  iexp = strtol(mant + i + 1, nullptr, 10);
+  iexp = (int)strtol(mant + i + 1, nullptr, 10);
   lexp = sprintf(exp, "e%d", iexp);
   if ((iexp >= size) || (iexp < -3)) {
     i = roundat(mant, size - 1 -lexp, iexp);
