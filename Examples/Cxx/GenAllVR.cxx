@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
   // avoid INVALID = 0
   for(int i = 1; i < 27; ++i)
     {
-    VR vr = (VR::VRType)(1 << i);
+    VR vr = (VR::VRType)(1LL << i);
     Tag t = FindTagFromVR( pubdict, vr );
     if( vr != VR::UN && vr != VR::SQ )
       {
