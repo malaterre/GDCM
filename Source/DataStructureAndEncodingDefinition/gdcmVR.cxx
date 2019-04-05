@@ -291,7 +291,7 @@ unsigned int VR::GetIndex(VRType vr)
   default:
       {
       long long a = (long long)vr;
-      for (l = 0; a > 1; ++l)
+      for (; a > 1; ++l)
         a >>= 1LL;
       l++;
       }
