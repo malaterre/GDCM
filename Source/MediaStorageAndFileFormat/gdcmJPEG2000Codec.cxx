@@ -394,14 +394,14 @@ class JPEG2000Internals
 {
 public:
   JPEG2000Internals()
-  : nNumberOfThreads( -1 )
+  : nNumberOfThreadsForDecompression( -1 )
     {
     memset(&coder_param, 0, sizeof(coder_param));
     opj_set_default_encoder_parameters(&coder_param);
     }
 
   opj_cparameters coder_param;
-  int nNumberOfThreads;
+  int nNumberOfThreadsForDecompression;
 };
 
 void JPEG2000Codec::SetRate(unsigned int idx, double rate)
@@ -446,15 +446,15 @@ void JPEG2000Codec::SetNumberOfResolutions(unsigned int nres)
   Internals->coder_param.numresolution = nres;
 }
 
-void JPEG2000Codec::SetNumberOfThreads( int nThreads)
+void JPEG2000Codec::SetNumberOfThreadsForDecompression( int nThreads)
 {
   if( nThreads < 0 )
   {
-    Internals->nNumberOfThreads = opj_get_num_cpus();
-	Internals->nNumberOfThreads = Internals->nNumberOfThreads == 1 ? 0 : Internals->nNumberOfThreads ;
+    Internals->nNumberOfThreadsForDecompression = opj_get_num_cpus();
+	Internals->nNumberOfThreadsForDecompression = Internals->nNumberOfThreadsForDecompression == 1 ? 0 : Internals->nNumberOfThreadsForDecompression ;
   }
   else
-    Internals->nNumberOfThreads = nThreads ;
+    Internals->nNumberOfThreadsForDecompression = nThreads ;
 }
 
 void JPEG2000Codec::SetReversible(bool res)
@@ -466,7 +466,7 @@ void JPEG2000Codec::SetReversible(bool res)
 JPEG2000Codec::JPEG2000Codec()
 {
   Internals = new JPEG2000Internals;
-  SetNumberOfThreads( -1 );
+  SetNumberOfThreadsForDecompression( -1 );
 }
 
 JPEG2000Codec::~JPEG2000Codec()
@@ -668,7 +668,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     gdcmErrorMacro( "Impossible happen" );
     return std::make_pair<char*,size_t>(0,0);
     }
-  opj_codec_set_threads(dinfo, Internals->nNumberOfThreads);
+  opj_codec_set_threads(dinfo, Internals->nNumberOfThreadsForDecompression);
   int reversible;
   myfile mysrc;
   myfile *fsrc = &mysrc;
@@ -1244,7 +1244,6 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
   /* get a J2K compressor handle */
   cinfo = opj_create_compress(CODEC_J2K);
 
-  opj_codec_set_threads(cinfo, Internals->nNumberOfThreads);
 
   /* setup the encoder parameters using the current image and using user parameters */
   opj_setup_encoder(cinfo, &parameters, image);
@@ -1420,7 +1419,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     return false;
     }
   
-  opj_codec_set_threads(dinfo, Internals->nNumberOfThreads);
+  opj_codec_set_threads(dinfo, Internals->nNumberOfThreadsForDecompression);
 
   myfile mysrc;
   myfile *fsrc = &mysrc;
