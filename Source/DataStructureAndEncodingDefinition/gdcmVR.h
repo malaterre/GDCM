@@ -224,7 +224,7 @@ public:
 
 private:
   // Internal function that map a VRType to an index in the VRStrings table
-  static long long GetIndex(VRType vr);
+  static unsigned int GetIndex(VRType vr);
   VRType VRField;
 };
 //-----------------------------------------------------------------------------

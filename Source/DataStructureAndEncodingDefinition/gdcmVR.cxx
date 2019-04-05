@@ -264,10 +264,10 @@ unsigned int VR::GetSizeof() const
   return size;
 }
 
-long long VR::GetIndex(VRType vr)
+unsigned int VR::GetIndex(VRType vr)
 {
   if( vr == VR::VL32 ) return 0;
-  long long l;
+  unsigned int l;
   assert( vr <= VR_END );
   switch(vr)
     {
@@ -302,7 +302,7 @@ long long VR::GetIndex(VRType vr)
 
 const char *VR::GetVRString(VRType vr)
 {
-  int idx = (int)GetIndex(vr);
+  const unsigned int idx = GetIndex(vr);
   return VRStrings[idx];
 }
 
@@ -316,10 +316,10 @@ const char *VR::GetVRStringFromFile(VRType vr)
   const VRType *p =
     std::lower_bound(start, end, vr);
   assert( *p == vr );
-  assert( (p - start) == GetIndex(vr) );
+  assert( (p - start) == (long long)GetIndex(vr) );
   return VRStrings[p-start];
 #else
-  int idx = (int)GetIndex(vr);
+  const unsigned int idx = GetIndex(vr);
   return VRStrings[idx];
 #endif
 }
