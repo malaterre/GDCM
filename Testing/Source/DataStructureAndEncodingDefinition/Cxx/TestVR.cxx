@@ -150,6 +150,25 @@ int TestValue()
 
 int TestVR(int, char *[])
 {
+  enum {
+   V1 = 0ULL,
+   V2 = 4294967295ULL
+  } E4;
+  std::cout << sizeof E4 << std::endl;
+  enum {
+   V3 = 0ULL,
+   V4 = 4294967296ULL
+  } E8;
+  std::cout << sizeof E8 << std::endl;
+  if( sizeof E4 != 4 ) {
+    std::cerr << "E4 is: " << sizeof E4 << std::endl;
+    return 1;
+  }
+  if( sizeof E8 != 8 ) {
+    std::cerr << "E8 is: " << sizeof E8 << std::endl;
+    return 1;
+  }
+
   if( TestValue() )
     return 1;
 
