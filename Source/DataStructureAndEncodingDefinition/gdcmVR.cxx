@@ -302,7 +302,7 @@ long long VR::GetIndex(VRType vr)
 
 const char *VR::GetVRString(VRType vr)
 {
-  int idx = GetIndex(vr);
+  int idx = (int)GetIndex(vr);
   return VRStrings[idx];
 }
 
@@ -319,7 +319,7 @@ const char *VR::GetVRStringFromFile(VRType vr)
   assert( (p - start) == GetIndex(vr) );
   return VRStrings[p-start];
 #else
-  int idx = GetIndex(vr);
+  int idx = (int)GetIndex(vr);
   return VRStrings[idx];
 #endif
 }
