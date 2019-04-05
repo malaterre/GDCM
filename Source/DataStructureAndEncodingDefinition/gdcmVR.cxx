@@ -267,12 +267,11 @@ unsigned int VR::GetSizeof() const
 unsigned int VR::GetIndex(VRType vr)
 {
   if( vr == VR::VL32 ) return 0;
-  unsigned int l;
+  unsigned int l = 0;
   assert( vr <= VR_END );
   switch(vr)
     {
   case INVALID:
-    l = 0;
     break;
   case OB_OW:
     l =  35;
@@ -296,6 +295,7 @@ unsigned int VR::GetIndex(VRType vr)
         a >>= 1LL;
       l++;
       }
+    break;
     }
   return l;
 }
