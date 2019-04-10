@@ -1496,6 +1496,10 @@ int main (int argc, char *argv[])
       {
       res += PrintCT3(filename, verbose!= 0);
       }
+    else if( printpmtf )
+      {
+      res += PrintPMTF(filename, verbose!= 0);
+      }
     else if( printelscint )
       {
       res += PrintELSCINT(filename, verbose!= 0);
