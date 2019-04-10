@@ -25,28 +25,39 @@
 
 #include <assert.h>
 
-bool DumpToshibaDTI( const char * input, size_t len )
+static bool DumpToshibaDTI( const char * input, size_t len )
 {
+  static int i = 0;
+  ++i;
   if( len % 2 ) return false;
 
   std::vector<char> copy( input, input + len );
   std::reverse( copy.begin(), copy.end() );
 
+#if 0
+  std::ostringstream f;
+  f << "debug" << i;
+  std::ofstream of( f.str().c_str(), std::ios::binary );
+  of.write( &copy[0], copy.size() );
+  of.close();
+#else
+
   std::istringstream is;
   std::string dup( &copy[0], copy.size() );
   is.str( dup );
 
-  gdcm::Reader reader;
-  reader.SetStream( is );
-  if( !reader.Read() )
-    return false;
+  gdcm::File file;
+  gdcm::FileMetaInformation & fmi = file.GetHeader();
+  fmi.SetDataSetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+  gdcm::DataSet & ds = file.GetDataSet();
+  ds.Read<gdcm::ExplicitDataElement,gdcm::SwapperNoOp>( is );
 
-  //std::cout << reader.GetFile().GetDataSet() << std::endl;
   //gdcm::DictPrinter p;
   gdcm::Printer p;
-  p.SetFile( reader.GetFile() );
+  p.SetFile( file );
   p.SetColor( true );
   p.Print( std::cout );
+#endif
 
   return true;
 }
