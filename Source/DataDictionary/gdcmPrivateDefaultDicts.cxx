@@ -4630,7 +4630,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0029,0x0011,"MMCPrivate",VR::LO,VM::VM1,"?",false },
   {0x0029,0x0012,"MMCPrivate",VR::LO,VM::VM1,"?",false },
   {0x0029,0x0013,"MMCPrivate",VR::LO,VM::VM1,"?",false },
-  {0x0029,0x0014,"MMCPrivate",VR::LO,VM::VM1,"?",false },
+  {0x0029,0x0014,"MMCPrivate",VR::LO,VM::VM1,"?MTR True/False?",false },
   {0x0029,0x0015,"MMCPrivate",VR::LO,VM::VM1,"?",false },
   {0x0029,0x0016,"MMCPrivate",VR::LO,VM::VM1,"?",false },
   {0x0029,0x0017,"MMCPrivate",VR::LO,VM::VM1,"?",false },
