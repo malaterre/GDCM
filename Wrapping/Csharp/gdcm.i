@@ -349,6 +349,7 @@ EXTEND_CLASS_PRINT(gdcm::VL)
 }
 %csmethodmodifiers gdcm::VL::GetValueLength "private"
 
+%typemap(csbase) gdcm::VR::VRType "long long"
 %include "gdcmVR.h"
 EXTEND_CLASS_PRINT(gdcm::VR)
 %include "gdcmVM.h"
