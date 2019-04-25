@@ -54,7 +54,7 @@ namespace gdcm
 class GDCM_EXPORT VR
 {
 public:
-  typedef enum {
+  typedef enum : long long {
     // Warning: Do not write if ( vr & VR::INVALID ) but if ( vr == VR::INVALID )
     INVALID = 0, // For Item/(Seq) Item Delimitation Item
     AE = 1,
