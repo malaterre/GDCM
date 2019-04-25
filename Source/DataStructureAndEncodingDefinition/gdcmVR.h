@@ -54,7 +54,7 @@ namespace gdcm
 class GDCM_EXPORT VR
 {
 public:
-  typedef enum : long long {
+  enum VRType : long long {
     // Warning: Do not write if ( vr & VR::INVALID ) but if ( vr == VR::INVALID )
     INVALID = 0, // For Item/(Seq) Item Delimitation Item
     AE = 1,
@@ -106,7 +106,7 @@ public:
     VR_VM1 = AS | LT | ST | UT | SQ | OF | OL | OV | OD | OW | OB | UN, // All those VR have a VM1
     VRALL = VRASCII | VRBINARY,
     VR_END = UV+1  // Invalid VR, need to be max(VRType)+1
-  } VRType;
+  };
 
   static const char *GetVRString(VRType vr);
 
