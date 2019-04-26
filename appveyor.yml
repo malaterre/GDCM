@@ -2,7 +2,7 @@
 # http://www.appveyor.com/docs/appveyor-yml
 
 # Set build version format here instead of in the admin panel.
-version: 2.9.0.{build}
+version: 3.0.0.{build}
 
 # http://www.appveyor.com/docs/build-cache#caching-chocolatey-packages
 # https://github.com/kvirc/KVIrc/blob/master/.appveyor.yml
@@ -23,13 +23,13 @@ cache:
 
 environment:
   matrix:
-  - VS_GEN: Visual Studio 12 2013
+  - VS_GEN: Visual Studio 10 2010
     CONFIG: Release
     B_NAME: Windows-x86
     DO_REL: true
     PYTHONHOME: C:\Python27
     JAVA_HOME: C:\Program Files (x86)\Java\jdk1.7.0
-  - VS_GEN: Visual Studio 12 2013 Win64
+  - VS_GEN: Visual Studio 10 2010 Win64
     CONFIG: Release
     B_NAME: Windows-x86_64
     DO_REL: true
@@ -58,8 +58,7 @@ branches:
   - coverity_scan
 
 #You can disable builds on new tags through UI (General tab of project settings) or in appveyor.yml:
-# skip tag building since v2.7.0 will trigger an infinite loop
-skip_tags: true
+#skip_tags: true
 
 # scripts that are called at very beginning, before repo cloning
 init:
@@ -112,9 +111,9 @@ before_build:
 # scripts to run after build
 after_build:
   # create NSIS installer
-  - cpack -G NSIS -C %CONFIG% || true
+  - cpack -G NSIS -C %CONFIG%
   # create binary zip
-  - cpack -G ZIP -C %CONFIG% || true
+  - cpack -G ZIP -C %CONFIG%
   # no need for source release on github
 
 # to run your custom scripts instead of automatic MSBuild
@@ -163,13 +162,13 @@ deploy:
   - provider: GitHub
     auth_token:
       secure: 7HmfZp9O7bVdQo2hRk6FjOUs7jJosftv2rZ6JPBNzjPcAOMXDTvLqv3lvzdAzBfy
-    release: v2.9.0
-    description: 'Beta release of GDCM v$(appveyor_build_version)'
+    release: $(appveyor_repo_tag_name)
+    description: 'Release of GDCM $(appveyor_repo_tag_name)'
     # github automatically does source zip/tarball for us
     artifact: installer,zip_executable
     draft: false
-    prerelease: true
+    prerelease: false
     on:
-      branch: master                # release from master branch only
-      appveyor_repo_tag: false      # deploy on tag push only
+      branch: release               # release from release branch only
+      appveyor_repo_tag: true       # deploy on tag push only
       do_rel: true
