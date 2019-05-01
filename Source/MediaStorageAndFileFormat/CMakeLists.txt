@@ -191,7 +191,15 @@ endif()
 
 # main libs:
 target_link_libraries(gdcmMSFF LINK_PUBLIC gdcmIOD gdcmDSED gdcmDICT)
-target_link_libraries(gdcmMSFF LINK_PRIVATE ${GDCM_LJPEG_LIBRARIES} ${GDCM_OPENJPEG_LIBRARIES})
+
+target_link_libraries(gdcmMSFF LINK_PRIVATE ${GDCM_LJPEG_LIBRARIES})
+
+if (GDCM_USE_SYSTEM_OPENJPEG)
+  target_link_libraries(gdcmMSFF LINK_PRIVATE ${OPENJPEG_LIBRARIES})
+else()
+  target_link_libraries(gdcmMSFF LINK_PRIVATE ${GDCM_OPENJPEG_LIBRARIES})
+endif()
+
 if(GDCM_USE_JPEGLS)
   target_link_libraries(gdcmMSFF LINK_PRIVATE ${GDCM_CHARLS_LIBRARIES})
 endif()
