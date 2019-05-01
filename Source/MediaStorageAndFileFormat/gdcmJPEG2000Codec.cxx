@@ -451,14 +451,15 @@ void JPEG2000Codec::SetNumberOfThreadsForDecompression( int nThreads)
 #if ((OPJ_VERSION_MAJOR == 2 && OPJ_VERSION_MINOR >= 3) || (OPJ_VERSION_MAJOR > 2))
   if( nThreads < 0 )
   {
-    Internals->nNumberOfThreadsForDecompression = opj_get_num_cpus();
-	Internals->nNumberOfThreadsForDecompression = Internals->nNumberOfThreadsForDecompression == 1 ? 0 : Internals->nNumberOfThreadsForDecompression ;
+    const int x = opj_get_num_cpus();
+    Internals->nNumberOfThreadsForDecompression = x == 1 ? 0 : x;
   }
   else
   {
     Internals->nNumberOfThreadsForDecompression = nThreads;
   }
 #else
+  (void)nThreads;
   Internals->nNumberOfThreadsForDecompression = 0;
 #endif
 }
