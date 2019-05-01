@@ -448,13 +448,19 @@ void JPEG2000Codec::SetNumberOfResolutions(unsigned int nres)
 
 void JPEG2000Codec::SetNumberOfThreadsForDecompression( int nThreads)
 {
+#if ((OPJ_VERSION_MAJOR == 2 && OPJ_VERSION_MINOR >= 3) || (OPJ_VERSION_MAJOR > 2))
   if( nThreads < 0 )
   {
     Internals->nNumberOfThreadsForDecompression = opj_get_num_cpus();
 	Internals->nNumberOfThreadsForDecompression = Internals->nNumberOfThreadsForDecompression == 1 ? 0 : Internals->nNumberOfThreadsForDecompression ;
   }
   else
-    Internals->nNumberOfThreadsForDecompression = nThreads ;
+  {
+    Internals->nNumberOfThreadsForDecompression = nThreads;
+  }
+#else
+  Internals->nNumberOfThreadsForDecompression = 0;
+#endif
 }
 
 void JPEG2000Codec::SetReversible(bool res)
@@ -668,7 +674,10 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     gdcmErrorMacro( "Impossible happen" );
     return std::make_pair<char*,size_t>(0,0);
     }
+#if ((OPJ_VERSION_MAJOR == 2 && OPJ_VERSION_MINOR >= 3) || (OPJ_VERSION_MAJOR > 2))
   opj_codec_set_threads(dinfo, Internals->nNumberOfThreadsForDecompression);
+#endif
+
   int reversible;
   myfile mysrc;
   myfile *fsrc = &mysrc;
@@ -1418,8 +1427,10 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     gdcmErrorMacro( "Impossible happen" );
     return false;
     }
-  
+
+#if ((OPJ_VERSION_MAJOR == 2 && OPJ_VERSION_MINOR >= 3) || (OPJ_VERSION_MAJOR > 2)) 
   opj_codec_set_threads(dinfo, Internals->nNumberOfThreadsForDecompression);
+#endif
 
   myfile mysrc;
   myfile *fsrc = &mysrc;
