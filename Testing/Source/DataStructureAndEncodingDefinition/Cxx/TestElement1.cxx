@@ -81,7 +81,7 @@ int TestAS()
 
   // TODO this should not compile:
   Element<VR::AS, VM::VM6> b = {{ "019Yb" }};
-  b = b;//to avoid the warning of b not being useful
+  (void)b;//to avoid the warning of b not being useful
 
   return 0;
 }
