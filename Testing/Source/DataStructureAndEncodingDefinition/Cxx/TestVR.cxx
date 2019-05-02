@@ -159,13 +159,21 @@ int TestVR(int, char *[])
    V3 = 0ULL,
    V4 = 4294967296ULL
   } E8;
+  enum : long long {
+   V5 = 0ULL,
+   V6 = 4294967296ULL
+  } E8ll;
   std::cout << sizeof E8 << std::endl;
   if( sizeof E4 != 4 ) {
     std::cerr << "E4 is: " << sizeof E4 << std::endl;
     return 1;
   }
   if( sizeof E8 != 8 ) {
+    // bad bad compiler
     std::cerr << "E8 is: " << sizeof E8 << std::endl;
+  }
+  if( sizeof E8ll != 8 ) {
+    std::cerr << "E8ll is: " << sizeof E8 << std::endl;
     return 1;
   }
 
