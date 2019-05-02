@@ -2,7 +2,8 @@
 # https://github.com/travis-ci/travis-ci/issues/3505
 language: cpp
 # Use the faster container-based infrastructure.
-sudo: false
+#sudo: false
+dist: xenial
 env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
