@@ -38,6 +38,10 @@ void PythonFilter::SetDicts(const Dicts &dicts)
   assert(0); // FIXME
 }
 
+void PythonFilter::SetFile(const File& f) { F = f; }
+File &PythonFilter::GetFile() { return *F; }
+const File &PythonFilter::GetFile() const { return *F; }
+
 static const char *PythonTypesFromVR[] = {
 nullptr, //  "??",        // 0
 "s", //  "AE",        // 1
