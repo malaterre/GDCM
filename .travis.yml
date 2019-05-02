@@ -60,7 +60,7 @@ matrix:
 before_install:
   #- env
   - cmake --version
-  #- swig -version
+  - if [ "$B_NAME" == "system" ]; then swig -version; fi
   # do not run the full test suite for now on fsanitize and osx (takes too long)
   - if [ "$B_NAME" == "fsanitize" ]; then mv Testing/Data Testing/Data.old; fi
   # https://docs.travis-ci.com/user/osx-ci-environment/#Environment-variables
