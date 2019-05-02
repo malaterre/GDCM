@@ -103,13 +103,13 @@ else()
     SOURCES gdcmswig.i gdcmPythonFilter.cxx
   )
 endif()
-SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} gdcmMEXD gdcmMSFF gdcmIOD)
+SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} LINK_PRIVATE gdcmMEXD gdcmMSFF gdcmIOD)
 # Apparently on my UNIX, python module (/usr/lib/pyshared/pythonX.Y/*/*.so) do not explicitly
 # link to python libraries...Leave default to always link to python libraries since
 # this is required at least on Apple & Win32, but leave the option to advanced user to explicitly
 # refuse linking to python libs (set GDCM_NO_PYTHON_LIBS_LINKING to ON):
 if(NOT GDCM_NO_PYTHON_LIBS_LINKING)
-  SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} ${PYTHON_LIBRARY})
+  SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} LINK_PRIVATE ${PYTHON_LIBRARY})
 endif()
 set_property(TARGET ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTY NO_SONAME 1)
 
@@ -124,12 +124,12 @@ set_property(TARGET ${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} 
 if(WIN32 AND NOT CYGWIN)
   set_target_properties(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES SUFFIX ".pyd")
   # shared libs on windows needs to be fully resolved
-  SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} ${PYTHON_LIBRARIES})
+  SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} LINK_PRIVATE ${PYTHON_LIBRARIES})
   message(STATUS "Will use pyd extension" )
 else()
   message(STATUS "Will NOT use pyd extension" )
 endif()
-set_target_properties(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
+#set_target_properties(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 
 # swig generates a _gdcm.so and a gdcm.py, we need to copy gdcm.py to the proper place:
 # gdcm.py is the interface name != implementation name, so we need to keep 'gdcm', so that 'import gdcm'
