@@ -32,7 +32,6 @@ set(DSED_TEST_SRCS
   TestVRUI
   TestElement1
   #TestExplicitDataElement
-  TestFileMetaInformation
   TestFile
   TestFileSet
   TestFragment
@@ -66,6 +65,7 @@ endif()
 if(GDCM_DATA_ROOT)
 set(DSED_TEST_SRCS
   ${DSED_TEST_SRCS}
+  TestFileMetaInformation
   TestReader2
   TestAttribute8
   TestPDBHeader
