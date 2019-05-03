@@ -109,7 +109,11 @@ static std::string getInfoDate(Dict *infoDict, const char *key)
 static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap, bool & unicode)
 {
   Object obj;
+#ifdef LIBPOPPLER_GOOSTRING_HAS_CONSTGETCHAR
   const GooString *s1;
+#else
+  GooString *s1;
+#endif
   bool isUnicode = false;
   Unicode u;
   char buf[8];
