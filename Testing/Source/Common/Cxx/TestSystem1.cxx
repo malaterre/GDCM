@@ -380,7 +380,9 @@ return 1;
 }
   int res = 0;
   res +=  TestGetTimeOfDay();
+  std::cout << "res = " << res << std::endl;
   res +=  TestMakeDirectory();
+  std::cout << "res = " << res << std::endl;
 
   const char * testfilesize = gdcm::Testing::GetTempFilename( "filesize.bin" );
 if( gdcm::System::FileExists( testfilesize ) )
