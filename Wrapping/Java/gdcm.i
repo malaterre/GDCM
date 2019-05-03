@@ -782,11 +782,17 @@ $1 = JNU_GetStringNativeChars(jenv, $input);
 %include "gdcmCommand.h"
 
 %template(SmartPtrScan) gdcm::SmartPointer<gdcm::Scanner>;
+%template (TagToValue) std::map<gdcm::Tag, const char*>;
+//%template (TagToValueType) std::map<gdcm::Tag, const char*>::value_type;
+%template (MappingType) std::map<const char*,gdcm::Scanner::TagToValue>;
 %include "gdcmScanner.h"
 EXTEND_CLASS_PRINT(gdcm::Scanner)
 %template(SmartPtrStrictScan) gdcm::SmartPointer<gdcm::StrictScanner>;
 %include "gdcmStrictScanner.h"
 EXTEND_CLASS_PRINT(gdcm::StrictScanner)
+%clear TagToValue;
+//%clear TagToValueType;
+%clear MappingType;
 
 %template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
 //%ignore gdcm::Anonymizer::Anonymizer;
