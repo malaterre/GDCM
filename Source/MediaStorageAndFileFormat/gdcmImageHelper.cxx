@@ -432,6 +432,8 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
    || ms == MediaStorage::IVOCTForProcessing
    || ms == MediaStorage::IVOCTForPresentation
    || ms == MediaStorage::BreastTomosynthesisImageStorage
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForPresentation
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForProcessing
    || ms == MediaStorage::LegacyConvertedEnhancedMRImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedCTImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedPETImageStorage )
@@ -560,6 +562,8 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
    || ms == MediaStorage::IVOCTForPresentation
    || ms == MediaStorage::IVOCTForProcessing
    || ms == MediaStorage::BreastTomosynthesisImageStorage
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForPresentation
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForProcessing
    || ms == MediaStorage::LegacyConvertedEnhancedMRImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedCTImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedPETImageStorage )
@@ -878,6 +882,8 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
    || ms == MediaStorage::IVOCTForProcessing
    || ms == MediaStorage::IVOCTForPresentation
    || ms == MediaStorage::BreastTomosynthesisImageStorage
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForPresentation
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForProcessing
    || ms == MediaStorage::LegacyConvertedEnhancedMRImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedCTImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedPETImageStorage )
@@ -908,6 +914,8 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
    || ms == MediaStorage::XRay3DCraniofacialImageStorage
    || ms == MediaStorage::SegmentationStorage
    || ms == MediaStorage::BreastTomosynthesisImageStorage
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForPresentation
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForProcessing
    || ms == MediaStorage::LegacyConvertedEnhancedMRImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedCTImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedPETImageStorage )
@@ -1254,6 +1262,8 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     || ms == MediaStorage::IVOCTForProcessing
     || ms == MediaStorage::IVOCTForPresentation
     || ms == MediaStorage::BreastTomosynthesisImageStorage
+    || ms == MediaStorage::BreastProjectionXRayImageStorageForPresentation
+    || ms == MediaStorage::BreastProjectionXRayImageStorageForProcessing
     || ms == MediaStorage::LegacyConvertedEnhancedMRImageStorage
     || ms == MediaStorage::LegacyConvertedEnhancedCTImageStorage
     || ms == MediaStorage::LegacyConvertedEnhancedPETImageStorage)
@@ -1554,6 +1564,8 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
    || ms == MediaStorage::IVOCTForPresentation
    || ms == MediaStorage::IVOCTForProcessing
    || ms == MediaStorage::BreastTomosynthesisImageStorage
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForPresentation
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForProcessing
    || ms == MediaStorage::LegacyConvertedEnhancedMRImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedCTImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedPETImageStorage )
@@ -1827,6 +1839,8 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
    && ms != MediaStorage::IVOCTForPresentation
    && ms != MediaStorage::IVOCTForProcessing
    && ms != MediaStorage::BreastTomosynthesisImageStorage
+   && ms != MediaStorage::BreastProjectionXRayImageStorageForPresentation
+   && ms != MediaStorage::BreastProjectionXRayImageStorageForProcessing
    && ms != MediaStorage::LegacyConvertedEnhancedMRImageStorage
    && ms != MediaStorage::LegacyConvertedEnhancedCTImageStorage
    && ms != MediaStorage::LegacyConvertedEnhancedPETImageStorage )
@@ -1846,6 +1860,8 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
    || ms == MediaStorage::IVOCTForPresentation
    || ms == MediaStorage::IVOCTForProcessing
    || ms == MediaStorage::BreastTomosynthesisImageStorage
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForPresentation
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForProcessing
    || ms == MediaStorage::LegacyConvertedEnhancedMRImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedCTImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedPETImageStorage)
@@ -1965,6 +1981,8 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
    && ms != MediaStorage::IVOCTForPresentation
    && ms != MediaStorage::IVOCTForProcessing
    && ms != MediaStorage::BreastTomosynthesisImageStorage
+   && ms != MediaStorage::BreastProjectionXRayImageStorageForPresentation
+   && ms != MediaStorage::BreastProjectionXRayImageStorageForProcessing
    && ms != MediaStorage::LegacyConvertedEnhancedMRImageStorage
    && ms != MediaStorage::LegacyConvertedEnhancedCTImageStorage
    && ms != MediaStorage::LegacyConvertedEnhancedPETImageStorage )
@@ -2003,6 +2021,8 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
    || ms == MediaStorage::IVOCTForPresentation
    || ms == MediaStorage::IVOCTForProcessing
    || ms == MediaStorage::BreastTomosynthesisImageStorage
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForPresentation
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForProcessing
    || ms == MediaStorage::LegacyConvertedEnhancedMRImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedCTImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedPETImageStorage )
@@ -2095,6 +2115,8 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
    && ms != MediaStorage::IVOCTForPresentation
    && ms != MediaStorage::IVOCTForProcessing
    && ms != MediaStorage::BreastTomosynthesisImageStorage
+   && ms != MediaStorage::BreastProjectionXRayImageStorageForPresentation
+   && ms != MediaStorage::BreastProjectionXRayImageStorageForProcessing
    && ms != MediaStorage::LegacyConvertedEnhancedMRImageStorage
    && ms != MediaStorage::LegacyConvertedEnhancedCTImageStorage
    && ms != MediaStorage::LegacyConvertedEnhancedPETImageStorage )
@@ -2113,6 +2135,8 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
    || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::XRay3DCraniofacialImageStorage
    || ms == MediaStorage::BreastTomosynthesisImageStorage
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForPresentation
+   || ms == MediaStorage::BreastProjectionXRayImageStorageForProcessing
    || ms == MediaStorage::LegacyConvertedEnhancedMRImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedCTImageStorage
    || ms == MediaStorage::LegacyConvertedEnhancedPETImageStorage )

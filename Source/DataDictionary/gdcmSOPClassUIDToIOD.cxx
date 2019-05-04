@@ -115,6 +115,9 @@ namespace gdcm
 {"1.2.840.10008.5.1.4.1.1.2.2", "Legacy Converted Enhanced CT Image IOD Modules"},
 {"1.2.840.10008.5.1.4.1.1.4.4", "Legacy Converted Enhanced MR Image IOD Modules"},
 {"1.2.840.10008.5.1.4.1.1.128.1", "Legacy Converted Enhanced PET Image IOD Modules"},
+{"1.2.840.10008.5.1.4.1.1.13.1.4" , "Breast Projection X-Ray Image - For Presentation Image IOD Modules"},
+{"1.2.840.10008.5.1.4.1.1.13.1.5" , "Breast Projection X-Ray Image - For Processing Image IOD Modules"},
+
 // Deprecated:
 {"1.2.840.10008.3.1.2.3.3" , "Modality Performed Procedure Step IOD Modules" },
 {"1.2.840.10008.5.1.4.1.1.5" , "NM Image IOD Modules"},
