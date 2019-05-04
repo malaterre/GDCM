@@ -637,7 +637,7 @@ SurfaceSegmentationStorage,
 BreastTomosynthesisImageStorage,
 LegacyConvertedEnhancedCTImageStorage,
 LegacyConvertedEnhancedMRImageStorage,
-LegacyConvertedEnhancedPETImageStorage
+LegacyConvertedEnhancedPETImageStorage,
 BreastProjectionXRayImageStorageForPresentation,
 BreastProjectionXRayImageStorageForProcessing
 } TSName;
