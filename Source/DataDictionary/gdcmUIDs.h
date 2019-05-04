@@ -1,3 +1,9 @@
+// Arrays can be generated
+// $ xsltproc UIDToC++.xsl Part6.xml > tmp.cxx
+// they may be not backward compatible (retired,
+// manually added in the past, etc.) and
+// don't contain private elements, have to be reviewed
+
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
