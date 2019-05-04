@@ -335,6 +335,8 @@ uid_1_2_840_10008_5_1_4_1_1_13_1_3, // Breast Tomosynthesis Image Storage
 uid_1_2_840_10008_5_1_4_1_1_2_2,  // Legacy Converted Enhanced CT  ImageStorage,
 uid_1_2_840_10008_5_1_4_1_1_4_4,  // Legacy Converted Enhanced MR  ImageStorage,
 uid_1_2_840_10008_5_1_4_1_1_128_1, // Legacy Converted Enhanced PET ImageStorage
+uid_1_2_840_10008_5_1_4_1_1_13_1_4, // Breast Projection X-Ray Image Storage - For Presentation
+uid_1_2_840_10008_5_1_4_1_1_13_1_5, // Breast Projection X-Ray Image Storage - For Processing
 uid_1_2_840_10008_1_2_4_101, // MPEG2 Main Profile @ High Level
 uid_1_2_840_10008_1_2_4_102, // MPEG-4 AVC/H.264 High Profile / Level 4.1
 uid_1_2_840_10008_1_2_4_103  // MPEG-4 AVC/H.264 BD-compatible High Profile / Level 4.1
@@ -636,6 +638,8 @@ BreastTomosynthesisImageStorage,
 LegacyConvertedEnhancedCTImageStorage,
 LegacyConvertedEnhancedMRImageStorage,
 LegacyConvertedEnhancedPETImageStorage
+BreastProjectionXRayImageStorageForPresentation,
+BreastProjectionXRayImageStorageForProcessing
 } TSName;
 
 
