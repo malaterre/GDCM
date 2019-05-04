@@ -1982,7 +1982,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
    && ms != MediaStorage::IVOCTForProcessing
    && ms != MediaStorage::MediaStorage::BreastTomosynthesisImageStorage
    && ms != MediaStorage::BreastProjectionXRayImageStorageForPresentation
-   && ms != BreastProjectionXRayImageStorageForProcessing
+   && ms != MediaStorage::BreastProjectionXRayImageStorageForProcessing
    && ms != MediaStorage::LegacyConvertedEnhancedMRImageStorage
    && ms != MediaStorage::LegacyConvertedEnhancedCTImageStorage
    && ms != MediaStorage::LegacyConvertedEnhancedPETImageStorage )
