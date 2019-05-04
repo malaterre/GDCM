@@ -14,7 +14,7 @@
      PURPOSE.  See the above copyright notice for more information.
 -->
 <!--
-  Generate UIDs arrays for gdcmUIDs.h/.cxx
+  Generate temporary UIDs arrays for gdcmUIDs.h/.cxx
   $ xsltproc UIDToC++.xsl Part6.xml &gt; tmp.cxx
 -->
   <xsl:template match="/dicts">
@@ -106,6 +106,9 @@
 </xsl:text>
     </xsl:for-each>
         <xsl:text>
+//
+// WARNING: check backward compat. and manually added private UIDs
+//
 {nullptr, nullptr}
 };
 #endif // GDCMUIDS_CXX
