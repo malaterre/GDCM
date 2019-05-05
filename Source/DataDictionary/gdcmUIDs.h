@@ -299,17 +299,18 @@ uid_1_2_840_10008_15_0_4_5 = 265, // dicomNetworkAE
 uid_1_2_840_10008_15_0_4_6 = 266, // dicomNetworkConnection
 uid_1_2_840_10008_15_0_4_7 = 267, // dicomUniqueAETitle
 uid_1_2_840_10008_15_0_4_8 = 268, // dicomTransferCapability
-uid_1_2_840_10008_5_1_4_1_1_77_1_6 = 269, // VL Whole Slide Microscopy Image Storage
-uid_1_2_840_10008_5_1_4_1_1_6_2 = 270, // Enhanced US Volume Storage
-uid_1_2_840_10008_5_1_4_1_1_66_5 = 271, // Surface Segmentation Storage
+//
+uid_1_2_840_10008_5_1_4_1_1_77_1_6 = 269, // VL Whole Slide Microscopy
+uid_1_2_840_10008_5_1_4_1_1_6_2    = 270, // Enhanced US Volume Storage
+uid_1_2_840_10008_5_1_4_1_1_66_5   = 271, // Surface Segmentation Storage
 uid_1_2_840_10008_5_1_4_1_1_13_1_3 = 272, // Breast Tomosynthesis Image Storage
-uid_1_2_840_10008_5_1_4_1_1_2_2 = 273, // Legacy Converted Enhanced CT  ImageStorage,
-uid_1_2_840_10008_5_1_4_1_1_4_4 = 274, // Legacy Converted Enhanced MR  ImageStorage,
-uid_1_2_840_10008_5_1_4_1_1_128_1 = 275, // Legacy Converted Enhanced PET ImageStorage
+uid_1_2_840_10008_5_1_4_1_1_2_2    = 273, // Legacy Converted Enhanced CT
+uid_1_2_840_10008_5_1_4_1_1_4_4    = 274, // Legacy Converted Enhanced MR
+uid_1_2_840_10008_5_1_4_1_1_128_1  = 275, // Legacy Converted Enhanced PET
 
 /////////////////////////////////////////
 //
-// Update to 2019b
+// 2019b
 //
 uid_1_2_840_10008_1_5_2 = 276,
 uid_1_2_840_10008_1_5_3 = 277,
@@ -764,6 +765,7 @@ dicomNetworkAE = 265, // dicomNetworkAE
 dicomNetworkConnection = 266, // dicomNetworkConnection
 dicomUniqueAETitle = 267, // dicomUniqueAETitle
 dicomTransferCapability = 268, // dicomTransferCapability
+//
 VLWholeSlideMicroscopyImageStorage     = 269,
 EnhancedUSVolumeStorage                = 270,
 SurfaceSegmentationStorage             = 271,
@@ -774,7 +776,7 @@ LegacyConvertedEnhancedPETImageStorage = 275,
 
 //////////////////////////////////////////////
 //
-// Update to 2019b
+// 2019b
 //
 PETColorPaletteSOPInstance = 276,
 HotMetalBlueColorPaletteSOPInstance = 277,

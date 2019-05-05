@@ -290,22 +290,14 @@ namespace gdcm
 {"1.2.840.10008.15.0.4.6","dicomNetworkConnection"},
 {"1.2.840.10008.15.0.4.7","dicomUniqueAETitle"},
 {"1.2.840.10008.15.0.4.8","dicomTransferCapability"},
-
-//////////////////////////////////////////////
 //
-//
-//
-{"1.2.840.10008.5.1.4.1.1.77.1.6","VL Whole Slide Microscopy Image Storage"},
-{"1.2.840.10008.5.1.4.1.1.6.2", "Enhanced US Volume Storage" },
-{"1.2.840.10008.5.1.4.1.1.66.5","Surface Segmentation Storage"},
-{"1.2.840.10008.5.1.4.1.1.13.1.3","Breast Tomosynthesis Image Storage"},
-{"1.2.840.10008.5.1.4.1.1.2.2", "Legacy Converted Enhanced CT Image Storage" },
-{"1.2.840.10008.5.1.4.1.1.4.4", "Legacy Converted Enhanced MR Image Storage" },
-{"1.2.840.10008.5.1.4.1.1.128.1", "Legacy Converted Enhanced PET Image Storage" },
-//
-//
-//
-//////////////////////////////////////////////
+{"1.2.840.10008.5.1.4.1.1.77.1.6", "VL Whole Slide Microscopy Image Storage"},
+{"1.2.840.10008.5.1.4.1.1.6.2",    "Enhanced US Volume Storage" },
+{"1.2.840.10008.5.1.4.1.1.66.5",   "Surface Segmentation Storage"},
+{"1.2.840.10008.5.1.4.1.1.13.1.3", "Breast Tomosynthesis Image Storage"},
+{"1.2.840.10008.5.1.4.1.1.2.2",    "Legacy Converted Enhanced CT Image Storage" },
+{"1.2.840.10008.5.1.4.1.1.4.4",    "Legacy Converted Enhanced MR Image Storage" },
+{"1.2.840.10008.5.1.4.1.1.128.1",  "Legacy Converted Enhanced PET Image Storage" },
 
 //////////////////////////////////////////////
 //

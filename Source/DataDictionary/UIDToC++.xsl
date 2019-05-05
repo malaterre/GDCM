@@ -13,12 +13,11 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notice for more information.
 -->
-<!--
-  Generate temporary UIDs arrays for gdcmUIDs.h/.cxx
-  $ xsltproc UIDToC++.xsl Part6.xml &gt; tmp.cxx
--->
   <xsl:template match="/dicts">
     <xsl:text>
+// GENERATED FILE DO NOT EDIT
+// $ xsltproc UIDToC++.xsl Part6.xml &gt; gdcmUIDs.cxx
+
 /*=========================================================================
 
   Program: GDCM (Grassroots DICOM). A DICOM library
@@ -95,7 +94,6 @@
 </xsl:text>
 #ifdef GDCMUIDS_CXX
         <xsl:text>static const char * const TransferSyntaxStrings[][2] = {
-{nullptr,nullptr}, // Starts a 1, not 0
 </xsl:text>
     <xsl:for-each select="table/uid">
         <xsl:text>{"</xsl:text>
@@ -105,11 +103,7 @@
         <xsl:text>"},
 </xsl:text>
     </xsl:for-each>
-        <xsl:text>
-//
-// WARNING: check backward compat. and manually added private UIDs
-//
-{nullptr, nullptr}
+        <xsl:text>{ 0, 0 }
 };
 #endif // GDCMUIDS_CXX
 </xsl:text>
