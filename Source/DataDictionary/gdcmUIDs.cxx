@@ -291,13 +291,16 @@ namespace gdcm
 {"1.2.840.10008.15.0.4.7","dicomUniqueAETitle"},
 {"1.2.840.10008.15.0.4.8","dicomTransferCapability"},
 //
-{"1.2.840.10008.5.1.4.1.1.77.1.6", "VL Whole Slide Microscopy Image Storage"},
-{"1.2.840.10008.5.1.4.1.1.6.2",    "Enhanced US Volume Storage" },
-{"1.2.840.10008.5.1.4.1.1.66.5",   "Surface Segmentation Storage"},
-{"1.2.840.10008.5.1.4.1.1.13.1.3", "Breast Tomosynthesis Image Storage"},
-{"1.2.840.10008.5.1.4.1.1.2.2",    "Legacy Converted Enhanced CT Image Storage" },
-{"1.2.840.10008.5.1.4.1.1.4.4",    "Legacy Converted Enhanced MR Image Storage" },
-{"1.2.840.10008.5.1.4.1.1.128.1",  "Legacy Converted Enhanced PET Image Storage" },
+{"1.2.840.10008.5.1.4.1.1.77.1.6","VL Whole Slide Microscopy Image Storage"},
+{"1.2.840.10008.5.1.4.1.1.6.2",   "Enhanced US Volume Storage" },
+{"1.2.840.10008.5.1.4.1.1.66.5",  "Surface Segmentation Storage"},
+{"1.2.840.10008.5.1.4.1.1.13.1.3","Breast Tomosynthesis Image Storage"},
+{"1.2.840.10008.5.1.4.1.1.2.2",   "Legacy Converted Enhanced CT Image Storage" },
+{"1.2.840.10008.5.1.4.1.1.4.4",   "Legacy Converted Enhanced MR Image Storage" },
+{"1.2.840.10008.5.1.4.1.1.128.1", "Legacy Converted Enhanced PET Image Storage" },
+{"1.2.840.10008.1.2.4.101",       "MPEG2 Main Profile @ High Level"},
+{"1.2.840.10008.1.2.4.102",       "MPEG-4 AVC/H.264 High Profile / Level 4.1"},
+{"1.2.840.10008.1.2.4.103",       "MPEG-4 AVC/H.264 BD-compatible High Profile / Level 4.1"},
 
 //////////////////////////////////////////////
 //
@@ -432,9 +435,6 @@ namespace gdcm
 {"1.2.840.10008.7.1.1","Native DICOM Model"},
 {"1.2.840.10008.7.1.2","Abstract Multi-Dimensional Image Model"},
 {"1.2.840.10008.8.1.1","DICOM Content Mapping Resource"},
-{"1.2.840.10008.1.2.4.101","MPEG2 Main Profile @ High Level"},
-{"1.2.840.10008.1.2.4.102","MPEG-4 AVC/H.264 High Profile / Level 4.1"},
-{"1.2.840.10008.1.2.4.103","MPEG-4 AVC/H.264 BD-compatible High Profile / Level 4.1"},
 //
 //
 //
