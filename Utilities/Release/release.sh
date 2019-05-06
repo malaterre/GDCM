@@ -150,6 +150,8 @@ sed "s/vVERSION/v$version/" $basedir/gdcm/Utilities/Release/README.md > $basedir
 rsync --protect-args -e ssh $basedir/README.md "malat,gdcm@frs.sourceforge.net:/home/frs/project/gdcm/gdcm\ 3.x/GDCM\ $version"
 check_exit_value $? "rsync did not return properly" || exit 1
 
+# create htaccess for sf.net
+echo "DirectoryIndex index.xhtml" > Utilities/doxygen/html/.htaccess
 rsync --protect-args -a -r Utilities/doxygen/html malat,gdcm@web.sourceforge.net:htdocs/$dirversion
 check_exit_value $? "rsync recursive html did not return properly" || exit 1
 rsync --protect-args -av Utilities/doxygen/gdcm-$version-doc.tar.gz malat,gdcm@web.sourceforge.net:htdocs/$dirversion
