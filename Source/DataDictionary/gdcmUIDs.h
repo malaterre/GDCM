@@ -443,7 +443,8 @@ uid_1_2_840_10008_5_1_4_45_3         = 403,
 uid_1_2_840_10008_5_1_4_45_4         = 404,
 uid_1_2_840_10008_7_1_1              = 405,
 uid_1_2_840_10008_7_1_2              = 406,
-uid_1_2_840_10008_8_1_1              = 407
+uid_1_2_840_10008_8_1_1              = 407,
+uid_1_2_840_10008_5_1_4_1_1_4_3      = 408
 //
 //
 /////////////////////////////////////////
@@ -909,7 +910,8 @@ ImplantTemplateGroupInformationModelMOVE                           = 403,
 ImplantTemplateGroupInformationModelGET                            = 404,
 NativeDICOMModel                                                   = 405,
 AbstractMultiDimensionalImageModel                                 = 406,
-DICOMContentMappingResource                                        = 407
+DICOMContentMappingResource                                        = 407,
+EnhancedMRColorImageStorage                                        = 408
 //
 //
 //////////////////////////////////////////////

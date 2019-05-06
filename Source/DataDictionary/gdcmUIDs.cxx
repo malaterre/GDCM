@@ -435,6 +435,7 @@ namespace gdcm
 {"1.2.840.10008.7.1.1","Native DICOM Model"},
 {"1.2.840.10008.7.1.2","Abstract Multi-Dimensional Image Model"},
 {"1.2.840.10008.8.1.1","DICOM Content Mapping Resource"},
+{"1.2.840.10008.5.1.4.1.1.4.3","Enhanced MR Color Image Storage"},
 //
 //
 //
