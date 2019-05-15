@@ -18,6 +18,7 @@
 #include "gdcmSwapper.h"
 
 #include <numeric>
+#include <string.h> // memcpy
 
 // CharLS includes
 #include "gdcm_charls.h"
