@@ -200,11 +200,12 @@ PixelFormat::ScalarType Rescaler::ComputeInterceptSlopePixelType()
 }
 
 template <typename TIn>
-void Rescaler::RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n)
+void Rescaler::RescaleFunctionIntoBestFit(char *out8, const TIn *in, size_t n)
 {
   double intercept = Intercept;
   double slope = Slope;
   PixelFormat::ScalarType output = ComputeInterceptSlopePixelType();
+  void *out = out8;
   if( UseTargetPixelType )
     {
     output = TargetScalarType;
@@ -245,11 +246,12 @@ void Rescaler::RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n)
  }
 
 template <typename TIn>
-void Rescaler::InverseRescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n)
+void Rescaler::InverseRescaleFunctionIntoBestFit(char *out8, const TIn *in, size_t n)
 {
   const double intercept = Intercept;
   const double slope = Slope;
   PixelFormat output = ComputePixelTypeFromMinMax();
+  void *out = out8;
   switch(output)
     {
   case PixelFormat::SINGLEBIT:
@@ -280,9 +282,10 @@ void Rescaler::InverseRescaleFunctionIntoBestFit(char *out, const TIn *in, size_
  }
 
 
-bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
+bool Rescaler::InverseRescale(char *out, const char *in8, size_t n)
 {
   bool fastpath = true;
+  const void* in = in8;
   switch(PF)
     {
   case PixelFormat::FLOAT32:
@@ -336,8 +339,9 @@ bool Rescaler::InverseRescale(char *out, const char *in, size_t n)
   return true;
 }
 
-bool Rescaler::Rescale(char *out, const char *in, size_t n)
+bool Rescaler::Rescale(char *out, const char *in8, size_t n)
 {
+  const void *in = in8;
   if( UseTargetPixelType == false )
     {
     // fast path:
