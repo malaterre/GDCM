@@ -36,7 +36,11 @@ set(CMAKE_SWIG_OUTDIR "${GDCM_JAVA_HOME}")
 set(CMAKE_SWIG_FLAGS "-package gdcm")
 separate_arguments(CMAKE_SWIG_FLAGS)
 # http://www.debian.org/doc/packaging-manuals/java-policy/x105.html
-SWIG_ADD_MODULE(gdcmjni java gdcm.i)
+SWIG_ADD_LIBRARY(
+  gdcmjni
+  LANGUAGE java
+  SOURCES gdcm.i
+)
 SWIG_LINK_LIBRARIES(gdcmjni gdcmMSFF
   gdcmMEXD
   # There is no real point in linking explicitly to jni libraries. This is a java module

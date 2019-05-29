@@ -27,7 +27,11 @@ set_source_files_properties(gdcm.i PROPERTIES CPLUSPLUS ON)
 set(CMAKE_SWIG_FLAGS "-namespace gdcm -dllimport gdcmsharpglue")
 separate_arguments(CMAKE_SWIG_FLAGS)
 # libgdksharpglue.so
-SWIG_ADD_MODULE(gdcmsharpglue csharp gdcm.i)
+SWIG_ADD_LIBRARY(
+  gdcmsharpglue
+  LANGUAGE csharp
+  SOURCES gdcm.i
+)
 SWIG_LINK_LIBRARIES(gdcmsharpglue gdcmMSFF
   gdcmMEXD
 )

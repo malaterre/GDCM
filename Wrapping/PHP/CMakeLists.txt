@@ -27,7 +27,11 @@ set_source_files_properties(gdcm.i PROPERTIES CPLUSPLUS ON)
 #set(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}")
 
 # swig expect a name like that: php_gdcm.so
-SWIG_ADD_MODULE(php_gdcm php gdcm.i)
+SWIG_ADD_LIBRARY(
+  php_gdcm
+  LANGUAGE php
+  SOURCES gdcm.i
+)
 SWIG_LINK_LIBRARIES(php_gdcm gdcmMSFF gdcmMEXD)
 # warning, by default there are undefined symbols in the generated php/gdcm module
 # one would need to actually link to : /usr/lib/apache2/modules/libphp5.so
