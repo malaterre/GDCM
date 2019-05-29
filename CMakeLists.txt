@@ -57,9 +57,6 @@ set(GDCM_LIBRARY_PROPERTIES ${GDCM_LIBRARY_PROPERTIES}
   VERSION "${GDCM_VERSION}"
   SOVERSION "${GDCM_API_VERSION}"
 )
-#set(GDCM_EXECUTABLE_PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES}
-#  VERSION "${GDCM_VERSION_MAJOR}.${GDCM_VERSION_MINOR}"
-#)
 set(GDCM_EXECUTABLE_PROPERTIES)
 if(GDCM_NO_EXECUTABLE_PROPERTIES)
   set(GDCM_EXECUTABLE_PROPERTIES)
@@ -125,7 +122,6 @@ if(BUILD_SHARED_LIBS)
   set(NAMELINK_ONLY NAMELINK_ONLY)
   set(NAMELINK_SKIP NAMELINK_SKIP)
 endif()
-
 
 #-----------------------------------------------------------------------------
 if(NOT EXECUTABLE_OUTPUT_PATH)
@@ -198,13 +194,7 @@ endif()
 #-----------------------------------------------------------------------------
 # Build the main lib...
 if(NOT GDCM_HAVE_STDINT_H)
-  if( MSVC OR "x${CMAKE_CXX_COMPILER_ID}x" MATCHES "Intel" )
-    include_directories(
-      "${GDCM_SOURCE_DIR}/Utilities/C99"
-      )
-    # Process the install rules from C99
-    add_subdirectory(Utilities/C99)
-  endif()
+  message(FATAL_ERROR "You system does not have stdint.h")
 endif()
 
 # --------------------------------------------------------------------------
