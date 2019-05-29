@@ -783,8 +783,11 @@ $1 = JNU_GetStringNativeChars(jenv, $input);
 
 %template(SmartPtrScan) gdcm::SmartPointer<gdcm::Scanner>;
 %template (TagToValue) std::map<gdcm::Tag, const char*>;
-//%template (TagToValueType) std::map<gdcm::Tag, const char*>::value_type;
+#if SWIG_VERSION >= 0x040000
+%template (MappingType) std::map<const char*,std::map<gdcm::Tag,const char*>, gdcm::Scanner::ltstr>;
+#else
 %template (MappingType) std::map<const char*,gdcm::Scanner::TagToValue>;
+#endif
 %include "gdcmScanner.h"
 EXTEND_CLASS_PRINT(gdcm::Scanner)
 %template(SmartPtrStrictScan) gdcm::SmartPointer<gdcm::StrictScanner>;
