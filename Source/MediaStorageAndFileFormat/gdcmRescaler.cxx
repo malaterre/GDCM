@@ -16,7 +16,7 @@
 #include <algorithm> // std::max
 #include <stdlib.h> // abort
 #include <string.h> // memcpy
-#include <math.h> // floor
+#include <cmath> // std::lround
 
 namespace gdcm
 {
@@ -79,12 +79,8 @@ struct FImpl
 template < typename T >
 static inline T round_impl(const double d)
 {
-#ifdef GDCM_HAVE_LROUND
   // round() is C99, std::round() is C++11
-  return (T)lround(d);
-#else
-  return (T)((d > 0.0) ? floor(d + 0.5) : ceil(d - 0.5));
-#endif
+  return (T)std::lround(d);
 }
 
 template<typename TOut>
