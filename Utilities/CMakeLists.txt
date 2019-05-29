@@ -103,9 +103,6 @@ if(GDCM_USE_PVRG)
   endif()
 endif()
 
-# Do C99
-APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/C99/COPYING)
-
 #if(NOT GDCM_INSTALL_NO_DEVELOPMENT)
 ##  file(GLOB header_files "*.h" "*.txx")
 #  install(FILES
