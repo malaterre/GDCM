@@ -886,6 +886,15 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
       {
       TagValueKey tvk;
       tvk.first = tag;
+      std::string tagValue;
+      if( !copy.IsEmpty() )
+        {
+        if( const ByteValue *bv = copy.GetByteValue() )
+          {
+          tagValue = std::string( bv->GetPointer(), bv->GetLength() );
+          }
+        }
+      tvk.second = tagValue;
 
       assert( dummyMapNonUIDTags.count( tvk ) == 0 || dummyMapNonUIDTags.count( tvk ) == 1 );
       if( dummyMapNonUIDTags.count( tvk ) == 0 )
