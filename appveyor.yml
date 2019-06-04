@@ -164,6 +164,11 @@ artifacts:
 # commits from tags - the value is True if tag was pushed; otherwise it's
 # False.  When it's True the name of tag is stored in APPVEYOR_REPO_TAG_NAME.
 deploy:
+  - provider: NuGet
+    api_key:
+      secure: T6GXp3POj8sDGZWmZ5tkLgdbyLjllar/ZVLNn96SkrI3IDBq+L3GFMH13FEZs0uR
+    skip_symbols: true
+    artifact: nuget_package
   - provider: GitHub
     auth_token:
       secure: 7HmfZp9O7bVdQo2hRk6FjOUs7jJosftv2rZ6JPBNzjPcAOMXDTvLqv3lvzdAzBfy
