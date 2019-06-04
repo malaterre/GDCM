@@ -799,10 +799,13 @@ if(GDCM_STANDALONE) # disabled for ITK distribution of gdcm
     if (${CMAKE_VERSION} VERSION_GREATER "3.12.0")
       set(CPACK_BINARY_NUGET "ON")
       # ${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt is too long (>4000 characters)
-      set(CPACK_NUGET_PACKAGE_DESCRIPTION ${GDCM_PACKAGE_DESCRIPTION_SUMMARY})
+      set(CPACK_NUGET_PACKAGE_DESCRIPTION "Grassroots DiCoM is a C++ library for DICOM medical files. It is accessible from Python, C#, Java and PHP. It supports RAW, JPEG, JPEG 2000, JPEG-LS, RLE and deflated transfer syntax.
+      It comes with a super fast scanner implementation to quickly scan hundreds of DICOM files.
+      It supports SCU network operations (C-ECHO, C-FIND, C-STORE, C-MOVE). PS 3.3 & 3.6 are distributed as XML files.
+      It also provides PS 3.15 certificates and password based mecanism to anonymize and de-identify DICOM datasets.")
       set(CPACK_NUGET_PACKAGE_LICENSEURL "http://gdcm.sourceforge.net/Copyright.html")
       set(CPACK_NUGET_PACKAGE_HOMEPAGE_URL "http://gdcm.sourceforge.net")
-      set(CPACK_NUGET_PACKAGE_TAGS "dicom medical")
+      set(CPACK_NUGET_PACKAGE_TAGS "dicom" "medical")
     endif()
   endif()
   if(GDCM_WRAP_JAVA)
