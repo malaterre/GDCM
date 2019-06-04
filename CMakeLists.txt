@@ -806,6 +806,7 @@ if(GDCM_STANDALONE) # disabled for ITK distribution of gdcm
       set(CPACK_NUGET_PACKAGE_LICENSEURL "http://gdcm.sourceforge.net/Copyright.html")
       set(CPACK_NUGET_PACKAGE_HOMEPAGE_URL "http://gdcm.sourceforge.net")
       set(CPACK_NUGET_PACKAGE_TAGS "dicom" "medical")
+      set(CPACK_NUGET_PACKAGE_ICONURL "http://gdcm.sourceforge.net/images/logo_gdcm64x64.png")
     endif()
   endif()
   if(GDCM_WRAP_JAVA)
