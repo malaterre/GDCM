@@ -798,6 +798,8 @@ if(GDCM_STANDALONE) # disabled for ITK distribution of gdcm
     # https://cmake.org/cmake/help/latest/cpack_gen/nuget.html#cpack_gen:CPack%20NuGet%20Generator
     if (${CMAKE_VERSION} VERSION_GREATER "3.12.0")
       set(CPACK_BINARY_NUGET "ON")
+      # ${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt is too long (>4000 characters)
+      set(CPACK_NUGET_PACKAGE_DESCRIPTION ${GDCM_PACKAGE_DESCRIPTION_SUMMARY})
     endif()
   endif()
   if(GDCM_WRAP_JAVA)
