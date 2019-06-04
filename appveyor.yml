@@ -112,6 +112,8 @@ before_build:
 after_build:
   # create NSIS installer
   - cpack -G NSIS -C %CONFIG%
+  # create NuGet installer
+  - cpack -G NuGet -C %CONFIG%
   # create binary zip
   - cpack -G ZIP -C %CONFIG%
   # no need for source release on github
@@ -139,6 +141,9 @@ artifacts:
   - path: GDCM-*-$(B_NAME).zip
     name: zip_executable
     type: zip
+  - path: GDCM-*-$(B_NAME).nupkg
+    name: nuget_package
+    type: nugetpackage
 
 #---------------------------------#
 #     deployment configuration    #
