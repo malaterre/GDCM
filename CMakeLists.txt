@@ -795,6 +795,10 @@ if(GDCM_STANDALONE) # disabled for ITK distribution of gdcm
   endif()
   if(GDCM_WRAP_CSHARP)
     list(APPEND components CSharpModule)
+    # https://cmake.org/cmake/help/latest/cpack_gen/nuget.html#cpack_gen:CPack%20NuGet%20Generator
+    if (${CMAKE_VERSION} VERSION_GREATER "3.12.0")
+      set(CPACK_BINARY_NUGET "ON")
+    endif()
   endif()
   if(GDCM_WRAP_JAVA)
     list(APPEND components JavaModule)
