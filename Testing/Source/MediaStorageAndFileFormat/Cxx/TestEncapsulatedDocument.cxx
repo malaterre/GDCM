@@ -18,6 +18,7 @@ int TestEncapsulatedDocument(int argc, char *argv[])
   (void)argc;
   (void)argv;
   gdcm::EncapsulatedDocument w;
+  (void)w;
 
   return 0;
 }

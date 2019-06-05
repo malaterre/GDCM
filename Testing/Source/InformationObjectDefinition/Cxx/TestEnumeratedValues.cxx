@@ -16,5 +16,6 @@
 int TestEnumeratedValues(int, char *[])
 {
   gdcm::EnumeratedValues ev;
+  (void)ev;
   return 0;
 }
