@@ -1019,14 +1019,6 @@ set(GDCM_INCLUDE_PATH
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   )
-if(NOT GDCM_HAVE_STDINT_H)
-  if(MSVC)
-    set(GDCM_INCLUDE_PATH
-      ${GDCM_INCLUDE_PATH}
-      "${GDCM_SOURCE_DIR}/Utilities/C99"
-    )
-  endif()
-endif()
 if(GDCM_USE_VTK)
     set(GDCM_INCLUDE_PATH
       ${GDCM_INCLUDE_PATH}
