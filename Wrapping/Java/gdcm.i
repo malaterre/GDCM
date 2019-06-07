@@ -782,7 +782,6 @@ $1 = JNU_GetStringNativeChars(jenv, $input);
 %include "gdcmCommand.h"
 
 %template(SmartPtrScan) gdcm::SmartPointer<gdcm::Scanner>;
-%template (TagToValue) std::map<gdcm::Tag, const char*>;
 #if SWIG_VERSION >= 0x040000
 // [Java] #1356 std::map wrappers have been modified.
 %extend std::map {
@@ -802,8 +801,10 @@ $1 = JNU_GetStringNativeChars(jenv, $input);
   }
 %}
 }
+%template (TagToValue) std::map<gdcm::Tag, const char*>;
 %template (MappingType) std::map<const char*,std::map<gdcm::Tag,const char*>, gdcm::Scanner::ltstr>;
 #else
+%template (TagToValue) std::map<gdcm::Tag, const char*>;
 %template (MappingType) std::map<const char*,gdcm::Scanner::TagToValue>;
 #endif
 %include "gdcmScanner.h"
