@@ -87,18 +87,6 @@ if(OLDSTYLECSHARP)
     COMMENT "csc *.cs"
     )
 
-  if(BUILD_EXAMPLES)
-    # building HelloCSharpWorld:
-    add_custom_command(
-      OUTPUT ${GDCM_EXECUTABLE_DIR}/HelloCsharpWorld.exe
-      COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/HelloCsharpWorld.exe" ${CMAKE_CURRENT_SOURCE_DIR}/HelloCsharpWorld.cs
-      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-      DEPENDS ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
-      ${CMAKE_CURRENT_SOURCE_DIR}/HelloCsharpWorld.cs
-      COMMENT "Create HelloCsharpWorld.exe"
-      )
-  endif()
-
   # $ export MONO_LOG_LEVEL="debug"; export MONO_LOG_MASK="dll"
   # $ export LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/Wrapping/Csharp/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin
   add_custom_target(GDCMCSharp ALL
