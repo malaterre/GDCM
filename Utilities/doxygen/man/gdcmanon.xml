@@ -212,6 +212,9 @@ In this case one could simply do, as a first step execute the reversible anonymi
 <para><literallayout>$ gdcmanon --dumb --remove 400,500 --remove 12,62 --remove 12,63 anonymized_reversible.dcm anonymized_irreversible.dcm
 </literallayout></para>
 
+<para>In recent GDCM version those two independant gdcmanon steps can be executed using simply:<literallayout>$ gdcmanon input.dcm anonymized_irreversible.dcm</literallayout></para>
+<para>Or if one want for readability:<literallayout>$ gdcmanon -e input.dcm anonymized_irreversible.dcm</literallayout></para>
+
 <para><formalpara><title>Remarks: </title>
 
 <para>As mentionned in DICOM Sup 142, this anonymization is preferred over de-identification since: It is not required that the Encrypted Attributes Data Set be created; indeed, there may be circumstances where the Dataset is expected to be archived long enough that any contemporary encryption technology may be inadequate to provide long term protection against unauthorized recovery of identification</para>
