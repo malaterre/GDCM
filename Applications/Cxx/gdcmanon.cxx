@@ -623,9 +623,12 @@ int main(int argc, char *argv[])
     {
     if( !des3 && !aes128 && !aes192 && !aes256 )
       {
-      aes256 = 1;
+      if( rsa_path.empty() && cert_path.empty() )
+        ciphertype = gdcm::CryptographicMessageSyntax::NO_CIPHER;
+      else
+        ciphertype = GetFromString( "aes256" );
       }
-
+    else {
     if( des3 )
       {
       ciphertype = GetFromString( "des3" );
@@ -646,6 +649,7 @@ int main(int argc, char *argv[])
       {
       return 1;
       }
+    }
     }
 
   if( !gdcm::System::FileExists(filename.c_str()) )
