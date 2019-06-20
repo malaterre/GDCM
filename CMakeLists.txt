@@ -57,9 +57,6 @@ set(GDCM_LIBRARY_PROPERTIES ${GDCM_LIBRARY_PROPERTIES}
   VERSION "${GDCM_VERSION}"
   SOVERSION "${GDCM_API_VERSION}"
 )
-#set(GDCM_EXECUTABLE_PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES}
-#  VERSION "${GDCM_VERSION_MAJOR}.${GDCM_VERSION_MINOR}"
-#)
 set(GDCM_EXECUTABLE_PROPERTIES)
 if(GDCM_NO_EXECUTABLE_PROPERTIES)
   set(GDCM_EXECUTABLE_PROPERTIES)
@@ -125,7 +122,6 @@ if(BUILD_SHARED_LIBS)
   set(NAMELINK_ONLY NAMELINK_ONLY)
   set(NAMELINK_SKIP NAMELINK_SKIP)
 endif()
-
 
 #-----------------------------------------------------------------------------
 if(NOT EXECUTABLE_OUTPUT_PATH)
@@ -198,13 +194,7 @@ endif()
 #-----------------------------------------------------------------------------
 # Build the main lib...
 if(NOT GDCM_HAVE_STDINT_H)
-  if( MSVC OR "x${CMAKE_CXX_COMPILER_ID}x" MATCHES "Intel" )
-    include_directories(
-      "${GDCM_SOURCE_DIR}/Utilities/C99"
-      )
-    # Process the install rules from C99
-    add_subdirectory(Utilities/C99)
-  endif()
+  message(FATAL_ERROR "You system does not have stdint.h")
 endif()
 
 # --------------------------------------------------------------------------
@@ -795,6 +785,19 @@ if(GDCM_STANDALONE) # disabled for ITK distribution of gdcm
   endif()
   if(GDCM_WRAP_CSHARP)
     list(APPEND components CSharpModule)
+    # https://cmake.org/cmake/help/latest/cpack_gen/nuget.html#cpack_gen:CPack%20NuGet%20Generator
+    if (${CMAKE_VERSION} VERSION_GREATER "3.12.0")
+      set(CPACK_BINARY_NUGET "ON")
+      # ${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt is too long (>4000 characters)
+      set(CPACK_NUGET_PACKAGE_DESCRIPTION "Grassroots DiCoM is a C++ library for DICOM medical files. It is accessible from Python, C#, Java and PHP. It supports RAW, JPEG, JPEG 2000, JPEG-LS, RLE and deflated transfer syntax.
+      It comes with a super fast scanner implementation to quickly scan hundreds of DICOM files.
+      It supports SCU network operations (C-ECHO, C-FIND, C-STORE, C-MOVE). PS 3.3 & 3.6 are distributed as XML files.
+      It also provides PS 3.15 certificates and password based mecanism to anonymize and de-identify DICOM datasets.")
+      set(CPACK_NUGET_PACKAGE_LICENSEURL "http://gdcm.sourceforge.net/Copyright.html")
+      set(CPACK_NUGET_PACKAGE_HOMEPAGE_URL "http://gdcm.sourceforge.net")
+      set(CPACK_NUGET_PACKAGE_TAGS "dicom" "medical")
+      set(CPACK_NUGET_PACKAGE_ICONURL "http://gdcm.sourceforge.net/images/logo_gdcm64x64.png")
+    endif()
   endif()
   if(GDCM_WRAP_JAVA)
     list(APPEND components JavaModule)
@@ -1016,14 +1019,6 @@ set(GDCM_INCLUDE_PATH
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   )
-if(NOT GDCM_HAVE_STDINT_H)
-  if(MSVC)
-    set(GDCM_INCLUDE_PATH
-      ${GDCM_INCLUDE_PATH}
-      "${GDCM_SOURCE_DIR}/Utilities/C99"
-    )
-  endif()
-endif()
 if(GDCM_USE_VTK)
     set(GDCM_INCLUDE_PATH
       ${GDCM_INCLUDE_PATH}

@@ -251,7 +251,7 @@ struct param
     assert( gettypenamefromtype( type ) );
     is.read( (char*)&dim, sizeof( dim ) ); // number of elements
     is.read( (char*)&v4.val, sizeof( v4.val ) );
-    assert( v4.val == 0 ); // always 0 ? sometimes not...
+    //assert( v4.val == 0 ); // always 0 ? sometimes not...
     const uint32_t cur = (uint32_t)is.tellg();
     is.read( (char*)&offset, sizeof( offset ) );
     assert( offset != 0 );

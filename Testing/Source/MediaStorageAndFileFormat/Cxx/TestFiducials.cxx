@@ -18,6 +18,7 @@ int TestFiducials(int argc, char *argv[])
   (void)argc;
   (void)argv;
   gdcm::Fiducials f;
+  (void)f;
 
   return 0;
 }

@@ -70,14 +70,6 @@
 #include <getopt.h>
 #include <string.h>
 
-#ifndef GDCM_HAVE_ATOLL
-#ifdef _MSC_VER
-#define atoll _atoi64
-#else
-#define atoll atol
-#endif
-#endif
-
 static unsigned int readsize(const char *str, unsigned int * size)
 {
   int n = sscanf( str, "%i,%i,%i", size, size+1, size+2);
@@ -596,7 +588,7 @@ int main (int argc, char *argv[])
             {
             assert( strcmp(s, "offset") == 0 );
             poffset = 1;
-            start_pos = (size_t)atoll(optarg);
+            start_pos = (size_t)std::atoll(optarg);
             }
           else if( option_index == 17 ) /* template */
             {

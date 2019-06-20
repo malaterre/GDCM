@@ -37,7 +37,7 @@ int TestUnpacker12Bits(int, char *[])
   if( b )
     {
     std::set<short> out;
-    short * output_s = (short*)output;
+    short * output_s = (short*)(void*)output;
     for( size_t i = 0; i < outlen / 2; ++i )
       {
       const short &v = output_s[i];

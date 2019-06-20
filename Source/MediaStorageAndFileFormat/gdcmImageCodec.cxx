@@ -112,7 +112,7 @@ bool ImageCodec::DoByteSwap(std::istream &is, std::ostream &os)
   if( PF.GetBitsAllocated() == 16 )
     {
     ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
-      dummy_buffer, SwapCode::LittleEndian, buf_size/2);
+      (void*)dummy_buffer, SwapCode::LittleEndian, buf_size/2);
     }
 #else
   // GE_DLX-8-MONO2-PrivateSyntax.dcm is 8bits
@@ -120,7 +120,7 @@ bool ImageCodec::DoByteSwap(std::istream &is, std::ostream &os)
   if ( PF.GetBitsAllocated() == 16 )
     {
     ByteSwap<uint16_t>::SwapRangeFromSwapCodeIntoSystem((uint16_t*)
-      dummy_buffer, SwapCode::BigEndian, buf_size/2);
+      (void*)dummy_buffer, SwapCode::BigEndian, buf_size/2);
     }
 #endif
   os.write(dummy_buffer, buf_size);
@@ -385,9 +385,10 @@ struct ApplyMask
   uint16_t pmask;
 };
 
-bool ImageCodec::CleanupUnusedBits(char * data, size_t datalen)
+bool ImageCodec::CleanupUnusedBits(char * data8, size_t datalen)
 {
   if( !NeedOverlayCleanup ) return true;
+  void * data = data8;
   assert( PF.GetBitsAllocated() > 8 );
   if( PF.GetBitsAllocated() == 16 )
     {

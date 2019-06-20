@@ -782,9 +782,31 @@ $1 = JNU_GetStringNativeChars(jenv, $input);
 %include "gdcmCommand.h"
 
 %template(SmartPtrScan) gdcm::SmartPointer<gdcm::Scanner>;
+#if SWIG_VERSION >= 0x040000
+// [Java] #1356 std::map wrappers have been modified.
+%extend std::map {
+%proxycode %{
+  // Old API
+  public boolean empty() {
+    return isEmpty();
+  }
+  public void set($typemap(jboxtype, K) key, $typemap(jboxtype, T) x) {
+    put(key, x);
+  }
+  public void del($typemap(jboxtype, K) key) {
+    remove(key);
+  }
+  public boolean has_key($typemap(jboxtype, K) key) {
+    return containsKey(key);
+  }
+%}
+}
 %template (TagToValue) std::map<gdcm::Tag, const char*>;
-//%template (TagToValueType) std::map<gdcm::Tag, const char*>::value_type;
+%template (MappingType) std::map<const char*,std::map<gdcm::Tag,const char*>, gdcm::Scanner::ltstr>;
+#else
+%template (TagToValue) std::map<gdcm::Tag, const char*>;
 %template (MappingType) std::map<const char*,gdcm::Scanner::TagToValue>;
+#endif
 %include "gdcmScanner.h"
 EXTEND_CLASS_PRINT(gdcm::Scanner)
 %template(SmartPtrStrictScan) gdcm::SmartPointer<gdcm::StrictScanner>;
