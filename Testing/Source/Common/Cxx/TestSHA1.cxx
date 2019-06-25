@@ -236,6 +236,9 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "99c169688190a66100b61319eaeefb3db1936125" , "RLEDebianBug816607Orig.dcm" },
 { "f18f91631b59f0242b5daca547878e4c5cbf6a5b" , "GE_MR_0025xx1bProtocolDataBlockXML.dcm" },
 { "8c46efd571b33264d7c0bed14fb6dd0282330b92" , "JPEGLS_CharLS_10742.dcm" },
+{ "f52cac75e6371a8a9b70b2146811b52593cef774" , "EmptyIcon_Bug417.dcm" },
+{ "fbca7c76d8c290d6a07aff378526463185b391d0" , "EnhancedWithIPPPerFrameIOPShared.dcm" },
+{ "566387063a28df033d891ac48a42dbb3f6b6a65f" , "FUJI-ffff-MONO1-J2K.dcm" },
 
 { NULL, NULL}
 };
