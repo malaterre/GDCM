@@ -727,33 +727,36 @@ int main(int argc, char *argv[])
     }
 
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmanon" );
-  gdcm::Global& g = gdcm::Global::GetInstance();
-  if( !resourcespath )
-    {
-    const char *xmlpathenv = getenv("GDCM_RESOURCES_PATH");
-    if( xmlpathenv )
+  if( !dumb_mode )
+  {
+    gdcm::Global& g = gdcm::Global::GetInstance();
+    if( !resourcespath )
       {
-      // Make sure to look for XML dict in user explicitly specified dir first:
-      xmlpath = xmlpathenv;
-      resourcespath = 1;
+      const char *xmlpathenv = getenv("GDCM_RESOURCES_PATH");
+      if( xmlpathenv )
+        {
+        // Make sure to look for XML dict in user explicitly specified dir first:
+        xmlpath = xmlpathenv;
+        resourcespath = 1;
+        }
       }
-    }
-  if( resourcespath )
-    {
-    // xmlpath is set either by the cmd line option or the env var
-    if( !g.Prepend( xmlpath.c_str() ) )
+    if( resourcespath )
       {
-      std::cerr << "Specified Resources Path is not valid: " << xmlpath << std::endl;
+      // xmlpath is set either by the cmd line option or the env var
+      if( !g.Prepend( xmlpath.c_str() ) )
+        {
+        std::cerr << "Specified Resources Path is not valid: " << xmlpath << std::endl;
+        return 1;
+        }
+      }
+    // All set, then load the XML files:
+    if( !g.LoadResourcesFiles() )
+      {
+      std::cerr << "Could not load XML file from specified path" << std::endl;
       return 1;
       }
-    }
-  // All set, then load the XML files:
-  if( !g.LoadResourcesFiles() )
-    {
-    std::cerr << "Could not load XML file from specified path" << std::endl;
-    return 1;
-    }
-  const gdcm::Defs &defs = g.GetDefs(); (void)defs;
+    const gdcm::Defs &defs = g.GetDefs(); (void)defs;
+  }
   if( !rootuid )
     {
     // only read the env var if no explicit cmd line option
