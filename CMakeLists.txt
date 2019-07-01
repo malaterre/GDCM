@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13.4 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.9.2 FATAL_ERROR) # travis-ci wants 3.9.2
 
 set(GDCM_MAX_VALIDATED_CMAKE_VERSION "3.13.4")
 if("${CMAKE_VERSION}" VERSION_LESS_EQUAL "${GDCM_MAX_VALIDATED_CMAKE_VERSION}")
