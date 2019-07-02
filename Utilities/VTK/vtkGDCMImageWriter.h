@@ -39,6 +39,7 @@
 #define VTKGDCMIMAGEWRITER_H
 
 #include "vtkImageWriter.h"
+#include "vtkVersion.h"
 
 class vtkLookupTable;
 class vtkMedicalImageProperties;

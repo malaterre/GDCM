@@ -26,8 +26,9 @@
 #include "vtkErrorCode.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkRTStructSetProperties.h"
-#include "gdcmSystem.h"
+#include "vtkVersion.h"
 
+#include "gdcmSystem.h"
 #include "gdcmWriter.h"
 #include "gdcmUIDs.h"
 #include "gdcmUIDGenerator.h"

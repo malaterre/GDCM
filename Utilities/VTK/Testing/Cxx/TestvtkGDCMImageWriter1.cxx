@@ -17,6 +17,7 @@
 #include "vtkImageData.h"
 #include "vtkMultiThreader.h"
 #include "vtkMedicalImageProperties.h"
+#include "vtkVersion.h"
 
 #include "gdcmTesting.h"
 #include "gdcmFilename.h"
