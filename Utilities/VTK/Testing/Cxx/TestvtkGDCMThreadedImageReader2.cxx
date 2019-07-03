@@ -14,6 +14,7 @@
 #include "vtkGDCMThreadedImageReader2.h"
 #include "vtkGDCMImageReader.h"
 #include "vtkCommand.h"
+#include "vtkVersion.h"
 
 #include "gdcmDirectory.h"
 #include "gdcmSystem.h"

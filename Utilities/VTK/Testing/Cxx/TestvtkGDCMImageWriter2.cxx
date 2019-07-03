@@ -18,6 +18,7 @@
 #include "vtkMultiThreader.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkStringArray.h"
+#include "vtkVersion.h"
 
 #include "gdcmTesting.h"
 #include "gdcmFilename.h"

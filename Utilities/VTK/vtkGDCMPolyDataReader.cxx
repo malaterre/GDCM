@@ -24,6 +24,7 @@
 #include "vtkMedicalImageProperties.h"
 #include "vtkRTStructSetProperties.h"
 #include "vtkEmptyCell.h"
+#include "vtkVersion.h"
 #include "gdcmReader.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmAttribute.h"

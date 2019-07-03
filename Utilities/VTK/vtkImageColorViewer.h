@@ -54,6 +54,7 @@
 #define VTKIMAGECOLORVIEWER_H
 
 #include "vtkObject.h"
+#include "vtkVersion.h"
 
 class vtkAlgorithm;
 class vtkAlgorithmOutput;
