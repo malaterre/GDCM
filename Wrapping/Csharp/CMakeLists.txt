@@ -95,14 +95,6 @@ if(OLDSTYLECSHARP)
     ${SWIG_MODULE_gdcmsharpglue_REAL_NAME} # GDCMCSharp from the outside rebuild the C# binding not just the *.dll but the glue
     COMMENT "building gdcm-sharp.dll"
     )
-
-  if(BUILD_EXAMPLES)
-    add_custom_target(GDCMCSharpExample ALL
-      DEPENDS
-      ${GDCM_EXECUTABLE_DIR}/HelloCsharpWorld.exe
-      COMMENT "building HelloCsharpWorld.exe"
-      )
-  endif()
 endif()
 
 if(NOT GDCM_INSTALL_NO_LIBRARIES)
