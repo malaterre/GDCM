@@ -281,6 +281,44 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 %enddef
 #endif
 
+%pragma(csharp) modulecode=%{
+	  internal static byte[] StringToUtf8Bytes(string str)
+	  {
+	    if (str == null)
+	      return null;
+
+	    int bytecount = System.Text.Encoding.UTF8.GetMaxByteCount(str.Length);
+	    byte[] bytes = new byte[bytecount + 1];
+	    System.Text.Encoding.UTF8.GetBytes(str, 0, str.Length, bytes, 0);
+	    return bytes;
+	  }
+
+	  internal static string Utf8BytesToString(System.IntPtr pNativeData)
+	  {
+	    if (pNativeData == System.IntPtr.Zero)
+	        return null;
+	       
+	    int length = global::System.Runtime.InteropServices.Marshal.PtrToStringAnsi(pNativeData).Length;
+	    byte[] strbuf = new byte[length]; 
+	    global::System.Runtime.InteropServices.Marshal.Copy(pNativeData, strbuf, 0, length);
+	    return System.Text.Encoding.UTF8.GetString(strbuf);
+	  }
+%}
+
+
+%typemap(csin) (const char *filename_native)  "$module.StringToUtf8Bytes($csinput)"
+%typemap(imtype, out="IntPtr") (const char *filename_native) "byte[]"
+%typemap(out) (const char *filename_native) %{ $result = $1; %}
+%typemap(csout, excode=SWIGEXCODE) (const char *filename_native) {
+// %typemap(csout) (const char *filename_native)
+IntPtr cPtr = $imcall;
+string ret = $module.Utf8BytesToString(cPtr);
+$excode
+return ret;
+}
+
+//%apply ( const char *filename_native ) { const char* GetFieldAsString };
+
 //%feature("autodoc", "1")
 %include "gdcmConfigure.h"
 //%include "gdcmTypes.h"
