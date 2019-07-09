@@ -1,6 +1,7 @@
 # Define the tests for gdcm-java
 set(GDCM_JAVA_TEST_SRCS
   TestReader
+  TestReaderUnicode
   TestTag
   TestReaderUpToTag
   )
