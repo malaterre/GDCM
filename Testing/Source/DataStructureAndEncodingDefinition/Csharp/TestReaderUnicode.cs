@@ -69,6 +69,7 @@ public class TestReaderUnicode
     String tmpdir = Testing.GetTempDirectory( subdir );
     process(filename, tmpdir, "ascii.dcm" );
     process(filename, tmpdir, "ê.dcm" );
+    process(filename, tmpdir, "А.dcm" );
 
     return 0;
     }
