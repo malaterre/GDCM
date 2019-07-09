@@ -344,6 +344,9 @@ return ret;
 
 %include "gdcmPixelFormat.h"
 EXTEND_CLASS_PRINT(gdcm::PixelFormat)
+// GetType is already used, prefer GetMSType:
+%rename(GetMSType) gdcm::MediaStorage::operator MSType () const;
+
 %include "gdcmMediaStorage.h"
 EXTEND_CLASS_PRINT(gdcm::MediaStorage)
 //%rename(__getitem__) gdcm::Tag::operator[];
