@@ -33,7 +33,7 @@ public class TestReaderUnicode
       copyFile(template, filename);
     } catch (IOException ex) {
       Console.WriteLine("Error copying: " + template + " to " + filename );
-      return;
+      throw ex;
     }
     Reader reader = new Reader();
     Console.WriteLine("Reading: " + filename );
