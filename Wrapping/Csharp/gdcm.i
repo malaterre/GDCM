@@ -610,8 +610,18 @@ EXTEND_CLASS_PRINT(gdcm::IconImage)
 %include "gdcmPixmap.h"
 EXTEND_CLASS_PRINT(gdcm::Pixmap)
 
+%apply double[] { double spacing[3] }
+%apply float[] { float origin[3] }
+%apply double[] { double origin[3] }
+%apply float[] { float dircos[6] }
+%apply double[] { double dircos[6] }
+//%apply double OUTPUT[] { const double* GetDirectionCosines() const }
 %include "gdcmImage.h"
 EXTEND_CLASS_PRINT(gdcm::Image)
+%clear spacing;
+%clear origin;
+%clear dircos;
+
 %include "gdcmFragment.h"
 EXTEND_CLASS_PRINT(gdcm::Fragment)
 // convert SWIGTYPE_p_std__vectorT_gdcm__Fragment_t__size_type
