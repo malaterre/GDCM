@@ -514,6 +514,8 @@ EXTEND_CLASS_PRINT(gdcm::Item)
 EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %rename (CSharpDataSet) SWIGDataSet;
 %rename (CSharpTagToValue) SWIGTagToValue;
+// convert SWIGTYPE_p_std__setT_gdcm__DataElement_t__size_type
+%template() std::set< gdcm::DataElement >;
 %include "gdcmDataSet.h"
 EXTEND_CLASS_PRINT(gdcm::DataSet)
 //%include "gdcmString.h"
