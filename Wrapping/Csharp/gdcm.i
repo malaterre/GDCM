@@ -328,14 +328,18 @@ return ret;
 %include "gdcmLegacyMacro.h"
 
 // The following must be define early on as gdcmVL.h get included real early
-%rename(GetValueLength) gdcm::VL::operator uint32_t;
-//%csmethodmodifiers gdcm::VL::GetValueLength "private"
-//%csmethodmodifiers GetValueLength "private"
-//%rename(GetValue) VL::operator uint32_t ();
-//  public static implicit operator int( MyType a )
-//        {
-//            return a.value;
-//        }
+%rename(GetValueLength) gdcm::VL::operator uint32_t () const;
+// following does not work:
+//%csmethodmodifiers gdcm::VL::GetValueLength() "private"
+// VR
+%rename(GetVRField) gdcm::VR::operator VRType () const;
+// the following does not work
+//%csmethodmodifiers gdcm::VR::GetVRField() "private"
+// VM
+%rename(GetVMField) gdcm::VM::operator VMType () const;
+// GetType is already used, prefer GetMSType:
+%rename(GetMSType) gdcm::MediaStorage::operator MSType () const;
+
 %include "gdcmSwapCode.h"
 
 //%feature("director") Event;
@@ -344,11 +348,20 @@ return ret;
 
 %include "gdcmPixelFormat.h"
 EXTEND_CLASS_PRINT(gdcm::PixelFormat)
-// GetType is already used, prefer GetMSType:
-%rename(GetMSType) gdcm::MediaStorage::operator MSType () const;
 
 %include "gdcmMediaStorage.h"
 EXTEND_CLASS_PRINT(gdcm::MediaStorage)
+%extend gdcm::MediaStorage
+{
+%typemap(cscode) MediaStorage
+%{
+  public static implicit operator MSType( MediaStorage ms )
+    {
+    return ms.GetMSType();
+    }
+%}
+}
+
 //%rename(__getitem__) gdcm::Tag::operator[];
 //%rename(this ) gdcm::Tag::operator[];
 %include "gdcmTag.h"
@@ -388,13 +401,32 @@ EXTEND_CLASS_PRINT(gdcm::VL)
     }
 %}
 }
-%csmethodmodifiers gdcm::VL::GetValueLength "private"
 
 %typemap(csbase) gdcm::VR::VRType "long"
 %include "gdcmVR.h"
 EXTEND_CLASS_PRINT(gdcm::VR)
+%extend gdcm::VR
+{
+%typemap(cscode) VR
+%{
+public static implicit operator VR.VRType( VR vr )
+    {
+    return vr.GetVRField();
+    }
+%}
+}
 %include "gdcmVM.h"
 EXTEND_CLASS_PRINT(gdcm::VM)
+%extend gdcm::VM
+{
+%typemap(cscode) VM
+%{
+public static implicit operator VM.VMType( VM vm )
+    {
+    return vm.GetVMField();
+    }
+%}
+}
 //%template (FilenameType) std::string;
 %template (FilenamesType) std::vector<std::string>;
 %include "gdcmDirectory.h"
