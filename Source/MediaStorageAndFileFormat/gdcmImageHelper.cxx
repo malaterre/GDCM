@@ -863,9 +863,20 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
     }
     else if( img.GetNumberOfDimensions() == 2 && dims[2] == 1 )
     {
-      // This is a MF instances, need to set Number of Frame to 1
-      if( ms.MediaStorage::GetModalityDimension() > 2 )
-        ds.Replace( numframes.GetAsDataElement() );
+      // This is a MF instances, need to set Number of Frame to 1 when Required
+      if (ms.MediaStorage::GetModalityDimension() > 2)
+      {
+        // Only include Multi-Frame when required (not Conditional):
+        if( ms == MediaStorage::XRayAngiographicImageStorage // A.14.3 XA Image IOD Module Table: Multi-frame C.7.6.6 C - Required if pixel data is Multi - frame Cine data
+		 )
+        {
+           ds.Remove(numframes.GetTag());
+        }
+        else
+        {
+           ds.Replace(numframes.GetAsDataElement());
+        }
+      }
     }
     else // cleanup
       ds.Remove( numframes.GetTag() );
