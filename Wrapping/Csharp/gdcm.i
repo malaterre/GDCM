@@ -618,6 +618,19 @@ EXTEND_CLASS_PRINT(gdcm::Pixmap)
 %apply float[] { float dircos[6] }
 %apply double[] { double dircos[6] }
 //%apply double OUTPUT[] { const double* GetDirectionCosines() const }
+/*
+// https://stackoverflow.com/a/57071144/136285
+%typemap(csout,excode=SWIGEXCODE) const double* gdcm::Image::GetDirectionCosines() const {
+    global::System.IntPtr cPtr = $imcall;$excode
+    double[] tmp = new double[6];
+    // I have no idea why Marshal.Copy does not seem to have any support for unsigned types...
+    global::System.Runtime.InteropServices.Marshal.Copy(cPtr, tmp, 0, 6);
+    // There is probably a better way to go from int[3] -> uint[3], but it is not obvious to me
+    //return new $typemap(cstype, $*1_type)[3]{($typemap(cstype, $*1_type))tmp[0],($typemap(cstype, $*1_type))tmp[1],($typemap(cstype, $*1_type))tmp[2]};
+	return tmp;
+}
+%typemap(cstype) const double *gdcm::Image::GetDirectionCosines() const "$typemap(cstype, $*1_type)[]"
+*/
 %include "gdcmImage.h"
 EXTEND_CLASS_PRINT(gdcm::Image)
 %clear spacing;
