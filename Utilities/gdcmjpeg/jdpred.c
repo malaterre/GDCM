@@ -284,11 +284,11 @@ predict_start_pass (j_decompress_ptr cinfo)
    *
    * Al specifies the point transform (Pt).  Legal values are: 0 <= Pt <= 15.
    */
-  if (cinfo->Ss < 1 || cinfo->Ss > 7 ||
-      cinfo->Se != 0 || cinfo->Ah != 0 ||
+  if (cinfo->Ss < 1 ||
+      cinfo->Ss > 7 ||
       cinfo->Al > 15)        /* need not check for < 0 */
     ERREXIT4(cinfo, JERR_BAD_LOSSLESS,
-       cinfo->Ss, cinfo->Se, cinfo->Ah, cinfo->Al);
+       cinfo->Ss, 0, 0, cinfo->Al);
 
   /* Set undifference functions to first row function */
   for (ci = 0; ci < cinfo->num_components; ci++)
