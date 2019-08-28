@@ -149,8 +149,8 @@ int main(int argc, char *argv [])
   if( !isrle )
     {
     std::cerr << "Tamar Compression Type is not PMSCT_RLE1" << std::endl;
-	return 1;
-	}
+    return 1;
+    }
 
   gdcm::Attribute<0x0028,0x0010> at1;
   at1.SetFromDataSet( ds );
@@ -170,7 +170,7 @@ int main(int argc, char *argv [])
     if( compressionpixeldata.IsEmpty() )
       {
       std::cerr << "ELSCINT1 Pixel Data is empty" << std::endl;
-	  return 1;
+      return 1;
       }
     const gdcm::ByteValue * bv2 = compressionpixeldata.GetByteValue();
     // If standard pixel data element does not exist, create it
@@ -212,12 +212,12 @@ int main(int argc, char *argv [])
     if( compressionpixeldata.IsEmpty() )
       {
       std::cerr << "Pixel Data is empty" << std::endl;
-	  return 1;
+      return 1;
       }
     const gdcm::ByteValue * bv2 = compressionpixeldata.GetByteValue();
     if( bv2->GetLength() == at1l )
       {
-	  // Handle special case that is not compressed
+      // Handle special case that is not compressed
       ;;
       }
     else
