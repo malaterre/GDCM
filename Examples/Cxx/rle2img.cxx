@@ -45,7 +45,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmImageWriter.h"
 
-/* FIXME: Why is PhilipsLosslessRice.dcm a 512x512 image ... */
+
 void delta_decode(const char *inbuffer, size_t length, std::vector<unsigned short> &output)
 {
   // RLE pass
@@ -104,7 +104,7 @@ int main(int argc, char *argv [])
 {
   if( argc < 2 )
     {
-    std::cerr << argv[0] << "input.dcm [output.dcm]" << std::endl;
+    std::cerr << argv[0] << " input.dcm [output.dcm]" << std::endl;
     std::cerr << "will default to 'outrle.dcm' unless output.dcm is specified."
       << std::endl;
     return 1;
@@ -119,97 +119,136 @@ int main(int argc, char *argv [])
     }
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
 
-  // (07a1,1011) CS [PMSCT_RLE1]                                       # 10,1 Tamar Compression Type
-  const gdcm::PrivateTag tcompressiontype(0x07a1,0x0011,"ELSCINT1");
-  if( !ds.FindDataElement( tcompressiontype ) ) return 1;
+  // (07a1,1011) CS [PMSCT_RLE1]   # 10,1 Tamar Compression Type
+  const gdcm::PrivateTag tcompressiontype(0x07a1, 0x0011, "ELSCINT1");
+  if( !ds.FindDataElement( tcompressiontype ) )
+    {
+    std::cerr << "Tamar Compression Type not found" << std::endl;
+    return 1;
+    }
   const gdcm::DataElement& compressiontype = ds.GetDataElement( tcompressiontype );
-  if ( compressiontype.IsEmpty() ) return 1;
+  if( compressiontype.IsEmpty() )
+    {
+    std::cerr << "Tamar Compression Type is empty" << std::endl;
+    return 1;
+    }
+
   const gdcm::ByteValue * bv = compressiontype.GetByteValue();
   std::string comprle = "PMSCT_RLE1";
   std::string comprgb = "PMSCT_RGB1";
   bool isrle = false;
-  bool isrgb = false;
   if( strncmp( bv->GetPointer(), comprle.c_str(), comprle.size() ) == 0 )
     {
     isrle = true;
     }
-  if( strncmp( bv->GetPointer(), comprgb.c_str(), comprgb.size() ) == 0 )
+  else if( strncmp( bv->GetPointer(), comprgb.c_str(), comprgb.size() ) == 0 )
     {
-    isrgb = true;
-    std::cerr << "See: pmsct_rgb1.cxx instead" << std::endl;
+    std::cerr << "PMSCT_RGB1 compression, see: pmsct_rgb1.cxx instead" << std::endl;
     return 1;
     }
-  if( !isrgb && !isrle ) return 1;
-
-  // check if compressed pixel data reside in private or standard tag
-  const gdcm::PrivateTag tprivatepixeldata(0x07a1,0x100a,"ELSCINT1");
-  const gdcm::Tag tstandardpixeldata(0x7fe0, 0x0010);
-  gdcm::Tag tpixeldata;
-  if(ds.FindDataElement(tprivatepixeldata)) tpixeldata = tprivatepixeldata;
-  else if(ds.FindDataElement(tstandardpixeldata)) tpixeldata = tstandardpixeldata;
-  if(!ds.FindDataElement(tpixeldata)) return 1;
-
-  const gdcm::DataElement& compressionpixeldata = ds.GetDataElement( tpixeldata);
-  if ( compressionpixeldata.IsEmpty() ) return 1;
-  const gdcm::ByteValue * bv2 = compressionpixeldata.GetByteValue();
+  if( !isrle )
+    {
+    std::cerr << "Tamar Compression Type is not PMSCT_RLE1" << std::endl;
+	return 1;
+	}
 
   gdcm::Attribute<0x0028,0x0010> at1;
   at1.SetFromDataSet( ds );
   gdcm::Attribute<0x0028,0x0011> at2;
   at2.SetFromDataSet( ds );
-
-  gdcm::DataElement pixeldata;
-  // if standard voxel data element does not exist, create it
-  if( !reader.GetFile().GetDataSet().FindDataElement( tpixeldata ) )
-  {
-    pixeldata = gdcm::DataElement( tpixeldata, 0, gdcm::VR::OW );
-  }
-  else{
-    pixeldata = reader.GetFile().GetDataSet().GetDataElement( tpixeldata );
-  }
-
-  pixeldata.SetVR( gdcm::VR::OW );
-  gdcm::VL bv2l = bv2->GetLength();
   gdcm::VL at1l = at1.GetValue() * at2.GetValue() * 2; /* sizeof(unsigned short) == 2 */
-  // Handle special case that is not compressed:
-  if( bv2l == at1l )
+
+  // Check if compressed pixel data reside in private or standard tag
+  const gdcm::PrivateTag tprivatepixeldata(0x07a1,0x000a,"ELSCINT1");
+  const gdcm::Tag tstandardpixeldata(0x7fe0, 0x0010);
+  gdcm::DataElement pixeldata;
+
+  if( ds.FindDataElement( tprivatepixeldata ) )
     {
-    pixeldata.SetByteValue( bv2->GetPointer(), bv2->GetLength() );
+    const gdcm::DataElement& compressionpixeldata =
+      ds.GetDataElement( tprivatepixeldata );
+    if( compressionpixeldata.IsEmpty() )
+      {
+      std::cerr << "ELSCINT1 Pixel Data is empty" << std::endl;
+	  return 1;
+      }
+    const gdcm::ByteValue * bv2 = compressionpixeldata.GetByteValue();
+    // If standard pixel data element does not exist, create it
+    if( !reader.GetFile().GetDataSet().FindDataElement( tstandardpixeldata ) )
+      {
+      pixeldata = gdcm::DataElement( tstandardpixeldata, 0, gdcm::VR::OW );
+      }
+    else
+      {
+      pixeldata = reader.GetFile().GetDataSet().GetDataElement( tstandardpixeldata );
+      }
+    pixeldata.SetVR( gdcm::VR::OW );
+    if( bv2->GetLength() == at1l )
+      {
+      // Handle special case that is not compressed
+      pixeldata.SetByteValue( bv2->GetPointer(), bv2->GetLength() );
+      }
+    else
+      {
+      std::vector<unsigned short> buffer;
+      delta_decode(bv2->GetPointer(), bv2->GetLength(), buffer);
+      pixeldata.SetByteValue(
+        (char*)&buffer[0],
+        (uint32_t)(buffer.size() * sizeof( unsigned short ) ) );
+      }
+    if( reader.GetFile().GetDataSet().FindDataElement( tstandardpixeldata ) )
+      {
+      reader.GetFile().GetDataSet().Replace( tstandardpixeldata );
+      }
+    else
+      {
+      reader.GetFile().GetDataSet().ReplaceEmpty( tstandardpixeldata );
+      }
     }
-  else
+  else if( ds.FindDataElement( tstandardpixeldata ) )
     {
-    std::vector<unsigned short> buffer;
-    delta_decode(bv2->GetPointer(), bv2->GetLength(), buffer);
-    pixeldata.SetByteValue( (char*)&buffer[0], (uint32_t)(buffer.size() * sizeof( unsigned short )) );
+    const gdcm::DataElement& compressionpixeldata =
+      ds.GetDataElement( tstandardpixeldata);
+    if( compressionpixeldata.IsEmpty() )
+      {
+      std::cerr << "Pixel Data is empty" << std::endl;
+	  return 1;
+      }
+    const gdcm::ByteValue * bv2 = compressionpixeldata.GetByteValue();
+    if( bv2->GetLength() == at1l )
+      {
+	  // Handle special case that is not compressed
+      ;;
+      }
+    else
+      {
+      pixeldata = reader.GetFile().GetDataSet().GetDataElement( tstandardpixeldata );
+      std::vector<unsigned short> buffer;
+      delta_decode(bv2->GetPointer(), bv2->GetLength(), buffer);
+      pixeldata.SetVR( gdcm::VR::OW );
+      pixeldata.SetByteValue(
+        (char*)&buffer[0],
+        (uint32_t)(buffer.size() * sizeof( unsigned short ) ) );
+      reader.GetFile().GetDataSet().Replace( pixeldata );
+      }
     }
+
   // TODO we should check that decompress byte buffer match the expected size (row*col*...)
-
-  // Add the pixel data element
-  if( reader.GetFile().GetDataSet().FindDataElement( tpixeldata ) )
-  {
-    reader.GetFile().GetDataSet().Replace( pixeldata );
-  }
-  else
-  {
-    reader.GetFile().GetDataSet().ReplaceEmpty( pixeldata );
-  }
-
-
   reader.GetFile().GetHeader().SetDataSetTransferSyntax(
     gdcm::TransferSyntax::ExplicitVRLittleEndian);
   gdcm::Writer writer;
   writer.SetFile( reader.GetFile() );
 
   // Cleanup stuff:
-  // This makes the code equivalent to Philips workstation IntelliSpace Portal
+  // this makes the code equivalent to Philips workstation IntelliSpace Portal
   if( writer.GetFile().GetDataSet().FindDataElement( tcompressiontype ) )
-  {
-    writer.GetFile().GetDataSet().Remove( gdcm::Tag(0x07a1,0x1011) );
-  }
+    {
+    writer.GetFile().GetDataSet().Remove( tcompressiontype );
+    }
   if( writer.GetFile().GetDataSet().FindDataElement( tprivatepixeldata ) )
-  {
-    writer.GetFile().GetDataSet().Remove( gdcm::Tag(0x07a1,0x100a) );
-  }
+    {
+    writer.GetFile().GetDataSet().Remove( tprivatepixeldata );
+    }
 
   std::string outfilename;
   if (argc > 2)
