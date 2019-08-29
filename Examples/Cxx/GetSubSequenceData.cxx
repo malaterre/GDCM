@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
   const DataElement& seq1 = subds.GetDataElement( tseq1 );
 
   SmartPointer<SequenceOfItems> sqi2 = seq1.GetValueAsSQ();
+  assert( sqi2->GetNumberOfItems() == 1 );
   //int n = sqi2->GetNumberOfItems();
   int index = 1;
   Item &item2 = sqi2->GetItem(index);
@@ -73,6 +74,7 @@ int main(int argc, char *argv[])
   SmartPointer<SequenceOfItems> sqi3 = seq2.GetValueAsSQ();
   size_t ni3 = sqi3->GetNumberOfItems(); (void)ni3;
   assert( sqi3->GetNumberOfItems() >= 1 );
+  std::cout << "#Groups = " << sqi3->GetNumberOfItems() << std::endl;
   Item &item3 = sqi3->GetItem(1);
   DataSet &subds3 = item3.GetNestedDataSet();
 
@@ -93,9 +95,9 @@ int main(int argc, char *argv[])
       {
       Element<VR::SL, VM::VM4> el;
       el.SetFromDataElement( subds6.GetDataElement( tseq7 ) );
-      std::cout << "El= " << el.GetValue() << std::endl;
       dimx = el.GetValue(0);
       dimy = el.GetValue(1);
+      std::cout << "Dims= " << dimx << " " << dimy << std::endl;
       }
     }
 
@@ -123,6 +125,7 @@ int main(int argc, char *argv[])
     const DataElement& de8 = subds4.GetDataElement( tseq8 );
     Element<VR::UL,VM::VM1> ldimz;
     ldimz.SetFromDataElement( de8 );
+    std::cout << "ldimz: " << ldimz.GetValue() << std::endl;
     dimz += ldimz.GetValue();
     if( !subds4.FindDataElement( tseq4 ) ) return 1;
     const DataElement& seq4 = subds4.GetDataElement( tseq4 );
@@ -134,6 +137,16 @@ int main(int argc, char *argv[])
 
     const ByteValue *bv4 = seq4.GetByteValue();
     (void)bv4;
+    Element<VR::FD, VM::VM1_n> el0;
+    el0.SetFromDataElement( seq4 );
+    std::cout << "TimeStamp (" << el0.GetLength() << "): ";
+    // Seems like the 3D volumes is split into chunks of max 100 frames...
+    assert( ldimz.GetValue() == el0.GetLength() );
+    for( int  i = 0; i < el0.GetLength(); ++i ) {
+      if(i) std::cout << ",";
+      std::cout << el0.GetValue(i);
+    }
+    std::cout << std::endl;
 #if 0
       {
       std::ofstream out( "/tmp/mo4", std::ios::binary );
