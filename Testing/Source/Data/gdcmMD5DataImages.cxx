@@ -705,6 +705,8 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "2b64303085d747956bfdda2ee8cc33bc" , "EnhancedWithIPPPerFrameIOPShared.dcm" },
 { "4ca2f3a88d21d941f6485a8d91f96e29" , "FUJI-ffff-MONO1-J2K.dcm" },
 
+{ "b9697e3615a841e4c04f45ede6923278" , "JPEGLosslessSeNonZero.dcm" },
+
 
 /* Stopping condition */
 { nullptr ,nullptr }

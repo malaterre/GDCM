@@ -242,6 +242,7 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "fd6ba97f247f5b8ef70f407f5c1b5f11" , "EmptyIcon_Bug417.dcm" },
 { "271d71dde59c0cad76baab36c909a43a" , "EnhancedWithIPPPerFrameIOPShared.dcm" },
 { "2fd5ad3e9265861be43b6a341314cc52" , "FUJI-ffff-MONO1-J2K.dcm" },
+{ "69648b9be35a621e9e5b447df656ab18" , "JPEGLosslessSeNonZero.dcm" },
 
 { nullptr, nullptr}
 };

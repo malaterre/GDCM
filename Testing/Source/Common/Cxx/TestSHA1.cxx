@@ -239,6 +239,7 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "f52cac75e6371a8a9b70b2146811b52593cef774" , "EmptyIcon_Bug417.dcm" },
 { "fbca7c76d8c290d6a07aff378526463185b391d0" , "EnhancedWithIPPPerFrameIOPShared.dcm" },
 { "566387063a28df033d891ac48a42dbb3f6b6a65f" , "FUJI-ffff-MONO1-J2K.dcm" },
+{ "cb4be6eb5b38940067a1b74ca0360bbb8c66c449" , "JPEGLosslessSeNonZero.dcm" },
 
 { NULL, NULL}
 };
