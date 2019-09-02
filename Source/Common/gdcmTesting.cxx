@@ -445,6 +445,7 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 0,"EmptyIcon_Bug417.dcm" },
 { 0,"EnhancedWithIPPPerFrameIOPShared.dcm" },
 { 0,"FUJI-ffff-MONO1-J2K.dcm" },
+{ 0,"JPEGLosslessSeNonZero.dcm" },
 { 0, nullptr }
 };
 

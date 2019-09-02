@@ -241,6 +241,7 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "EmptyIcon_Bug417.dcm",4482 },
 { "EnhancedWithIPPPerFrameIOPShared.dcm",23224 },
 { "FUJI-ffff-MONO1-J2K.dcm",2052 },
+{ "JPEGLosslessSeNonZero.dcm",760 },
 
 /* Stopping condition */
 { nullptr ,0 },
