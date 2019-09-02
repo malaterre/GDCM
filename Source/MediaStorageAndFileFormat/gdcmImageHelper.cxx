@@ -851,10 +851,12 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
     ds.Replace( columns.GetAsDataElement() );
     Attribute<0x0028,0x0008> numframes = { 0 };
     numframes.SetValue( dims[2] );
-    if( img.GetNumberOfDimensions() == 3 && dims[2] > 1 )
+    if( img.GetNumberOfDimensions() == 3 && dims[2] >= 1 )
     {
       if( ms.MediaStorage::GetModalityDimension() > 2 )
         ds.Replace( numframes.GetAsDataElement() );
+      else if( ms.MediaStorage::GetModalityDimension() == 2 && dims[2] == 1 )
+        ds.Remove( numframes.GetTag() );
       else
       {
         gdcmErrorMacro( "MediaStorage does not allow 3rd dimension. But value is: " << dims[2] );
