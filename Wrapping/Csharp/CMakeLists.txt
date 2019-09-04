@@ -40,6 +40,9 @@ if(UNIX)
 set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
 set_property(TARGET ${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTY NO_SONAME 1)
 endif()
+if(WIN32)
+set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+endif()
 
 # Module are always place in the library destination but for poor win32 user I
 # decided to place them right next to the other dlls
