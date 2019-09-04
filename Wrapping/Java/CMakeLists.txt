@@ -41,7 +41,7 @@ SWIG_ADD_LIBRARY(
   LANGUAGE java
   SOURCES gdcm.i
 )
-SWIG_LINK_LIBRARIES(gdcmjni gdcmMSFF
+SWIG_LINK_LIBRARIES(gdcmjni LINK_PRIVATE gdcmMSFF
   gdcmMEXD
   # There is no real point in linking explicitly to jni libraries. This is a java module
   # it could contains undefined symbols after all.

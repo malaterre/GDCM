@@ -32,7 +32,7 @@ SWIG_ADD_LIBRARY(
   LANGUAGE csharp
   SOURCES gdcm.i
 )
-SWIG_LINK_LIBRARIES(gdcmsharpglue gdcmMSFF
+SWIG_LINK_LIBRARIES(gdcmsharpglue LINK_PRIVATE gdcmMSFF
   gdcmMEXD
 )
 set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
