@@ -29,19 +29,20 @@ separate_arguments(CMAKE_SWIG_FLAGS)
 # libgdksharpglue.so
 SWIG_ADD_LIBRARY(
   gdcmsharpglue
+  # by default 'MODULE' does not allow setting of VERSION (WIN32)
+  TYPE SHARED
   LANGUAGE csharp
   SOURCES gdcm.i
 )
 SWIG_LINK_LIBRARIES(gdcmsharpglue LINK_PRIVATE gdcmMSFF
   gdcmMEXD
 )
-set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 if(UNIX)
-set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
-set_property(TARGET ${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTY NO_SONAME 1)
+  set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
+  set_property(TARGET ${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTY NO_SONAME 1)
 endif()
 if(WIN32)
-set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
+  set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
 endif()
 
 # Module are always place in the library destination but for poor win32 user I
