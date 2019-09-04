@@ -80,7 +80,11 @@ if(OLDSTYLECSHARP)
 
   add_custom_command(
     OUTPUT ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/doc:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.xml" "/out:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "*.cs"
+    COMMAND ${CMAKE_CSHARP_COMPILER}
+    ARGS "/t:library"
+    $<$<CONFIG:Debug>:/debug>
+    $<$<CONFIG:Debug>:/pdb:${GDCM_LIBRARY_DIR}/gdcm-sharp>
+    "/doc:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.xml" "/out:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "*.cs"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
     ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
