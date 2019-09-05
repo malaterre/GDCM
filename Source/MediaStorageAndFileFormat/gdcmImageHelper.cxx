@@ -207,9 +207,10 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
   dc.Cross( normal );
 
   // For each item
-  std::vector<double> distances;
   SequenceOfItems::SizeType nitems = sqi->GetNumberOfItems();
+  if( nitems > 1 ) {
   std::vector<double> dircos_subds2; dircos_subds2.resize(6);
+  std::vector<double> distances;
   for(SequenceOfItems::SizeType i0 = 1; i0 <= nitems; ++i0)
     {
     const Item &item = sqi->GetItem(i0);
@@ -280,6 +281,31 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
       prev = distances[i];
       }
     }
+  } else {
+    // single slice
+    const Tag tfgs0(0x5200,0x9229);
+    if( !ds.FindDataElement( tfgs0 ) ) return false;
+    SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs0 ).GetValueAsSQ();
+    if( !(sqi && sqi->GetNumberOfItems() > 0) ) return false;
+    // Get first item:
+    const Item &item = sqi->GetItem(1);
+    const DataSet & subds = item.GetNestedDataSet();
+    // <entry group="0028" element="9110" vr="SQ" vm="1" name="Pixel Measures Sequence"/>
+    const Tag tpms(0x0028,0x9110);
+    if( !subds.FindDataElement(tpms) ) return false;
+    //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
+    SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
+    assert( sqi2 );
+    const Item &item2 = sqi2->GetItem(1);
+    const DataSet & subds2 = item2.GetNestedDataSet();
+    // <entry group="0028" element="0030" vr="DS" vm="2" name="Pixel Spacing"/>
+    const Tag tps(0x0018,0x0088);
+    if( !subds2.FindDataElement(tps) ) return false;
+    const DataElement &de = subds2.GetDataElement( tps );
+    Attribute<0x0018,0x0088> at;
+    at.SetFromDataElement( de );
+    zspacing = at.GetValue();
+  }
   return true;
 }
 
