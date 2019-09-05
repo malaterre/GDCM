@@ -21,6 +21,11 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
 )
 
+# Add FileVersion info, only visible on WIN32
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/version.rc.in
+  ${CMAKE_CURRENT_BINARY_DIR}/version.rc
+  @ONLY)
 set_source_files_properties(gdcm.i PROPERTIES CPLUSPLUS ON)
 
 # See sf.net bug #2895067
