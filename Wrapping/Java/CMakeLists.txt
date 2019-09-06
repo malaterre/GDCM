@@ -47,7 +47,6 @@ SWIG_LINK_LIBRARIES(gdcmjni LINK_PRIVATE gdcmMSFF
   # it could contains undefined symbols after all.
   #${JNI_LIBRARIES}
 )
-set_target_properties(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 if (WIN32)
   # disable lib prefix on windows with mingw
   set_target_properties(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES PREFIX "")

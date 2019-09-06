@@ -23,9 +23,8 @@ set_source_files_properties(gdcm.i PROPERTIES CPLUSPLUS ON)
 
 # TODO check convetion for perl module name:
 SWIG_ADD_MODULE(perl_gdcm perl gdcm.i)
-SWIG_LINK_LIBRARIES(perl_gdcm gdcmMSFF)
+SWIG_LINK_LIBRARIES(perl_gdcm LINK_PRIVATE gdcmMSFF)
 
-#set_target_properties(${SWIG_MODULE_perl_gdcm_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 # Remove 'lib' prefix :no-op on windows and valid for UNIX based syste
 set_target_properties(${SWIG_MODULE_perl_gdcm_REAL_NAME} PROPERTIES PREFIX "")
 set_property(TARGET ${SWIG_MODULE_perl_gdcm_REAL_NAME} PROPERTY NO_SONAME 1)

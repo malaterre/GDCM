@@ -32,7 +32,7 @@ SWIG_ADD_LIBRARY(
   LANGUAGE php
   SOURCES gdcm.i
 )
-SWIG_LINK_LIBRARIES(php_gdcm gdcmMSFF gdcmMEXD)
+SWIG_LINK_LIBRARIES(php_gdcm LINK_PRIVATE gdcmMSFF gdcmMEXD)
 # warning, by default there are undefined symbols in the generated php/gdcm module
 # one would need to actually link to : /usr/lib/apache2/modules/libphp5.so
 # I do not believe this is correct, instead make sure that
@@ -41,7 +41,6 @@ SWIG_LINK_LIBRARIES(php_gdcm gdcmMSFF gdcmMEXD)
 # with something like undefined reference to `zend_error'
 set_property(TARGET ${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTY NO_SONAME 1)
 
-set_target_properties(${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 # Remove 'lib' prefix :no-op on windows and valid for UNIX based syste
 set_target_properties(${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTIES PREFIX "")
 
