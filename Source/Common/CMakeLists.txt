@@ -209,9 +209,6 @@ if(GDCM_USE_SYSTEM_OPENSSL)
   target_link_libraries(gdcmCommon LINK_PRIVATE ${OPENSSL_LIBRARIES})
 endif()
 set_target_properties(gdcmCommon PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-if(BUILD_SHARED_LIBS)
-  #set_target_properties(gdcmCommon PROPERTIES INTERFACE_LINK_LIBRARIES "" LINK_INTERFACE_LIBRARIES "")
-endif()
 
 # libs
 install_library(gdcmCommon)

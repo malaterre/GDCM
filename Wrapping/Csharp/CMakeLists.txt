@@ -21,6 +21,11 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
 )
 
+# Add FileVersion info, only visible on WIN32
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/version.rc.in
+  ${CMAKE_CURRENT_BINARY_DIR}/version.rc
+  @ONLY)
 set_source_files_properties(gdcm.i PROPERTIES CPLUSPLUS ON)
 
 # See sf.net bug #2895067
@@ -30,14 +35,13 @@ separate_arguments(CMAKE_SWIG_FLAGS)
 SWIG_ADD_LIBRARY(
   gdcmsharpglue
   LANGUAGE csharp
-  SOURCES gdcm.i
+  SOURCES gdcm.i ${CMAKE_CURRENT_BINARY_DIR}/version.rc
 )
-SWIG_LINK_LIBRARIES(gdcmsharpglue gdcmMSFF
+SWIG_LINK_LIBRARIES(gdcmsharpglue LINK_PRIVATE gdcmMSFF
   gdcmMEXD
 )
-set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 if(UNIX)
-set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
+  set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
 endif()
 set_property(TARGET ${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTY NO_SONAME 1)
 
@@ -80,7 +84,11 @@ if(OLDSTYLECSHARP)
 
   add_custom_command(
     OUTPUT ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/doc:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.xml" "/out:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "*.cs"
+    COMMAND ${CMAKE_CSHARP_COMPILER}
+    ARGS "/t:library"
+    $<$<CONFIG:Debug>:/debug>
+    $<$<CONFIG:Debug>:/pdb:${GDCM_LIBRARY_DIR}/gdcm-sharp>
+    "/doc:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.xml" "/out:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "*.cs"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
     ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs

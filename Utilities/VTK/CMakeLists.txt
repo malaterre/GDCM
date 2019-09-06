@@ -170,8 +170,6 @@ target_link_libraries(${VTKGDCM_NAME} LINK_PRIVATE gdcmMSFF ${vtkgdcm_LIBS})
 if(GDCM_HAVE_PTHREAD_H)
   target_link_libraries(${VTKGDCM_NAME} LINK_PRIVATE pthread)
 endif()
-# prevent viral dep of vtkgdcm
-#set_property(TARGET ${VTKGDCM_NAME} PROPERTY LINK_INTERFACE_LIBRARIES "")
 if(NOT GDCM_INSTALL_NO_LIBRARIES)
   install(TARGETS ${VTKGDCM_NAME}
     EXPORT ${GDCM_TARGETS_NAME}
@@ -232,7 +230,6 @@ if(GDCM_WRAP_PHP)
     set_target_properties(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "vtkgdcm")
   endif()
   set_target_properties(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES PREFIX "")
-  #set_target_properties(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
   set_property(TARGET ${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTY NO_SONAME 1)
 
 if(NOT GDCM_INSTALL_NO_LIBRARIES)
@@ -788,7 +785,6 @@ if(GDCM_WRAP_PYTHON)
     if(NOT GDCM_NO_PYTHON_LIBS_LINKING)
       target_link_libraries(${VTKGDCM_NAME}Python LINK_PRIVATE ${PYTHON_LIBRARY})
     endif()
-    #set_property(TARGET ${VTKGDCM_NAME}PythonD PROPERTY LINK_INTERFACE_LIBRARIES "")
     set_property(TARGET ${VTKGDCM_NAME}Python PROPERTY NO_SONAME 1)
     #set_property(TARGET ${VTKGDCM_NAME}PythonD PROPERTY NO_SONAME 1)
     # Removing lib prefix if we are at VTK7. Based on a reply by David Gobbi to

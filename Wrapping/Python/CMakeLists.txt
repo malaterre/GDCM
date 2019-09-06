@@ -129,7 +129,6 @@ if(WIN32 AND NOT CYGWIN)
 else()
   message(STATUS "Will NOT use pyd extension" )
 endif()
-#set_target_properties(${SWIG_MODULE_${GDCM_PYTHON_IMPLEMENTATION_NAME}_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 
 # swig generates a _gdcm.so and a gdcm.py, we need to copy gdcm.py to the proper place:
 # gdcm.py is the interface name != implementation name, so we need to keep 'gdcm', so that 'import gdcm'
