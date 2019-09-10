@@ -62,6 +62,7 @@ static void PrintHelp()
   std::cout << "  -p --print      Print output." << std::endl;
   std::cout << "  -r --recursive  Recusively descend directory." << std::endl;
   std::cout << "     --strict     Use strict parser (faster but less tolerant with bogus DICOM files)." << std::endl;
+  std::cout << "     --table      Use Table output." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;
@@ -76,7 +77,7 @@ typedef std::vector<gdcm::PrivateTag> VectorPrivateTags;
 template < typename TScanner >
 static int DoIt(
   gdcm::Directory const & d,
-  bool const & print ,
+  bool const & print , int table,
     VectorTags const & tags,
   VectorPrivateTags const & privatetags)
 {
@@ -97,7 +98,13 @@ static int DoIt(
     std::cerr << "Scanner failed" << std::endl;
     return 1;
     }
-  if (print) s.Print( std::cout );
+  if (print)
+    {
+    if(table)
+      s.PrintTable( std::cout );
+    else
+      s.Print( std::cout );
+    }
 
   return 0;
 }
@@ -117,6 +124,7 @@ int main(int argc, char *argv[])
   gdcm::PrivateTag privatetag;
 
   int strict = 0;
+  int table = 0;
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -134,6 +142,7 @@ int main(int argc, char *argv[])
         {"print", 1, 0, 0},
         {"private-tag", 1, 0, 0},
         {"strict", 0, &strict, 1},
+        {"table", 0, &table, 1},
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -292,9 +301,10 @@ int main(int argc, char *argv[])
   gdcm::Directory d;
   unsigned int nfiles = d.Load( dirname.c_str(), recursive );
   if( verbose ) d.Print( std::cout );
-  std::cout << "done retrieving file list " << nfiles << " files found." <<  std::endl;
+  if( !table )
+    std::cout << "done retrieving file list " << nfiles << " files found." <<  std::endl;
 
   if( strict )
-    return DoIt<gdcm::StrictScanner>(d,print,tags,privatetags);
-  return DoIt<gdcm::Scanner>(d,print,tags,privatetags);
+    return DoIt<gdcm::StrictScanner>(d,print,table,tags,privatetags);
+  return DoIt<gdcm::Scanner>(d,print,table,tags,privatetags);
 }
