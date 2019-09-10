@@ -32,6 +32,10 @@
 #include "gdcmTrace.h"
 #include "gdcmVersion.h"
 #include "gdcmSimpleSubjectWatcher.h"
+#include "gdcmGlobal.h"
+#include "gdcmDicts.h"
+#include "gdcmDict.h"
+#include "gdcmDictEntry.h"
 
 #include <string>
 #include <iostream>
@@ -55,8 +59,9 @@ static void PrintHelp()
   std::cout << "Usage: gdcmscanner [OPTION] -d directory -t tag(s)" << std::endl;
   std::cout << "Scan a directory containing DICOM files.\n";
   std::cout << "Parameter (required):" << std::endl;
-  std::cout << "  -d --dir       DICOM directory" << std::endl;
-  std::cout << "  -t --tag %d,%d DICOM tag(s) to look for" << std::endl;
+  std::cout << "  -d --dir                  DICOM directory" << std::endl;
+  std::cout << "  -t --tag %d,%d            DICOM tag(s) to look for" << std::endl;
+  std::cout << "  -k --keyword %s           DICOM keyword(s) to look for" << std::endl;
   std::cout << "  -P --private-tag %d,%d,%s DICOM private tag(s) to look for" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "  -p --print      Print output." << std::endl;
@@ -122,6 +127,9 @@ int main(int argc, char *argv[])
   VectorPrivateTags privatetags;
   gdcm::Tag tag;
   gdcm::PrivateTag privatetag;
+  static const gdcm::Global &g = gdcm::Global::GetInstance();
+  static const gdcm::Dicts &dicts = g.GetDicts();
+  static const gdcm::Dict &pubdict = dicts.GetPublicDict();
 
   int strict = 0;
   int table = 0;
@@ -136,26 +144,27 @@ int main(int argc, char *argv[])
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
-        {"dir", 1, nullptr, 0},
-        {"tag", 1, nullptr, 0},
-        {"recursive", 1, nullptr, 0},
-        {"print", 1, nullptr, 0},
-        {"private-tag", 1, nullptr, 0},
-        {"strict", 0, &strict, 1},
-        {"table", 0, &table, 1},
+        {"dir", required_argument, nullptr, 'd'},
+        {"tag", required_argument, nullptr, 't'},
+        {"recursive", no_argument, nullptr, 'r'},
+        {"print", no_argument, nullptr, 'p'},
+        {"private-tag", required_argument, nullptr, 'P'},
+        {"keyword", required_argument, nullptr, 'k'},
+        {"strict", no_argument, &strict, 1},
+        {"table", no_argument, &table, 1},
 
 // General options !
-        {"verbose", 0, &verbose, 1},
-        {"warning", 0, &warning, 1},
-        {"debug", 0, &debug, 1},
-        {"error", 0, &error, 1},
-        {"help", 0, &help, 1},
-        {"version", 0, &version, 1},
+        {"verbose", no_argument, nullptr, 'V'},
+        {"warning", no_argument, nullptr, 'W'},
+        {"debug", no_argument, nullptr, 'D'},
+        {"error", no_argument, nullptr, 'E'},
+        {"help", no_argument, nullptr, 'H'},
+        {"version", no_argument, nullptr, 'v'},
 
         {nullptr, 0, nullptr, 0}
     };
 
-    c = getopt_long (argc, argv, "d:t:rpP:VWDEhv",
+    c = getopt_long (argc, argv, "d:t:rpP:k:VWDEhv",
       long_options, &option_index);
     if (c == -1)
       {
@@ -165,18 +174,10 @@ int main(int argc, char *argv[])
     switch (c)
       {
     case 0:
+      if (optarg)
         {
-        //const char *s = long_options[option_index].name;
-        //printf ("option %s", s);
-        //if (optarg)
-        //  {
-        //  if( option_index == 0 ) /* input */
-        //    {
-        //    assert( strcmp(s, "input") == 0 );
-        //    }
-        //  printf (" with arg %s", optarg);
-        //  }
-        //printf ("\n");
+        const char *s = long_options[option_index].name; (void)s;
+        assert(0);
         }
       break;
 
@@ -188,6 +189,20 @@ int main(int argc, char *argv[])
       tag.ReadFromCommaSeparatedString(optarg);
       tags.push_back( tag );
       //std::cerr << optarg << std::endl;
+      break;
+
+    case 'k':
+      {
+      const char * keyword = optarg;
+      /*const gdcm::DictEntry &dictentry =*/ pubdict.GetDictEntryByKeyword(keyword, tag);
+      if( tag != gdcm::Tag(0xffff,0xffff) )
+        tags.push_back( tag );
+      else
+        {
+        std::cerr << "Invalid keyword: " << keyword << std::endl;
+        return 1;
+        }
+      }
       break;
 
     case 'P':
