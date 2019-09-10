@@ -300,6 +300,11 @@ int main(int argc, char *argv[])
 
   gdcm::Directory d;
   unsigned int nfiles = d.Load( dirname.c_str(), recursive );
+  if( !nfiles )
+    {
+    std::cerr << "No files found in: " << dirname << std::endl;
+    return 1;
+    }
   if( verbose ) d.Print( std::cout );
   if( !table )
     std::cout << "done retrieving file list " << nfiles << " files found." <<  std::endl;
