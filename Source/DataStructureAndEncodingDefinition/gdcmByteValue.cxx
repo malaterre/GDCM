@@ -30,7 +30,7 @@ namespace gdcm_ns
       ++l;
       }
 #else
-    assert( !l.IsUndefined() && !l.IsOdd() );
+    gdcmAssertAlwaysMacro( !l.IsUndefined() && !l.IsOdd() );
 #endif
     // I cannot use reserve for now. I need to implement:
     // STL - vector<> and istream
