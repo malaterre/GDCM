@@ -61,6 +61,7 @@ static void PrintHelp()
   std::cout << "Options:" << std::endl;
   std::cout << "  -p --print      Print output." << std::endl;
   std::cout << "  -r --recursive  Recusively descend directory." << std::endl;
+  std::cout << "     --strict     Use strict parser (faster but less tolerant with bogus DICOM files)." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;
