@@ -35,6 +35,7 @@ set(EXAMPLES_SRCS
   PrintLUT
   EmptyMask
   DumpSiemensBase64
+  DumpVisusChange
   TemplateEmptyImage
   MakeTemplate
   DeriveSeries
