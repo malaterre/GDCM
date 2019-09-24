@@ -38,6 +38,10 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x0071,0x0021,"SIEMENS MED PT",VR::UI,VM::VM1,"Registration Matrix UID",false},
+  {0x0071,0x0022,"SIEMENS MED PT",VR::DT,VM::VM1,"Decay Correction DateTime",false},
+  {0x0071,0x0023,"SIEMENS MED PT",VR::FD,VM::VM16,"Registration Matrix",false},
+  {0x0071,0x0024,"SIEMENS MED PT",VR::CS,VM::VM1,"Table Motion",false},
   {0x0021,0x0001,"SIEMENS MR SDR 01",VR::LO,VM::VM1,"??",false},
   {0x0021,0x0001,"SIEMENS MR SDS 01",VR::IS,VM::VM1,"??",false},
   {0x0021,0x0002,"SIEMENS MR SDR 01",VR::LO,VM::VM1,"??",false},
