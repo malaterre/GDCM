@@ -590,22 +590,6 @@ if(GDCM_STANDALONE)
 else()
   set(BUILD_APPLICATIONS OFF)
 endif()
-add_subdirectory(Utilities)
-add_subdirectory(Source)
-
-if(GDCM_STANDALONE)
-  add_subdirectory(Wrapping)
-  if(GDCM_WRAP_CSHARP)
-    add_subdirectory(Wrapping/Csharp)
-  endif()
-endif()
-
-if(GDCM_STANDALONE)
-  # After Wrapping please
-  if(BUILD_EXAMPLES)
-    add_subdirectory(Examples)
-  endif()
-endif()
 
 #-----------------------------------------------------------------------------
 # Need pthread for the following class:
@@ -618,7 +602,7 @@ if(GDCM_STANDALONE)
 endif()
 
 if(GDCM_STANDALONE)
-  if(BUILD_TESTING)
+  if(GDCM_BUILD_TESTING)
     configure_file(${GDCM_SOURCE_DIR}/CMake/CTestCustom.ctest.in
         ${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest @ONLY)
     file(WRITE ${GDCM_BINARY_DIR}/CTestCustom.cmake
@@ -632,6 +616,21 @@ if(GDCM_STANDALONE)
       "to the full path name of the gdcmData directory; if you don't want, disable GDCM_BUILD_TESTING.\n"
       "What is gdcmData? Please read: http://gdcm.sourceforge.net/wiki/index.php/General_questions#What_is_gdcmData_.3F")
     endif()
+  endif()
+endif()
+
+# After enable_testing()
+add_subdirectory(Utilities)
+add_subdirectory(Source)
+
+if(GDCM_STANDALONE)
+  add_subdirectory(Wrapping)
+endif()
+
+if(GDCM_STANDALONE)
+  # After Wrapping please
+  if(BUILD_EXAMPLES)
+    add_subdirectory(Examples)
   endif()
 endif()
 

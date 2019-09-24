@@ -1,7 +1,3 @@
-# Special CMake Module required when doing Python Testing
-if(BUILD_TESTING AND GDCM_WRAP_PYTHON)
-  include(${GDCM_SOURCE_DIR}/CMake/UsePythonTest.cmake)
-endif()
 # Try to rebuild wrapping a little more often:
 include_regular_expression("^(gdcm).*$")
 # TODO:
