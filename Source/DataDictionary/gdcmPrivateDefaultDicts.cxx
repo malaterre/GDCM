@@ -38,6 +38,9 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x7fe1,0x0001,"Bioclinica",VR::UT,VM::VM1,"??",false},
+  {0x7fe1,0x0002,"Bioclinica",VR::LO,VM::VM1,"??",false},
+  {0x7fe1,0x0003,"Bioclinica",VR::LO,VM::VM1,"??",false},
   {0x5533,0x0033,"Visus Change",VR::SQ,VM::VM1,"Visus Data Save Sequence",false},
   {0x5533,0x0035,"Visus Change",VR::DA,VM::VM1,"Visus Data Save Date",false},
   {0x5533,0x0037,"Visus Change",VR::LO,VM::VM1,"Visus Data Save Originator",false},
