@@ -23,9 +23,13 @@
 static bool process( std::vector<gdcm::DataElement> & ms, const char * filename)
 {
   using namespace gdcm;
+  Tag pd(0x7fe0,0x0000);
+  std::set<gdcm::Tag> skiptags;
+  skiptags.insert( pd );
+
   gdcm::Reader reader;
   reader.SetFileName( filename );
-  if( !reader.Read() )
+  if( !reader.ReadUpToTag( pd, skiptags ) )
   {
     std::cerr << "Failure to read: " << filename << std::endl;
     return false;
@@ -61,6 +65,8 @@ static bool process( std::vector<gdcm::DataElement> & ms, const char * filename)
 
 int main(int argc, char *argv[])
 {
+  bool usefastpath = true;
+
   if( argc < 2 ) return 1;
   using namespace gdcm;
   const char *filename = argv[1];
@@ -87,15 +93,31 @@ int main(int argc, char *argv[])
     filenames.push_back( filename );
   }
   gdcm::StringFilter sf;
+
+  Tag pd(0x7fe0,0x0000);
+  std::set<gdcm::Tag> skiptags;
+  skiptags.insert( pd );
+
   gdcm::Reader reader;
   reader.SetFileName( filenames[0].c_str() );
-  if( !reader.Read() )
+  if( !reader.ReadUpToTag( pd, skiptags ) )
   {
     std::cerr << "Could not read file: " << filename << std::endl;
     return 1;
   }
   gdcm::File &file = reader.GetFile();
   sf.SetFile(file);
+
+  if( usefastpath ) {
+    // Heuristic, assume if private tag cannot be found in first file, skip the directory
+    gdcm::DataSet &ds1 = file.GetDataSet();
+
+    const gdcm::PrivateTag tseq1(0x5533,0x33,"Visus Change");
+    if( !ds1.FindDataElement( tseq1 ) ){
+      std::cerr << "Could not find private tag in first file skipping whole directory: " << filename << std::endl;
+      return 0;
+    }
+  }
  
   std::vector<DataElement> ms;
   for(gdcm::Directory::FilenamesType::const_iterator cit = filenames.begin(); cit != filenames.end(); ++cit )
@@ -105,12 +127,16 @@ int main(int argc, char *argv[])
     }
   }
 
-  std::sort(ms.begin(), ms.end());
-  for(std::vector<DataElement>::const_iterator it = ms.begin(); it != ms.end(); ++it )
-  {
-    DataElement const & de = *it;
-    std::string const & s = sf.ToString( de );
-    std::cout << de.GetTag() << " " << s << std::endl;
+  if( !ms.empty() ) {
+    std::sort(ms.begin(), ms.end());
+    std::cout << filename << ",\"";
+    for(std::vector<DataElement>::const_iterator it = ms.begin(); it != ms.end(); ++it )
+    {
+      DataElement const & de = *it;
+      std::string const & s = sf.ToString( de );
+      std::cout << de.GetTag() << " " << s << std::endl;
+    }
+    std::cout << "\"" << std::endl;
   }
 
   return 0;
