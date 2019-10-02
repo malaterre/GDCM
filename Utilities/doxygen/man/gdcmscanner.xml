@@ -37,7 +37,7 @@
 <title>OPTIONS</title>
 
 <para><literallayout>  -p --print      Print output.
-  -r --recursive  Recusively descend directory.
+  -r --recursive  Recursively descend directory.
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmxml_1general_options">
