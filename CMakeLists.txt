@@ -679,6 +679,11 @@ include(CMake/InstallRequiredVTKLibraries.cmake)
 endif()
 endif()
 
+# Make sure to run doxygen after everything else (in particular vtkgdcm):
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/Utilities/doxygen)
+  add_subdirectory(Utilities/doxygen)
+endif()
+
 #-----------------------------------------------------------------------------
 # CPack stuff
 if(GDCM_STANDALONE) # disabled for ITK distribution of gdcm
