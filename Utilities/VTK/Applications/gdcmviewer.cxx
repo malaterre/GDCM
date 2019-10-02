@@ -754,7 +754,7 @@ void PrintHelp()
   std::cout << "Options:" << std::endl;
   std::cout << "     --force-rescale    force rescale." << std::endl;
   std::cout << "     --force-spacing    force spacing." << std::endl;
-  std::cout << "  -r --recursive        Recusively descend directory." << std::endl;
+  std::cout << "  -r --recursive        Recursively descend directory." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;

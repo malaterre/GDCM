@@ -65,7 +65,7 @@ static void PrintHelp()
   std::cout << "  -P --private-tag %d,%d,%s DICOM private tag(s) to look for" << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "  -p --print      Print output." << std::endl;
-  std::cout << "  -r --recursive  Recusively descend directory." << std::endl;
+  std::cout << "  -r --recursive  Recursively descend directory." << std::endl;
   std::cout << "     --strict     Use strict parser (faster but less tolerant with bogus DICOM files)." << std::endl;
   std::cout << "     --table      Use Table output." << std::endl;
   std::cout << "General Options:" << std::endl;

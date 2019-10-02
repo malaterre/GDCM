@@ -613,7 +613,7 @@ if(GDCM_WRAP_CSHARP)
       OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
       COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs"
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-      DEPENDS "${swig_generated_file_fullname}"
+      DEPENDS ${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME} 
       ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
       COMMENT "csc *.cs"
       )
