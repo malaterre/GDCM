@@ -14,6 +14,7 @@
 #include "gdcmImageCodec.h"
 #include "gdcmJPEGCodec.h"
 #include "gdcmByteSwap.txx"
+#include "gdcmImageChangePhotometricInterpretation.h"
 #include "gdcmTrace.h"
 
 #include <iostream>
@@ -186,6 +187,63 @@ assert(0); // Do not use this code !
   delete[] copy;
 
   os.write(dummy_buffer, buf_size);
+  delete[] dummy_buffer;
+  return true;
+}
+
+bool ImageCodec::DoYBRFull422(std::istream &is, std::ostream &os)
+{
+  // FIXME: Do some stupid work:
+  std::streampos start = is.tellg();
+  assert( 0 - start == 0 );
+  is.seekg( 0, std::ios::end);
+  const size_t buf_size = (size_t)is.tellg();
+  const size_t rgb_buf_size = buf_size * 3 / 2;
+  unsigned char *dummy_buffer = new unsigned char[buf_size];
+  is.seekg(start, std::ios::beg);
+  is.read( (char*)dummy_buffer, buf_size);
+  is.seekg(start, std::ios::beg); // reset
+
+  assert( !(rgb_buf_size % 3) );
+  assert( !(buf_size % 2) );
+  unsigned char *copy = new unsigned char[ rgb_buf_size ];
+  const size_t size = buf_size/4;
+
+  for (size_t j = 0; j < size; ++j)
+    {
+    unsigned char ybr422[4];
+    ybr422[0] = dummy_buffer[4*j+0];
+    ybr422[1] = dummy_buffer[4*j+1];
+    ybr422[2] = dummy_buffer[4*j+2];
+    ybr422[3] = dummy_buffer[4*j+3];
+
+#if 0
+    unsigned char ybr1[3];
+    unsigned char ybr2[3];
+    ybr1[0] = ybr422[0];
+    ybr1[1] = ybr422[2];
+    ybr1[2] = ybr422[3];
+    ybr2[0] = ybr422[1];
+    ybr2[1] = ybr422[2];
+    ybr2[2] = ybr422[3];
+
+    unsigned char rgb[6];
+    ImageChangePhotometricInterpretation::YBR2RGB(rgb + 0, ybr1);
+    ImageChangePhotometricInterpretation::YBR2RGB(rgb + 3, ybr2);
+    memcpy(copy + 6 * j, rgb, 6 );
+#else
+    unsigned char ybr[6]; // ybr1 + ybr2
+    ybr[0] = ybr422[0];
+    ybr[1] = ybr422[2];
+    ybr[2] = ybr422[3];
+    ybr[3] = ybr422[1];
+    ybr[4] = ybr422[2];
+    ybr[5] = ybr422[3];
+    memcpy(copy + 6 * j, ybr, 6 );
+#endif
+    }
+  os.write((char*)copy, rgb_buf_size);
+  delete[] copy;
   delete[] dummy_buffer;
   return true;
 }
@@ -585,8 +643,10 @@ bool ImageCodec::DecodeByStreams(std::istream &is, std::ostream &os)
       const JPEGCodec *c = dynamic_cast<const JPEGCodec*>(this);
       if( !c )
         {
-        gdcmErrorMacro( "YBR_FULL_422 is not implemented in GDCM. Image will be displayed incorrectly" );
+        //gdcmErrorMacro( "YBR_FULL_422 is not implemented in GDCM. Image will be displayed incorrectly" );
         //this->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
+        DoYBRFull422(*cur_is,pl_os);
+        cur_is = &pl_os;
         }
       }
     break;
