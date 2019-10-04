@@ -66,6 +66,7 @@ static int TestEquipmentManufacturerFunc(const char* filename, bool verbose = fa
   || strcmp(name, "JPEGLS_CharLS_10742.dcm" ) == 0
   || strcmp(name, "JPEGLosslessYBR_FULL_422.dcm" ) == 0
   || strcmp(name, "JPEGLosslessSeNonZero.dcm" ) == 0
+  || strcmp(name, "US-YBR_FULL_422-EVRLE.dcm" ) == 0
   || strcmp(name, "LIBIDO-24-ACR_NEMA-Rectangle.dcm" ) == 0
   || strcmp(name, "MR-Brucker-CineTagging-NonSquarePixels.dcm" ) == 0
   || strcmp(name, "MR16BitsAllocated_8BitsStored.dcm" ) == 0
