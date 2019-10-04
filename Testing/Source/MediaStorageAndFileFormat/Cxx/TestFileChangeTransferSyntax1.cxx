@@ -94,6 +94,7 @@ static int TestFileChangeTransferSyntax1Func(const char *filename, bool verbose 
     || strcmp(name, "JDDICOM_Sample2-dcmdjpeg.dcm") == 0 // cannot recreate FMI
     || strcmp(name, "DMCPACS_ExplicitImplicit_BogusIOP.dcm") == 0 // ImageRegionReader does not handle it
     || strcmp(name, "unreadable.dcm") == 0 // No Pixel Data (old ACR-NEMA)
+    || strcmp(name, "US-YBR_FULL_422-EVRLE.dcm") == 0 // packed ybr422
     || strncmp(name, "DICOMDIR", 8) == 0 // DICOMDIR*
     || strncmp(name, "dicomdir", 8) == 0 // dicomdir*
     )
