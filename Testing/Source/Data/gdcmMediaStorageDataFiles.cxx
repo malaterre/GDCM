@@ -254,6 +254,7 @@ static const char * const gdcmMediaStorageDataFiles[][2] = {
 { "EnhancedWithIPPPerFrameIOPShared.dcm" , "1.2.840.10008.5.1.4.1.1.13.1.2" },
 { "FUJI-ffff-MONO1-J2K.dcm" , "1.2.840.10008.5.1.4.1.1.1" },
 { "JPEGLosslessSeNonZero.dcm" , "1.2.840.10008.5.1.4.1.1.7" },
+{ "US-YBR_FULL_422-EVRLE.dcm" , "1.2.840.10008.5.1.4.1.1.6.1" },
 
 /* Stopping condition */
 { nullptr ,nullptr }

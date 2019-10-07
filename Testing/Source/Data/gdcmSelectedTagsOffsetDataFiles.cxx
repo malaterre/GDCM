@@ -237,6 +237,7 @@ static const StreamOffset gdcmSelectedTagsOffsetDataFiles[] = {
 { "EnhancedWithIPPPerFrameIOPShared.dcm",23212},
 { "FUJI-ffff-MONO1-J2K.dcm",2040},
 { "JPEGLosslessSeNonZero.dcm",748},
+{ "US-YBR_FULL_422-EVRLE.dcm",1542},
 { "dicomdir_Acusson_WithPrivate_WithSR",3826 },
 { "dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents",37218 },
 { "dicomdir_Pms_With_heavy_embedded_sequence",3003414 },

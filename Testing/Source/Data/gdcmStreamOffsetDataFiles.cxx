@@ -242,6 +242,7 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "EnhancedWithIPPPerFrameIOPShared.dcm",23224 },
 { "FUJI-ffff-MONO1-J2K.dcm",2052 },
 { "JPEGLosslessSeNonZero.dcm",760 },
+{ "US-YBR_FULL_422-EVRLE.dcm",1554 },
 
 /* Stopping condition */
 { nullptr ,0 },
