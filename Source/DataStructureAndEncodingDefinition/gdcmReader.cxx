@@ -24,7 +24,7 @@
 #include "gdcmImplicitDataElement.h"
 
 #ifdef _MSC_VER
-#include <windows.h> // MultiByteToWideChar 
+#include <windows.h> // MultiByteToWideChar
 #endif
 
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION

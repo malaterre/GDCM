@@ -587,7 +587,7 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
         if( pi_orig == PhotometricInterpretation::YBR_FULL_422 ) {
           at1.SetValue( "01" );
           ds.Replace( at1.GetAsDataElement() );
- 
+
           static const CSComp newvalues2[] = {"ISO_10918_1"};
           at3.SetValues(  newvalues2, 1 );
           ds.Replace( at3.GetAsDataElement() );
