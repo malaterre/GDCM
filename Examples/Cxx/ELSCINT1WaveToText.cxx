@@ -43,7 +43,7 @@ bool dumpargs(std::ostream & os, T c1, T c2, T c3, T c4, T c5, T c6, T c7, T c8)
 
 bool wave2stream( std::ostream &text_file, const char *in, size_t len )
 {
-  short * buffer = (short*)in;
+  const short * buffer = (const short*)in;
   size_t length = len / sizeof( short );
   text_file << "COMPLETE_WAVE" << '\t' << "MASK"       << '\t' << "AQUISITION_PROFIL" << '\t' << "END-INHALE" << '\t' << "END-EXHALE" << '\t' << "AQUISITION_WAVE" << '\t' << "WAVE_STATISTICS" << '\t' << "MASK"        << std::endl;
   for (size_t i=0;i<length-76;i+=2)

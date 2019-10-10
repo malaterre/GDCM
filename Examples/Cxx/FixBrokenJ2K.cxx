@@ -62,8 +62,8 @@ int main(int argc, char *argv[])
     }
   const gdcm::Fragment &frag0 = sqf->GetFragment(0);
 
-  const gdcm::ByteValue *bv = frag0.GetByteValue();
-  const char *ptr = bv->GetPointer();
+  gdcm::ByteValue *bv = const_cast<gdcm::ByteValue*>(frag0.GetByteValue());
+  char *ptr = (char*)bv->GetVoidPointer();
   size_t len = bv->GetLength();
 
   static const unsigned char sig[] = {0,0,0,0,0x6A,0x70,0x32,0x63};
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
   // Apparently the flag to enable a color transform on 3 color components is set in
   // the COD marker. (YCC is byte[6] in the COD marker)
   // we need to disable this flag;
-  const char *cod_marker = ptr + 0x35; /* 0x2d + 0x8 */ // FIXME
+  char *cod_marker = ptr + 0x35; /* 0x2d + 0x8 */ // FIXME
   if( cod_marker[0] == (char)0xff && cod_marker[1] == 0x52 )
     {
     // found start of COD

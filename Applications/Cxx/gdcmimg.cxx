@@ -1203,9 +1203,9 @@ int main (int argc, char *argv[])
     gdcm::ByteValue *bv = new gdcm::ByteValue();
     bv->SetLength( (uint32_t)len );
     //memcpy( bv->GetPointer(), imageori
-    imageori.GetBuffer( (char*)bv->GetPointer() );
+    imageori.GetBuffer( (char*)bv->GetVoidPointer() );
     // Rub out pixels:
-    char *p = (char*)bv->GetPointer();
+    char *p = (char*)bv->GetVoidPointer();
     switch(pixeltype)
       {
     case gdcm::PixelFormat::UINT8:
