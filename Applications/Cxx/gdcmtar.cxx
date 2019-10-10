@@ -1415,7 +1415,7 @@ int main (int argc, char *argv[])
     //std::cout << image << std::endl;
     const gdcm::DataElement &pixeldata = image.GetDataElement();
     //const gdcm::ByteValue *bv = pixeldata.GetByteValue();
-    gdcm::SmartPointer<gdcm::ByteValue> bv = (gdcm::ByteValue*)pixeldata.GetByteValue();
+    gdcm::SmartPointer<gdcm::ByteValue> bv = const_cast<gdcm::ByteValue*>(pixeldata.GetByteValue());
     unsigned long slice_len = image.GetBufferLength() / dims[2];
     assert( slice_len * dims[2] == image.GetBufferLength() );
     //assert( image.GetBufferLength() == bv->GetLength() );

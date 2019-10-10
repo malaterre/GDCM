@@ -54,7 +54,7 @@ void delta_decode(const unsigned char *data_in, size_t data_size,
     REPEATMODE = 0x83
   };
 
-  byte* src = (byte*)data_in;
+  const byte* src = (const byte*)data_in;
   byte* dest = (byte*)&new_stream[0];
   union { byte gray; byte rgb[3]; } pixel;
   pixel.rgb[0] = pixel.rgb[1] = pixel.rgb[2] = 0;
