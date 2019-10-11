@@ -991,6 +991,17 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
       bool need = PixelData->GetTransferSyntax() == TransferSyntax::ImplicitVRBigEndianPrivateGE;
       PixelData->SetNeedByteSwap( need );
       PixelData->SetDataElement( xde );
+      if( PixelData->GetTransferSyntax().IsEncapsulated() && PixelData->GetDataElement().GetByteValue() )
+      {
+        // Pixel Data attribute is not encapsulated, let's check for simple user error
+        const ByteValue *bv = PixelData->GetDataElement().GetByteValue();
+        if( bv->GetLength() == PixelData->GetBufferLength() ||
+            bv->GetLength() == PixelData->GetBufferLength() + 1 )
+        {
+          gdcmWarningMacro( "Pixel Data was found to be raw. Fixing invalid Transfer Syntax: " << PixelData->GetTransferSyntax() );
+          PixelData->SetTransferSyntax( TransferSyntax::ExplicitVRLittleEndian );
+        }
+      }
 
       // FIXME:
       // We should check that when PixelData is RAW that Col * Dim == PixelData->GetLength()
