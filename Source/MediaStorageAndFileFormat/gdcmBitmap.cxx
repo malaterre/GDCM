@@ -264,7 +264,7 @@ unsigned long Bitmap::GetBufferLength() const
   std::vector<unsigned int>::const_iterator it = Dimensions.begin();
   for(; it != Dimensions.end(); ++it)
     {
-    assert( *it );
+    if( *it == 0 ) gdcmWarningMacro("Dimension has been found to be zero" );
     mul *= *it;
     }
   // Multiply by the pixel size:
@@ -313,7 +313,7 @@ unsigned long Bitmap::GetBufferLength() const
     }
   len = mul;
 
-  assert( len != 0 );
+  //assert( len != 0 );
   return len;
 }
 
