@@ -886,13 +886,15 @@ void Reader::SetFileName(const char *uft8path)
 {
   if(Ifstream) delete Ifstream;
   Ifstream = new std::ifstream();
-  Ifstream->open(
+  if (uft8path && *uft8path) {
 #ifdef _MSC_VER
-      ToUtf16(uft8path).c_str()
+    const std::wstring uft16path = ToUtf16(uft8path);
+    const std::wstring uncpath = HandleMaxPath(uft16path);
+    Ifstream->open(uncpath.c_str(), std::ios::binary);
 #else
-      uft8path
+    Ifstream->open( uft8path, std::ios::binary);
 #endif
-	  , std::ios::binary);
+  }
   if( Ifstream->is_open() )
     {
     Stream = Ifstream;
