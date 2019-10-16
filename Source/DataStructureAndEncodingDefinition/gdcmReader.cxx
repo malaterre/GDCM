@@ -829,7 +829,7 @@ bool Reader::CanRead() const
 
 #ifdef _MSC_VER
 namespace {
-static inline std::wstring ToUtf16(std::string str) {
+static inline std::wstring ToUtf16(std::string const & str) {
   std::wstring ret;
   int len = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), NULL, 0);
   if (len > 0) {
