@@ -412,6 +412,25 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
         Bitmap *i = (Bitmap*)this;
         i->SetPixelFormat( codec.GetPixelFormat() );
         }
+#else
+      const PixelFormat & cpf = codec.GetPixelFormat();
+      // SC16BitsAllocated_8BitsStoredJPEG.dcm
+      if( cpf.GetBitsAllocated() <= pf.GetBitsAllocated() )
+        {
+        if( cpf.GetPixelRepresentation() == pf.GetPixelRepresentation() )
+          {
+          if( cpf.GetSamplesPerPixel() == pf.GetSamplesPerPixel() )
+            {
+            if( cpf.GetBitsStored() < pf.GetBitsStored() )
+              {
+              Bitmap *i = const_cast<Bitmap*>(this);
+              gdcmWarningMacro( "Encapsulated stream has fewer bits actually stored on disk. correcting." );
+              i->GetPixelFormat().SetBitsAllocated( cpf.GetBitsAllocated() );
+              i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
+              }
+            }
+          }
+        }
 #endif
       if( GetDimensions()[0] != codec.GetDimensions()[0]
       || GetDimensions()[1] != codec.GetDimensions()[1] )
