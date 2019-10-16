@@ -864,7 +864,7 @@ static inline bool ComputeFullPath(std::wstring const &in, std::wstring &out) {
 }
 
 static inline std::wstring HandleMaxPath(std::wstring const &in) {
-  if (in.size() > MAX_PATH) {
+  if (in.size() >= MAX_PATH) {
     std::wstring out;
     bool ret = ComputeFullPath(in, out);
     if (!ret) return in;
