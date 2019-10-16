@@ -215,7 +215,7 @@ static const char * const vtkgdcmMD5MetaImages[][3] = {
 { "NM-PAL-16-PixRep1.dcm","a04de15a87306cf77cd85ae5b720a0b2", "304f147752d46adfdcff71a30cd03d0a" },
 { "MEDILABInvalidCP246_EVRLESQasUN.dcm","da13f42e41d36ef065af2cb5d770f70b", "d99ace99196e148522c8599803bacc28" },
 { "JPEGInvalidSecondFrag.dcm","32ea68aea0c81d4cc75c5a234e1719ed", "8fb3a76c1f18b71b52d139ebd8406b50" },
-{ "SC16BitsAllocated_8BitsStoredJPEG.dcm","c9f9d07783496fa9a9e5b28a90603a70", "c164a73ba18ab4e88977921ffc7c3a65" },
+{ "SC16BitsAllocated_8BitsStoredJPEG.dcm","c9f9d07783496fa9a9e5b28a90603a70", "f845c8f283d39a0204c325654493ba53" },
 { "SC16BitsAllocated_8BitsStoredJ2K.dcm","96639bac776d875b02f6aa9b35ee2db7", "dbf83984984741c98205d77a947b442c" },
 { "SIEMENS_SYNGO-12-MONO2-LUTWrongLength512.dcm","81f79e2fcb3caec752e55be8077441dc", "4a5d8549791432b29948dd8ff63e2534" },
 { "IllegalGroup2ImplicitTS.dcm","7c922536b5cf4143ce931ff5f552f588", "f666a95dde9ddfdec0cf9574a7985ae3" },
