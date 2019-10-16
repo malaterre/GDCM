@@ -838,7 +838,48 @@ static inline std::wstring ToUtf16(std::string const & str) {
   }
   return ret;
 }
+// http://arsenmk.blogspot.com/2015/12/handling-long-paths-on-windows.html
+static inline bool ComputeFullPath(std::wstring const &in, std::wstring &out) {
+  // consider an input fileName of type PCWSTR (const wchar_t*)
+  const wchar_t *fileName = in.c_str();
+  DWORD requiredBufferLength = GetFullPathNameW(fileName, 0, nullptr, nullptr);
+
+  if (0 == requiredBufferLength)  // means failure
+  {
+    return false;
+  }
+
+  out.resize(requiredBufferLength);
+  wchar_t *buffer = &out[0];
+
+  DWORD result =
+      GetFullPathNameW(fileName, requiredBufferLength, buffer, nullptr);
+
+  if (0 == result) {
+    return false;
+  }
+
+  // buffer now contains the full path name of fileName, use it.
+  return true;
 }
+
+static inline std::wstring HandleMaxPath(std::wstring const &in) {
+  if (in.size() > MAX_PATH) {
+    std::wstring out;
+    bool ret = ComputeFullPath(in, out);
+    if (!ret) return in;
+    if (out[0] == '\\' && out[1] == '\\') {
+      const std::wstring prefix = LR"(\\?\UNC\)";
+      out = prefix + (out.c_str() + 2);
+    } else {
+      const std::wstring prefix = LR"(\\?\)";
+      out = prefix + out.c_str();
+    }
+    return out;
+  }
+  return in;
+}
+} // namespace
 #endif
 
 void Reader::SetFileName(const char *uft8path)
