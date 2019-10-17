@@ -831,10 +831,10 @@ bool Reader::CanRead() const
 namespace {
 static inline std::wstring ToUtf16(std::string const & str) {
   std::wstring ret;
-  int len = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), NULL, 0);
+  int len = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.length(), nullptr, 0);
   if (len > 0) {
     ret.resize(len);
-    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), &ret[0], len);
+    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.length(), &ret[0], len);
   }
   return ret;
 }
@@ -864,14 +864,20 @@ static inline bool ComputeFullPath(std::wstring const &in, std::wstring &out) {
 }
 
 static inline std::wstring HandleMaxPath(std::wstring const &in) {
-  if (in.size() > MAX_PATH) {
+  if (in.size() >= MAX_PATH) {
     std::wstring out;
     bool ret = ComputeFullPath(in, out);
     if (!ret) return in;
-    if (out[0] == '\\' && out[1] == '\\') {
+    if (out.size() < 4) return in;
+    if (out[0] == '\\' && out[1] == '\\' && out[2] == '?') {
+      // nothing to do
+    } else if (out[0] == '\\' && out[1] == '\\' && out[2] != '?') {
+      // server path
       const std::wstring prefix = LR"(\\?\UNC\)";
       out = prefix + (out.c_str() + 2);
     } else {
+      // regular C:\ style path:
+      assert(out[1] == ':');
       const std::wstring prefix = LR"(\\?\)";
       out = prefix + out.c_str();
     }
