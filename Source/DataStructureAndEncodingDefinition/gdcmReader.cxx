@@ -868,10 +868,16 @@ static inline std::wstring HandleMaxPath(std::wstring const &in) {
     std::wstring out;
     bool ret = ComputeFullPath(in, out);
     if (!ret) return in;
-    if (out[0] == '\\' && out[1] == '\\') {
+    if (out.size() < 4) return in;
+    if (out[0] == '\\' && out[1] == '\\' && out[2] == '?') {
+      // nothing to do
+    } else if (out[0] == '\\' && out[1] == '\\' && out[2] != '?') {
+      // server path
       const std::wstring prefix = LR"(\\?\UNC\)";
       out = prefix + (out.c_str() + 2);
     } else {
+      // regular C:\ style path:
+      assert(out[1] == ':');
       const std::wstring prefix = LR"(\\?\)";
       out = prefix + out.c_str();
     }
