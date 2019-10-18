@@ -233,7 +233,6 @@ void StrictScanner::PrintTable( std::ostream & os ) const
     {
     const char *filename = file->c_str();
     assert( filename && *filename );
-    bool b = IsKey(filename);
     os << '"' << filename << '"' << "\t";
     TagsType::const_iterator tag = Tags.begin();
     const TagToValue &mapping = GetMapping(filename);
