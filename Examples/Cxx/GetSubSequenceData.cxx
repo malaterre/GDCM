@@ -103,7 +103,7 @@ static bool processgroup(Item & item3, std::string const & outfilename)
     std::cout << "TimeStamp (" << el0.GetLength() << "): ";
     // Seems like the 3D volumes is split into chunks of max 100 frames...
     assert( ldimz.GetValue() == el0.GetLength() );
-    for( int  i = 0; i < el0.GetLength(); ++i ) {
+    for( unsigned long i = 0; i < el0.GetLength(); ++i ) {
       if(i) std::cout << ",";
       std::cout << el0.GetValue(i);
     }
@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
   size_t ni3 = sqi3->GetNumberOfItems(); (void)ni3;
   assert( sqi3->GetNumberOfItems() >= 1 );
   std::cout << "#Groups = " << sqi3->GetNumberOfItems() << std::endl;
-  for( int i = 1; i <= sqi3->GetNumberOfItems(); ++i) {
+  for( SequenceOfItems::SizeType i = 1; i <= sqi3->GetNumberOfItems(); ++i) {
     Item &item3 = sqi3->GetItem(i);
     std::ostringstream os;
     os << "outvid";
