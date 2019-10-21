@@ -783,7 +783,8 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
   assert( image->numcomps == this->GetPhotometricInterpretation().GetSamplesPerPixel() );
   if( this->GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
     assert( !mct );
-  else if( this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT )
+  else if( this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
+        || this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_ICT )
     assert( mct );
   else
     assert( !mct );
