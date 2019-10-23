@@ -1092,7 +1092,11 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
   // Two cases:
   // - DataSet did not specify the lossyflag
   // - DataSet specify it to be 0, but there is still a chance it could be wrong:
-  if( !haslossyflag || !lossyflag )
+  // execute computation of lossy flag eny time the TS is encapsulated so as to
+  // update the correct PixelFormat as early as possible and not during
+  // decompression in case of mismatch:
+  if( (!haslossyflag || !lossyflag)
+   || PixelData->GetTransferSyntax().IsEncapsulated() )
     {
     PixelData->ComputeLossyFlag();
     if( PixelData->IsLossy() && (!lossyflag && haslossyflag ) )
@@ -1100,6 +1104,8 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
       // We always prefer the setting from the stream...
       gdcmWarningMacro( "DataSet set LossyFlag to 0, while Codec made the stream lossy" );
       }
+    // Make sure to combine DICOM info + pixel data bitstream:
+    PixelData->SetLossyFlag( PixelData->IsLossy() || lossyflag);
     }
 
   return true;

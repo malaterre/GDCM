@@ -350,6 +350,12 @@ bool Bitmap::TryRAWCodec(char *buffer, bool &lossyflag) const
     //bool r = codec.Decode(PixelData, out);
     bool r = codec.DecodeBytes(bv->GetPointer(), bv->GetLength(),
       buffer, len);
+    if( GetNeedByteSwap() )
+      {
+      // Internally DecodeBytes always does the byteswapping step, so remove internal flag
+      Bitmap *i = const_cast<Bitmap*>(this);
+      i->SetNeedByteSwap(false);
+      }
     if( !r ) return false;
     //const ByteValue *outbv = out.GetByteValue();
     //assert( outbv );
