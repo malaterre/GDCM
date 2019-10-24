@@ -104,10 +104,6 @@ public:
   /// Set target interval for output data. A best match will be computed (if possible)
   /// Used for inverse transformation
   void SetMinMaxForPixelType(double min, double max)
-    {
-    ScalarRangeMin = min;
-    ScalarRangeMax = max;
-    }
 
   /// Compute the Pixel Format of the output data
   /// Used for inverse transformation

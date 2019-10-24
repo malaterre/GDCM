@@ -486,6 +486,21 @@ static PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ do
   return st;
 }
 
+void Rescaler::SetMinMaxForPixelType(double min, double max)
+{
+  if( min < max )
+  {
+    ScalarRangeMin = min;
+    ScalarRangeMax = max;
+  }
+  else
+  {
+    gdcmWarningMacro( "Min > Max. Correcting" );
+    ScalarRangeMin = max;
+    ScalarRangeMax = min;
+  }
+}
+
 PixelFormat Rescaler::ComputePixelTypeFromMinMax()
 {
   assert( PF != PixelFormat::UNKNOWN );
