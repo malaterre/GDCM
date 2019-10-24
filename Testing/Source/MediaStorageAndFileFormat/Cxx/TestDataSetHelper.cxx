@@ -25,7 +25,95 @@ public:
   VR PrintDataElement(std::ostringstream & os, const Dicts &dicts, const DataSet & ds, const DataElement &de, std::ostream &out, std::string const & indent ) {
     const VR vr = Printer::PrintDataElement(os, dicts, ds, de, out, indent );
     const VR vr2 = DataSetHelper::ComputeVR(*F, ds, de.GetTag());
-    assert( vr == vr2 );
+    if( vr != vr2 )
+    {
+      std::string privcrea = ds.GetPrivateCreator(de.GetTag());
+      // Special case for AMIInvalidPrivateDefinedLengthSQasUN.dcm
+      const PrivateTag pt1(0x0027,0x33,"GEMS_IMAG_01");
+      // DX_GE_FALCON_SNOWY-VOI.dcm
+      const PrivateTag pt2(0x0045,0x72,"GEMS_FALCON_03");
+      const PrivateTag pt3(0x0045,0x73,"GEMS_FALCON_03");
+      if( PrivateTag(de.GetTag(),"GEMS_IMAG_01") == pt1 )
+      {
+        assert( vr == VR::UL );
+        assert( vr2 == VR::SL );
+        return vr;
+      }
+      if( PrivateTag(de.GetTag(),"GEMS_IMAG_01") == pt2
+       || PrivateTag(de.GetTag(),"GEMS_IMAG_01") == pt3 )
+      {
+        assert( vr == VR::IS );
+        assert( vr2 == VR::DS );
+        return vr;
+      }
+      // ELSCINT1_PMSCT_RLE1.dcm
+      if( de.GetTag() == Tag(0x0020,0x0070) )
+      {
+        assert( vr == VR::CS );
+        assert( vr2 == VR::LO );
+        return vr;
+      }
+      // EmptyIcon_Bug417.dcm
+      if( de.GetTag() == Tag(0x0040,0x1008) )
+      {
+        assert( vr == VR::ST );
+        assert( vr2 == VR::LO );
+        return vr;
+      }
+      // GE_CT_With_Private_compressed-icon.dcm
+      if( de.GetTag() == Tag(0x0040,0x0253) )
+      {
+        assert( vr == VR::CS );
+        assert( vr2 == VR::SH );
+        return vr;
+      }
+      // JPEGInvalidSecondFrag.dcm
+      if( de.GetTag() == Tag(0x0018,0x9305)
+       || de.GetTag() == Tag(0x0018,0x9306)
+       || de.GetTag() == Tag(0x0018,0x9307)
+       || de.GetTag() == Tag(0x0023,0x1070) )
+      {
+        assert( vr == VR::OB );
+        assert( vr2 == VR::FD );
+        return vr;
+      }
+      // NM-PAL-16-PixRep1.dcm...FIXME: dcmconv +te
+      if( de.GetTag() == Tag(0x0028,0x1101)
+       || de.GetTag() == Tag(0x0028,0x1102)
+       || de.GetTag() == Tag(0x0028,0x1103)
+       || de.GetTag() == Tag(0x0028,0x1201)
+       || de.GetTag() == Tag(0x0028,0x1202)
+       || de.GetTag() == Tag(0x0028,0x1203) )
+      {
+        assert( vr == VR::US );
+        assert( vr2 == VR::SS || vr2 == VR::OW );
+        return vr;
+      }
+      // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
+      if( de.GetTag() == Tag(0x0008,0x0010)
+       || de.GetTag() == Tag(0x0018,0x4000)
+       || de.GetTag() == Tag(0x0020,0x3402) )
+      {
+        assert( vr == VR::LO );
+        assert( vr2 == VR::CS || vr2 == VR::LT || vr2 == VR::SH );
+        return vr;
+      }
+      // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
+      if( de.GetTag() == Tag(0x0020,0x1001)
+       || de.GetTag() == Tag(0x0028,0x0005)
+       || de.GetTag() == Tag(0x0028,0x0040)
+       || de.GetTag() == Tag(0x0028,0x0200) )
+      {
+        assert( vr == VR::DS || vr == VR::SS || vr == VR::SH );
+        assert( vr2 == VR::IS || vr2 == VR::US || vr2 == VR::CS );
+        return vr;
+      }
+      if( vr == VR::SQ || vr2 == VR::SQ )
+        assert( vr == vr2 );
+      if( !de.GetTag().IsPrivate() )
+        assert( vr == vr2 );
+      //assert( vr.Comptible(vr2) );
+    }
     return vr;
   }
 void PrintSQ(const SequenceOfItems *sqi, std::ostream & os, std::string const & indent)
