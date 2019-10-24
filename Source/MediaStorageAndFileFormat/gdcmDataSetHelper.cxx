@@ -191,6 +191,12 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
     if( pixeldata == t || t.IsGroupXX(overlaydata) )
       {
       vr = VR::OW;
+      if( ds.FindDataElement( t ) )
+        {
+        const DataElement &de = ds.GetDataElement( t );
+        const gdcm::SequenceOfFragments * sqf = de.GetSequenceOfFragments();
+        if( sqf ) vr = VR::OB;
+        }
       }
     else if( waveformdata == t || waveformpaddingvalue == t )
       {
