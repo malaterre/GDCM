@@ -97,6 +97,22 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
   // not much we can do...
   if( refvr == VR::INVALID || refvr == VR::UN )
     {
+    // New public/private tag, let's forward what is found in the file (hopefully correct)
+    if( ds.FindDataElement( t ) )
+      {
+      const DataElement &de = ds.GetDataElement( t );
+      const VR &devr = de.GetVR();
+      if( devr != VR::INVALID && devr != VR::UN )
+        {
+        gdcmWarningMacro("Please report. Missing dict entry for: " << de );
+        return devr;
+        }
+      // CP-246
+      if( devr == VR::UN && de.IsUndefinedLength() )
+        {
+        return VR::SQ;
+        }
+      }
     // postcondition says it cannot be VR::INVALID, so return VR::UN
     return VR::UN;
     }
@@ -191,6 +207,12 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
     if( pixeldata == t || t.IsGroupXX(overlaydata) )
       {
       vr = VR::OW;
+      if( ds.FindDataElement( t ) )
+        {
+        const DataElement &de = ds.GetDataElement( t );
+        const gdcm::SequenceOfFragments * sqf = de.GetSequenceOfFragments();
+        if( sqf ) vr = VR::OB;
+        }
       }
     else if( waveformdata == t || waveformpaddingvalue == t )
       {
