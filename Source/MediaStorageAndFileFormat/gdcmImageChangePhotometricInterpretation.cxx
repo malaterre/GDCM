@@ -49,7 +49,7 @@ bool ImageChangePhotometricInterpretation::ChangeMonochrome()
   // mistake. just like Largest Image Pixel Value and other would be wrong
   const Bitmap &image = *Input;
   PhotometricInterpretation pi = image.GetPhotometricInterpretation();
-  assert( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 );
+  if( pi != PhotometricInterpretation::MONOCHROME1 && pi != PhotometricInterpretation::MONOCHROME2 ) return false;
   if( pi == PI )
     {
     return true;
@@ -207,7 +207,7 @@ bool ImageChangePhotometricInterpretation::Change()
   Output = Input;
   if( PI == PhotometricInterpretation::YBR_FULL )
     {
-    assert( Input->GetPhotometricInterpretation() == PhotometricInterpretation::RGB );
+    if( Input->GetPhotometricInterpretation() != PhotometricInterpretation::RGB ) return false;
     /*
     In the case where Bits Allocated (0028,0100) has a value of 8 then the following equations convert
     between RGB and YCBCR Photometric Interpretation.
@@ -220,6 +220,7 @@ bool ImageChangePhotometricInterpretation::Change()
     }
   else if( PI == PhotometricInterpretation::RGB )
     {
+    if( Input->GetPhotometricInterpretation() != PhotometricInterpretation::YBR_FULL ) return false;
     /* octave:
      * B = [.2990,.5870,.1140;- .16874, - .33126,  .5000; .5000, - .41869, - .08131]
      * inv(B)
