@@ -70,12 +70,16 @@ static inline int Clamp(T v)
 template <typename T>
 void ImageChangePhotometricInterpretation::RGB2YBR(T ybr[3], const T rgb[3])
 {
+  // Implementation details, since the equations from:
+  // http://dicom.nema.org/medical/dicom/current/output/chtml/part03/sect_C.7.6.3.html#sect_C.7.6.3.1.2
+  // are rounded to the 4th decimal precision, prefer the exact equation from the original document at:
+  // CCIR Recommendation 601-2, also found in T.871 (Section §7, page 4)
   const double R = rgb[0];
   const double G = rgb[1];
   const double B = rgb[2];
-  const int Y  = Round(  .299 * R + .587 * G + .114 * B             );
-  const int CB = Round((-.299 * R - .587 * G + .886 * B)/1.772 + 128);
-  const int CR = Round(( .701 * R - .587 * G - .114 * B)/1.402 + 128);
+  const int Y  = Round(  0.299 * R + 0.587 * G + 0.114 * B             );
+  const int CB = Round((-0.299 * R - 0.587 * G + 0.886 * B)/1.772 + 128);
+  const int CR = Round(( 0.701 * R - 0.587 * G - 0.114 * B)/1.402 + 128);
   ybr[0] = Clamp(Y );
   ybr[1] = Clamp(CB);
   ybr[2] = Clamp(CR);
