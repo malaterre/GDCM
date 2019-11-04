@@ -237,8 +237,28 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
       }
     else
       {
-      assert( 0 && "Should not happen" );
-      vr = VR::INVALID;
+      // We may reach here coming from a private attribute
+      if( t.IsPrivate() && !t.IsPrivateCreator() )
+        {
+        // ?HitachiMedical.Dream.Cabinet.ApplicationObjects.ImageAppData?
+        vr = VR::UN;
+        // no clue which VR to pick, try to re-use the one from the file:
+        if( ds.FindDataElement( t ) )
+          {
+          const DataElement &de = ds.GetDataElement( t );
+          const VR &devr = de.GetVR();
+          if( devr != VR::INVALID && devr != VR::UN )
+            {
+            gdcmWarningMacro("Possibly incorrect VR for: " << de );
+            vr = devr;
+            }
+          }
+        }
+      else
+        {
+        // Do we need to update this logic ?
+        gdcmAssertAlwaysMacro( 0 && "Should not happen" );
+        }
       }
     }
   else if( vr == VR::US_SS_OW )
