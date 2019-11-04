@@ -197,7 +197,7 @@ bool ImageChangePhotometricInterpretation::ChangeRGB2YBR()
       rgb[0] = p[ 3 * i + 0];
       rgb[1] = p[ 3 * i + 1];
       rgb[2] = p[ 3 * i + 2];
-      RGB2YBR(ybr, rgb);
+      RGB2YBR(ybr, rgb, pf.GetBitsStored());
       p[ 3 * i + 0] = ybr[0];
       p[ 3 * i + 1] = ybr[1];
       p[ 3 * i + 2] = ybr[2];
@@ -212,7 +212,7 @@ bool ImageChangePhotometricInterpretation::ChangeRGB2YBR()
       rgb[0] = p[ 3 * i + 0];
       rgb[1] = p[ 3 * i + 1];
       rgb[2] = p[ 3 * i + 2];
-      RGB2YBR(ybr, rgb);
+      RGB2YBR(ybr, rgb, pf.GetBitsStored());
       p[ 3 * i + 0] = ybr[0];
       p[ 3 * i + 1] = ybr[1];
       p[ 3 * i + 2] = ybr[2];
