@@ -910,6 +910,16 @@ int main (int argc, char *argv[])
         }
 
       if( !Populate( writer, raw, filenames, ndimension, start_pos ) ) return 1;
+      // populate will guess pixel format and photometric inter from file, need
+      // to override after calling Populate:
+      if( pformat )
+        {
+        writer.GetPixmap().SetPixelFormat( pfref );
+        }
+      if( pinter )
+        {
+        writer.GetPixmap().SetPhotometricInterpretation( refpi );
+        }
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );
