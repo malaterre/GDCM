@@ -196,6 +196,7 @@
 #include "gdcmJSON.h"
 #include "gdcmFileDecompressLookupTable.h"
 #include "gdcmEmptyMaskGenerator.h"
+#include "gdcmEquipmentManufacturer.h"
 
 using namespace gdcm;
 %}
@@ -828,3 +829,4 @@ EXTEND_CLASS_PRINT(gdcm::BoxRegion)
 %include "gdcmJSON.h"
 %include "gdcmFileDecompressLookupTable.h"
 %include "gdcmEmptyMaskGenerator.h"
+%include "gdcmEquipmentManufacturer.h"
