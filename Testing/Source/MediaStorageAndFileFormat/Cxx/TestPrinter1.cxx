@@ -16,6 +16,8 @@
 #include "gdcmFilename.h"
 #include "gdcmTesting.h"
 
+// How to update this file:
+// $ while IFS=\; read -r col1 col2 col3; do echo "-e 's/$col2/$col3/g'"; done < /tmp/full  > /tmp/s
 // the following list has been generated using gdcm, git: df760b9d8b3c9b280ad423153c649190f6e21204
 // This correspond to the commit just before:
 // BUG: an explicit length VR=SQ dataelement would not have been loaded as
