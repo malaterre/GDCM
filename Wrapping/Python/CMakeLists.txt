@@ -48,8 +48,8 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-find_package(PythonInterp REQUIRED)
-find_package(PythonLibs REQUIRED)
+find_package(PythonInterp ${GDCM_DEFAULT_PYTHON_VERSION} REQUIRED)
+find_package(PythonLibs ${GDCM_DEFAULT_PYTHON_VERSION} REQUIRED)
 # TODO Need to check consistency python interp and python libs...
 mark_as_advanced(PYTHON_LIBRARY PYTHON_INCLUDE_PATH)
 # Lamest excuse ever:
