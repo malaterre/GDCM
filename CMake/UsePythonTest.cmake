@@ -20,7 +20,7 @@
 #
 
 # Need python interpreter:
-find_package(PythonInterp REQUIRED)
+find_package(PythonInterp ${GDCM_DEFAULT_PYTHON_VERSION} REQUIRED)
 mark_as_advanced(PYTHON_EXECUTABLE)
 
 macro(ADD_PYTHON_TEST TESTNAME FILENAME)
