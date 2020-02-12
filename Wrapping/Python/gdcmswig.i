@@ -225,6 +225,8 @@ using namespace gdcm;
 %include "std_map.i"
 %include "exception.i"
 
+%include "pybuffer.i"
+
 // operator= is not needed in python AFAIK
 %ignore operator=;                      // Ignore = everywhere.
 %ignore operator++;                     // Ignore
@@ -823,7 +825,7 @@ typedef int64_t time_t; // FIXME
 EXTEND_CLASS_PRINT(gdcm::Region)
 %include "gdcmBoxRegion.h"
 EXTEND_CLASS_PRINT(gdcm::BoxRegion)
-%apply char[] { char* inreadbuffer }
+%pybuffer_mutable_binary(char *inreadbuffer, size_t buflen);
 %include "gdcmImageRegionReader.h"
 %clear char* inreadbuffer;
 %include "gdcmJSON.h"
