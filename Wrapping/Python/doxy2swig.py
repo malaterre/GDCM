@@ -32,6 +32,7 @@ http://internetducttape.com/2007/03/20/automatic_documentation_python_doxygen/
 # Thanks:
 #   Johan Hake:  the include_function_definition feature
 #   Bill Spotz:  bug reports and testing.
+#   Sebastian Henschel:   Misc. enhancements.
 #
 ######################################################################
 
@@ -39,7 +40,6 @@ from xml.dom import minidom
 import re
 import textwrap
 import sys
-import types
 import os.path
 import optparse
 
@@ -156,7 +156,7 @@ class Doxy2SWIG:
 
     def add_text(self, value):
         """Adds text corresponding to `value` into `self.pieces`."""
-        if type(value) in (types.ListType, types.TupleType):
+        if isinstance(value, (list, tuple)):
             self.pieces.extend(value)
         else:
             self.pieces.append(value)
@@ -216,13 +216,13 @@ class Doxy2SWIG:
         kind = node.attributes['kind'].value
         if kind in ('class', 'struct'):
             prot = node.attributes['prot'].value
-            if prot <> 'public':
+            if prot != 'public':
                 return
             names = ('compoundname', 'briefdescription',
                      'detaileddescription', 'includes')
             first = self.get_specific_nodes(node, names)
             for n in names:
-                if first.has_key(n):
+                if n in first:
                     self.parse(first[n])
             self.add_text(['";','\n'])
             for n in node.childNodes:
@@ -243,6 +243,7 @@ class Doxy2SWIG:
             if key == 'kind':
                 if val == 'param': text = 'Parameters'
                 elif val == 'exception': text = 'Exceptions'
+                elif val == 'retval': text = 'Returns'
                 else: text = val
                 break
         self.add_text(['\n', '\n', text, ':', '\n'])
@@ -286,7 +287,7 @@ class Doxy2SWIG:
             if name[:8] == 'operator': # Don't handle operators yet.
                 return
 
-            if not first.has_key('definition') or \
+            if not 'definition' in first or \
                    kind in ['variable', 'typedef']:
                 return
 
@@ -378,7 +379,7 @@ class Doxy2SWIG:
             if not os.path.exists(fname):
                 fname = os.path.join(self.my_dir,  fname)
             if not self.quiet:
-                print "parsing file: %s"%fname
+                print( "parsing file: %s"%fname )
             p = Doxy2SWIG(fname, self.include_function_definition, self.quiet)
             p.generate()
             self.pieces.extend(self.clean_pieces(p.pieces))
@@ -416,8 +417,8 @@ class Doxy2SWIG:
         _data = "".join(ret)
         ret = []
         for i in _data.split('\n\n'):
-            if i == 'Parameters:' or i == 'Exceptions:':
-                ret.extend([i, '\n-----------', '\n\n'])
+            if i == 'Parameters:' or i == 'Exceptions:' or i == 'Returns:':
+                ret.extend([i, '\n'+'-'*len(i), '\n\n'])
             elif i.find('// File:') > -1: # leave comments alone.
                 ret.extend([i, '\n'])
             else:
@@ -444,7 +445,7 @@ def main():
                       action='store_true',
                       default=False,
                       dest='quiet',
-                      help='be quiet and minimise output')
+                      help='be quiet and minimize output')
 
     options, args = parser.parse_args()
     if len(args) != 2:
