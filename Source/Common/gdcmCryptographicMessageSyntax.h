@@ -29,11 +29,10 @@ public:
   void operator=(const CryptographicMessageSyntax&) = delete;
 
   typedef enum {
-    NO_CIPHER = 0,   // Anonymization mode (de-identification without encrypted content)
-    DES3_CIPHER = 1, // Triple DES
-    AES128_CIPHER,   // CBC AES
-    AES192_CIPHER,   // '   '
-    AES256_CIPHER    // '   '
+    DES3_CIPHER,   // Triple DES
+    AES128_CIPHER, // CBC AES
+    AES192_CIPHER, // '   '
+    AES256_CIPHER  // '   '
   } CipherTypes;
 
     // X.509
