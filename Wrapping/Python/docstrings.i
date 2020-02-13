@@ -623,8 +623,8 @@ C++ includes: gdcmASN1.h ";
 
 AsynchronousOperationsWindowSub.
 
-PS 3.7 Table D.3-7 ASYNCHRONOUS OPERATIONS WINDOW SUB-ITEM FIELDS (A
--ASSOCIATE-RQ)
+PS 3.7 Table D.3-7 ASYNCHRONOUS OPERATIONS WINDOW SUB-ITEM FIELDS
+(A-ASSOCIATE-RQ)
 
 C++ includes: gdcmAsynchronousOperationsWindowSub.h ";
 
@@ -1308,7 +1308,9 @@ gdcm::Bitmap::GetLUT() const ";
 gdcm::Bitmap::GetLUT() ";
 
 %feature("docstring")  gdcm::Bitmap::GetNeedByteSwap "bool
-gdcm::Bitmap::GetNeedByteSwap() const ";
+gdcm::Bitmap::GetNeedByteSwap() const
+
+INTERNAL do not use. ";
 
 %feature("docstring")  gdcm::Bitmap::GetNumberOfDimensions "unsigned
 int gdcm::Bitmap::GetNumberOfDimensions() const
@@ -1611,6 +1613,9 @@ gdcm::ByteValue::GetPointer() const ";
 
 %feature("docstring")  gdcm::ByteValue::GetVoidPointer "const void*
 gdcm::ByteValue::GetVoidPointer() const ";
+
+%feature("docstring")  gdcm::ByteValue::GetVoidPointer "void*
+gdcm::ByteValue::GetVoidPointer() ";
 
 %feature("docstring")  gdcm::ByteValue::IsEmpty "bool
 gdcm::ByteValue::IsEmpty() const ";
@@ -5566,8 +5571,8 @@ image. This implementation requires that the information stored in the
 DICOM header are consistent with what is in the encapsulated Pixel
 Data. This is technically not required by DICOM standard, which makes
 this implementation illegal with regards to the famous JPEG
-note:http://dicom.nema.org/medical/dicom/current/output/chtml/part05/sect_8.2.html
-#para_4bcb841e-c6bf-4e26-82a5-3fad3c942da0 See:   ImageReader
+note:http://dicom.nema.org/medical/dicom/current/output/chtml/part05/sect_8.2.html#para_4bcb841e-c6bf-4e26-82a5-3fad3c942da0
+See:   ImageReader
 
 C++ includes: gdcmImageRegionReader.h ";
 
@@ -5662,8 +5667,8 @@ Write. ";
 
 ImplementationClassUIDSub.
 
-PS 3.7 Table D.3-1 IMPLEMENTATION CLASS UID SUB-ITEM FIELDS (A
--ASSOCIATE-RQ)
+PS 3.7 Table D.3-1 IMPLEMENTATION CLASS UID SUB-ITEM FIELDS
+(A-ASSOCIATE-RQ)
 
 C++ includes: gdcmImplementationClassUIDSub.h ";
 
@@ -9646,8 +9651,8 @@ gdcm::RLECodec::SetLength(unsigned long l) ";
 
 RoleSelectionSub.
 
-PS 3.7 Table D.3-9 SCP/SCU ROLE SELECTION SUB-ITEM FIELDS (A
--ASSOCIATE-RQ)
+PS 3.7 Table D.3-9 SCP/SCU ROLE SELECTION SUB-ITEM FIELDS
+(A-ASSOCIATE-RQ)
 
 C++ includes: gdcmRoleSelectionSub.h ";
 
@@ -10582,8 +10587,8 @@ Explicit function to retrieve the pointer. ";
 
 SOPClassExtendedNegociationSub.
 
-PS 3.7 Table D.3-11 SOP CLASS EXTENDED NEGOTIATION SUB-ITEM FIELDS (A
--ASSOCIATE-RQ and A-ASSOCIATE-AC)
+PS 3.7 Table D.3-11 SOP CLASS EXTENDED NEGOTIATION SUB-ITEM FIELDS
+(A-ASSOCIATE-RQ and A-ASSOCIATE-AC)
 
 C++ includes: gdcmSOPClassExtendedNegociationSub.h ";
 
@@ -12976,8 +12981,9 @@ ULTransitionTable The transition table of all the ULEvents, new
 ULActions, and ULStates.
 
 Based roughly on the solutions in player2.cpp in the boost examples
-and this so question:http://stackoverflow.com/questions/1647631/c
--state-machine-design
+and this so
+question:http://stackoverflow.com/questions/1647631/c-state-machine-
+design
 
 The transition table is constructed of TableRows. Each row is based on
 an event, and an event handler in the TransitionTable object takes a
@@ -14550,7 +14556,7 @@ gdcm::add1(char *buf, int n) ";
 %feature("docstring")  gdcm::network::backslash "ignore_char const
 gdcm::backslash('\\\\\\\\') ";
 
-%feature("docstring")  gdcm::network::Clamp "static int gdcm::Clamp(T
+%feature("docstring")  gdcm::network::Clamp "static T gdcm::Clamp(int
 v) ";
 
 %feature("docstring")  gdcm::network::clean "static void
@@ -15748,6 +15754,9 @@ gdcm::terminal::setmode(Mode m) ";
 // File: DumpToSQLITE3_8cxx-example.xml
 
 
+// File: DumpVisusChange_8cxx-example.xml
+
+
 // File: DuplicatePCDE_8cxx-example.xml
 
 
@@ -15773,6 +15782,9 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: ExtractImageRegion_8java-example.xml
+
+
+// File: ExtractImageRegion_8py-example.xml
 
 
 // File: ExtractImageRegionWithLUT_8cs-example.xml
