@@ -27,13 +27,13 @@ environment:
     CONFIG: Release
     B_NAME: Windows-x86
     DO_REL: true
-    PYTHONHOME: C:\Python27
-    JAVA_HOME: C:\Program Files (x86)\Java\jdk1.7.0
+    PYTHONHOME: C:\Python37
+    JAVA_HOME: C:\Program Files (x86)\Java\jdk1.8.0
   - VS_GEN: Visual Studio 12 2013 Win64
     CONFIG: Release
     B_NAME: Windows-x86_64
     DO_REL: true
-    PYTHONHOME: C:\Python34-x64
+    PYTHONHOME: C:\Python37-x64
     JAVA_HOME: C:\Program Files\Java\jdk1.8.0
 #  - VS_GEN: Visual Studio 14 2015 Win64
 #    CONFIG: Release
