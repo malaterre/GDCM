@@ -805,6 +805,12 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
               gdcmWarningMacro( "Encapsulated stream has fewer bits actually stored on disk. correcting." );
               i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
               }
+            else if( cpf.GetBitsStored() > pf.GetBitsStored() )
+              {
+              Bitmap *i = const_cast<Bitmap*>(this);
+              gdcmWarningMacro( "Encapsulated stream has more bits actually stored on disk. correcting." );
+              i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
+              }
             }
           }
         }
