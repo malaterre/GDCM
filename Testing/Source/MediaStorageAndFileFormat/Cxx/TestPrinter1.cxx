@@ -246,6 +246,7 @@ static const char * const printmd5[][2] = {
 { "df3327313dadcc29e88779c7bc884abb" , "EmptyIcon_Bug417.dcm" },
 { "7d0db54d48964c813d513b472f29155c" , "JPEGLosslessSeNonZero.dcm" },
 { "44e6c3eef66b555ec3ae3e6dec6e8157" , "US-YBR_FULL_422-EVRLE.dcm" },
+{ "80deb837f8cfc1edc95f636ef099d431" , "Osirix10vs8BitsStored.dcm" },
 
 
 { nullptr ,nullptr }

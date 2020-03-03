@@ -210,6 +210,7 @@ static const char * const iconimagearray3[][2] = {
  {"f4f35d60b3cc18aaa6d8d92f0cd3708a" , "NM-PAL-16-PixRep1.dcm" },
  {"843f097f2161014cd1b11be5413eace9" , "MEDILABInvalidCP246_EVRLESQasUN.dcm" },
  {"c103d405ae61aa4ed148e17157e5afc1" , "JPEGInvalidSecondFrag.dcm" },
+{ "c103d405ae61aa4ed148e17157e5afc1" , "Osirix10vs8BitsStored.dcm" },
 
  // sentinel
  { 0, 0 }

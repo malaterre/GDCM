@@ -236,6 +236,7 @@ static const StreamOffset gdcmSelectedPrivateGroupOffsetDataFiles[] = {
 { "FUJI-ffff-MONO1-J2K.dcm",982},
 { "JPEGLosslessSeNonZero.dcm",530},
 { "US-YBR_FULL_422-EVRLE.dcm",744},
+{ "Osirix10vs8BitsStored.dcm",1512},
 { "dicomdir_With_embedded_icons",7125212 },
 { "dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents",37218 },
 { "dicomdir_Acusson_WithPrivate_WithSR",3826 },

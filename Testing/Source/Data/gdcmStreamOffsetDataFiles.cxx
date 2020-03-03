@@ -243,6 +243,7 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "FUJI-ffff-MONO1-J2K.dcm",2052 },
 { "JPEGLosslessSeNonZero.dcm",760 },
 { "US-YBR_FULL_422-EVRLE.dcm",1554 },
+{ "Osirix10vs8BitsStored.dcm",73978 },
 
 /* Stopping condition */
 { nullptr ,0 },
