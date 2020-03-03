@@ -707,6 +707,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "b9697e3615a841e4c04f45ede6923278" , "JPEGLosslessSeNonZero.dcm" },
 { "5fcd7d6573cab16d2ef575bba878ec78" , "US-YBR_FULL_422-EVRLE.dcm" },
+{ "d62b4c13e8108671f1c66626c5bdee55" , "Osirix10vs8BitsStored.dcm" },
 
 
 /* Stopping condition */
