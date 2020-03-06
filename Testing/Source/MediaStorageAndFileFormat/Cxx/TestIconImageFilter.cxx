@@ -114,7 +114,7 @@ int TestIconImageFilterFunc(const char *filename, bool verbose = false)
     }
   else
     {
-    assert( refmd5 == 0 );
+    assert( refmd5 == nullptr );
     }
 
   return 0;

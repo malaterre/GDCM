@@ -188,7 +188,7 @@ SOPClassUIDToIOD::SOPClassUIDToIODType& SOPClassUIDToIOD::GetSOPClassUIDToIOD(un
   if( i < SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() )
     return SOPClassUIDToIODStrings[i];
   // else return the {0x0, 0x0} sentinel:
-  assert( *SOPClassUIDToIODStrings[ SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() ] == 0 );
+  assert( *SOPClassUIDToIODStrings[ SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() ] == nullptr );
   return SOPClassUIDToIODStrings[ SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() ];
 
 }
