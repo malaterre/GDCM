@@ -140,6 +140,7 @@ public:
     BreastProjectionXRayImageStorageForProcessing,
     HardcopyColorImageStorage,
     EnhancedMRColorImageStorage,
+    FujiPrivateMammoCRImageStorage,
     MS_END
   } MSType; // Media Storage Type
 

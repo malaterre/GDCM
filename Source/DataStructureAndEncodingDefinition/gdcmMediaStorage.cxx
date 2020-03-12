@@ -147,6 +147,7 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.13.1.5", // Breast Projection X-Ray Image Storage - For Processing
   "1.2.840.10008.5.1.1.30",  // HardcopyColorImageStorage
   "1.2.840.10008.5.1.4.1.1.4.3", // EnhancedMRColorImageStorage
+  "1.2.392.200036.9125.1.1.4", // FujiPrivateMammoCRImageStorage (aka FUJI MAMMO CR Storage)
 
   nullptr
 };
@@ -337,6 +338,7 @@ static const MSModalityType MSModalityTypes[] = {
   {"MG", 3, false},// BreastProjectionXRayImageStorageForProcessing
   {"HC", 2, false},// HardcopyGrayscaleImageStorage
   {"MR", 3, false},// EnhancedMRColorImageStorage
+  {"MG", 2, false},// FujiPrivateMammoCRImageStorage
   {nullptr, 0, false} //MS_END
 };
 
