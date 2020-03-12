@@ -139,6 +139,7 @@ public:
     BreastProjectionXRayImageStorageForPresentation,
     BreastProjectionXRayImageStorageForProcessing,
     HardcopyColorImageStorage,
+    EnhancedMRColorImageStorage,
     MS_END
   } MSType; // Media Storage Type
 
