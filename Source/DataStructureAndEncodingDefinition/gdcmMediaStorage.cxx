@@ -145,6 +145,7 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.128.1", // Legacy Converted Enhanced PET Image Storage
   "1.2.840.10008.5.1.4.1.1.13.1.4", // Breast Projection X-Ray Image Storage - For Presentation
   "1.2.840.10008.5.1.4.1.1.13.1.5", // Breast Projection X-Ray Image Storage - For Processing
+  "1.2.840.10008.5.1.1.30",  // HardcopyColorImageStorage
 
   nullptr
 };
@@ -333,6 +334,7 @@ static const MSModalityType MSModalityTypes[] = {
   {"PT", 3, false},//LegacyConvertedEnhancedPETImageStorage,
   {"MG", 3, false},//BreastProjectionXRayImageStorageForPresentation
   {"MG", 3, false},//BreastProjectionXRayImageStorageForProcessing
+  {"HC", 2, false},//HardcopyGrayscaleImageStorage
   {nullptr, 0, false} //MS_END
 };
 
