@@ -1167,6 +1167,7 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   case MediaStorage::XRayAngiographicImageStorage:
   case MediaStorage::XRayRadiofluoroscopingImageStorage:
   case MediaStorage::XRayAngiographicBiPlaneImageStorageRetired:
+  case MediaStorage::FujiPrivateMammoCRImageStorage:
     // (0018,1164) DS [0.5\0.5]                                #   8, 2 ImagerPixelSpacing
     t = Tag(0x0018,0x1164);
     break;
