@@ -1392,7 +1392,7 @@ int main (int argc, char *argv[])
     gdcm::UIDs uid;
     uid.SetFromUID( ms.GetString() );
 
-    if( uid != gdcm::UIDs::EnhancedMRImageStorage )
+    if( uid != gdcm::UIDs::uid_1_2_840_10008_5_1_4_1_1_4_1 ) //NOTE: uid_1_2_840_10008_5_1_4_1_1_4_1 = 121, // Enhanced MR Image Storage
       {
       std::cerr << "MediaStorage is not handled " << ms << " [" << uid.GetName() << "]" << std::endl;
       return 1;
