@@ -282,17 +282,18 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
       }
     }
   } else {
-    // single slice
+    // single slice, this is not an error to not find the zspacing in this case.
+    zspacing = 1.0;
     const Tag tfgs0(0x5200,0x9229);
-    if( !ds.FindDataElement( tfgs0 ) ) return false;
+    if( !ds.FindDataElement( tfgs0 ) ) return true;
     SmartPointer<SequenceOfItems> sqi0 = ds.GetDataElement( tfgs0 ).GetValueAsSQ();
-    if( !(sqi0 && sqi0->GetNumberOfItems() > 0) ) return false;
+    if( !(sqi0 && sqi0->GetNumberOfItems() > 0) ) return true;
     // Get first item:
     const Item &item = sqi0->GetItem(1);
     const DataSet & subds = item.GetNestedDataSet();
     // <entry group="0028" element="9110" vr="SQ" vm="1" name="Pixel Measures Sequence"/>
     const Tag tpms(0x0028,0x9110);
-    if( !subds.FindDataElement(tpms) ) return false;
+    if( !subds.FindDataElement(tpms) ) return true;
     //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
     SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
     assert( sqi2 );
@@ -300,7 +301,7 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     const DataSet & subds2 = item2.GetNestedDataSet();
     // <entry group="0028" element="0030" vr="DS" vm="2" name="Pixel Spacing"/>
     const Tag tps(0x0018,0x0088);
-    if( !subds2.FindDataElement(tps) ) return false;
+    if( !subds2.FindDataElement(tps) ) return true;
     const DataElement &de = subds2.GetDataElement( tps );
     Attribute<0x0018,0x0088> at;
     at.SetFromDataElement( de );
