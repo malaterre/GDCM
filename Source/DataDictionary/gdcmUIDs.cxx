@@ -490,6 +490,7 @@ namespace gdcm
 {"1.2.840.113619.5.2","Implicit VR Big Endian DLX (G.E Private)"},
 // DICOM_Conformance_Statement_GEMINI_R3.5_R3.6.pdf
 {"1.3.46.670589.33.1.4.1","CT-private-ELE"},
+{"1.2.392.200036.9125.1.1.4","Fuji Private Mammo CR Image Storage"},
 //
 //
 //
