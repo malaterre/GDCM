@@ -1184,7 +1184,8 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
     t = Tag(0x0018,0x2010);
     break;
   case MediaStorage::HardcopyGrayscaleImageStorage:
-    t = Tag(0xffff,0xffff);
+  case MediaStorage::HardcopyColorImageStorage:
+    t = Tag(0x0018,0x2010); // Nominal Scanned Pixel Spacing
     break;
   case MediaStorage::GEPrivate3DModelStorage: // FIXME FIXME !!!
   case MediaStorage::Philips3D:
