@@ -449,6 +449,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::EnhancedMRColorImageStorage
    || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::OphthalmicTomographyImageStorage
    || ms == MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage
@@ -582,6 +583,7 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::EnhancedMRColorImageStorage
    || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
@@ -917,6 +919,7 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
   // cleanup pass:
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::EnhancedMRColorImageStorage
    || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
@@ -955,6 +958,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   /*|| ms == MediaStorage::EnhancedMRColorImageStorage*/
    || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::XRay3DCraniofacialImageStorage
@@ -1304,6 +1308,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
 
   if( ms == MediaStorage::EnhancedCTImageStorage
     || ms == MediaStorage::EnhancedMRImageStorage
+    || ms == MediaStorage::EnhancedMRColorImageStorage
     || ms == MediaStorage::EnhancedPETImageStorage
     || ms == MediaStorage::OphthalmicTomographyImageStorage
     || ms == MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage
@@ -1609,6 +1614,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::EnhancedMRColorImageStorage
    || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
@@ -1892,6 +1898,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
    && ms != MediaStorage::XRay3DAngiographicImageStorage
    && ms != MediaStorage::XRay3DCraniofacialImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
+   && ms != MediaStorage::EnhancedMRColorImageStorage
    && ms != MediaStorage::EnhancedPETImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage
    && ms != MediaStorage::IVOCTForPresentation
@@ -1909,6 +1916,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::EnhancedMRColorImageStorage
    || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::XRay3DCraniofacialImageStorage
@@ -2040,6 +2048,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
    && ms != MediaStorage::XRay3DAngiographicImageStorage
    && ms != MediaStorage::XRay3DCraniofacialImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
+   && ms != MediaStorage::EnhancedMRColorImageStorage
    && ms != MediaStorage::EnhancedPETImageStorage
    && ms != MediaStorage::EnhancedCTImageStorage
    && ms != MediaStorage::IVOCTForPresentation
@@ -2076,6 +2085,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   || ms == MediaStorage::EnhancedMRColorImageStorage
    || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::MultiframeSingleBitSecondaryCaptureImageStorage
    || ms == MediaStorage::MultiframeGrayscaleByteSecondaryCaptureImageStorage
@@ -2175,6 +2185,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
    && ms != MediaStorage::MultiframeGrayscaleWordSecondaryCaptureImageStorage
    && ms != MediaStorage::MultiframeTrueColorSecondaryCaptureImageStorage
    && ms != MediaStorage::EnhancedMRImageStorage
+   /*&& ms != MediaStorage::EnhancedMRColorImageStorage*/
    && ms != MediaStorage::EnhancedCTImageStorage
    && ms != MediaStorage::EnhancedPETImageStorage
    && ms != MediaStorage::XRay3DAngiographicImageStorage
@@ -2199,6 +2210,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
   if( ms == MediaStorage::SegmentationStorage ) return; // seg storage cannot have rescale slope
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
+   /*|| ms == MediaStorage::EnhancedMRColorImageStorage*/
    || ms == MediaStorage::EnhancedPETImageStorage
    || ms == MediaStorage::XRay3DAngiographicImageStorage
    || ms == MediaStorage::XRay3DCraniofacialImageStorage
