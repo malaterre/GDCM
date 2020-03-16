@@ -10423,7 +10423,7 @@ void PrivateDict::LoadDefault()
    {
 //   if( n.group % 2 != 0 )
      {
-     assert( n.owner != 0 );
+     assert( n.owner != nullptr );
      assert( n.name );
      assert( n.group % 2 != 0 || n.group == 0xffff );
      assert( n.element <= 0xff || n.element == 0xffff );
