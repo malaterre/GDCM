@@ -341,37 +341,34 @@ using Kitware.VTK;
 %ignore vtkGDCMImageReader::PrintSelf;
 %ignore vtkGDCMImageWriter::PrintSelf;
 
-%typemap(csdestruct_derived, methodname="Dispose", methodmodifiers="public") vtkGDCMTesting {
+%typemap(csdisposing_derived, methodname="Dispose", methodmodifiers="protected", parameters="bool disposing") vtkGDCMTesting {
   lock(this) {
     if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
       swigCMemOwn = false;
       vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
     }
     swigCPtr = new HandleRef(null, IntPtr.Zero);
-    GC.SuppressFinalize(this);
-    base.Dispose();
+    base.Dispose(disposing);
   }
 }
-%typemap(csdestruct_derived, methodname="Dispose", methodmodifiers="public") vtkGDCMImageReader {
+%typemap(csdisposing_derived, methodname="Dispose", methodmodifiers="protected", parameters="bool disposing") vtkGDCMImageReader {
   lock(this) {
     if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
       swigCMemOwn = false;
       vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
     }
     swigCPtr = new HandleRef(null, IntPtr.Zero);
-    GC.SuppressFinalize(this);
-    base.Dispose();
+    base.Dispose(disposing);
   }
 }
-%typemap(csdestruct_derived, methodname="Dispose", methodmodifiers="public") vtkGDCMImageWriter {
+%typemap(csdisposing_derived, methodname="Dispose", methodmodifiers="protected", parameters="bool disposing") vtkGDCMImageWriter {
   lock(this) {
     if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
       swigCMemOwn = false;
       vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
     }
     swigCPtr = new HandleRef(null, IntPtr.Zero);
-    GC.SuppressFinalize(this);
-    base.Dispose();
+    base.Dispose(disposing);
   }
 }
 
