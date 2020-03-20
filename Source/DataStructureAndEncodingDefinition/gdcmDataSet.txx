@@ -15,7 +15,6 @@
 #define GDCMDATASET_TXX
 
 #include "gdcmByteValue.h"
-#include "gdcmSequenceOfFragments.h"
 #include "gdcmPrivateTag.h"
 #include "gdcmParseException.h"
 
@@ -434,24 +433,11 @@ namespace gdcm_ns
         gdcmAssertAlwaysMacro( pd.GetTag() == Tag(0x7fe0,0x0010) );
         gdcmAssertAlwaysMacro( pd.GetVR() == VR::OB );
         gdcmAssertAlwaysMacro( pd.IsUndefinedLength() );
-        const VL fraglen = locallength - l - 12;
-#if 1
-        Fragment frag;
-        frag.SetVL( fraglen );
-        frag.template ReadValue<TSwap>(is);
-        SmartPointer<SequenceOfFragments> sqf = new SequenceOfFragments;
-        sqf->AddFragment(frag);
-        pd.SetValue( *sqf );
-        InsertDataElement( pd );
-        length = locallength = l;
-        gdcmWarningMacro( "Item length is wrong" );
-        throw Exception( "Changed Length" );
-#else
-        pd.SetVL( fraglen );
+        const VL pdlen = locallength - l - 12;
+        pd.SetVL( pdlen );
         pd.template ReadValue<TSwap>(is, true);
         InsertDataElement( pd );
         length = locallength = l;
-#endif
         }
       else
         {
