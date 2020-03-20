@@ -646,7 +646,7 @@ int vtkGDCMPolyDataReader::RequestData_HemodynamicWaveformStorage(gdcm::Reader c
   const gdcm::DataElement &wd = nestedds.GetDataElement( twd );
   const gdcm::ByteValue *bv = wd.GetByteValue();
   size_t len = bv->GetLength();
-  int16_t *p = (int16_t*)bv;
+  const int16_t *p = (const int16_t*)bv;
 
   // get the info object
   int pd = 0;
