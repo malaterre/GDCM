@@ -258,7 +258,11 @@ static std::string getInfoDate(Dict *infoDict, const char *key)
   return out;
 }
 
+#ifdef LIBPOPPLER_UNICODEMAP_HAS_CONSTMAPUNICODE
+static std::string getInfoString(Dict *infoDict, const char *key, const UnicodeMap *uMap)
+#else
 static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap)
+#endif
 {
   Object obj;
 #ifdef LIBPOPPLER_GOOSTRING_HAS_CONSTGETCHAR
@@ -509,11 +513,19 @@ static int ProcessOneFile( std::string const & filename, gdcm::Defs const & defs
     std::string creationdate;
     std::string moddate;
 
+#ifdef LIBPOPPLER_UNICODEMAP_HAS_CONSTMAPUNICODE
+    const UnicodeMap *uMap;
+#else
     UnicodeMap *uMap;
+#endif
 #ifdef LIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM
     globalParams = new GlobalParams(0);
 #else
+#ifdef LIBPOPPLER_GLOBALPARAMS_HAS_RESET
+    globalParams.reset(new GlobalParams());
+#else
     globalParams = new GlobalParams();
+#endif
 #endif
     uMap = globalParams->getTextEncoding();
 
