@@ -29,7 +29,7 @@
 
 namespace gdcm
 {
-int TestAnonymize2(const char *subdir, const char *filename)
+int TestAnonymize2(const char *subdir, const char *filename, bool verbose = false)
 {
   gdcm::Global& g = gdcm::Global::GetInstance();
   if( !g.LoadResourcesFiles() )
@@ -193,7 +193,7 @@ int TestAnonymizer2(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return gdcm::TestAnonymize2(argv[0], filename);
+    return gdcm::TestAnonymize2(argv[0], filename, true);
     }
 
   // else
