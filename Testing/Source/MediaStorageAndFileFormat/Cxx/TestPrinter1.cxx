@@ -247,6 +247,9 @@ static const char * const printmd5[][2] = {
 { "7d0db54d48964c813d513b472f29155c" , "JPEGLosslessSeNonZero.dcm" },
 { "44e6c3eef66b555ec3ae3e6dec6e8157" , "US-YBR_FULL_422-EVRLE.dcm" },
 { "80deb837f8cfc1edc95f636ef099d431" , "Osirix10vs8BitsStored.dcm" },
+{ "a638f2bc00e67f35257f36e5d5caa6b0" , "Bug_Siemens_PrivateIconNoItem.dcm" },
+{ "f64bcbdf9396df3eb3cedd28457042da" , "HardcopyColor_YBR_RCT_J2K_PC1.dcm" },
+{ "4f9b4e5530f1d60472d85a641105c009" , "PET-GE-dicomwrite-PixelDataSQUNv2.dcm" },
 
 
 { nullptr ,nullptr }
