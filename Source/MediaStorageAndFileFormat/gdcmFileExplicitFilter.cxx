@@ -95,7 +95,7 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
     //assert( de.GetVR() == VR::INVALID );
     VR cvr = DataSetHelper::ComputeVR(*F,ds, t);
     VR oldvr = de.GetVR();
-    if( cvr == VR::SQ ) { assert( oldvr == VR::SQ || oldvr == VR::UN ); }
+    if( cvr == VR::SQ ) { assert( oldvr == VR::SQ || oldvr == VR::UN || oldvr == VR::INVALID ); }
     //SequenceOfItems *sqi = de.GetSequenceOfItems();
     //SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(&de.GetValue());
     SmartPointer<SequenceOfItems> sqi = nullptr;
