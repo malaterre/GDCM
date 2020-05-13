@@ -107,7 +107,7 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
         {
         if( !de.IsEmpty() )
           {
-          gdcmErrorMacro("DICOM file written out may not be readable" );
+          gdcmWarningMacro("DICOM file written out may not be readable" );
           cvr = VR::UN;
           }
         }
