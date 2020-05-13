@@ -29,7 +29,7 @@
 
 namespace gdcm
 {
-int TestAnonymize2(const char *subdir, const char *filename)
+int TestAnonymize2(const char *subdir, const char *filename, bool verbose = false)
 {
   gdcm::Global& g = gdcm::Global::GetInstance();
   if( !g.LoadResourcesFiles() )
@@ -103,6 +103,14 @@ int TestAnonymize2(const char *subdir, const char *filename)
   ano->SetFile( reader.GetFile() );
   if( !ano->BasicApplicationLevelConfidentialityProfile() )
     {
+    gdcm::Filename fn( filename );
+    if( strcmp(fn.GetName(), "EmptyIcon_Bug417.dcm") == 0  // not supported for now (already anonymized)
+     || strcmp(fn.GetName(), "PET-GE-dicomwrite-PixelDataSQUNv2.dcm") == 0  // not supported for now (already anonymized)
+     || strcmp(fn.GetName(), "HardcopyColor_YBR_RCT_J2K_PC1.dcm") == 0  // deprecated SOP Class UID
+      )
+      {
+      return 0;
+      }
     if( ms != gdcm::MediaStorage::MS_END )
       {
       std::cerr << "BasicApplicationLevelConfidentialityProfile fails for: " << filename << std::endl;
@@ -193,7 +201,7 @@ int TestAnonymizer2(int argc, char *argv[])
   if( argc == 2 )
     {
     const char *filename = argv[1];
-    return gdcm::TestAnonymize2(argv[0], filename);
+    return gdcm::TestAnonymize2(argv[0], filename, true);
     }
 
   // else

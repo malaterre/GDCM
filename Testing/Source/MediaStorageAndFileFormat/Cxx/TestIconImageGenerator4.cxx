@@ -215,6 +215,9 @@ static const char * const iconimagearray4[][2] = {
  {"7c70c2aaacf9a4206cbe2191fa4d2041" , "SC16BitsAllocated_8BitsStoredJ2K.dcm" },
  {"da0922a02f8e763ec878089617e0bc4c" , "SC16BitsAllocated_8BitsStoredJPEG.dcm" },
  {"da0922a02f8e763ec878089617e0bc4c" , "Osirix10vs8BitsStored.dcm" },
+ {"da0922a02f8e763ec878089617e0bc4c" , "Bug_Siemens_PrivateIconNoItem.dcm" },
+ {"da0922a02f8e763ec878089617e0bc4c" , "HardcopyColor_YBR_RCT_J2K_PC1.dcm" },
+ {"da0922a02f8e763ec878089617e0bc4c" , "PET-GE-dicomwrite-PixelDataSQUNv2.dcm" },
 
  // sentinel
  { 0, 0 }

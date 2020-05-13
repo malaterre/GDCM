@@ -106,7 +106,7 @@ static const char * const printmd5[][2] = {
 { "d576bf8e8b2ca71fd543d29698807e85" , "ExplicitVRforPublicElementsImplicitVRforShadowElements.dcm" } ,
 { "3199cd21166043d619209d7a2073fb56" , "fffc0000UN.dcm" } ,
 { "9b426b02521cbc2f3ee25ab383ca835e" , "FUJI-10-MONO1-ACR_NEMA_2.dcm" } ,
-{ "68948325d590458fa6a648a93ef46f04" , "FUJI-ffff-MONO1-J2K.dcm"} ,
+{ "f705cfe771a299023c8dcc94b2184960" , "FUJI-ffff-MONO1-J2K.dcm"} ,
 { "2aba3dacd00a0bc14a06e2d7142b916a" , "gdcm-ACR-LibIDO.acr" } ,
 { "b808c747b59f9d1a91a01491103abea5" , "gdcm-CR-DCMTK-16-NonSamplePerPix.dcm" } ,
 { "e7b5089a2a007221993ee5a7e6d44959" , "gdcm-JPEG-Extended.dcm" } ,
@@ -247,6 +247,9 @@ static const char * const printmd5[][2] = {
 { "7d0db54d48964c813d513b472f29155c" , "JPEGLosslessSeNonZero.dcm" },
 { "44e6c3eef66b555ec3ae3e6dec6e8157" , "US-YBR_FULL_422-EVRLE.dcm" },
 { "80deb837f8cfc1edc95f636ef099d431" , "Osirix10vs8BitsStored.dcm" },
+{ "a638f2bc00e67f35257f36e5d5caa6b0" , "Bug_Siemens_PrivateIconNoItem.dcm" },
+{ "f64bcbdf9396df3eb3cedd28457042da" , "HardcopyColor_YBR_RCT_J2K_PC1.dcm" },
+{ "4f9b4e5530f1d60472d85a641105c009" , "PET-GE-dicomwrite-PixelDataSQUNv2.dcm" },
 
 
 { nullptr ,nullptr }

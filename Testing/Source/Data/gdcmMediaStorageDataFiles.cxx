@@ -257,6 +257,9 @@ static const char * const gdcmMediaStorageDataFiles[][2] = {
 { "US-YBR_FULL_422-EVRLE.dcm" , "1.2.840.10008.5.1.4.1.1.6.1" },
 { "PET-GE-dicomwrite-PixelDataSQUN.dcm" , "1.2.840.10008.5.1.4.1.1.128" },
 { "Osirix10vs8BitsStored.dcm" , "1.2.840.10008.5.1.4.1.1.4" },
+{ "Bug_Siemens_PrivateIconNoItem.dcm" , "1.2.840.10008.5.1.4.1.1.2" },
+{ "HardcopyColor_YBR_RCT_J2K_PC1.dcm" , "1.2.840.10008.5.1.1.30" },
+{ "PET-GE-dicomwrite-PixelDataSQUNv2.dcm" , "1.2.840.10008.5.1.4.1.1.128" },
 
 /* Stopping condition */
 { nullptr ,nullptr }

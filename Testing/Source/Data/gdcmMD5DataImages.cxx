@@ -709,6 +709,9 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "5fcd7d6573cab16d2ef575bba878ec78" , "US-YBR_FULL_422-EVRLE.dcm" },
 { "d62b4c13e8108671f1c66626c5bdee55" , "Osirix10vs8BitsStored.dcm" },
 
+{ "b7c6fb507da1b7a3f81f821a2e3eaf49" , "Bug_Siemens_PrivateIconNoItem.dcm" },
+{ "56238d3665ebdb0251d1161fb7f4edc6" , "HardcopyColor_YBR_RCT_J2K_PC1.dcm" },
+{ "5fe2b8742f05a0ba06d354f965266dbc" , "PET-GE-dicomwrite-PixelDataSQUNv2.dcm" },
 
 /* Stopping condition */
 { nullptr ,nullptr }

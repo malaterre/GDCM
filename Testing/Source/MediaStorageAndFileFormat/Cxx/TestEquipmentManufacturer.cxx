@@ -76,6 +76,7 @@ static int TestEquipmentManufacturerFunc(const char* filename, bool verbose = fa
   || strcmp(name, "PICKER-16-MONO2-No_DicomV3_Preamble.dcm" ) == 0
   || strcmp(name, "OT-PAL-8-face.dcm" ) == 0
   || strcmp(name, "TG18-CH-2k-01.dcm" ) == 0 // wotsit ?
+  || strcmp(name, "HardcopyColor_YBR_RCT_J2K_PC1.dcm" ) == 0 // RamSoft Inc.
   || strncmp(name, "D_CLUNIE", 8) == 0 // D_CLUNIE*
   || strncmp(name, "LEADTOOLS_FLOWERS", 17) == 0 // LEADTOOLS_FLOWERS*
   || strncmp(name, "JDDICOM", 7) == 0 // JDDICOM*

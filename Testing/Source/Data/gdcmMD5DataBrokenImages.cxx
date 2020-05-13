@@ -93,6 +93,9 @@ static const char * const gdcmMD5DataBrokenImages[][2] = {
 // Two Items in a single Frame JPEG compressed DICOM image:
 { "cd00658f54dbd2d2a9d02d64c6f6497e" , "JPEGInvalidSecondFrag.dcm" },
 
+// VR is set to 'OX'
+{ "5793021ffb7b3506ae22ae9329d67d29" , "Bug_Siemens_PrivateIconNoItem.dcm" },
+
 { nullptr ,nullptr }
 };
 
