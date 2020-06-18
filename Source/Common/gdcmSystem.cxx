@@ -120,255 +120,306 @@ const char* System::GetArgv0()
 }
 */
 
-const char * System::GetCWD()
-{
+const char *System::GetCWD() {
   static char buf[2048];
-  const char* cwd = Getcwd(buf, 2048);
+  const char *cwd = Getcwd(buf, 2048);
   return cwd;
-/*
-  std::string path;
-  if ( cwd )
-    {
-    path = cwd;
-    }
-  return path;
-*/
-}
-
-bool System::MakeDirectory(const char *path)
-{
-  if( !path || !*path )
-    return false;
-  if(System::FileExists(path))
-    {
-    return true;
-    }
-  Filename fn(path);
-  std::string dir = fn.ToUnixSlashes();
-
-  std::string::size_type pos = dir.find(':');
-  if(pos == std::string::npos)
-    {
-    pos = 0;
-    }
-  std::string topdir;
-  bool ok = true;
-  while(ok && (pos = dir.find('/', pos)) != std::string::npos)
-    {
-    topdir = dir.substr(0, pos+1);
-    ok = ok && (System::FileIsDirectory(topdir.c_str()) || 0 == Mkdir(topdir.c_str()));
-    pos++;
-    }
-  if( !ok ) return false;
-  if(dir[dir.size()-1] == '/')
-    {
-    topdir = dir.substr(0, dir.size());
-    }
-  else
-    {
-    topdir = dir;
-    }
-  if(Mkdir(topdir.c_str()) != 0)
-    {
-    // There is a bug in the Borland Run time library which makes MKDIR
-    // return EACCES when it should return EEXISTS
-    // if it is some other error besides directory exists
-    // then return false
-    if( (errno != EEXIST)
-#ifdef __BORLANDC__
-        && (errno != EACCES)
-#endif
-      )
+  /*
+    std::string path;
+    if ( cwd )
       {
-      return false;
+      path = cwd;
       }
-    }
-  return true;
+    return path;
+  */
 }
 
-// return true if the file exists
-bool System::FileExists(const char* filename)
+static inline int Mkdir2(const char *utf8)
 {
 #ifdef _MSC_VER
-# define access _access
+  const std::wstring unc = System::ConvertToUNC(utf8);
+  return _wmkdir(unc.c_str());
+#else
+  return Mkdir(utf8);
 #endif
-#ifndef R_OK
-# define R_OK 04
-#endif
-  if ( access(filename, R_OK) != 0 )
-    {
-    return false;
+}
+
+bool System::MakeDirectory(const char *path) {
+    if (!path || !*path) return false;
+    if (System::FileExists(path)) {
+      return true;
     }
-  else
-    {
-    //assert( !FileIsDirectory(filename) );
+    Filename fn(path);
+    std::string dir = fn.ToUnixSlashes();
+
+    std::string::size_type pos = dir.find(':');
+    if (pos == std::string::npos) {
+      pos = 0;
+    }
+    std::string topdir;
+    bool ok = true;
+    while (ok && (pos = dir.find('/', pos)) != std::string::npos) {
+      topdir = dir.substr(0, pos + 1);
+      ok = ok && (System::FileIsDirectory(topdir.c_str()) ||
+                  0 == Mkdir2(topdir.c_str()));
+      pos++;
+    }
+    if (!ok) return false;
+    if (dir[dir.size() - 1] == '/') {
+      topdir = dir.substr(0, dir.size());
+    } else {
+      topdir = dir;
+    }
+    if (Mkdir2(topdir.c_str()) != 0) {
+      // There is a bug in the Borland Run time library which makes MKDIR
+      // return EACCES when it should return EEXISTS
+      // if it is some other error besides directory exists
+      // then return false
+      if ((errno != EEXIST)
+#ifdef __BORLANDC__
+          && (errno != EACCES)
+#endif
+      ) {
+        return false;
+      }
+    }
     return true;
-    }
-}
+  }
 
-bool System::FileIsDirectory(const char* name)
-{
-  struct stat fs;
-  if(stat(name, &fs) == 0)
-    {
+  // return true if the file exists
+  bool System::FileExists(const char *filename) {
+#ifndef R_OK
+#define R_OK 04
+#endif
+#ifdef _MSC_VER
+    const std::wstring unc = System::ConvertToUNC(filename);
+    if (_waccess(unc.c_str(), R_OK) != 0) {
+#else
+    if (access(filename, R_OK) != 0) {
+#endif
+      return false;
+    } else {
+      // assert( !FileIsDirectory(filename) );
+      return true;
+    }
+  }
+
+  bool System::FileIsDirectory(const char *name) {
+#ifdef _MSC_VER
+    struct _stat64i32 fs;
+    const std::wstring wname = System::ConvertToUNC(name);
+    if (_wstat(wname.c_str(), &fs) == 0) {
+#else
+    struct stat fs;
+    if (stat(name, &fs) == 0) {
+#endif
 #if _WIN32
-    return ((fs.st_mode & _S_IFDIR) != 0);
+      return ((fs.st_mode & _S_IFDIR) != 0);
 #else
-    return S_ISDIR(fs.st_mode);
+      return S_ISDIR(fs.st_mode);
 #endif
+    } else {
+      return false;
     }
-  else
-    {
-    return false;
-    }
-}
+  }  // namespace gdcm
 
-bool System::FileIsSymlink(const char* name)
-{
-#if defined( _WIN32 )
-  (void)name;
+  bool System::FileIsSymlink(const char *name) {
+#if defined(_WIN32)
+    (void)name;
 #else
-  struct stat fs;
-  if(lstat(name, &fs) == 0)
-    {
-    return S_ISLNK(fs.st_mode);
+    struct stat fs;
+    if (lstat(name, &fs) == 0) {
+      return S_ISLNK(fs.st_mode);
     }
 #endif
-  return false;
-}
-
-// TODO st_mtimensec
-time_t System::FileTime(const char* filename)
-{
-  struct stat fs;
-  if(stat(filename, &fs) == 0)
-    {
-    // man 2 stat
-    // time_t    st_atime;   /* time of last access */
-    // time_t    st_mtime;   /* time of last modification */
-    // time_t    st_ctime;   /* time of last status change */
-    return fs.st_mtime;
-
-    // Since  kernel 2.5.48, the stat structure supports nanosecond resolution
-    // for the three file timestamp fields.  Glibc exposes the nanosecond com-
-    // ponent of each field using names either of the form st_atim.tv_nsec, if
-    // the _BSD_SOURCE or _SVID_SOURCE feature test macro is  defined,  or  of
-    // the  form st_atimensec, if neither of these macros is defined.  On file
-    // systems that do not support  sub-second  timestamps,  these  nanosecond
-    // fields are returned with the value 0.
-    }
-  return 0;
-}
-
-const char *System::GetLastSystemError()
-{
-  int e = errno;
-  return strerror(e);
-}
-
-bool System::GetPermissions(const char* file, unsigned short& mode)
-{
-  if ( !file )
-    {
     return false;
+  }
+
+  // TODO st_mtimensec
+  time_t System::FileTime(const char *filename) {
+    struct stat fs;
+    if (stat(filename, &fs) == 0) {
+      // man 2 stat
+      // time_t    st_atime;   /* time of last access */
+      // time_t    st_mtime;   /* time of last modification */
+      // time_t    st_ctime;   /* time of last status change */
+      return fs.st_mtime;
+
+      // Since  kernel 2.5.48, the stat structure supports nanosecond resolution
+      // for the three file timestamp fields.  Glibc exposes the nanosecond com-
+      // ponent of each field using names either of the form st_atim.tv_nsec, if
+      // the _BSD_SOURCE or _SVID_SOURCE feature test macro is  defined,  or  of
+      // the  form st_atimensec, if neither of these macros is defined.  On file
+      // systems that do not support  sub-second  timestamps,  these  nanosecond
+      // fields are returned with the value 0.
+    }
+    return 0;
+  }
+
+  const char *System::GetLastSystemError() {
+    int e = errno;
+    return strerror(e);
+  }
+
+  bool System::GetPermissions(const char *file, unsigned short &mode) {
+    if (!file) {
+      return false;
     }
 
-  struct stat st;
-  if ( stat(file, &st) < 0 )
-    {
-    return false;
+    struct stat st;
+    if (stat(file, &st) < 0) {
+      return false;
     }
-  mode = (short)st.st_mode;
-  return true;
-}
+    mode = (short)st.st_mode;
+    return true;
+  }
 
-bool System::SetPermissions(const char* file, unsigned short mode)
-{
-  if ( !file )
-    {
-    return false;
+  bool System::SetPermissions(const char *file, unsigned short mode) {
+    if (!file) {
+      return false;
     }
-  if ( !System::FileExists(file) )
-    {
-    return false;
+    if (!System::FileExists(file)) {
+      return false;
     }
-  if ( chmod(file, mode) < 0 )
-    {
-    return false;
+    if (chmod(file, mode) < 0) {
+      return false;
     }
 
-  return true;
-}
+    return true;
+  }
 
-bool System::RemoveFile(const char* source)
-{
+  bool System::RemoveFile(const char *source) {
 #ifdef _WIN32
-  unsigned short mode;
-  if ( !System::GetPermissions(source, mode) )
-    {
-    return false;
+    unsigned short mode;
+    if (!System::GetPermissions(source, mode)) {
+      return false;
     }
-  /* Win32 unlink is stupid --- it fails if the file is read-only  */
-  System::SetPermissions(source, S_IWRITE);
+    /* Win32 unlink is stupid --- it fails if the file is read-only  */
+    System::SetPermissions(source, S_IWRITE);
 #endif
-  bool res = unlink(source) != 0 ? false : true;
+    bool res = unlink(source) != 0 ? false : true;
 #ifdef _WIN32
-  if ( !res )
-    {
-    System::SetPermissions(source, mode);
+    if (!res) {
+      System::SetPermissions(source, mode);
     }
 #endif
-  return res;
-}
+    return res;
+  }
 
-// RemoveDirectory is a WIN32 function, use different name
-bool System::DeleteDirectory(const char *source)
-{
-  unsigned short mode;
-  if(System::GetPermissions(source, mode))
-    {
+  // RemoveDirectory is a WIN32 function, use different name
+  bool System::DeleteDirectory(const char *source) {
+    unsigned short mode;
+    if (System::GetPermissions(source, mode)) {
 #if defined(_WIN32) && !defined(__CYGWIN__)
-    mode |= S_IWRITE;
+      mode |= S_IWRITE;
 #else
-    mode |= S_IWUSR;
+      mode |= S_IWUSR;
 #endif
-    System::SetPermissions(source, mode);
+      System::SetPermissions(source, mode);
     }
 
-  Directory dir;
-  unsigned int numfiles = dir.Load(source, false);
-  (void)numfiles;
-  Directory::FilenamesType const & files = dir.GetFilenames();
-  for ( Directory::FilenamesType::const_iterator it = files.begin();
-    it != files.end(); ++it )
-    {
-    const char *filename = it->c_str();
-    if( System::FileIsDirectory(filename) &&
-      !System::FileIsSymlink(filename) )
-      {
-      if (!System::DeleteDirectory(filename))
-        {
-        return false;
+    Directory dir;
+    unsigned int numfiles = dir.Load(source, false);
+    (void)numfiles;
+    Directory::FilenamesType const &files = dir.GetFilenames();
+    for (Directory::FilenamesType::const_iterator it = files.begin();
+         it != files.end(); ++it) {
+      const char *filename = it->c_str();
+      if (System::FileIsDirectory(filename) &&
+          !System::FileIsSymlink(filename)) {
+        if (!System::DeleteDirectory(filename)) {
+          return false;
         }
-      }
-    else
-      {
-      if(!System::RemoveFile(filename))
-        {
-        return false;
+      } else {
+        if (!System::RemoveFile(filename)) {
+          return false;
         }
       }
     }
-  return Rmdir(source) == 0;
-}
+    return Rmdir(source) == 0;
+  }
 
 #ifndef PATH_MAX
 #define PATH_MAX 4096
 #endif
 
-// return size of file; also returns zero if no file exists
-size_t System::FileSize(const char* filename)
-{
+#ifdef _MSC_VER
+  namespace {
+  static inline std::wstring ToUtf16(std::string const &str) {
+    std::wstring ret;
+    int len = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.length(),
+                                  nullptr, 0);
+    if (len > 0) {
+      ret.resize(len);
+      MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.length(), &ret[0],
+                          len);
+    }
+    return ret;
+  }
+  // http://arsenmk.blogspot.com/2015/12/handling-long-paths-on-windows.html
+  static inline bool ComputeFullPath(std::wstring const &in,
+                                     std::wstring &out) {
+    // consider an input fileName of type PCWSTR (const wchar_t*)
+    const wchar_t *fileName = in.c_str();
+    DWORD requiredBufferLength =
+        GetFullPathNameW(fileName, 0, nullptr, nullptr);
+
+    if (0 == requiredBufferLength)  // means failure
+    {
+      return false;
+    }
+
+    out.resize(requiredBufferLength);
+    wchar_t *buffer = &out[0];
+
+    DWORD result =
+        GetFullPathNameW(fileName, requiredBufferLength, buffer, nullptr);
+
+    if (0 == result) {
+      return false;
+    }
+
+    // buffer now contains the full path name of fileName, use it.
+    return true;
+  }
+
+  static inline std::wstring HandleMaxPath(std::wstring const &in) {
+    if (in.size() >= MAX_PATH) {
+      std::wstring out;
+      bool ret = ComputeFullPath(in, out);
+      if (!ret) return in;
+      if (out.size() < 4) return in;
+      if (out[0] == '\\' && out[1] == '\\' && out[2] == '?') {
+        // nothing to do
+      } else if (out[0] == '\\' && out[1] == '\\' && out[2] != '?') {
+        // server path
+        const std::wstring prefix = LR"(\\?\UNC\)";
+        out = prefix + (out.c_str() + 2);
+      } else {
+        // regular C:\ style path:
+        assert(out[1] == ':');
+        const std::wstring prefix = LR"(\\?\)";
+        out = prefix + out.c_str();
+      }
+      return out;
+    }
+    return in;
+  }
+  }  // namespace
+#endif
+
+  std::wstring System::ConvertToUNC(const char *utf8path) {
+#ifdef _MSC_VER
+    const std::wstring uft16path = ToUtf16(utf8path);
+    const std::wstring uncpath = HandleMaxPath(uft16path);
+    return uncpath;
+#else
+    return "";
+#endif
+  }
+
+  // return size of file; also returns zero if no file exists
+  size_t System::FileSize(const char *filename) {
 #if 0
        All of these system calls return a stat structure, which  contains  the
        following fields:
