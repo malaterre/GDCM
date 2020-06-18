@@ -449,13 +449,16 @@ bool System::DeleteDirectory(const char *source)
   }  // namespace
 #endif
 
+std::wstring System::ConvertToUNC(const char *utf8path)
+{
 #ifdef _MSC_VER
-static inline std::wstring System::ConvertToUNC(const char *utf8path) {
-  const std::wstring uft16path = ToUtf16(utf8path);
-  const std::wstring uncpath = HandleMaxPath(uft16path);
-  return uncpath;
-}
+    const std::wstring uft16path = ToUtf16(utf8path);
+    const std::wstring uncpath = HandleMaxPath(uft16path);
+    return uncpath;
+#else
+    return std::wstring();
 #endif
+}
 
 // return size of file; also returns zero if no file exists
 size_t System::FileSize(const char* filename)
