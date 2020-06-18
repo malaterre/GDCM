@@ -181,7 +181,7 @@ void Writer::SetFileName(const char *utf8path)
       const std::wstring uncpath = System::ConvertToUNC(utf8path);
       Ofstream->open(uncpath.c_str(), std::ios::out | std::ios::binary);
 #else
-      Ofstream->open(uft8path, std::ios::out | std::ios::binary);
+      Ofstream->open(utf8path, std::ios::out | std::ios::binary);
 #endif
       assert(Ofstream->is_open());
       assert(!Ofstream->fail());
