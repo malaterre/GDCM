@@ -108,6 +108,13 @@ public:
         assert( vr2 == VR::IS || vr2 == VR::US || vr2 == VR::CS );
         return vr;
       }
+      // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
+      if( de.GetTag() == Tag(0x0008,0x0040) )
+      {
+        assert( vr == VR::SS );
+        assert( vr2 == VR::US );
+        return vr;
+      }
       if( vr == VR::SQ || vr2 == VR::SQ )
         assert( vr == vr2 );
       if( !de.GetTag().IsPrivate() )
