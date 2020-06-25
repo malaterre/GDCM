@@ -34,14 +34,14 @@ def TestModifyFields(filename):
   if ds.FindDataElement( replacetag ):
     de = ds.GetDataElement( replacetag )
     #print dir(de)
-    patname = "This^is^an^example"
+    patname = b"This^is^an^example"
     de.SetByteStringValue( patname )
 
   # let's insert a new dataelement
   # <entry group="0012" element="0062" vr="CS" vm="1" name="Patient Identity Removed"/>
   pir = gdcm.DataElement( gdcm.Tag(0x0012,0x0062) )
   pir.SetVR( gdcm.VR( gdcm.VR.CS ) ) # specify the VR explicitly
-  yes = "YES"
+  yes = b"YES"
   pir.SetByteStringValue( yes )
   ds.Insert( pir )
 
@@ -54,7 +54,7 @@ def TestModifyFields(filename):
   #print dictel.GetVR()
   deid = gdcm.DataElement( deidmethod )
   deid.SetVR( dictel.GetVR() )
-  methodstr = "Well known Company"
+  methodstr = b"Well known Company"
   #deid.SetByteStringValue( methodstr )
   deid.SetByteStringValue( methodstr )
   ds.Insert( deid )
