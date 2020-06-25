@@ -456,6 +456,7 @@ std::wstring System::ConvertToUNC(const char *utf8path)
     const std::wstring uncpath = HandleMaxPath(uft16path);
     return uncpath;
 #else
+    (void)utf8path;
     return std::wstring();
 #endif
 }
