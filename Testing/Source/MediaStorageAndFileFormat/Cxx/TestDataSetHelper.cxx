@@ -236,7 +236,6 @@ static int TestDataSetHelperFunc(const char *filename, bool verbose= false)
     return 1;
     }
 
-  const gdcm::Global &g = gdcm::GlobalInstance;
   const gdcm::File & file = r.GetFile();
   gdcm::Printer2 print;
   print.SetFile( file );
