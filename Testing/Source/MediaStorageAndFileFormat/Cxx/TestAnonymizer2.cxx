@@ -47,6 +47,7 @@ int TestAnonymize2(const char *subdir, const char *filename, bool verbose = fals
     System::MakeDirectory( tmpdir.c_str() );
     //return 1;
     }
+  if(verbose) std::cout << "Processing: " << filename << std::endl;
   std::string outfilename = Testing::GetTempFilename( filename, subdir );
 
   // Create directory first:
