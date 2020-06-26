@@ -13,6 +13,10 @@
 =========================================================================*/
 #include "gdcmPixelFormat.h"
 
+struct frame_info {
+  gdcm::PixelFormat pixeltype;
+};
+
 int TestPixelFormat(int , char *[])
 {
   using gdcm::PixelFormat;
@@ -138,6 +142,7 @@ int TestPixelFormat(int , char *[])
   pf4.SetPixelRepresentation(1);
   if( pf4.GetScalarType() != gdcm::PixelFormat::INT16 ) return 1;
 
+  frame_info fi = {};
 
   return 0;
 }
