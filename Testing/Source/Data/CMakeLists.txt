@@ -52,6 +52,8 @@ set(BLACK_LIST_READER
   ELSCINT1_LOSSLESS_RICE.dcm
 # SignedShortLossless has never really been supported anyway:
   SignedShortLosslessBug.dcm
+# Would need to process ALL Pixel Data element when decompressing:
+  PET-GE-dicomwrite-PixelDataSQUNv3.dcm
 # Toshiba US Private Data Storage 1.2.392.200036.9116.7.8.1.1.1
   TOSHIBA_MDW_HEADER.dcm
 # TODO, nasty:
