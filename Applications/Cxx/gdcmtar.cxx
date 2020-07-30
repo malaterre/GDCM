@@ -1519,6 +1519,7 @@ int main (int argc, char *argv[])
 //      gdcm::DataElement &pd = slice.GetDataElement();
       const char *sliceptr = bv->GetPointer() + i * slice_len;
       gdcm::DataElement newpixeldata( gdcm::Tag(0x7fe0,0x0010) );
+      newpixeldata.SetVR( pixeldata.GetVR() );
       newpixeldata.SetByteValue( sliceptr, (uint32_t)slice_len); // slow !
       ds.Replace( newpixeldata );
 
