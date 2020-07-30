@@ -1416,6 +1416,11 @@ int main (int argc, char *argv[])
     const gdcm::DataElement &pixeldata = image.GetDataElement();
     //const gdcm::ByteValue *bv = pixeldata.GetByteValue();
     gdcm::SmartPointer<gdcm::ByteValue> bv = const_cast<gdcm::ByteValue*>(pixeldata.GetByteValue());
+    if( !bv )
+    {
+      std::cerr << "decompress first" << std::endl;
+      return 1;
+    }
     unsigned long slice_len = image.GetBufferLength() / dims[2];
     assert( slice_len * dims[2] == image.GetBufferLength() );
     //assert( image.GetBufferLength() == bv->GetLength() );
