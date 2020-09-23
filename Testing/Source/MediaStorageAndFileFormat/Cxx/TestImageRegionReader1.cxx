@@ -91,7 +91,7 @@ static int TestImageRegionRead(const char* filename, bool verbose = false)
 
   if( verbose )
     {
-    std::cout << "ref=" << ref << std::endl;
+    if(ref) std::cout << "ref=" << ref << std::endl;
     std::cout << "md5=" << digest << std::endl;
     }
   if( !ref )
