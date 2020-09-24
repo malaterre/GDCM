@@ -143,6 +143,7 @@ int TestPixelFormat(int , char *[])
   if( pf4.GetScalarType() != gdcm::PixelFormat::INT16 ) return 1;
 
   frame_info fi = {};
+  (void)fi;
 
   return 0;
 }
