@@ -857,7 +857,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
 
   this->ForceRescale = 0; // always reset this thing
   // gdcmData/DCMTK_JPEGExt_12Bits.dcm
-  if( pixeltype != outputpt && pixeltype.GetBitsAllocated() != 12 )
+  if( pixeltype != outputpt && pixeltype.GetBitsAllocated() != 12 && pixeltype.GetSamplesPerPixel() == 1 )
     {
     this->ForceRescale = 1;
     }
