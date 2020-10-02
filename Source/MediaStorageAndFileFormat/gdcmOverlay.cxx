@@ -202,7 +202,7 @@ void Overlay::Update(const DataElement & de)
     // if OverlayBitsAllocated is 16 it imply Overlay in unused pixel bits
     if( at.GetValue() != 1 )
       {
-      gdcmWarningMacro( "Unsuported OverlayBitsAllocated: " << at.GetValue() );
+      gdcmDebugMacro( "Unsuported OverlayBitsAllocated: " << at.GetValue() );
       }
     SetBitsAllocated( at.GetValue() );
     }
