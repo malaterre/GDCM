@@ -1081,6 +1081,15 @@ int vtkGDCMImageReader::LoadSingleFile(const char *filename, char *pointer, unsi
   // HACK: Make sure that Shift/Scale are the one from the file:
   this->Shift = image.GetIntercept();
   this->Scale = image.GetSlope();
+  if( (this->Scale != 1.0 || this->Shift != 0.0) || this->ForceRescale )
+  {
+    if( pixeltype.GetSamplesPerPixel() != 1 )
+    {
+      vtkWarningMacro( "Cannot do Rescale with Sample Per Pixel != 1. Discarding rescale" );
+      this->Shift = 0.0;
+      this->Scale = 1.0;
+    }
+  }
 
   if( (this->Scale != 1.0 || this->Shift != 0.0) || this->ForceRescale )
   {
