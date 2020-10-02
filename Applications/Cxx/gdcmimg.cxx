@@ -346,6 +346,7 @@ static bool PopulateSingeFile( gdcm::PixmapWriter & writer,
 
 static bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Directory::FilenamesType const & filenames, unsigned int ndim = 2, std::streampos const & pos = 0 )
 {
+  assert( !filenames.empty() );
   std::vector<std::string>::const_iterator it = filenames.begin();
   bool b = true;
   gdcm::Pixmap &image = writer.GetPixmap();
