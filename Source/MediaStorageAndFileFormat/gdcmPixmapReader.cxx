@@ -498,6 +498,11 @@ bool DoOverlays(const DataSet& ds, Pixmap& pixeldata)
   std::vector<bool> updateoverlayinfo;
   if( (numoverlays = GetNumberOfOverlaysInternal( ds, overlaylist )) )
     {
+    if( numoverlays && pixeldata.GetPixelFormat().GetSamplesPerPixel() != 1 )
+      {
+      gdcmWarningMacro( numoverlays << " Overlay(s) were found, while PI is: " << pixeldata.GetPhotometricInterpretation() << " skipping them.");
+      return true;
+      }
     updateoverlayinfo.resize(numoverlays, false);
     pixeldata.SetNumberOfOverlays( numoverlays );
 
@@ -1259,6 +1264,7 @@ bool PixmapReader::ReadACRNEMAImage()
 
   // 4. Do the Curves/Overlays if any
   DoCurves(ds, *PixelData);
+  // Pay attention that pf.GetSamplesPerPixel() may equal 1 (eg. LIBIDO-24-ACR_NEMA-Rectangle.dcm)
   DoOverlays(ds, *PixelData);
 
   // 5. Do the PixelData
