@@ -170,7 +170,7 @@ bool PixmapReader::Read()
 }
 
 // PICKER-16-MONO2-Nested_icon.dcm
-void DoIconImage(const DataSet& rootds, Pixmap& image)
+static void DoIconImage(const DataSet& rootds, Pixmap& image)
 {
   const Tag ticonimage(0x0088,0x0200);
   IconImage &pixeldata = image.GetIconImage();
@@ -354,7 +354,7 @@ void DoIconImage(const DataSet& rootds, Pixmap& image)
 }
 
 // GE_DLX-8-MONO2-Multiframe.dcm
-void DoCurves(const DataSet& ds, Pixmap& pixeldata)
+static void DoCurves(const DataSet& ds, Pixmap& pixeldata)
 {
   unsigned int numcurves;
   if( (numcurves = Curve::GetNumberOfCurves( ds )) )
@@ -406,7 +406,7 @@ void DoCurves(const DataSet& ds, Pixmap& pixeldata)
     }
 }
 
-unsigned int GetNumberOfOverlaysInternal(DataSet const & ds, std::vector<uint16_t> & overlaylist)
+static unsigned int GetNumberOfOverlaysInternal(DataSet const & ds, std::vector<uint16_t> & overlaylist)
 {
   Tag overlay(0x6000,0x0000); // First possible overlay
   bool finished = false;
@@ -491,7 +491,7 @@ unsigned int GetNumberOfOverlaysInternal(DataSet const & ds, std::vector<uint16_
   return numoverlays;
 }
 
-bool DoOverlays(const DataSet& ds, Pixmap& pixeldata)
+static bool DoOverlays(const DataSet& ds, Pixmap& pixeldata)
 {
   unsigned int numoverlays;
   std::vector<uint16_t> overlaylist;
