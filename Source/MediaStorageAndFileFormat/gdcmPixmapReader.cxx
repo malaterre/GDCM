@@ -498,11 +498,6 @@ static bool DoOverlays(const DataSet& ds, Pixmap& pixeldata)
   std::vector<bool> updateoverlayinfo;
   if( (numoverlays = GetNumberOfOverlaysInternal( ds, overlaylist )) )
     {
-    if( numoverlays && pixeldata.GetPixelFormat().GetSamplesPerPixel() != 1 )
-      {
-      gdcmWarningMacro( numoverlays << " Overlay(s) were found, while PI is: " << pixeldata.GetPhotometricInterpretation() << " skipping them.");
-      return true;
-      }
     updateoverlayinfo.resize(numoverlays, false);
     pixeldata.SetNumberOfOverlays( numoverlays );
 
@@ -535,11 +530,11 @@ static bool DoOverlays(const DataSet& ds, Pixmap& pixeldata)
         //assert( unpack.str().size() / 8 == ((ov.GetRows() * ov.GetColumns()) + 7 ) / 8 );
         assert( ov.IsInPixelData( ) == false );
         }
-      else
+      else if( pixeldata.GetPixelFormat().GetSamplesPerPixel() == 1 )
         {
+        assert( ov.IsEmpty() );
         gdcmDebugMacro( "This image does not contains Overlay in the 0x60xx tags. "
-          << "Instead the overlay is stored in the unused bit of the Pixel Data. "
-          << "This is not supported right now"
+          << "Instead the overlay is stored in the unused bit of the Pixel Data."
           << std::endl );
         ov.IsInPixelData( true );
         // make sure Overlay is valid
@@ -555,6 +550,14 @@ static bool DoOverlays(const DataSet& ds, Pixmap& pixeldata)
           //throw Exception("TODO: Could not extract Overlay Data");
           }
         updateoverlayinfo[idxoverlays] = true;
+        }
+      else
+        {
+        // http://dicom.nema.org/medical/dicom/current/output/chtml/part03/sect_C.9.2.html
+	// Overlay data stored in unused bit planes of Pixel Data (7FE0,0010)
+	// with Samples Per Pixel (0028,0002) of 1 was previously described in
+	// DICOM. 
+	gdcmWarningMacro( "Overlay was found, while PI is: " << pixeldata.GetPhotometricInterpretation() << " skipping.");
         }
       }
     //std::cout << "Num of Overlays: " << numoverlays << std::endl;
