@@ -31,6 +31,8 @@
 
 <para><literallayout>  -d --dir       DICOM directory
   -t --tag %d,%d DICOM tag(s) to look for
+  -k --keyword %s           DICOM keyword(s) to look for
+  -P --private-tag %d,%d,%s DICOM private tag(s) to look for
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmxml_1options">
@@ -38,6 +40,8 @@
 
 <para><literallayout>  -p --print      Print output.
   -r --recursive  Recursively descend directory.
+     --strict     Use strict parser (faster but less tolerant with bogus DICOM files).
+     --table      Use Table output.
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmxml_1general_options">
