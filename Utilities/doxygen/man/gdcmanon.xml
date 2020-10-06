@@ -82,6 +82,16 @@ file-out  DICOM output directory
      --resources-path         Resources path.
   -k --key                    Path to RSA Private Key.
   -c --certificate            Path to Certificate.
+  -p --password               Encryption passphrase.
+</literallayout></para>
+</refsection>
+<refsection xml:id="gdcmanon_1crypto_library">
+<title>Crypto library options</title>
+
+<para><literallayout>     --crypto=
+           openssl            OpenSSL (default on non-Windows systems).
+           capi               Microsoft CryptoAPI (default on Windows systems).
+           openssl-p7         Old OpenSSL implementation.
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmanon_1encryption_options">

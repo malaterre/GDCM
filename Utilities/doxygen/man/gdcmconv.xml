@@ -60,6 +60,8 @@ file-out  DICOM output filename
 <title>image options</title>
 
 <para><literallayout>  -l --apply-lut                      Apply LUT (non-standard, advanced user only).
+  -8 --apply-lut8                     Apply LUT/RGB8 (non-standard, advanced user only).
+     --decompress-lut                 Decompress LUT (linearize segmented LUT).
   -P --photometric-interpretation %s  Change Photometric Interpretation (when possible).
   -w --raw                            Decompress image.
   -d --deflated                       Compress using deflated (gzip).
