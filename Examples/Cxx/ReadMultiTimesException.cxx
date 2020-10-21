@@ -43,8 +43,9 @@ int main(int argc, char* argv[])
       char *buffer = new char[ len ];
       img.GetBuffer( buffer ); // do NOT de-allocate buffer !
       }
-    catch (std::bad_alloc)
+    catch (std::bad_alloc &ba)
       {
+      (void)ba;
       std::cerr << "BAD ALLOC Exception caught!" << std::endl;
       }
     catch (...)
