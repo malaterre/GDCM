@@ -42,12 +42,12 @@ public:
   /** Assignment operator. */
   ParseException &operator= ( const ParseException &orig )
     {
-    (void)orig;
-    //TODO
+    LastElement = orig.LastElement;
     return *this;
     }
   ParseException(const ParseException& orig):Exception(orig)
     {
+    LastElement = orig.LastElement;
     }
 
   /** Equivalence operator. */
