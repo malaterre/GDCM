@@ -44,7 +44,7 @@ static std::string getInfoDate(Dict *infoDict, const char *key)
   std::string out;
 
 #ifdef LIBPOPPLER_NEW_OBJECT_API
-  if ((obj = infoDict->lookup((char*)key)).isString())
+  if ((obj = infoDict->lookup(const_cast<char*>(key))).isString())
 #else
   if (infoDict->lookup((char*)key, &obj)->isString())
 #endif
@@ -125,7 +125,7 @@ static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uM
   std::string out;
 
 #ifdef LIBPOPPLER_NEW_OBJECT_API
-  if ((obj = infoDict->lookup((char*)key)).isString())
+  if ((obj = infoDict->lookup(const_cast<char*>(key))).isString())
 #else
   if (infoDict->lookup((char*)key, &obj)->isString())
 #endif
