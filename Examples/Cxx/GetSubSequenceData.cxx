@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
   DataSet &subds3 = item3.GetNestedDataSet();
 
   const PrivateTag tseq6(0x7fe1,0x26,"GEMS_Ultrasound_MovieGroup_001");
-  if( !subds3.FindDataElement( tseq6 ) ) return true;
+  if( !subds3.FindDataElement( tseq6 ) ) return 1;
   const DataElement& seq6 = subds3.GetDataElement( tseq6 );
   SmartPointer<SequenceOfItems> sqi6 = seq6.GetValueAsSQ();
   size_t ni6= sqi6->GetNumberOfItems();
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     }
 
   const PrivateTag tseq3(0x7fe1,0x36,"GEMS_Ultrasound_MovieGroup_001");
-  if( !subds3.FindDataElement( tseq3 ) ) return true;
+  if( !subds3.FindDataElement( tseq3 ) ) return 1;
   const DataElement& seq3 = subds3.GetDataElement( tseq3 );
 
 //    std::cout << seq3 << std::endl;
@@ -119,14 +119,14 @@ int main(int argc, char *argv[])
     Item &item4 = sqi4->GetItem(i4);
     DataSet &subds4 = item4.GetNestedDataSet();
 
-    if( !subds4.FindDataElement( tseq8 ) ) return true;
+    if( !subds4.FindDataElement( tseq8 ) ) return 1;
     const DataElement& de8 = subds4.GetDataElement( tseq8 );
     Element<VR::UL,VM::VM1> ldimz;
     ldimz.SetFromDataElement( de8 );
     dimz += ldimz.GetValue();
-    if( !subds4.FindDataElement( tseq4 ) ) return true;
+    if( !subds4.FindDataElement( tseq4 ) ) return 1;
     const DataElement& seq4 = subds4.GetDataElement( tseq4 );
-    if( !subds4.FindDataElement( tseq5 ) ) return true;
+    if( !subds4.FindDataElement( tseq5 ) ) return 1;
     const DataElement& seq5 = subds4.GetDataElement( tseq5 );
 
     //    std::cout << seq4 << std::endl;
