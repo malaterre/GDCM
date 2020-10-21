@@ -1269,7 +1269,7 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
 
   myfile mysrc;
   myfile *fsrc = &mysrc;
-  char *buffer_j2k = new char[inputlength]; // overallocated
+  char *buffer_j2k = new char[inputlength * 2]; // overallocated for weird case
   fsrc->mem = fsrc->cur = buffer_j2k;
   fsrc->len = 0; //inputlength;
 
