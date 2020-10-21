@@ -36,8 +36,7 @@ namespace gdcm_ns
 class ParseException : public Exception
 {
 public:
-  ParseException()
-  = default;
+  ParseException() = default;
   ~ParseException() throw() override {};
 
   /** Assignment operator. */
@@ -46,6 +45,9 @@ public:
     (void)orig;
     //TODO
     return *this;
+    }
+  ParseException(const ParseException& orig):Exception(orig)
+    {
     }
 
   /** Equivalence operator. */

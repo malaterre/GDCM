@@ -194,7 +194,7 @@ struct param
     assert( bla < sizeof(name0) );
     is.read( name0, bla);
     size_t l = strlen(name0);
-    assert( l == bla );
+    assert( l == bla ); (void)l;
     char * ptr = strdup( name0 );
     v4.ptr = ptr;
     type = param_string;
@@ -209,7 +209,7 @@ struct param
     assert( bla < sizeof(name0) );
     is.read( name0, bla);
     size_t l = strlen(name0);
-    assert( l == bla );
+    assert( l == bla ); (void)l;
     memcpy( this->name, name0, bla );
     is.read( (char*)&bla, sizeof(bla) );
     assert( bla == 0x1 );

@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
     std::cout << at4.GetValue(0) << std::endl;
 
     vtkDoubleArray *d = vtkDoubleArray::New();
-    d->SetArray( (double*)pts , at1.GetValue() * at2.GetValue() , 0 );
+    d->SetArray( const_cast<double*>(pts) , at1.GetValue() * at2.GetValue() , 0 );
 
     vtkImageData *img = vtkImageData::New();
     img->Initialize();
