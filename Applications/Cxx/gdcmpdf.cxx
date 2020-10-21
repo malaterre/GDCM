@@ -470,7 +470,7 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
   char date[22];
   const size_t datelen = 8;
   int res = gdcm::System::GetCurrentDateTime(date);
-  if( !res ) return false;
+  if( !res ) return 1;
     {
     gdcm::DataElement de( gdcm::Tag(0x0008,0x0020) );
     // Do not copy the whole cstring:
