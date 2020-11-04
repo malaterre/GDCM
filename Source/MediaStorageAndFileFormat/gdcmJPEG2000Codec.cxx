@@ -1269,7 +1269,7 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
 
   myfile mysrc;
   myfile *fsrc = &mysrc;
-  char *buffer_j2k = new char[inputlength]; // overallocated
+  char *buffer_j2k = new char[inputlength * 2]; // overallocated for weird case
   fsrc->mem = fsrc->cur = buffer_j2k;
   fsrc->len = 0; //inputlength;
 
@@ -1771,7 +1771,14 @@ bool JPEG2000Codec::DecodeExtent(
       if( !raw_len.first || !raw_len.second ) return false;
       // check pixel format *after* DecodeByStreamsCommon !
       const PixelFormat & pf2 = this->GetPixelFormat();
-      if( pf != pf2 ) return false;
+      if( pf.GetSamplesPerPixel() != pf2.GetSamplesPerPixel()
+       || pf.GetBitsAllocated() != pf2.GetBitsAllocated()
+      )
+        {
+        gdcmErrorMacro( "Invalid PixelFormat found (mismatch DICOM vs J2K)" );
+        return false;
+        }
+
 
       char *raw = raw_len.first;
       const unsigned int rowsize = xmax - xmin + 1;

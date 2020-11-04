@@ -813,15 +813,15 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
 namespace gdcm
 {
 
-static const DataElement &GetNestedDataElement( const DataSet &ds, const Tag & t1, const Tag & t2 )
+static inline void ReplaceIf(DataSet &rootds, const DataSet &ds, const Tag & t1, const Tag & t2 )
 {
-  assert( ds.FindDataElement( t1 ) );
+  if( !ds.FindDataElement( t1 ) ) return ;
   SmartPointer<SequenceOfItems> sqi1 = ds.GetDataElement( t1 ).GetValueAsSQ();
-  assert( sqi1 );
+  if( !sqi1 || sqi1->IsEmpty() ) return ;
   const Item &item1 = sqi1->GetItem(1);
   const DataSet & ds1 = item1.GetNestedDataSet();
-  assert( ds1.FindDataElement( t2 ) );
-  return ds1.GetDataElement( t2 );
+  if( !ds1.FindDataElement( t2 ) ) return ;
+  rootds.Replace(ds1.GetDataElement( t2 ));
 }
 
 static bool RemapSharedIntoOld( gdcm::DataSet & ds,
@@ -837,53 +837,53 @@ static bool RemapSharedIntoOld( gdcm::DataSet & ds,
   const DataSet & sfgs_ds = item1.GetNestedDataSet();
 #if 1
   // Repetition Time
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x0080) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x0080) );
   // Echo Train Length
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x0091) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x0091) );
   // Flip Angle
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x1314) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x1314) );
   // Number of Averages
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9119), Tag(0x0018,0x0083) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9119), Tag(0x0018,0x0083) );
 
   // Percent Sampling
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9125), Tag(0x0018,0x0093) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9125), Tag(0x0018,0x0093) );
   // Percent Phase Field of View
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9125), Tag(0x0018,0x0094) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9125), Tag(0x0018,0x0094) );
   // Receive Coil Name
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9042), Tag(0x0018,0x1250) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9042), Tag(0x0018,0x1250) );
   // Transmit Coil Name
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9049), Tag(0x0018,0x1251) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9049), Tag(0x0018,0x1251) );
   // InPlanePhaseEncodingDirection
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9125), Tag(0x0018,0x1312) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9125), Tag(0x0018,0x1312) );
   // TransmitterFrequency
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9006), Tag(0x0018,0x9098) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9006), Tag(0x0018,0x9098) );
   // InversionRecovery
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9115), Tag(0x0018,0x9009) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9115), Tag(0x0018,0x9009) );
   // FlowCompensation
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9115), Tag(0x0018,0x9010) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9115), Tag(0x0018,0x9010) );
   // ReceiveCoilType
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9042), Tag(0x0018,0x9043) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9042), Tag(0x0018,0x9043) );
   // QuadratureReceiveCoil
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9042), Tag(0x0018,0x9044) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9042), Tag(0x0018,0x9044) );
   // SlabThickness
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9107), Tag(0x0018,0x9104) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9107), Tag(0x0018,0x9104) );
   // MultiCoilDefinitionSequence
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9042), Tag(0x0018,0x9045) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9042), Tag(0x0018,0x9045) );
   // SlabOrientation
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9107), Tag(0x0018,0x9105) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9107), Tag(0x0018,0x9105) );
   // MidSlabPosition
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9107), Tag(0x0018,0x9106) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9107), Tag(0x0018,0x9106) );
   // OperatingModeSequence
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x9176) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x9176) );
   // MRAcquisitionPhaseEncodingStepsOutOf
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9125), Tag(0x0018,0x9232) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9125), Tag(0x0018,0x9232) );
   // SpecificAbsorptionRateSequence
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x9239) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0018,0x9112), Tag(0x0018,0x9239) );
   // AnatomicRegionSequence
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0020,0x9071), Tag(0x0008,0x2218) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0020,0x9071), Tag(0x0008,0x2218) );
   // Purpose of Reference Code Sequence
   // FIXME what if there is multiple purpose of rcs ?
-  ds.Replace( GetNestedDataElement(sfgs_ds, Tag(0x0008,0x1140), Tag(0x0040,0xa170) ) );
+  ReplaceIf(ds, sfgs_ds, Tag(0x0008,0x1140), Tag(0x0040,0xa170) );
 #else
   for(
     DataSet::ConstIterator it = sfgs_ds.Begin();
@@ -898,44 +898,44 @@ static bool RemapSharedIntoOld( gdcm::DataSet & ds,
 
 #if 1
   // Effective Echo Time
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0018,0x9114), Tag(0x0018,0x9082) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0018,0x9114), Tag(0x0018,0x9082) );
   // -> should also be Echo Time
   // Nominal Cardiac Trigger Delay Time
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0018,0x9118), Tag(0x0020,0x9153) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0018,0x9118), Tag(0x0020,0x9153) );
   // Metabolite Map Description
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0018,0x9152), Tag(0x0018,0x9080) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0018,0x9152), Tag(0x0018,0x9080) );
   // IPP
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9113), Tag(0x0020,0x0032) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0020,0x9113), Tag(0x0020,0x0032) );
   // IOP
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9116), Tag(0x0020,0x0037) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0020,0x9116), Tag(0x0020,0x0037) );
   // Slice Thickness
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0028,0x9110), Tag(0x0018,0x0050) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0028,0x9110), Tag(0x0018,0x0050) );
   // Pixel Spacing
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0028,0x9110), Tag(0x0028,0x0030) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0028,0x9110), Tag(0x0028,0x0030) );
 
   // window level
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0028,0x9132), Tag(0x0028,0x1050) ) );
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0028,0x9132), Tag(0x0028,0x1051) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0028,0x9132), Tag(0x0028,0x1050) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0028,0x9132), Tag(0x0028,0x1051) );
 
   // rescale slope/intercept
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0028,0x9145), Tag(0x0028,0x1052) ) );
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0028,0x9145), Tag(0x0028,0x1053) ) );
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0028,0x9145), Tag(0x0028,0x1054) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0028,0x9145), Tag(0x0028,0x1052) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0028,0x9145), Tag(0x0028,0x1053) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0028,0x9145), Tag(0x0028,0x1054) );
 
   // FrameReferenceDateTime
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9111), Tag(0x0018,0x9151) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0020,0x9111), Tag(0x0018,0x9151) );
   // FrameAcquisitionDuration
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9111), Tag(0x0018,0x9220) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0020,0x9111), Tag(0x0018,0x9220) );
   // TemporalPositionIndex
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9111), Tag(0x0020,0x9128) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0020,0x9111), Tag(0x0020,0x9128) );
   // InStackPositionNumber
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9111), Tag(0x0020,0x9057) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0020,0x9111), Tag(0x0020,0x9057) );
   // FrameType
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0018,0x9226), Tag(0x0008,0x9007) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0018,0x9226), Tag(0x0008,0x9007) );
   // DimensionIndexValues
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9111), Tag(0x0020,0x9157) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0020,0x9111), Tag(0x0020,0x9157) );
   // FrameAcquisitionDateTime
-  ds.Replace( GetNestedDataElement(pffgs_ds, Tag(0x0020,0x9111), Tag(0x0018,0x9074) ) );
+  ReplaceIf(ds, pffgs_ds, Tag(0x0020,0x9111), Tag(0x0018,0x9074) );
   // Nominal Cardiac Trigger Delay Time -> Trigger Time
   //const DataElement &NominalCardiacTriggerDelayTime =
   //  GetNestedDataElement(pffgs_ds, Tag(0x0018,0x9226), Tag(0x0008,0x9007) );
@@ -1416,6 +1416,11 @@ int main (int argc, char *argv[])
     const gdcm::DataElement &pixeldata = image.GetDataElement();
     //const gdcm::ByteValue *bv = pixeldata.GetByteValue();
     gdcm::SmartPointer<gdcm::ByteValue> bv = const_cast<gdcm::ByteValue*>(pixeldata.GetByteValue());
+    if( !bv )
+    {
+      std::cerr << "decompress first" << std::endl;
+      return 1;
+    }
     unsigned long slice_len = image.GetBufferLength() / dims[2];
     assert( slice_len * dims[2] == image.GetBufferLength() );
     //assert( image.GetBufferLength() == bv->GetLength() );
@@ -1466,7 +1471,7 @@ int main (int argc, char *argv[])
 
   char date[22];
   const size_t datelen = 8;
-  //int res = gdcm::System::GetCurrentDateTime(date);
+  gdcm::System::GetCurrentDateTime(date);
   gdcm::Attribute<0x8,0x12> instcreationdate;
   instcreationdate.SetValue( gdcm::DTComp( date, datelen ) );
   ds.Replace( instcreationdate.GetAsDataElement() );
@@ -1514,6 +1519,7 @@ int main (int argc, char *argv[])
 //      gdcm::DataElement &pd = slice.GetDataElement();
       const char *sliceptr = bv->GetPointer() + i * slice_len;
       gdcm::DataElement newpixeldata( gdcm::Tag(0x7fe0,0x0010) );
+      newpixeldata.SetVR( pixeldata.GetVR() );
       newpixeldata.SetByteValue( sliceptr, (uint32_t)slice_len); // slow !
       ds.Replace( newpixeldata );
 

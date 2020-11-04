@@ -31,6 +31,8 @@
 
 <para><literallayout>  -d --dir       DICOM directory
   -t --tag %d,%d DICOM tag(s) to look for
+  -k --keyword %s           DICOM keyword(s) to look for
+  -P --private-tag %d,%d,%s DICOM private tag(s) to look for
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmxml_1options">
@@ -38,6 +40,8 @@
 
 <para><literallayout>  -p --print      Print output.
   -r --recursive  Recursively descend directory.
+     --strict     Use strict parser (faster but less tolerant with bogus DICOM files).
+     --table      Use Table output.
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmxml_1general_options">
@@ -74,6 +78,14 @@
 <para><literallayout>$ gdcmscanner -t 10,10 -d gdcmData -p
 </literallayout></para>
 </refsection>
+<refsection xml:id="gdcmviewer_1table_usage">
+<title>Table usage</title>
+
+<para>In order to display as CSV (see dicom3tools/dctable) all the values for SOP Instance / Study Instance / Series Instance UID(s) in the directory name <emphasis role="bold">gdcmData</emphasis>, simply do:</para>
+
+<para><literallayout>$ gdcmscanner -k SOPInstanceUID -k StudyInstanceUID -k SeriesInstanceUID -d gdcmData -p --table
+</literallayout></para>
+</refsection>
 <refsection xml:id="gdcmscanner_1complex_usage">
 <title>Complex usage</title>
 
@@ -87,6 +99,6 @@
 <refsection xml:id="gdcmxml_1see_also">
 <title>SEE ALSO</title>
 
-<para><emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmraw</emphasis>(1)</para>
+<para><emphasis role="bold">dctable</emphasis>(1), <emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmraw</emphasis>(1)</para>
 </refsection>
 </refentry>

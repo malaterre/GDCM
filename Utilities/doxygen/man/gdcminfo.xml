@@ -46,6 +46,9 @@
      --resources-path     Resources path.
      --md5sum             Compute md5sum of Pixel Data attribute value.
      --check-compression  check the encapsulated stream compression (lossless/lossy).
+     --force-rescale    force rescale.
+     --force-spacing    force spacing.
+     --mosaic           dump image information of MOSAIC.
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcminfo_1general_options">

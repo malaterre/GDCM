@@ -355,7 +355,7 @@ static void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool
           READ_NEXT \
           char *value_char = (char*)xmlTextReaderConstValue(reader); \
           int nvalue = sscanf(value_char,"%d",&(values[count++]));  \
-          assert( nvalue == 1 );  \
+          assert( nvalue == 1 ); (void)nvalue; \
           READ_NEXT /*Value ending tag*/ \
           name = (const char*)xmlTextReaderConstName(reader); \
           READ_NEXT \

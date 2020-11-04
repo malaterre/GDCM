@@ -44,7 +44,7 @@ static std::string getInfoDate(Dict *infoDict, const char *key)
   std::string out;
 
 #ifdef LIBPOPPLER_NEW_OBJECT_API
-  if ((obj = infoDict->lookup((char*)key)).isString())
+  if ((obj = infoDict->lookup(const_cast<char*>(key))).isString())
 #else
   if (infoDict->lookup((char*)key, &obj)->isString())
 #endif
@@ -64,11 +64,11 @@ static std::string getInfoDate(Dict *infoDict, const char *key)
       {
       switch (n)
         {
-      case 1: mon = 1;
-      case 2: day = 1;
-      case 3: hour = 0;
-      case 4: min = 0;
-      case 5: sec = 0;
+      case 1: mon = 1;  /* fall through */
+      case 2: day = 1;  /* fall through */
+      case 3: hour = 0; /* fall through */
+      case 4: min = 0;  /* fall through */
+      case 5: sec = 0;  /* fall through */
         }
       tmStruct.tm_year = year - 1900;
       tmStruct.tm_mon = mon - 1;
@@ -125,7 +125,7 @@ static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uM
   std::string out;
 
 #ifdef LIBPOPPLER_NEW_OBJECT_API
-  if ((obj = infoDict->lookup((char*)key)).isString())
+  if ((obj = infoDict->lookup(const_cast<char*>(key))).isString())
 #else
   if (infoDict->lookup((char*)key, &obj)->isString())
 #endif
@@ -470,7 +470,7 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
   char date[22];
   const size_t datelen = 8;
   int res = gdcm::System::GetCurrentDateTime(date);
-  if( !res ) return false;
+  if( !res ) return 1;
     {
     gdcm::DataElement de( gdcm::Tag(0x0008,0x0020) );
     // Do not copy the whole cstring:

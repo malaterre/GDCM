@@ -3826,7 +3826,7 @@ gdcm::Event::CheckEvent(const Event *) const =0
 Check if given event matches or derives from this event. ";
 
 %feature("docstring")  gdcm::Event::GetEventName "virtual const char*
-gdcm::Event::GetEventName(void) const =0
+gdcm::Event::GetEventName() const =0
 
 Return the StringName associated with the event. ";
 
@@ -5599,7 +5599,9 @@ error ";
 gdcm::ImageRegionReader::ReadIntoBuffer(char *inreadbuffer, size_t
 buflen)
 
-Read into buffer: false upon error ";
+Read into buffer: For Python, the buflen param is deduced directly
+from the input bytearray passed as parameter (function only takes one
+param). false upon error ";
 
 %feature("docstring")  gdcm::ImageRegionReader::SetRegion "void
 gdcm::ImageRegionReader::SetRegion(Region const &region)
@@ -5634,6 +5636,15 @@ Get Output image. ";
 %feature("docstring") gdcm::ImageWriter "
 
 ImageWriter.
+
+This is an extended version of the PixmapWriter. Pay attention that:
+It will populate missing attribute for Secondary Capture Image Storage
+instances,
+
+It may also change an input MR Image Storage instance into a pseudo
+Enhanced MR Image Storage instance whenever Modality LUT is required.
+
+Some DataElement related to gdcm::Image may be slightly altered.
 
 C++ includes: gdcmImageWriter.h ";
 
@@ -8105,7 +8116,9 @@ type (see GetMin / GetMax signature restricted to 64bits signed).
 
 C++ includes: gdcmPixelFormat.h ";
 
-%feature("docstring")  gdcm::PixelFormat::PixelFormat "gdcm::PixelFormat::PixelFormat(unsigned short samplesperpixel=1,
+%feature("docstring")  gdcm::PixelFormat::PixelFormat "gdcm::PixelFormat::PixelFormat() ";
+
+%feature("docstring")  gdcm::PixelFormat::PixelFormat "gdcm::PixelFormat::PixelFormat(unsigned short samplesperpixel,
 unsigned short bitsallocated=8, unsigned short bitsstored=8, unsigned
 short highbit=7, unsigned short pixelrepresentation=0) ";
 
@@ -9674,9 +9687,6 @@ gdcm::network::RoleSelectionSub::Size() const ";
 %feature("docstring")  gdcm::network::RoleSelectionSub::Write "const
 std::ostream& gdcm::network::RoleSelectionSub::Write(std::ostream &os)
 const ";
-
-
-// File: structgdcm_1_1SerieHelper_1_1Rule.xml
 
 
 // File: classgdcm_1_1Scanner.xml
@@ -11284,6 +11294,9 @@ File (see SetFile). ";
 gdcm::StringFilter::ToString(const Tag &t) const
 
 Directly from a Tag: ";
+
+%feature("docstring")  gdcm::StringFilter::ToString "std::string
+gdcm::StringFilter::ToString(const PrivateTag &t) const ";
 
 %feature("docstring")  gdcm::StringFilter::ToStringPair "std::pair<std::string, std::string>
 gdcm::StringFilter::ToStringPair(const DataElement &de) const
@@ -13902,6 +13915,81 @@ int) ";
 vtkThreadedImageAlgorithm) ";
 
 
+// File: classvtkGDCMThreadedImageReader3.xml
+%feature("docstring") vtkGDCMThreadedImageReader3 "C++ includes:
+vtkGDCMThreadedImageReader3.h ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::GetFileName "virtual const char* vtkGDCMThreadedImageReader3::GetFileName(int i=0)
+";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::PrintSelf "virtual void vtkGDCMThreadedImageReader3::PrintSelf(ostream &os,
+vtkIndent indent) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::SetFileName "virtual void vtkGDCMThreadedImageReader3::SetFileName(const char
+*filename) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::SetFileNames "virtual void vtkGDCMThreadedImageReader3::SetFileNames(vtkStringArray
+*) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::SplitExtent "int
+vtkGDCMThreadedImageReader3::SplitExtent(int splitExt[6], int
+startExt[6], int num, int total) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkBooleanMacro "vtkGDCMThreadedImageReader3::vtkBooleanMacro(FileLowerLeft, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkBooleanMacro "vtkGDCMThreadedImageReader3::vtkBooleanMacro(LoadOverlays, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetMacro "vtkGDCMThreadedImageReader3::vtkGetMacro(FileLowerLeft, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetMacro "vtkGDCMThreadedImageReader3::vtkGetMacro(NumberOfOverlays, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetMacro "vtkGDCMThreadedImageReader3::vtkGetMacro(DataScalarType, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetMacro "vtkGDCMThreadedImageReader3::vtkGetMacro(NumberOfScalarComponents,
+int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetMacro "vtkGDCMThreadedImageReader3::vtkGetMacro(LoadOverlays, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetObjectMacro
+"vtkGDCMThreadedImageReader3::vtkGetObjectMacro(FileNames,
+vtkStringArray) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetVector3Macro
+"vtkGDCMThreadedImageReader3::vtkGetVector3Macro(DataOrigin, double)
+";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetVector3Macro
+"vtkGDCMThreadedImageReader3::vtkGetVector3Macro(DataSpacing, double)
+";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetVector6Macro
+"vtkGDCMThreadedImageReader3::vtkGetVector6Macro(DataExtent, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkSetMacro "vtkGDCMThreadedImageReader3::vtkSetMacro(FileLowerLeft, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkSetMacro "vtkGDCMThreadedImageReader3::vtkSetMacro(DataScalarType, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkSetMacro "vtkGDCMThreadedImageReader3::vtkSetMacro(NumberOfScalarComponents,
+int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkSetMacro "vtkGDCMThreadedImageReader3::vtkSetMacro(LoadOverlays, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkSetVector3Macro
+"vtkGDCMThreadedImageReader3::vtkSetVector3Macro(DataOrigin, double)
+";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkSetVector3Macro
+"vtkGDCMThreadedImageReader3::vtkSetVector3Macro(DataSpacing, double)
+";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkSetVector6Macro
+"vtkGDCMThreadedImageReader3::vtkSetVector6Macro(DataExtent, int) ";
+
+%feature("docstring")
+vtkGDCMThreadedImageReader3::vtkTypeRevisionMacro "vtkGDCMThreadedImageReader3::vtkTypeRevisionMacro(vtkGDCMThreadedImageReader3,
+vtkThreadedImageAlgorithm) ";
+
+
 // File: classvtkImageColorViewer.xml
 %feature("docstring") vtkImageColorViewer "C++ includes:
 vtkImageColorViewer.h ";
@@ -15529,6 +15617,9 @@ gdcm::terminal::setmode(Mode m) ";
 // File: vtkGDCMThreadedImageReader2_8h.xml
 
 
+// File: vtkGDCMThreadedImageReader3_8h.xml
+
+
 // File: vtkImageColorViewer_8h.xml
 
 
@@ -15562,49 +15653,40 @@ gdcm::terminal::setmode(Mode m) ";
 // File: bug.xml
 
 
-// File: dir_e040de17c0346d6e352713ff147418d5.xml
+// File: dir_041d54874d9fecec94d9cb4ae010b51e.xml
 
 
-// File: dir_c76daeb6f6dec6f3ea799fce56f7d2d8.xml
+// File: dir_8021392154ea27d3da33100afd5b42a1.xml
 
 
-// File: dir_dbf95c1d90c5a901881337453263e002.xml
+// File: dir_83a82e6a2bc4a0f6429532cb237ca746.xml
 
 
-// File: dir_18f0eb58264c0e5251b09e2a1c43e69e.xml
+// File: dir_9760e222fce508c3b7270d68e6523d76.xml
 
 
-// File: dir_43e0a1f539e00dcfa1a6bc4d4fee4fc2.xml
+// File: dir_90174c188c639015dd869d1a853f914f.xml
 
 
-// File: dir_dbf5bd6b6031826eb661c0a6cc15a5dc.xml
+// File: dir_aceed280bd27dc60f64c2cb4efae4f90.xml
 
 
-// File: dir_9bf5ea929d074a4376f8e7ab62cf44cb.xml
+// File: dir_5aab2906425e8d9a7aa9fea4f8d0a2fa.xml
 
 
-// File: dir_1bf6655710ee689b67564d3c1ea81ded.xml
+// File: dir_5daaa9a41ac240f7de3019ff61b11839.xml
 
 
-// File: dir_1703a9a86ce09b357d10c179ef37187c.xml
+// File: dir_b138abe427a068e1da5116454e79caa4.xml
 
 
-// File: dir_7d8a53dc7c6e118dc326634b1445bfbd.xml
+// File: dir_6b1a62c3f439db8dff4e3363f340e91f.xml
 
 
-// File: dir_c65ec574e088a3fb8c01ccf67a472041.xml
+// File: dir_776c231028699256e0cc13f46def7474.xml
 
 
-// File: dir_b7bc1d3f8c76b5f778038891003f2f25.xml
-
-
-// File: dir_2e6026c62002f4bb8a32f565fccc2e09.xml
-
-
-// File: dir_6737ba0c6e4d2f00b8b2ea67e96033d0.xml
-
-
-// File: dir_fc26ec98c29cdba1e5d03a2a0f4491e0.xml
+// File: dir_6285418b2babf39982c6f35dbd05cbb5.xml
 
 
 // File: AddPrivateAttribute_8py-example.xml
@@ -15692,9 +15774,6 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: CStoreQtProgress_8cxx-example.xml
-
-
-// File: dctable_8cxx-example.xml
 
 
 // File: DecompressImage_8cs-example.xml
@@ -16073,6 +16152,9 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: SimplePrint_8cs-example.xml
+
+
+// File: SimplePrint_8java-example.xml
 
 
 // File: SimplePrintPatientName_8cs-example.xml
