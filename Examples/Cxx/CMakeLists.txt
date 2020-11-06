@@ -32,6 +32,7 @@ mark_as_advanced(QT_QMAKE_EXECUTABLE)
 endif()
 
 set(EXAMPLES_SRCS
+  UnWrapCustomStorage
   PrintLUT
   EmptyMask
   DumpSiemensBase64
