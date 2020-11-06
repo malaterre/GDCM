@@ -42,7 +42,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x2013,0x0011,"BioClinicaImaging",VR::ST,VM::VM1,"Custom Storage Former Filename",false},
   {0x2013,0x0012,"BioClinicaImaging",VR::LO,VM::VM1,"Custom Storage Mime-Type",false},
   {0x2013,0x0013,"BioClinicaImaging",VR::UL,VM::VM1,"Custom Storage File Length",false},
-  {0x2013,0x0016,"BioClinicaImaging",VR::ST,VM::VM1,"Custom Storage InformationDescription",false},
+  {0x2013,0x0016,"BioClinicaImaging",VR::ST,VM::VM1,"Custom Storage Information Description",false},
   {0x2013,0x0017,"BioClinicaImaging",VR::UL,VM::VM1,"Custom Storage Number Of Segments",false},
   {0x2013,0x0018,"BioClinicaImaging",VR::IS,VM::VM1,"Custom Storage Last Byte Padded",false},
   {0x2013,0x0001,"BioClinicaImagingSegmentGroup",VR::OB,VM::VM1,"Custom Storage Segment Blob #1",false},
