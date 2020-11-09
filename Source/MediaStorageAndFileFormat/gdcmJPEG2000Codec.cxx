@@ -638,7 +638,11 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     file_length--;
     }
   // what if 0xd9 is never found ?
-  assert( file_length > 0 && src[file_length-1] == 0xd9 );
+  if( !( file_length > 0 && src[file_length-1] == 0xd9 ) )
+  {
+    assert(true);
+    return std::make_pair( nullptr, 0 );
+  }
 
   /* set decoding parameters to default values */
   opj_set_default_decoder_parameters(&parameters);
@@ -1401,6 +1405,8 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   opj_stream_t *cio = nullptr;
   opj_image_t *image = nullptr;
   const unsigned char *src = (const unsigned char*)dummy_buffer;
+  if(!src)
+	  return false ;
   size_t file_length = buf_size;
 
   /* set decoding parameters to default values */
@@ -1687,6 +1693,8 @@ bool JPEG2000Codec::DecodeExtent(
       {
       size_t fraglen = frag.GetVL();
       size_t oldlen = vdummybuffer.size();
+	  if( fraglen == 0 && fraglen == 0 )
+        break;
       // update
       buf_size = fraglen + oldlen;
       vdummybuffer.resize( buf_size );
