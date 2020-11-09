@@ -640,7 +640,6 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
   // what if 0xd9 is never found ?
   if( !( file_length > 0 && src[file_length-1] == 0xd9 ) )
   {
-    assert(true);
     return std::make_pair( nullptr, 0 );
   }
 
@@ -1693,7 +1692,7 @@ bool JPEG2000Codec::DecodeExtent(
       {
       size_t fraglen = frag.GetVL();
       size_t oldlen = vdummybuffer.size();
-	  if( fraglen == 0 && fraglen == 0 )
+	  if( fraglen == 0 && oldlen == 0 )
         break;
       // update
       buf_size = fraglen + oldlen;
