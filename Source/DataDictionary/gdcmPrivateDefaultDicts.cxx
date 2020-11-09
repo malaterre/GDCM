@@ -38,6 +38,13 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x2013,0x0010,"BioDICOMizer",VR::LO,VM::VM1,"Custom Storage Version",false},
+  {0x2013,0x0011,"BioDICOMizer",VR::ST,VM::VM1,"Custom Storage Former Filename",false},
+  {0x2013,0x0012,"BioDICOMizer",VR::LO,VM::VM1,"Custom Storage Mime-Type",false},
+  {0x2013,0x0013,"BioDICOMizer",VR::UL,VM::VM1,"Custom Storage File Length",false},
+  {0x2013,0x0016,"BioDICOMizer",VR::ST,VM::VM1,"Custom Storage Information Description",false},
+  {0x2013,0x0017,"BioDICOMizer",VR::UL,VM::VM1,"Custom Storage Number Of Segments",false},
+  {0x2013,0x0018,"BioDICOMizer",VR::IS,VM::VM1,"Custom Storage Last Byte Padded",false},
   {0x2013,0x0010,"BioClinicaImaging",VR::LO,VM::VM1,"Custom Storage Version",false},
   {0x2013,0x0011,"BioClinicaImaging",VR::ST,VM::VM1,"Custom Storage Former Filename",false},
   {0x2013,0x0012,"BioClinicaImaging",VR::LO,VM::VM1,"Custom Storage Mime-Type",false},
