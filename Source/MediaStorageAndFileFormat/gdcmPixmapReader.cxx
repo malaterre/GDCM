@@ -1140,10 +1140,21 @@ bool PixmapReader::ReadACRNEMAImage()
   if( ds.FindDataElement( timagedimensions ) )
     {
     const DataElement& de0 = ds.GetDataElement( timagedimensions );
+    unsigned short imagedimensions = 0;
+    if( de0.GetVR() == VR::SS )
+    {
+    // Data/SIEMENS_MAGNETOM-12-MONO2-Uncompressed.dcm 0028,0005 is SS
+    Element<VR::SS,VM::VM1> el0 = { 0 };
+    el0.SetFromDataElement( de0 );
+    imagedimensions = el0.GetValue();
+    }
+    else
+    {
     Attribute<0x0028,0x0005> at0 = { 0 };
     at0.SetFromDataElement( de0 );
     assert( at0.GetNumberOfValues() == 1 );
-    unsigned short imagedimensions = at0.GetValue();
+    imagedimensions = at0.GetValue();
+    }
     //assert( imagedimensions == ReadSSFromTag( timagedimensions, ss, conversion ) );
     if ( imagedimensions == 3 )
       {
