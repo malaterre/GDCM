@@ -389,9 +389,8 @@ void MediaStorage::GuessFromModality(const char *modality, unsigned int dim )
     }
 }
 
-const char* MediaStorage::GetFromDataSetOrHeader(DataSet const &ds, const Tag & tag)
+const char* MediaStorage::GetFromDataSetOrHeader(DataSet const &ds, const Tag & tag, std::string &buf)
 {
-  static std::string ret;
   if( ds.FindDataElement( tag ) )
     {
     const ByteValue *sopclassuid = ds.GetDataElement( tag ).GetByteValue();
@@ -407,15 +406,16 @@ const char* MediaStorage::GetFromDataSetOrHeader(DataSet const &ds, const Tag & 
       std::string::size_type pos = sopclassuid_str.find_last_of(' ');
       sopclassuid_str = sopclassuid_str.substr(0,pos);
       }
-    ret = sopclassuid_str.c_str();
-    return ret.c_str();
+    buf = sopclassuid_str.c_str();
+    return buf.c_str();
     }
   return 0;
 }
 
 bool MediaStorage::SetFromDataSetOrHeader(DataSet const &ds, const Tag & tag)
 {
-  const char * ms_str = GetFromDataSetOrHeader(ds,tag);
+  std::string buf;
+  const char * ms_str = GetFromDataSetOrHeader(ds,tag,buf);
   if( ms_str )
     {
     MediaStorage ms = MediaStorage::GetMSType(ms_str);
@@ -430,10 +430,10 @@ bool MediaStorage::SetFromDataSetOrHeader(DataSet const &ds, const Tag & tag)
   return false;
 }
 
-const char* MediaStorage::GetFromHeader(FileMetaInformation const &fmi)
+const char* MediaStorage::GetFromHeader(FileMetaInformation const &fmi, std::string &buf)
 {
   const Tag tmediastoragesopclassuid(0x0002, 0x0002);
-  return GetFromDataSetOrHeader(fmi, tmediastoragesopclassuid);
+  return GetFromDataSetOrHeader(fmi, tmediastoragesopclassuid, buf);
 }
 
 bool MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
@@ -442,10 +442,10 @@ bool MediaStorage::SetFromHeader(FileMetaInformation const &fmi)
   return SetFromDataSetOrHeader(fmi, tmediastoragesopclassuid);
 }
 
-const char* MediaStorage::GetFromDataSet(DataSet const &ds)
+const char* MediaStorage::GetFromDataSet(DataSet const &ds, std::string & buf)
 {
   const Tag tsopclassuid(0x0008, 0x0016);
-  return GetFromDataSetOrHeader(ds, tsopclassuid);
+  return GetFromDataSetOrHeader(ds, tsopclassuid, buf);
 }
 
 
@@ -543,7 +543,8 @@ bool MediaStorage::SetFromFile(File const &file)
    * are a pain to handle ...
    */
   const FileMetaInformation &header = file.GetHeader();
-  const char* header_ms_ptr = GetFromHeader(header);
+  std::string buf1;
+  const char* header_ms_ptr = GetFromHeader(header, buf1);
   std::string copy1;
   const char *header_ms_str = 0;
   if( header_ms_ptr )
@@ -552,7 +553,8 @@ bool MediaStorage::SetFromFile(File const &file)
     header_ms_str = copy1.c_str();
     }
   const DataSet &ds = file.GetDataSet();
-  const char* ds_ms_ptr = GetFromDataSet(ds);
+  std::string buf2;
+  const char* ds_ms_ptr = GetFromDataSet(ds, buf2);
   std::string copy2;
   const char *ds_ms_str = 0;
   if( ds_ms_ptr )
