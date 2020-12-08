@@ -142,6 +142,7 @@ public:
     EnhancedMRColorImageStorage,
     FujiPrivateMammoCRImageStorage,
     OphthalmicPhotography16BitImageStorage,
+    VideoMicroscopicImageStorage,
     MS_END
   } MSType; // Media Storage Type
 
