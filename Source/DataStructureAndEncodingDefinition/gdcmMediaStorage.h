@@ -201,12 +201,10 @@ protected:
 
 private:
   bool SetFromDataSetOrHeader(DataSet const &ds, const Tag & tag);
-  /// THREAD SAFE
-  const char* GetFromDataSetOrHeader(DataSet const &ds, const Tag & tag, std::string &buf);
-  /// THREAD SAFE
-  const char* GetFromHeader(FileMetaInformation const &fmi, std::string &buf);
-  /// THREAD SAFE
-  const char* GetFromDataSet(DataSet const &ds, std::string &buf);
+
+  std::string GetFromDataSetOrHeader(DataSet const &ds, const Tag & tag);
+  std::string GetFromHeader(FileMetaInformation const &fmi);
+  std::string GetFromDataSet(DataSet const &ds);
 
 private:
   MSType MSField;
