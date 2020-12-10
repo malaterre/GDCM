@@ -149,6 +149,7 @@ static const char *MSStrings[] = {
   "1.2.840.10008.5.1.4.1.1.4.3", // EnhancedMRColorImageStorage
   "1.2.392.200036.9125.1.1.4", // FujiPrivateMammoCRImageStorage (aka FUJI MAMMO CR Storage)
   "1.2.840.10008.5.1.4.1.1.77.1.5.2", // Ophthalmic Photography 16 Bit Image Storage
+  "1.2.840.10008.5.1.4.1.1.77.1.2.1", // VideoMicroscopicImageStorage
 
   nullptr
 };
@@ -341,6 +342,7 @@ static const MSModalityType MSModalityTypes[] = {
   {"MR", 3, false},// EnhancedMRColorImageStorage
   {"MG", 2, false},// FujiPrivateMammoCRImageStorage
   {"OP", 3, false},// OphthalmicPhotography16BitImageStorage
+  {"GM", 3, false},// VideoMicroscopicImageStorage
   {nullptr, 0, false} //MS_END
 };
 
