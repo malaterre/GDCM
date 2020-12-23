@@ -41,6 +41,10 @@ class GDCM_EXPORT Curve : public Object
 {
 public:
   Curve();
+  Curve(const Curve &ov); // Internal pointers require specialization
+  Curve& operator=(const Curve&); // Internal pointers require specialization
+  Curve(Curve&&) = delete; // Internal pointers require specialization
+  Curve& operator=(Curve&&) = delete;
   ~Curve() override;
   void Print(std::ostream &) const override;
 
@@ -75,7 +79,6 @@ public:
 
   void Decode(std::istream &is, std::ostream &os);
 
-  Curve(Curve const &ov);
 private:
   double ComputeValueFromStartAndStep(unsigned int idx) const;
   CurveInternal *Internal;

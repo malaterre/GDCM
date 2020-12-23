@@ -39,7 +39,11 @@ class GDCM_EXPORT Bitmap : public Object
 {
 public:
   Bitmap();
-  ~Bitmap() override;
+  Bitmap(const Bitmap&) = default;
+  Bitmap(Bitmap&&) = default;
+  Bitmap& operator=(const Bitmap&) = default;
+  Bitmap& operator=(Bitmap&&) = default;
+  ~Bitmap() override = default;
   void Print(std::ostream &) const override;
 
   virtual bool AreOverlaysInPixelData() const { return false; }

@@ -32,8 +32,13 @@ namespace gdcm
 class GDCM_EXPORT Pixmap : public Bitmap
 {
 public:
-  Pixmap();
-  ~Pixmap() override;
+  Pixmap(); // Specialized
+  Pixmap(const Pixmap&) = default;
+  Pixmap(Pixmap&&) = default;
+  Pixmap& operator=(const Pixmap&) = default;
+  Pixmap& operator=(Pixmap&&) = default;
+  ~Pixmap() override = default;
+  
   void Print(std::ostream &) const override;
 
   /// returns if Overlays are stored in the unused bit of the pixel data:

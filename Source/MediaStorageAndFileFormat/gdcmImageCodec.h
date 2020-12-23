@@ -32,7 +32,13 @@ class GDCM_EXPORT ImageCodec : public Codec
   friend class ImageChangePhotometricInterpretation;
 public:
   ImageCodec();
-  ~ImageCodec() override;
+  ImageCodec(const ImageCodec&) = default;
+  ImageCodec(ImageCodec&&) = default;
+  ImageCodec& operator=(const ImageCodec&) = default;
+  ImageCodec& operator=(ImageCodec&&) = default;
+  ~ImageCodec() override = default;
+
+
   bool CanCode(TransferSyntax const &) const override { return false; }
   bool CanDecode(TransferSyntax const &) const override { return false; }
   bool Decode(DataElement const &is_, DataElement &os) override;
