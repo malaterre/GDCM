@@ -85,11 +85,11 @@ public:
   void AddRestriction(uint16_t group, uint16_t elem, std::string const &value, int op);
 
 protected:
-  bool UserOrdering(FileList *fileSet);
+  bool UserOrdering(FileList *fileList);
   void AddFileName(std::string const &filename);
   bool AddFile(FileWithName &header);
   void AddRestriction(const Tag& tag);
-  bool ImagePositionPatientOrdering(FileList *fileSet);
+  bool ImagePositionPatientOrdering(FileList *fileList);
   bool ImageNumberOrdering( FileList *fileList );
   bool FileNameOrdering( FileList *fileList );
 

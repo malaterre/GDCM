@@ -69,8 +69,8 @@ public:
   /// Will return (0,0,0) if the origin was not specified.
   const double *GetOrigin() const;
   double GetOrigin(unsigned int idx) const;
-  void SetOrigin(const float origin[3]);
-  void SetOrigin(const double origin[3]);
+  void SetOrigin(const float ori[3]);
+  void SetOrigin(const double ori[3]);
   void SetOrigin(unsigned int idx, double ori);
 
   /// Return a 6-tuples specifying the direction cosines

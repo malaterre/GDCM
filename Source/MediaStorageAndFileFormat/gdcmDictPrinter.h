@@ -32,7 +32,7 @@ public:
   void Print(std::ostream& os);
 
 protected:
-  void PrintDataElement2(std::ostream& os, const DataSet &ds, const DataElement &ide);
+  void PrintDataElement2(std::ostream& os, const DataSet &ds, const DataElement &de);
   void PrintDataSet2(std::ostream& os, const DataSet &ds);
 };
 

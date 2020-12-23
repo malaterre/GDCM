@@ -29,7 +29,7 @@ public:
   /**
    * Call this function to obtain the required buffer size
    */
-  static size_t GetEncodeLength(const char *src, size_t srclen );
+  static size_t GetEncodeLength(const char *src, size_t slen );
 
   /**
    * \brief          Encode a buffer into base64 format
@@ -47,7 +47,7 @@ public:
   /**
    * Call this function to obtain the required buffer size
    */
-  static size_t GetDecodeLength( const char *src, size_t len );
+  static size_t GetDecodeLength( const char *src, size_t slen );
 
   /**
    * \brief          Decode a base64-formatted buffer

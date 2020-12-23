@@ -54,8 +54,8 @@ public:
   bool Write() override; // Execute()
 
 protected:
-  void DoIconImage(DataSet & ds, Pixmap const & image);
-  bool PrepareWrite( MediaStorage const & refms );
+  void DoIconImage(DataSet & rootds, Pixmap const & image);
+  bool PrepareWrite( MediaStorage const & ref_ms );
 
   SmartPointer<Pixmap> PixelData;
 };

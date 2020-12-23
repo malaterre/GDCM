@@ -67,7 +67,7 @@ public:
   /// This function is used to build both a move and a find query 
   /// (true for inMove if it's move, false if it's find)
   static BaseRootQuery* ConstructQuery(ERootType inRootType, EQueryLevel inQueryLevel,
-    const DataSet& queryds, EQueryType queryType = eFind );
+    const DataSet& ds, EQueryType queryType = eFind );
 
   /// \deprecated
   static BaseRootQuery* ConstructQuery(ERootType inRootType, EQueryLevel inQueryLevel,

@@ -40,7 +40,7 @@ public :
   MrProtocol();
   ~MrProtocol();
 
-  bool Load( const ByteValue * bv, const char * str, int version );
+  bool Load( const ByteValue * bv, const char * csastr, int version );
   void Print(std::ostream &os) const;
 
   int GetVersion() const;

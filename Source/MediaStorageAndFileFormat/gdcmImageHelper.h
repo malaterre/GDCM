@@ -103,11 +103,11 @@ public:
   static void SetRescaleInterceptSlopeValue(File & f, const Image & img);
 
   // read only for now
-  static bool GetRealWorldValueMappingContent(File const & f, RealWorldValueMappingContent & rwvmc);
+  static bool GetRealWorldValueMappingContent(File const & f, RealWorldValueMappingContent & ret);
 
   /// Set/Get Origin (IPP) from/to a file
   static std::vector<double> GetOriginValue(File const & f);
-  static void SetOriginValue(DataSet & ds, const Image & img);
+  static void SetOriginValue(DataSet & ds, const Image & image);
 
   /// Get Direction Cosines (IOP) from/to a file
   /// Requires a file because mediastorage must be known
@@ -140,13 +140,13 @@ public:
   static SmartPointer<LookupTable> GetLUT(File const& f);
 
   // Moved from PixampReader to here. Generally used for photometric interpretation.
-  static const ByteValue* GetPointerFromElement(Tag const &tag, File const& f);
+  static const ByteValue* GetPointerFromElement(Tag const &tag, File const& inF);
 
   /// Moved from MediaStorage here, since we need extra info stored in PixelFormat & PhotometricInterpretation
   static MediaStorage ComputeMediaStorageFromModality(const char *modality,
-    unsigned int dimension = 2, PixelFormat const & pf = PixelFormat(),
+    unsigned int dimension = 2, PixelFormat const & pixeltype = PixelFormat(),
     PhotometricInterpretation const & pi = PhotometricInterpretation(),
-    double rescaleintercept = 0, double rescaleslope = 1 );
+    double intercept = 0, double slope = 1 );
 
 protected:
   static Tag GetSpacingTagFromMediaStorage(MediaStorage const &ms);

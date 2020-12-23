@@ -54,7 +54,7 @@ public:
   bool ComputeMOSAICDimensions(unsigned int dims[3]);
 
   /// Extract the value for SliceNormalVector (CSA header)
-  bool ComputeMOSAICSliceNormal( double dims[3], bool & inverted );
+  bool ComputeMOSAICSliceNormal( double slicenormalvector[3], bool & inverted );
 
   /// Extract the value for ImagePositionPatient (requires inverted flag)
   bool ComputeMOSAICSlicePosition( double pos[3], bool inverted );

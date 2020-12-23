@@ -72,7 +72,7 @@ public:
   /// Generate the PresentationContext array from a File-Set. File specified needs to
   /// be valid DICOM files.
   /// Used for C-STORE operations
-  bool GenerateFromFilenames(const Directory::FilenamesType &files);
+  bool GenerateFromFilenames(const Directory::FilenamesType &filenames);
 
   /// Add a single PresentationContext from a single File. Call multiple times when
   /// dealing with multiple files.
@@ -85,7 +85,7 @@ public:
   /// Not implemented for now. GDCM internally uses Implicit Little Endian
   void SetDefaultTransferSyntax( const TransferSyntax &ts );
 protected:
-  bool AddPresentationContext( const char *absyn, const char *ts );
+  bool AddPresentationContext( const char *as, const char *ts );
   const char *GetDefaultTransferSyntax() const;
 
 private:

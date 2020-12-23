@@ -46,7 +46,7 @@ public:
   const std::ostream &Write(std::ostream &os) const;
   size_t Size() const;
 
-  void SetAbstractSyntax( AbstractSyntax const & absyn );
+  void SetAbstractSyntax( AbstractSyntax const & as );
   AbstractSyntax const &GetAbstractSyntax() const { return SubItems; }
   AbstractSyntax &GetAbstractSyntax() { return SubItems; }
 
@@ -69,7 +69,7 @@ public:
     return SubItems == pc.SubItems && TransferSyntaxes == pc.TransferSyntaxes;
     }
 
-  PresentationContextRQ(const PresentationContext & pc);
+  PresentationContextRQ(const PresentationContext & in);
 
 private:
   static const uint8_t ItemType;

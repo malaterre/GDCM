@@ -117,7 +117,7 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
     Point* points;
     int pointsLength;
   public:
-    Block(Point* points, std::ptrdiff_t pointsLength);
+    Block(Point* pts, std::ptrdiff_t ptslen);
     Point * getPoints();
     int numPoints() const;
     int longestSideIndex() const;

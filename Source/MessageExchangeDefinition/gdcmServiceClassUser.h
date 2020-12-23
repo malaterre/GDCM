@@ -94,23 +94,23 @@ public:
   bool SendStore(DataSet const &ds);
 
   /// C-FIND a query, return result are in retDatasets
-  bool SendFind(const BaseRootQuery* query, std::vector<DataSet> &retDatasets);
+  bool SendFind(const BaseRootQuery* query, std::vector<DataSet> &retDataSets);
 
   /// Execute a C-MOVE, based on query, return files are written in outputdir
   bool SendMove(const BaseRootQuery* query, const char *outputdir);
   /// Execute a C-MOVE, based on query, returned dataset are Implicit
-  bool SendMove(const BaseRootQuery* query, std::vector<DataSet> &retDatasets);
+  bool SendMove(const BaseRootQuery* query, std::vector<DataSet> &retDataSets);
   /// Execute a C-MOVE, based on query, returned Files are stored in vector
-  bool SendMove(const BaseRootQuery* query, std::vector<File> &retFile);
+  bool SendMove(const BaseRootQuery* query, std::vector<File> &retFiles);
 
   /// for wrapped language: instanciate a reference counted object
   static SmartPointer<ServiceClassUser> New() { return new ServiceClassUser; }
 
 private:
-  network::EStateID RunEventLoop(network::ULEvent& inEvent,
+  network::EStateID RunEventLoop(network::ULEvent& currentEvent,
     network::ULConnection* inWhichConnection,
     network::ULConnectionCallback* inCallback, const bool& startWaiting);
-  network::EStateID RunMoveEventLoop(network::ULEvent& inEvent,
+  network::EStateID RunMoveEventLoop(network::ULEvent& currentEvent,
     network::ULConnectionCallback* inCallback);
 
 private:

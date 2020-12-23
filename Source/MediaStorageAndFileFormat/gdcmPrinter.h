@@ -89,7 +89,7 @@ public:
   void Print(std::ostream& os);
 
   /// Print an individual dataset
-  void PrintDataSet(const DataSet &ds, std::ostream& os, const std::string &s = "");
+  void PrintDataSet(const DataSet &ds, std::ostream& out, const std::string &indent = "");
 
 protected:
   VR PrintDataElement(std::ostringstream & os, const Dicts &dicts, const DataSet & ds, const DataElement &de, std::ostream &out, std::string const & indent );

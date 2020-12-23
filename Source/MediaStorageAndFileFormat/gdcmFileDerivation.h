@@ -79,7 +79,7 @@ public:
 protected:
   bool AddDerivationDescription();
   bool AddSourceImageSequence();
-  bool AddPurposeOfReferenceCodeSequence(DataSet &ds);
+  bool AddPurposeOfReferenceCodeSequence(DataSet &subds);
 
 private:
   SmartPointer<File> F;

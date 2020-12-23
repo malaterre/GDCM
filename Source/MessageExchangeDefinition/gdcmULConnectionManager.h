@@ -57,14 +57,14 @@ namespace gdcm {
       //at which point, it will return the current state of the connection
       //this starts by initiating an action, but can be put into a passive mode
       //for a cmove/cstore combination by setting startWaiting to true
-      EStateID RunEventLoop(ULEvent& inEvent, ULConnection* inWhichConnection, 
+      EStateID RunEventLoop(ULEvent& currentEvent, ULConnection* inWhichConnection, 
         ULConnectionCallback* inCallback, const bool& startWaiting);
 
       //like the above, but will manage the event loop for a move event (which
       //is basically two simultaneous connections interwoven, one inbound and
       //the other outbound.  Note, for instance, that cmoversp's can be sent back
       //during the other connection's operation.
-      EStateID RunMoveEventLoop(ULEvent& inEvent, ULConnectionCallback* inCallback);
+      EStateID RunMoveEventLoop(ULEvent& currentEvent, ULConnectionCallback* inCallback);
 
     public:
       ULConnectionManager();
@@ -104,7 +104,7 @@ namespace gdcm {
       //allows for a connection to be broken, but waits for an acknowledgement
       //of the breaking for a certain amount of time.  Returns true of the
       //other side acknowledges the break
-      bool BreakConnection(const double& inTimeout);
+      bool BreakConnection(const double& inTimeOut);
 
       //severs the connection, if it's open, without waiting for any kind of response.
       //typically done if the program is going down.

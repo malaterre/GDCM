@@ -144,7 +144,7 @@ public:
 
   /// See GetFilenameFromTagToValue(). This is simply GetFilenameFromTagToValue followed
   // by a call to GetMapping()
-  TagToValue const & GetMappingFromTagToValue(Tag const &t, const char *value) const;
+  TagToValue const & GetMappingFromTagToValue(Tag const &t, const char *valueref) const;
 
   /// Retrieve the value found for tag: t associated with file: filename
   /// This is meant for a single short call. If multiple calls (multiple tags)

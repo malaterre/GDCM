@@ -75,7 +75,7 @@ public:
 
   /// Retrieve the hostname, only the first 255 byte are copyied.
   /// This may come handy to specify the Station Name
-  static bool GetHostName(char hostname[255]);
+  static bool GetHostName(char name[255]);
 
   // In the following the size '22' is explicitly listed. You need to pass in
   // at least 22bytes of array. If the string is an output it will be
@@ -94,7 +94,7 @@ public:
   /// format as ASCII text a time_t with milliseconds
   /// See VR::DT from DICOM PS 3.5
   /// milliseconds is in the range [0, 999999]
-  static bool FormatDateTime(char date[22], time_t t, long milliseconds = 0);
+  static bool FormatDateTime(char date[22], time_t timep, long milliseconds = 0);
 
   /// Parse a date stored as ASCII text into a time_t structured (discard millisecond if any)
   static bool ParseDateTime(time_t &timep, const char date[22]);
@@ -123,12 +123,12 @@ public:
   static const char * GetCWD();
 
   /// strtok_r
-  static char *StrTokR(char *ptr, const char *sep, char **end);
+  static char *StrTokR(char *str, const char *delim, char **nextp);
 
   /// strsep
   /// param stringp is passed by pointer, it may be modified, you'll need to
   /// make a copy, in case you want to free the memory pointed at
-  static char *StrSep(char **stringp, const char *delim);
+  static char *StrSep(char **sp, const char *sep);
 
   /// return `locale charmap`
   static const char *GetLocaleCharset();

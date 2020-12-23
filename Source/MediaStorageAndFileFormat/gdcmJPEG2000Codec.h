@@ -38,7 +38,7 @@ public:
   bool CanDecode(TransferSyntax const &ts) const override;
   bool CanCode(TransferSyntax const &ts) const override;
 
-  bool Decode(DataElement const &is, DataElement &os) override;
+  bool Decode(DataElement const &in, DataElement &out) override;
   bool Code(DataElement const &in, DataElement &out) override;
 
   bool GetHeaderInfo(std::istream &is, TransferSyntax &ts) override;
@@ -82,8 +82,8 @@ protected:
 
 private:
   std::pair<char *, size_t> DecodeByStreamsCommon(char *dummy_buffer, size_t buf_size);
-  bool CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & complen, const char * indata, size_t inlen );
-  bool GetHeaderInfo(const char * dummy_buffer, size_t len, TransferSyntax &ts);
+  bool CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & complen, const char * inputdata, size_t inputlength );
+  bool GetHeaderInfo(const char * dummy_buffer, size_t buf_size, TransferSyntax &ts);
   JPEG2000Internals *Internals;
 };
 

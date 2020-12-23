@@ -88,7 +88,7 @@ public :
   /// -1 -> Error
   ///  0 -> Lossless
   ///  1 -> Lossy
-  static int GetLossyFlagFromFile(const char *filepath);
+  static int GetLossyFlagFromFile(const char *filename);
 
   /// Return the GDCM DATA ROOT
   static const char * GetDataRoot();
