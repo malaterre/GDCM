@@ -140,7 +140,7 @@ typedef my_marker_reader * my_marker_ptr;
     if (! (*datasrc->fill_input_buffer) (cinfo))  \
       { action; }  \
     INPUT_RELOAD(cinfo);  \
-  }
+  } do {} while (0)
 
 /* Read a byte into variable V.
  * If must suspend, take the specified action (typically "return FALSE").

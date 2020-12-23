@@ -316,7 +316,7 @@ static OPJ_INT16 opj_t1_getnmsedec_ref(OPJ_UINT32 x, OPJ_UINT32 bitpos)
         south[-1] |= T1_SIGMA_2; \
         south[1] |= T1_SIGMA_0; \
     } \
-}
+} do {} while(0)
 
 
 static INLINE void opj_t1_update_flags(opj_flag_t *flagsp, OPJ_UINT32 ci,
@@ -434,7 +434,7 @@ static INLINE void opj_t1_dec_sigpass_step_raw(
         } \
         flags |= T1_PI_THIS << (ci * 3U); \
     } \
-}
+}  do {} while(0)
 
 static INLINE void opj_t1_dec_sigpass_step_mqc(
     opj_t1_t *t1,
@@ -660,7 +660,7 @@ static void opj_t1_dec_sigpass_raw(
                 } \
             } \
         } \
-}
+} do {} while(0)
 
 static void opj_t1_dec_sigpass_mqc_64x64_novsc(
     opj_t1_t *t1,
@@ -780,7 +780,7 @@ static INLINE void opj_t1_dec_refpass_step_raw(
         data[ci*data_stride] += (v ^ (data[ci*data_stride] < 0)) ? poshalf : -poshalf; \
         flags |= T1_MU_THIS << (ci * 3U); \
     } \
-}
+} do {} while(0)
 
 static INLINE void opj_t1_dec_refpass_step_mqc(
     opj_t1_t *t1,
@@ -1000,7 +1000,7 @@ static void opj_t1_dec_refpass_raw(
                 } \
             } \
         } \
-}
+} do {} while(0)
 
 static void opj_t1_dec_refpass_mqc_64x64(
     opj_t1_t *t1,
@@ -1138,7 +1138,7 @@ LABEL_PARTIAL:
             } \
         } while(0); \
     } \
-}
+} do {} while(0)
 
 static void opj_t1_dec_clnpass_step(
     opj_t1_t *t1,
@@ -1328,7 +1328,7 @@ static void opj_t1_enc_clnpass(
             *flagsp &= ~(T1_PI_0 | T1_PI_1 | T1_PI_2 | T1_PI_3); \
         } \
     } \
-}
+} do {} while(0)
 
 static void opj_t1_dec_clnpass_check_segsym(opj_t1_t *t1, OPJ_INT32 cblksty)
 {

@@ -120,7 +120,7 @@ static INLINE OPJ_UINT32 opj_mqc_raw_decode(opj_mqc_t *mqc)
             c += l_c << 8; \
             ct = 8; \
         } \
-}
+} do {} while(0)
 
 /* For internal use of opj_mqc_decode_macro() */
 #define opj_mqc_renormd_macro(mqc, a, c, ct) \
@@ -133,7 +133,7 @@ static INLINE OPJ_UINT32 opj_mqc_raw_decode(opj_mqc_t *mqc)
         c <<= 1; \
         ct--; \
     } while (a < 0x8000); \
-}
+}  do {} while(0)
 
 #define opj_mqc_decode_macro(d, mqc, curctx, a, c, ct) \
 { \
@@ -154,7 +154,7 @@ static INLINE OPJ_UINT32 opj_mqc_raw_decode(opj_mqc_t *mqc)
             d = (*curctx)->mps; \
         } \
     } \
-}
+}  do {} while(0)
 
 #define DOWNLOAD_MQC_VARIABLES(mqc, curctx, c, a, ct) \
         register const opj_mqc_state_t **curctx = mqc->curctx; \
@@ -166,7 +166,7 @@ static INLINE OPJ_UINT32 opj_mqc_raw_decode(opj_mqc_t *mqc)
         mqc->curctx = curctx; \
         mqc->c = c; \
         mqc->a = a; \
-        mqc->ct = ct;
+        mqc->ct = ct
 
 /**
 Input a byte

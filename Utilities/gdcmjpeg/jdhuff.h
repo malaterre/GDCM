@@ -110,7 +110,7 @@ typedef struct {    /* Bitreading working state within an MCU */
   br_state.next_input_byte = cinfop->src->next_input_byte; \
   br_state.bytes_in_buffer = cinfop->src->bytes_in_buffer; \
   get_buffer = permstate.get_buffer; \
-  bits_left = permstate.bits_left;
+  bits_left = permstate.bits_left
 
 #define BITREAD_SAVE_STATE(cinfop,permstate)  \
   cinfop->src->next_input_byte = br_state.next_input_byte; \
@@ -140,8 +140,8 @@ typedef struct {    /* Bitreading working state within an MCU */
   { if (bits_left < (nbits)) {  \
       if (! jpeg_fill_bit_buffer(&(state),get_buffer,bits_left,nbits))  \
         { action; }  \
-      get_buffer = (state).get_buffer; bits_left = (state).bits_left; } }
-
+      get_buffer = (state).get_buffer; bits_left = (state).bits_left; } } \
+    do {} while(0)
 #define GET_BITS(nbits) \
   (((int) (get_buffer >> (bits_left -= (nbits)))) & ((1<<(nbits))-1))
 
@@ -194,7 +194,7 @@ slowlabel: \
   { failaction; } \
     get_buffer = state.get_buffer; bits_left = state.bits_left; \
   } \
-}
+} do {} while(0)
 
 /* Out-of-line case for Huffman code fetching */
 EXTERN(int) jpeg_huff_decode

@@ -80,7 +80,7 @@ METHODDEF(void) start_pass
       reset_predictor(cinfo, ci); \
       restart = TRUE; \
     } \
-  }
+  } do {} while(0)
 
 
 /*
@@ -117,7 +117,7 @@ METHODDEF(void) start_pass
   if (cinfo->restart_interval) { \
     if (--pred->restart_rows_to_go[ci] == 0) \
       reset_predictor(cinfo, ci); \
-  }
+  } do {} while(0)
 
 
 /*

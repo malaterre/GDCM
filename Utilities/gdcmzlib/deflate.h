@@ -265,7 +265,7 @@ typedef struct internal_state {
 /* Output a byte on the stream.
  * IN assertion: there is enough room in pending_buf.
  */
-#define put_byte(s, c) {s->pending_buf[s->pending++] = (c);}
+#define put_byte(s, c) {s->pending_buf[s->pending++] = (c);}  do {}  while(0)
 
 
 #define MIN_LOOKAHEAD (MAX_MATCH+MIN_MATCH+1)
@@ -311,7 +311,7 @@ void _tr_stored_block OF((deflate_state *s, charf *buf, ulg stored_len,
     s->l_buf[s->last_lit++] = cc; \
     s->dyn_ltree[cc].Freq++; \
     flush = (s->last_lit == s->lit_bufsize-1); \
-   }
+   } do {}  while(0)
 # define _tr_tally_dist(s, distance, length, flush) \
   { uch len = (length); \
     ush dist = (distance); \
@@ -321,7 +321,7 @@ void _tr_stored_block OF((deflate_state *s, charf *buf, ulg stored_len,
     s->dyn_ltree[_length_code[len]+LITERALS+1].Freq++; \
     s->dyn_dtree[d_code(dist)].Freq++; \
     flush = (s->last_lit == s->lit_bufsize-1); \
-  }
+  } do {} while(0)
 #else
 # define _tr_tally_lit(s, c, flush) flush = _tr_tally(s, 0, c)
 # define _tr_tally_dist(s, distance, length, flush) \

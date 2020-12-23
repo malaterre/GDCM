@@ -198,7 +198,7 @@ struct static_tree_desc_s {int dummy;}; /* for buggy compilers */
  */
 #define CLEAR_HASH(s) \
     s->head[s->hash_size-1] = NIL; \
-    zmemzero((Bytef *)s->head, (unsigned)(s->hash_size-1)*sizeof(*s->head));
+    zmemzero((Bytef *)s->head, (unsigned)(s->hash_size-1)*sizeof(*s->head))
 
 /* ========================================================================= */
 int ZEXPORT deflateInit_(strm, level, version, stream_size)
@@ -1370,13 +1370,13 @@ local void fill_window(s)
    s->block_start = s->strstart; \
    flush_pending(s->strm); \
    Tracev((stderr,"[FLUSH]")); \
-}
+} do {} while(0)
 
 /* Same but force premature exit if necessary. */
 #define FLUSH_BLOCK(s, eof) { \
    FLUSH_BLOCK_ONLY(s, eof); \
    if (s->strm->avail_out == 0) return (eof) ? finish_started : need_more; \
-}
+} do {}  while(0)
 
 /* ===========================================================================
  * Copy without compression as much as possible from the input stream, return
