@@ -78,7 +78,7 @@ int TestInvalidDICOMFiles(int , char *[])
     std::cerr << "No such directory: " << extradataroot <<  std::endl;
     return 1;
     }
-  static const size_t n = sizeof( list ) / sizeof( element );
+  //static const size_t n = sizeof( list ) / sizeof( element );
   for(const auto & el : list)
   {
   std::string sfilename = extradataroot;

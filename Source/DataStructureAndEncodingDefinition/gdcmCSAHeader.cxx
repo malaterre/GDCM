@@ -617,7 +617,7 @@ Apparently tag <-> vr has no relation ... it must be derived from something else
 
 VR GetVRFromDataSetFormatDict( const Tag& t )
 {
-  static const unsigned int nentries = sizeof(DataSetFormatDict) / sizeof(*DataSetFormatDict);
+  //static const unsigned int nentries = sizeof(DataSetFormatDict) / sizeof(*DataSetFormatDict);
   VR ret = VR::VR_END;
   //static const Tag tend = Tag(0xffff,0xffff);
   for(const auto & entry : DataSetFormatDict)
@@ -1287,7 +1287,7 @@ bool CSAHeader::GetMrProtocol( const DataSet & ds, MrProtocol & mrProtocol )
     "MrProtocol",
     "MrPhoenixProtocol" 
   };
-  static const int n = sizeof candidates / sizeof * candidates;
+  //static const int n = sizeof candidates / sizeof * candidates;
   bool found = false;
   for(auto candidate : candidates)
   {

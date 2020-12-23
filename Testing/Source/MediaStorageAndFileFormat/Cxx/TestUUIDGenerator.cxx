@@ -31,7 +31,7 @@ int TestUUIDGenerator(int , char *[])
     "ba209999-0c6c-11d2-97cf-00c04f8eea45",
     "67C8770B-44F1-410A-AB9A-F9B5446F13EE"
   };
-  const size_t nv = sizeof( valids ) / sizeof( *valids );
+  //const size_t nv = sizeof( valids ) / sizeof( *valids );
   for(auto valid : valids)
     {
     if( !gdcm::UUIDGenerator::IsValid( valid ) )

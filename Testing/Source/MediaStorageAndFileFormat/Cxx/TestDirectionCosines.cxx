@@ -80,7 +80,7 @@ R"(0.999081\0.0426953\0.00369274\-0.0419025\0.955059\0.293439)",
 bool TestCrossDot()
 {
   std::set< std::string > myset;
-  const unsigned int nipp = sizeof(ImageOrientationPatientList) / sizeof(*ImageOrientationPatientList);
+  //const unsigned int nipp = sizeof(ImageOrientationPatientList) / sizeof(*ImageOrientationPatientList);
   for(auto & i : ImageOrientationPatientList)
     {
     myset.insert( i );
