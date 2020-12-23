@@ -106,9 +106,8 @@ void ULConnection::SetPresentationContexts(
   const std::vector<PresentationContext>& inContexts)
 {
   mPresentationContexts.clear();
-  for( size_t i = 0; i < inContexts.size(); ++i )
+  for(const auto & in : inContexts)
     {
-    PresentationContext const &in = inContexts[i];
     mPresentationContexts.emplace_back(in );
     }
 }

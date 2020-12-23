@@ -238,9 +238,8 @@ int TestSystem1(int, char *[])
     "20010102030405.0101",
     "20010102030405.010101",
   };
-  for(int i = 0; i < 10; ++i )
+  for(auto date : dates)
     {
-    const char *date = dates[i];
     time_t timep; long milliseconds;
     if( !gdcm::System::ParseDateTime(timep, milliseconds, date) )
       {
@@ -264,9 +263,8 @@ int TestSystem1(int, char *[])
     "20010102030405.0000001",
     "20010102030405.0000001",
   };
-  for(int i = 0; i < 10; ++i )
+  for(auto date : dates)
     {
-    const char *date = dates[i];
     time_t timep; long milliseconds;
     if( gdcm::System::ParseDateTime(timep, milliseconds, date) )
       {

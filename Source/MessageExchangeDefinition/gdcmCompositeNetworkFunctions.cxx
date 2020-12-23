@@ -380,9 +380,8 @@ bool CompositeNetworkFunctions::CStore( const char *remote, uint16_t portno,
   bool ret = true; // by default no error
   try
     {
-    for( size_t i = 0; i < files.size(); ++i )
+    for(const auto & filename : files)
       {
-      const std::string & filename = files[i];
       fn = filename.c_str();
       assert( fn && *fn ); (void)fn;
       Reader reader;

@@ -74,10 +74,8 @@ const ModuleEntry& Module::GetModuleEntryInMacros(Macros const &macros, const Ta
   //static const Defs &defs = g.GetDefs();
   //static const Macros &macros = defs.GetMacros();
 
-  for( auto it2 = ArrayIncludeMacros.begin();
-    it2 != ArrayIncludeMacros.end(); ++it2)
+  for(const auto & name : ArrayIncludeMacros)
     {
-    const std::string &name = *it2;
     const Macro &macro= macros.GetMacro( name.c_str() );
     if( macro.FindMacroEntry( tag ) )
       {

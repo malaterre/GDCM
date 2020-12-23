@@ -173,10 +173,9 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
 void Scanner::Print( std::ostream & os ) const
 {
   os << "Values:\n";
-  for(auto it = Values.begin() ; it != Values.end();
-    ++it)
+  for(const auto & Value : Values)
     {
-    os << *it << "\n";
+    os << Value << "\n";
     }
   os << "Mapping:\n";
   auto file = Filenames.begin();

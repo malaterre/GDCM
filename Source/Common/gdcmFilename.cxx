@@ -66,11 +66,11 @@ const char *Filename::ToWindowsSlashes()
 {
   Conversion = FileName;
   //assert( !Conversion.empty() );
-  for (std::string::iterator it = Conversion.begin(); it != Conversion.end(); ++it )
+  for (char & it : Conversion)
     {
-    if( *it == '/' )
+    if( it == '/' )
       {
-      *it = '\\';
+      it = '\\';
       }
     }
 
@@ -84,12 +84,11 @@ const char *Filename::ToUnixSlashes()
   //std::string::size_type s = Conversion.find("\\");
   //assert( s == std::string::npos );
   assert( !Conversion.empty() );
-  for (std::string::iterator it = Conversion.begin(); it != Conversion.end(); ++it )
+  for (char & it : Conversion)
     {
-    if( *it == '\\' )
+    if( it == '\\' )
       {
-      assert( it+1 == Conversion.end() || *(it+1) != ' ' ); // is it an escaped space ?
-      *it = '/';
+      it = '/';
       }
     }
 

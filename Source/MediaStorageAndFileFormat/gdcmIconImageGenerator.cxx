@@ -331,8 +331,8 @@ void IconImageGenerator::BuildLUT( Bitmap & bitmap, unsigned int maxcolor )
   lut.Clear();
   lut.Allocate( 8 );
   std::vector< unsigned char > buffer[3];
-  for( int i = 0; i < 3; ++i )
-    buffer[i].reserve( ncolors );
+  for(auto & i : buffer)
+    i.reserve( ncolors );
 
   std::list<Point>::const_iterator it = palette.begin();
   for( ; it != palette.end(); ++it )

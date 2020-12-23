@@ -63,10 +63,9 @@ int TestFileAnonymize1(const char *filename, bool verbose = false)
   gdcm::FileAnonymizer fa;
   fa.SetInputFileName( filename );
   fa.SetOutputFileName( outfilename.c_str() );
-  for( std::vector<gdcm::Tag>::const_iterator it = tags.begin();
-    it != tags.end(); ++it )
+  for(const auto & tag : tags)
     {
-    fa.Remove( *it );
+    fa.Remove( tag );
     }
   if( !fa.Write() )
     {
@@ -84,10 +83,8 @@ int TestFileAnonymize1(const char *filename, bool verbose = false)
     }
   const File &f = r.GetFile();
   const DataSet &ds = f.GetDataSet();
-  for( std::vector<gdcm::Tag>::const_iterator it = tags.begin();
-    it != tags.end(); ++it )
+  for(const auto & t : tags)
     {
-    const gdcm::Tag & t = *it;
     if( ds.FindDataElement( t ) )
       {
       gdcm::Filename fn( filename );

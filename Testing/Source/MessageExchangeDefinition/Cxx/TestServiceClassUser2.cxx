@@ -216,12 +216,10 @@ int TestServiceClassUser2(int argc, char *argv[])
     }
 
   size_t ndatasets = 0;
-  for(
-    std::vector<gdcm::DataSet>::const_iterator cfind_it = datasets.begin();
-    cfind_it != datasets.end(); ++cfind_it )
+  for(const auto & dataset : datasets)
     {
     gdcm::DataSet &queryds = movequery1->GetQueryDataSet();
-    const gdcm::DataElement &instanceuid = cfind_it->GetDataElement( gdcm::Tag(0x8,0x18) );
+    const gdcm::DataElement &instanceuid = dataset.GetDataElement( gdcm::Tag(0x8,0x18) );
     queryds.Replace( instanceuid );
 
     // C-MOVE

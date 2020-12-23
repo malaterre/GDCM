@@ -125,10 +125,9 @@ void SerieHelper::SetDirectory(std::string const &dir, bool recursive)
   unsigned int nfiles = dirList.Load(dir, recursive); (void)nfiles;
 
   Directory::FilenamesType const &filenames = dirList.GetFilenames();
-  for( auto it = filenames.begin();
-    it != filenames.end(); ++it)
+  for(const auto & filename : filenames)
     {
-    AddFileName( *it );
+    AddFileName( filename );
     }
 }
 
@@ -188,11 +187,8 @@ bool SerieHelper::AddFile(FileWithName &header)
   // make sure the file correspond to his set of rules:
 
   std::string s;
-  for(auto it2 = Restrictions.begin();
-    it2 != Restrictions.end();
-    ++it2)
+  for(auto & r : Restrictions)
     {
-    const Rule &r = *it2;
     //s = header->GetEntryValue( r.group, r.elem );
     s = sf.ToString( Tag(r.group,r.elem) );
     if ( !CompareDicomString(s, r.value.c_str(), r.op) )
@@ -287,12 +283,10 @@ bool SerieHelper::ImageNumberOrdering( FileList *fileList )
 {
   Attribute<0x0020,0x0013> instancenumber;
   std::set<int> instancenumbers;
-  for ( FileList::const_iterator
-    it = fileList->begin();
-    it != fileList->end(); ++it )
+  for (const auto & it : *fileList)
     {
     instancenumber.SetValue( -1 );
-    const DataSet& ds = (*it)->GetDataSet();
+    const DataSet& ds = it->GetDataSet();
     instancenumber.SetFromDataSet( ds );
     int in = instancenumber.GetValue();
     instancenumbers.insert( in );
@@ -317,14 +311,12 @@ bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList ) const
 
   std::multimap<double,SmartPointer<FileWithName> > distmultimap;
   // Use a multimap to sort the distances from 0,0,0
-  for ( FileList::const_iterator
-    it = fileList->begin();
-    it != fileList->end(); ++it )
+  for (const auto & it : *fileList)
     {
     if ( first )
       {
       //(*it)->GetImageOrientationPatient( cosines );
-      cosines = ImageHelper::GetDirectionCosinesValue( **it );
+      cosines = ImageHelper::GetDirectionCosinesValue( *it );
 
       // You only have to do this once for all slices in the volume. Next,
       // for each slice, calculate the distance along the slice normal
@@ -334,7 +326,7 @@ bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList ) const
       normal[1] = cosines[2]*cosines[3] - cosines[0]*cosines[5];
       normal[2] = cosines[0]*cosines[4] - cosines[1]*cosines[3];
 
-      ipp = ImageHelper::GetOriginValue( **it );
+      ipp = ImageHelper::GetOriginValue( *it );
       //ipp[0] = (*it)->GetXOrigin();
       //ipp[1] = (*it)->GetYOrigin();
       //ipp[2] = (*it)->GetZOrigin();
@@ -345,14 +337,14 @@ bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList ) const
         dist += normal[i]*ipp[i];
         }
 
-      distmultimap.insert(std::pair<const double,SmartPointer<FileWithName> >(dist, *it));
+      distmultimap.insert(std::pair<const double,SmartPointer<FileWithName> >(dist, it));
 
       max = min = dist;
       first = false;
       }
     else
       {
-      ipp = ImageHelper::GetOriginValue( **it );
+      ipp = ImageHelper::GetOriginValue( *it );
       //ipp[0] = (*it)->GetXOrigin();
       //ipp[1] = (*it)->GetYOrigin();
       //ipp[2] = (*it)->GetZOrigin();
@@ -363,7 +355,7 @@ bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList ) const
         dist += normal[i]*ipp[i];
         }
 
-      distmultimap.insert(std::pair<const double,SmartPointer<FileWithName> >(dist, *it));
+      distmultimap.insert(std::pair<const double,SmartPointer<FileWithName> >(dist, it));
 
       min = (min < dist) ? min : dist;
       max = (max > dist) ? max : dist;
@@ -404,11 +396,9 @@ bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList ) const
 
   if (DirectOrder)
     {
-    for (auto it3 = distmultimap.begin();
-      it3 != distmultimap.end();
-      ++it3)
+    for (auto & it3 : distmultimap)
       {
-      fileList->push_back( (*it3).second );
+      fileList->push_back( it3.second );
       }
     }
   else // user asked for reverse order
@@ -462,11 +452,8 @@ std::string SerieHelper::CreateUniqueSeriesIdentifier( File * inFile )
     std::string id = uid.c_str();
     if(UseSeriesDetails)
       {
-      for(auto it2 = Refine.begin();
-        it2 != Refine.end();
-        ++it2)
+      for(auto & r : Refine)
         {
-        const Rule &r = *it2;
         //std::string s = inFile->GetEntryValue( r.group, r.elem );
         std::string s = sf.ToString( Tag(r.group, r.elem) );
         //if( s == GDCM_UNFOUND )

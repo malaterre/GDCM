@@ -66,34 +66,34 @@ bool TestCMSProvider(gdcm::CryptographicMessageSyntax& cms, const char * provNam
   const std::string encrypted_vector = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/encrypted_text" );
 
   bool ret = true;
-  for (unsigned int i = 0; i < 4; i++)
+  for (auto cipher : ciphers)
     {
     char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
     size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
-    cms.SetCipherType(ciphers[i]);
+    cms.SetCipherType(cipher);
     bool encryptSuccess = cms.Encrypt(encout, encoutlen, tstr, tstr_l);
     if (!encryptSuccess)
       {
-      std::cerr << provName << " using " << cip2str[ciphers[i]] << ": encryption failed" << std::endl;
+      std::cerr << provName << " using " << cip2str[cipher] << ": encryption failed" << std::endl;
       ret = false;
       continue;
       }
     bool decryptSuccess = cms.Decrypt(decout, decoutlen, encout, encoutlen);
     if (!decryptSuccess)
       {
-      std::cerr << provName << " using " << cip2str[ciphers[i]] << ": decryption failed" << std::endl;
+      std::cerr << provName << " using " << cip2str[cipher] << ": decryption failed" << std::endl;
       ret = false;
       continue;
       }
     if (decoutlen != tstr_l)
       {
-      std::cerr << provName << " using " << cip2str[ciphers[i]] << ": decryted length different from original (" << decoutlen << " != " << tstr_l << ")" << std::endl;
+      std::cerr << provName << " using " << cip2str[cipher] << ": decryted length different from original (" << decoutlen << " != " << tstr_l << ")" << std::endl;
       ret = false;
       continue;
       }
     if (memcmp(tstr, decout, tstr_l) != 0)
       {
-      std::cerr << provName << " using " << cip2str[ciphers[i]] << ": decryted data different from original" << std::endl;
+      std::cerr << provName << " using " << cip2str[cipher] << ": decryted data different from original" << std::endl;
       ret = false;
       continue;
       }
@@ -143,36 +143,36 @@ bool TestCMSCompatibility(gdcm::CryptographicMessageSyntax& cms1, const char * p
   const std::string encrypted_vector = gdcm::Filename::Join(gdcm::Testing::GetSourceDirectory(), "/Testing/Source/Data/encrypted_text" );
 
   bool ret = true;
-  for (int i = 0; i < 4; i++)
+  for (auto cipher : ciphers)
     {
     char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
     size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
-    cms1.SetCipherType(ciphers[i]);
-    cms2.SetCipherType(ciphers[i]);
+    cms1.SetCipherType(cipher);
+    cms2.SetCipherType(cipher);
 
     bool encryptSuccess = cms1.Encrypt(encout, encoutlen, tstr, tstr_l);
     if (!encryptSuccess)
       {
-      std::cerr << provName1 << " & " << provName2 << " using " << cip2str[ciphers[i]] << ": encryption failed" << std::endl;
+      std::cerr << provName1 << " & " << provName2 << " using " << cip2str[cipher] << ": encryption failed" << std::endl;
       ret = false;
       break;
       }
     bool decryptSuccess = cms2.Decrypt(decout, decoutlen, encout, encoutlen);
     if (!decryptSuccess)
       {
-      std::cerr << provName1 << " & " << provName2 << " using " << cip2str[ciphers[i]] << ": decryption failed" << std::endl;
+      std::cerr << provName1 << " & " << provName2 << " using " << cip2str[cipher] << ": decryption failed" << std::endl;
       ret = false;
       break;
       }
     if (decoutlen != tstr_l)
       {
-      std::cerr <<  provName1 << " & " << provName2 << " using " << cip2str[ciphers[i]] << ": decryted length different from original (" << decoutlen << " != " << tstr_l << ")" << std::endl;
+      std::cerr <<  provName1 << " & " << provName2 << " using " << cip2str[cipher] << ": decryted length different from original (" << decoutlen << " != " << tstr_l << ")" << std::endl;
       ret = false;
       break;
       }
     if (memcmp(tstr, decout, tstr_l) != 0)
       {
-      std::cerr <<  provName1 << " & " << provName2 << " using " << cip2str[ciphers[i]] << ": decryted data different from original" << std::endl;
+      std::cerr <<  provName1 << " & " << provName2 << " using " << cip2str[cipher] << ": decryted data different from original" << std::endl;
       ret = false;
       break;
       }

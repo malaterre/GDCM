@@ -620,9 +620,8 @@ VR GetVRFromDataSetFormatDict( const Tag& t )
   static const unsigned int nentries = sizeof(DataSetFormatDict) / sizeof(*DataSetFormatDict);
   VR ret = VR::VR_END;
   //static const Tag tend = Tag(0xffff,0xffff);
-  for( unsigned int i = 0; i < nentries; ++i)
+  for(const auto & entry : DataSetFormatDict)
     {
-    const DataSetFormatEntry &entry = DataSetFormatDict[i];
     if( entry.t == t )
       {
       ret = entry.vr;
@@ -1290,9 +1289,8 @@ bool CSAHeader::GetMrProtocol( const DataSet & ds, MrProtocol & mrProtocol )
   };
   static const int n = sizeof candidates / sizeof * candidates;
   bool found = false;
-  for( int i = 0; i < n; ++i )
+  for(auto candidate : candidates)
   {
-    const char * candidate = candidates[i];
     if( FindCSAElementByName( candidate ) )
     {
       // assume the correct one is the one that is not empty,

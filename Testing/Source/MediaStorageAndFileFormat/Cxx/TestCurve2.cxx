@@ -54,9 +54,8 @@ static const curveel arraycurve[] = {
 static const curveel *getcurveelfromname(const char *filename)
 {
   static const size_t nel = sizeof( arraycurve ) / sizeof( *arraycurve );
-  for( size_t i = 0; i < nel; ++i )
+  for(const auto & c : arraycurve)
     {
-    const curveel &c = arraycurve[i];
     if( strcmp( filename, c.name) == 0 )
       {
       return &c;
