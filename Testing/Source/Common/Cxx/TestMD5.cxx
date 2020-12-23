@@ -284,7 +284,7 @@ int TestMD5Func(const char* filename, const char *md5ref, bool verbose = false)
 
 static const char *GetMD5Sum(const char *filename)
 {
-  typedef const char * const (*md5pair)[2];
+  using md5pair = const char *const (*)[2];
   const char *md5filename;
   md5pair md5filenames = gdcmMD5SumFiles;
   int i = 0;
