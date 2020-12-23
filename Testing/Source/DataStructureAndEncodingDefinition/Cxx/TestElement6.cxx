@@ -27,7 +27,7 @@ int TestElement6(int , char *[])
   const gdcm::VM vm = gdcm::VM::VM4;
 
   // mimic string filter behavior:
-  const char input[] = "0\\256\\256\\0";
+  const char input[] = R"(0\256\256\0)";
   const char * value = input;
   const size_t len = strlen( input );
 

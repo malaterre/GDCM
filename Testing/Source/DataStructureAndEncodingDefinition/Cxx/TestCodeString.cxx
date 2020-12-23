@@ -89,7 +89,7 @@ int TestCodeString(int , char *[])
       }
     }
 
-  const char fn5[] = "SUBDIR1\\SUBDIR2\\LONGSUBDIR\\IMG01";
+  const char fn5[] = R"(SUBDIR1\SUBDIR2\LONGSUBDIR\IMG01)";
     {
     std::string copy = fn5;
     if( copy.size() % 2 )
