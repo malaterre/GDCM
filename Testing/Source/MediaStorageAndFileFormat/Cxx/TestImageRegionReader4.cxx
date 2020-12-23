@@ -120,7 +120,8 @@ int TestImageRegionReader4(int argc, char *argv[])
   // First of get rid of warning/debug message
   gdcm::Trace::DebugOff();
   gdcm::Trace::WarningOff();
-  int r = 0, i = 0;
+  int r = 0;
+  int i = 0;
   const char *extradataroot = gdcm::Testing::GetDataExtraRoot();
   static const char *names[] = {
     "/gdcmSampleData/images_of_interest/US_512x512x2496_JPEG_BaseLine_Process_1.dcm",

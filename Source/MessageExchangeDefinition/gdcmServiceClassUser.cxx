@@ -558,7 +558,10 @@ EStateID ServiceClassUser::RunEventLoop(network::ULEvent& currentEvent,
             //if (theState == eSta6TransferReady){//ie, finished the transitions
               //with find, the results now come down the wire.
               //the pdu we already have from the event will tell us how many to expect.
-              uint32_t pendingDE1, pendingDE2, success, theVal;
+              uint32_t pendingDE1;
+              uint32_t pendingDE2;
+              uint32_t success;
+              uint32_t theVal;
               pendingDE1 = 0xff01;
               pendingDE2 = 0xff00;
               success = 0x0000;
@@ -601,7 +604,8 @@ EStateID ServiceClassUser::RunEventLoop(network::ULEvent& currentEvent,
               if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success)
                 {
                 //check for other error fields
-                const ByteValue *err1 = nullptr, *err2 = nullptr;
+                const ByteValue *err1 = nullptr;
+                const ByteValue *err2 = nullptr;
                 gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
                 switch (theVal){
                   case 0xA701:
@@ -860,7 +864,10 @@ EStateID ServiceClassUser::RunMoveEventLoop(ULEvent& currentEvent, ULConnectionC
         if (theState == eSta6TransferReady){//ie, finished the transitions
           //with find, the results now come down the wire.
           //the pdu we already have from the event will tell us how many to expect.
-          uint32_t pendingDE1, pendingDE2, success, theVal;
+          uint32_t pendingDE1;
+          uint32_t pendingDE2;
+          uint32_t success;
+          uint32_t theVal;
           pendingDE1 = 0xff01;
           pendingDE2 = 0xff00;
           success = 0x0000;
@@ -906,7 +913,8 @@ EStateID ServiceClassUser::RunMoveEventLoop(ULEvent& currentEvent, ULConnectionC
           }
           if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success){
             //check for other error fields
-            const ByteValue *err1 = nullptr, *err2 = nullptr;
+            const ByteValue *err1 = nullptr;
+            const ByteValue *err2 = nullptr;
             gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
             switch (theVal){
               case 0xA701:

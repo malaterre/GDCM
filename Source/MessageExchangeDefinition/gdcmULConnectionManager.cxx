@@ -654,11 +654,10 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
         if (theState == eSta6TransferReady){//ie, finished the transitions
           //with find, the results now come down the wire.
           //the pdu we already have from the event will tell us how many to expect.
-          uint32_t pendingDE1, pendingDE2, success, theVal;
-          pendingDE1 = 0xff01;
-          pendingDE2 = 0xff00;
-          success = 0x0000;
-          theVal = pendingDE1;
+          uint32_t pendingDE1 = 0xff01;
+          uint32_t pendingDE2 = 0xff00;
+          uint32_t success = 0x0000;
+          uint32_t theVal = pendingDE1;
           uint32_t theNumLeft = 0; // the number of pending sub operations left.
           //so here's the thing: dcmtk responds with 'success' as it first cmove rsp
           //which is retarded and, I think, wrong.  However, dcm4chee responds with 'pending'
@@ -710,7 +709,8 @@ EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnecti
           }
           if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success){
             //check for other error fields
-            const ByteValue *err1 = nullptr, *err2 = nullptr;
+            const ByteValue *err1 = nullptr;
+            const ByteValue *err2 = nullptr;
             gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
             switch (theVal){
               case 0xA701:
@@ -966,11 +966,10 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
             //if (theState == eSta6TransferReady){//ie, finished the transitions
               //with find, the results now come down the wire.
               //the pdu we already have from the event will tell us how many to expect.
-              uint32_t pendingDE1, pendingDE2, success, theVal;
-              pendingDE1 = 0xff01;
-              pendingDE2 = 0xff00;
-              success = 0x0000;
-              theVal = pendingDE1;
+              uint32_t pendingDE1 = 0xff01;
+              uint32_t pendingDE2 = 0xff00;
+              uint32_t success = 0x0000;
+              uint32_t theVal = pendingDE1;
               uint32_t theCommandCode = 0;//for now, a nothing value
               DataSet theRSP =
                 PresentationDataValue::ConcatenatePDVBlobs(
@@ -1009,7 +1008,8 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
               if (theVal != pendingDE1 && theVal != pendingDE2 && theVal != success)
                 {
                 //check for other error fields
-                const ByteValue *err1 = nullptr, *err2 = nullptr;
+                const ByteValue *err1 = nullptr;
+                const ByteValue *err2 = nullptr;
                 gdcmErrorMacro( "Transfer failed with code " << theVal << std::endl);
                 switch (theVal){
                   case 0xA701:

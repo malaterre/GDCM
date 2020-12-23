@@ -547,7 +547,8 @@ bool JPEGCodec::DecodeExtent(
     std::vector<char> buffer1;
     buffer1.resize( rowsize*bytesPerPixel );
     char *tmpBuffer1 = &buffer1[0];
-    unsigned int y, z;
+    unsigned int y;
+    unsigned int z;
     std::streamoff theOffset;
     for (z = zmin; z <= zmax; ++z)
       {

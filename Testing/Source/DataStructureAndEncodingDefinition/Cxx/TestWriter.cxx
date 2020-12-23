@@ -66,7 +66,8 @@ int TestWrite(const char *subdir, const char* filename, bool recursing, bool ver
     }
 
   // Ok we have now two files let's compare their md5 sum:
-  char digest[33], outdigest[33];
+  char digest[33];
+  char outdigest[33];
   Testing::ComputeFileMD5(filename, digest);
   Testing::ComputeFileMD5(outfilename.c_str(), outdigest);
   if( strcmp(digest, outdigest) )
@@ -131,7 +132,8 @@ int TestWriter(int argc, char *argv[])
     }
 
   // else
-  int r = 0, i = 0;
+  int r = 0;
+  int i = 0;
   gdcm::Trace::DebugOff();
   gdcm::Trace::WarningOff();
   const char *filename;

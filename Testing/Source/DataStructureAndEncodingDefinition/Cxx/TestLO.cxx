@@ -20,7 +20,9 @@ int TestLO(int , char *[])
   if( !lo.IsValid() ) return 1;
 
   const char str[] = "this is LO1 \\this is LO2 \\ this is LO 3 ";
-  gdcm::LO lo1, lo2, lo3;
+  gdcm::LO lo1;
+  gdcm::LO lo2;
+  gdcm::LO lo3;
   std::stringstream ss;
   ss << str;
   ss >> lo1;

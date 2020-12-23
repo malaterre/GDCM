@@ -75,11 +75,11 @@ struct fnv_hash
   static uint64_t
   hash(const char* pBuffer, size_t nByteLen)
     {
-    uint64_t nHashVal    = FNV1_64_INIT,
-             nMagicPrime = 0x00000100000001b3ULL;
+    uint64_t nHashVal    = FNV1_64_INIT;
+    uint64_t nMagicPrime = 0x00000100000001b3ULL;
 
-    const unsigned char* pFirst = ( const unsigned char* )( pBuffer ),
-                       * pLast  = pFirst + nByteLen;
+    const unsigned char * pFirst = ( const unsigned char* )( pBuffer );
+    const unsigned char * pLast  = pFirst + nByteLen;
 
     while( pFirst < pLast )
       {

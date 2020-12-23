@@ -189,7 +189,8 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
 
   void Block::shrink()
     {
-    int i,j;
+    int i;
+    int j;
     for(j=0; j<NUM_DIMENSIONS; j++)
       {
       minCorner.x[j] = maxCorner.x[j] = points[0].x[j];
@@ -250,7 +251,8 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
       case 2: std::nth_element(begin, median, end, CoordinatePointComparator<2>()); break;
         }
 
-      Block block1(begin, median-begin), block2(median, end-median);
+      Block block1(begin, median-begin);
+      Block block2(median, end-median);
       block1.shrink();
       block2.shrink();
 
@@ -681,7 +683,9 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
         auto *ybr = (unsigned char*)&tempvbuf[0];
         unsigned char *ybr_out = ybr;
         unsigned char *ybr_end = ybr + vbuffer2.size();
-        int R, G, B;
+        int R;
+        int G;
+        int B;
         for( ; ybr != ybr_end; )
           {
           auto a = (unsigned char)(*ybr); ++ybr;
@@ -728,7 +732,9 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
 
         auto *ybr_out = (unsigned char*)&tempvbuf[0];
         unsigned char *ybr_out_end = ybr_out + vbuffer2.size();
-        int R, G, B;
+        int R;
+        int G;
+        int B;
         for( ; ybr_out != ybr_out_end; )
           {
           auto a = (unsigned char)(*ybra); ++ybra;

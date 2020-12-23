@@ -141,7 +141,8 @@ bool StreamImageReader::ReadImageSubregionRAW(char* inReadBuffer, const std::siz
   //assumes that the file is organized in row-major format, with each row rastering across
   assert( mFileOffset != -1 );
   (void)inBufferLength;
-  int y, z;
+  int y;
+  int z;
   std::streamoff theOffset;
 
   //need to get the pixel size information

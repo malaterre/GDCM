@@ -1042,7 +1042,8 @@ opj_image_t* rawtoimage(const char *inputbuffer8, opj_cparameters_t *parameters,
 {
   (void)quality;
   (void)fragment_size;
-  int w, h;
+  int w;
+  int h;
   int numcomps;
   OPJ_COLOR_SPACE color_space;
   opj_image_cmptparm_t cmptparm[3]; /* maximum of 3 components */

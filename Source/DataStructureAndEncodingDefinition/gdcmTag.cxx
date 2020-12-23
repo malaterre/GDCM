@@ -20,7 +20,8 @@ namespace gdcm
 {
   bool Tag::ReadFromCommaSeparatedString(const char *str)
     {
-    unsigned int group = 0, element = 0;
+    unsigned int group = 0;
+    unsigned int element = 0;
     if( !str || sscanf(str, "%04x,%04x", &group , &element) != 2 )
       {
       gdcmDebugMacro( "Problem reading Tag: " << str );
@@ -32,7 +33,8 @@ namespace gdcm
     }
   bool Tag::ReadFromContinuousString(const char *str)
     {
-    unsigned int group = 0, element = 0;
+    unsigned int group = 0;
+    unsigned int element = 0;
     if( !str || sscanf(str, "%04x%04x", &group , &element) != 2 )
       {
       gdcmDebugMacro( "Problem reading Tag: " << str );
@@ -44,7 +46,8 @@ namespace gdcm
     }  
   bool Tag::ReadFromPipeSeparatedString(const char *str)
     {
-    unsigned int group = 0, element = 0;
+    unsigned int group = 0;
+    unsigned int element = 0;
     if( !str || sscanf(str, "%04x|%04x", &group , &element) != 2 )
       {
       gdcmDebugMacro( "Problem reading Tag: " << str );

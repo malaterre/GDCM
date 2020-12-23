@@ -23,7 +23,9 @@ bool Unpacker12Bits::Unpack(char *out, const char *in, size_t n)
   auto *q = (short*)(void*)out;
   const auto *p = (const unsigned char*)in;
   const unsigned char *end = p+n;
-  unsigned char b0,b1,b2;
+  unsigned char b0;
+  unsigned char b1;
+  unsigned char b2;
 
   while (p!=end)
     {
@@ -42,7 +44,8 @@ bool Unpacker12Bits::Pack(char *out, const char *in, size_t n)
   auto *q = (unsigned char*)out;
   const auto *p = (const unsigned short*)(const void*)in;
   const auto *end = (const unsigned short*)(const void*)(in+n);
-  unsigned short b0,b1;
+  unsigned short b0;
+  unsigned short b1;
 
   while(p!=end)
     {

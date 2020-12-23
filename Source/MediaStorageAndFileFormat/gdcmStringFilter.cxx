@@ -141,8 +141,12 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
   const char delim[] = "/";
   const char subdelim[] = "[]@='";
 
-  char *str1, *str2, *token, *subtoken;
-  char *saveptr1= nullptr, *saveptr2;
+  char *str1;
+  char *str2;
+  char *token;
+  char *subtoken;
+  char *saveptr1= nullptr;
+  char *saveptr2;
   int j;
 
   //bool dicomnativemodel = false;//unused

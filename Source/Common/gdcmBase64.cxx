@@ -104,7 +104,8 @@ static std::string base64_decode(std::string const& encoded_string)
   size_t i = 0;
   size_t j = 0;
   size_t in_ = 0;
-  unsigned char char_array_4[4], char_array_3[3];
+  unsigned char char_array_4[4];
+  unsigned char char_array_3[3];
   std::string ret;
 
   while (in_len-- && ( encoded_string[in_] != '=') && is_base64(encoded_string[in_])) {
