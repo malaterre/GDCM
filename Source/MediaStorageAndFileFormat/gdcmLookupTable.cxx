@@ -300,7 +300,7 @@ inline void printrgb( const unsigned char *rgb )
   std::cout << int(rgb[0]) << "," << int(rgb[1]) << "," << int(rgb[2]);
 }
 
-void LookupTable::Encode(std::istream &is, std::ostream &os)
+void LookupTable::Encode(std::istream &is, std::ostream &os) const
 {
   if ( BitSample == 8 )
     {
