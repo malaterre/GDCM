@@ -89,7 +89,7 @@ protected:
   void AddFileName(std::string const &filename);
   bool AddFile(FileWithName &header);
   void AddRestriction(const Tag& tag);
-  bool ImagePositionPatientOrdering(FileList *fileList);
+  bool ImagePositionPatientOrdering(FileList *fileList) const;
   bool ImageNumberOrdering( FileList *fileList );
   bool FileNameOrdering( FileList *fileList );
 

@@ -71,8 +71,8 @@ protected:
   bool TryJPEGCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output);
   bool TryJPEG2000Codec(const DataElement &pixelde, Bitmap const &input, Bitmap &output);
   bool TryJPEGLSCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output);
-  bool TryRAWCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output);
-  bool TryRLECodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output);
+  bool TryRAWCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output) const;
+  bool TryRLECodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output) const;
 
 private:
   TransferSyntax TS;

@@ -305,7 +305,7 @@ bool SerieHelper::ImageNumberOrdering( FileList *fileList )
   return false;
 }
 
-bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList )
+bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList ) const
 {
   //iop is calculated based on the file file
   std::vector<double> cosines;

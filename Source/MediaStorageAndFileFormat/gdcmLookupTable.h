@@ -104,7 +104,7 @@ public:
 
 private:
   /// Unfinished work
-  void Encode(std::istream &is, std::ostream &os);
+  void Encode(std::istream &is, std::ostream &os) const;
 
 protected:
   LookupTableInternal *Internal;

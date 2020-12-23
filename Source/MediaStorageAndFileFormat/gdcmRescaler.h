@@ -107,7 +107,7 @@ public:
 
   /// Compute the Pixel Format of the output data
   /// Used for inverse transformation
-  PixelFormat ComputePixelTypeFromMinMax();
+  PixelFormat ComputePixelTypeFromMinMax() const;
 
 protected:
   template <typename TIn>

@@ -526,7 +526,7 @@ void Rescaler::SetMinMaxForPixelType(double min, double max)
   }
 }
 
-PixelFormat Rescaler::ComputePixelTypeFromMinMax()
+PixelFormat Rescaler::ComputePixelTypeFromMinMax() const
 {
   assert( PF != PixelFormat::UNKNOWN );
   const double intercept = Intercept;

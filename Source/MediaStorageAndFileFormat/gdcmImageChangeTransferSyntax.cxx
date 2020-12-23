@@ -78,7 +78,7 @@ void UpdatePhotometricInterpretation( Bitmap const &input, Bitmap &output )
     || output.GetPhotometricInterpretation() == PhotometricInterpretation::PALETTE_COLOR ); // programmer error
 }
 
-bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output)
+bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output) const
 {
   unsigned long len = input.GetBufferLength(); (void)len;
   //assert( len == pixelde.GetByteValue()->GetLength() );
@@ -108,7 +108,7 @@ bool ImageChangeTransferSyntax::TryRAWCodec(const DataElement &pixelde, Bitmap c
   return false;
 }
 
-bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output)
+bool ImageChangeTransferSyntax::TryRLECodec(const DataElement &pixelde, Bitmap const &input, Bitmap &output) const
 {
   unsigned long len = input.GetBufferLength(); (void)len;
   //assert( len == pixelde.GetByteValue()->GetLength() );
