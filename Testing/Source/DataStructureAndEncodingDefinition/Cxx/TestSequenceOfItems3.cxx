@@ -26,7 +26,7 @@ int TestSequenceOfItems3Func(const char * filename, bool verbose = false)
     }
   gdcm::DataSet const& ds = r.GetFile().GetDataSet();
 
-  gdcm::DataSet::ConstIterator it = ds.Begin();
+  auto it = ds.Begin();
   for( ; it != ds.End(); ++it)
     {
     const gdcm::DataElement &de = *it;

@@ -420,7 +420,7 @@ void XMLPrinter::PrintSQ(const SequenceOfItems *sqi, const TransferSyntax & ts, 
   
   int noItems = 1;
 
-  SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
+  auto it = sqi->Items.begin();
   for(; it != sqi->Items.end(); ++it)
     {
     const Item &item = *it;
@@ -467,7 +467,7 @@ void XMLPrinter::PrintDataSet(const DataSet &ds, const TransferSyntax & ts, std:
   const Dicts &dicts = g.GetDicts();
   const Dict &d = dicts.GetPublicDict(); (void)d;
 
-  DataSet::ConstIterator it = ds.Begin();
+  auto it = ds.Begin();
   UUIDGenerator UIDgen;
   
   for( ; it != ds.End(); ++it )

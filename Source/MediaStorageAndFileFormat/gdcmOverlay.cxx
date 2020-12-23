@@ -266,17 +266,17 @@ bool Overlay::GrabOverlayFromPixelData(DataSet const &ds)
       }
     const char *array = bv->GetPointer();
     const unsigned int length = ovlength * 8 * 1; //bv->GetLength();
-    const uint8_t *p = (const uint8_t*)(const void*)array;
-    const uint8_t *end = (const uint8_t*)(const void*)(array + length);
+    const auto *p = (const uint8_t*)(const void*)array;
+    const auto *end = (const uint8_t*)(const void*)(array + length);
     assert( 8 * ovlength == (unsigned int)Internal->Rows * Internal->Columns );
     if( Internal->Data.empty() )
       {
       gdcmWarningMacro("Internal Data is empty." );
       return false;
       }
-    unsigned char * overlay = (unsigned char*)&Internal->Data[0];
+    auto * overlay = (unsigned char*)&Internal->Data[0];
     int c = 0;
-    uint8_t pmask = (uint8_t)(1 << Internal->BitPosition);
+    auto pmask = (uint8_t)(1 << Internal->BitPosition);
     assert( length / 1 == ovlength * 8 );
     while( p != end )
       {
@@ -317,8 +317,8 @@ bool Overlay::GrabOverlayFromPixelData(DataSet const &ds)
     // SIEMENS_GBS_III-16-ACR_NEMA_1.acr is pain to support,
     // I cannot simply use the bv->GetLength I have to use the image dim:
     const unsigned int length = ovlength * 8 * 2; //bv->GetLength();
-    const uint16_t *p = (const uint16_t*)(const void*)array;
-    const uint16_t *end = (const uint16_t*)(const void*)(array + length);
+    const auto *p = (const uint16_t*)(const void*)array;
+    const auto *end = (const uint16_t*)(const void*)(array + length);
     //const unsigned int ovlength = length / (8*2);
     assert( 8 * ovlength == (unsigned int)Internal->Rows * Internal->Columns );
     if( Internal->Data.empty() )
@@ -326,9 +326,9 @@ bool Overlay::GrabOverlayFromPixelData(DataSet const &ds)
       gdcmWarningMacro("Internal Data is empty." );
       return false;
       }
-    unsigned char * overlay = (unsigned char*)&Internal->Data[0];
+    auto * overlay = (unsigned char*)&Internal->Data[0];
     int c = 0;
-    uint16_t pmask = (uint16_t)(1 << Internal->BitPosition);
+    auto pmask = (uint16_t)(1 << Internal->BitPosition);
     assert( length / 2 == ovlength * 8 );
     while( p != end )
       {
@@ -494,14 +494,14 @@ bool Overlay::GetUnpackBuffer(char *buffer, size_t len) const
 {
   const size_t unpacklen = GetUnpackBufferLength();
   if( len < unpacklen ) return false;
-  unsigned char *unpackedbytes = (unsigned char*)buffer;
+  auto *unpackedbytes = (unsigned char*)buffer;
   const unsigned char *begin = unpackedbytes;
   for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
     {
     assert( unpackedbytes <= begin + len ); // We never store more than actually required
     // const unsigned char &packedbytes = *it;
     // weird bug with gcc 3.3 (prerelease on SuSE) apparently:
-    unsigned char packedbytes = static_cast<unsigned char>(*it);
+    auto packedbytes = static_cast<unsigned char>(*it);
     unsigned char mask = 1;
     for (unsigned int i = 0; i < 8 && unpackedbytes < begin + len; ++i)
       {

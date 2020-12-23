@@ -209,11 +209,11 @@ Retrieved from: http://en.literateprograms.org/Median_cut_algorithm_(C_Plus_Plus
     {
     assert( numPoints > 0 );
     //Point* Points = (Point*)malloc(sizeof(Point) * numPoints);
-    Point* Points = new Point[numPoints];
+    auto* Points = new Point[numPoints];
     assert( Points );
     const ByteValue *bv = PixelData.GetByteValue();
     assert( bv );
-    const unsigned char *inbuffer = (const unsigned char*)bv->GetPointer();
+    const auto *inbuffer = (const unsigned char*)bv->GetPointer();
     assert( inbuffer );
     size_t bvlen = bv->GetLength(); (void)bvlen;
     assert( bvlen == (size_t) numPoints * 3 ); // only 8bits RGB please
@@ -382,7 +382,7 @@ template <typename TPixelType>
 void ComputeMinMax( const TPixelType *p, size_t npixels , double & min, double &max, double discardvalue)
 {
   assert( npixels );
-  const TPixelType discard = (TPixelType)discardvalue;
+  const auto discard = (TPixelType)discardvalue;
   assert( (double)discard == discardvalue );
   TPixelType lmin = std::numeric_limits< TPixelType>::max();
   TPixelType lmax = std::numeric_limits< TPixelType>::min();
@@ -678,15 +678,15 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
       assert( I->GetPixelFormat() == PixelFormat::UINT8 );
       if( P->GetPlanarConfiguration() == 0 )
         {
-        unsigned char *ybr = (unsigned char*)&tempvbuf[0];
+        auto *ybr = (unsigned char*)&tempvbuf[0];
         unsigned char *ybr_out = ybr;
         unsigned char *ybr_end = ybr + vbuffer2.size();
         int R, G, B;
         for( ; ybr != ybr_end; )
           {
-          unsigned char a = (unsigned char)(*ybr); ++ybr;
-          unsigned char b = (unsigned char)(*ybr); ++ybr;
-          unsigned char c = (unsigned char)(*ybr); ++ybr;
+          auto a = (unsigned char)(*ybr); ++ybr;
+          auto b = (unsigned char)(*ybr); ++ybr;
+          auto c = (unsigned char)(*ybr); ++ybr;
 
           R = 38142 *(a-16) + 52298 *(c -128);
           G = 38142 *(a-16) - 26640 *(c -128) - 12845 *(b -128);
@@ -718,7 +718,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
         {
         std::string tempvbufybr = tempvbuf;
 
-        unsigned char *ybr = (unsigned char*)&tempvbufybr[0];
+        auto *ybr = (unsigned char*)&tempvbufybr[0];
         unsigned char *ybr_end = ybr + vbuffer2.size();
         assert( vbuffer2.size() % 3 == 0 );
         size_t ybrl = vbuffer2.size() / 3;
@@ -726,14 +726,14 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
         unsigned char *ybrb = ybr + 1 * ybrl;
         unsigned char *ybrc = ybr + 2 * ybrl;
 
-        unsigned char *ybr_out = (unsigned char*)&tempvbuf[0];
+        auto *ybr_out = (unsigned char*)&tempvbuf[0];
         unsigned char *ybr_out_end = ybr_out + vbuffer2.size();
         int R, G, B;
         for( ; ybr_out != ybr_out_end; )
           {
-          unsigned char a = (unsigned char)(*ybra); ++ybra;
-          unsigned char b = (unsigned char)(*ybrb); ++ybrb;
-          unsigned char c = (unsigned char)(*ybrc); ++ybrc;
+          auto a = (unsigned char)(*ybra); ++ybra;
+          auto b = (unsigned char)(*ybrb); ++ybrb;
+          auto c = (unsigned char)(*ybrc); ++ybrc;
 
           R = 38142 *(a-16) + 52298 *(c -128);
           G = 38142 *(a-16) - 26640 *(c -128) - 12845 *(b -128);
@@ -766,7 +766,7 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
         assert( I->GetPixelFormat() == PixelFormat::UINT8 );
         std::string tempvbufrgb = tempvbuf;
 
-        unsigned char *rgb = (unsigned char*)&tempvbufrgb[0];
+        auto *rgb = (unsigned char*)&tempvbufrgb[0];
         unsigned char *rgb_end = rgb + vbuffer2.size();
         assert( vbuffer2.size() % 3 == 0 );
         size_t rgbl = vbuffer2.size() / 3;
@@ -774,13 +774,13 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
         unsigned char *rgbb = rgb + 1 * rgbl;
         unsigned char *rgbc = rgb + 2 * rgbl;
 
-        unsigned char *rgb_out = (unsigned char*)&tempvbuf[0];
+        auto *rgb_out = (unsigned char*)&tempvbuf[0];
         unsigned char *rgb_out_end = rgb_out + vbuffer2.size();
         for( ; rgb_out != rgb_out_end; )
           {
-          unsigned char a = (unsigned char)(*rgba); ++rgba;
-          unsigned char b = (unsigned char)(*rgbb); ++rgbb;
-          unsigned char c = (unsigned char)(*rgbc); ++rgbc;
+          auto a = (unsigned char)(*rgba); ++rgba;
+          auto b = (unsigned char)(*rgbb); ++rgbb;
+          auto c = (unsigned char)(*rgbc); ++rgbc;
 
           *rgb_out = a; ++rgb_out;
           *rgb_out = b; ++rgb_out;
@@ -877,8 +877,8 @@ f. If a Palette Color lookup Table is used, an 8 Bit Allocated (0028,0100) shall
     // - Read the value from window/level to get better min,max value
     // - iterate over all possible value to find the min,max as we are looping
     // over all values anyway
-    double min = (double)oripf.GetMin();
-    double max = (double)oripf.GetMax();
+    auto min = (double)oripf.GetMin();
+    auto max = (double)oripf.GetMax();
     if( Internals->UseMinMax )
       {
       min = Internals->Min;

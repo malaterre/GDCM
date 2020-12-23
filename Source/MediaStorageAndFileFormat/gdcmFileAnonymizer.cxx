@@ -151,7 +151,7 @@ bool FileAnonymizer::ComputeReplaceTagPosition()
   assert( filename );
   const bool inplace = file_exist(Internals->OutputFilename.c_str());
 
-  std::map<Tag, std::string>::reverse_iterator rit = Internals->ReplaceTags.rbegin();
+  auto rit = Internals->ReplaceTags.rbegin();
   for ( ; rit != Internals->ReplaceTags.rend(); rit++ )
     {
     PositionEmpty pe;
@@ -245,7 +245,7 @@ bool FileAnonymizer::ComputeRemoveTagPosition()
     return false;
     }
 
-  std::set<Tag>::reverse_iterator rit = Internals->RemoveTags.rbegin();
+  auto rit = Internals->RemoveTags.rbegin();
   for ( ; rit != Internals->RemoveTags.rend(); rit++ )
     {
     PositionEmpty pe;
@@ -330,7 +330,7 @@ bool FileAnonymizer::ComputeEmptyTagPosition()
     return false;
     }
 
-  std::set<Tag>::reverse_iterator rit = Internals->EmptyTags.rbegin();
+  auto rit = Internals->EmptyTags.rbegin();
   for ( ; rit != Internals->EmptyTags.rend(); rit++ )
     {
     PositionEmpty pe;

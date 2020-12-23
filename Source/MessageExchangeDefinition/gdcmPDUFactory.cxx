@@ -83,22 +83,22 @@ EEventID PDUFactory::DetermineEventByPDU(const BasePDU* inPDU)
 {
   if(inPDU)
     {
-    const AAssociateRQPDU* theAAssociateRQPDU = dynamic_cast<const AAssociateRQPDU*>(inPDU);
+    const auto* theAAssociateRQPDU = dynamic_cast<const AAssociateRQPDU*>(inPDU);
     if (theAAssociateRQPDU != nullptr)
       {
       return eAASSOCIATE_RQPDUreceived;
       }
-    const AAssociateACPDU* theAAssociateACPDU = dynamic_cast<const AAssociateACPDU*>(inPDU);
+    const auto* theAAssociateACPDU = dynamic_cast<const AAssociateACPDU*>(inPDU);
     if (theAAssociateACPDU != nullptr)
       {
       return eASSOCIATE_ACPDUreceived;
       }
-    const AAssociateRJPDU* theAAssociateRJPDU = dynamic_cast<const AAssociateRJPDU*>(inPDU);
+    const auto* theAAssociateRJPDU = dynamic_cast<const AAssociateRJPDU*>(inPDU);
     if (theAAssociateRJPDU != nullptr)
       {
       return eASSOCIATE_RJPDUreceived;
       }
-    const PDataTFPDU* thePDataTFPDU = dynamic_cast<const PDataTFPDU*>(inPDU);
+    const auto* thePDataTFPDU = dynamic_cast<const PDataTFPDU*>(inPDU);
     if (thePDataTFPDU != nullptr)
       {
       ///
@@ -116,17 +116,17 @@ EEventID PDUFactory::DetermineEventByPDU(const BasePDU* inPDU)
 #endif
       return ePDATATFPDU;
       }
-    const AReleaseRQPDU* theAReleaseRQPDU = dynamic_cast<const AReleaseRQPDU*>(inPDU);
+    const auto* theAReleaseRQPDU = dynamic_cast<const AReleaseRQPDU*>(inPDU);
     if (theAReleaseRQPDU != nullptr)
       {
       return eARELEASE_RQPDUReceivedOpen;
       }
-    const AReleaseRPPDU* theAReleaseRPPDU = dynamic_cast<const AReleaseRPPDU*>(inPDU);
+    const auto* theAReleaseRPPDU = dynamic_cast<const AReleaseRPPDU*>(inPDU);
     if (theAReleaseRPPDU != nullptr)
       {
       return eARELEASE_RPPDUReceived;
       }
-    const AAbortPDU* theAAbortPDU = dynamic_cast<const AAbortPDU*>(inPDU);
+    const auto* theAAbortPDU = dynamic_cast<const AAbortPDU*>(inPDU);
     if (theAAbortPDU != nullptr)
       {
       return eAABORTPDUReceivedOpen;
@@ -137,13 +137,13 @@ EEventID PDUFactory::DetermineEventByPDU(const BasePDU* inPDU)
 
 BasePDU* PDUFactory::ConstructReleasePDU()
 {
-  AReleaseRQPDU* theAReleaseRQPDU = new AReleaseRQPDU();
+  auto* theAReleaseRQPDU = new AReleaseRQPDU();
 
   return theAReleaseRQPDU;
 }
 BasePDU* PDUFactory::ConstructAbortPDU()
 {
-  AAbortPDU* theAAbortPDU = new AAbortPDU();
+  auto* theAAbortPDU = new AAbortPDU();
 
   return theAAbortPDU;
 }
@@ -155,7 +155,7 @@ std::vector<BasePDU*> PDUFactory::CreateCEchoPDU(const ULConnection& inConnectio
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++)
     {
-    PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+    auto* thePDataTFPDU = new PDataTFPDU();
     thePDataTFPDU->AddPresentationDataValue( *pdvItor );
     outVector.push_back(thePDataTFPDU);
     }
@@ -171,7 +171,7 @@ std::vector<BasePDU*> PDUFactory::CreateCMovePDU(const ULConnection&
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++)
     {
-    PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+    auto* thePDataTFPDU = new PDataTFPDU();
     thePDataTFPDU->AddPresentationDataValue( *pdvItor );
     outVector.push_back(thePDataTFPDU);
     }
@@ -187,7 +187,7 @@ std::vector<BasePDU*> PDUFactory::CreateCStoreRQPDU(const ULConnection& inConnec
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++)
     {
-    PDataTFPDU* thePDataTFPDU = new PDataTFPDU;
+    auto* thePDataTFPDU = new PDataTFPDU;
     thePDataTFPDU->AddPresentationDataValue( *pdvItor );
     outVector.push_back(thePDataTFPDU);
     }
@@ -203,7 +203,7 @@ std::vector<BasePDU*> PDUFactory::CreateCStoreRSPPDU(const DataSet* inDataSet,
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++)
     {
-    PDataTFPDU* thePDataTFPDU = new PDataTFPDU;
+    auto* thePDataTFPDU = new PDataTFPDU;
     thePDataTFPDU->AddPresentationDataValue( *pdvItor );
     outVector.push_back(thePDataTFPDU);
     }
@@ -220,7 +220,7 @@ std::vector<BasePDU*> PDUFactory::CreateCFindPDU(const ULConnection& inConnectio
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++)
     {
-    PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+    auto* thePDataTFPDU = new PDataTFPDU();
     thePDataTFPDU->AddPresentationDataValue( *pdvItor );
     outVector.push_back(thePDataTFPDU);
     }
@@ -238,7 +238,7 @@ std::vector<BasePDU*> PDUFactory::CreateNEventReportPDU		(const ULConnection& in
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++)
     {
-    PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+    auto* thePDataTFPDU = new PDataTFPDU();
     thePDataTFPDU->AddPresentationDataValue( *pdvItor );
     outVector.push_back(thePDataTFPDU);
     }
@@ -255,7 +255,7 @@ std::vector<BasePDU*> PDUFactory::CreateNGetPDU				(const ULConnection& inConnec
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++)
     {
-    PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+    auto* thePDataTFPDU = new PDataTFPDU();
     thePDataTFPDU->AddPresentationDataValue( *pdvItor );
     outVector.push_back(thePDataTFPDU);
     }
@@ -272,7 +272,7 @@ std::vector<BasePDU*> PDUFactory::CreateNSetPDU				(const ULConnection& inConnec
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++)
     {
-    PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+    auto* thePDataTFPDU = new PDataTFPDU();
     thePDataTFPDU->AddPresentationDataValue( *pdvItor );
     outVector.push_back(thePDataTFPDU);
     }
@@ -289,7 +289,7 @@ std::vector<BasePDU*> PDUFactory::CreateNActionPDU			(const ULConnection& inConn
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++)
     {
-    PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+    auto* thePDataTFPDU = new PDataTFPDU();
     thePDataTFPDU->AddPresentationDataValue( *pdvItor );
     outVector.push_back(thePDataTFPDU);
     }
@@ -306,7 +306,7 @@ std::vector<BasePDU*> PDUFactory::CreateNCreatePDU			(const ULConnection& inConn
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++)
     {
-    PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+    auto* thePDataTFPDU = new PDataTFPDU();
     thePDataTFPDU->AddPresentationDataValue( *pdvItor );
     outVector.push_back(thePDataTFPDU);
     }
@@ -323,7 +323,7 @@ std::vector<BasePDU*> PDUFactory::CreateNDeletePDU			(const ULConnection& inConn
   std::vector<BasePDU*> outVector;
   for (pdvItor = pdv.begin(); pdvItor < pdv.end(); pdvItor++)
     {
-    PDataTFPDU* thePDataTFPDU = new PDataTFPDU();
+    auto* thePDataTFPDU = new PDataTFPDU();
     thePDataTFPDU->AddPresentationDataValue( *pdvItor );
     outVector.push_back(thePDataTFPDU);
     }
@@ -342,7 +342,7 @@ std::vector<PresentationDataValue> PDUFactory::GetPDVs(const std::vector<BasePDU
   std::vector<PresentationDataValue> outPDVs;
   for (itor = inDataPDUs.begin(); itor < inDataPDUs.end(); itor++)
     {
-    PDataTFPDU* thePDataTFPDU = dynamic_cast<PDataTFPDU*>(*itor);
+    auto* thePDataTFPDU = dynamic_cast<PDataTFPDU*>(*itor);
     if (thePDataTFPDU == nullptr)
       {
       assert(0); //shouldn't really get here.

@@ -192,7 +192,7 @@ bool ImageWriter::Write()
     {
     const char *modality = ms.GetModality();
     DataElement de( Tag(0x0008, 0x0060 ) );
-    VL::Type strlenModality = (VL::Type)strlen(modality);
+    auto strlenModality = (VL::Type)strlen(modality);
     de.SetByteValue( modality, strlenModality );
     de.SetVR( Attribute<0x0008, 0x0060>::GetVR() );
     ds.Insert( de );
@@ -231,7 +231,7 @@ bool ImageWriter::Write()
       // (0008,0064) CS [SI]                                     #   2, 1 ConversionType
       const char conversion[] = "WSD "; // FIXME
       DataElement de( Tag(0x0008, 0x0064 ) );
-      VL::Type strlenConversion = (VL::Type)strlen(conversion);
+      auto strlenConversion = (VL::Type)strlen(conversion);
       de.SetByteValue( conversion, strlenConversion );
       de.SetVR( Attribute<0x0008, 0x0064>::GetVR() );
       ds.Insert( de );
@@ -378,7 +378,7 @@ Attribute<0x0028,0x0004> piat;
 {
     const char *pistr = PhotometricInterpretation::GetPIString(pi);
     DataElement de( Tag(0x0028, 0x0004 ) );
-    VL::Type strlenPistr = (VL::Type)strlen(pistr);
+    auto strlenPistr = (VL::Type)strlen(pistr);
     de.SetByteValue( pistr, strlenPistr );
     de.SetVR( piat.GetVR() );
     ds.Replace( de );

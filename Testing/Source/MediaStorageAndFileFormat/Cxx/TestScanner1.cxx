@@ -112,7 +112,7 @@ int TestScanner1(int argc, char *argv[])
     }
 
   int numerrors = 0;
-  for( gdcm::Directory::FilenamesType::const_iterator it = files.begin(); it != files.end(); ++it )
+  for( auto it = files.begin(); it != files.end(); ++it )
     {
     const char *filename = it->c_str();
     const char* value = s.GetValue(filename, t7);
@@ -162,7 +162,7 @@ int TestScanner1(int argc, char *argv[])
   const char *filename = sfilename.c_str();
   // The following breaks with Papyrus file: PET-cardio-Multiframe-Papyrus.dcm
   unsigned int i = 0;
-  gdcm::Scanner::MappingType::const_iterator it = mt.find(filename);
+  auto it = mt.find(filename);
   assert( it != mt.end() );
   while( it == mt.end() )
     {
@@ -177,7 +177,7 @@ int TestScanner1(int argc, char *argv[])
   std::cout << "Mapping for " << filename << " is :" << std::endl;
   const gdcm::Scanner::TagToValue &tv = it->second;
   //const std::string &filename = d.GetFilenames()[0];
-  gdcm::Scanner::TagToValue::const_iterator it2 = tv.find( t5 );
+  auto it2 = tv.find( t5 );
   if( it2 == tv.end() || t5 != it2->first )
     {
     std::cerr << "Could not find tag:" << t5 << std::endl;
@@ -189,7 +189,7 @@ int TestScanner1(int argc, char *argv[])
 
   const gdcm::Directory::FilenamesType &filenames = d.GetFilenames();
 {
-  gdcm::Directory::FilenamesType::const_iterator it = filenames.begin();
+  auto it = filenames.begin();
   for(; it != filenames.end(); ++it)
     {
     const char *filename = it->c_str();

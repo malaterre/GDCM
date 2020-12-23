@@ -28,7 +28,7 @@ int TestSimplePrint(const char *filename, bool verbose = false)
   gdcm::DataSet const& ds = r.GetFile().GetDataSet();
 
   int ret = 0;
-  gdcm::DataSet::ConstIterator it = ds.Begin();
+  auto it = ds.Begin();
   std::ostringstream os;
   for( ; it != ds.End(); ++it)
     {

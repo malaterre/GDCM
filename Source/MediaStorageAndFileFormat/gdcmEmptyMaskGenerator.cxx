@@ -60,7 +60,7 @@ const Tag EmptyMaskGenerator::impl::TFrameOfReferenceUID = Tag(0x0020,0x0052);
 bool EmptyMaskGenerator::impl::collectuids( Tag const & tag, std::map< std::string, std::string > & hash)
 {
   Scanner::ValuesType vt = s.GetValues(tag);
-  for( Scanner::ValuesType::const_iterator it = vt.begin();
+  for( auto it = vt.begin();
     it != vt.end(); ++it )
     {
     const char * newuid = uid.Generate();
@@ -212,7 +212,7 @@ bool EmptyMaskGenerator::impl::populateattributes( const char * filename, File c
   const char * oldseriesuid = s.GetValue (filename, TSeriesInstanceUID);
   if( oldseriesuid )
     {
-    std::map< std::string, std::string >::iterator it =
+    auto it =
       seriesuidhash.find( oldseriesuid );
     seriesinstanceuid.SetValue( it->second.c_str() );
     std::map< std::string, std::string >::difference_type diff =
@@ -382,7 +382,7 @@ bool EmptyMaskGenerator::impl::run(const char * filename, const char * outfile)
     {
     const unsigned int chunk = 4096u;
     char bytes[chunk] = {};
-    const unsigned int nchunks = (unsigned int)( buflen / chunk);
+    const auto nchunks = (unsigned int)( buflen / chunk);
     const unsigned int remain = buflen % chunk;
     for( unsigned int i = 0; i < nchunks; ++i )
       {
@@ -438,7 +438,7 @@ bool EmptyMaskGenerator::Execute()
     }
   bool success = true;
   Directory::FilenamesType const & filenames = pimpl->s.GetFilenames();
-  for( Directory::FilenamesType::const_iterator it =  filenames.begin(); it != filenames.end(); ++it )
+  for( auto it =  filenames.begin(); it != filenames.end(); ++it )
     {
     const char * filename = it->c_str();
     Filename fn( filename );

@@ -171,8 +171,8 @@ void LookupTable::SetLUT(LookupTableType type, const unsigned char *array,
   else if( BitSample == 16 )
     {
     assert( Internal->Length[type]*(BitSample/8) == length );
-    uint16_t *uchar16 = (uint16_t*)(void*)&Internal->RGB[0];
-    const uint16_t *array16 = (const uint16_t*)(const void*)array;
+    auto *uchar16 = (uint16_t*)(void*)&Internal->RGB[0];
+    const auto *array16 = (const uint16_t*)(const void*)array;
     for( unsigned int i = 0; i < Internal->Length[type]; ++i)
       {
       assert( 2*i < length );
@@ -203,8 +203,8 @@ void LookupTable::GetLUT(LookupTableType type, unsigned char *array, unsigned in
   else if( BitSample == 16 )
     {
     length = Internal->Length[type]*(BitSample/8);
-    uint16_t *uchar16 = (uint16_t*)(void*)&Internal->RGB[0];
-    uint16_t *array16 = (uint16_t*)(void*)array;
+    auto *uchar16 = (uint16_t*)(void*)&Internal->RGB[0];
+    auto *array16 = (uint16_t*)(void*)array;
     for( unsigned int i = 0; i < Internal->Length[type]; ++i)
       {
       assert( 2*i < length );
@@ -513,8 +513,8 @@ bool LookupTable::Decode(char *output, size_t outlen, const char *input, size_t 
   if ( BitSample == 8 )
     {
     const unsigned char * end = (const unsigned char*)input + inlen;
-    unsigned char * rgb = (unsigned char*)output;
-    for( const unsigned char * idx = (const unsigned char*)input; idx != end; ++idx )
+    auto * rgb = (unsigned char*)output;
+    for( const auto * idx = (const unsigned char*)input; idx != end; ++idx )
       {
       if( IncompleteLUT )
         {
@@ -531,11 +531,11 @@ bool LookupTable::Decode(char *output, size_t outlen, const char *input, size_t 
     }
   else if ( BitSample == 16 )
     {
-    const uint16_t *rgb16 = (const uint16_t*)(void*)&Internal->RGB[0];
+    const auto *rgb16 = (const uint16_t*)(void*)&Internal->RGB[0];
     assert( inlen % 2 == 0 );
-    const uint16_t * end = (const uint16_t*)(const void*)(input + inlen);
-    uint16_t * rgb = (uint16_t*)(void*)output;
-    for( const uint16_t * idx = (const uint16_t*)(const void*)input; idx != end; ++idx )
+    const auto * end = (const uint16_t*)(const void*)(input + inlen);
+    auto * rgb = (uint16_t*)(void*)output;
+    for( const auto * idx = (const uint16_t*)(const void*)input; idx != end; ++idx )
       {
       if( IncompleteLUT )
         {
@@ -569,8 +569,8 @@ bool LookupTable::Decode8(char *output, size_t outlen, const char *input, size_t
   if ( BitSample == 8 )
     {
     const unsigned char * end = (const unsigned char*)input + inlen;
-    unsigned char * rgb = (unsigned char*)output;
-    for( const unsigned char * idx = (const unsigned char*)input; idx != end; ++idx )
+    auto * rgb = (unsigned char*)output;
+    for( const auto * idx = (const unsigned char*)input; idx != end; ++idx )
       {
       if( IncompleteLUT )
         {
@@ -587,11 +587,11 @@ bool LookupTable::Decode8(char *output, size_t outlen, const char *input, size_t
     }
   else if ( BitSample == 16 )
     {
-    const uint16_t *rgb16 = (const uint16_t*)(void*)&Internal->RGB[0];
+    const auto *rgb16 = (const uint16_t*)(void*)&Internal->RGB[0];
     assert( inlen % 2 == 0 );
-    const uint16_t * end = (const uint16_t*)(const void*)(input + inlen);
-    uint8_t * rgb = (uint8_t*)output;
-    for( const uint16_t * idx = (const uint16_t*)(const void*)input; idx != end; ++idx )
+    const auto * end = (const uint16_t*)(const void*)(input + inlen);
+    auto * rgb = (uint8_t*)output;
+    for( const auto * idx = (const uint16_t*)(const void*)input; idx != end; ++idx )
       {
       if( IncompleteLUT )
         {
@@ -654,8 +654,8 @@ bool LookupTable::GetBufferAsRGBA(unsigned char *rgba) const
     ret = true;
 */
     //std::vector<unsigned char>::const_iterator it = Internal->RGB.begin();
-    uint16_t *uchar16 = (uint16_t*)(void*)&Internal->RGB[0];
-    uint16_t *rgba16 = (uint16_t*)(void*)rgba;
+    auto *uchar16 = (uint16_t*)(void*)&Internal->RGB[0];
+    auto *rgba16 = (uint16_t*)(void*)rgba;
     size_t s = Internal->RGB.size();
     s /= 2;
     s /= 3;
@@ -682,7 +682,7 @@ bool LookupTable::WriteBufferAsRGBA(const unsigned char *rgba)
   bool ret = false;
   if ( BitSample == 8 )
     {
-    std::vector<unsigned char>::iterator it = Internal->RGB.begin();
+    auto it = Internal->RGB.begin();
     for(; it != Internal->RGB.end() ;)
       {
       // RED
@@ -699,8 +699,8 @@ bool LookupTable::WriteBufferAsRGBA(const unsigned char *rgba)
   else if ( BitSample == 16 )
     {
     //assert( Internal->Length[type]*(BitSample/8) == length );
-    uint16_t *uchar16 = (uint16_t*)(void*)&Internal->RGB[0];
-    const uint16_t *rgba16 = (const uint16_t*)(const void*)rgba;
+    auto *uchar16 = (uint16_t*)(void*)&Internal->RGB[0];
+    const auto *rgba16 = (const uint16_t*)(const void*)rgba;
     size_t s = Internal->RGB.size();
     s /= 2;
     s /= 3;
@@ -734,7 +734,7 @@ void LookupTable::Print(std::ostream &os) const
     {
     uint16_t maxlut[3] = { 0 , 0 , 0};
     uint16_t minlut[3] = { 0xffff, 0xffff, 0xffff };
-    uint16_t *uchar16 = (uint16_t*)(void*)&Internal->RGB[0];
+    auto *uchar16 = (uint16_t*)(void*)&Internal->RGB[0];
     if( Internal->Length[BLUE] != Internal->Length[RED]
     || Internal->Length[RED] != Internal->Length[GREEN] ) return;
     for( unsigned int i = 0; i < Internal->Length[BLUE]; ++i)
@@ -767,7 +767,7 @@ bool LookupTable::IsRGB8() const
     {
     uint16_t maxlut[3] = { 0 , 0 , 0};
     uint16_t minlut[3] = { 0xffff, 0xffff, 0xffff };
-    uint16_t *uchar16 = (uint16_t*)(void*)&Internal->RGB[0];
+    auto *uchar16 = (uint16_t*)(void*)&Internal->RGB[0];
     if( Internal->Length[BLUE] != Internal->Length[RED]
     || Internal->Length[RED] != Internal->Length[GREEN] ) return false;
     for( unsigned int i = 0; i < Internal->Length[BLUE]; ++i)

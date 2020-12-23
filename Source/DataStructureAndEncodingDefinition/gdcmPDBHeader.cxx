@@ -279,7 +279,7 @@ void PDBHeader::Print(std::ostream &os) const
     }
   else
     {
-    std::vector<PDBElement>::const_iterator it = InternalPDBDataSet.begin();
+    auto it = InternalPDBDataSet.begin();
 
     for(; it != InternalPDBDataSet.end(); ++it)
       {

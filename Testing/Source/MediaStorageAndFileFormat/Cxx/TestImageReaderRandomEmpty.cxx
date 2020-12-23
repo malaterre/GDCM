@@ -43,7 +43,7 @@ int TestImageReaderRandomEmptyFunc(const char *subdir, const char* filename, boo
   const gdcm::File &file = reader.GetFile();
   const gdcm::DataSet &ds = file.GetDataSet();
   const gdcm::FileMetaInformation &fmi = file.GetHeader();
-  gdcm::DataSet::ConstIterator it = ds.Begin();
+  auto it = ds.Begin();
 
   // Create directory first:
   std::string tmpdir = gdcm::Testing::GetTempDirectory( subdir );

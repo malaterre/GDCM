@@ -26,7 +26,7 @@ const unsigned int nuids = 100;
 void* func (void* argc)
 {
   gdcm::UIDGenerator g;
-  std::set<std::string> *uids= reinterpret_cast< std::set<std::string>* >(argc);
+  auto *uids= reinterpret_cast< std::set<std::string>* >(argc);
   for(unsigned int i = 0; i < nuids; i++)
     {
     const char *s = g.Generate();
@@ -56,7 +56,7 @@ int TestUIDGenerator2(int , char *[])
     pthread_join (th[i], nullptr);
 
   std::vector<std::string> v_one(nuids*nthreads);
-  std::vector<std::string>::iterator it = v_one.begin();
+  auto it = v_one.begin();
   for(i = 0; i < nthreads; i+=2)
     {
     std::set_union(uids[i].begin(), uids[i].end(),

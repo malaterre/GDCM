@@ -147,7 +147,7 @@ const std::ostream &AAssociateRQPDU::Write(std::ostream &os) const
   os.write( CallingAETitle, 16 );
   os.write( (const char*)&Reserved43_74, sizeof(Reserved43_74) );
   AppContext.Write(os);
-  std::vector<PresentationContextRQ>::const_iterator it = PresContext.begin();
+  auto it = PresContext.begin();
   for( ; it != PresContext.end(); ++it)
     {
     it->Write(os);
@@ -169,7 +169,7 @@ size_t AAssociateRQPDU::Size() const
   ret += sizeof(CallingAETitle);
   ret += sizeof(Reserved43_74);
   ret += AppContext.Size();
-  std::vector<PresentationContextRQ>::const_iterator it = PresContext.begin();
+  auto it = PresContext.begin();
   for( ; it != PresContext.end(); ++it)
     {
     ret += it->Size();
@@ -267,7 +267,7 @@ void AAssociateRQPDU::Print(std::ostream &os) const
   os << std::endl;
   //std::vector<PresentationContextRQ> PresContext;
   os << "PresentationContext(s): ";
-  std::vector<PresentationContextRQ>::const_iterator it = PresContext.begin();
+  auto it = PresContext.begin();
   for( ; it != PresContext.end(); ++it)
     {
     it->Print( os << std::endl );
@@ -279,7 +279,7 @@ void AAssociateRQPDU::Print(std::ostream &os) const
 
 const PresentationContextRQ *AAssociateRQPDU::GetPresentationContextByID(uint8_t id) const
 {
-  std::vector<PresentationContextRQ>::const_iterator it = PresContext.begin();
+  auto it = PresContext.begin();
   for( ; it != PresContext.end(); ++it)
     {
     if( it->GetPresentationContextID() == id )
@@ -292,7 +292,7 @@ const PresentationContextRQ *AAssociateRQPDU::GetPresentationContextByID(uint8_t
 
 const PresentationContextRQ *AAssociateRQPDU::GetPresentationContextByAbstractSyntax(AbstractSyntax const & as ) const
 {
-  std::vector<PresentationContextRQ>::const_iterator it = PresContext.begin();
+  auto it = PresContext.begin();
   for( ; it != PresContext.end(); ++it)
     {
     if( it->GetAbstractSyntax() == as )

@@ -88,7 +88,7 @@ bool TestCrossDot()
 
   if( myset.size() <= 1 ) return false;
 
-  std::set< std::string >::const_iterator it = myset.begin();
+  auto it = myset.begin();
   gdcm::DirectionCosines ref;
   gdcm::DirectionCosines dc;
   for( ; it != myset.end(); ++it )

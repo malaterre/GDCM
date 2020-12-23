@@ -27,7 +27,7 @@ namespace gdcm
     }
   void FileSet::SetFiles(FilesType const &files)
     {
-    FilesType::const_iterator it = files.begin();
+    auto it = files.begin();
     for( ; it != files.end(); ++it )
       {
       AddFile( it->c_str() );

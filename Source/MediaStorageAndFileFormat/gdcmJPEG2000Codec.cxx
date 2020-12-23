@@ -222,7 +222,7 @@ static bool parsejp2_imp( const char * const stream, const size_t file_size, boo
       assert( len64 >= 8 );
       return parsej2k_imp( cur, (size_t)(len64 - 8), lossless, mct );
       }
-      const size_t lenmarker = (size_t)(len64 - 8);
+      const auto lenmarker = (size_t)(len64 - 8);
       cur += lenmarker;
     }
 
@@ -624,8 +624,8 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
   opj_stream_t *cio = nullptr;
   opj_image_t *image = nullptr;
 
-  unsigned char *src = (unsigned char*)dummy_buffer;
-  uint32_t file_length = (uint32_t)buf_size; // 32bits truncation should be ok since DICOM cannot have larger than 2Gb image
+  auto *src = (unsigned char*)dummy_buffer;
+  auto file_length = (uint32_t)buf_size; // 32bits truncation should be ok since DICOM cannot have larger than 2Gb image
 
   // WARNING: OpenJPEG is very picky when there is a trailing 00 at the end of the JPC
   // so we need to make sure to remove it:
@@ -922,7 +922,7 @@ void rawtoimage_fill2(const T *inputbuffer, int w, int h, int numcomps, opj_imag
     smask = (uint16_t)(
       smask << ( 16 - (bitsallocated - bitsstored + 1) ));
     // nmask : to propagate sign bit on negative values
-    int16_t nmask = (int16_t)0x8000;
+    auto nmask = (int16_t)0x8000;
     nmask = (int16_t)(nmask >> ( bitsallocated - bitsstored - 1 ));
      if( pc )
       {
@@ -1403,7 +1403,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   opj_codec_t* dinfo = nullptr;  /* handle to a decompressor */
   opj_stream_t *cio = nullptr;
   opj_image_t *image = nullptr;
-  const unsigned char *src = (const unsigned char*)dummy_buffer;
+  const auto *src = (const unsigned char*)dummy_buffer;
   size_t file_length = buf_size;
 
   /* set decoding parameters to default values */
@@ -1807,7 +1807,7 @@ bool JPEG2000Codec::DecodeExtent(
 
 ImageCodec * JPEG2000Codec::Clone() const
 {
-  JPEG2000Codec * copy = new JPEG2000Codec;
+  auto * copy = new JPEG2000Codec;
   return copy;
 }
 

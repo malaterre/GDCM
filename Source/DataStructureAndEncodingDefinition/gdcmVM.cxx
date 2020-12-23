@@ -213,7 +213,7 @@ unsigned int VM::GetIndex(VMType vm)
     break;
   default:
       {
-      unsigned int a = (unsigned int)vm;
+      auto a = (unsigned int)vm;
       for (l = 0; a > 1; ++l)
         a >>= 1;
       l++;
@@ -329,7 +329,7 @@ VM::VMType VM::GetVMTypeFromLength(size_t length, unsigned int size)
 {
   // Check first of length is a indeed a multiple of size and that length is != 0
   if ( !length || length % size ) return VM::VM0;
-  const unsigned int ratio = (unsigned int)(length / size);
+  const auto ratio = (unsigned int)(length / size);
   //std::cerr << "RATIO=" << ratio << std::endl;
   switch( ratio )
     {

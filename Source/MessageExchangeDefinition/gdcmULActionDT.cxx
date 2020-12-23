@@ -185,7 +185,7 @@ EStateID ULActionDT1::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
 
   for (itor = theDataPDUs.begin(); itor < theDataPDUs.end(); itor++) {
 
-    PDataTFPDU* dataPDU = dynamic_cast<PDataTFPDU*>(*itor);
+    auto* dataPDU = dynamic_cast<PDataTFPDU*>(*itor);
     if (dataPDU == nullptr)
       {
       throw Exception("Data sending event PDU malformed.");
@@ -207,7 +207,7 @@ EStateID ULActionDT1::PerformAction(Subject *s, ULEvent& inEvent, ULConnection& 
   std::istream * pStream = inEvent.GetIStream() ;
   if ( pStream )
     {
-    PDataTFPDU* dataPDU = dynamic_cast<PDataTFPDU*>(theDataPDUs[0]);
+    auto* dataPDU = dynamic_cast<PDataTFPDU*>(theDataPDUs[0]);
     if (dataPDU == nullptr)
       {
       throw Exception("Data sending event PDU malformed.");

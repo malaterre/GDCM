@@ -126,7 +126,7 @@ public:
 void PrintSQ(const SequenceOfItems *sqi, std::ostream & os, std::string const & indent)
 {
   if( !sqi ) return;
-  SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
+  auto it = sqi->Items.begin();
   for(; it != sqi->Items.end(); ++it)
     {
     const Item &item = *it;
@@ -164,7 +164,7 @@ void PrintDataSet(const DataSet &ds, std::ostream &out, std::string const & inde
   const Global& g = GlobalInstance;
   const Dicts &dicts = g.GetDicts();
 
-  DataSet::ConstIterator it = ds.Begin();
+  auto it = ds.Begin();
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;

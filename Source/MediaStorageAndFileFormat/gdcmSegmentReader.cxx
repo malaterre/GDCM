@@ -152,7 +152,7 @@ Segment::BasicCodedEntryVector readCodeSequenceMacroAttributes(const Tag & tag, 
   {
     SmartPointer<SequenceOfItems> sequence = dataset.GetDataElement(tag).GetValueAsSQ();
 
-    SequenceOfItems::Iterator it = sequence->Begin();
+    auto it = sequence->Begin();
     for(; it != sequence->End(); ++it)
     {
       const Item & item = *it;

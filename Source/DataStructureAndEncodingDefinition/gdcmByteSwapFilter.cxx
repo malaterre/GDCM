@@ -33,13 +33,13 @@ ByteSwapFilter::~ByteSwapFilter()
 bool ByteSwapFilter::ByteSwap()
 {
   for(
-    DataSet::ConstIterator it = DS.Begin();
+    auto it = DS.Begin();
     it != DS.End(); ++it)
     {
     const DataElement &de = *it;
     VR const & vr = de.GetVR();
     //assert( vr & VR::VRASCII || vr & VR::VRBINARY );
-    ByteValue *bv = const_cast<ByteValue*>(de.GetByteValue());
+    auto *bv = const_cast<ByteValue*>(de.GetByteValue());
     gdcm::SmartPointer<gdcm::SequenceOfItems> si = de.GetValueAsSQ();
     if( de.IsEmpty() )
       {
@@ -109,7 +109,7 @@ bool ByteSwapFilter::ByteSwap()
         for( ; it2 != si->End(); ++it2)
           {
           const Item &item = *it2;
-          DataSet &ds = const_cast<DataSet&>(item.GetNestedDataSet()); // FIXME
+          auto &ds = const_cast<DataSet&>(item.GetNestedDataSet()); // FIXME
           ByteSwapFilter bsf(ds);
           bsf.ByteSwap();
           }
@@ -129,7 +129,7 @@ bool ByteSwapFilter::ByteSwap()
   if( ByteSwapTag )
     {
     DataSet copy;
-    DataSet::ConstIterator it = DS.Begin();
+    auto it = DS.Begin();
     for( ; it != DS.End(); ++it)
       {
       DataElement de = *it;

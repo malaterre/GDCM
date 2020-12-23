@@ -65,7 +65,7 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
     gdcmWarningMacro( "Not implemented sorry" );
     return false;
     }
-  DataSet::Iterator it = ds.Begin();
+  auto it = ds.Begin();
   for( ; it != ds.End(); )
     {
     DataElement de = *it;
@@ -167,7 +167,7 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
       de.SetVLToUndefined();
       assert( sqi->GetLength().IsUndefined() );
       // recursive
-      SequenceOfItems::ItemVector::iterator sit = sqi->Items.begin();
+      auto sit = sqi->Items.begin();
       for(; sit != sqi->Items.end(); ++sit)
         {
         //Item &item = const_cast<Item&>(*sit);

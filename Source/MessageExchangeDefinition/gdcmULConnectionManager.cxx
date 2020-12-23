@@ -196,7 +196,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
   if(theState != eSta6TransferReady)
     {
     std::vector<BasePDU*> const & thePDUs = theEvent.GetPDUs();
-    for( std::vector<BasePDU*>::const_iterator itor
+    for( auto itor
       = thePDUs.begin(); itor != thePDUs.end(); itor++)
       {
       //assert(*itor);
@@ -207,7 +207,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
   else if (Trace::GetDebugFlag())
     {
     std::vector<BasePDU*> const & thePDUs = theEvent.GetPDUs();
-    for( std::vector<BasePDU*>::const_iterator itor
+    for( auto itor
       = thePDUs.begin(); itor != thePDUs.end(); itor++)
       {
       assert(*itor);

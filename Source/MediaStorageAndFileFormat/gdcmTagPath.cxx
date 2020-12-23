@@ -42,7 +42,7 @@ TagPath::~TagPath()
 void TagPath::Print(std::ostream &os) const
 {
   unsigned int flip = 0;
-  std::vector<Tag>::const_iterator it = Path.begin();
+  auto it = Path.begin();
   for(; it != Path.end(); ++it)
     {
     if( flip % 2 == 0 )

@@ -40,7 +40,7 @@ Pixmap::~Pixmap() = default;
 bool Pixmap::AreOverlaysInPixelData() const
 {
   int total = 0;
-  std::vector<Overlay>::const_iterator it = Overlays.begin();
+  auto it = Overlays.begin();
   for(; it != Overlays.end(); ++it)
     {
     total += (int)it->IsInPixelData();
@@ -60,12 +60,12 @@ bool Pixmap::UnusedBitsPresentInPixelData() const
 void Pixmap::Print(std::ostream &os) const
 {
   Bitmap::Print(os);
-  for( std::vector<Overlay>::const_iterator it = Overlays.begin();
+  for( auto it = Overlays.begin();
     it != Overlays.end(); ++it)
     {
     it->Print( os );
     }
-  for( std::vector<Curve>::const_iterator it = Curves.begin();
+  for( auto it = Curves.begin();
     it != Curves.end(); ++it)
     {
     it->Print( os );

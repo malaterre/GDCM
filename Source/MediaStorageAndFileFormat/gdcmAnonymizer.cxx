@@ -253,7 +253,7 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
           {
           de.SetVR( dictentry.GetVR() );
           }
-        const VL::Type paddedSize = (VL::Type) padded.size();//casting to avoid size_t warning on 64
+        const auto paddedSize = (VL::Type) padded.size();//casting to avoid size_t warning on 64
         de.SetByteValue( padded.c_str(), paddedSize );
         ds.Replace( de );
         ret = true;
@@ -268,12 +268,12 @@ static bool Anonymizer_RemoveRetired(File const &file, DataSet &ds)
   static const Global &g = GlobalInstance;
   static const Dicts &dicts = g.GetDicts();
   static const Dict &pubdict = dicts.GetPublicDict();
-  DataSet::Iterator it = ds.Begin();
+  auto it = ds.Begin();
   for( ; it != ds.End(); )
     {
     const DataElement &de1 = *it;
     // std::set::erase invalidate iterator, so we need to make a copy first:
-    DataSet::Iterator dup = it;
+    auto dup = it;
     ++it;
     if( de1.GetTag().IsPublic() )
       {
@@ -318,12 +318,12 @@ bool Anonymizer::RemoveRetired()
 
 static bool Anonymizer_RemoveGroupLength(File const &file, DataSet &ds)
 {
-  DataSet::Iterator it = ds.Begin();
+  auto it = ds.Begin();
   for( ; it != ds.End(); )
     {
     const DataElement &de1 = *it;
     // std::set::erase invalidate iterator, so we need to make a copy first:
-    DataSet::Iterator dup = it;
+    auto dup = it;
     ++it;
     if( de1.GetTag().IsGroupLength() )
       {
@@ -364,12 +364,12 @@ bool Anonymizer::RemoveGroupLength()
 
 static bool Anonymizer_RemovePrivateTags(File const &file, DataSet &ds)
 {
-  DataSet::Iterator it = ds.Begin();
+  auto it = ds.Begin();
   for( ; it != ds.End(); )
     {
     const DataElement &de1 = *it;
       // std::set::erase invalidate iterator, so we need to make a copy first:
-      DataSet::Iterator dup = it;
+      auto dup = it;
       ++it;
     if( de1.GetTag().IsPrivate() )
       {
@@ -460,7 +460,7 @@ bool Anonymizer::CheckIfSequenceContainsAttributeToAnonymize(File const &file, S
     {
     Item &item = sqi->GetItem( i );
     DataSet &nested = item.GetNestedDataSet();
-    DataSet::Iterator it = nested.Begin();
+    auto it = nested.Begin();
     for( ; it != nested.End() && !found; ++it)
       {
       const DataElement &de = *it;
@@ -552,7 +552,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   this->InvokeEvent( IterationEvent() );
   // Check that root level sequence do not contains any of those attributes
 {
-  DataSet::ConstIterator it = ds.Begin();
+  auto it = ds.Begin();
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
@@ -632,12 +632,12 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     // <entry group="0400" element="0510" vr="UI" vm="1" name="Encrypted Content Transfer Syntax UID"/>
     DataElement encrypted_ts_de( Tag(0x400,0x510) );
     encrypted_ts_de.SetVR( Attribute<0x0400, 0x0510>::GetVR() );
-    const VL::Type encryptedStrLen = (VL::Type)strlen(encrypted_ts.GetString());
+    const auto encryptedStrLen = (VL::Type)strlen(encrypted_ts.GetString());
     encrypted_ts_de.SetByteValue( encrypted_ts.GetString(), encryptedStrLen );
     // <entry group="0400" element="0520" vr="OB" vm="1" name="Encrypted Content"/>
     DataElement encrypted_de( Tag(0x400,0x520) );
     encrypted_de.SetVR( Attribute<0x0400, 0x0520>::GetVR() );
-    const VL::Type encryptedLenSize = (VL::Type)encrypted_len;
+    const auto encryptedLenSize = (VL::Type)encrypted_len;
     encrypted_de.SetByteValue( (char*)buf, encryptedLenSize );
     delete[] buf;
     delete[] orig;
@@ -937,7 +937,7 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
       }
     }
 
-  DataSet::ConstIterator it = ds.Begin();
+  auto it = ds.Begin();
   for( ; it != ds.End(); /*++it*/ )
     {
     assert( it != ds.End() );
@@ -1091,7 +1091,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
   assert( sqi && sqi->GetNumberOfItems() == 1 );
   Item const & item2 = sqi->GetItem( 1 );
   const DataSet &nds2 = item2.GetNestedDataSet();
-  DataSet::ConstIterator it = nds2.Begin();
+  auto it = nds2.Begin();
   for( ; it != nds2.End(); ++it )
     {
     ds.Replace( *it );

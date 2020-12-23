@@ -31,7 +31,7 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
     if( pc.GetElement() )
       {
       const DataElement r(pc);
-      ConstIterator it = DES.find(r);
+      auto it = DES.find(r);
       if( it == DES.end() )
         {
         // FIXME, could this happen ?
@@ -63,7 +63,7 @@ Tag DataSet::ComputeDataElement(const PrivateTag & t) const
   // is valid because we have not yet done the mapping, so 0xa < 0x10 fails but might not later on
   const Tag start(t.GetGroup(), 0x0010 ); // First possible private creator (0x0 -> 0x9 are reserved...)
   const DataElement r(start);
-  ConstIterator it = DES.lower_bound(r);
+  auto it = DES.lower_bound(r);
   const char *refowner = t.GetOwner();
   assert( refowner );
   bool found = false;

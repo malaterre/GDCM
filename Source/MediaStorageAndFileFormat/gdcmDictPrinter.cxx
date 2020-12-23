@@ -74,7 +74,7 @@ VM GuessVMType(DataElement const &de)
     case VR::IS: case VR::DS: case VR::DT: case VR::CS:
         {
         // Need to count \\ character
-        const ByteValue *bv = dynamic_cast<const ByteValue*>(&value);
+        const auto *bv = dynamic_cast<const ByteValue*>(&value);
         vm = VM::VM1; // why not ?
         if(!de.IsEmpty())
           {
@@ -525,7 +525,7 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
 //-----------------------------------------------------------------------------
 void DictPrinter::PrintDataSet2(std::ostream& os, const DataSet &ds)
 {
-  DataSet::ConstIterator it = ds.Begin();
+  auto it = ds.Begin();
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;

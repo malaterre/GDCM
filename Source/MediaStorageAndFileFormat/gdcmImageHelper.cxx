@@ -2463,7 +2463,7 @@ bool ImageHelper::ComputeSpacingFromImagePositionPatient(const std::vector<doubl
     {
     return false;
     }
-  std::vector<double>::const_iterator it = imageposition.begin();
+  auto it = imageposition.begin();
   //const double x0 = *it++;
   //const double y0 = *it++;
   //const double z0 = *it++;

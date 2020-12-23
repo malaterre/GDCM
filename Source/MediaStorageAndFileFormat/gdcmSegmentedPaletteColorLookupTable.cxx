@@ -87,7 +87,7 @@ namespace gdcm
                 double value_float
                     = static_cast<double>(y0)
                     + (static_cast<double>(i)/static_cast<double>(length)) * y01;
-                EntryType value_int = static_cast<EntryType>(value_float + 0.5);
+                auto value_int = static_cast<EntryType>(value_float + 0.5);
                 expanded.push_back(value_int);
             }
             return true;
@@ -109,19 +109,19 @@ namespace gdcm
                 return false;
             }
             const EntryType* first_segment = instances.begin()->first;
-            const unsigned short* pOffset
+            const auto* pOffset
                 = reinterpret_cast<const unsigned short*>(this->_first + 2);
             unsigned long offsetBytes
                 = (*pOffset) | (static_cast<unsigned long>(*(pOffset + 1)) << 16);
             const EntryType* copied_part_head
                 = first_segment + offsetBytes / sizeof(EntryType);
-            typename SegmentMap::const_iterator ppHeadSeg = instances.find(copied_part_head);
+            auto ppHeadSeg = instances.find(copied_part_head);
             if ( ppHeadSeg == instances.end() ) {
                 // referred segment not found
                 return false;
             }
             EntryType nNumCopies = *(this->_first + 1);
-            typename SegmentMap::const_iterator ppSeg = ppHeadSeg;
+            auto ppSeg = ppHeadSeg;
             while ( std::distance(ppHeadSeg, ppSeg) <nNumCopies ) {
                 assert( ppSeg != instances.end() );
                 ppSeg->second->Expand(instances, expanded);
@@ -158,8 +158,8 @@ namespace gdcm
         typename Segment<EntryType>::SegmentMap instances;
         std::transform(segments.begin(), segments.end(),
             std::inserter(instances, instances.end()), typename Segment<EntryType>::ToMap());
-        typename SegmentList::iterator ppSeg = segments.begin();
-        typename SegmentList::iterator endOfSegments = segments.end();
+        auto ppSeg = segments.begin();
+        auto endOfSegments = segments.end();
         for ( ; ppSeg != endOfSegments; ++ppSeg ) {
             (*ppSeg)->Expand(instances, palette);
         }
@@ -184,7 +184,7 @@ void SegmentedPaletteColorLookupTable::SetLUT(LookupTableType type, const unsign
     }
   else if( BitSample == 16 )
     {
-    const uint16_t *array16 = (const uint16_t*)(const void*)array;
+    const auto *array16 = (const uint16_t*)(const void*)array;
     const uint16_t *segment_values = array16;
     std::vector<uint16_t> palette;
     unsigned int num_entries = GetLUTLength(type);

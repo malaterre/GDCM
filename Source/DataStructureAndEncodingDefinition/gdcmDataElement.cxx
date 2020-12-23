@@ -25,7 +25,7 @@ namespace gdcm_ns
   void DataElement::SetVLToUndefined() {
     assert( VRField == VR::SQ || VRField == VR::INVALID
       || (VRField == VR::UN /*&& IsUndefinedLength()*/ ) );
-    SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
+    auto *sqi = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
     if( sqi )
       {
       sqi->SetLengthToUndefined();
@@ -39,7 +39,7 @@ namespace gdcm_ns
     return sqf;
   }
   SequenceOfFragments* DataElement::GetSequenceOfFragments() {
-    SequenceOfFragments *sqf = dynamic_cast<SequenceOfFragments*>(ValueField.GetPointer());
+    auto *sqf = dynamic_cast<SequenceOfFragments*>(ValueField.GetPointer());
     return sqf;
   }
 
@@ -58,7 +58,7 @@ namespace gdcm_ns
       {
       return nullptr;
       }
-    SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
+    auto *sq = dynamic_cast<SequenceOfItems*>(ValueField.GetPointer());
     if( sq ) // all set !
       {
       //assert( GetVR() == VR::SQ );
@@ -73,7 +73,7 @@ namespace gdcm_ns
           {
           const ByteValue *bv = GetByteValue();
           assert( bv );
-          SequenceOfItems *sqi = new SequenceOfItems;
+          auto *sqi = new SequenceOfItems;
           sqi->SetLength( bv->GetLength() );
           std::string s( bv->GetPointer(), bv->GetLength() );
           try
@@ -114,7 +114,7 @@ namespace gdcm_ns
           assert( GetVR() == VR::UN ); // cp 246, IVRLE SQ
           const ByteValue *bv = GetByteValue();
           assert( bv );
-          SequenceOfItems *sqi = new SequenceOfItems;
+          auto *sqi = new SequenceOfItems;
           sqi->SetLength( bv->GetLength() );
           std::string s( bv->GetPointer(), bv->GetLength() );
           try

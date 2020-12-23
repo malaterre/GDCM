@@ -362,7 +362,7 @@ void SingleDataElementInserter(DataSet &ds, Scanner const & scanner)
   assert( npatient == 1 );
 #endif
 
-  Scanner::ValuesType::const_iterator it = patientsnames.begin();
+  auto it = patientsnames.begin();
   patientsname.SetValue( it->c_str() );
   ds.Insert( patientsname.GetAsDataElement() );
 }
@@ -394,7 +394,7 @@ bool DICOMDIRGenerator::AddPatientDirectoryRecord()
   //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
 
-  Scanner::ValuesType::const_iterator it = patientids.begin();
+  auto it = patientids.begin();
   for( ; it  != patientids.end(); ++it)
     {
     Item item;
@@ -472,7 +472,7 @@ bool DICOMDIRGenerator::AddStudyDirectoryRecord()
   //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
 
-  Scanner::ValuesType::const_iterator it = studyinstanceuids.begin();
+  auto it = studyinstanceuids.begin();
   for( ; it  != studyinstanceuids.end(); ++it)
     {
     Item item;
@@ -573,7 +573,7 @@ bool DICOMDIRGenerator::AddSeriesDirectoryRecord()
   //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
 
-  Scanner::ValuesType::const_iterator it = seriesinstanceuids.begin();
+  auto it = seriesinstanceuids.begin();
   for( ; it  != seriesinstanceuids.end(); ++it)
     {
     Item item;
@@ -652,7 +652,7 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
   //SequenceOfItems * sqi = (SequenceOfItems*)de.GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
 
-  Scanner::ValuesType::const_iterator it = sopinstanceuids.begin();
+  auto it = sopinstanceuids.begin();
   Filename rootdir = Internals->rootdir.c_str();
   const char *rd = rootdir.ToWindowsSlashes();
   size_t strlen_rd = strlen( rd );
@@ -728,7 +728,7 @@ bool DICOMDIRGenerator::AddImageDirectoryRecord()
     if( ttv.find( imagetype.GetTag() ) != ttv.end() )
       {
       const char *v = ttv.find(imagetype.GetTag())->second;
-      VL::Type strlenV = (VL::Type)strlen(v);
+      auto strlenV = (VL::Type)strlen(v);
       de2.SetByteValue( v, strlenV );
       }
     ds.Insert( de2 );
@@ -761,7 +761,7 @@ static bool IsCompatibleWithISOIEC9660MediaFormat(const char *filename)
     {
     copy.push_back( ' ' );
     }
-  VL::Type copySize = (VL::Type)copy.size();
+  auto copySize = (VL::Type)copy.size();
   de.SetByteValue( copy.c_str(), copySize ) ;
   at.SetFromDataElement( de );
   unsigned int n = at.GetNumberOfValues();
@@ -852,7 +852,7 @@ bool DICOMDIRGenerator::Generate()
 
   // Let's check that filenames are ok for iso9660 + compatible with VR:CS
 {
-  FilenamesType::const_iterator it = filenames.begin();
+  auto it = filenames.begin();
   for( ; it != filenames.end(); ++it )
     {
     Filename fn = it->c_str();
@@ -918,7 +918,7 @@ bool DICOMDIRGenerator::Generate()
 
   DataElement de_drs( Tag(0x4,0x1220) ); // DirectoryRecordSequence
 
-  SequenceOfItems * sqi0 = new SequenceOfItems;
+  auto * sqi0 = new SequenceOfItems;
   de_drs.SetVR( VR::SQ );
   de_drs.SetValue( *sqi0 );
   de_drs.SetVLToUndefined();
@@ -978,7 +978,7 @@ the File-set.
   VL fmi_len = h.GetFullLength();
   VL fmi_len_offset = 0;
 {
-  DataSet::ConstIterator it = ds.Begin();
+  auto it = ds.Begin();
   for(; it != ds.End() && it->GetTag() != Tag(0x0004,0x1220); ++it)
     {
     const DataElement &detmp = *it;
@@ -995,7 +995,7 @@ the File-set.
 
   VL fmi_len_offset2 = 0;
 {
-  DataSet::ConstIterator it = ds.Begin();
+  auto it = ds.Begin();
   for( ; it != ds.End() && it->GetTag() <= Tag(0x0004,0x1220); ++it)
     {
     const DataElement &detmp = *it;

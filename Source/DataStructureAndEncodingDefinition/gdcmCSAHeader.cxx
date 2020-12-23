@@ -955,8 +955,8 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
   InternalType = UNKNOWN; // reset
   gdcm::Tag t1(0x0029,0x0010);
   gdcm::Tag t2(0x0029,0x0020);
-  uint16_t v = (uint16_t)(de.GetTag().GetElement() << 8);
-  uint16_t v2 = (uint16_t)(v >> 8);
+  auto v = (uint16_t)(de.GetTag().GetElement() << 8);
+  auto v2 = (uint16_t)(v >> 8);
   //if( de.GetTag().GetPrivateCreator() == t1 )
   if( v2 == t1.GetElement() )
     {
@@ -1176,7 +1176,7 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
 
 void CSAHeader::Print(std::ostream &os) const
 {
-  std::set<CSAElement>::const_iterator it = InternalCSADataSet.begin();
+  auto it = InternalCSADataSet.begin();
   gdcm::Tag t1(0x0029,0x0010);
   gdcm::Tag t2(0x0029,0x0020);
   if( DataElementTag == t1 )
@@ -1203,7 +1203,7 @@ const CSAElement &CSAHeader::GetCSAElementByName(const char *name)
   if( name )
     {
     //int s =  InternalCSADataSet.size();
-    std::set<CSAElement>::const_iterator it = InternalCSADataSet.begin();
+    auto it = InternalCSADataSet.begin();
     for(; it != InternalCSADataSet.end(); ++it)
       {
       const char *itname = it->GetName();
@@ -1221,7 +1221,7 @@ bool CSAHeader::FindCSAElementByName(const char *name)
 {
   if( name )
     {
-    std::set<CSAElement>::const_iterator it = InternalCSADataSet.begin();
+    auto it = InternalCSADataSet.begin();
     for(; it != InternalCSADataSet.end(); ++it)
       {
       const char *itname = it->GetName();

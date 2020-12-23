@@ -220,7 +220,7 @@ bool SplitMosaicFilter::ComputeMOSAICDimensions( unsigned int dims[3] )
   dims[0] = colrow[0];
   dims[1] = colrow[1];
 
-  const unsigned int div = (unsigned int )ceil(sqrt( (double)numberOfImagesInMosaic ) );
+  const auto div = (unsigned int )ceil(sqrt( (double)numberOfImagesInMosaic ) );
   dims[0] /= div;
   dims[1] /= div;
   dims[2] = numberOfImagesInMosaic;
@@ -341,7 +341,7 @@ bool SplitMosaicFilter::Split()
     {
     return false;
     }
-  const unsigned int div = (unsigned int )ceil(sqrt( (double)dims[2]) );
+  const auto div = (unsigned int )ceil(sqrt( (double)dims[2]) );
   bool inverted;
   double normal[3];
   bool hasOriginCSA = true;
@@ -389,7 +389,7 @@ bool SplitMosaicFilter::Split()
   }
   if( !b ) return false;
 
-  VL::Type outbufSize = (VL::Type)outbuf.size();
+  auto outbufSize = (VL::Type)outbuf.size();
   pixeldata.SetByteValue( &outbuf[0], outbufSize );
 
   Image &image = GetImage();
@@ -439,7 +439,7 @@ bool SplitMosaicFilter::Split()
     }
   DataElement de( Tag(0x0008, 0x0016) );
   const char* msstr = MediaStorage::GetMSString(ms);
-  VL::Type strlenMsstr = (VL::Type)strlen(msstr);
+  auto strlenMsstr = (VL::Type)strlen(msstr);
   de.SetByteValue( msstr, strlenMsstr );
   de.SetVR( Attribute<0x0008, 0x0016>::GetVR() );
   ds.Replace( de );

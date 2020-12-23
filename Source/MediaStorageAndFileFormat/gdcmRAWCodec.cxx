@@ -179,7 +179,7 @@ bool RAWCodec::Decode(DataElement const &in, DataElement &out)
     bool b = Unpacker12Bits::Unpack(copy, &str[0], str.size() );
     assert( b );
     (void)b;
-    VL::Type lenSize = (VL::Type)len;
+    auto lenSize = (VL::Type)len;
     out.SetByteValue( copy, lenSize );
     delete[] copy;
 
@@ -187,7 +187,7 @@ bool RAWCodec::Decode(DataElement const &in, DataElement &out)
     }
   else
     {
-      VL::Type strSize = (VL::Type) str.size();
+      auto strSize = (VL::Type) str.size();
     out.SetByteValue( &str[0], strSize);
     }
 

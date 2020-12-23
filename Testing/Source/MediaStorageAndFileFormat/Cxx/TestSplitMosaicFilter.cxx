@@ -119,7 +119,7 @@ int TestSplitMosaicFilter(int argc, char *argv[])
   outbuf.resize(ll);
 
   const unsigned int *mos_dims = image.GetDimensions();
-  unsigned int div = (unsigned int )ceil(sqrt( (double)mos_dims[2]) );
+  auto div = (unsigned int )ceil(sqrt( (double)mos_dims[2]) );
 
   reorganize_mosaic_invert((unsigned short *)&outbuf[0],  inputdims,
     div, mos_dims, (const unsigned short*)&buf[0] );

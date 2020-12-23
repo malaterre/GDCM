@@ -124,7 +124,7 @@ int TestReadCanReadExtra()
 
   gdcm::Directory::FilenamesType const & fns = d.GetFilenames();
   int r = 0;
-  for( gdcm::Directory::FilenamesType::const_iterator it = fns.begin();
+  for( auto it = fns.begin();
     it != fns.end(); ++it )
     {
     const char *filename = it->c_str();

@@ -148,7 +148,7 @@ bool ImageCodec::DoYBR(std::istream &is, std::ostream &os)
   assert( !(buf_size % 3) );
   unsigned long size = (unsigned long)buf_size/3;
   //assert(buf_size < INT_MAX);
-  unsigned char *copy = new unsigned char[ (unsigned int)buf_size ];
+  auto *copy = new unsigned char[ (unsigned int)buf_size ];
   memmove( copy, dummy_buffer, (size_t)buf_size);
 assert(0); // Do not use this code !
   // FIXME FIXME FIXME
@@ -159,7 +159,7 @@ assert(0); // Do not use this code !
   const unsigned char *c = copy + size + size;
   int R, G, B;
 
-  unsigned char *p = (unsigned char*)dummy_buffer;
+  auto *p = (unsigned char*)dummy_buffer;
   for (unsigned long j = 0; j < size; ++j)
     {
     R = 38142 *(*a-16) + 52298 *(*c -128);
@@ -199,14 +199,14 @@ bool ImageCodec::DoYBRFull422(std::istream &is, std::ostream &os)
   is.seekg( 0, std::ios::end);
   const size_t buf_size = (size_t)is.tellg();
   const size_t rgb_buf_size = buf_size * 3 / 2;
-  unsigned char *dummy_buffer = new unsigned char[buf_size];
+  auto *dummy_buffer = new unsigned char[buf_size];
   is.seekg(start, std::ios::beg);
   is.read( (char*)dummy_buffer, buf_size);
   is.seekg(start, std::ios::beg); // reset
 
   assert( !(rgb_buf_size % 3) );
   assert( !(buf_size % 2) );
-  unsigned char *copy = new unsigned char[ rgb_buf_size ];
+  auto *copy = new unsigned char[ rgb_buf_size ];
   const size_t size = buf_size/4;
 
   for (size_t j = 0; j < size; ++j)
@@ -461,10 +461,10 @@ bool ImageCodec::CleanupUnusedBits(char * data8, size_t datalen)
       smask = (uint16_t)(
         smask << ( 16 - (PF.GetBitsAllocated() - PF.GetBitsStored() + 1) ));
       // nmask : to propagate sign bit on negative values
-      int16_t nmask = (int16_t)0x8000;
+      auto nmask = (int16_t)0x8000;
       nmask = (int16_t)(nmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 ));
 
-      uint16_t *start = (uint16_t*)data;
+      auto *start = (uint16_t*)data;
       for( uint16_t *p = start ; p != start + datalen / 2; ++p )
         {
         uint16_t c = *p;
@@ -482,7 +482,7 @@ bool ImageCodec::CleanupUnusedBits(char * data8, size_t datalen)
       }
     else // Pixel are unsigned
       {
-      uint16_t *start = (uint16_t*)data;
+      auto *start = (uint16_t*)data;
       for( uint16_t *p = start ; p != start + datalen / 2; ++p )
         {
         uint16_t c = *p;
@@ -517,7 +517,7 @@ bool ImageCodec::DoOverlayCleanup(std::istream &is, std::ostream &os)
       smask = (uint16_t)(
         smask << ( 16 - (PF.GetBitsAllocated() - PF.GetBitsStored() + 1) ));
       // nmask : to propagate sign bit on negative values
-      int16_t nmask = (int16_t)0x8000;
+      auto nmask = (int16_t)0x8000;
       nmask = (int16_t)(nmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 ));
 
       uint16_t c;
@@ -547,8 +547,8 @@ bool ImageCodec::DoOverlayCleanup(std::istream &is, std::ostream &os)
         {
         is.read((char *)&buffer[0], bufferSize * sizeof(uint16_t));
         std::streamsize bytesRead = is.gcount();
-        std::vector<uint16_t>::iterator validBufferEnd = buffer.begin() + bytesRead / sizeof(uint16_t);
-        for (std::vector<uint16_t>::iterator it = buffer.begin(); it != validBufferEnd; ++it)
+        auto validBufferEnd = buffer.begin() + bytesRead / sizeof(uint16_t);
+        for (auto it = buffer.begin(); it != validBufferEnd; ++it)
           {
           *it = ((*it >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask);
           }
@@ -629,7 +629,7 @@ bool ImageCodec::DecodeByStreams(std::istream &is, std::ostream &os)
     //DoYBR(*cur_is,pi_os);
     //cur_is = &pi_os;
     {
-      const JPEGCodec *c = dynamic_cast<const JPEGCodec*>(this);
+      const auto *c = dynamic_cast<const JPEGCodec*>(this);
       if( c )
         {
         // The following is required for very special case of color space conversion
@@ -648,7 +648,7 @@ bool ImageCodec::DecodeByStreams(std::istream &is, std::ostream &os)
       {
       // US-GE-4AICL142.dcm
       // Hopefully it has been done by the JPEG decoder itself...
-      const JPEGCodec *c = dynamic_cast<const JPEGCodec*>(this);
+      const auto *c = dynamic_cast<const JPEGCodec*>(this);
       if( !c )
         {
         //gdcmErrorMacro( "YBR_FULL_422 is not implemented in GDCM. Image will be displayed incorrectly" );

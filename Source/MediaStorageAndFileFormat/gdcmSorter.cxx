@@ -81,8 +81,8 @@ bool Sorter::StableSort(std::vector<std::string> const & filenames)
   std::vector< SmartPointer<FileWithName> > filelist;
   filelist.resize( filenames.size() );
 
-  std::vector< SmartPointer<FileWithName> >::iterator it2 = filelist.begin();
-  for( Directory::FilenamesType::const_iterator it = filenames.begin();
+  auto it2 = filelist.begin();
+  for( auto it = filenames.begin();
     it != filenames.end() && it2 != filelist.end(); ++it, ++it2)
     {
     Reader reader;
@@ -125,8 +125,8 @@ bool Sorter::Sort(std::vector<std::string> const & filenames)
   std::vector< SmartPointer<FileWithName> > filelist;
   filelist.resize( filenames.size() );
 
-  std::vector< SmartPointer<FileWithName> >::iterator it2 = filelist.begin();
-  for( Directory::FilenamesType::const_iterator it = filenames.begin();
+  auto it2 = filelist.begin();
+  for( auto it = filenames.begin();
     it != filenames.end() && it2 != filelist.end(); ++it, ++it2)
     {
     Reader reader;
@@ -167,7 +167,7 @@ bool Sorter::AddSelect( Tag const &tag, const char *value )
 
 void Sorter::Print( std::ostream &os) const
 {
-  std::vector<std::string>::const_iterator it = Filenames.begin();
+  auto it = Filenames.begin();
   for( ; it != Filenames.end(); ++it)
     {
     os << *it <<std::endl;

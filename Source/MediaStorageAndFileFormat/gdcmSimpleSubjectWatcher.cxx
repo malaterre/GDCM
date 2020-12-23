@@ -130,7 +130,7 @@ void SimpleSubjectWatcher::EndFilter()
 }
 void SimpleSubjectWatcher::ShowProgress(Subject *caller, const Event &evt)
 {
-  const ProgressEvent &pe = dynamic_cast<const ProgressEvent&>(evt);
+  const auto &pe = dynamic_cast<const ProgressEvent&>(evt);
   (void)caller;
   if( !m_Comment.empty() )
     std::cout << "(" << m_Comment << ") ";
@@ -138,7 +138,7 @@ void SimpleSubjectWatcher::ShowProgress(Subject *caller, const Event &evt)
 }
 void SimpleSubjectWatcher::ShowFileName(Subject *caller, const Event &evt)
 {
-  const FileNameEvent &pe = dynamic_cast<const FileNameEvent&>(evt);
+  const auto &pe = dynamic_cast<const FileNameEvent&>(evt);
   (void)caller;
   if( !m_Comment.empty() )
     std::cout << "(" << m_Comment << ") ";
@@ -154,19 +154,19 @@ void SimpleSubjectWatcher::ShowAbort()
 }
 void SimpleSubjectWatcher::ShowAnonymization(Subject *caller, const Event &evt)
 {
-  const AnonymizeEvent &ae = dynamic_cast<const AnonymizeEvent&>(evt);
+  const auto &ae = dynamic_cast<const AnonymizeEvent&>(evt);
   (void)caller;
   std::cout << "AnonymizeEvent: " << ae.GetTag() << std::endl;
 }
 void SimpleSubjectWatcher::ShowData(Subject *caller, const Event &evt)
 {
-  const DataEvent &ae = dynamic_cast<const DataEvent&>(evt);
+  const auto &ae = dynamic_cast<const DataEvent&>(evt);
   (void)caller;
   std::cout << "DataEvent: " << ae.GetDataLength() << std::endl;
 }
 void SimpleSubjectWatcher::ShowDataSet(Subject *caller, const Event &evt)
 {
-  const DataSetEvent &ae = dynamic_cast<const DataSetEvent&>(evt);
+  const auto &ae = dynamic_cast<const DataSetEvent&>(evt);
   (void)caller;
   std::cout << "DataSetEvent: \n";
   std::cout << ae.GetDataSet() << std::endl;

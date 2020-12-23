@@ -61,7 +61,7 @@ void BoxRegion::SetDomain(unsigned int xmin, unsigned int xmax,
 
 Region *BoxRegion::Clone() const
 {
-  BoxRegion *br = new BoxRegion( *this );
+  auto *br = new BoxRegion( *this );
   return br;
 }
 

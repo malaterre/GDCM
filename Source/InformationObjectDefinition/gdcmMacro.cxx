@@ -23,7 +23,7 @@ namespace gdcm
 
 bool Macro::FindMacroEntry(const Tag &tag) const
 {
-  MapModuleEntry::const_iterator it = ModuleInternal.find(tag);
+  auto it = ModuleInternal.find(tag);
   if( it != ModuleInternal.end() )
     {
     return true;
@@ -34,7 +34,7 @@ bool Macro::FindMacroEntry(const Tag &tag) const
 
 const MacroEntry& Macro::GetMacroEntry(const Tag &tag) const
 {
-  MapModuleEntry::const_iterator it = ModuleInternal.find(tag);
+  auto it = ModuleInternal.find(tag);
   if( it != ModuleInternal.end() )
     {
     assert( it->first == tag );
@@ -48,7 +48,7 @@ bool Macro::Verify(const DataSet& ds, Usage const & usage) const
 {
   bool success = true;
   if( usage == Usage::UserOption ) return success;
-  Macro::MapModuleEntry::const_iterator it = ModuleInternal.begin();
+  auto it = ModuleInternal.begin();
   for(;it != ModuleInternal.end(); ++it)
     {
     const Tag &tag = it->first;

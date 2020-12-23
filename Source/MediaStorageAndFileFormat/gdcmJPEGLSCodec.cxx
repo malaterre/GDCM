@@ -154,7 +154,7 @@ bool JPEGLSCodec::CanCode(TransferSyntax const &ts) const
 bool JPEGLSCodec::DecodeByStreamsCommon(const char *buffer, size_t totalLen, std::vector<unsigned char> &rgbyteOut)
 {
   using namespace charls;
-  const unsigned char* pbyteCompressed = (const unsigned char*)buffer;
+  const auto* pbyteCompressed = (const unsigned char*)buffer;
   size_t cbyteCompressed = totalLen;
 
   JlsParameters params = {};
@@ -221,7 +221,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
 
       bv->GetBuffer(mybuffer, bv->GetLength());
 
-      const unsigned char* pbyteCompressed = (const unsigned char*)mybuffer;
+      const auto* pbyteCompressed = (const unsigned char*)mybuffer;
       while( totalLen > 0 && pbyteCompressed[totalLen-1] != 0xd9 )
         {
         totalLen--;
@@ -543,7 +543,7 @@ bool JPEGLSCodec::DecodeExtent(
 
 ImageCodec * JPEGLSCodec::Clone() const
 {
-  JPEGLSCodec * copy = new JPEGLSCodec;
+  auto * copy = new JPEGLSCodec;
   return copy;
 }
 

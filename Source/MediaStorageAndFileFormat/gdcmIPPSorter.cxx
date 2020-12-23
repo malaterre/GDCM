@@ -108,7 +108,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     if( iops.size() != 1 )
       {
       std::set< dircos_key, dircos_comp > s;
-      for( Scanner::ValuesType::const_iterator it = iops.begin(); it != iops.end(); ++it )
+      for( auto it = iops.begin(); it != iops.end(); ++it )
       {
         dircos_key dk;
         dk.read( *it );
@@ -140,7 +140,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
 
   const char *reference = filenames[0].c_str();
   // we cannot simply consider the first file, what if this is not DICOM ?
-  for(std::vector<std::string>::const_iterator it1 = filenames.begin();
+  for(auto it1 = filenames.begin();
     it1 != filenames.end(); ++it1)
     {
     const char *filename = it1->c_str();
@@ -151,7 +151,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
       }
     }
   Scanner::TagToValue const &t2v = scanner.GetMapping(reference);
-  Scanner::TagToValue::const_iterator it = t2v.find( tiop );
+  auto it = t2v.find( tiop );
   // Take the first file in the list of filenames, if not IOP is found, simply gives up:
   if( it == t2v.end() )
     {
@@ -190,7 +190,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   using SortedFilenames = std::map<double, const char *>;
   SortedFilenames sorted;
 {
-  std::vector<std::string>::const_iterator it1 = filenames.begin();
+  auto it1 = filenames.begin();
   DirectionCosines dc2;
   for(; it1 != filenames.end(); ++it1)
     {
