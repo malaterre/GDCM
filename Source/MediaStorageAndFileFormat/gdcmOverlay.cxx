@@ -496,12 +496,12 @@ bool Overlay::GetUnpackBuffer(char *buffer, size_t len) const
   if( len < unpacklen ) return false;
   auto *unpackedbytes = (unsigned char*)buffer;
   const unsigned char *begin = unpackedbytes;
-  for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
+  for(char it : Internal->Data)
     {
     assert( unpackedbytes <= begin + len ); // We never store more than actually required
     // const unsigned char &packedbytes = *it;
     // weird bug with gcc 3.3 (prerelease on SuSE) apparently:
-    auto packedbytes = static_cast<unsigned char>(*it);
+    auto packedbytes = static_cast<unsigned char>(it);
     unsigned char mask = 1;
     for (unsigned int i = 0; i < 8 && unpackedbytes < begin + len; ++i)
       {
@@ -527,9 +527,8 @@ void Overlay::Decompress(std::ostream &os) const
   unsigned char unpackedbytes[8];
   //std::vector<char>::const_iterator beg = Internal->Data.begin();
   size_t curlen = 0;
-  for( std::vector<char>::const_iterator it = Internal->Data.begin(); it != Internal->Data.end(); ++it )
+  for(unsigned char packedbytes : Internal->Data)
     {
-    unsigned char packedbytes = *it;
     unsigned char mask = 1;
     unsigned int i = 0;
     for (; i < 8 && curlen < unpacklen; ++i)

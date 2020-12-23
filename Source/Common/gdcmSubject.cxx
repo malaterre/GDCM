@@ -59,10 +59,9 @@ private:
 SubjectInternals::
 ~SubjectInternals()
 {
-  for(auto i = m_Observers.begin();
-      i != m_Observers.end(); ++i)
+  for(auto & m_Observer : m_Observers)
     {
-    delete (*i);
+    delete m_Observer;
     }
 }
 
@@ -113,10 +112,9 @@ void
 SubjectInternals::
 RemoveAllObservers()
 {
-  for(auto i = m_Observers.begin();
-      i != m_Observers.end(); ++i)
+  for(auto & m_Observer : m_Observers)
     {
-    delete (*i);
+    delete m_Observer;
     }
   m_Observers.clear();
 }
@@ -127,13 +125,12 @@ SubjectInternals::
 InvokeEvent( const Event & event,
              Subject* self)
 {
-  for(auto i = m_Observers.begin();
-      i != m_Observers.end(); ++i)
+  for(auto & m_Observer : m_Observers)
     {
-    const Event * e =  (*i)->m_Event;
+    const Event * e =  m_Observer->m_Event;
     if(e->CheckEvent(&event))
       {
-      (*i)->m_Command->Execute(self, event);
+      m_Observer->m_Command->Execute(self, event);
       }
     }
 }
@@ -143,13 +140,12 @@ SubjectInternals::
 InvokeEvent( const Event & event,
              const Subject* self)
 {
-  for(auto i = m_Observers.begin();
-      i != m_Observers.end(); ++i)
+  for(auto & m_Observer : m_Observers)
     {
-    const Event * e =  (*i)->m_Event;
+    const Event * e =  m_Observer->m_Event;
     if(e->CheckEvent(&event))
       {
-      (*i)->m_Command->Execute(self, event);
+      m_Observer->m_Command->Execute(self, event);
       }
     }
 }
@@ -159,12 +155,11 @@ Command*
 SubjectInternals::
 GetCommand(unsigned long tag)
 {
-  for(auto i = m_Observers.begin();
-      i != m_Observers.end(); ++i)
+  for(auto & m_Observer : m_Observers)
     {
-    if ( (*i)->m_Tag == tag)
+    if ( m_Observer->m_Tag == tag)
       {
-      return (*i)->m_Command;
+      return m_Observer->m_Command;
       }
     }
   return nullptr;
@@ -174,10 +169,9 @@ bool
 SubjectInternals::
 HasObserver(const Event & event) const
 {
-  for(auto i = m_Observers.begin();
-      i != m_Observers.end(); ++i)
+  for(auto m_Observer : m_Observers)
     {
-    const Event * e =  (*i)->m_Event;
+    const Event * e =  m_Observer->m_Event;
     if(e->CheckEvent(&event))
       {
       return true;
@@ -195,11 +189,10 @@ PrintObservers(std::ostream& os, std::string indent) const
     return false;
     }
 
-  for(auto i = m_Observers.begin();
-      i != m_Observers.end(); ++i)
+  for(auto m_Observer : m_Observers)
     {
-    const Event * e =  (*i)->m_Event;
-    const Command* c = (*i)->m_Command; (void)c;
+    const Event * e =  m_Observer->m_Event;
+    const Command* c = m_Observer->m_Command; (void)c;
     os << indent << e->GetEventName() << "(" /*<< c->GetNameOfClass()*/ << ")\n";
     }
   return true;

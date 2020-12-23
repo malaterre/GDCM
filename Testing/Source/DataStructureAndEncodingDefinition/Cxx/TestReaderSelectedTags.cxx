@@ -109,10 +109,9 @@ int TestReadSelectedTagsExtra()
 
   gdcm::Directory::FilenamesType const & fns = d.GetFilenames();
   int r = 0;
-  for( auto it = fns.begin();
-    it != fns.end(); ++it )
+  for(const auto & fn : fns)
     {
-    const char *filename = it->c_str();
+    const char *filename = fn.c_str();
     r += TestReadSelectedTags( filename );
     }
 

@@ -79,9 +79,8 @@ int TestInvalidDICOMFiles(int , char *[])
     return 1;
     }
   static const size_t n = sizeof( list ) / sizeof( element );
-  for( size_t i = 0; i < n; ++i )
+  for(const auto & el : list)
   {
-  const element &el = list[i];
   std::string sfilename = extradataroot;
   sfilename += "/gdcmSampleData/images_of_interest/";
   sfilename += el.in;

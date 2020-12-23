@@ -88,9 +88,9 @@ int TestVM(int, char *[])
     !(gdcm::VM::VM4 & gdcm::VM::VM4_4n),
   };
   static const int nerror_combinations = sizeof( error_combinations ) / sizeof( *error_combinations );
-  for( int i = 0; i < nerror_combinations; ++i )
+  for(int error_combination : error_combinations)
     {
-    if( error_combinations[i] ) return 1;
+    if( error_combination ) return 1;
     }
 
   const char *vm1 = gdcm::VM::GetVMString( gdcm::VM::VM1 );

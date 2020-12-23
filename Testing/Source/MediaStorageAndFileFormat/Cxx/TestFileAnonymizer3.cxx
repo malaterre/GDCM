@@ -65,10 +65,9 @@ static int TestFileAnonymize3(const char *filename, bool verbose = false)
   gdcm::FileAnonymizer fa;
   fa.SetInputFileName( filename );
   fa.SetOutputFileName( outfilename.c_str() );
-  for( std::vector<gdcm::Tag>::const_iterator it = tags.begin();
-    it != tags.end(); ++it )
+  for(const auto & tag : tags)
     {
-    fa.Replace( *it, "TOTO" );
+    fa.Replace( tag, "TOTO" );
     }
   if( !fa.Write() )
     {
@@ -96,10 +95,8 @@ static int TestFileAnonymize3(const char *filename, bool verbose = false)
   ms.SetFromFile( f );
 
   const DataSet &ds = f.GetDataSet();
-  for( std::vector<gdcm::Tag>::const_iterator it = tags.begin();
-    it != tags.end(); ++it )
+  for(const auto & t : tags)
     {
-    const gdcm::Tag & t = *it;
     // Special handling of t8 (DICOMDIR only)
     const bool iserror = (ms == gdcm::MediaStorage::MediaStorageDirectoryStorage && t == t8) && false; // de-activate for now
     if( !ds.FindDataElement( t ) )

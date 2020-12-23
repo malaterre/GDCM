@@ -149,9 +149,9 @@ std::vector<DataSet> DirectoryHelper::LoadImageFromFiles(const std::string& inDi
           return blank;
         }
         Directory::FilenamesType theSortedFiles = sorter.GetFilenames();
-        for (unsigned long j = 0; j < theSortedFiles.size(); ++j){
+        for (auto & theSortedFile : theSortedFiles){
           Reader theReader;
-          theReader.SetFileName(theSortedFiles[j].c_str());
+          theReader.SetFileName(theSortedFile.c_str());
           theReader.Read();
           theReturn.push_back(theReader.GetFile().GetDataSet());
         }

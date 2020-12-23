@@ -63,9 +63,8 @@ int TestImageHelper2(int, char *[])
   sroot += "/";
 
   gdcm::Trace::WarningOff();
-  for(unsigned int i = 0; i < nfiles; ++i)
+  for(auto filename : filenames)
   {
-    const char * filename = filenames[i];
     std::string fullpath = sroot + filename;
 
     gdcm::ImageHelper::SetForceRescaleInterceptSlope(true);

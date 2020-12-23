@@ -108,10 +108,10 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
     if( iops.size() != 1 )
       {
       std::set< dircos_key, dircos_comp > s;
-      for( auto it = iops.begin(); it != iops.end(); ++it )
+      for(const auto & iop : iops)
       {
         dircos_key dk;
-        dk.read( *it );
+        dk.read( iop );
         s.insert( dk );
       }
       // sometime we want to handle:
@@ -140,10 +140,9 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
 
   const char *reference = filenames[0].c_str();
   // we cannot simply consider the first file, what if this is not DICOM ?
-  for(auto it1 = filenames.begin();
-    it1 != filenames.end(); ++it1)
+  for(const auto & it1 : filenames)
     {
-    const char *filename = it1->c_str();
+    const char *filename = it1.c_str();
     bool iskey = scanner.IsKey(filename);
     if( iskey )
       {

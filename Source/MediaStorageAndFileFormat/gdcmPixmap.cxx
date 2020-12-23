@@ -60,15 +60,13 @@ bool Pixmap::UnusedBitsPresentInPixelData() const
 void Pixmap::Print(std::ostream &os) const
 {
   Bitmap::Print(os);
-  for( auto it = Overlays.begin();
-    it != Overlays.end(); ++it)
+  for(const auto & Overlay : Overlays)
     {
-    it->Print( os );
+    Overlay.Print( os );
     }
-  for( auto it = Curves.begin();
-    it != Curves.end(); ++it)
+  for(const auto & Curve : Curves)
     {
-    it->Print( os );
+    Curve.Print( os );
     }
 }
 

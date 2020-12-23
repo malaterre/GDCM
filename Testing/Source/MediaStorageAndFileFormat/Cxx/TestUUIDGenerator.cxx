@@ -32,9 +32,8 @@ int TestUUIDGenerator(int , char *[])
     "67C8770B-44F1-410A-AB9A-F9B5446F13EE"
   };
   const size_t nv = sizeof( valids ) / sizeof( *valids );
-  for( size_t i = 0; i < nv; ++i )
+  for(auto valid : valids)
     {
-    const char *valid = valids[i];
     if( !gdcm::UUIDGenerator::IsValid( valid ) )
       {
       std::cerr << "Invalid: " << valid << std::endl;

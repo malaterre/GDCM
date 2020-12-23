@@ -357,10 +357,9 @@ bool System::DeleteDirectory(const char *source)
   unsigned int numfiles = dir.Load(source, false);
   (void)numfiles;
   Directory::FilenamesType const & files = dir.GetFilenames();
-  for ( auto it = files.begin();
-    it != files.end(); ++it )
+  for (const auto & file : files)
     {
-    const char *filename = it->c_str();
+    const char *filename = file.c_str();
     if( System::FileIsDirectory(filename) &&
       !System::FileIsSymlink(filename) )
       {

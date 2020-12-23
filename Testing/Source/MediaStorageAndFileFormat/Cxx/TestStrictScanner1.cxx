@@ -114,9 +114,9 @@ int TestStrictScanner1(int argc, char *argv[])
     }
 
   int numerrors = 0;
-  for( auto it = files.begin(); it != files.end(); ++it )
+  for(const auto & file : files)
     {
-    const char *filename = it->c_str();
+    const char *filename = file.c_str();
     const char* value = s.GetValue(filename, t7);
     const char *msstr = gdcm::Testing::GetMediaStorageFromFile(filename);
     if( msstr && strcmp(msstr, "1.2.840.10008.1.3.10" ) == 0 )

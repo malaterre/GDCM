@@ -60,11 +60,10 @@ const Tag EmptyMaskGenerator::impl::TFrameOfReferenceUID = Tag(0x0020,0x0052);
 bool EmptyMaskGenerator::impl::collectuids( Tag const & tag, std::map< std::string, std::string > & hash)
 {
   Scanner::ValuesType vt = s.GetValues(tag);
-  for( auto it = vt.begin();
-    it != vt.end(); ++it )
+  for(const auto & it : vt)
     {
     const char * newuid = uid.Generate();
-    hash.insert( std::make_pair( *it, newuid ) );
+    hash.insert( std::make_pair( it, newuid ) );
     }
   return true;
 }
@@ -438,9 +437,9 @@ bool EmptyMaskGenerator::Execute()
     }
   bool success = true;
   Directory::FilenamesType const & filenames = pimpl->s.GetFilenames();
-  for( auto it =  filenames.begin(); it != filenames.end(); ++it )
+  for(const auto & it : filenames)
     {
-    const char * filename = it->c_str();
+    const char * filename = it.c_str();
     Filename fn( filename );
     std::string outfile = outdir;
     outfile += '/';

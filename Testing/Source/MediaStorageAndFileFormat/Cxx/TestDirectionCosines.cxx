@@ -81,9 +81,9 @@ bool TestCrossDot()
 {
   std::set< std::string > myset;
   const unsigned int nipp = sizeof(ImageOrientationPatientList) / sizeof(*ImageOrientationPatientList);
-  for( unsigned int i = 0; i < nipp; ++i )
+  for(auto & i : ImageOrientationPatientList)
     {
-    myset.insert( ImageOrientationPatientList[i] );
+    myset.insert( i );
     }
 
   if( myset.size() <= 1 ) return false;
@@ -94,9 +94,9 @@ bool TestCrossDot()
   for( ; it != myset.end(); ++it )
     {
     ref.SetFromString( it->c_str() );
-    for( unsigned int i = 0; i < nipp; ++i )
+    for(auto & i : ImageOrientationPatientList)
       {
-      dc.SetFromString( ImageOrientationPatientList[i] );
+      dc.SetFromString( i );
       const double crossdot = ref.CrossDot( dc);
       const double eps = 1. - crossdot;
       if( eps > 1e-6 || eps < 0 ) return false;

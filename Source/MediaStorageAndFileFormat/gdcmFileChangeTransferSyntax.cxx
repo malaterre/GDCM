@@ -288,11 +288,11 @@ void FileChangeTransferSyntax::SetTransferSyntax( TransferSyntax const & ts )
     &rle
   };
   const int n = sizeof( codecs ) / sizeof( *codecs );
-  for( int i = 0; i < n; ++i )
+  for(auto & codec : codecs)
     {
-    if( codecs[i]->CanCode( ts ) )
+    if( codec->CanCode( ts ) )
       {
-      Internals->IC = codecs[i]->Clone();
+      Internals->IC = codec->Clone();
       }
     }
   assert( Internals->TS );

@@ -147,12 +147,10 @@ bool ServiceClassUser::StartAssociation()
   if(theState != eSta6TransferReady)
     {
     std::vector<BasePDU*> const & thePDUs = theEvent.GetPDUs();
-    for( auto itor
-      = thePDUs.begin(); itor != thePDUs.end(); itor++)
+    for(auto thePDU : thePDUs)
       {
-      assert(*itor);
-      if (*itor == nullptr) continue; //can have a nulled pdu, apparently
-      (*itor)->Print(Trace::GetErrorStream());
+      if (thePDU == nullptr) continue; //can have a nulled pdu, apparently
+      thePDU->Print(Trace::GetErrorStream());
       }
     }
 
@@ -699,9 +697,9 @@ EStateID ServiceClassUser::RunEventLoop(network::ULEvent& currentEvent,
                   DataSet theCompleteFindResponse =
                     PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
                   //note that it's the responsibility of the event to delete the PDU in theFindRSP
-                  for (size_t i = 0; i < theData.size(); i++)
+                  for (auto & i : theData)
                     {
-                    delete theData[i];
+                    delete i;
                     }
                   //outDataSet.push_back(theCompleteFindResponse);
                   if (inCallback)
@@ -1042,8 +1040,8 @@ EStateID ServiceClassUser::RunMoveEventLoop(ULEvent& currentEvent, ULConnectionC
                 DataSet theCompleteFindResponse =
                   PresentationDataValue::ConcatenatePDVBlobs(PDUFactory::GetPDVs(theData));
                 //note that it's the responsibility of the event to delete the PDU in theFindRSP
-                for (size_t i = 0; i < theData.size(); i++){
-                  delete theData[i];
+                for (auto & i : theData){
+                  delete i;
                 }
                 //outDataSet.push_back(theCompleteFindResponse);
                 if (inCallback){
