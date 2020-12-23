@@ -47,9 +47,6 @@ ImageCodec::ImageCodec()
   LossyFlag = false;
 }
 
-ImageCodec::~ImageCodec()
-= default;
-
 bool ImageCodec::GetHeaderInfo(std::istream &, TransferSyntax &)
 {
   // This function should really be virtual pure.

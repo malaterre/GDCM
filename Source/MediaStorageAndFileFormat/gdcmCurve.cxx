@@ -94,12 +94,21 @@ Curve::~Curve()
   delete Internal;
 }
 
-Curve::Curve(Curve const &ov):Object(ov)
+Curve::Curve(const Curve &ov):Object(ov)
 {
   //delete Internal;
   Internal = new CurveInternal;
   // TODO: copy CurveInternal into other...
   *Internal = *ov.Internal;
+}
+
+Curve & Curve::operator=(const Curve &ov)
+{
+  delete Internal;
+  Internal = new CurveInternal;
+  // TODO: copy CurveInternal into other...
+  *Internal = *ov.Internal;
+  return *this;
 }
 
 void Curve::Print(std::ostream &os) const
