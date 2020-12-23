@@ -52,7 +52,7 @@ int TestImageHelper2(int, char *[])
     "PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm", // need PVRG option
   };
 
-  const unsigned int nfiles = sizeof(filenames)/sizeof(*filenames);
+  //const unsigned int nfiles = sizeof(filenames)/sizeof(*filenames);
   const char *root = gdcm::Testing::GetDataRoot();
   if( !root || !*root )
     {

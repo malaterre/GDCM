@@ -87,7 +87,7 @@ int TestVM(int, char *[])
     gdcm::VM::VM1 & gdcm::VM::VM4_4n,
     !(gdcm::VM::VM4 & gdcm::VM::VM4_4n),
   };
-  static const int nerror_combinations = sizeof( error_combinations ) / sizeof( *error_combinations );
+  //static const int nerror_combinations = sizeof( error_combinations ) / sizeof( *error_combinations );
   for(int error_combination : error_combinations)
     {
     if( error_combination ) return 1;

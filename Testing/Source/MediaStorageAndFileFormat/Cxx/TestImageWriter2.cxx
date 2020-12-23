@@ -51,7 +51,7 @@ int TestImageWriter2(int , char *[])
 {
   const char *directory = gdcm::Testing::GetDataRoot();
   gdcm::Trace::WarningOff();
-  static const unsigned int ntests = sizeof( LossLessTestArray ) / sizeof( *LossLessTestArray );
+  //static const unsigned int ntests = sizeof( LossLessTestArray ) / sizeof( *LossLessTestArray );
   for(const auto & ltest : LossLessTestArray)
     {
     const char *j2k_filename1 = ltest.lossyfile;
