@@ -394,14 +394,14 @@ class JPEG2000Internals
 {
 public:
   JPEG2000Internals()
-  : nNumberOfThreadsForDecompression( -1 )
+   
     {
     memset(&coder_param, 0, sizeof(coder_param));
     opj_set_default_encoder_parameters(&coder_param);
     }
 
   opj_cparameters coder_param;
-  int nNumberOfThreadsForDecompression;
+  int nNumberOfThreadsForDecompression{ -1 };
 };
 
 void JPEG2000Codec::SetRate(unsigned int idx, double rate)
