@@ -39,6 +39,7 @@
  */
 #define _SVID_SOURCE
 
+#define _DEFAULT_SOURCE
 #include <stdio.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

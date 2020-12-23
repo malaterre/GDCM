@@ -6921,8 +6921,9 @@ OPJ_BOOL opj_j2k_setup_encoder(opj_j2k_t *p_j2k,
                                        image->comps[0].h * image->comps[0].prec) /
                                       ((double)parameters->tcp_rates[parameters->tcp_numlayers - 1] * 8 *
                                        image->comps[0].dx * image->comps[0].dy));
-            if (temp_size > (OPJ_FLOAT32)INT_MAX) {
-                parameters->max_cs_size = (OPJ_FLOAT32)INT_MAX;
+            static const OPJ_FLOAT32 max_float_size_allowed = (1 << FLT_MANT_DIG); // LARGEST INTEGER STORABLE IN FLOAT
+            if (temp_size > max_float_size_allowed) {
+                parameters->max_cs_size = max_float_size_allowed;
             } else {
                 parameters->max_cs_size = (int) floor(temp_size);
             }
