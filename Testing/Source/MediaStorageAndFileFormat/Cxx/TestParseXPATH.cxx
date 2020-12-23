@@ -43,7 +43,7 @@ static bool CheckResult( std::string const & filename, std::string const & value
   else if ( filename == "NM-PAL-16-PixRep1.dcm" )
     return value == "Full fidelity image ";
   else
-    return value == "";
+    return value.empty();
 }
 
 int TestParseXPATHFile(const char* filename, bool verbose = false )
