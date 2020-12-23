@@ -198,7 +198,7 @@ start_pass_phuff (j_compress_ptr cinfo, boolean gather_statistics)
 #define emit_byte(entropy,val)  \
   { *(entropy)->next_output_byte++ = (JOCTET) (val);  \
     if (--(entropy)->free_in_buffer == 0)  \
-      dump_buffer(entropy); }
+      dump_buffer(entropy); } do {} while(0)
 
 
 LOCAL(void)

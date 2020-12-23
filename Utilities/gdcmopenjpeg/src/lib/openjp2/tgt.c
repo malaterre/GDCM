@@ -236,7 +236,7 @@ void opj_tgt_destroy(opj_tgt_tree_t *p_tree)
 void opj_tgt_reset(opj_tgt_tree_t *p_tree)
 {
     OPJ_UINT32 i;
-    opj_tgt_node_t * l_current_node = 00;;
+    opj_tgt_node_t * l_current_node = 00;
 
     if (! p_tree) {
         return;

@@ -170,7 +170,7 @@ local void gen_trees_header OF((void));
 #else /* DEBUG */
 #  define send_code(s, c, tree) \
      { if (z_verbose>2) fprintf(stderr,"\ncd %3d ",(c)); \
-       send_bits(s, tree[c].Code, tree[c].Len); }
+       send_bits(s, tree[c].Code, tree[c].Len); }  do {}  while(0)
 #endif
 
 /* ===========================================================================
@@ -180,7 +180,7 @@ local void gen_trees_header OF((void));
 #define put_short(s, w) { \
     put_byte(s, (uch)((w) & 0xff)); \
     put_byte(s, (uch)((ush)(w) >> 8)); \
-}
+}  do {}  while(0)
 
 /* ===========================================================================
  * Send a value on a given number of bits.
@@ -226,7 +226,7 @@ local void send_bits(s, value, length)
     s->bi_buf |= (value) << s->bi_valid;\
     s->bi_valid += len;\
   }\
-}
+}  do {}  while(0)
 #endif /* DEBUG */
 
 
@@ -436,7 +436,7 @@ local void init_block(s)
     top = s->heap[SMALLEST]; \
     s->heap[SMALLEST] = s->heap[s->heap_len--]; \
     pqdownheap(s, tree, SMALLEST); \
-}
+} do {}  while(0)
 
 /* ===========================================================================
  * Compares to subtrees, using the tree depth as tie breaker when

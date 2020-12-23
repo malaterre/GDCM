@@ -41,7 +41,7 @@ extern void   free   OF((voidpf ptr));
 #endif
 
 #define ALLOC(size) malloc(size)
-#define TRYFREE(p) {if (p) free(p);}
+#define TRYFREE(p) {if (p) free(p);} do {} while(0)
 
 static int const gz_magic[2] = {0x1f, 0x8b}; /* gzip magic header */
 

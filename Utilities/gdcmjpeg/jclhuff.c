@@ -212,7 +212,8 @@ start_pass_huff (j_compress_ptr cinfo, boolean gather_statistics)
   { *(state)->next_output_byte++ = (JOCTET) (val);  \
     if (--(state)->free_in_buffer == 0)  \
       if (! dump_buffer(state))  \
-        { action; } }
+        { action; } \
+  } do {} while(0)
 
 
 LOCAL(boolean)

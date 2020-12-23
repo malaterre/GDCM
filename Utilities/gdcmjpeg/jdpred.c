@@ -55,7 +55,7 @@
   for (xindex = 1; xindex < width; xindex++) { \
     Ra = (diff_buf[xindex] + PREDICTOR1) & 0xFFFF; \
     undiff_buf[xindex] = Ra; \
-  }
+  } do {} while(0)
 
 /*
  * 2-Dimensional undifferencer routine.
@@ -85,7 +85,7 @@
     Rb = GETJSAMPLE(prev_row[xindex]); \
     Ra = (diff_buf[xindex] + PREDICTOR) & 0xFFFF; \
     undiff_buf[xindex] = Ra; \
-  }
+  } do {} while(0)
 
 
 /*

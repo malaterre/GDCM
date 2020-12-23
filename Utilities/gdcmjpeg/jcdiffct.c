@@ -126,7 +126,7 @@ start_pass_diff (j_compress_ptr cinfo, J_BUF_MODE pass_mode)
 }
 
 
-#define SWAP_ROWS(rowa,rowb) {JSAMPROW temp; temp=rowa; rowa=rowb; rowb=temp;}
+#define SWAP_ROWS(rowa,rowb) {JSAMPROW temp; temp=rowa; rowa=rowb; rowb=temp;} do {} while(0)
 
 /*
  * Process some data in the single-pass case.
