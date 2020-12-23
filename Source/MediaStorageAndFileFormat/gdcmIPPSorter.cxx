@@ -187,7 +187,7 @@ bool IPPSorter::Sort(std::vector<std::string> const & filenames)
   // each slice, calculate the distance along the slice normal using the IPP
   // tag ("dist" is initialized to zero before reading the first slice) :
   //typedef std::multimap<double, const char*> SortedFilenames;
-  typedef std::map<double, const char*> SortedFilenames;
+  using SortedFilenames = std::map<double, const char *>;
   SortedFilenames sorted;
 {
   std::vector<std::string>::const_iterator it1 = filenames.begin();

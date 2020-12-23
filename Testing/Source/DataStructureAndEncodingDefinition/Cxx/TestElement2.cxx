@@ -23,7 +23,7 @@ struct dummy
 
 template<int,int> struct TagToElement;
 template<> struct TagToElement<0x0018,0x1624> {
-  typedef gdcm::Element<gdcm::VR::US,gdcm::VM::VM3> Type;
+  using Type = gdcm::Element<gdcm::VR::US, gdcm::VM::VM3>;
 };
 
 int TestElement2(int, char *[])

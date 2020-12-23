@@ -19,12 +19,12 @@ int TestSwapper(int argc, char *argv[])
   (void)argv; (void)argc;
   int res = 0;
 
-  typedef union {
+  using testswapper = union {
     uint64_t v64;
     uint32_t v32[2];
     uint16_t v16[4];
     uint8_t  v8[8];
-  } testswapper;
+  };
   testswapper t;
   for(uint_fast8_t i = 0; i < 8; ++i) t.v8[i] = i;
 

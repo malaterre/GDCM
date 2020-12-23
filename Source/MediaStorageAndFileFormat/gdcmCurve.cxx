@@ -295,7 +295,7 @@ static const char * const TypeOfDataDescription[][2] = {
 };
 const char *Curve::GetTypeOfDataDescription() const
 {
-  typedef const char* const (*TypeOfDataDescriptionType)[2];
+  using TypeOfDataDescriptionType = const char *const (*)[2];
   TypeOfDataDescriptionType t = TypeOfDataDescription;
   int i = 0;
   const char *p = t[i][0];
