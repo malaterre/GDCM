@@ -37,7 +37,7 @@ class FileChangeTransferSyntaxInternals
 public:
   FileChangeTransferSyntaxInternals()
     
-  {}
+  = default;
   ~FileChangeTransferSyntaxInternals()
     {
     delete IC;
