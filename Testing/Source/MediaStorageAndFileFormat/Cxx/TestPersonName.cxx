@@ -18,7 +18,7 @@
 
 int TestPersonName(int, char *[])
 {
-  typedef gdcm::PersonName PN;
+  using PN = gdcm::PersonName;
 
   PN pn0;
   pn0.SetComponents();
