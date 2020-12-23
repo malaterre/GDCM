@@ -41,8 +41,8 @@ int TestServiceClassUser1(int argc, char *argv[])
     }
   std::string aetitle = argv[1]; // the ae title of this computer
   std::string call = argv[2]; // the ae title of the server
-  uint16_t portno = (uint16_t)atoi(argv[3]); // the port of the server
-  uint16_t moveReturnPort = (uint16_t)atoi(argv[4]); // the port over which return cstore scps are done for cmove
+  auto portno = (uint16_t)atoi(argv[3]); // the port of the server
+  auto moveReturnPort = (uint16_t)atoi(argv[4]); // the port over which return cstore scps are done for cmove
   std::string remote = argv[5]; //the ip address of the remote server
 
   gdcm::SmartPointer<gdcm::ServiceClassUser> scup = new gdcm::ServiceClassUser;

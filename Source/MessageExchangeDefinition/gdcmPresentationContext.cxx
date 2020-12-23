@@ -57,7 +57,7 @@ uint8_t PresentationContext::GetPresentationContextID() const
 void PresentationContext::Print(std::ostream &os) const
 {
   os << "AbstractSyntax:" << AbstractSyntax << std::endl;
-  std::vector<std::string>::const_iterator it = TransferSyntaxes.begin();
+  auto it = TransferSyntaxes.begin();
   for( ; it != TransferSyntaxes.end(); ++it )
     {
     os << *it << std::endl;

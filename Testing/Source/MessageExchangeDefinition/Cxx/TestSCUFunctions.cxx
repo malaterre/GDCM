@@ -32,8 +32,8 @@
 
 //this should maybe override == ?
 bool AreDataSetsEqual(const gdcm::DataSet& ds1, const gdcm::DataSet& ds2){
-  gdcm::DataSet::ConstIterator it1 = ds1.Begin();
-  gdcm::DataSet::ConstIterator it2 = ds2.Begin();
+  auto it1 = ds1.Begin();
+  auto it2 = ds2.Begin();
 
   const gdcm::DataElement &de1 = *it1;
   const gdcm::DataElement &de2 = *it2;
@@ -106,8 +106,8 @@ int TestSCUFunctions(int argc, char *argv[])
   gdcm::Trace::WarningOff();
   std::string aetitle = argv[1]; // the ae title of this computer
   std::string call = argv[2]; // the ae title of the server
-  uint16_t portno = (uint16_t)atoi(argv[3]); // the port of the server
-  uint16_t moveReturnPort = (uint16_t)atoi(argv[4]); // the port over which return cstore scps are done for cmove
+  auto portno = (uint16_t)atoi(argv[3]); // the port of the server
+  auto moveReturnPort = (uint16_t)atoi(argv[4]); // the port over which return cstore scps are done for cmove
   std::string remote = argv[5]; //the ip address of the remote server
   std::string tmpdir = gdcm::Testing::GetTempDirectory( "TestSCUFunctions" );
   std::string outputDir = tmpdir; //place to where data is returned by cmove
@@ -153,7 +153,7 @@ int TestSCUFunctions(int argc, char *argv[])
   //validuids.push_back( "1.2.840.10008.1.2.2" );
   // remove any file without SOP Instance UID
   for(
-    gdcm::Directory::FilenamesType::iterator it = theFilenames.begin();
+    auto it = theFilenames.begin();
     it != theFilenames.end(); )
     {
     const char *file = it->c_str();

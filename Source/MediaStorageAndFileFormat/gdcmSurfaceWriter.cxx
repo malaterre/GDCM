@@ -525,8 +525,8 @@ bool SurfaceWriter::PrepareWrite()
           // else Should I remove items?
 
           const MeshPrimitive::PrimitivesData &         primitivesData= meshPrimitive->GetPrimitivesData();
-          MeshPrimitive::PrimitivesData::const_iterator it            = primitivesData.begin();
-          MeshPrimitive::PrimitivesData::const_iterator itEnd         = primitivesData.end();
+          auto it            = primitivesData.begin();
+          auto itEnd         = primitivesData.end();
           unsigned int                                  i             = 1;
           for (; it != itEnd; it++)
           {
@@ -665,8 +665,8 @@ bool SurfaceWriter::PrepareWrite()
 
     //*****   Referenced Surface Sequence    *****//
     SmartPointer<SequenceOfItems>   refSurfaceSQ    = segmentDS.GetDataElement( Tag(0x0066, 0x002B) ).GetValueAsSQ();
-    SequenceOfItems::Iterator       itRefSurface    = refSurfaceSQ->Begin();
-    SequenceOfItems::Iterator       itEndRefSurface = refSurfaceSQ->End();
+    auto       itRefSurface    = refSurfaceSQ->Begin();
+    auto       itEndRefSurface = refSurfaceSQ->End();
     unsigned int                    idxSurface      = 0;
     for (; itRefSurface != itEndRefSurface; itRefSurface++)
     {
@@ -783,7 +783,7 @@ bool SurfaceWriter::PrepareWrite()
     const char * SOPClassUID = MediaStorage::GetMSString(MediaStorage::SurfaceSegmentationStorage);
 
     DataElement de( Tag(0x0008, 0x0016) );
-    VL::Type strlenSOPClassUID= (VL::Type)strlen(SOPClassUID);
+    auto strlenSOPClassUID= (VL::Type)strlen(SOPClassUID);
     de.SetByteValue( SOPClassUID, strlenSOPClassUID );
     de.SetVR( Attribute<0x0008, 0x0016>::GetVR() );
     ds.ReplaceEmpty( de );
@@ -797,7 +797,7 @@ bool SurfaceWriter::PrepareWrite()
     const char * SOPInstanceUID = UIDgen.Generate();
 
     DataElement de( Tag(0x0008, 0x0018) );
-    VL::Type strlenSOPInstanceUID= (VL::Type)strlen(SOPInstanceUID);
+    auto strlenSOPInstanceUID= (VL::Type)strlen(SOPInstanceUID);
     de.SetByteValue( SOPInstanceUID, strlenSOPInstanceUID );
     de.SetVR( Attribute<0x0008, 0x0018>::GetVR() );
     ds.ReplaceEmpty( de );
@@ -807,7 +807,7 @@ bool SurfaceWriter::PrepareWrite()
   {
     const char *tsuid = TransferSyntax::GetTSString( ts );
     DataElement de( Tag(0x0002,0x0010) );
-    VL::Type strlenTSUID = (VL::Type)strlen(tsuid);
+    auto strlenTSUID = (VL::Type)strlen(tsuid);
     de.SetByteValue( tsuid, strlenTSUID );
     de.SetVR( Attribute<0x0002, 0x0010>::GetVR() );
     fmi.Replace( de );

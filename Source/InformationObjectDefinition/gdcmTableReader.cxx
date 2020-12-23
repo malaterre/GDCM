@@ -50,20 +50,20 @@ namespace gdcm
 
 static void XMLCALL startElement(void *userData, const char *name, const char **atts)
 {
-  TableReader *tr = reinterpret_cast<TableReader*>(userData);
+  auto *tr = reinterpret_cast<TableReader*>(userData);
   tr->StartElement(name, atts);
 }
 
 static void XMLCALL endElement(void *userData, const char *name)
 {
-  TableReader *tr = reinterpret_cast<TableReader*>(userData);
+  auto *tr = reinterpret_cast<TableReader*>(userData);
   tr->EndElement(name);
 }
 
 static void XMLCALL characterDataHandler(void* userData, const char* data,
   int length)
 {
-  TableReader *tr = reinterpret_cast<TableReader*>(userData);
+  auto *tr = reinterpret_cast<TableReader*>(userData);
   tr->CharacterDataHandler(data,length);
 }
 

@@ -79,7 +79,7 @@ std::string to_string ( Float data ) {
             else if( ldata < 0){
 				//since ldata is negative, to have the test pass,
 				//the right casting has to be done to avoid a casting warning here
-				unsigned long uldata = (unsigned long)(fabs(ldata)+1.0);
+				auto uldata = (unsigned long)(fabs(ldata)+1.0);
                 digits -= uldata; // (zeros before first significant digit)
 			}
         }

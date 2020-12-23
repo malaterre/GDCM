@@ -29,7 +29,7 @@ static bool check( const int64_t inslen )
 
 static bool append( size_t len )
 {
-  off_t newlen = (off_t)len;
+  auto newlen = (off_t)len;
 #if 1
   newlen -= (off_t)actualde;
   return check( newlen );
@@ -58,7 +58,7 @@ int TestSystem2(int, char *[])
   int val1 = 5;
   int val2 = 10;
   size_t size = 2;
-  const off_t o = (off_t)size;
+  const auto o = (off_t)size;
   
   if( !check( o + val1 - val2 ) )
     {

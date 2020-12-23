@@ -19,8 +19,8 @@ int TestPreamble(int, char *[])
 {
   gdcm::Preamble p;
 }
-  gdcm::FileMetaInformation * m_pFileMetaInformation = new gdcm::FileMetaInformation();
-  gdcm::Preamble *p = new gdcm::Preamble();
+  auto * m_pFileMetaInformation = new gdcm::FileMetaInformation();
+  auto *p = new gdcm::Preamble();
 
   m_pFileMetaInformation->SetPreamble( *p );
   m_pFileMetaInformation->Clear();

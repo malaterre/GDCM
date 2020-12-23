@@ -65,7 +65,7 @@ namespace gdcm_ns
     // I cannot check IsPrintable some file contains \2 or \0 in a VR::LO element
     // See: acr_image_with_non_printable_in_0051_1010.acr
     //assert( IsPrintable(length) );
-    std::vector<char>::const_iterator it = Internal.begin();
+    auto it = Internal.begin();
     for(; it != Internal.begin()+length; ++it)
       {
       const char &c = *it;
@@ -76,7 +76,7 @@ namespace gdcm_ns
   void ByteValue::PrintHex(std::ostream &os, VL maxlength ) const {
     VL length = std::min(maxlength, Length);
     // WARNING: Internal.end() != Internal.begin()+Length
-    std::vector<char>::const_iterator it = Internal.begin();
+    auto it = Internal.begin();
     os << std::hex;
     for(; it != Internal.begin()+length; ++it)
       {
@@ -123,7 +123,7 @@ namespace gdcm_ns
     count1=count2=1;
     os << "<PersonName number = \"" << count1 << "\" >\n" ;
     os << "<SingleByte>\n<FamilyName> " ;
-    std::vector<char>::const_iterator it = Internal.begin();
+    auto it = Internal.begin();
     for(; it != (Internal.begin() + Length); ++it)
       {
       const char &c = *it;
@@ -269,7 +269,7 @@ namespace gdcm_ns
 
     int count = 1;
     os << "<Value number = \"" << count << "\" >";
-    std::vector<char>::const_iterator it = Internal.begin();
+    auto it = Internal.begin();
 
     for(; it != (Internal.begin() + Length); ++it)
       {
@@ -305,7 +305,7 @@ namespace gdcm_ns
     //VL length = std::min(maxlength, Length);
     // WARNING: Internal.end() != Internal.begin()+Length
 
-    std::vector<char>::const_iterator it = Internal.begin();
+    auto it = Internal.begin();
     os << std::hex;
     for(; it != Internal.begin() + Length; ++it)
       {

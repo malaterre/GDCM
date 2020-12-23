@@ -559,7 +559,7 @@ std::string StringFilter::FromString(const Tag&t, const char * value, size_t len
     {
     return s;
     }
-  VL::Type castLen = (VL::Type)len;
+  auto castLen = (VL::Type)len;
   size_t count = VM::GetNumberOfElementsFromArray(value, castLen);
   VL vl = vm.GetLength() * vr.GetSizeof();
   if( vm.GetLength() == 0 )

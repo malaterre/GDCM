@@ -101,7 +101,7 @@ Attribute<0x0028,0x0004> piat;
     const char *pistr = PhotometricInterpretation::GetPIString(pi);
 {
     DataElement de( Tag(0x0028, 0x0004 ) );
-    VL::Type strlenPistr = (VL::Type)strlen(pistr);
+    auto strlenPistr = (VL::Type)strlen(pistr);
     de.SetByteValue( pistr, strlenPistr );
     de.SetVR( piat.GetVR() );
     ds.Replace( de );
@@ -283,7 +283,7 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
     assert( pi != PhotometricInterpretation::UNKNOWN );
     const char *pistr = PhotometricInterpretation::GetPIString(pi);
     DataElement de( Tag(0x0028, 0x0004 ) );
-    VL::Type strlenPistr = (VL::Type)strlen(pistr);
+    auto strlenPistr = (VL::Type)strlen(pistr);
     de.SetByteValue( pistr, strlenPistr );
     de.SetVR( Attribute<0x0028,0x0004>::GetVR() );
     ds.Replace( de );
@@ -673,7 +673,7 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
   if( !ds.FindDataElement( Tag(0x0008, 0x0016) ) )
     {
     DataElement de( Tag(0x0008, 0x0016 ) );
-    VL::Type strlenMsstr = (VL::Type)strlen(msstr);
+    auto strlenMsstr = (VL::Type)strlen(msstr);
     de.SetByteValue( msstr, strlenMsstr);
     de.SetVR( Attribute<0x0008, 0x0016>::GetVR() );
     ds.Insert( de );
@@ -689,7 +689,7 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
     if( strncmp( bv->GetPointer(), msstr, bv->GetLength() ) != 0 )
       {
       DataElement de = ds.GetDataElement( Tag(0x0008,0x0016) );
-      VL::Type strlenMsstr = (VL::Type) strlen(msstr);
+      auto strlenMsstr = (VL::Type) strlen(msstr);
       de.SetByteValue( msstr, strlenMsstr );
       ds.Replace( de );
       }
@@ -714,7 +714,7 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
     SmartPointer<SequenceOfItems> sq;
     if( ds.FindDataElement( tsourceImageSequence ) )
       {
-      DataElement &de = const_cast<DataElement&>(ds.GetDataElement( tsourceImageSequence ));
+      auto &de = const_cast<DataElement&>(ds.GetDataElement( tsourceImageSequence ));
       de.SetVLToUndefined(); // For now
       if( de.IsEmpty() )
         {
@@ -754,7 +754,7 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
     {
     const char *sop = uid.Generate();
     DataElement de( Tag(0x0008,0x0018) );
-    VL::Type strlenSOP = (VL::Type) strlen(sop);
+    auto strlenSOP = (VL::Type) strlen(sop);
     de.SetByteValue( sop, strlenSOP );
     de.SetVR( Attribute<0x0008, 0x0018>::GetVR() );
     ds.ReplaceEmpty( de );
@@ -765,7 +765,7 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
     {
     const char *study = uid.Generate();
     DataElement de( Tag(0x0020,0x000d) );
-    VL::Type strlenStudy= (VL::Type)strlen(study);
+    auto strlenStudy= (VL::Type)strlen(study);
     de.SetByteValue( study, strlenStudy );
     de.SetVR( Attribute<0x0020, 0x000d>::GetVR() );
     ds.ReplaceEmpty( de );
@@ -776,7 +776,7 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
     {
     const char *series = uid.Generate();
     DataElement de( Tag(0x0020,0x000e) );
-    VL::Type strlenSeries= (VL::Type)strlen(series);
+    auto strlenSeries= (VL::Type)strlen(series);
     de.SetByteValue( series, strlenSeries );
     de.SetVR( Attribute<0x0020, 0x000e>::GetVR() );
     ds.ReplaceEmpty( de );
@@ -790,7 +790,7 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
       {
       const char *tsuid = TransferSyntax::GetTSString( ts );
       DataElement de( Tag(0x0002,0x0010) );
-      VL::Type strlenTSUID = (VL::Type)strlen(tsuid);
+      auto strlenTSUID = (VL::Type)strlen(tsuid);
       de.SetByteValue( tsuid, strlenTSUID );
       de.SetVR( Attribute<0x0002, 0x0010>::GetVR() );
       fmi.Replace( de );

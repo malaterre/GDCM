@@ -105,7 +105,7 @@ void SerieHelper::Clear()
   while (l)
     {
     // For all the File of a File set
-    for (FileList::iterator it  = l->begin();
+    for (auto it  = l->begin();
       it != l->end();
       ++it)
       {
@@ -125,7 +125,7 @@ void SerieHelper::SetDirectory(std::string const &dir, bool recursive)
   unsigned int nfiles = dirList.Load(dir, recursive); (void)nfiles;
 
   Directory::FilenamesType const &filenames = dirList.GetFilenames();
-  for( Directory::FilenamesType::const_iterator it = filenames.begin();
+  for( auto it = filenames.begin();
     it != filenames.end(); ++it)
     {
     AddFileName( *it );
@@ -188,7 +188,7 @@ bool SerieHelper::AddFile(FileWithName &header)
   // make sure the file correspond to his set of rules:
 
   std::string s;
-  for(SerieRestrictions::iterator it2 = Restrictions.begin();
+  for(auto it2 = Restrictions.begin();
     it2 != Restrictions.end();
     ++it2)
     {
@@ -380,7 +380,7 @@ bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList ) const
 
   // Check to see if image shares a common position
   bool ok = true;
-  for (std::multimap<double, SmartPointer<FileWithName> >::iterator it2 = distmultimap.begin();
+  for (auto it2 = distmultimap.begin();
     it2 != distmultimap.end();
     ++it2)
     {
@@ -404,7 +404,7 @@ bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList ) const
 
   if (DirectOrder)
     {
-    for (std::multimap<double, SmartPointer<FileWithName> >::iterator it3 = distmultimap.begin();
+    for (auto it3 = distmultimap.begin();
       it3 != distmultimap.end();
       ++it3)
       {
@@ -462,7 +462,7 @@ std::string SerieHelper::CreateUniqueSeriesIdentifier( File * inFile )
     std::string id = uid.c_str();
     if(UseSeriesDetails)
       {
-      for(SerieRestrictions::iterator it2 = Refine.begin();
+      for(auto it2 = Refine.begin();
         it2 != Refine.end();
         ++it2)
         {

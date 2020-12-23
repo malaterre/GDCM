@@ -59,7 +59,7 @@ private:
 SubjectInternals::
 ~SubjectInternals()
 {
-  for(std::list<Observer* >::iterator i = m_Observers.begin();
+  for(auto i = m_Observers.begin();
       i != m_Observers.end(); ++i)
     {
     delete (*i);
@@ -72,7 +72,7 @@ SubjectInternals::
 AddObserver(const Event & event,
             Command* cmd)
 {
-  Observer* ptr = new Observer(cmd, event.MakeObject(), m_Count);
+  auto* ptr = new Observer(cmd, event.MakeObject(), m_Count);
   m_Observers.push_back(ptr);
   m_Count++;
   return ptr->m_Tag;
@@ -84,8 +84,8 @@ SubjectInternals::
 AddObserver(const Event & event,
             Command* cmd) const
 {
-  Observer* ptr = new Observer(cmd, event.MakeObject(), m_Count);
-  SubjectInternals * me = const_cast<SubjectInternals *>( this );
+  auto* ptr = new Observer(cmd, event.MakeObject(), m_Count);
+  auto * me = const_cast<SubjectInternals *>( this );
   me->m_Observers.push_back(ptr);
   me->m_Count++;
   return ptr->m_Tag;
@@ -96,7 +96,7 @@ void
 SubjectInternals::
 RemoveObserver(unsigned long tag)
 {
-  for(std::list<Observer* >::iterator i = m_Observers.begin();
+  for(auto i = m_Observers.begin();
       i != m_Observers.end(); ++i)
     {
     if((*i)->m_Tag == tag)
@@ -113,7 +113,7 @@ void
 SubjectInternals::
 RemoveAllObservers()
 {
-  for(std::list<Observer* >::iterator i = m_Observers.begin();
+  for(auto i = m_Observers.begin();
       i != m_Observers.end(); ++i)
     {
     delete (*i);
@@ -127,7 +127,7 @@ SubjectInternals::
 InvokeEvent( const Event & event,
              Subject* self)
 {
-  for(std::list<Observer* >::iterator i = m_Observers.begin();
+  for(auto i = m_Observers.begin();
       i != m_Observers.end(); ++i)
     {
     const Event * e =  (*i)->m_Event;
@@ -143,7 +143,7 @@ SubjectInternals::
 InvokeEvent( const Event & event,
              const Subject* self)
 {
-  for(std::list<Observer* >::iterator i = m_Observers.begin();
+  for(auto i = m_Observers.begin();
       i != m_Observers.end(); ++i)
     {
     const Event * e =  (*i)->m_Event;
@@ -159,7 +159,7 @@ Command*
 SubjectInternals::
 GetCommand(unsigned long tag)
 {
-  for(std::list<Observer* >::iterator i = m_Observers.begin();
+  for(auto i = m_Observers.begin();
       i != m_Observers.end(); ++i)
     {
     if ( (*i)->m_Tag == tag)
@@ -174,7 +174,7 @@ bool
 SubjectInternals::
 HasObserver(const Event & event) const
 {
-  for(std::list<Observer* >::const_iterator i = m_Observers.begin();
+  for(auto i = m_Observers.begin();
       i != m_Observers.end(); ++i)
     {
     const Event * e =  (*i)->m_Event;
@@ -195,7 +195,7 @@ PrintObservers(std::ostream& os, std::string indent) const
     return false;
     }
 
-  for(std::list<Observer* >::const_iterator i = m_Observers.begin();
+  for(auto i = m_Observers.begin();
       i != m_Observers.end(); ++i)
     {
     const Event * e =  (*i)->m_Event;

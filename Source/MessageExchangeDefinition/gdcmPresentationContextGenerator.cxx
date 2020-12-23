@@ -100,7 +100,7 @@ bool PresentationContextGenerator::GenerateFromFilenames(const Directory::Filena
   Tag mediasopclass(0x2,0x2);
   Tag sopclass(0x8,0x16);
 
-  Directory::FilenamesType::const_iterator file = filenames.begin();
+  auto file = filenames.begin();
   std::set<Tag> skiptags;
   for(; file != filenames.end(); ++file)
     {

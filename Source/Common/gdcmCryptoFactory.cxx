@@ -55,7 +55,7 @@ CryptoFactory* CryptoFactory::GetFactoryInstance(CryptoLib id)
 #endif // _WIN32
     }
 
-  std::map<CryptoLib, CryptoFactory*>::iterator it = getInstanceMap().find(id);
+  auto it = getInstanceMap().find(id);
   if (it == getInstanceMap().end())
     {
     gdcmErrorMacro( "No crypto factory registered with id " << (int)id );

@@ -108,7 +108,7 @@ bool CompositeNetworkFunctions::CEcho(const char *remote, uint16_t portno,
 BaseRootQuery* CompositeNetworkFunctions::ConstructQuery( ERootType inRootType,
   EQueryLevel inQueryLevel, const KeyValuePairArrayType& keys, EQueryType queryType /*= eFind*/ )
 {
-  KeyValuePairArrayType::const_iterator it = keys.begin();
+  auto it = keys.begin();
   DataSet ds;
   for(; it != keys.end(); ++it)
     {
@@ -331,7 +331,7 @@ public:
     }
   void ShowProgress(Subject *caller, const Event &evt) override
     {
-    const ProgressEvent &pe = dynamic_cast<const ProgressEvent&>(evt);
+    const auto &pe = dynamic_cast<const ProgressEvent&>(evt);
     (void)caller;
     progress = refprogress + (1. / (double)nfiles ) * pe.GetProgress();
 //    std::cout << "Progress: " << progress << " " << pe.GetProgress() << std::endl;

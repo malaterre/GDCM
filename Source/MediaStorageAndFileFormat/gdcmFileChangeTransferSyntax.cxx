@@ -404,7 +404,7 @@ bool FileChangeTransferSyntax::InitializeCopy()
           {
           const char *sop = uid.Generate();
           DataElement de( Tag(0x0008,0x0018) );
-          VL::Type strlenSOP = (VL::Type) strlen(sop);
+          auto strlenSOP = (VL::Type) strlen(sop);
           de.SetByteValue( sop, strlenSOP );
           de.SetVR( Attribute<0x0008, 0x0018>::GetVR() );
           ds.Replace( de );

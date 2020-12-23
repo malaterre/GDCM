@@ -126,7 +126,7 @@ bool PNMCodec::Write(const char *filename, const DataElement &out) const
       }
     else if( pf.GetBitsAllocated() == 1 )
       {
-      const uint8_t *x = (const uint8_t*) bv->GetPointer();
+      const auto *x = (const uint8_t*) bv->GetPointer();
       for( size_t i = 0; i < bv->GetLength(); i++ )
         {
         uint8_t b = reverseBitsByte(x[i]);
@@ -229,7 +229,7 @@ bool PNMCodec::Read(const char *filename, DataElement &out) const
   }
 
   out.SetTag( Tag(0x7fe0,0x0010) );
-  VL::Type pdLenSize = (VL::Type)pdlen;
+  auto pdLenSize = (VL::Type)pdlen;
   out.SetByteValue( buf, pdLenSize );
   delete[] buf;
 

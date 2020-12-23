@@ -147,7 +147,7 @@ bool ServiceClassUser::StartAssociation()
   if(theState != eSta6TransferReady)
     {
     std::vector<BasePDU*> const & thePDUs = theEvent.GetPDUs();
-    for( std::vector<BasePDU*>::const_iterator itor
+    for( auto itor
       = thePDUs.begin(); itor != thePDUs.end(); itor++)
       {
       assert(*itor);

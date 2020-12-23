@@ -24,7 +24,7 @@ namespace gdcm
 bool Module::FindModuleEntryInMacros(Macros const &macros, const Tag &tag) const
 {
   (void)macros;
-  MapModuleEntry::const_iterator it = ModuleInternal.find(tag);
+  auto it = ModuleInternal.find(tag);
   if( it != ModuleInternal.end() )
     {
     return true;
@@ -56,7 +56,7 @@ bool Module::FindModuleEntryInMacros(Macros const &macros, const Tag &tag) const
 
 const ModuleEntry& Module::GetModuleEntryInMacros(Macros const &macros, const Tag &tag) const
 {
-  MapModuleEntry::const_iterator it = ModuleInternal.find(tag);
+  auto it = ModuleInternal.find(tag);
   if( it != ModuleInternal.end() )
     {
     assert( it->first == tag );
@@ -74,7 +74,7 @@ const ModuleEntry& Module::GetModuleEntryInMacros(Macros const &macros, const Ta
   //static const Defs &defs = g.GetDefs();
   //static const Macros &macros = defs.GetMacros();
 
-  for( ArrayIncludeMacrosType::const_iterator it2 = ArrayIncludeMacros.begin();
+  for( auto it2 = ArrayIncludeMacros.begin();
     it2 != ArrayIncludeMacros.end(); ++it2)
     {
     const std::string &name = *it2;
@@ -92,7 +92,7 @@ bool Module::Verify(const DataSet& ds, Usage const & usage) const
 {
   bool success = true;
   if( usage == Usage::UserOption ) return success;
-  Module::MapModuleEntry::const_iterator it = ModuleInternal.begin();
+  auto it = ModuleInternal.begin();
   for(;it != ModuleInternal.end(); ++it)
     {
     const Tag &tag = it->first;

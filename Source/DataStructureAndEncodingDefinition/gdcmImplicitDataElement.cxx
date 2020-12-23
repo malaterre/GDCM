@@ -25,14 +25,14 @@ VL ImplicitDataElement::GetLength() const
     {
     assert( ValueField->GetLength().IsUndefined() );
     Value *p = ValueField;
-    SequenceOfItems *sq = dynamic_cast<SequenceOfItems*>(p);
+    auto *sq = dynamic_cast<SequenceOfItems*>(p);
     if( sq )
       {
       return TagField.GetLength() + ValueLengthField.GetLength()
         + sq->ComputeLength<ImplicitDataElement>();
       }
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-    SequenceOfFragments *sf = dynamic_cast<SequenceOfFragments*>(p);
+    auto *sf = dynamic_cast<SequenceOfFragments*>(p);
     if( sf )
       {
       //assert( VRField & VR::OB_OW ); // VR::INVALID is not possible AFAIK...
@@ -44,7 +44,7 @@ VL ImplicitDataElement::GetLength() const
     return ValueLengthField;
     }
   //else if( const SequenceOfItems *sqi = GetSequenceOfItems() )
-  else if( const SequenceOfItems *sqi = dynamic_cast<const SequenceOfItems*>( ValueField.GetPointer() ) )
+  else if( const auto *sqi = dynamic_cast<const SequenceOfItems*>( ValueField.GetPointer() ) )
     {
     // TestWrite2
     return TagField.GetLength() + ValueLengthField.GetLength()

@@ -41,7 +41,7 @@ void Trace::SetStreamToFile( const char *filename )
     FileStream = nullptr;
     UseStreamToFile = false;
     }
-  std::ofstream * out = new std::ofstream;
+  auto * out = new std::ofstream;
   if( !out ) return;
   out->open( filename );
   if( !out->good() ) return;

@@ -31,7 +31,7 @@ struct RoleSelectionSubItems
 {
   void Print(std::ostream &os) const
     {
-    std::vector<RoleSelectionSub>::const_iterator it = RSSArray.begin();
+    auto it = RSSArray.begin();
     for( ; it != RSSArray.end(); ++it )
       {
       it->Print(os);
@@ -39,7 +39,7 @@ struct RoleSelectionSubItems
     }
   const std::ostream &Write(std::ostream &os) const
     {
-    std::vector<RoleSelectionSub>::const_iterator it = RSSArray.begin();
+    auto it = RSSArray.begin();
     for( ; it != RSSArray.end(); ++it )
       {
       it->Write(os);
@@ -59,7 +59,7 @@ struct RoleSelectionSubItems
   size_t Size() const
     {
     size_t s = 0;
-    std::vector<RoleSelectionSub>::const_iterator it = RSSArray.begin();
+    auto it = RSSArray.begin();
     for( ; it != RSSArray.end(); ++it )
       {
       s += it->Size();
@@ -73,7 +73,7 @@ struct SOPClassExtendedNegociationSubItems
 {
   void Print(std::ostream &os) const
     {
-    std::vector<SOPClassExtendedNegociationSub>::const_iterator it = SOPCENSArray.begin();
+    auto it = SOPCENSArray.begin();
     for( ; it != SOPCENSArray.end(); ++it )
       {
       it->Print(os);
@@ -81,7 +81,7 @@ struct SOPClassExtendedNegociationSubItems
     }
   const std::ostream &Write(std::ostream &os) const
     {
-    std::vector<SOPClassExtendedNegociationSub>::const_iterator it = SOPCENSArray.begin();
+    auto it = SOPCENSArray.begin();
     for( ; it != SOPCENSArray.end(); ++it )
       {
       it->Write(os);
@@ -101,7 +101,7 @@ struct SOPClassExtendedNegociationSubItems
   size_t Size() const
     {
     size_t s = 0;
-    std::vector<SOPClassExtendedNegociationSub>::const_iterator it = SOPCENSArray.begin();
+    auto it = SOPCENSArray.begin();
     for( ; it != SOPCENSArray.end(); ++it )
       {
       s += it->Size();

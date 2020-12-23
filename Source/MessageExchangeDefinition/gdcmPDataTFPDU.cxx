@@ -89,7 +89,7 @@ const std::ostream &PDataTFPDU::Write(std::ostream &os) const
   uint32_t copy = ItemLength;
   SwapperDoOp::SwapArray(&copy,1);
   os.write( (const char*)&copy, sizeof(ItemLength) );
-  std::vector<PresentationDataValue>::const_iterator it = V.begin();
+  auto it = V.begin();
   for( ; it != V.end(); ++it )
     {
     it->Write( os );
@@ -104,7 +104,7 @@ size_t PDataTFPDU::Size() const
   ret += sizeof(ItemType);
   ret += sizeof(Reserved2);
   ret += sizeof(ItemLength);
-  std::vector<PresentationDataValue>::const_iterator it = V.begin();
+  auto it = V.begin();
   for( ; it != V.end(); ++it )
     {
     ret += it->Size( );
@@ -119,7 +119,7 @@ void PDataTFPDU::Print(std::ostream &os) const
   //static const uint8_t Reserved2;
   os << "ItemLength: " << ItemLength << std::endl; // PDU Length ?
   os << "PresentationDataValue: " << std::endl;
-  std::vector<PresentationDataValue>::const_iterator it = V.begin();
+  auto it = V.begin();
   for( ; it != V.end(); ++it )
     {
     it->Print( os );

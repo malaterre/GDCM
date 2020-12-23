@@ -164,7 +164,7 @@ bool ImageChangeTransferSyntax::TryJPEGCodec(const DataElement &pixelde, Bitmap 
     }
 
   ImageCodec *codec = &jpgcodec;
-  JPEGCodec *usercodec = dynamic_cast<JPEGCodec*>(UserCodec);
+  auto *usercodec = dynamic_cast<JPEGCodec*>(UserCodec);
   if( usercodec && usercodec->CanCode( ts ) )
     {
     codec = usercodec;
@@ -238,7 +238,7 @@ bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde, Bitma
 
   JPEGLSCodec jlscodec;
   ImageCodec *codec = &jlscodec;
-  JPEGLSCodec *usercodec = dynamic_cast<JPEGLSCodec*>(UserCodec);
+  auto *usercodec = dynamic_cast<JPEGLSCodec*>(UserCodec);
   if( usercodec && usercodec->CanCode( ts ) )
     {
     codec = usercodec;
@@ -257,7 +257,7 @@ bool ImageChangeTransferSyntax::TryJPEGLSCodec(const DataElement &pixelde, Bitma
     bool r;
     if( input.AreOverlaysInPixelData() || input.UnusedBitsPresentInPixelData() )
       {
-      ByteValue *bv = const_cast<ByteValue*>(pixelde.GetByteValue());
+      auto *bv = const_cast<ByteValue*>(pixelde.GetByteValue());
       assert( bv );
       gdcm::DataElement tmp;
       tmp.SetByteValue( bv->GetPointer(), bv->GetLength());
@@ -297,7 +297,7 @@ bool ImageChangeTransferSyntax::TryJPEG2000Codec(const DataElement &pixelde, Bit
 
   JPEG2000Codec j2kcodec;
   ImageCodec *codec = &j2kcodec;
-  JPEG2000Codec *usercodec = dynamic_cast<JPEG2000Codec*>(UserCodec);
+  auto *usercodec = dynamic_cast<JPEG2000Codec*>(UserCodec);
   if( usercodec && usercodec->CanCode( ts ) )
     {
     codec = usercodec;
@@ -412,8 +412,8 @@ bool ImageChangeTransferSyntax::Change()
     {
     // In memory decompression:
     DataElement pixeldata( Tag(0x7fe0,0x0010) );
-    ByteValue *bv0 = new ByteValue();
-    uint32_t len0 = (uint32_t)Input->GetBufferLength();
+    auto *bv0 = new ByteValue();
+    auto len0 = (uint32_t)Input->GetBufferLength();
     bv0->SetLength( len0 );
     bool b = Input->GetBuffer( (char*)bv0->GetVoidPointer() );
     if( !b )
@@ -439,16 +439,16 @@ bool ImageChangeTransferSyntax::Change()
     // same goes for icon
     DataElement iconpixeldata( Tag(0x7fe0,0x0010) );
     Bitmap &bitmap = *Input;
-    if( Pixmap *pixmap = dynamic_cast<Pixmap*>( &bitmap ) )
+    if( auto *pixmap = dynamic_cast<Pixmap*>( &bitmap ) )
       {
       Bitmap &outbitmap = *Output;
-      Pixmap *outpixmap = dynamic_cast<Pixmap*>( &outbitmap );
+      auto *outpixmap = dynamic_cast<Pixmap*>( &outbitmap );
       assert( outpixmap != nullptr );
       if( !pixmap->GetIconImage().IsEmpty() )
         {
         // same goes for icon
-        ByteValue *bv = new ByteValue();
-        uint32_t len = (uint32_t)pixmap->GetIconImage().GetBufferLength();
+        auto *bv = new ByteValue();
+        auto len = (uint32_t)pixmap->GetIconImage().GetBufferLength();
         bv->SetLength( len );
         bool bb = pixmap->GetIconImage().GetBuffer( (char*)bv->GetVoidPointer() );
         if( !bb )
@@ -494,12 +494,12 @@ bool ImageChangeTransferSyntax::Change()
     }
 
   Bitmap &bitmap = *Input;
-  if( Pixmap *pixmap = dynamic_cast<Pixmap*>( &bitmap ) )
+  if( auto *pixmap = dynamic_cast<Pixmap*>( &bitmap ) )
     {
     if( !pixmap->GetIconImage().IsEmpty() && CompressIconImage )
       {
       Bitmap &outbitmap = *Output;
-      Pixmap *outpixmap = dynamic_cast<Pixmap*>( &outbitmap );
+      auto *outpixmap = dynamic_cast<Pixmap*>( &outbitmap );
 
       // same goes for icon
       success = false;

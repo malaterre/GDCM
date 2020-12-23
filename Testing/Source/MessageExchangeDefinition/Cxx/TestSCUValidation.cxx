@@ -40,7 +40,7 @@ static gdcm::network::ULConnectionManager *GetConnectionManager(gdcm::BaseRootQu
     return nullptr;
     }
 
-  gdcm::network::ULConnectionManager *theManager =
+  auto *theManager =
     new gdcm::network::ULConnectionManager();
   if (!theManager->EstablishConnection(AETitle, PeerAETitle, ComputerName, 0,
     (uint16_t)port, 1000, generator.GetPresentationContexts() ))

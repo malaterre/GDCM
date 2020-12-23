@@ -401,7 +401,7 @@ bool FileDerivation::AddPurposeOfReferenceCodeSequence(DataSet &subds)
   const Tag prcs(0x0040,0xa170);
   if( !subds.FindDataElement( prcs) )
     {
-    SequenceOfItems *sqi2 = new SequenceOfItems;
+    auto *sqi2 = new SequenceOfItems;
     DataElement de( prcs );
     de.SetVR( VR::SQ );
     de.SetValue( *sqi2 );

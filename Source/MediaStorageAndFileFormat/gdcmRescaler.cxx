@@ -438,8 +438,8 @@ static PixelFormat ComputeInverseBestFitFromMinMax(/*const PixelFormat &pf,*/ do
    * => dmax = 65535.000244081035
    * thus we must always make sure to cast to an integer first.
    */
-  int64_t min = (int64_t)dmin;
-  int64_t max = (int64_t)dmax;
+  auto min = (int64_t)dmin;
+  auto max = (int64_t)dmax;
 
   int log2max = 0;
 

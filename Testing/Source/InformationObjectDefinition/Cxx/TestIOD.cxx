@@ -36,14 +36,14 @@ int TestIOD(int, char *[])
 
   //const IOD& iod = defs.GetIODFromFile(*F);
 
-    IODs::IODMapTypeConstIterator it = iods.Begin();
+    auto it = iods.Begin();
     for( ; it != iods.End(); ++it )
       {
       const IODs::IODName &name = it->first;
       (void)name;
       const IOD &iod = it->second;
 
-      gdcm::Dict::ConstIterator dictit = pubdict.Begin();
+      auto dictit = pubdict.Begin();
       for(; dictit != pubdict.End(); ++dictit)
         {
         const gdcm::Tag &tag = dictit->first;

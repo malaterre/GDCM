@@ -164,7 +164,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       std::stringstream is;
       const Fragment &frag = sf0->GetFragment(i);
       if( frag.IsEmpty() ) return false;
-      const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+      const auto &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
       size_t bv_len = bv.GetLength();
       char *mybuffer = new char[bv_len];
       bool b = bv.GetBuffer(mybuffer, bv.GetLength());
@@ -224,7 +224,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
         std::stringstream is;
         const Fragment &frag = sf->GetFragment(i);
         if( frag.IsEmpty() ) return false;
-        const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+        const auto &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
         size_t bv_len = bv.GetLength();
         char *mybuffer = new char[bv_len];
         bool b = bv.GetBuffer(mybuffer, bv.GetLength());
@@ -243,7 +243,7 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
   //assert( pos == len );
   const size_t sizeOfOs = (size_t)os.tellp();
   os.seekp( 0, std::ios::beg );
-  ByteValue * bv = new ByteValue;
+  auto * bv = new ByteValue;
   bv->SetLength( (uint32_t)sizeOfOs );
   bv->Read<SwapperNoOp>( os );
   out.SetValue( *bv );
@@ -349,7 +349,7 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
     assert( str.size() );
     Fragment frag;
     //frag.SetTag( itemStart );
-    VL::Type strSize = (VL::Type)str.size();
+    auto strSize = (VL::Type)str.size();
     frag.SetByteValue( &str[0], strSize );
     sq->AddFragment( frag );
 
@@ -639,7 +639,7 @@ bool JPEGCodec::IsStateSuspension() const
 
 ImageCodec * JPEGCodec::Clone() const
 {
-  JPEGCodec *copy = new JPEGCodec;
+  auto *copy = new JPEGCodec;
   ImageCodec &ic = *copy;
   ic = *this;
   assert( copy->PF == PF );

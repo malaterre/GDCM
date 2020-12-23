@@ -77,7 +77,7 @@ int TestDataElement2(const uint16_t group, const uint16_t element,
   const char* vr, const char* value)
 {
   const char *str;
-  const uint32_t vl = (uint32_t)strlen( value );
+  const auto vl = (uint32_t)strlen( value );
   std::stringstream ss;
   // SimpleData Element, just group,element and length
   str = reinterpret_cast<const char*>(&group);

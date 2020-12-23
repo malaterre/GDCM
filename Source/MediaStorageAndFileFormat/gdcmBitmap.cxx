@@ -261,7 +261,7 @@ unsigned long Bitmap::GetBufferLength() const
   unsigned long len = 0;
   unsigned int mul = 1;
   // First multiply the dimensions:
-  std::vector<unsigned int>::const_iterator it = Dimensions.begin();
+  auto it = Dimensions.begin();
   for(; it != Dimensions.end(); ++it)
     {
     if( *it == 0 ) gdcmWarningMacro("Dimension has been found to be zero" );
@@ -353,7 +353,7 @@ bool Bitmap::TryRAWCodec(char *buffer, bool &lossyflag) const
     if( GetNeedByteSwap() )
       {
       // Internally DecodeBytes always does the byteswapping step, so remove internal flag
-      Bitmap *i = const_cast<Bitmap*>(this);
+      auto *i = const_cast<Bitmap*>(this);
       i->SetNeedByteSwap(false);
       }
     if( !r ) return false;
@@ -400,7 +400,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       const SequenceOfFragments *sf = PixelData.GetSequenceOfFragments();
       if( !sf ) return false;
       const Fragment &frag = sf->GetFragment(0);
-      const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
+      const auto &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
       PixelFormat pf = GetPixelFormat(); // PixelFormat::UINT8;
       codec.SetPixelFormat( pf );
 
@@ -429,14 +429,14 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
             {
             if( cpf.GetBitsStored() < pf.GetBitsStored() )
               {
-              Bitmap *i = const_cast<Bitmap*>(this);
+              auto *i = const_cast<Bitmap*>(this);
               gdcmWarningMacro( "Encapsulated stream has fewer bits actually stored on disk. correcting." );
               i->GetPixelFormat().SetBitsAllocated( cpf.GetBitsAllocated() );
               i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
               }
             else if( cpf.GetBitsStored() < pf.GetBitsStored() )
               {
-              Bitmap *i = const_cast<Bitmap*>(this);
+              auto *i = const_cast<Bitmap*>(this);
               gdcmWarningMacro( "Encapsulated stream has more bits actually stored on disk. correcting." );
               i->GetPixelFormat().SetBitsAllocated( cpf.GetBitsAllocated() );
               i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
@@ -477,7 +477,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
     // Did PI change or not ?
     if ( GetPlanarConfiguration() != codec.GetPlanarConfiguration() )
       {
-      Bitmap *i = const_cast<Bitmap*>(this); (void)i;
+      auto *i = const_cast<Bitmap*>(this); (void)i;
       //i->SetPlanarConfiguration( codec.GetPlanarConfiguration() );
       }
     // I cannot re-activate the following since I would loose the palette color information
@@ -497,7 +497,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       // gdcmData/DCMTK_JPEGExt_12Bits.dcm
       if( pf.GetPixelRepresentation() == cpf.GetPixelRepresentation() ) {
         if( pf.GetBitsAllocated() == 12 ) {
-          Bitmap *i = const_cast<Bitmap*>(this);
+          auto *i = const_cast<Bitmap*>(this);
           i->GetPixelFormat().SetBitsAllocated( 16 );
           i->GetPixelFormat().SetBitsStored( 12 );
           }
@@ -615,7 +615,7 @@ bool Bitmap::TryPVRGCodec(char *buffer, bool &lossyflag) const
     assert( r );
     if ( GetPlanarConfiguration() != codec.GetPlanarConfiguration() )
       {
-      Bitmap *i = const_cast<Bitmap*>(this);
+      auto *i = const_cast<Bitmap*>(this);
       i->PlanarConfiguration = codec.GetPlanarConfiguration();
       }
     const ByteValue *outbv = out.GetByteValue();
@@ -684,7 +684,7 @@ bool Bitmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
       const SequenceOfFragments *sf = PixelData.GetSequenceOfFragments();
       if( !sf ) return false;
       const Fragment &frag = sf->GetFragment(0);
-      const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
+      const auto &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
 
       std::stringstream ss;
       ss.write( bv2.GetPointer(), bv2.GetLength() );
@@ -749,14 +749,14 @@ bool Bitmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
             {
             if( cpf.GetBitsStored() < pf.GetBitsStored() )
               {
-              Bitmap *i = const_cast<Bitmap*>(this);
+              auto *i = const_cast<Bitmap*>(this);
               gdcmWarningMacro( "Encapsulated stream has fewer bits actually stored on disk. correcting." );
               i->GetPixelFormat().SetBitsAllocated( cpf.GetBitsAllocated() );
               i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
               }
             else if( cpf.GetBitsStored() > pf.GetBitsStored() )
               {
-              Bitmap *i = const_cast<Bitmap*>(this);
+              auto *i = const_cast<Bitmap*>(this);
               gdcmWarningMacro( "Encapsulated stream has more bits actually stored on disk. correcting." );
               i->GetPixelFormat().SetBitsAllocated( cpf.GetBitsAllocated() );
               i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
@@ -767,7 +767,7 @@ bool Bitmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
       else
         {
         gdcmWarningMacro( "Bits Allocated are different. This is pretty bad using info from codestream" );
-        Bitmap *i = const_cast<Bitmap*>(this);
+        auto *i = const_cast<Bitmap*>(this);
         i->SetPixelFormat( codec.GetPixelFormat() );
         }
 
@@ -812,7 +812,7 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
       const SequenceOfFragments *sf = PixelData.GetSequenceOfFragments();
       if( !sf ) return false;
       const Fragment &frag = sf->GetFragment(0);
-      const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
+      const auto &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
 
       bool b = codec.GetHeaderInfo( bv2.GetPointer(), bv2.GetLength() , ts2 );
       if( !b ) return false;
@@ -839,14 +839,14 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
             {
             if( cpf.GetBitsStored() < pf.GetBitsStored() )
               {
-              Bitmap *i = const_cast<Bitmap*>(this);
+              auto *i = const_cast<Bitmap*>(this);
               gdcmWarningMacro( "Encapsulated stream has fewer bits actually stored on disk. correcting." );
               i->GetPixelFormat().SetBitsAllocated( cpf.GetBitsAllocated() );
               i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
               }
             else if( cpf.GetBitsStored() > pf.GetBitsStored() )
               {
-              Bitmap *i = const_cast<Bitmap*>(this);
+              auto *i = const_cast<Bitmap*>(this);
               gdcmWarningMacro( "Encapsulated stream has more bits actually stored on disk. correcting." );
               i->GetPixelFormat().SetBitsAllocated( cpf.GetBitsAllocated() );
               i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
@@ -858,7 +858,7 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
         {
         // SC16BitsAllocated_8BitsStoredJ2K.dcm
         gdcmWarningMacro( "Bits Allocated are different. This is pretty bad using info from codestream" );
-        Bitmap *i = const_cast<Bitmap*>(this);
+        auto *i = const_cast<Bitmap*>(this);
         i->SetPixelFormat( codec.GetPixelFormat() );
         }
 #endif
@@ -914,7 +914,7 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
             {
             if( cpf.GetBitsStored() < pf.GetBitsStored() )
               {
-              Bitmap *i = const_cast<Bitmap*>(this);
+              auto *i = const_cast<Bitmap*>(this);
               gdcmWarningMacro( "Encapsulated stream has fewer bits actually stored on disk. correcting." );
               i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
               }
@@ -1057,7 +1057,7 @@ void Bitmap::Print(std::ostream &os) const
     os << "NumberOfDimensions: " << NumberOfDimensions << "\n";
     assert( Dimensions.size() );
     os << "Dimensions: (";
-    std::vector<unsigned int>::const_iterator it = Dimensions.begin();
+    auto it = Dimensions.begin();
     os << *it;
     for(++it; it != Dimensions.end(); ++it)
       {

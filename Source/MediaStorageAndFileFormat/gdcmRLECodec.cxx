@@ -527,7 +527,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     assert( str.size() );
     Fragment frag;
     //frag.SetTag( itemStart );
-    VL::Type strSize = (VL::Type)str.size();
+    auto strSize = (VL::Type)str.size();
     frag.SetByteValue( &str[0], strSize );
     sq->AddFragment( frag );
     }
@@ -556,7 +556,7 @@ size_t RLECodec::DecodeFragment(Fragment const & frag, char *buffer, size_t llen
 {
 
   std::stringstream is;
-  const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+  const auto &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
   size_t bv_len = bv.GetLength();
   char *mybuffer = new char[bv_len];
   bv.GetBuffer(mybuffer, bv.GetLength());
@@ -616,7 +616,7 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
     std::string str = os.str();
     std::string::size_type check = str.size();
     assert( check == len );
-    VL::Type checkCast = (VL::Type)check;
+    auto checkCast = (VL::Type)check;
     out.SetByteValue( &str[0], checkCast );
     return true;
     }
@@ -700,7 +700,7 @@ bool RLECodec::DecodeExtent(
 
     // handle DICOM padding
     std::streampos end = is.tellg();
-    size_t numberOfReadBytes = (size_t)(end - start);
+    auto numberOfReadBytes = (size_t)(end - start);
     if( numberOfReadBytes > frag.GetVL() )
       {
       // Special handling for ALOKA_SSD-8-MONO2-RLE-SQ.dcm
@@ -928,7 +928,7 @@ public:
     }
   memsrc * clone() override
     {
-    memsrc * ret = new memsrc( ptr, len );
+    auto * ret = new memsrc( ptr, len );
     return ret;
     }
 private:

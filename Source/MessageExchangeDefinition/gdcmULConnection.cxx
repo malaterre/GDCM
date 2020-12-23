@@ -282,7 +282,7 @@ const PresentationContextRQ *ULConnection::GetPresentationContextRQByID(uint8_t 
 {
   // one day ULConnection will actually use a AAssociateRQPDU as internal implementation
   // for now duplicate code from AAssociateRQPDU::GetPresentationContextFromAbstractSyntax
-  std::vector<PresentationContextRQ>::const_iterator it = mPresentationContexts.begin();
+  auto it = mPresentationContexts.begin();
   for( ; it != mPresentationContexts.end(); ++it)
     {
     if( it->GetPresentationContextID() == id )
@@ -298,7 +298,7 @@ const PresentationContextAC *ULConnection::GetPresentationContextACByID(uint8_t 
 {
   // one day ULConnection will actually use a AAssociateRQPDU as internal implementation
   // for now duplicate code from AAssociateRQPDU::GetPresentationContextFromAbstractSyntax
-  std::vector<PresentationContextAC>::const_iterator it = mAcceptedPresentationContexts.begin();
+  auto it = mAcceptedPresentationContexts.begin();
   for( ; it != mAcceptedPresentationContexts.end(); ++it)
     {
     if( it->GetPresentationContextID() == id )
@@ -316,7 +316,7 @@ uint8_t ULConnection::GetPresentationContextIDFromPresentationContext(Presentati
   // for now duplicate code from AAssociateRQPDU::GetPresentationContextIDFromAbstractSyntax
   uint8_t ret = 0;
 
-  std::vector<PresentationContextRQ>::const_iterator it =
+  auto it =
     std::find( mPresentationContexts.begin(), mPresentationContexts.end(), pc );
   if( it != mPresentationContexts.end() )
     {

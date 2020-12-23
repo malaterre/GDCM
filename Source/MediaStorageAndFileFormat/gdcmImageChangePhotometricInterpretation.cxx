@@ -70,7 +70,7 @@ bool ImageChangePhotometricInterpretation::ChangeMonochrome()
 
   DataElement &de = Output->GetDataElement();
   std::string str = os.str();
-  VL::Type strSize = (VL::Type)str.size();
+  auto strSize = (VL::Type)str.size();
   de.SetByteValue( str.c_str(), strSize);
   //Output->GetLUT().Clear();
   Output->SetPhotometricInterpretation( PI );
@@ -115,7 +115,7 @@ bool ImageChangePhotometricInterpretation::ChangeYBR2RGB()
   if( pf.GetSamplesPerPixel() != 3 || pf.GetPixelRepresentation() != 0 ) return false;
   if( pf.GetBitsAllocated() == 16 )
   {
-    unsigned short *p = (unsigned short*)p8;
+    auto *p = (unsigned short*)p8;
     unsigned short rgb[3];
     unsigned short ybr[3];
     for( unsigned long i = 0; i < len / (3 * 2); ++i ) {
@@ -130,7 +130,7 @@ bool ImageChangePhotometricInterpretation::ChangeYBR2RGB()
   }
   else if( pf.GetBitsAllocated() == 8 )
   {
-    unsigned char *p = (unsigned char*)p8;
+    auto *p = (unsigned char*)p8;
     unsigned char rgb[3];
     unsigned char ybr[3];
     for( unsigned long i = 0; i < len / 3; ++i ) {
@@ -190,7 +190,7 @@ bool ImageChangePhotometricInterpretation::ChangeRGB2YBR()
   if( pf.GetSamplesPerPixel() != 3 || pf.GetPixelRepresentation() != 0 ) return false;
   if( pf.GetBitsAllocated() == 16 )
   {
-    unsigned short *p = (unsigned short*)p8;
+    auto *p = (unsigned short*)p8;
     unsigned short rgb[3];
     unsigned short ybr[3];
     for( unsigned long i = 0; i < len / (3 * 2); ++i ) {
@@ -205,7 +205,7 @@ bool ImageChangePhotometricInterpretation::ChangeRGB2YBR()
   }
   else if( pf.GetBitsAllocated() == 8 )
   {
-    unsigned char *p = (unsigned char*)p8;
+    auto *p = (unsigned char*)p8;
     unsigned char rgb[3];
     unsigned char ybr[3];
     for( unsigned long i = 0; i < len / 3; ++i ) {

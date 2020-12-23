@@ -118,7 +118,7 @@ int TestPixelFormat(int , char *[])
 
   for(unsigned int i = 0; i < PixelFormat::UNKNOWN; ++i)
     {
-    PixelFormat::ScalarType st = (PixelFormat::ScalarType)i;
+    auto st = (PixelFormat::ScalarType)i;
     pf.SetScalarType( st );
     gdcm::PixelFormat pf2 = st;
     std::cout << pf << std::endl;

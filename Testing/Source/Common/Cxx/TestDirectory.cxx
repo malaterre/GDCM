@@ -35,7 +35,7 @@ int TestOneDirectory(const char *path, bool recursive = false )
     return 1;
     }
   gdcm::Directory::FilenamesType const &files = d.GetFilenames();
-  for(gdcm::Directory::FilenamesType::const_iterator it = files.begin(); it != files.end(); ++it )
+  for(auto it = files.begin(); it != files.end(); ++it )
     {
     const char *filename = it->c_str();
     if( !gdcm::System::FileExists(filename) )

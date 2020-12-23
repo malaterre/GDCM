@@ -112,13 +112,13 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
     Tag last;
     if( !Tags.empty() )
       {
-      TagsType::const_reverse_iterator it1 = Tags.rbegin();
+      auto it1 = Tags.rbegin();
       const Tag & publiclast = *it1;
       last = publiclast;
       }
     if( !PrivateTags.empty() )
       {
-      PrivateTagsType::const_reverse_iterator pit1 = PrivateTags.rbegin();
+      auto pit1 = PrivateTags.rbegin();
       Tag privatelast = *pit1;
       if( last < privatelast ) last = privatelast;
       }
@@ -173,13 +173,13 @@ bool Scanner::Scan( Directory::FilenamesType const & filenames )
 void Scanner::Print( std::ostream & os ) const
 {
   os << "Values:\n";
-  for(ValuesType::const_iterator it = Values.begin() ; it != Values.end();
+  for(auto it = Values.begin() ; it != Values.end();
     ++it)
     {
     os << *it << "\n";
     }
   os << "Mapping:\n";
-  Directory::FilenamesType::const_iterator file = Filenames.begin();
+  auto file = Filenames.begin();
   for(; file != Filenames.end(); ++file)
     {
     const char *filename = file->c_str();
@@ -191,7 +191,7 @@ void Scanner::Print( std::ostream & os ) const
     if( Mappings.find(filename) != Mappings.end() )
       {
       const TagToValue &mapping = GetMapping(filename);
-      TagToValue::const_iterator it = mapping.begin();
+      auto it = mapping.begin();
       for( ; it != mapping.end(); ++it)
         {
         const Tag & tag = it->first;
@@ -219,13 +219,13 @@ static bool IsVRUI(Tag const &tag)
 
 void Scanner::PrintTable( std::ostream & os ) const
 {
-  Directory::FilenamesType::const_iterator file = Filenames.begin();
+  auto file = Filenames.begin();
   for(; file != Filenames.end(); ++file)
     {
     const char *filename = file->c_str();
     assert( filename && *filename );
     os << '"' << filename << '"' << "\t";
-    TagsType::const_iterator tag = Tags.begin();
+    auto tag = Tags.begin();
     const TagToValue &mapping = GetMapping(filename);
     for( ; tag != Tags.end(); ++tag )
       {
@@ -265,7 +265,7 @@ bool Scanner::IsKey( const char * filename ) const
 */
   // Look for the file in Mappings table:
   assert( filename && *filename );
-  MappingType::const_iterator it2 = Mappings.find(filename);
+  auto it2 = Mappings.find(filename);
   return it2 != Mappings.end();
 }
 
@@ -274,7 +274,7 @@ Directory::FilenamesType Scanner::GetKeys() const
 {
   Directory::FilenamesType keys;
 
-  Directory::FilenamesType::const_iterator file = Filenames.begin();
+  auto file = Filenames.begin();
   for(; file != Filenames.end(); ++file)
     {
     const char *filename = file->c_str();
@@ -305,7 +305,7 @@ const char *Scanner::GetFilenameFromTagToValue(Tag const &t, const char *valuere
   const char *filenameref = nullptr;
   if( valueref )
     {
-    Directory::FilenamesType::const_iterator file = Filenames.begin();
+    auto file = Filenames.begin();
     size_t len = strlen( valueref );
     if( len && valueref[ len - 1 ] == ' ' )
       {
@@ -334,7 +334,7 @@ Scanner::GetAllFilenamesFromTagToValue(Tag const &t, const char *valueref) const
   if( valueref )
     {
     const std::string valueref_str = String<>::Trim( valueref );
-    Directory::FilenamesType::const_iterator file = Filenames.begin();
+    auto file = Filenames.begin();
     for(; file != Filenames.end(); ++file)
       {
       const char *filename = file->c_str();
@@ -358,7 +358,7 @@ Scanner::TagToValue const & Scanner::GetMappingFromTagToValue(Tag const &t, cons
 Scanner::ValuesType Scanner::GetValues(Tag const &t) const
 {
   ValuesType vt;
-  Directory::FilenamesType::const_iterator file = Filenames.begin();
+  auto file = Filenames.begin();
   for(; file != Filenames.end(); ++file)
     {
     const char *filename = file->c_str();
@@ -375,7 +375,7 @@ Scanner::ValuesType Scanner::GetValues(Tag const &t) const
 Directory::FilenamesType Scanner::GetOrderedValues(Tag const &t) const
 {
   Directory::FilenamesType theReturn;
-  Directory::FilenamesType::const_iterator file = Filenames.begin();
+  auto file = Filenames.begin();
   for(; file != Filenames.end(); ++file)
     {
     const char *filename = file->c_str();
@@ -399,7 +399,7 @@ void Scanner::ProcessPublicTag(StringFilter &sf, const char *filename)
 
   const FileMetaInformation & header = file.GetHeader();
   const DataSet & ds = file.GetDataSet();
-  TagsType::const_iterator tag = Tags.begin();
+  auto tag = Tags.begin();
   for( ; tag != Tags.end(); ++tag )
     {
     if( tag->GetGroup() == 0x2 )

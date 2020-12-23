@@ -130,7 +130,7 @@ void writeCodeSequenceMacroAttributes(const Segment::BasicCodedEntryVector & ent
                                       const Tag & tag,
                                       DataSet & dataset)
 {
-  Segment::BasicCodedEntryVector::const_iterator it = entries.begin();
+  auto it = entries.begin();
   for(; it != entries.end(); ++it)
   {
     writeCodeSequenceMacroAttributes(*it, tag, dataset, true);

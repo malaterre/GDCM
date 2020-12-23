@@ -63,7 +63,7 @@ bool TestRescaler2Func(
   gdcm::PixelFormat::ScalarType outputpt;
   outputpt = r.ComputeInterceptSlopePixelType();
 
-  gdcm::PixelFormat::ScalarType targetpixeltype =
+  auto targetpixeltype =
     (gdcm::PixelFormat::ScalarType)TypeToPixelFormat<output_pixel>::Type;
   if( best_fit )
     {
@@ -97,8 +97,8 @@ bool TestRescaler2Func(
     return false;
 
   // get the min/max:
-  double min2 = (double)output[0];
-  double max2 = (double)output[nvalues-1];
+  auto min2 = (double)output[0];
+  auto max2 = (double)output[nvalues-1];
   if( min2 > max2 ) return false;
 
   if( intercept == 0 && slope == 1 )

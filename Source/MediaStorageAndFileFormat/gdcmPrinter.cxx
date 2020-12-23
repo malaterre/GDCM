@@ -267,7 +267,7 @@ void PrintValue(VR::VRType const &vr, VM const &vm, const Value &v)
 {
   try
     {
-    const ByteValue &bv = dynamic_cast<const ByteValue&>(v);
+    const auto &bv = dynamic_cast<const ByteValue&>(v);
     const void *array = bv.GetVoidPointer();
     const VL &length = bv.GetLength();
     //unsigned short val = *(unsigned short*)(array);
@@ -874,7 +874,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
 void Printer::PrintSQ(const SequenceOfItems *sqi, std::ostream & os, std::string const & indent)
 {
   if( !sqi ) return;
-  SequenceOfItems::ItemVector::const_iterator it = sqi->Items.begin();
+  auto it = sqi->Items.begin();
   for(; it != sqi->Items.end(); ++it)
     {
     const Item &item = *it;
@@ -914,7 +914,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
   const Dicts &dicts = g.GetDicts();
   const Dict &d = dicts.GetPublicDict(); (void)d;
 
-  DataSet::ConstIterator it = ds.Begin();
+  auto it = ds.Begin();
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;
@@ -983,7 +983,7 @@ void Printer::PrintDataSet(const DataSet &ds, std::ostream &out, std::string con
 //-----------------------------------------------------------------------------
 void DumpDataSet(const DataSet &ds, std::ostream &os )
 {
-  DataSet::ConstIterator it = ds.Begin();
+  auto it = ds.Begin();
   for( ; it != ds.End(); ++it )
     {
     const DataElement &de = *it;

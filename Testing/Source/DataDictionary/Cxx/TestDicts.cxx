@@ -27,7 +27,7 @@ int TestDicts(int, char *[])
   // get the Part 6 dicts from it:
   const gdcm::Dicts &ds = g.GetDicts();
   const gdcm::Dict &pub = ds.GetPublicDict();
-  gdcm::Dict::ConstIterator it = pub.Begin();
+  auto it = pub.Begin();
   int ret = 0;
   std::set<std::string> names;
   for( ; it != pub.End(); ++it)

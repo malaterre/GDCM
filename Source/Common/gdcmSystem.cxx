@@ -357,7 +357,7 @@ bool System::DeleteDirectory(const char *source)
   unsigned int numfiles = dir.Load(source, false);
   (void)numfiles;
   Directory::FilenamesType const & files = dir.GetFilenames();
-  for ( Directory::FilenamesType::const_iterator it = files.begin();
+  for ( auto it = files.begin();
     it != files.end(); ++it )
     {
     const char *filename = it->c_str();

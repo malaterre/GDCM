@@ -105,7 +105,7 @@ const std::ostream &PresentationContextRQ::Write(std::ostream &os) const
   os.write( (const char*)&Reserved7, sizeof(Reserved7) );
   os.write( (const char*)&Reserved8, sizeof(Reserved8) );
   SubItems.Write(os);
-  std::vector<TransferSyntaxSub>::const_iterator it = TransferSyntaxes.begin();
+  auto it = TransferSyntaxes.begin();
   for( ; it != TransferSyntaxes.end(); ++it )
     {
     it->Write( os );
@@ -125,7 +125,7 @@ size_t PresentationContextRQ::Size() const
   ret += sizeof(Reserved7);
   ret += sizeof(Reserved8);
   ret += SubItems.Size();
-  std::vector<TransferSyntaxSub>::const_iterator it = TransferSyntaxes.begin();
+  auto it = TransferSyntaxes.begin();
   for( ; it != TransferSyntaxes.end(); ++it )
     {
     ret += it->Size();
@@ -171,7 +171,7 @@ void PresentationContextRQ::Print(std::ostream &os) const
   //static const uint8_t Reserved7;
   //static const uint8_t Reserved8;
   SubItems.Print( os );
-  std::vector<TransferSyntaxSub>::const_iterator it = TransferSyntaxes.begin();
+  auto it = TransferSyntaxes.begin();
   for( ; it != TransferSyntaxes.end(); ++it )
     {
     it->Print( os );

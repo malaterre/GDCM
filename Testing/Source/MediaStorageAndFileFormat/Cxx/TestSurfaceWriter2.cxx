@@ -64,13 +64,13 @@ int TestSurfaceWriter2(const char *subdir, const char* filename)
     {
     SegmentReader::SegmentVector  segments = reader.GetSegments();
     Segment::SurfaceVector        tmp;
-    SegmentReader::SegmentVector::iterator itSegments    = segments.begin();
-    SegmentReader::SegmentVector::iterator itEndSegments = segments.end();
+    auto itSegments    = segments.begin();
+    auto itEndSegments = segments.end();
     for (; itSegments != itEndSegments; itSegments++)
       {
       tmp = (*itSegments)->GetSurfaces();
-      Segment::SurfaceVector::iterator itSurfaces    = tmp.begin();
-      Segment::SurfaceVector::iterator itEndSurfaces = tmp.end();
+      auto itSurfaces    = tmp.begin();
+      auto itEndSurfaces = tmp.end();
       for (; itSurfaces != itEndSurfaces; itSurfaces++)
         {
         SmartPointer< Surface > surf = *itSurfaces;
@@ -143,13 +143,13 @@ int TestSurfaceWriter2(const char *subdir, const char* filename)
     return 1;
     }
 
-  Segment::SurfaceVector::iterator itSurfaces2    = surfaces2.begin();
-  Segment::SurfaceVector::iterator itEndSurfaces2 = surfaces2.end();
+  auto itSurfaces2    = surfaces2.begin();
+  auto itEndSurfaces2 = surfaces2.end();
   SegmentHelper::BasicCodedEntry processingAlgo2;
 
   Segment::SurfaceVector           surfaces      = segment->GetSurfaces();
-  Segment::SurfaceVector::iterator itSurfaces    = surfaces.begin();
-  Segment::SurfaceVector::iterator itEndSurfaces = surfaces.end();
+  auto itSurfaces    = surfaces.begin();
+  auto itEndSurfaces = surfaces.end();
   for (; itSurfaces2 != itEndSurfaces2; itSurfaces2++)
     {
     SmartPointer< Surface > surf = *itSurfaces2;

@@ -42,7 +42,7 @@ VL SequenceOfFragments::ComputeLength() const
   // First the table
   length += Table.GetLength();
   // Then all the fragments
-  FragmentVector::const_iterator it = Fragments.begin();
+  auto it = Fragments.begin();
   for(;it != Fragments.end(); ++it)
     {
     const VL fraglen = it->ComputeLength();
@@ -57,7 +57,7 @@ VL SequenceOfFragments::ComputeLength() const
 unsigned long SequenceOfFragments::ComputeByteLength() const
 {
   unsigned long r = 0;
-  FragmentVector::const_iterator it = Fragments.begin();
+  auto it = Fragments.begin();
   for(;it != Fragments.end(); ++it)
     {
     assert( !it->GetVL().IsUndefined() );
@@ -68,10 +68,10 @@ unsigned long SequenceOfFragments::ComputeByteLength() const
 
 bool SequenceOfFragments::GetFragBuffer(unsigned int fragNb, char *buffer, unsigned long &length) const
 {
-  FragmentVector::const_iterator it = Fragments.begin();
+  auto it = Fragments.begin();
     {
     const Fragment &frag = *(it+fragNb);
-    const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+    const auto &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
     const VL len = frag.GetVL();
     bv.GetBuffer(buffer, len);
     length = len;
@@ -82,19 +82,19 @@ bool SequenceOfFragments::GetFragBuffer(unsigned int fragNb, char *buffer, unsig
 const Fragment& SequenceOfFragments::GetFragment(SizeType num) const
 {
   assert( num < Fragments.size() );
-  FragmentVector::const_iterator it = Fragments.begin();
+  auto it = Fragments.begin();
   const Fragment &frag = *(it+num);
   return frag;
 }
 
 bool SequenceOfFragments::GetBuffer(char *buffer, unsigned long length) const
 {
-  FragmentVector::const_iterator it = Fragments.begin();
+  auto it = Fragments.begin();
   unsigned long total = 0;
   for(;it != Fragments.end(); ++it)
     {
     const Fragment &frag = *it;
-    const ByteValue &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
+    const auto &bv = dynamic_cast<const ByteValue&>(frag.GetValue());
     const VL len = frag.GetVL();
     bv.GetBuffer(buffer, len);
     buffer += len;
@@ -111,7 +111,7 @@ bool SequenceOfFragments::GetBuffer(char *buffer, unsigned long length) const
 
 bool SequenceOfFragments::WriteBuffer(std::ostream &os) const
 {
-  FragmentVector::const_iterator it = Fragments.begin();
+  auto it = Fragments.begin();
   unsigned long total = 0;
   for(;it != Fragments.end(); ++it)
     {
@@ -141,7 +141,7 @@ bool SequenceOfFragments::FillFragmentWithJPEG( Fragment & frag, std::istream & 
     jfif.push_back( byte );
     if( byte == 0xd9 && jfif[ jfif.size() - 2 ] == 0xff ) break;
     }
-  const uint32_t len = static_cast<uint32_t>(jfif.size());
+  const auto len = static_cast<uint32_t>(jfif.size());
   frag.SetByteValue( (char*)&jfif[0], len );
   return true;
 }

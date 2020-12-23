@@ -37,7 +37,7 @@ int TestUnpacker12Bits(int, char *[])
   if( b )
     {
     std::set<short> out;
-    short * output_s = (short*)(void*)output;
+    auto * output_s = (short*)(void*)output;
     for( size_t i = 0; i < outlen / 2; ++i )
       {
       const short &v = output_s[i];
@@ -74,7 +74,7 @@ int TestUnpacker12Bits(int, char *[])
   if (!b) res = 1;
   if( b )
     {
-    unsigned short * output_s = (unsigned short*)output;
+    auto * output_s = (unsigned short*)output;
     const unsigned short outputvalues[] = { 0x301, 0x452, 0x967, 0xab8 };
     const size_t outputlen = sizeof(outputvalues) / sizeof(*outputvalues);
     assert( outlen / 2 == outputlen );

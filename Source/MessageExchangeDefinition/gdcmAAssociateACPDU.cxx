@@ -148,7 +148,7 @@ const std::ostream &AAssociateACPDU::Write(std::ostream &os) const
   os.write( (const char*)&Reserved43_74, sizeof(Reserved43_74) );
   AppContext.Write( os );
   gdcmAssertAlwaysMacro( PresContextAC.size() );
-  std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();
+  auto it = PresContextAC.begin();
   for( ; it != PresContextAC.end(); ++it )
     {
     it->Write( os );
@@ -172,7 +172,7 @@ size_t AAssociateACPDU::Size() const
   ret += sizeof(Reserved27_42);
   ret += sizeof(Reserved43_74);
   ret += AppContext.Size();
-  std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();
+  auto it = PresContextAC.begin();
   for( ; it != PresContextAC.end(); ++it )
     {
     ret += it->Size();
@@ -198,7 +198,7 @@ void AAssociateACPDU::Print(std::ostream &os) const
   os << "Application Context Name: ";
   AppContext.Print( os );
   os << "List of PresentationContextAC: " << std::endl;
-  std::vector<PresentationContextAC>::const_iterator it = PresContextAC.begin();
+  auto it = PresContextAC.begin();
   for( ; it != PresContextAC.end(); ++it )
     {
     it->Print(os);

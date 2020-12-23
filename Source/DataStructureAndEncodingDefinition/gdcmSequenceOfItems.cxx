@@ -74,7 +74,7 @@ void SequenceOfItems::SetLengthToUndefined()
 
 bool SequenceOfItems::FindDataElement(const Tag &t) const
 {
-  ConstIterator it = Begin();
+  auto it = Begin();
   bool found = false;
   for(; it != End() && !found; ++it)
     {

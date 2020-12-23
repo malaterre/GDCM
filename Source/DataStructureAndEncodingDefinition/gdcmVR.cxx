@@ -290,7 +290,7 @@ unsigned int VR::GetIndex(VRType vr)
     break;
   default:
       {
-      long long a = (long long)vr;
+      auto a = (long long)vr;
       for (; a > 1; ++l)
         a >>= 1LL;
       l++;
