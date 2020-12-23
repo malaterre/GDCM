@@ -39,7 +39,7 @@ public:
   unsigned long GetBufferLength() const { return BufferLength; }
   void SetBufferLength(unsigned long l) { BufferLength = l; }
 
-  bool Decode(DataElement const &is, DataElement &os) override;
+  bool Decode(DataElement const &in, DataElement &out) override;
   bool Decode(DataElement const &in, char* outBuffer, size_t inBufferLength,
               uint32_t inXMin, uint32_t inXMax, uint32_t inYMin,
               uint32_t inYMax, uint32_t inZMin, uint32_t inZMax);

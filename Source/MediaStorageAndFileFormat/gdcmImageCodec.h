@@ -45,7 +45,7 @@ public:
   virtual ImageCodec * Clone() const = 0;
 
 protected:
-  bool DecodeByStreams(std::istream &is_, std::ostream &os) override;
+  bool DecodeByStreams(std::istream &is, std::ostream &os) override;
   virtual bool IsValid(PhotometricInterpretation const &pi);
 public:
 
@@ -101,7 +101,7 @@ public:
   void SetNumberOfDimensions(unsigned int dim);
   unsigned int GetNumberOfDimensions() const;
 
-  bool CleanupUnusedBits(char * data, size_t datalen);
+  bool CleanupUnusedBits(char * data8, size_t datalen);
 
 protected:
   // Streaming (write) API:
@@ -135,14 +135,14 @@ protected:
   unsigned int NumberOfDimensions;
   bool LossyFlag;
 
-  bool DoOverlayCleanup(std::istream &is_, std::ostream &os);
-  bool DoByteSwap(std::istream &is_, std::ostream &os);
-  bool DoYBR(std::istream &is_, std::ostream &os);
-  bool DoYBRFull422(std::istream &is_, std::ostream &os);
-  bool DoPlanarConfiguration(std::istream &is_, std::ostream &os);
-  bool DoSimpleCopy(std::istream &is_, std::ostream &os);
-  bool DoPaddedCompositePixelCode(std::istream &is_, std::ostream &os);
-  bool DoInvertMonochrome(std::istream &is_, std::ostream &os);
+  bool DoOverlayCleanup(std::istream &is, std::ostream &os);
+  bool DoByteSwap(std::istream &is, std::ostream &os);
+  bool DoYBR(std::istream &is, std::ostream &os);
+  bool DoYBRFull422(std::istream &is, std::ostream &os);
+  bool DoPlanarConfiguration(std::istream &is, std::ostream &os);
+  bool DoSimpleCopy(std::istream &is, std::ostream &os);
+  bool DoPaddedCompositePixelCode(std::istream &is, std::ostream &os);
+  bool DoInvertMonochrome(std::istream &is, std::ostream &os);
 
   //template <typename T>
   //bool DoInvertPlanarConfiguration(T *output, const T *input, uint32_t length);

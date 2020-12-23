@@ -67,7 +67,7 @@ public:
 
   /// Find out if the string is a valid UID or not
   /// \todo: Move that in DataStructureAndEncoding (see FileMetaInformation::CheckFileMetaInformation)
-  static bool IsValid(const char *uid);
+  static bool IsValid(const char *uid_);
 
   /// Return the default (GDCM) root UID:
   static const char *GetGDCMUID(); // who would want that in the public API ??

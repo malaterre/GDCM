@@ -55,7 +55,7 @@ public:
   virtual bool Write(); // Execute()
 
   /// Set the filename of DICOM file to write:
-  void SetFileName(const char *filename_native);
+  void SetFileName(const char *utf8path);
 
   /// Set user ostream buffer
   void SetStream(std::ostream &output_stream) {

@@ -37,8 +37,8 @@ public:
   void PrettyPrintOn();
   void PrettyPrintOff();
 
-  bool Code(DataSet const & in, std::ostream & os);
-  bool Decode(std::istream & is, DataSet & out);
+  bool Code(DataSet const & ds, std::ostream & os);
+  bool Decode(std::istream & is, DataSet & ds);
 
 private:
   JSONInternal *Internals;

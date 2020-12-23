@@ -93,10 +93,10 @@ private:
   SequenceOfItems *GetDirectoryRecordSequence();
   size_t FindLowerLevelDirectoryRecord( size_t item1, const char *directorytype );
   typedef std::pair< std::string, Tag> MyPair;
-  MyPair GetReferenceValueForDirectoryType(size_t item);
+  MyPair GetReferenceValueForDirectoryType(size_t itemidx);
   bool SeriesBelongToStudy(const char *seriesuid, const char *studyuid);
   bool ImageBelongToSeries(const char *sopuid, const char *seriesuid, Tag const &t1, Tag const &t2);
-  bool ImageBelongToSameSeries(const char *sopuid, const char *seriesuid, Tag const &t);
+  bool ImageBelongToSameSeries(const char *sopuid1, const char *sopuid2, Tag const &t);
 
   DICOMDIRGeneratorInternal * Internals;
 };

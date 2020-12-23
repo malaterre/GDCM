@@ -41,7 +41,7 @@ public:
   ~RLECodec() override;
   bool CanCode(TransferSyntax const &ts) const override;
   bool CanDecode(TransferSyntax const &ts) const override;
-  bool Decode(DataElement const &is, DataElement &os) override;
+  bool Decode(DataElement const &in, DataElement &out) override;
   unsigned long GetBufferLength() const { return BufferLength; }
   void SetBufferLength(unsigned long l) { BufferLength = l; }
 
@@ -52,9 +52,9 @@ public:
 protected:
   bool DecodeExtent(
     char *buffer,
-    unsigned int XMin, unsigned int XMax,
-    unsigned int YMin, unsigned int YMax,
-    unsigned int ZMin, unsigned int ZMax,
+    unsigned int xmin, unsigned int xmax,
+    unsigned int ymin, unsigned int ymax,
+    unsigned int zmin, unsigned int zmax,
     std::istream & is
   );
 
@@ -70,7 +70,7 @@ protected:
   bool StartEncode( std::ostream & ) override;
   bool IsRowEncoder() override;
   bool IsFrameEncoder() override;
-  bool AppendRowEncode( std::ostream & out, const char * data, size_t datalen ) override;
+  bool AppendRowEncode( std::ostream & os, const char * data, size_t datalen ) override;
   bool AppendFrameEncode( std::ostream & out, const char * data, size_t datalen ) override;
   bool StopEncode( std::ostream & ) override;
 

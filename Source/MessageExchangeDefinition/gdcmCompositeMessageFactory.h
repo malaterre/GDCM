@@ -44,7 +44,7 @@ class CompositeMessageFactory
       static std::vector<PresentationDataValue> ConstructCEchoRQ(const ULConnection& inConnection);
 
       static std::vector<PresentationDataValue> ConstructCStoreRQ(const ULConnection& inConnection,const File &file, bool writeDataSet = true );
-      static std::vector<PresentationDataValue> ConstructCStoreRSP(const DataSet *inDataSet, const BasePDU* inPC);
+      static std::vector<PresentationDataValue> ConstructCStoreRSP(const DataSet *inDataSet, const BasePDU* inPDU);
 
       static  std::vector<PresentationDataValue> ConstructCFindRQ(const ULConnection& inConnection, const BaseRootQuery* inRootQuery);
 

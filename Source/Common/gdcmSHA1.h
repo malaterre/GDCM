@@ -37,7 +37,7 @@ public :
   SHA1(const SHA1&) = delete;
   void operator=(const SHA1&) = delete;
 
-  static bool Compute(const char *buffer, unsigned long buf_len, char digest_str[20*2+1]);
+  static bool Compute(const char *buffer, unsigned long buf_len, char digest[20*2+1]);
 
   static bool ComputeFile(const char *filename, char digest_str[20*2+1]);
 

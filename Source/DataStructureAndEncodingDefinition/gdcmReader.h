@@ -61,7 +61,7 @@ public:
 
   /// Set the filename to open. This will create a std::ifstream internally
   /// See SetStream if you are dealing with different std::istream object
-  void SetFileName(const char *filename_native);
+  void SetFileName(const char *utf8path);
 
   /// Set the open-ed stream directly
   void SetStream(std::istream &input_stream) {
@@ -82,10 +82,10 @@ public:
   bool ReadUpToTag(const Tag & tag, std::set<Tag> const & skiptags = std::set<Tag>() );
 
   /// Will only read the specified selected tags.
-  bool ReadSelectedTags(std::set<Tag> const & tags, bool readvalues = true);
+  bool ReadSelectedTags(std::set<Tag> const & selectedTags, bool readvalues = true);
 
   /// Will only read the specified selected private tags.
-  bool ReadSelectedPrivateTags(std::set<PrivateTag> const & ptags, bool readvalues = true);
+  bool ReadSelectedPrivateTags(std::set<PrivateTag> const & selectedPTags, bool readvalues = true);
 
   /// Test whether this is a DICOM file
   /// \warning need to call either SetFileName or SetStream first

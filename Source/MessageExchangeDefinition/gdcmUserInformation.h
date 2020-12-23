@@ -54,8 +54,8 @@ public:
   const MaximumLengthSub &GetMaximumLengthSub() const { return MLS; }
   MaximumLengthSub &GetMaximumLengthSub() { return MLS; }
 
-  void AddRoleSelectionSub( RoleSelectionSub const & r );
-  void AddSOPClassExtendedNegociationSub( SOPClassExtendedNegociationSub const & s );
+  void AddRoleSelectionSub( RoleSelectionSub const & rss );
+  void AddSOPClassExtendedNegociationSub( SOPClassExtendedNegociationSub const & sopcens );
 
 private:
   static const uint8_t ItemType;

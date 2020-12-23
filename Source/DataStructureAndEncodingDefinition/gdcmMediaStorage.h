@@ -158,7 +158,7 @@ typedef enum {
   } ObjectType;
 
   /// Return the Media String associated. Will return NULL for MS_END
-  static const char* GetMSString(MSType ts);
+  static const char* GetMSString(MSType ms);
 
   /// Return the Media String of the object.
   const char* GetString() const;
@@ -168,7 +168,7 @@ typedef enum {
 
   /// Returns whether DICOM has a Pixel Data element (7fe0,0010)
   /// \warning MRSpectroscopyStorage could be image but are not
-  static bool IsImage(MSType ts);
+  static bool IsImage(MSType ms);
 
   operator MSType () const { return MSField; }
 
@@ -191,7 +191,7 @@ typedef enum {
   bool SetFromDataSet(DataSet const &ds); // Will get the SOP Class UID
   bool SetFromHeader(FileMetaInformation const &fmi); // Will get the Media Storage SOP Class UID
   bool SetFromModality(DataSet const &ds);
-  void GuessFromModality(const char *modality, unsigned int dimension = 2);
+  void GuessFromModality(const char *modality, unsigned int dim = 2);
 
   friend std::ostream &operator<<(std::ostream &os, const MediaStorage &ms);
 

@@ -42,7 +42,7 @@ class CStoreRQ : public BaseCompositeMessage {
     class CStoreRSP : public BaseCompositeMessage {
       std::vector<PresentationDataValue> ConstructPDV(const ULConnection &inConnection, const BaseRootQuery* inRootQuery) override;//to fulfill the virtual contract
     public:
-      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet, const BasePDU* inPC);
+      std::vector<PresentationDataValue> ConstructPDV(const DataSet* inDataSet, const BasePDU* inPDU);
     };
   }
 }

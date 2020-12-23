@@ -79,8 +79,8 @@ public:
   typedef std::vector<PresentationContextRQ> PresentationContextArrayType;
   PresentationContextArrayType const &GetPresentationContexts() { return PresContext; }
 
-  const PresentationContextRQ *GetPresentationContextByID(uint8_t i) const;
-  const PresentationContextRQ *GetPresentationContextByAbstractSyntax(AbstractSyntax const & absyn ) const;
+  const PresentationContextRQ *GetPresentationContextByID(uint8_t id) const;
+  const PresentationContextRQ *GetPresentationContextByAbstractSyntax(AbstractSyntax const & as ) const;
   bool IsLastFragment() const override { return true; }
 
   const UserInformation & GetUserInformation() const { return UserInfo; }

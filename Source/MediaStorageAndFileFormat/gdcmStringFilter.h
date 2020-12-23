@@ -46,7 +46,7 @@ public:
   /// Directly from a Tag:
   std::string ToString(const Tag& t) const;
 
-  std::string ToString(const PrivateTag& t) const;
+  std::string ToString(const PrivateTag& privTag) const;
 
   /// Convert to string the ByteValue contained in a DataElement
   /// the returned elements are:
@@ -67,11 +67,11 @@ public:
   /// Execute the XPATH query to find a value (as string)
   /// return false when attribute is not found (or an error in the XPATH query)
   /// You need to make sure that your XPATH query is syntatically correct
-  bool ExecuteQuery(std::string const &query, std::string & value) const;
+  bool ExecuteQuery(std::string const &query_const, std::string & value) const;
 
 protected:
   std::pair<std::string, std::string> ToStringPair(const Tag& t, DataSet const &ds) const;
-  bool ExecuteQuery(std::string const &query, DataSet const &ds, std::string & value) const;
+  bool ExecuteQuery(std::string const &query_const, DataSet const &ds, std::string & retvalue) const;
 
 private:
   std::pair<std::string, std::string> ToStringPairInternal(const DataElement& de, DataSet const &ds) const;

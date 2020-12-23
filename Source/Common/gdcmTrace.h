@@ -72,13 +72,13 @@ public :
   static bool GetDebugFlag();
 
   /// Turn warning messages on (default: true)
-  static void SetWarning(bool debug);
+  static void SetWarning(bool warning);
   static void WarningOn();
   static void WarningOff();
   static bool GetWarningFlag();
 
   /// Turn error messages on (default: true)
-  static void SetError(bool debug);
+  static void SetError(bool error);
   static void ErrorOn();
   static void ErrorOff();
   static bool GetErrorFlag();

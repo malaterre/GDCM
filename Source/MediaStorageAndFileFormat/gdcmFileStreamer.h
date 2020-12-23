@@ -67,7 +67,7 @@ public:
   /// This will delete any existing Tag t. Need to call it only once.
   bool StartDataElement( const Tag & t );
   /// Append to previously started Tag t
-  bool AppendToDataElement( const Tag & t, const char *array, size_t len );
+  bool AppendToDataElement( const Tag & t, const char *data, size_t len );
   /// Stop appending to tag t. This will compute the proper attribute length.
   bool StopDataElement( const Tag & t );
   /// Add a hint on the final size of the dataelement. When optimally chosen,
@@ -84,7 +84,7 @@ public:
   /// \bug maxsizede should be a value lower than the actual total size of the buffer to be copied
   bool StartGroupDataElement( const PrivateTag & pt, size_t maxsizede = 0, uint8_t startoffset = 0 );
   /// Append to previously started private creator
-  bool AppendToGroupDataElement( const PrivateTag & pt, const char *array, size_t len );
+  bool AppendToGroupDataElement( const PrivateTag & pt, const char *data, size_t len );
   /// Stop appending to private creator
   bool StopGroupDataElement( const PrivateTag & pt );
   /// Optimisation: pre-allocate the number of dataelement within the private

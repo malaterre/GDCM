@@ -56,7 +56,7 @@ public:
   const char *GetString() const;
 
   // You need to make sure end of string is \0
-  static PIType GetPIType(const char *pi);
+  static PIType GetPIType(const char *inputpi);
 
   static bool IsRetired(PIType pi);
 

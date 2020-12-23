@@ -31,7 +31,7 @@ public:
   const char* Generate();
 
   /// Find out if the string is a valid UUID or not
-  static bool IsValid(const char *uid);
+  static bool IsValid(const char *suid);
 
 private:
   std::string Unique; // Buffer

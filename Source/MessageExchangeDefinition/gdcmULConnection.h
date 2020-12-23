@@ -83,7 +83,7 @@ class GDCM_EXPORT ULConnection
       TransferSyntaxSub const & GetCStoreTransferSyntax( ) const;
     public:
 
-      ULConnection(const ULConnectionInfo& inUserInformation);
+      ULConnection(const ULConnectionInfo& inConnectInfo);
       //destructors are virtual to prevent memory leaks by inherited classes
       virtual ~ULConnection();
 

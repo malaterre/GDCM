@@ -53,7 +53,7 @@ class ARTIMTimer
       ARTIMTimer(); //initiates the start and timeout at -1;
       void Start(); //'start' the timer by getting the current wall time
       void Stop();//'stop' the timer by resetting the 'start' to -1;
-      void SetTimeout(double inTimeout);
+      void SetTimeout(double inTimeOut);
       double GetTimeout() const;
 
       double GetElapsedTime() const;

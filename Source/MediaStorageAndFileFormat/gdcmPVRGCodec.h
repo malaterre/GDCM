@@ -40,7 +40,7 @@ public:
   bool CanDecode(TransferSyntax const &ts) const override;
   bool CanCode(TransferSyntax const &ts) const override;
 
-  bool Decode(DataElement const &is, DataElement &os) override;
+  bool Decode(DataElement const &in, DataElement &out) override;
   bool Code(DataElement const &in, DataElement &out) override;
   void SetLossyFlag( bool l );
 

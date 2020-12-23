@@ -49,7 +49,7 @@ public :
   typedef std::vector<FilenameType> FilenamesType;
 
   /// Print
-  void Print(std::ostream &os = std::cout) const;
+  void Print(std::ostream &_os = std::cout) const;
 
   /// Get the name of the toplevel directory
   FilenameType const &GetToplevel() const { return Toplevel; }

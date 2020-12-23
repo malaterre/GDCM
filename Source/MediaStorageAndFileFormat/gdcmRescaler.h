@@ -72,10 +72,10 @@ public:
   ~Rescaler() = default;
 
   /// Direct transform
-  bool Rescale(char *out, const char *in, size_t n);
+  bool Rescale(char *out, const char *in8, size_t n);
 
   /// Inverse transform
-  bool InverseRescale(char *out, const char *in, size_t n);
+  bool InverseRescale(char *out, const char *in8, size_t n);
 
   /// Set Intercept: used for both direct&inverse transformation
   void SetIntercept(double i) { Intercept = i; }
@@ -89,7 +89,7 @@ public:
   /// matching Target Pixel Type is computed. However user can override
   /// this auto selection by switching UseTargetPixelType:true and
   /// also specifying the specifix Target Pixel Type
-  void SetTargetPixelType( PixelFormat const & targetst );
+  void SetTargetPixelType( PixelFormat const & targetpf );
 
   /// Override default behavior of Rescale
   void SetUseTargetPixelType(bool b);
@@ -111,9 +111,9 @@ public:
 
 protected:
   template <typename TIn>
-    void RescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n);
+    void RescaleFunctionIntoBestFit(char *out8, const TIn *in, size_t n);
   template <typename TIn>
-    void InverseRescaleFunctionIntoBestFit(char *out, const TIn *in, size_t n);
+    void InverseRescaleFunctionIntoBestFit(char *out8, const TIn *in, size_t n);
 
 private:
   double Intercept; // 0028,1052

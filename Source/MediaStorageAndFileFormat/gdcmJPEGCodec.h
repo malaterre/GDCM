@@ -45,8 +45,8 @@ public:
   ~JPEGCodec() override;
   bool CanDecode(TransferSyntax const &ts) const override;
   bool CanCode(TransferSyntax const &ts) const override;
-  bool Decode(DataElement const &is, DataElement &os) override;
-  void SetPixelFormat(PixelFormat const &pf) override;
+  bool Decode(DataElement const &in, DataElement &out) override;
+  void SetPixelFormat(PixelFormat const &pt) override;
 
   /// Compute the offset table:
   void ComputeOffsetTable(bool b);
@@ -83,7 +83,7 @@ protected:
   bool StartEncode( std::ostream & ) override;
   bool IsRowEncoder() override;
   bool IsFrameEncoder() override;
-  bool AppendRowEncode( std::ostream & out, const char * data, size_t datalen ) override;
+  bool AppendRowEncode( std::ostream & os, const char * data, size_t datalen ) override;
   bool AppendFrameEncode( std::ostream & out, const char * data, size_t datalen ) override;
   bool StopEncode( std::ostream & ) override;
 

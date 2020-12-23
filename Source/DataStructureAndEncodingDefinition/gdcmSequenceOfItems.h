@@ -80,7 +80,7 @@ public:
 
   /// Remove an Item as specified by its index, if index > size, false is returned
   /// Index starts at 1 not 0
-  bool RemoveItemByIndex( const SizeType index );
+  bool RemoveItemByIndex( const SizeType position );
 
   bool IsEmpty() const { return Items.empty(); };
   SizeType GetNumberOfItems() const {  return Items.size(); }

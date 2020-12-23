@@ -56,7 +56,7 @@ public :
   ~PDBHeader() = default;
 
   /// Load the PDB Header from a DataElement of a DataSet
-  bool LoadFromDataElement(DataElement const &de);
+  bool LoadFromDataElement(DataElement const &protocoldatablock);
 
   /// Print
   void Print(std::ostream &os) const;
