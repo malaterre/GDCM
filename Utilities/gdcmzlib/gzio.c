@@ -126,7 +126,8 @@ local gzFile gz_open (path, mode, fd)
 
     s->path = (char*)ALLOC(strlen(path)+1);
     if (s->path == NULL) {
-        return destroy(s), (gzFile)Z_NULL;
+        destroy(s);
+        return (gzFile)Z_NULL;
     }
     strcpy(s->path, path); /* do this early for debugging */
 
@@ -146,7 +147,8 @@ local gzFile gz_open (path, mode, fd)
             *m++ = *p; /* copy the mode */
         }
     } while (*p++ && m != fmode + sizeof(fmode));
-    if (s->mode == '\0') return destroy(s), (gzFile)Z_NULL;
+    if (s->mode == '\0') destroy(s);
+    return (gzFile)Z_NULL;
 
     if (s->mode == 'w') {
 #ifdef NO_GZCOMPRESS
@@ -159,7 +161,8 @@ local gzFile gz_open (path, mode, fd)
         s->stream.next_out = s->outbuf = (Byte*)ALLOC(Z_BUFSIZE);
 #endif
         if (err != Z_OK || s->outbuf == Z_NULL) {
-            return destroy(s), (gzFile)Z_NULL;
+            destroy(s);
+            return (gzFile)Z_NULL;
         }
     } else {
         s->stream.next_in  = s->inbuf = (Byte*)ALLOC(Z_BUFSIZE);
@@ -172,7 +175,8 @@ local gzFile gz_open (path, mode, fd)
          * present after the compressed stream.
          */
         if (err != Z_OK || s->inbuf == Z_NULL) {
-            return destroy(s), (gzFile)Z_NULL;
+            destroy(s);
+            return (gzFile)Z_NULL;
         }
     }
     s->stream.avail_out = Z_BUFSIZE;
@@ -181,7 +185,8 @@ local gzFile gz_open (path, mode, fd)
     s->file = fd < 0 ? F_OPEN(path, fmode) : (FILE*)fdopen(fd, fmode);
 
     if (s->file == NULL) {
-        return destroy(s), (gzFile)Z_NULL;
+        destroy(s);
+        return (gzFile)Z_NULL;
     }
     if (s->mode == 'w') {
         /* Write a very simple .gz header:
