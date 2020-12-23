@@ -127,7 +127,7 @@ int TestImageRegionReader4(int argc, char *argv[])
     "/gdcmSampleData/images_of_interest/PHILIPS_Integris_V-10-MONO2-Multiframe.dcm",
     "/gdcmSampleData/ForSeriesTesting/MultiFramesSingleSerieXR/1.3.46.670589.7.5.10.80002138018.20001204.181556.9.1.1.dcm",
     "/gdcmSampleData/images_of_interest/i32.XADC.7.215MegaBytes.dcm",
-    NULL
+    nullptr
   };
   const char *filename;
   while( (filename = names[i]) )
