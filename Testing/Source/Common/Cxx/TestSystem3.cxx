@@ -56,7 +56,7 @@ int TestSystem3(int, char *[])
     }
   free( copy );
   if( v.size() != 3 ) return 1;
-  if( v[0] != "" ) return 1;
+  if( !v[0].empty() ) return 1;
   if( v[1] != "ISO 2022 IR 13" ) return 1;
   if( v[2] != "ISO 2022 IR 87" ) return 1;
 }
