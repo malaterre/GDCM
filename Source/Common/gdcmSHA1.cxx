@@ -45,7 +45,7 @@ SHA1::~SHA1()
   delete Internals;
 }
 
-bool SHA1::Compute(const char *buffer, unsigned long buf_len, char digest[])
+bool SHA1::Compute(const char *buffer, unsigned long buf_len, const char digest[])
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   if( !buffer || !buf_len )
@@ -116,7 +116,7 @@ static bool process_file(const char *filename, unsigned char *digest)
 }
 #endif
 
-bool SHA1::ComputeFile(const char *filename, char digest_str[20*2+1])
+bool SHA1::ComputeFile(const char *filename, const char digest_str[20*2+1])
 {
 #ifdef GDCM_USE_SYSTEM_OPENSSL
   // If not file exist
