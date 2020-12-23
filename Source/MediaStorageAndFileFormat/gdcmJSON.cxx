@@ -122,7 +122,7 @@ static inline bool CanContainBackslash( const VR::VRType vrtype )
 class JSONInternal
 {
 public:
-  JSONInternal(){}
+  JSONInternal()= default;
   bool PrettyPrint{false};
   bool PreferKeyword{false};
 };

@@ -46,7 +46,7 @@ public:
   std::string calledaetitle;
   double timeout;
 
-  ServiceClassUserInternals(){}
+  ServiceClassUserInternals()= default;
   ~ServiceClassUserInternals(){
     delete mConnection;
     delete mSecondaryConnection;
