@@ -30,7 +30,9 @@ int TestString1(int , char *[])
   const char str[] = "WINDOW1\\WINDOW2\\WINDOW3";
   //const size_t lenstr = strlen(str);
 
-  gdcm::String<'\\'> ms1, ms2, ms3;
+  gdcm::String<'\\'> ms1;
+  gdcm::String<'\\'> ms2;
+  gdcm::String<'\\'> ms3;
   std::stringstream ss;
   ss << str;
   ss >> ms1;
@@ -60,7 +62,9 @@ int TestString1(int , char *[])
   const char str[] = "WINDOW1^WINDOW2^WINDOW3";
   //const size_t lenstr = strlen(str);
 
-  gdcm::String<'^'> ms1, ms2, ms3;
+  gdcm::String<'^'> ms1;
+  gdcm::String<'^'> ms2;
+  gdcm::String<'^'> ms3;
   std::stringstream ss;
   ss << str;
   ss >> ms1;

@@ -150,7 +150,8 @@ bool PNMCodec::Read(const char *filename, DataElement &out) const
 {
   size_t len = System::FileSize(filename);
   std::ifstream is(filename, std::ios::binary);
-  std::string type, str;
+  std::string type;
+  std::string str;
   std::getline(is,type);
   PhotometricInterpretation pi;
   if( type == "P5" )
@@ -256,7 +257,8 @@ bool PNMCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   //assert(len < INT_MAX);
   is.seekg( 0, std::ios::beg );
 
-  std::string type, str;
+  std::string type;
+  std::string str;
   std::getline(is,type);
   PhotometricInterpretation pi;
   if( type == "P4" ) // P4 => mono W/B !

@@ -213,7 +213,8 @@ int PDBHeader::readprotocoldatablock(const char *input, size_t inputlen, bool ve
       {
       PDBElement pdbel;
       std::istringstream is2( out );
-      std::string name, value;
+      std::string name;
+      std::string value;
       is2 >> name;
       std::getline(is2, value);
       pdbel.SetName( name.c_str() );

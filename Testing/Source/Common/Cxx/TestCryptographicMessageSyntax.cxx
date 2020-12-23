@@ -68,8 +68,10 @@ bool TestCMSProvider(gdcm::CryptographicMessageSyntax& cms, const char * provNam
   bool ret = true;
   for (auto cipher : ciphers)
     {
-    char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
-    size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
+    char encout[BUFSZ] = {0};
+    char decout[BUFSZ] = {0};
+    size_t encoutlen = BUFSZ;
+    size_t decoutlen = BUFSZ;
     cms.SetCipherType(cipher);
     bool encryptSuccess = cms.Encrypt(encout, encoutlen, tstr, tstr_l);
     if (!encryptSuccess)
@@ -145,8 +147,10 @@ bool TestCMSCompatibility(gdcm::CryptographicMessageSyntax& cms1, const char * p
   bool ret = true;
   for (auto cipher : ciphers)
     {
-    char encout[BUFSZ] = {0}, decout[BUFSZ] = {0};
-    size_t encoutlen = BUFSZ, decoutlen = BUFSZ;
+    char encout[BUFSZ] = {0};
+    char decout[BUFSZ] = {0};
+    size_t encoutlen = BUFSZ;
+    size_t decoutlen = BUFSZ;
     cms1.SetCipherType(cipher);
     cms2.SetCipherType(cipher);
 

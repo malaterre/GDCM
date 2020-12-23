@@ -117,7 +117,9 @@ Attribute<0x0028,0x0004> piat;
       // (0028,1102) US 256\0\16                                 #   6, 3 GreenPaletteColorLookupTableDescriptor
       // (0028,1103) US 256\0\16                                 #   6, 3 BluePaletteColorLookupTableDescriptor
       // lut data:
-      unsigned short length, subscript, bitsize;
+      unsigned short length;
+      unsigned short subscript;
+      unsigned short bitsize;
       //unsigned short rawlut8[256];
       std::vector<unsigned short> rawlut8;
       rawlut8.resize(256);
@@ -343,7 +345,9 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
       // (0028,1102) US 256\0\16                                 #   6, 3 GreenPaletteColorLookupTableDescriptor
       // (0028,1103) US 256\0\16                                 #   6, 3 BluePaletteColorLookupTableDescriptor
       // lut data:
-      unsigned short length, subscript, bitsize;
+      unsigned short length;
+      unsigned short subscript;
+      unsigned short bitsize;
       unsigned short rawlut8[256];
       unsigned short rawlut16[65536];
       unsigned short *rawlut = rawlut8;

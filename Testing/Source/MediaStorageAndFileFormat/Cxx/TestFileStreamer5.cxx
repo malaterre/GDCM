@@ -83,7 +83,8 @@ int TestFileStreamer5(int argc, char *argv[])
   gdcm::Trace::DebugOff();
   gdcm::Trace::WarningOff();
   gdcm::Trace::ErrorOff();
-  int r = 0, i = 0;
+  int r = 0;
+  int i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )

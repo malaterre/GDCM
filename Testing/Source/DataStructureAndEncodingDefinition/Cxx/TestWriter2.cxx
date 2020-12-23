@@ -106,7 +106,8 @@ int TestWriter2(int argc, char *argv[])
     }
 
   // else
-  int r = 0, i = 0;
+  int r = 0;
+  int i = 0;
   gdcm::Trace::DebugOff();
   gdcm::Trace::WarningOff();
   const char *filename;

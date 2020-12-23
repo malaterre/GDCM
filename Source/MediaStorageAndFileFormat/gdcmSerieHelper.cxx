@@ -306,7 +306,8 @@ bool SerieHelper::ImagePositionPatientOrdering( FileList *fileList ) const
   double normal[3] = {};
   std::vector<double> ipp;
   double dist;
-  double min = 0, max = 0;
+  double min = 0;
+  double max = 0;
   bool first = true;
 
   std::multimap<double,SmartPointer<FileWithName> > distmultimap;

@@ -264,7 +264,8 @@ bool ImageRegionReader::ReadRAWIntoBuffer(char *buffer, size_t buflen)
   std::vector<char> buffer2;
   buffer2.resize( rowsize*bytesPerPixel );
   char *tmpBuffer2 = &buffer2[0];
-  unsigned int y, z;
+  unsigned int y;
+  unsigned int z;
   std::streamoff theOffset;
   for (z = zmin; z <= zmax; ++z)
     {

@@ -606,7 +606,8 @@ const char *System::GetCurrentResourcesDirectory()
  */
 inline int getlastdigit(unsigned char *data, unsigned long size)
 {
-  int extended, carry = 0;
+  int extended;
+  int carry = 0;
   for(unsigned int i=0;i<size;i++)
     {
     extended = (carry << 8) + data[i];
@@ -759,7 +760,13 @@ bool System::ParseDateTime(time_t &timep, long &milliseconds, const char date[22
     }
 #else
   // instead write our own:
-  int year, mon, day, hour, min, sec, n;
+  int year;
+  int mon;
+  int day;
+  int hour;
+  int min;
+  int sec;
+  int n;
   if ((n = sscanf(date, "%4d%2d%2d%2d%2d%2d",
         &year, &mon, &day, &hour, &min, &sec)) >= 1)
     {
@@ -1031,7 +1038,8 @@ char *System::StrSep(char **sp, const char *sep)
   // http://unixpapa.com/incnote/string.html
   // http://stackoverflow.com/questions/8512958/is-there-a-windows-variant-of-strsep
 #if 1
-  char *p, *s;
+  char *p;
+  char *s;
   if (sp == nullptr || *sp == nullptr || **sp == '\0') return nullptr;
   s = *sp;
   p = s + strcspn(s, sep);

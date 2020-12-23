@@ -157,7 +157,9 @@ assert(0); // Do not use this code !
   const unsigned char *a = copy + 0;
   const unsigned char *b = copy + size;
   const unsigned char *c = copy + size + size;
-  int R, G, B;
+  int R;
+  int G;
+  int B;
 
   auto *p = (unsigned char*)dummy_buffer;
   for (unsigned long j = 0; j < size; ++j)

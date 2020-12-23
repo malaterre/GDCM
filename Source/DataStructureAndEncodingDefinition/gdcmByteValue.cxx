@@ -119,7 +119,8 @@ namespace gdcm_ns
     element NamePrefix {xsd:string}?,
     element NameSuffix {xsd:string}?
      */
-    int count1 , count2;
+    int count1 ;
+    int count2;
     count1=count2=1;
     os << "<PersonName number = \"" << count1 << "\" >\n" ;
     os << "<SingleByte>\n<FamilyName> " ;

@@ -23,7 +23,8 @@ namespace gdcm_ns
   bool PrivateTag::ReadFromCommaSeparatedString(const char *str)
     {
     if( !str ) return false;
-    unsigned int group = 0, element = 0;
+    unsigned int group = 0;
+    unsigned int element = 0;
     std::string owner;
     owner.resize( strlen(str) ); // str != NULL
     if( sscanf(str, "%04x,%04x,%[^\"]", &group , &element, &owner[0] ) != 3

@@ -24,7 +24,8 @@ int TestReadCanRead(const char *subdir, const char* filename, bool verbose = fal
   if( verbose )
   std::cout << "TestReadCanRead: " << filename << std::endl;
 
-  bool b1, b2;
+  bool b1;
+  bool b2;
 
   gdcm::Reader reader;
   reader.SetFileName( filename );
@@ -145,7 +146,8 @@ int TestReaderCanRead(int argc, char *argv[])
   gdcm::Trace::DebugOff();
   gdcm::Trace::WarningOff();
   gdcm::Trace::ErrorOff();
-  int r = 0, i = 0;
+  int r = 0;
+  int i = 0;
   const char *filename;
   const char * const *filenames = gdcm::Testing::GetFileNames();
   while( (filename = filenames[i]) )
