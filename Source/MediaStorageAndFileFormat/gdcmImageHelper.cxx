@@ -2202,6 +2202,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
     {
     if( img.GetIntercept() != 0. || img.GetSlope() != 1. )
       {
+      gdcmErrorMacro( "Cannot have non-identity intercept/slope values." );
       throw "Impossible"; // Please report
       }
     return;
