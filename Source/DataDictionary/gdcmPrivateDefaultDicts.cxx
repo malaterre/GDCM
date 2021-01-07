@@ -38,6 +38,8 @@ typedef struct
 } DICT_ENTRY;
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x7fdf,0x0050,"TomTec",VR::OB,VM::VM1,"Bookmark Information",false},
+  {0x7fdf,0x0051,"TomTec",VR::OB,VM::VM1,"Bookmark Content",false},
   {0x2013,0x0010,"BioDICOMizer",VR::LO,VM::VM1,"Custom Storage Version",false},
   {0x2013,0x0011,"BioDICOMizer",VR::ST,VM::VM1,"Custom Storage Former Filename",false},
   {0x2013,0x0012,"BioDICOMizer",VR::LO,VM::VM1,"Custom Storage Mime-Type",false},
