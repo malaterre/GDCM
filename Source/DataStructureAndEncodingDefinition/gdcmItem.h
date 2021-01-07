@@ -93,9 +93,6 @@ public:
     NestedDataSet = val.NestedDataSet;
     }
 
-  Item& operator=(const Item&) = default;
-  Item& operator=(Item&&) = default;
-
   template <typename TDE, typename TSwap>
   std::istream &Read(std::istream &is) {
     // Superclass
