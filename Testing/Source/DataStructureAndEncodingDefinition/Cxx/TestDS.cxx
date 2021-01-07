@@ -191,8 +191,8 @@ static bool singleTestDS(double d, int sz, bool se = false)
 #define TEST(x, y, z) { \
   std::cout << "  Testing:   " << #x << std::endl; \
   err_count += singleTestDS(x, y, z); \
-  test_count++; }
-
+  test_count++; }   \
+  GDCM_NOOP_STATEMENT
 
 /*
  * Test to make sure that double precision ieee 'double' is ok for DICOM VR = 'DS'

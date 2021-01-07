@@ -108,14 +108,14 @@ bool ImageChangePhotometricInterpretation::ChangeYBR2RGB()
   }
 
   unsigned long len = image.GetBufferLength();
-  char *p8 = new char[len];
-  image.GetBuffer( p8 );
+  unsigned short *p16 = new unsigned short[len/sizeof(unsigned short)];
+  image.GetBuffer( reinterpret_cast<char *>(p16) );
 
   const PixelFormat &pf = image.GetPixelFormat();
   if( pf.GetSamplesPerPixel() != 3 || pf.GetPixelRepresentation() != 0 ) return false;
   if( pf.GetBitsAllocated() == 16 )
   {
-    unsigned short *p = (unsigned short*)p8;
+    unsigned short *p = p16;
     unsigned short rgb[3];
     unsigned short ybr[3];
     for( unsigned long i = 0; i < len / (3 * 2); ++i ) {
@@ -130,7 +130,7 @@ bool ImageChangePhotometricInterpretation::ChangeYBR2RGB()
   }
   else if( pf.GetBitsAllocated() == 8 )
   {
-    unsigned char *p = (unsigned char*)p8;
+    unsigned char *p = (unsigned char*)p16;
     unsigned char rgb[3];
     unsigned char ybr[3];
     for( unsigned long i = 0; i < len / 3; ++i ) {
@@ -145,7 +145,7 @@ bool ImageChangePhotometricInterpretation::ChangeYBR2RGB()
   }
 
   DataElement &de = Output->GetDataElement();
-  de.SetByteValue( p8, len);
+  de.SetByteValue( reinterpret_cast<char *>(p16), len);
   //Output->GetLUT().Clear();
   Output->SetPhotometricInterpretation( PI );
   //Output->GetPixelFormat().SetSamplesPerPixel( 3 );
@@ -164,7 +164,7 @@ bool ImageChangePhotometricInterpretation::ChangeYBR2RGB()
 
 
   bool success = true;
-  delete[] p8;
+  delete[] p16;
   return success;
 }
 
@@ -183,14 +183,14 @@ bool ImageChangePhotometricInterpretation::ChangeRGB2YBR()
   }
 
   unsigned long len = image.GetBufferLength();
-  char *p8 = new char[len];
-  image.GetBuffer( p8 );
+  unsigned short *p16 = new unsigned short[len/sizeof(unsigned short)];
+  image.GetBuffer( reinterpret_cast<char *>(p16) );
 
   const PixelFormat &pf = image.GetPixelFormat();
   if( pf.GetSamplesPerPixel() != 3 || pf.GetPixelRepresentation() != 0 ) return false;
   if( pf.GetBitsAllocated() == 16 )
   {
-    unsigned short *p = (unsigned short*)p8;
+    unsigned short *p = p16;
     unsigned short rgb[3];
     unsigned short ybr[3];
     for( unsigned long i = 0; i < len / (3 * 2); ++i ) {
@@ -205,7 +205,7 @@ bool ImageChangePhotometricInterpretation::ChangeRGB2YBR()
   }
   else if( pf.GetBitsAllocated() == 8 )
   {
-    unsigned char *p = (unsigned char*)p8;
+    unsigned char *p = (unsigned char*)p16;
     unsigned char rgb[3];
     unsigned char ybr[3];
     for( unsigned long i = 0; i < len / 3; ++i ) {
@@ -220,7 +220,7 @@ bool ImageChangePhotometricInterpretation::ChangeRGB2YBR()
   }
 
   DataElement &de = Output->GetDataElement();
-  de.SetByteValue( p8, len);
+  de.SetByteValue( reinterpret_cast<char *>(p16), len);
   //Output->GetLUT().Clear();
   Output->SetPhotometricInterpretation( PI );
   //Output->GetPixelFormat().SetSamplesPerPixel( 3 );
@@ -239,7 +239,7 @@ bool ImageChangePhotometricInterpretation::ChangeRGB2YBR()
 
 
   bool success = true;
-  delete[] p8;
+  delete[] p16;
   return success;
 }
 

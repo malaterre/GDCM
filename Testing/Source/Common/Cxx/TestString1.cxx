@@ -14,7 +14,7 @@
 #include "gdcmString.h"
 #include <iostream>
 
-typedef gdcm::String<'\\',64> CSComp;
+using CSComp = gdcm::String<'\\', 64>;
 
 static void Print(CSComp v)
 {

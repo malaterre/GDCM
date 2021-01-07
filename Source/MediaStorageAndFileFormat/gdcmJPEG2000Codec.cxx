@@ -31,7 +31,7 @@ namespace gdcm
 {
 
 /* Part 1  Table A.2 List of markers and marker segments */
-typedef enum {
+using MarkerType = enum {
   FF30 = 0xFF30,
   FF31 = 0xFF31,
   FF32 = 0xFF32,
@@ -69,9 +69,9 @@ typedef enum {
   EPH = 0XFF92,
   SOD = 0xFF93,
   EOC = 0XFFD9  /* EOI in old jpeg */
-} MarkerType;
+};
 
-typedef enum {
+using OtherType = enum {
   JP   = 0x6a502020,
   FTYP = 0x66747970,
   JP2H = 0x6a703268,
@@ -84,7 +84,7 @@ typedef enum {
   CMAP = 0x636D6170,
   PCLR = 0x70636c72,
   RES  = 0x72657320
-} OtherType;
+};
 
 static inline bool hasnolength( uint_fast16_t marker )
 {
@@ -394,14 +394,14 @@ class JPEG2000Internals
 {
 public:
   JPEG2000Internals()
-  : nNumberOfThreadsForDecompression( -1 )
+   
     {
     memset(&coder_param, 0, sizeof(coder_param));
     opj_set_default_encoder_parameters(&coder_param);
     }
 
   opj_cparameters coder_param;
-  int nNumberOfThreadsForDecompression;
+  int nNumberOfThreadsForDecompression{ -1 };
 };
 
 void JPEG2000Codec::SetRate(unsigned int idx, double rate)

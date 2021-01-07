@@ -26,7 +26,7 @@
 
 namespace {
 using namespace gdcm;
-typedef struct
+using DICT_ENTRY = struct
 {
   uint16_t group;
   uint16_t element;
@@ -35,7 +35,7 @@ typedef struct
   VM::VMType vm;
   const char *name;
   bool ret;
-} DICT_ENTRY;
+};
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x7fdf,0x0050,"TomTec",VR::OB,VM::VM1,"Bookmark Information",false},

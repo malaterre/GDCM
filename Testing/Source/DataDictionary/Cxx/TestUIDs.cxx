@@ -434,7 +434,7 @@ int TestUIDs(int, char *[])
     }
   if( uid.GetName() ) return 1;
 
-  typedef const char* const (*mytype)[2];
+  using mytype = const char *const (*)[2];
   mytype sopclassuid = sopclassuids;
   while( *sopclassuid[0] )
     {
