@@ -106,23 +106,23 @@ int TestSplitMosaicFilter(int argc, char *argv[])
 //  const gdcm::Image &image = filter.GetImage();
 
   unsigned long l = image.GetBufferLength();
-  std::vector<unsigned short> buf;
-  buf.resize(l/sizeof(unsigned short));
-  if( !image.GetBuffer( reinterpret_cast<char *>(&buf[0]) ) )
+  std::vector<char> buf;
+  buf.resize(l);
+  if( !image.GetBuffer( &buf[0] ) )
     {
     std::cerr << "Could not GetBuffer << " << filename << std::endl;
     return 1;
     }
 
-  std::vector<unsigned short> outbuf;
-  unsigned long ll = inputdims[0] * inputdims[1];
+  std::vector<char> outbuf;
+  unsigned long ll = inputdims[0] * inputdims[1] * sizeof( unsigned short );
   outbuf.resize(ll);
 
   const unsigned int *mos_dims = image.GetDimensions();
   unsigned int div = (unsigned int )ceil(sqrt( (double)mos_dims[2]) );
 
-  reorganize_mosaic_invert(&outbuf[0],  inputdims,
-    div, mos_dims, &buf[0] );
+  reorganize_mosaic_invert((unsigned short *)&outbuf[0],  inputdims,
+    div, mos_dims, (const unsigned short*)&buf[0] );
 
 #if 0
   std::ofstream o( "/tmp/debug", std::ios::binary );
@@ -131,7 +131,7 @@ int TestSplitMosaicFilter(int argc, char *argv[])
 #endif
 
   char digest[33];
-  gdcm::Testing::ComputeMD5(reinterpret_cast<char *>(&outbuf[0]), ll*sizeof(unsigned short), digest);
+  gdcm::Testing::ComputeMD5(&outbuf[0], ll, digest);
 
   // $ gdcminfo --md5sum gdcmSampleData/images_of_interest/MR-sonata-3D-as-Tile.dcm
   if( strcmp(digest, "be96c01db8a0ec0753bd43f6a985345c" ) != 0 )
