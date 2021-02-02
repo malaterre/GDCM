@@ -1435,7 +1435,15 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
         el.Read( ss );
         for(unsigned int i = 0; i < el.GetLength(); ++i)
-          sp.push_back( el.GetValue(i) );
+        {
+          if( el.GetValue(i) )
+            sp.push_back( el.GetValue(i) );
+          else
+            {
+            gdcmWarningMacro( "Cant have a spacing of 0" );
+            sp.push_back( 1.0 );
+            }
+        }
         std::swap( sp[0], sp[1]);
         assert( sp.size() == (unsigned int)entry.GetVM() );
         }
