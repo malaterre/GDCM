@@ -787,16 +787,16 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
   if( this->GetPhotometricInterpretation() == PhotometricInterpretation::RGB
    || this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL )
   {
-    if( mct ) gdcmWarningMacro("Invalid PhotometricInterpretation, should be YBR_RCT");
+    if( mct ) { gdcmWarningMacro("Invalid PhotometricInterpretation, should be YBR_RCT"); }
   }
   else if( this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
         || this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_ICT )
   {
-    if( !mct ) gdcmWarningMacro("Invalid PhotometricInterpretation, should be RGB");
+    if( !mct ) { gdcmWarningMacro("Invalid PhotometricInterpretation, should be RGB"); }
   }
   else
   {
-    if( mct ) gdcmWarningMacro("MCT flag was set in SamplesPerPixel = 1 image. corrupt j2k ?");
+    if( mct ) { gdcmWarningMacro("MCT flag was set in SamplesPerPixel = 1 image. corrupt j2k ?"); }
   }
 
   /* close the byte stream */
