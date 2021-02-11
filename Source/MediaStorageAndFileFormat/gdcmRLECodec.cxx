@@ -581,7 +581,7 @@ size_t RLECodec::DecodeFragment(Fragment const & frag, char *buffer, size_t llen
     std::streamoff check = bv.GetLength() - p;
     // check == 2 for gdcmDataExtra/gdcmSampleData/US_DataSet/GE_US/2929J686-breaker
     //assert( check == 0 || check == 1 || check == 2 );
-    if( check ) gdcmDebugMacro( "tiny offset detected in between RLE segments: " << check );
+    if( check ) { gdcmDebugMacro( "tiny offset detected in between RLE segments: " << check ); }
     }
   else
     {

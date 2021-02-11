@@ -190,7 +190,7 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
     {
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
     if (!sf) return false;
-    size_t totalLen = sf->ComputeByteLength();
+    unsigned long totalLen = sf->ComputeByteLength();
     char *buffer = new char[totalLen];
     sf->GetBuffer(buffer, totalLen);
 
