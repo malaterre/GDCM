@@ -73,9 +73,9 @@ before_install:
   #- if [ "$TRAVIS_OS_NAME" == "osx" ]; then virtualenv env -p python3       ; fi
   #- if [ "$TRAVIS_OS_NAME" == "osx" ]; then source env/bin/activate         ; fi
   # kakadu setup for linux/system:
-  - if [ "$B_NAME" == "system" ]; then wget http://kakadusoftware.com/wp-content/uploads/2014/06/KDU77_Demo_Apps_for_Linux-x86-64_150710.zip; fi
-  - if [ "$B_NAME" == "system" ]; then unzip KDU77_Demo_Apps_for_Linux-x86-64_150710.zip; fi
-  - if [ "$B_NAME" == "system" ]; then export PATH=$PATH:$PWD/KDU77_Demo_Apps_for_Linux-x86-64_150710; fi
+  - if [ "$B_NAME" == "system" ]; then wget http://kakadusoftware.com/wp-content/uploads/KDU805_Demo_Apps_for_Linux-x86-64_200602.zip; fi
+  - if [ "$B_NAME" == "system" ]; then unzip KDU805_Demo_Apps_for_Linux-x86-64_200602.zip; fi
+  - if [ "$B_NAME" == "system" ]; then export PATH=$PATH:$PWD/KDU805_Demo_Apps_for_Linux-x86-64_200602; fi
 install: true
 before_script:
   - cmake -Wno-dev -G "Unix Makefiles" -DCMAKE_BUILD_TYPE:STRING=None -DGDCM_BUILD_TESTING:BOOL=ON -DGDCM_BUILD_APPLICATIONS:BOOL=ON -DGDCM_BUILD_SHARED_LIBS:BOOL=ON -DBUILDNAME:STRING=${TRAVIS_OS_NAME}-${TRAVIS_BRANCH}-${B_NAME} ${CMAKE_EXTRA} .
