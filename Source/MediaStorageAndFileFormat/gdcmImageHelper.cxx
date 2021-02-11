@@ -370,6 +370,28 @@ static bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std:
   return true;
 }
 
+static SmartPointer<SequenceOfItems> InsertOrReplaceSQ( DataSet & ds, const Tag &tag )
+{
+  SmartPointer<SequenceOfItems> sqi;
+  if( !ds.FindDataElement( tag ) )
+  {
+    sqi = new SequenceOfItems;
+    DataElement de( tag );
+    de.SetVR( VR::SQ );
+    de.SetValue( *sqi );
+    assert( de.GetVL().IsUndefined() );
+    de.SetVLToUndefined();
+    ds.Insert( de );
+  }
+  sqi = ds.GetDataElement( tag ).GetValueAsSQ();
+  sqi->SetLengthToUndefined();
+  DataElement de_dup = ds.GetDataElement( tag );
+  de_dup.SetValue( *sqi );
+  ds.Replace( de_dup );
+  return sqi;
+}
+
+
 // UltrasoundMultiframeImageStorage
 static bool GetUltraSoundSpacingValueFromSequence(const DataSet& ds, std::vector<double> &sp)
 {
@@ -417,7 +439,50 @@ static bool GetUltraSoundSpacingValueFromSequence(const DataSet& ds, std::vector
 
   return true;
 }
+static void SetUltraSoundSpacingValueFromSequence(DataSet& ds, std::vector<double> const &spacing)
+{
+/*
+(0018,6011) SQ (Sequence with explicit length #=1)      # 196, 1 SequenceOfUltrasoundRegions
+  (fffe,e000) na (Item with explicit length #=15)         # 188, 1 Item
+    (0018,6012) US 1                                        #   2, 1 RegionSpatialFormat
+    (0018,6014) US 1                                        #   2, 1 RegionDataType
+    (0018,6016) UL 0                                        #   4, 1 RegionFlags
+    (0018,6018) UL 0                                        #   4, 1 RegionLocationMinX0
+    (0018,601a) UL 0                                        #   4, 1 RegionLocationMinY0
+    (0018,601c) UL 479                                      #   4, 1 RegionLocationMaxX1
+    (0018,601e) UL 479                                      #   4, 1 RegionLocationMaxY1
+    (0018,6020) SL 0                                        #   4, 1 ReferencePixelX0
+    (0018,6022) SL 0                                        #   4, 1 ReferencePixelY0
+    (0018,6024) US 3                                        #   2, 1 PhysicalUnitsXDirection
+    (0018,6026) US 3                                        #   2, 1 PhysicalUnitsYDirection
+    (0018,6028) FD 0                                        #   8, 1 ReferencePixelPhysicalValueX
+    (0018,602a) FD 0                                        #   8, 1 ReferencePixelPhysicalValueY
+    (0018,602c) FD 0.002                                    #   8, 1 PhysicalDeltaX
+    (0018,602e) FD 0.002                                    #   8, 1 PhysicalDeltaY
+  (fffe,e00d) na (ItemDelimitationItem for re-encoding)   #   0, 0 ItemDelimitationItem
+(fffe,e0dd) na (SequenceDelimitationItem for re-encod.) #   0, 0 SequenceDelimitationItem
+*/
+  const Tag tsqusreg(0x0018,0x6011);
+        SmartPointer<SequenceOfItems> sqi = InsertOrReplaceSQ( ds, tsqusreg);
+        if( !sqi->GetNumberOfItems() )
+        {
+          Item item; //( Tag(0xfffe,0xe000) );
+          sqi->AddItem( item );
+        }
+        Item &item1 = sqi->GetItem(1);
+        item1.SetVLToUndefined();
+        DataSet &subds = item1.GetNestedDataSet();
+ 
+  //  (0018,602c) FD 0.002                                    #   8, 1 PhysicalDeltaX
+  //  (0018,602e) FD 0.002                                    #   8, 1 PhysicalDeltaY
+  Attribute<0x0018,0x602c> at1;
+        at1.SetValue( spacing[0] );
+  Attribute<0x0018,0x602e> at2;
+        at2.SetValue( spacing[1] );
+        subds.Replace( at1.GetAsDataElement() );
+        subds.Replace( at2.GetAsDataElement() );
 
+}
 
 
 /* Enhanced stuff looks like:
@@ -1345,7 +1410,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     gdcmWarningMacro( "Could not find Spacing" );
     return sp;
     }
-  else if( ms == MediaStorage::UltrasoundMultiFrameImageStorage )
+  else if( ms == MediaStorage::UltrasoundMultiFrameImageStorage || ms == MediaStorage::UltrasoundImageStorage )
     {
     if( GetUltraSoundSpacingValueFromSequence(ds, sp) )
       {
@@ -1582,27 +1647,6 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
   return sp;
 }
 
-static SmartPointer<SequenceOfItems> InsertOrReplaceSQ( DataSet & ds, const Tag &tag )
-{
-  SmartPointer<SequenceOfItems> sqi;
-  if( !ds.FindDataElement( tag ) )
-  {
-    sqi = new SequenceOfItems;
-    DataElement de( tag );
-    de.SetVR( VR::SQ );
-    de.SetValue( *sqi );
-    assert( de.GetVL().IsUndefined() );
-    de.SetVLToUndefined();
-    ds.Insert( de );
-  }
-  sqi = ds.GetDataElement( tag ).GetValueAsSQ();
-  sqi->SetLengthToUndefined();
-  DataElement de_dup = ds.GetDataElement( tag );
-  de_dup.SetValue( *sqi );
-  ds.Replace( de_dup );
-  return sqi;
-}
-
 void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spacing)
 {
   MediaStorage ms;
@@ -1705,6 +1749,11 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
     ds.Remove(t2);
     }
  
+    return;
+    }
+  else if( ms == MediaStorage::UltrasoundMultiFrameImageStorage || ms == MediaStorage::UltrasoundImageStorage )
+    {
+    SetUltraSoundSpacingValueFromSequence(ds, spacing);
     return;
     }
 
