@@ -291,7 +291,7 @@ unsigned long Bitmap::GetBufferLength() const
       save *= Dimensions[2];
     if(Dimensions[0] % 8 == 0 )
       assert( save * 8 == mul );
-    mul = save;
+    mul = (unsigned int)save;
     }
   else if( PF.GetBitsAllocated() % 8 != 0 )
     {
