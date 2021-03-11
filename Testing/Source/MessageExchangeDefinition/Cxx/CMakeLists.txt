@@ -1,22 +1,22 @@
 # MEXD Testing
 set(MEXD_TEST_SRCS
-  TestPresentationContextRQ
-  TestQueryFactory
-  TestULConnectionManager
-  TestServiceClassUser1
-  TestServiceClassUser2
-  TestServiceClassUser3
-  TestSCUValidation
-  TestEcho
-  TestFind
-  #TestULTransitionTable # symbols are not exported, mainly used for debugging
-  TestFindStudyRootQuery
-  TestFindPatientRootQuery
+  TestPresentationContextRQ.cxx
+  TestQueryFactory.cxx
+  TestULConnectionManager.cxx
+  TestServiceClassUser1.cxx
+  TestServiceClassUser2.cxx
+  TestServiceClassUser3.cxx
+  TestSCUValidation.cxx
+  TestEcho.cxx
+  TestFind.cxx
+  #TestULTransitionTable.cxx # symbols are not exported, mainly used for debugging
+  TestFindStudyRootQuery.cxx
+  TestFindPatientRootQuery.cxx
   )
 if(GDCM_DATA_ROOT)
   set(MEXD_TEST_SRCS
     ${MEXD_TEST_SRCS}
-    TestSCUFunctions
+    TestSCUFunctions.cxx
     )
 endif()
 
@@ -40,10 +40,10 @@ target_link_libraries(gdcmMEXDTests gdcmMEXD gdcmMSFF gdcmDSED gdcmDICT gdcmComm
 
 # Loop over files and create executables
 foreach(name ${MEXD_TEST_SRCS})
-  if(${name} STREQUAL "TestSCUFunctions"
-      OR ${name} STREQUAL "TestServiceClassUser1"
-      OR ${name} STREQUAL "TestServiceClassUser2"
-      OR ${name} STREQUAL "TestServiceClassUser3"
+  if(${name} STREQUAL "TestSCUFunctions.cxx"
+      OR ${name} STREQUAL "TestServiceClassUser1.cxx"
+      OR ${name} STREQUAL "TestServiceClassUser2.cxx"
+      OR ${name} STREQUAL "TestServiceClassUser3.cxx"
       )
     if(GDCM_DICOM_SERVER_AETITLE)
       add_test(NAME ${name} COMMAND gdcmMEXDTests ${name} ${GDCM_DICOM_CLIENT_AETITLE}
@@ -51,7 +51,8 @@ foreach(name ${MEXD_TEST_SRCS})
         ${GDCM_DICOM_CLIENT_PORT} ${GDCM_DICOM_SERVER_PEER})
     endif()
   else()
-    add_test(NAME ${name} COMMAND gdcmMEXDTests ${name})
+    get_filename_component(testname ${name} NAME_WE)
+    add_test(NAME ${testname} COMMAND gdcmMEXDTests ${testname})
   endif()
 endforeach()
 

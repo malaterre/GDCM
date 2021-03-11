@@ -1,15 +1,15 @@
 # Define the tests for Data Dictionary
 # DICT
 set(DICT_TEST_SRCS
-  TestDictEntry
-  TestDict
-  TestGlobal
-  TestUIDs
-  TestDicts
-  TestGroupDict
-  TestTagToType
-  TestSOPClassUIDToIOD
-  TestTagKeywords
+  TestDictEntry.cxx
+  TestDict.cxx
+  TestGlobal.cxx
+  TestUIDs.cxx
+  TestDicts.cxx
+  TestGroupDict.cxx
+  TestTagToType.cxx
+  TestSOPClassUIDToIOD.cxx
+  TestTagKeywords.cxx
   )
 
 # Add the include paths
@@ -29,5 +29,6 @@ target_link_libraries(gdcmDICTTests gdcmDICT gdcmMSFF)
 
 # Loop over files and create executables
 foreach(name ${DICT_TEST_SRCS})
-  add_test(NAME ${name} COMMAND gdcmDICTTests ${name})
+  get_filename_component(testname ${name} NAME_WE)
+  add_test(NAME ${testname} COMMAND gdcmDICTTests ${testname})
 endforeach()
