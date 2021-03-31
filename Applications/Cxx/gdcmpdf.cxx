@@ -695,6 +695,17 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
   at.SetValue( "application/pdf" );
   ds.Insert( at.GetAsDataElement() );
 }
+{
+//  gdcm::Attribute<0x0042, 0x0015> at;
+//  at.SetValue( length );
+//  ds.Insert( at.GetAsDataElement() );
+    gdcm::Element<gdcm::VR::UL,gdcm::VM::VM1> el;
+    el.SetValue( length );
+    gdcm::DataElement de = el.GetAsDataElement();
+    de.SetTag( gdcm::Tag(0x0042, 0x0015) );
+    ds.Insert( de );
+}
+
 
 
   writer.SetFileName( outfilename.c_str() );
