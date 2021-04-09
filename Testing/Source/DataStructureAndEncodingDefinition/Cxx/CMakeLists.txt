@@ -1,82 +1,82 @@
 # Define the tests for Data Structure and Encoding Definitions
 # DSED
 set(DSED_TEST_SRCS
-  TestAttribute
-  TestCodeString
-  TestAttribute1
-  TestAttribute7
-  #TestReadPatientName
-  TestLO
-  TestCSAElement
-  #TestByteBuffer
-  #TestByteValue
-  TestPreamble
-  TestReader
-  #TestReader4 # FIXME
-  TestReaderUpToTag1
-  TestReaderUpToTag2
-  TestReaderSelectedTags
-  TestReaderSelectedPrivateGroups
-  TestReaderCanRead
-  TestWriter
-  TestWriter2
-  TestCSAHeader
-  TestByteSwapFilter
-  TestBasicOffsetTable
-  TestComposite
-  TestDataElement
-  TestDataSet
-  #TestVRDS
-  TestDS
-  TestVRLT
-  TestVRUI
-  TestElement1
-  #TestExplicitDataElement
-  TestFile
-  TestFileSet
-  TestFragment
-  #TestImplicitDataElement
-  TestItem
-  #TestParser
-  TestSequenceOfFragments
-  TestSequenceOfItems
-  TestTag
-  TestPrivateTag
-  TestTransferSyntax
-  TestMediaStorage
-  TestVL
-  TestVM
-  TestVR
-  #TestValue
-  #TestTorture
-  TestElement2
-  TestElement4
-  TestElement5
-  TestElement6
+  TestAttribute.cxx
+  TestCodeString.cxx
+  TestAttribute1.cxx
+  TestAttribute7.cxx
+  #TestReadPatientName.cxx
+  TestLO.cxx
+  TestCSAElement.cxx
+  #TestByteBuffer.cxx
+  #TestByteValue.cxx
+  TestPreamble.cxx
+  TestReader.cxx
+  #TestReader4.cxx # FIXME
+  TestReaderUpToTag1.cxx
+  TestReaderUpToTag2.cxx
+  TestReaderSelectedTags.cxx
+  TestReaderSelectedPrivateGroups.cxx
+  TestReaderCanRead.cxx
+  TestWriter.cxx
+  TestWriter2.cxx
+  TestCSAHeader.cxx
+  TestByteSwapFilter.cxx
+  TestBasicOffsetTable.cxx
+  TestComposite.cxx
+  TestDataElement.cxx
+  TestDataSet.cxx
+  #TestVRDS.cxx
+  TestDS.cxx
+  TestVRLT.cxx
+  TestVRUI.cxx
+  TestElement1.cxx
+  #TestExplicitDataElement.cxx
+  TestFile.cxx
+  TestFileSet.cxx
+  TestFragment.cxx
+  #TestImplicitDataElement.cxx
+  TestItem.cxx
+  #TestParser.cxx
+  TestSequenceOfFragments.cxx
+  TestSequenceOfItems.cxx
+  TestTag.cxx
+  TestPrivateTag.cxx
+  TestTransferSyntax.cxx
+  TestMediaStorage.cxx
+  TestVL.cxx
+  TestVM.cxx
+  TestVR.cxx
+  #TestValue.cxx
+  #TestTorture.cxx
+  TestElement2.cxx
+  TestElement4.cxx
+  TestElement5.cxx
+  TestElement6.cxx
   )
 if(GDCM_TESTING_USE_LC_NUMERIC)
 # The test expect to be able to set fr as locale only turn if user
 # set the appropriate & hidden cmake variable
 set(DSED_TEST_SRCS
   ${DSED_TEST_SRCS}
-  TestLCNumeric
+  TestLCNumeric.cxx
 )
 endif()
 if(GDCM_DATA_ROOT)
 set(DSED_TEST_SRCS
   ${DSED_TEST_SRCS}
-  TestFileMetaInformation
-  TestReader2
-  TestAttribute8
-  TestPDBHeader
-  TestSequenceOfItems2
-  TestSequenceOfItems3
+  TestFileMetaInformation.cxx
+  TestReader2.cxx
+  TestAttribute8.cxx
+  TestPDBHeader.cxx
+  TestSequenceOfItems2.cxx
+  TestSequenceOfItems3.cxx
   )
 endif()
 if(GDCM_DATA_EXTRA_ROOT)
 set(DSED_TEST_SRCS
   ${DSED_TEST_SRCS}
-  TestInvalidDICOMFiles
+  TestInvalidDICOMFiles.cxx
   )
 endif()
 
@@ -85,7 +85,7 @@ CHECK_INCLUDE_FILE("sys/mman.h"   GDCM_HAVE_SYS_MMAN_H)
 # Need mmap
 if(GDCM_HAVE_SYS_MMAN_H)
   set(DSED_TEST_SRCS ${DSED_TEST_SRCS}
-    TestReader3
+    TestReader3.cxx
   )
 endif()
 
@@ -94,7 +94,7 @@ mark_as_advanced(SHARED_PTR)
 if(SHARED_PTR)
   set(DSED_TEST_SRCS
     ${DSED_TEST_SRCS}
-    TestCopyValue
+    TestCopyValue.cxx
     )
 endif()
 
@@ -119,7 +119,8 @@ endif()
 
 # Loop over files and create executables
 foreach(name ${DSED_TEST_SRCS})
-  add_test(NAME ${name} COMMAND gdcmDSEDTests ${name})
+  get_filename_component(testname ${name} NAME_WE)
+  add_test(NAME ${testname} COMMAND gdcmDSEDTests ${testname})
 endforeach()
 
 # FIXME

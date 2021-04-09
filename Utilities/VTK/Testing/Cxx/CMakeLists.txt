@@ -1,31 +1,31 @@
 # Define the tests for vtk-gdcm
 # vtkGDCM
 set(VTK_GDCM_TEST_SRCS
-  TestvtkGDCMImageReader
-  TestvtkGDCMImageReader4
-  TestvtkGDCMImageReaderIsLossy
-  TestvtkGDCMImageWriterIsLossy
-  #TestvtkImageChangeInformation
-  #TestvtkGDCMImageActor
-  #TestvtkGDCMImageViewer
+  TestvtkGDCMImageReader.cxx
+  TestvtkGDCMImageReader4.cxx
+  TestvtkGDCMImageReaderIsLossy.cxx
+  TestvtkGDCMImageWriterIsLossy.cxx
+  #TestvtkImageChangeInformation.cxx
+  #TestvtkGDCMImageActor.cxx
+  #TestvtkGDCMImageViewer.cxx
 )
 if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 4.5 )
   set(VTK_GDCM_TEST_SRCS
     ${VTK_GDCM_TEST_SRCS}
-    TestvtkGDCMImageWriter1
-    TestvtkGDCMImageWriter2
-    TestvtkGDCMThreadedImageReader2
-    TestvtkGDCMMetaImageWriter
+    TestvtkGDCMImageWriter1.cxx
+    TestvtkGDCMImageWriter2.cxx
+    TestvtkGDCMThreadedImageReader2.cxx
+    TestvtkGDCMMetaImageWriter.cxx
   )
 endif()
 
 if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 6.0 )
   set(VTK_GDCM_TEST_SRCS
     ${VTK_GDCM_TEST_SRCS}
-    TestvtkGDCMImageReader2_1
-    TestvtkGDCMImageReader2_2
-    TestvtkGDCMImageReader2_3
-    TestvtkGDCMMetaImageWriter2
+    TestvtkGDCMImageReader2_1.cxx
+    TestvtkGDCMImageReader2_2.cxx
+    TestvtkGDCMImageReader2_3.cxx
+    TestvtkGDCMMetaImageWriter2.cxx
   )
 endif()
 
@@ -33,15 +33,15 @@ endif()
 if(GDCM_DATA_ROOT)
   set(VTK_GDCM_TEST_SRCS
     ${VTK_GDCM_TEST_SRCS}
-    TestvtkGDCMImageReader1
+    TestvtkGDCMImageReader1.cxx
     )
 endif()
 # Need gdcmDataExtra
 if(GDCM_DATA_EXTRA_ROOT)
   set(VTK_GDCM_TEST_SRCS
     ${VTK_GDCM_TEST_SRCS}
-    TestvtkGDCMImageReader3
-    TestvtkGDCMPolyDataReader
+    TestvtkGDCMImageReader3.cxx
+    TestvtkGDCMPolyDataReader.cxx
   )
 endif()
 
@@ -49,7 +49,7 @@ if(VTK_USE_RENDERING)
   if(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
     set(VTK_GDCM_TEST_SRCS
       ${VTK_GDCM_TEST_SRCS}
-      TestvtkGDCMThreadedImageReader
+      TestvtkGDCMThreadedImageReader.cxx
     )
   endif()
 endif()
@@ -84,5 +84,6 @@ set(GDCM_VTK_GDCM_TESTS "${EXECUTABLE_OUTPUT_PATH}/gdcmvtkGDCMTests")
 
 # Loop over files and create executables
 foreach(name ${VTK_GDCM_TEST_SRCS})
-  add_test(NAME ${name} COMMAND ${GDCM_VTK_GDCM_TESTS} ${name})
+  get_filename_component(testname ${name} NAME_WE)
+  add_test(NAME ${testname} COMMAND ${GDCM_VTK_GDCM_TESTS} ${testname})
 endforeach()

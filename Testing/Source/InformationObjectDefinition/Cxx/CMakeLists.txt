@@ -1,26 +1,26 @@
 # Define the tests for Information Object Definition
 # IOD
 set(IOD_TEST_SRCS
-  TestTableReader
-  TestTable
-  TestTableEntry
-  TestType
-  TestModule
-  TestModules
-  TestModuleEntry
-  TestNestedModuleEntries
-  TestIODEntry
-  TestIOD
-  TestIODs
-  TestDefs
-  TestPatient
-  TestSeries
-  TestStudy
-  TestDefinedTerms
-  TestEnumeratedValues
-  TestUsage
-  #TestXMLDictReader
-  #TestXMLPrivateDictReader
+  TestTableReader.cxx
+  TestTable.cxx
+  TestTableEntry.cxx
+  TestType.cxx
+  TestModule.cxx
+  TestModules.cxx
+  TestModuleEntry.cxx
+  TestNestedModuleEntries.cxx
+  TestIODEntry.cxx
+  TestIOD.cxx
+  TestIODs.cxx
+  TestDefs.cxx
+  TestPatient.cxx
+  TestSeries.cxx
+  TestStudy.cxx
+  TestDefinedTerms.cxx
+  TestEnumeratedValues.cxx
+  TestUsage.cxx
+  #TestXMLDictReader.cxx
+  #TestXMLPrivateDictReader.cxx
   )
 
 # Add the include paths
@@ -41,5 +41,6 @@ target_link_libraries(gdcmIODTests gdcmIOD gdcmMSFF)
 
 # Loop over files and create executables
 foreach(name ${IOD_TEST_SRCS})
-  add_test(NAME ${name} COMMAND gdcmIODTests ${name})
+  get_filename_component(testname ${name} NAME_WE)
+  add_test(NAME ${testname} COMMAND gdcmIODTests ${testname})
 endforeach()
