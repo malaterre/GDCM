@@ -139,8 +139,8 @@ static void printbinary(std::istream &is, PDFElement const & pdfel )
   std::cout << "  " << bufferref << " ";
   uint32_t type = pdfel.gettype();
   uint32_t numels = pdfel.getnumelems();
-  uint32_t dummy = pdfel.getdummy();
-  assert( dummy == 0 ); (void)dummy;
+  //uint32_t dummy = pdfel.getdummy();
+  //assert( dummy == 0 ); (void)dummy;
   uint32_t offset = pdfel.getoffset();
   uint32_t pos = (uint32_t)(offset + is.tellg() - 4);
   printvalue(is, type, numels, pos);
@@ -334,6 +334,67 @@ static int DumpTOSHIBA_MEC_CT3(const gdcm::DataSet & ds)
   printer.SetColor( color != 0 );
   printer.Print( std::cout );
 
+  return 0;
+}
+
+static bool DumpToshibaDTI( const char * input, size_t len )
+{
+  if( len % 2 ) return false;
+
+  std::vector<char> copy( input, input + len );
+  std::reverse( copy.begin(), copy.end() );
+
+  std::istringstream is;
+  std::string dup( &copy[0], copy.size() );
+  is.str( dup );
+
+  gdcm::File file;
+  gdcm::FileMetaInformation & fmi = file.GetHeader();
+  fmi.SetDataSetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+  gdcm::DataSet & ds = file.GetDataSet();
+  ds.Read<gdcm::ExplicitDataElement,gdcm::SwapperNoOp>( is );
+
+  gdcm::Printer p;
+  p.SetFile( file );
+  p.SetColor( color != 0 );
+  p.Print( std::cout );
+
+  return true;
+}
+
+
+static int DumpTOSHIBA_PMTF_INFORMATION_DATA(const gdcm::DataSet & ds)
+{
+  // (0029,0010) ?? (LO) [PMTF INFORMATION DATA ]                      # 22,1 Private Creator
+  // (0029,1001) ?? (SQ) (Sequence with undefined length)              # u/l,1 ?
+
+  const gdcm::PrivateTag tpmtf(0x0029,0x1,"PMTF INFORMATION DATA");
+  if( !ds.FindDataElement( tpmtf) ) return 1;
+  const gdcm::DataElement& pmtf = ds.GetDataElement( tpmtf );
+  if ( pmtf.IsEmpty() ) return 1;
+  gdcm::SmartPointer<gdcm::SequenceOfItems> seq = pmtf.GetValueAsSQ();
+  if ( !seq || !seq->GetNumberOfItems() ) return 1;
+
+  size_t n = seq->GetNumberOfItems();
+  for( size_t i = 1; i <= n; ++i )
+    {
+    std::cout << "Item #" << i << std::endl;
+    gdcm::Item &item = seq->GetItem(i);
+    gdcm::DataSet &subds = item.GetNestedDataSet();
+    // (0029,0010) ?? (LO) [PMTF INFORMATION DATA ]                  # 22,1 Private Creator
+    // (0029,1090) ?? (OB) 00\05\00\13\00\12\00\22\                  # 202,1 ?
+    const gdcm::PrivateTag tseq(0x0029,0x90,"PMTF INFORMATION DATA");
+
+    if( subds.FindDataElement( tseq ) )
+      {
+      const gdcm::DataElement & de = subds.GetDataElement( tseq );
+      const gdcm::ByteValue * bv = de.GetByteValue();
+      if( !bv ) return 1;
+
+      bool b = DumpToshibaDTI( bv->GetPointer(), bv->GetLength() );
+      if( !b ) return 1;
+      }
+    }
   return 0;
 }
 
@@ -790,6 +851,24 @@ static int PrintCT3(const std::string & filename, bool verbose)
   return ret;
 }
 
+static int PrintPMTF(const std::string & filename, bool verbose)
+{
+  (void)verbose;
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  int ret = cleanup::DumpTOSHIBA_PMTF_INFORMATION_DATA( ds );
+
+  return ret;
+}
+
+
 static int PrintPDB(const std::string & filename, bool verbose)
 {
   (void)verbose;
@@ -1061,6 +1140,7 @@ static void PrintHelp()
   std::cout << "                         or VEPRO Protocol Information (0055,20,VEPRO VIM 5.0 DATA)." << std::endl;
   std::cout << "     --sds            print Philips MR Series Data Storage (1.3.46.670589.11.0.0.12.2) Information (2005,32,Philips MR Imaging DD 002)." << std::endl;
   std::cout << "     --ct3            print CT Private Data 2 (7005,10,TOSHIBA_MEC_CT3)." << std::endl;
+  std::cout << "     --pmtf           print PMTF INFORMATION DATA sub-sequences (0029,01,PMTF INFORMATION DATA)." << std::endl;
   std::cout << "  -A --asn1           print encapsulated ASN1 structure >(0400,0520)." << std::endl;
   std::cout << "     --map-uid-names  map UID to names." << std::endl;
   std::cout << "General Options:" << std::endl;
@@ -1093,6 +1173,7 @@ int main (int argc, char *argv[])
   int printvepro = 0;
   int printsds = 0; // MR Series Data Storage
   int printct3 = 0; // TOSHIBA_MEC_CT3
+  int printpmtf = 0; // TOSHIBA / PMTF INFORMATION DATA
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -1102,7 +1183,7 @@ int main (int argc, char *argv[])
   int recursive = 0;
   int printasn1 = 0;
   int mapuidnames = 0;
-  while (1) {
+  while (true) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
 /*
@@ -1138,6 +1219,7 @@ int main (int argc, char *argv[])
         {"csa-asl", 0, &printcsaasl, 1},
         {"csa-diffusion", 0, &printcsadiffusion, 1},
         {"mrprotocol", 0, &printmrprotocol, 1},
+        {"pmtf", 0, &printpmtf, 1},
         {nullptr, 0, nullptr, 0} // required
     };
     static const char short_options[] = "i:xrpdcCPAVWDEhvI";
@@ -1355,6 +1437,10 @@ int main (int argc, char *argv[])
         {
         res += PrintCT3(*it, verbose!= 0);
         }
+      else if( printpmtf )
+        {
+        res += PrintPMTF(*it, verbose!= 0);
+        }
       else if( printelscint )
         {
         res += PrintELSCINT(*it, verbose!= 0);
@@ -1409,6 +1495,10 @@ int main (int argc, char *argv[])
     else if( printct3 )
       {
       res += PrintCT3(filename, verbose!= 0);
+      }
+    else if( printpmtf )
+      {
+      res += PrintPMTF(filename, verbose!= 0);
       }
     else if( printelscint )
       {

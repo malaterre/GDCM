@@ -685,7 +685,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "a218fcee00e16d430f30ec7ebd4937dc" , "lena512_rot90.j2k.dcm" },
 
 { "dbf83984984741c98205d77a947b442c" , "SC16BitsAllocated_8BitsStoredJ2K.dcm" },
-{ "c164a73ba18ab4e88977921ffc7c3a65" , "SC16BitsAllocated_8BitsStoredJPEG.dcm" },
+{ "f845c8f283d39a0204c325654493ba53" , "SC16BitsAllocated_8BitsStoredJPEG.dcm" },
 
 { "4a5d8549791432b29948dd8ff63e2534" , "SIEMENS_SYNGO-12-MONO2-LUTWrongLength512.dcm" },
 
@@ -700,6 +700,18 @@ static const char * const gdcmMD5DataImages[][2] = {
 
 { "ad8f1164f0517ee150bf510d5dba5cc6" , "GE_MR_0025xx1bProtocolDataBlockXML.dcm" },
 
+{ "a0e0effa8d5638721b19e592acc11a4c" , "EmptyIcon_Bug417.dcm" },
+
+{ "2b64303085d747956bfdda2ee8cc33bc" , "EnhancedWithIPPPerFrameIOPShared.dcm" },
+{ "4ca2f3a88d21d941f6485a8d91f96e29" , "FUJI-ffff-MONO1-J2K.dcm" },
+
+{ "b9697e3615a841e4c04f45ede6923278" , "JPEGLosslessSeNonZero.dcm" },
+{ "5fcd7d6573cab16d2ef575bba878ec78" , "US-YBR_FULL_422-EVRLE.dcm" },
+{ "d62b4c13e8108671f1c66626c5bdee55" , "Osirix10vs8BitsStored.dcm" },
+
+{ "b7c6fb507da1b7a3f81f821a2e3eaf49" , "Bug_Siemens_PrivateIconNoItem.dcm" },
+{ "56238d3665ebdb0251d1161fb7f4edc6" , "HardcopyColor_YBR_RCT_J2K_PC1.dcm" },
+{ "5fe2b8742f05a0ba06d354f965266dbc" , "PET-GE-dicomwrite-PixelDataSQUNv2.dcm" },
 
 /* Stopping condition */
 { nullptr ,nullptr }

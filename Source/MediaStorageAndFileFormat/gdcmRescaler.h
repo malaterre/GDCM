@@ -52,13 +52,13 @@ namespace gdcm
  * Example: Let say input is FLOAT64, and we want UINT16 as ouput, we would do:
  *
  *\code
- *  Rescaler ir;
- *  ir.SetIntercept( 0 );
- *  ir.SetSlope( 5.6789 );
- *  ir.SetPixelFormat( FLOAT64 );
- *  ir.SetMinMaxForPixelType( ((PixelFormat)UINT16).GetMin(), ((PixelFormat)UINT16).GetMax() );
- *  ir.InverseRescale(output,input,numberofbytes );
- *\endcode
+    Rescaler ir;
+    ir.SetIntercept( 0 );
+    ir.SetSlope( 5.6789 );
+    ir.SetPixelFormat( FLOAT64 );
+    ir.SetMinMaxForPixelType( ((PixelFormat)UINT16).GetMin(), ((PixelFormat)UINT16).GetMax() );
+    ir.InverseRescale(output,input,numberofbytes );
+  \endcode
  *
  * \note handle floating point transformation back and forth to integer
  * properly (no loss)
@@ -69,7 +69,7 @@ class GDCM_EXPORT Rescaler
 {
 public:
   Rescaler():Intercept(0),Slope(1),PF(PixelFormat::UNKNOWN),TargetScalarType(PixelFormat::UNKNOWN), ScalarRangeMin(0), ScalarRangeMax(0), UseTargetPixelType(false) {}
-  ~Rescaler() {}
+  ~Rescaler() = default;
 
   /// Direct transform
   bool Rescale(char *out, const char *in, size_t n);
@@ -103,11 +103,7 @@ public:
 
   /// Set target interval for output data. A best match will be computed (if possible)
   /// Used for inverse transformation
-  void SetMinMaxForPixelType(double min, double max)
-    {
-    ScalarRangeMin = min;
-    ScalarRangeMax = max;
-    }
+  void SetMinMaxForPixelType(double min, double max);
 
   /// Compute the Pixel Format of the output data
   /// Used for inverse transformation

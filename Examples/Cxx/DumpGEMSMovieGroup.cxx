@@ -278,7 +278,7 @@ bool print36( gdcm::DataSet const & ds10, gdcm::SequenceOfItems *sqi_dict, std::
   gdcm::SmartPointer<gdcm::SequenceOfItems> sqi_values36 = seq_values36.GetValueAsSQ();
 
   size_t ni3 = sqi_values36->GetNumberOfItems();
-  assert( ni3 == 1 );
+  assert( ni3 >= 1 );
   for( size_t i3 = 1; i3 <= ni3; ++i3 )
     {
     gdcm::Item &item_36 = sqi_values36->GetItem(i3);

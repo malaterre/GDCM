@@ -196,9 +196,14 @@
 #include "gdcmJSON.h"
 #include "gdcmFileDecompressLookupTable.h"
 #include "gdcmEmptyMaskGenerator.h"
+#include "gdcmEquipmentManufacturer.h"
 
 using namespace gdcm;
 %}
+
+#if SWIG_VERSION < 0x030011
+#define override
+#endif
 
 //%insert("runtime") %{
 //#include "myheader.h"
@@ -219,6 +224,8 @@ using namespace gdcm;
 %include "std_pair.i"
 %include "std_map.i"
 %include "exception.i"
+
+%include "pybuffer.i"
 
 // operator= is not needed in python AFAIK
 %ignore operator=;                      // Ignore = everywhere.
@@ -328,7 +335,24 @@ EXTEND_CLASS_PRINT(gdcm::ByteValue)
 %include "gdcmSmartPointer.h"
 %template(SmartPtrSQ) gdcm::SmartPointer<gdcm::SequenceOfItems>;
 %template(SmartPtrFrag) gdcm::SmartPointer<gdcm::SequenceOfFragments>;
+%typemap(in) (const char* array, uint32_t length) {
+  $1 = PyString_AsString($input);
+  if ($1 == NULL) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '$symname', argument $argnum expected byte string.");
+  }
+  Py_ssize_t length = PyString_Size($input);
+  if (static_cast<size_t>(length) > std::numeric_limits<uint32_t>::max()) {
+    SWIG_exception_fail(SWIG_ArgError(SWIG_OverflowError), "in method '$symname', array in argument $argnum is too large.");
+  }
+  $2 = static_cast<uint32_t>(length);
+}
 %include "gdcmDataElement.h"
+%extend gdcm::DataElement
+{
+    void SetByteStringValue(const char *array, uint32_t length) {
+        self->SetByteValue(array, gdcm::VL(length));
+    }
+}
 EXTEND_CLASS_PRINT(gdcm::DataElement)
 %include "gdcmItem.h"
 EXTEND_CLASS_PRINT(gdcm::Item)
@@ -449,6 +473,12 @@ EXTEND_CLASS_PRINT(gdcm::PDBHeader)
 EXTEND_CLASS_PRINT(gdcm::MrProtocol)
 %include "gdcmCSAElement.h"
 EXTEND_CLASS_PRINT(gdcm::CSAElement)
+%extend gdcm::CSAElement
+{
+    void SetByteStringValue(const char *array, uint32_t length) {
+        self->SetByteValue(array, gdcm::VL(length));
+    }
+}
 %include "gdcmCSAHeader.h"
 EXTEND_CLASS_PRINT(gdcm::CSAHeader)
 %include "gdcmSequenceOfFragments.h"
@@ -795,9 +825,10 @@ typedef int64_t time_t; // FIXME
 EXTEND_CLASS_PRINT(gdcm::Region)
 %include "gdcmBoxRegion.h"
 EXTEND_CLASS_PRINT(gdcm::BoxRegion)
-%apply char[] { char* inreadbuffer }
+%pybuffer_mutable_binary(char *inreadbuffer, size_t buflen);
 %include "gdcmImageRegionReader.h"
 %clear char* inreadbuffer;
 %include "gdcmJSON.h"
 %include "gdcmFileDecompressLookupTable.h"
 %include "gdcmEmptyMaskGenerator.h"
+%include "gdcmEquipmentManufacturer.h"

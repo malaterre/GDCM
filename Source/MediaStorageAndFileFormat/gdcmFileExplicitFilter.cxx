@@ -95,15 +95,21 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
     //assert( de.GetVR() == VR::INVALID );
     VR cvr = DataSetHelper::ComputeVR(*F,ds, t);
     VR oldvr = de.GetVR();
+    if( cvr == VR::SQ ) { assert( oldvr == VR::SQ || oldvr == VR::UN || oldvr == VR::INVALID ); }
     //SequenceOfItems *sqi = de.GetSequenceOfItems();
     //SequenceOfItems *sqi = dynamic_cast<SequenceOfItems*>(&de.GetValue());
     SmartPointer<SequenceOfItems> sqi = nullptr;
-    if( vr == VR::SQ )
+    if( vr == VR::SQ 
+    || cvr == VR::SQ ) // CP-246 + Private SQ (not in dict)
       {
       sqi = de.GetValueAsSQ();
       if(!sqi)
         {
-        assert( de.IsEmpty() );
+        if( !de.IsEmpty() )
+          {
+          gdcmWarningMacro("DICOM file written out may not be readable" );
+          cvr = VR::UN;
+          }
         }
       }
     if( de.GetByteValue() && !sqi )

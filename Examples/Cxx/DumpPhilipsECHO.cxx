@@ -131,7 +131,7 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
     uLongf destLen = buf_size; // >= 608,427
     Bytef *dest = (Bytef*)&outbuf[0];
     assert( is.tellg() == offsets[r] + 16 );
-    const Bytef *source = (Bytef*)buf + offsets[r] + 16;
+    const Bytef *source = (const Bytef*)buf + offsets[r] + 16;
     uLong sourceLen;
     if( r + 1 == nframes )
       sourceLen = (uLong)totalsize - (uLong)offsets[r] - 16;

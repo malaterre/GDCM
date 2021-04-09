@@ -238,6 +238,15 @@ static const StreamOffset gdcmStreamOffsetDataFiles[] = {
 { "JPEG_LS_InvalidEscapeSequence_COM_padding.dcm", 764 },
 { "LengthOfItemLarger.dcm", 12748 },
 { "GE_MR_0025xx1bProtocolDataBlockXML.dcm",6474 },
+{ "EmptyIcon_Bug417.dcm",4482 },
+{ "EnhancedWithIPPPerFrameIOPShared.dcm",23224 },
+{ "FUJI-ffff-MONO1-J2K.dcm",2052 },
+{ "JPEGLosslessSeNonZero.dcm",760 },
+{ "US-YBR_FULL_422-EVRLE.dcm",1554 },
+{ "Osirix10vs8BitsStored.dcm",73978 },
+{ "Bug_Siemens_PrivateIconNoItem.dcm",12978 },
+{ "HardcopyColor_YBR_RCT_J2K_PC1.dcm",2626 },
+{ "PET-GE-dicomwrite-PixelDataSQUNv2.dcm",7718 },
 
 /* Stopping condition */
 { nullptr ,0 },

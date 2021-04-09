@@ -32,7 +32,9 @@ public:
   typedef DataSetEvent Self;
   typedef AnyEvent Superclass;
   DataSetEvent(DataSet const *ds = nullptr):m_DataSet(ds) {}
-  ~DataSetEvent() override {}
+  ~DataSetEvent() override = default;
+  void operator=(const Self&) = delete;
+  const DataSet *m_DataSet;
   const char * GetEventName() const override { return "DataSetEvent"; }
   bool CheckEvent(const ::gdcm::Event* e) const override
   { return (dynamic_cast<const Self*>(e) == nullptr ? false : true) ; }
@@ -41,9 +43,6 @@ public:
   DataSetEvent(const Self&s) : AnyEvent(s){};
 
   DataSet const & GetDataSet() const { return *m_DataSet; }
-private:
-  void operator=(const Self&);
-  const DataSet *m_DataSet;
 };
 
 

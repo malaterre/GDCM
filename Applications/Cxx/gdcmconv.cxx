@@ -488,7 +488,7 @@ int main (int argc, char *argv[])
   int jpeglserror = 0;
   int jpeglserror_value = 0;
 
-  while (1) {
+  while (true) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
@@ -793,7 +793,7 @@ int main (int argc, char *argv[])
     while (optind < argc)
       {
       //printf ("%s\n", argv[optind++]);
-      files.push_back( argv[optind++] );
+      files.emplace_back(argv[optind++] );
       }
     //printf ("\n");
     if( files.size() == 2
@@ -926,7 +926,7 @@ int main (int argc, char *argv[])
     }
 
   // Handle here the general file (not required to be image)
-  if ( explicitts || implicit || deflated )
+  if ( !raw && (explicitts || implicit || deflated) )
     {
     if( explicitts && implicit ) return 1; // guard
     if( explicitts && deflated ) return 1; // guard
@@ -1118,7 +1118,7 @@ int main (int argc, char *argv[])
 
     gdcm::ImageApplyLookupTable lutfilt;
     lutfilt.SetInput( image );
-    lutfilt.SetRGB8( lut8 );
+    lutfilt.SetRGB8( lut8 != 0 );
     bool b = lutfilt.Apply();
     if( !b )
       {
@@ -1178,7 +1178,11 @@ int main (int argc, char *argv[])
       {
       if( lossy )
         {
-        change.SetTransferSyntax( gdcm::TransferSyntax::JPEGBaselineProcess1 );
+        const gdcm::PixelFormat &pf = image.GetPixelFormat();
+        if( pf.GetBitsAllocated() > 8 )
+          change.SetTransferSyntax(gdcm::TransferSyntax::JPEGExtendedProcess2_4);
+        else
+          change.SetTransferSyntax( gdcm::TransferSyntax::JPEGBaselineProcess1 );
         jpegcodec.SetLossless( false );
         if( quality )
           {
@@ -1261,11 +1265,15 @@ int main (int argc, char *argv[])
       if( ts.IsExplicit() )
         {
         change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
+        if( implicit )
+          change.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
         }
       else
         {
         assert( ts.IsImplicit() );
         change.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
+        if( explicitts )
+        change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
         }
 #endif
       }

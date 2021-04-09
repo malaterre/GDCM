@@ -102,6 +102,7 @@ static bool prepare_file( FILE * pFile, const off64_t offset, const off64_t insl
   char buffer[BUFFERSIZE];
   struct stat sb;
 
+  assert( pFile );
   int fd = fileno( pFile );
   if (fstat(fd, &sb) == 0)
     {
@@ -192,17 +193,9 @@ enum Operation
 class FileStreamerInternals
 {
 public:
-  FileStreamerInternals():operation(NOOPERATION),
-  CurrentTag(0x0,0x0),
-  MaxSizeDE(0),
-  StartOffset(0),
-  CheckTemplateFileName(false),
-  InitializeCopy(false),
-  CheckPixelDataElement(false),
-  pFile(nullptr),
-  ReservedDataLength(0),
-  ReservedGroupDataElement(0),
-  Self(nullptr)
+  FileStreamerInternals():
+  CurrentTag(0x0,0x0)
+  
     {
     PrivateCreator.SetByteValue("",0);
     }
@@ -309,7 +302,7 @@ public:
           {
           // if you trigger this assertion, this means we have been allocating
           // memory for an element when not needed.
-          assert( (de.GetByteValue() && de.GetByteValue()->GetPointer() == 0) || de.GetSequenceOfFragments() );
+          assert( (de.GetByteValue() && de.GetByteValue()->GetPointer() == nullptr) || de.GetSequenceOfFragments() );
           }
         actualde = de.GetVL() + 2 * de.GetVR().GetLength() + 4;
         thepos -= actualde;
@@ -319,7 +312,7 @@ public:
         // no attribute found, easy case !
         }
       }
-    assert( pFile == NULL );
+    assert( pFile == nullptr );
     pFile = fopen(outfilename, "r+b");
     assert( pFile );
     CurrentDataLenth = 0;
@@ -366,6 +359,7 @@ public:
       }
     else
       {
+      assert( pFile );
       const off64_t curpos = FTello(pFile);
       assert( curpos == thepos );
       if( ReservedDataLength >= (off64_t)len )
@@ -546,7 +540,7 @@ public:
           }
         else
           {
-          return 1;
+          return true;
           }
         }
       else
@@ -586,7 +580,7 @@ public:
       }
 
     const size_t pclen = dicomdata.size();
-    assert( pFile == NULL );
+    assert( pFile == nullptr );
     pFile = fopen(outfilename, "r+b");
     assert( pFile );
 
@@ -660,26 +654,26 @@ public:
   std::string TemplateFilename;
   std::string OutFilename;
 private:
-  Operation operation;
+  Operation operation{NOOPERATION};
   Tag CurrentTag;
   DataElement PrivateCreator;
-  size_t MaxSizeDE;
-  uint8_t StartOffset;
+  size_t MaxSizeDE{0};
+  uint8_t StartOffset{0};
 public:
-  bool CheckTemplateFileName;
-  bool InitializeCopy;
-  bool CheckPixelDataElement;
+  bool CheckTemplateFileName{false};
+  bool InitializeCopy{false};
+  bool CheckPixelDataElement{false};
 private:
   // really private !
-  FILE* pFile;
+  FILE* pFile{nullptr};
   std::streampos thepos;
   size_t actualde;
   size_t CurrentDataLenth;
   Tag CurrentGroupTag;
-  off64_t ReservedDataLength;
-  unsigned short ReservedGroupDataElement;
+  off64_t ReservedDataLength{0};
+  unsigned short ReservedGroupDataElement{0};
 public:
-  FileStreamer *Self;
+  FileStreamer *Self{nullptr};
 private:
   bool UpdateDataElement( const Tag & t )
     {

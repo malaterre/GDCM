@@ -1,6 +1,7 @@
 # Define the tests for gdcm-java
 set(GDCM_JAVA_TEST_SRCS
   TestReader
+  TestReaderUnicode
   TestTag
   TestReaderUpToTag
   )
@@ -17,7 +18,7 @@ set(classfilesdep)
 foreach(example ${GDCM_JAVA_TEST_SRCS})
   add_custom_command(
     OUTPUT ${GDCM_EXECUTABLE_DIR}/${example}.class
-    COMMAND ${Java_JAVAC_EXECUTABLE} ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java -d ${GDCM_EXECUTABLE_DIR} -source ${GDCM_JAVA_SOURCE_VERSION} -target ${GDCM_JAVA_TARGET_VERSION} -classpath ${GDCM_LIBRARY_DIR}/gdcm.jar
+    COMMAND ${Java_JAVAC_EXECUTABLE} ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java -encoding utf-8 -d ${GDCM_EXECUTABLE_DIR} -source ${GDCM_JAVA_SOURCE_VERSION} -target ${GDCM_JAVA_TARGET_VERSION} -classpath ${GDCM_LIBRARY_DIR}/gdcm.jar
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${example}.java
     COMMENT "javac ${example}.java"

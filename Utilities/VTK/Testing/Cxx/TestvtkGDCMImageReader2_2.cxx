@@ -17,6 +17,7 @@
 #include "vtkInformation.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkStringArray.h"
+#include "vtkVersion.h"
 // DEBUG
 #include "vtkImageColorViewer.h"
 #include "vtkRenderWindowInteractor.h"
@@ -60,9 +61,13 @@ static int TestvtkGDCMImageRead(const char *filename, bool verbose)
   //reader->GetOutput()->Print( std::cout );
   const int mid = (wext[5] - wext[0]) / 2;
   wext[4] = wext[5] = mid;
+#if VTK_MAJOR_VERSION > 7 || (VTK_MAJOR_VERSION == 7 && VTK_MINOR_VERSION > 0)
+  int ret = reader->UpdateExtent( wext );
+#else
   reader->SetUpdateExtent( wext );
   //reader->Update();
   int ret = reader->GetExecutive()->Update();
+#endif
   if( !ret )
     {
     std::cerr << "Problem with: " << filename << std::endl;

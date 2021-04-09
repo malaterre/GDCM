@@ -18,9 +18,11 @@
 #include "gdcmSwapper.h"
 
 #include <numeric>
+#include <cstring> // memcpy
 
 // CharLS includes
 #include "gdcm_charls.h"
+
 
 #if defined(__GNUC__) && GCC_VERSION < 50101
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
@@ -34,8 +36,7 @@ JPEGLSCodec::JPEGLSCodec():BufferLength(0)/*,Lossless(true)*/,LossyError(0)
 }
 
 JPEGLSCodec::~JPEGLSCodec()
-{
-}
+= default;
 
 void JPEGLSCodec::SetLossless(bool l)
 {
@@ -150,7 +151,7 @@ bool JPEGLSCodec::CanCode(TransferSyntax const &ts) const
 #endif
 }
 
-bool JPEGLSCodec::DecodeByStreamsCommon(char *buffer, size_t totalLen, std::vector<unsigned char> &rgbyteOut)
+bool JPEGLSCodec::DecodeByStreamsCommon(const char *buffer, size_t totalLen, std::vector<unsigned char> &rgbyteOut)
 {
   using namespace charls;
   const unsigned char* pbyteCompressed = (const unsigned char*)buffer;
@@ -188,8 +189,8 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
   if( NumberOfDimensions == 2 )
     {
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-    assert( sf );
-    size_t totalLen = sf->ComputeByteLength();
+    if (!sf) return false;
+    unsigned long totalLen = sf->ComputeByteLength();
     char *buffer = new char[totalLen];
     sf->GetBuffer(buffer, totalLen);
 
@@ -206,15 +207,15 @@ bool JPEGLSCodec::Decode(DataElement const &in, DataElement &out)
   else if( NumberOfDimensions == 3 )
     {
     const SequenceOfFragments *sf = in.GetSequenceOfFragments();
-    assert( sf );
-    gdcmAssertAlwaysMacro( sf->GetNumberOfFragments() == Dimensions[2] );
+    if (!sf) return false;
+    if (sf->GetNumberOfFragments() != Dimensions[2]) return false;
     std::stringstream os;
     for(unsigned int i = 0; i < sf->GetNumberOfFragments(); ++i)
       {
       const Fragment &frag = sf->GetFragment(i);
       if( frag.IsEmpty() ) return false;
       const ByteValue *bv = frag.GetByteValue();
-      assert( bv );
+      if (!bv) return false;
       size_t totalLen = bv->GetLength();
       char *mybuffer = new char[totalLen];
 

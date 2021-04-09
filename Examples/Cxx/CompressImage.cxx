@@ -49,7 +49,9 @@ int main(int argc, char *argv[])
   // the dataset is the the set of element we are interested in:
   //gdcm::DataSet &ds = file.GetDataSet();
 
-  const gdcm::Image &image = reader.GetImage();
+  gdcm::Image &image = reader.GetImage();
+  // image.SetSpacing(0, 0.1);
+  // image.SetSpacing(1, 0.2);
   image.Print( std::cout );
 
   gdcm::ImageChangeTransferSyntax change;

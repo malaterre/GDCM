@@ -56,7 +56,7 @@ const char * FileMetaInformation::GetGDCMSourceApplicationEntityTitle()
 
 // Keep cstor and dstor here to keep API minimal (see dllexport issue with gdcmstrict::)
 FileMetaInformation::FileMetaInformation():DataSetTS(TransferSyntax::TS_END),MetaInformationTS(TransferSyntax::Unknown),DataSetMS(MediaStorage::MS_END) {}
-FileMetaInformation::~FileMetaInformation() {}
+FileMetaInformation::~FileMetaInformation() = default;
 
 void FileMetaInformation::SetImplementationClassUID(const char * imp)
 {
@@ -704,7 +704,7 @@ std::istream &FileMetaInformation::ReadCompat(std::istream &is)
 #define ADDVRIMPLICIT( element ) \
     case element: \
       de.SetVR( (VR::VRType)TagToType<0x0002,element>::VRType ); \
-      break;
+      break
 
 bool AddVRToDataElement(DataElement &de)
 {
@@ -878,7 +878,7 @@ std::string FileMetaInformation::GetMediaStorageAsString() const
       }
     }
   // Paranoid check: if last character of a VR=UI is space let's pretend this is a \0
-  if( ts.size() )
+  if( !ts.empty() )
     {
     char &last = ts[ts.size()-1];
     if( last == ' ' )

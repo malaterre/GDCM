@@ -110,13 +110,12 @@
 
 #cmakedefine GDCM_HAVE_STRCASECMP
 #cmakedefine GDCM_HAVE_STRNCASECMP
-#cmakedefine GDCM_HAVE_SNPRINTF
 #cmakedefine GDCM_HAVE_STRPTIME
 #cmakedefine GDCM_HAVE__STRICMP
 #cmakedefine GDCM_HAVE__STRNICMP
-#cmakedefine GDCM_HAVE__SNPRINTF
 #cmakedefine GDCM_HAVE_LROUND
 #cmakedefine GDCM_HAVE_GETTIMEOFDAY
+#cmakedefine GDCM_HAVE_ATOLL
 #cmakedefine GDCM_HAVE_JSON_OBJECT_OBJECT_GET_EX
 
 // MM: I have a feeling that if GDCM_HAVE_WCHAR_IFSTREAM, then UNICODE filename

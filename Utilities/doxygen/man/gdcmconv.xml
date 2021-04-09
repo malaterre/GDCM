@@ -60,6 +60,8 @@ file-out  DICOM output filename
 <title>image options</title>
 
 <para><literallayout>  -l --apply-lut                      Apply LUT (non-standard, advanced user only).
+  -8 --apply-lut8                     Apply LUT/RGB8 (non-standard, advanced user only).
+     --decompress-lut                 Decompress LUT (linearize segmented LUT).
   -P --photometric-interpretation %s  Change Photometric Interpretation (when possible).
   -w --raw                            Decompress image.
   -d --deflated                       Compress using deflated (gzip).
@@ -303,6 +305,14 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 
 <para><literallayout>$ gdcmconv --raw compressed.dcm uncompressed.dcm
 </literallayout></para>
+<para>In the case of uncompress file (Explicit and Implicit) the behavior is to keep the original Transfer Syntax (so Implicit remains Implit)</para>
+</refsection>
+<refsection xml:id="gdcmconv_1decompress_raw_imp">
+<title>Decompressing a Compressed DICOM as implicit</title>
+
+<para><literallayout>$ gdcmconv --raw --implicit compressed.dcm uncompressed_implicit.dcm
+</literallayout></para>
+<para>By symmetry it is also possible to use gdcmconv --raw --explicit to make sure that target file is always Explicit TS.</para>
 </refsection>
 <refsection xml:id="gdcmconv_1compress_icon">
 <title>Compressing an uncompressed Icon</title>

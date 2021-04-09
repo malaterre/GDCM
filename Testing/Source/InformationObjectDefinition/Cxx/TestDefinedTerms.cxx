@@ -16,5 +16,6 @@
 int TestDefinedTerms(int, char *[])
 {
   gdcm::DefinedTerms dt;
+  (void)dt;
   return 0;
 }

@@ -15,6 +15,20 @@
 
 #include <string>
 
+static int TestEnumString(std::string const & rep, gdcm::VR::VRType vr)
+{
+  const std::string & odstr = rep;
+  gdcm::VR::VRType od = gdcm::VR::GetVRTypeFromFile(odstr.c_str());
+  if( od != vr ) return 1;
+  const char *odcstr = gdcm::VR::GetVRStringFromFile(vr);
+  if( odstr != odcstr ) return 1;
+  od = gdcm::VR::GetVRType(odstr.c_str());
+  if( od != vr ) return 1;
+  odcstr = gdcm::VR::GetVRString(vr);
+  if( !gdcm::VR::IsValid(odstr.c_str())) return 1;
+  return 0;
+}
+
 // Not used...
 int verify()
 {
@@ -136,6 +150,33 @@ int TestValue()
 
 int TestVR(int, char *[])
 {
+  enum {
+   V1 = 0ULL,
+   V2 = 4294967295ULL
+  } E4;
+  std::cout << sizeof E4 << std::endl;
+  enum {
+   V3 = 0ULL,
+   V4 = 4294967296ULL
+  } E8;
+  enum : long long {
+   V5 = 0ULL,
+   V6 = 4294967296ULL
+  } E8ll;
+  std::cout << sizeof E8 << std::endl;
+  if( sizeof E4 != 4 ) {
+    std::cerr << "E4 is: " << sizeof E4 << std::endl;
+    return 1;
+  }
+  if( sizeof E8 != 8 ) {
+    // bad bad compiler
+    std::cerr << "E8 is: " << sizeof E8 << std::endl;
+  }
+  if( sizeof E8ll != 8 ) {
+    std::cerr << "E8ll is: " << sizeof E8 << std::endl;
+    return 1;
+  }
+
   if( TestValue() )
     return 1;
 
@@ -207,7 +248,7 @@ int TestVR(int, char *[])
   vr = gdcm::VR::AE;
   if( vr & gdcm::VR::VRASCII )
     {
-    std::cout << vr << "is ASCII\n";
+    std::cout << vr << " is ASCII\n";
     }
   else
     {
@@ -216,7 +257,7 @@ int TestVR(int, char *[])
   vr = gdcm::VR::UI;
   if( vr & gdcm::VR::VRASCII )
     {
-    std::cout << vr << "is ASCII\n";
+    std::cout << vr << " is ASCII\n";
     }
   else
     {
@@ -225,7 +266,7 @@ int TestVR(int, char *[])
   vr = gdcm::VR::OB;
   if( vr & gdcm::VR::VRBINARY )
     {
-    std::cout << vr << "is Binary\n";
+    std::cout << vr << " is Binary\n";
     }
   else
     {
@@ -257,6 +298,13 @@ int TestVR(int, char *[])
   //else if( gdcm::VR::US_SS_OW <= gdcm::VR::UT ) return 1;
   //else if( gdcm::VR::VL32 <= gdcm::VR::UT ) return 1;
 
+  if( TestEnumString("OD", gdcm::VR::OD ) == 1 ) return 1;
+  if( TestEnumString("OL", gdcm::VR::OL ) == 1 ) return 1;
+  if( TestEnumString("UC", gdcm::VR::UC ) == 1 ) return 1;
+  if( TestEnumString("UR", gdcm::VR::UR ) == 1 ) return 1;
+  if( TestEnumString("OV", gdcm::VR::OV ) == 1 ) return 1;
+  if( TestEnumString("SV", gdcm::VR::SV ) == 1 ) return 1;
+  if( TestEnumString("UV", gdcm::VR::UV ) == 1 ) return 1;
 
   return 0;
 }

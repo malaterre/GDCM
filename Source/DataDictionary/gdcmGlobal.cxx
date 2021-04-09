@@ -46,9 +46,9 @@ public:
     {
     assert( RessourcePaths.empty() );
     const char filename2[] = GDCM_CMAKE_INSTALL_PREFIX "/" GDCM_INSTALL_DATA_DIR "/XML/";
-    RessourcePaths.push_back( filename2 );
+    RessourcePaths.emplace_back(filename2 );
     const char filename3[] = GDCM_CMAKE_INSTALL_PREFIX " " GDCM_API_VERSION "/" GDCM_INSTALL_DATA_DIR "/XML/";
-    RessourcePaths.push_back( filename3 );
+    RessourcePaths.emplace_back(filename3 );
     const char *curprocfn = System::GetCurrentProcessFileName();
     if( curprocfn )
       {
@@ -60,12 +60,13 @@ public:
     const char *respath = System::GetCurrentResourcesDirectory();
     if( respath )
       {
-      RessourcePaths.push_back( respath );
+      RessourcePaths.emplace_back(respath );
       }
 #ifdef GDCM_BUILD_TESTING
     // Needed for backward compat and dashboard
     const char src_path[] = GDCM_SOURCE_DIR "/Source/InformationObjectDefinition/";
-    RessourcePaths.push_back( src_path );
+    RessourcePaths.emplace_back(src_path );
+    std::rotate(RessourcePaths.rbegin(), RessourcePaths.rbegin() + 1, RessourcePaths.rend());
 #endif
     }
   std::vector<std::string> RessourcePaths;
@@ -75,7 +76,7 @@ Global::Global()
 {
   if(++GlobalCount == 1)
     {
-    assert( Internals == NULL ); // paranoid
+    assert( Internals == nullptr ); // paranoid
     Internals = new GlobalInternal;
     assert( Internals->GlobalDicts.IsEmpty() );
     // Fill in with default values now !
@@ -101,7 +102,7 @@ Global::~Global()
 
 bool Global::LoadResourcesFiles()
 {
-  assert( Internals != NULL ); // paranoid
+  assert( Internals != nullptr ); // paranoid
   const char *filename = Locate( "Part3.xml" );
   if( filename )
     {
@@ -119,7 +120,7 @@ bool Global::Append(const char *path)
     {
     return false;
     }
-  Internals->RessourcePaths.push_back( path );
+  Internals->RessourcePaths.emplace_back(path );
   return true;
 }
 

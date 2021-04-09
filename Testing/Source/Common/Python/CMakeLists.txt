@@ -1,5 +1,4 @@
 # Define the tests for gdcm-python
-# gdcm-python
 set(GDCM_PYTHON_TEST_SRCS
   TestTesting
   )

@@ -1,15 +1,39 @@
-cmake_minimum_required(VERSION 3.8.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.9.2 FATAL_ERROR) # travis-ci wants 3.9.2
 
-project(GDCM)
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 11)
+set(GDCM_MAX_VALIDATED_CMAKE_VERSION "3.13.4")
+if("${CMAKE_VERSION}" VERSION_LESS_EQUAL "${GDCM_MAX_VALIDATED_CMAKE_VERSION}")
+  # As of 2018-12-04 GDCM has been validated to build with cmake version 3.13.1 new policies.
+  # Set and use the newest cmake policies that are validated to work
+  set(GDCM_CMAKE_POLICY_VERSION "${CMAKE_VERSION}")
+else()
+  set(GDCM_CMAKE_POLICY_VERSION "${GDCM_MAX_VALIDATED_CMAKE_VERSION}")
 endif()
-set(CMAKE_CXX_EXTENSIONS OFF)
+cmake_policy(VERSION ${GDCM_CMAKE_POLICY_VERSION}) 
+
+# GDCM version 3.0.0 will only support C++11 and greater
+if(CMAKE_CXX_STANDARD EQUAL "98" )
+   message(FATAL_ERROR "CMAKE_CXX_STANDARD:STRING=98 is not supported in GDCM version 3.0.0 and greater.")
+endif()
+#----------------------------------------------------------------------------
+
+project(GDCM
+  VERSION 3.1.0
+  LANGUAGES CXX C
+)
+## NOTE: the "DESCRIPTION" feature of project() was introduced in cmake 3.10.0
+set(PROJECT_DESCRIPTION "GDCM - Grassroots DICOM. GDCM is yet another DICOM library.")
+
+## Set aliases for backwards compatibility.  GDCM_VERSION_XXX are configured by the project() command 
+set(GDCM_MAJOR_VERSION ${GDCM_VERSION_MAJOR})
+set(GDCM_MINOR_VERSION ${GDCM_VERSION_MINOR})
+set(GDCM_BUILD_VERSION ${GDCM_VERSION_PATCH})
+set(GDCM_VERSION "${GDCM_VERSION_MAJOR}.${GDCM_VERSION_MINOR}.${GDCM_VERSION_PATCH}") # ${GDCM_VERSION_TWEAK}
+
 mark_as_advanced(CMAKE_BACKWARDS_COMPATIBILITY CMAKE_BUILD_TYPE CMAKE_INSTALL_PREFIX)
 set(GDCM_CMAKE_DIR "${GDCM_SOURCE_DIR}/CMake" CACHE INTERNAL "")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${GDCM_CMAKE_DIR}")
 
-set(GDCM_PACKAGE_DESCRIPTION_SUMMARY "GDCM - Grassroots DICOM. GDCM is yet another DICOM library.")
+set(GDCM_PACKAGE_DESCRIPTION_SUMMARY ${PROJECT_DESCRIPTION})
 set(GDCM_PACKAGE_CONTACT "GDCM Developers <gdcm-developers@lists.sourceforge.net>")
 
 # TODO
@@ -25,23 +49,14 @@ set(GDCM_PACKAGE_CONTACT "GDCM Developers <gdcm-developers@lists.sourceforge.net
 # See the CVS version of files in VTK/GUISupport/MFC for details. Or grep the
 # VTK source tree for "DELAYLOAD"
 
-#----------------------------------------------------------------------------
-set(GDCM_MAJOR_VERSION 3) # Version 3.0.0 will only support C++11 and greater
-set(GDCM_MINOR_VERSION 0)
-set(GDCM_BUILD_VERSION 0)
-set(GDCM_VERSION
-  "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}.${GDCM_BUILD_VERSION}")
 # let advanced user the option to define GDCM_API_VERSION:
 if(NOT DEFINED GDCM_API_VERSION)
-  set(GDCM_API_VERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}")
+  set(GDCM_API_VERSION "${GDCM_VERSION_MAJOR}.${GDCM_VERSION_MINOR}")
 endif()
 set(GDCM_LIBRARY_PROPERTIES ${GDCM_LIBRARY_PROPERTIES}
   VERSION "${GDCM_VERSION}"
   SOVERSION "${GDCM_API_VERSION}"
 )
-#set(GDCM_EXECUTABLE_PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES}
-#  VERSION "${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}"
-#)
 set(GDCM_EXECUTABLE_PROPERTIES)
 if(GDCM_NO_EXECUTABLE_PROPERTIES)
   set(GDCM_EXECUTABLE_PROPERTIES)
@@ -69,7 +84,7 @@ APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt)
 APPEND_COPYRIGHT(${CMAKE_CURRENT_SOURCE_DIR}/CMake/COPYING-CMAKE-SCRIPTS)
 
 #-----------------------------------------------------------------------------
-if(GDCM_MINOR_VERSION MATCHES "[02468]$")
+if(GDCM_VERSION_MINOR MATCHES "[02468]$")
   # Are we building a release branch / tag (read: even number)?
   # By default dashboard are expected to run with Design by Contract on
   # to trigger any of the assert, but on the other hand no user really
@@ -107,7 +122,6 @@ if(BUILD_SHARED_LIBS)
   set(NAMELINK_ONLY NAMELINK_ONLY)
   set(NAMELINK_SKIP NAMELINK_SKIP)
 endif()
-
 
 #-----------------------------------------------------------------------------
 if(NOT EXECUTABLE_OUTPUT_PATH)
@@ -180,13 +194,7 @@ endif()
 #-----------------------------------------------------------------------------
 # Build the main lib...
 if(NOT GDCM_HAVE_STDINT_H)
-  if( MSVC OR "x${CMAKE_CXX_COMPILER_ID}x" MATCHES "Intel" )
-    include_directories(
-      "${GDCM_SOURCE_DIR}/Utilities/C99"
-      )
-    # Process the install rules from C99
-    add_subdirectory(Utilities/C99)
-  endif()
+  message(FATAL_ERROR "You system does not have stdint.h")
 endif()
 
 # --------------------------------------------------------------------------
@@ -216,7 +224,7 @@ endif()
 # Install directories
 
 string(TOLOWER ${PROJECT_NAME} projectname)
-set(subdir "${projectname}-${GDCM_MAJOR_VERSION}.${GDCM_MINOR_VERSION}")
+set(subdir "${projectname}-${GDCM_VERSION_MAJOR}.${GDCM_VERSION_MINOR}")
 
 if(NOT GDCM_INSTALL_BIN_DIR)
   set(GDCM_INSTALL_BIN_DIR "bin")
@@ -510,6 +518,10 @@ if(GDCM_STANDALONE)
   mark_as_advanced(GDCM_USE_ACTIVIZ)
   option(GDCM_USE_JPEGLS "Build GDCM with JPEG-LS support" ON)
   mark_as_advanced(GDCM_USE_JPEGLS)
+  if(NOT DEFINED GDCM_DEFAULT_PYTHON_VERSION)
+    # override with cmake -DGDCM_DEFAULT_PYTHON_VERSION:STRING=2.7 if you dare
+    set(GDCM_DEFAULT_PYTHON_VERSION 3.2)
+  endif()
   if(NOT DEFINED GDCM_DEFAULT_JAVA_VERSION)
     # override with cmake -DGDCM_DEFAULT_JAVA_VERSION:STRING=1.5 if you dare
     set(GDCM_DEFAULT_JAVA_VERSION 1.7)
@@ -582,22 +594,6 @@ if(GDCM_STANDALONE)
 else()
   set(BUILD_APPLICATIONS OFF)
 endif()
-add_subdirectory(Utilities)
-add_subdirectory(Source)
-
-if(GDCM_STANDALONE)
-  add_subdirectory(Wrapping)
-  if(GDCM_WRAP_CSHARP)
-    add_subdirectory(Wrapping/Csharp)
-  endif()
-endif()
-
-if(GDCM_STANDALONE)
-  # After Wrapping please
-  if(BUILD_EXAMPLES)
-    add_subdirectory(Examples)
-  endif()
-endif()
 
 #-----------------------------------------------------------------------------
 # Need pthread for the following class:
@@ -610,7 +606,7 @@ if(GDCM_STANDALONE)
 endif()
 
 if(GDCM_STANDALONE)
-  if(BUILD_TESTING)
+  if(GDCM_BUILD_TESTING)
     configure_file(${GDCM_SOURCE_DIR}/CMake/CTestCustom.ctest.in
         ${GDCM_BINARY_DIR}/CMake/CTestCustom.ctest @ONLY)
     file(WRITE ${GDCM_BINARY_DIR}/CTestCustom.cmake
@@ -624,6 +620,21 @@ if(GDCM_STANDALONE)
       "to the full path name of the gdcmData directory; if you don't want, disable GDCM_BUILD_TESTING.\n"
       "What is gdcmData? Please read: http://gdcm.sourceforge.net/wiki/index.php/General_questions#What_is_gdcmData_.3F")
     endif()
+  endif()
+endif()
+
+# After enable_testing()
+add_subdirectory(Utilities)
+add_subdirectory(Source)
+
+if(GDCM_STANDALONE)
+  add_subdirectory(Wrapping)
+endif()
+
+if(GDCM_STANDALONE)
+  # After Wrapping please
+  if(BUILD_EXAMPLES)
+    add_subdirectory(Examples)
   endif()
 endif()
 
@@ -672,6 +683,11 @@ include(CMake/InstallRequiredVTKLibraries.cmake)
 endif()
 endif()
 
+# Make sure to run doxygen after everything else (in particular vtkgdcm):
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/Utilities/doxygen)
+  add_subdirectory(Utilities/doxygen)
+endif()
+
 #-----------------------------------------------------------------------------
 # CPack stuff
 if(GDCM_STANDALONE) # disabled for ITK distribution of gdcm
@@ -689,9 +705,9 @@ if(GDCM_STANDALONE) # disabled for ITK distribution of gdcm
   set(CPACK_PACKAGE_VENDOR "GDCM")
   set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt")
   set(CPACK_RESOURCE_FILE_LICENSE    "${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt")
-  set(CPACK_PACKAGE_VERSION_MAJOR "${GDCM_MAJOR_VERSION}")
-  set(CPACK_PACKAGE_VERSION_MINOR "${GDCM_MINOR_VERSION}")
-  set(CPACK_PACKAGE_VERSION_PATCH "${GDCM_BUILD_VERSION}")
+  set(CPACK_PACKAGE_VERSION_MAJOR "${GDCM_VERSION_MAJOR}")
+  set(CPACK_PACKAGE_VERSION_MINOR "${GDCM_VERSION_MINOR}")
+  set(CPACK_PACKAGE_VERSION_PATCH "${GDCM_VERSION_PATCH}")
   set(CPACK_PACKAGE_INSTALL_DIRECTORY "GDCM ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
   set(CPACK_SOURCE_PACKAGE_FILE_NAME "gdcm-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
@@ -777,6 +793,19 @@ if(GDCM_STANDALONE) # disabled for ITK distribution of gdcm
   endif()
   if(GDCM_WRAP_CSHARP)
     list(APPEND components CSharpModule)
+    # https://cmake.org/cmake/help/latest/cpack_gen/nuget.html#cpack_gen:CPack%20NuGet%20Generator
+    if (${CMAKE_VERSION} VERSION_GREATER "3.12.0")
+      set(CPACK_BINARY_NUGET "ON")
+      # ${CMAKE_CURRENT_BINARY_DIR}/Copyright.txt is too long (>4000 characters)
+      set(CPACK_NUGET_PACKAGE_DESCRIPTION "Grassroots DiCoM is a C++ library for DICOM medical files. It is accessible from Python, C#, Java and PHP. It supports RAW, JPEG, JPEG 2000, JPEG-LS, RLE and deflated transfer syntax.
+      It comes with a super fast scanner implementation to quickly scan hundreds of DICOM files.
+      It supports SCU network operations (C-ECHO, C-FIND, C-STORE, C-MOVE). PS 3.3 & 3.6 are distributed as XML files.
+      It also provides PS 3.15 certificates and password based mecanism to anonymize and de-identify DICOM datasets.")
+      set(CPACK_NUGET_PACKAGE_LICENSEURL "http://gdcm.sourceforge.net/Copyright.html")
+      set(CPACK_NUGET_PACKAGE_HOMEPAGE_URL "http://gdcm.sourceforge.net")
+      set(CPACK_NUGET_PACKAGE_TAGS "dicom" "medical")
+      set(CPACK_NUGET_PACKAGE_ICONURL "http://gdcm.sourceforge.net/images/logo_gdcm64x64.png")
+    endif()
   endif()
   if(GDCM_WRAP_JAVA)
     list(APPEND components JavaModule)
@@ -998,14 +1027,6 @@ set(GDCM_INCLUDE_PATH
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   )
-if(NOT GDCM_HAVE_STDINT_H)
-  if(MSVC)
-    set(GDCM_INCLUDE_PATH
-      ${GDCM_INCLUDE_PATH}
-      "${GDCM_SOURCE_DIR}/Utilities/C99"
-    )
-  endif()
-endif()
 if(GDCM_USE_VTK)
     set(GDCM_INCLUDE_PATH
       ${GDCM_INCLUDE_PATH}

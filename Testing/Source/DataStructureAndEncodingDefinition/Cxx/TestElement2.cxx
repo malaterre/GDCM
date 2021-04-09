@@ -23,7 +23,7 @@ struct dummy
 
 template<int,int> struct TagToElement;
 template<> struct TagToElement<0x0018,0x1624> {
-  typedef gdcm::Element<gdcm::VR::US,gdcm::VM::VM3> Type;
+  using Type = gdcm::Element<gdcm::VR::US, gdcm::VM::VM3>;
 };
 
 int TestElement2(int, char *[])
@@ -42,10 +42,10 @@ int TestElement2(int, char *[])
   ref2.Print(std::cout);
   std::cout << std::endl;
 
-  gdcm::Element<gdcm::VR::US, gdcm::VM::VM1_2> ref3; // = {{1}};
+  gdcm::Element<gdcm::VR::US, gdcm::VM::VM3_4> ref3; // = {{1}};
   ref3.SetLength(4);
-  ref3.SetValue(0,1);
-  ref3.SetValue(1,2);
+  ref3.SetValue(1,0);
+  ref3.SetValue(2,1);
   ref3.Print(std::cout);
   std::cout << std::endl;
 

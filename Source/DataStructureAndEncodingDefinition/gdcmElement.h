@@ -38,7 +38,7 @@ namespace gdcm_ns
  *
  * \note TODO
  */
-template<int T> class EncodingImplementation;
+template<long long T> class EncodingImplementation;
 
 
 /**
@@ -48,7 +48,7 @@ template<int T> class EncodingImplementation;
  * Invalid combinations have specialized declarations with no
  * definition.
  */
-template <int TVR, int TVM>
+template <long long TVR, int TVM>
 class ElementDisableCombinations {};
 template <>
 class  ElementDisableCombinations<VR::OB, VM::VM1_n> {};
@@ -65,7 +65,7 @@ class ElementDisableCombinations<VR::OW, TVM>;
  *
  * \note TODO
  */
-template<int TVR, int TVM>
+template<long long TVR, int TVM>
 class Element
 {
   enum { ElementDisableCombinationsCheck = sizeof ( ElementDisableCombinations<TVR, TVM> ) };
@@ -236,10 +236,10 @@ public:
     char sep;
     //std::cout << "GetLength: " << af->GetLength() << std::endl;
     for(unsigned long i=1; i<length;++i) {
-      assert( _is );
+      //assert( _is );
       // Get the separator in between the values
       _is >> std::ws >> sep; //_is.get(sep);
-      assert( sep == '\\' ); // FIXME: Bad use of assert
+      //assert( sep == '\\' ); // FIXME: Bad use of assert
       _is >> std::ws >> data[i];
       }
     }
@@ -300,7 +300,7 @@ static int add1(char *buf, int n) {
     return add1(buf, n-1);
   }
   else {
-    buf[n] += 1;
+    buf[n] = (char)(buf[n] + 1);
   }
   return 0;
 }
@@ -363,7 +363,7 @@ static void x16printf(char *buf, int size, Float f) {
   *mant = line[0];
   i = (int)strcspn(mant, "eE");
   mant[i] = '\0';
-  iexp = strtol(mant + i + 1, nullptr, 10);
+  iexp = (int)strtol(mant + i + 1, nullptr, 10);
   lexp = sprintf(exp, "e%d", iexp);
   if ((iexp >= size) || (iexp < -3)) {
     i = roundat(mant, size - 1 -lexp, iexp);
@@ -569,7 +569,7 @@ class Element<VR::PN, TVM> : public StringElement<TVM>
 #endif
 
 // Implementation for the undefined length (dynamically allocated array)
-template<int TVR>
+template<long long TVR>
 class Element<TVR, VM::VM1_n>
 {
   enum { ElementDisableCombinationsCheck = sizeof ( ElementDisableCombinations<TVR, VM::VM1_n> ) };
@@ -624,7 +624,7 @@ public:
     else {
       // TODO rewrite this stupid code:
       assert( Length == 0 );
-      assert( Internal == 0 );
+      assert( Internal == nullptr );
       assert( Save == false );
       Length = len / sizeof(Type);
       //assert( (len / sizeof(Type)) * sizeof(Type) == len );
@@ -655,10 +655,10 @@ public:
     assert( bv ); // That would be bad...
     if( (VR::VRType)(VRToEncoding<TVR>::Mode) == VR::VRBINARY )
       {
-      const Type* array = (const Type*)bv->GetPointer();
+      const Type* array = (const Type*)bv->GetVoidPointer();
       if( array ) {
         assert( array ); // That would be bad...
-        assert( Internal == 0 );
+        assert( Internal == nullptr );
         SetArray(array, bv->GetLength() ); }
       }
     else
@@ -763,7 +763,7 @@ protected:
       const Type* array = (const Type*)bv->GetPointer();
       if( array ) {
         assert( array ); // That would be bad...
-        assert( Internal == 0 );
+        assert( Internal == nullptr );
         SetArray(array, bv->GetLength() ); }
       }
     else
@@ -786,7 +786,7 @@ private:
 //class Element<VR::OB, TVM > : public Element<VR::OB, VM::VM1_n> {};
 
 // Partial specialization for derivatives of 1-n : 2-n, 3-n ...
-template<int TVR>
+template<long long TVR>
 class Element<TVR, VM::VM1_2> : public Element<TVR, VM::VM1_n>
 {
 public:
@@ -796,7 +796,7 @@ public:
     Parent::SetLength(len);
   }
 };
-template<int TVR>
+template<long long TVR>
 class Element<TVR, VM::VM2_n> : public Element<TVR, VM::VM1_n>
 {
   enum { ElementDisableCombinationsCheck = sizeof ( ElementDisableCombinations<TVR, VM::VM2_n> ) };
@@ -807,7 +807,7 @@ public:
     Parent::SetLength(len);
   }
 };
-template<int TVR>
+template<long long TVR>
 class Element<TVR, VM::VM2_2n> : public Element<TVR, VM::VM2_n>
 {
   enum { ElementDisableCombinationsCheck = sizeof ( ElementDisableCombinations<TVR, VM::VM2_2n> ) };
@@ -818,7 +818,7 @@ public:
     Parent::SetLength(len);
   }
 };
-template<int TVR>
+template<long long TVR>
 class Element<TVR, VM::VM3_n> : public Element<TVR, VM::VM1_n>
 {
   enum { ElementDisableCombinationsCheck = sizeof ( ElementDisableCombinations<TVR, VM::VM3_n> ) };
@@ -829,7 +829,7 @@ public:
     Parent::SetLength(len);
   }
 };
-template<int TVR>
+template<long long TVR>
 class Element<TVR, VM::VM3_3n> : public Element<TVR, VM::VM3_n>
 {
   enum { ElementDisableCombinationsCheck = sizeof ( ElementDisableCombinations<TVR, VM::VM3_3n> ) };
@@ -837,6 +837,16 @@ public:
   typedef Element<TVR, VM::VM3_n> Parent;
   void SetLength(int len) {
     if( len % 3 ) return;
+    Parent::SetLength(len);
+  }
+};
+template<long long TVR>
+class Element<TVR, VM::VM3_4> : public Element<TVR, VM::VM1_n>
+{
+public:
+  typedef Element<TVR, VM::VM1_n> Parent;
+  void SetLength(int len) {
+    if( len != 3 && len != 4 ) return;
     Parent::SetLength(len);
   }
 };

@@ -1,8 +1,3 @@
-# Special CMake Module required when doing Java Testing
-if(BUILD_TESTING AND GDCM_WRAP_JAVA)
-  include(${GDCM_SOURCE_DIR}/CMake/UseJavaTest.cmake)
-endif()
-
 find_package(SWIG REQUIRED)
 include(${SWIG_USE_FILE})
 option(GDCM_AUTOLOAD_GDCMJNI "Automatically load gdcmjni" ON)
@@ -36,14 +31,17 @@ set(CMAKE_SWIG_OUTDIR "${GDCM_JAVA_HOME}")
 set(CMAKE_SWIG_FLAGS "-package gdcm")
 separate_arguments(CMAKE_SWIG_FLAGS)
 # http://www.debian.org/doc/packaging-manuals/java-policy/x105.html
-SWIG_ADD_MODULE(gdcmjni java gdcm.i)
-SWIG_LINK_LIBRARIES(gdcmjni gdcmMSFF
+SWIG_ADD_LIBRARY(
+  gdcmjni
+  LANGUAGE java
+  SOURCES gdcm.i
+)
+SWIG_LINK_LIBRARIES(gdcmjni LINK_PRIVATE gdcmMSFF
   gdcmMEXD
   # There is no real point in linking explicitly to jni libraries. This is a java module
   # it could contains undefined symbols after all.
   #${JNI_LIBRARIES}
 )
-set_target_properties(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 if (WIN32)
   # disable lib prefix on windows with mingw
   set_target_properties(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES PREFIX "")

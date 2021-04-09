@@ -6,7 +6,7 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
-find_path(CHARLS_INCLUDE_DIR CharLS/interface.h
+find_path(CHARLS_INCLUDE_DIR CharLS/charls.h
 /usr/local/include
 /usr/include
 )

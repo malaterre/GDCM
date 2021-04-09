@@ -35,6 +35,12 @@ int TestFL()
   c.SetArray( f, sizeof(f), false);
   c.Print( std::cout );
   std::cout << std::endl;
+  {
+  DataElement de = c.GetAsDataElement();
+  Element<VR::FL,VM::VM1_n> el;
+  el.Set( de.GetValue() );
+  //el.SetFromDataElement( de );
+  }
 
   // Make sure this is possible to output as DataElement
   // an Element, in case one cannot use gdcm::Attribute
@@ -81,7 +87,7 @@ int TestAS()
 
   // TODO this should not compile:
   Element<VR::AS, VM::VM6> b = {{ "019Yb" }};
-  b = b;//to avoid the warning of b not being useful
+  (void)b;//to avoid the warning of b not being useful
 
   return 0;
 }

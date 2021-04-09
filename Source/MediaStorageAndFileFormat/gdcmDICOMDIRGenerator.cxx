@@ -35,9 +35,9 @@ class DICOMDIRGeneratorInternal
 public:
   DICOMDIRGeneratorInternal():F(new File) {}
   SmartPointer<File> F;
-  typedef Directory::FilenamesType  FilenamesType;
+  using FilenamesType = Directory::FilenamesType;
   FilenamesType fns;
-  typedef Directory::FilenameType  FilenameType;
+  using FilenameType = Directory::FilenameType;
   FilenameType rootdir;
   Scanner scanner;
   std::vector<uint32_t> OffsetTable;
@@ -959,7 +959,7 @@ the File-set.
   const char *mediastoragesopinstanceuid = uid.Generate();
   if( !UIDGenerator::IsValid( mediastoragesopinstanceuid ) )
     {
-    return 1;
+    return true;
     }
   at2.SetValue( mediastoragesopinstanceuid );
   h.Insert( at2.GetAsDataElement() );

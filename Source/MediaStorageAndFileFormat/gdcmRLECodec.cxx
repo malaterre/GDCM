@@ -297,7 +297,7 @@ bool DoInvertPlanarConfiguration(T *output, const T *input, uint32_t inputlength
     b += 3;
     }
   assert( b == input + length + 2);
-  assert ( pout = output + length );
+  assert ( pout == output + length );
   return true;
 }
 
@@ -400,7 +400,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
         {
         assert( GetPixelFormat().GetBitsAllocated() == 16 );
         // should not happen right ?
-        DoInvertPlanarConfiguration<short>((short*)bufferrgb, (const short*)ptr_img, (uint32_t)(image_len / sizeof(short)));
+        DoInvertPlanarConfiguration<short>((short*)(void*)bufferrgb, (const short*)(const void*)ptr_img, (uint32_t)(image_len / sizeof(short)));
         }
       ptr_img = bufferrgb;
       }
@@ -581,7 +581,7 @@ size_t RLECodec::DecodeFragment(Fragment const & frag, char *buffer, size_t llen
     std::streamoff check = bv.GetLength() - p;
     // check == 2 for gdcmDataExtra/gdcmSampleData/US_DataSet/GE_US/2929J686-breaker
     //assert( check == 0 || check == 1 || check == 2 );
-    if( check ) gdcmDebugMacro( "tiny offset detected in between RLE segments: " << check );
+    if( check ) { gdcmDebugMacro( "tiny offset detected in between RLE segments: " << check ); }
     }
   else
     {
@@ -847,7 +847,7 @@ bool RLECodec::DecodeByStreams(std::istream &is, std::ostream &os)
         }
       //assert( numberOfReadBytes + frame.Header.Offset[i] - is.tellg() + start == 0);
       }
-    assert( numOutBytes == length );
+    if( numOutBytes != length ) return false;
     }
 
   return ImageCodec::DecodeByStreams(tmpos,os);

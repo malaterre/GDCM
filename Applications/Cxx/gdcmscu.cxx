@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
   gdcm::Tag tag;
   std::vector< std::pair<gdcm::Tag, std::string> > keys;
   
-  while (1) {
+  while (true) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     /*
@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
             //ss >> str;
             std::getline(ss, str); // do not skip whitespace
             if( str.size() % 2 == 1 ) str += " ";
-            keys.push_back( std::make_pair(tag, str) );
+            keys.emplace_back(tag, str );
           }
           else if( option_index == 20 ) /* port-scp */
           {
@@ -339,7 +339,7 @@ int main(int argc, char *argv[])
         assert( cdummy == ',' || cdummy == '=' );
         std::string str;
         std::getline(ss, str); // do not skip whitespace
-        keys.push_back( std::make_pair(tag, str) );
+        keys.emplace_back(tag, str );
       }
         break;
         
@@ -426,7 +426,7 @@ int main(int argc, char *argv[])
       std::vector<std::string> files;
       while (optind < argc)
         {
-        files.push_back( argv[optind++] );
+        files.emplace_back(argv[optind++] );
         }
       filenames = files;
       }

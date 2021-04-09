@@ -18,6 +18,7 @@ int TestSpectroscopy(int argc, char *argv[])
   (void)argc;
   (void)argv;
   gdcm::Spectroscopy w;
+  (void)w;
 
   return 0;
 }

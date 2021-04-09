@@ -1,6 +1,6 @@
 /*=========================================================================
  *
- *  Copyright Insight Software Consortium
+ *  Copyright NumFOCUS
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -109,7 +109,7 @@ void ULConnection::SetPresentationContexts(
   for( size_t i = 0; i < inContexts.size(); ++i )
     {
     PresentationContext const &in = inContexts[i];
-    mPresentationContexts.push_back( in );
+    mPresentationContexts.emplace_back(in );
     }
 }
 

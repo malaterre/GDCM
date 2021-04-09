@@ -1,7 +1,3 @@
-# Special CMake Module required when doing C# Testing
-if(BUILD_TESTING AND GDCM_WRAP_CSHARP)
-  include(${GDCM_SOURCE_DIR}/CMake/UseCSharpTest.cmake)
-endif()
 # C# Cmd line options:
 # http://msdn.microsoft.com/en-us/library/ms379563(VS.80).aspx
 # http://msdn.microsoft.com/en-us/library/aa288436(VS.71).aspx
@@ -21,19 +17,27 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
 )
 
+# Add FileVersion info, only visible on WIN32
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/version.rc.in
+  ${CMAKE_CURRENT_BINARY_DIR}/version.rc
+  @ONLY)
 set_source_files_properties(gdcm.i PROPERTIES CPLUSPLUS ON)
 
 # See sf.net bug #2895067
 set(CMAKE_SWIG_FLAGS "-namespace gdcm -dllimport gdcmsharpglue")
 separate_arguments(CMAKE_SWIG_FLAGS)
 # libgdksharpglue.so
-SWIG_ADD_MODULE(gdcmsharpglue csharp gdcm.i)
-SWIG_LINK_LIBRARIES(gdcmsharpglue gdcmMSFF
+SWIG_ADD_LIBRARY(
+  gdcmsharpglue
+  LANGUAGE csharp
+  SOURCES gdcm.i ${CMAKE_CURRENT_BINARY_DIR}/version.rc
+)
+SWIG_LINK_LIBRARIES(gdcmsharpglue LINK_PRIVATE gdcmMSFF
   gdcmMEXD
 )
-set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
 if(UNIX)
-set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
+  set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
 endif()
 set_property(TARGET ${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTY NO_SONAME 1)
 
@@ -76,24 +80,16 @@ if(OLDSTYLECSHARP)
 
   add_custom_command(
     OUTPUT ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
-    COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/doc:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.xml" "/out:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "*.cs"
+    COMMAND ${CMAKE_CSHARP_COMPILER}
+    ARGS "/t:library"
+    $<$<CONFIG:Debug>:/debug>
+    $<$<CONFIG:Debug>:/pdb:${GDCM_LIBRARY_DIR}/gdcm-sharp>
+    "/doc:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll.xml" "/out:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "*.cs"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     DEPENDS "${swig_generated_file_fullname}"
     ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
     COMMENT "csc *.cs"
     )
-
-  if(BUILD_EXAMPLES)
-    # building HelloCSharpWorld:
-    add_custom_command(
-      OUTPUT ${GDCM_EXECUTABLE_DIR}/HelloCsharpWorld.exe
-      COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/r:${GDCM_LIBRARY_DIR}/gdcm-sharp.dll" "/out:${GDCM_EXECUTABLE_DIR}/HelloCsharpWorld.exe" ${CMAKE_CURRENT_SOURCE_DIR}/HelloCsharpWorld.cs
-      WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-      DEPENDS ${GDCM_LIBRARY_DIR}/gdcm-sharp.dll
-      ${CMAKE_CURRENT_SOURCE_DIR}/HelloCsharpWorld.cs
-      COMMENT "Create HelloCsharpWorld.exe"
-      )
-  endif()
 
   # $ export MONO_LOG_LEVEL="debug"; export MONO_LOG_MASK="dll"
   # $ export LD_LIBRARY_PATH=/home/mmalaterre/Projects/gdcm/debug-gcc43/Wrapping/Csharp/:/home/mmalaterre/Projects/gdcm/debug-gcc43/bin
@@ -103,14 +99,6 @@ if(OLDSTYLECSHARP)
     ${SWIG_MODULE_gdcmsharpglue_REAL_NAME} # GDCMCSharp from the outside rebuild the C# binding not just the *.dll but the glue
     COMMENT "building gdcm-sharp.dll"
     )
-
-  if(BUILD_EXAMPLES)
-    add_custom_target(GDCMCSharpExample ALL
-      DEPENDS
-      ${GDCM_EXECUTABLE_DIR}/HelloCsharpWorld.exe
-      COMMENT "building HelloCsharpWorld.exe"
-      )
-  endif()
 endif()
 
 if(NOT GDCM_INSTALL_NO_LIBRARIES)
@@ -120,6 +108,7 @@ if(NOT GDCM_INSTALL_NO_LIBRARIES)
   # install(FILES signature:
   install(FILES
     ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll
+    ${GDCM_LIBRARY_DIR2}/gdcm-sharp.dll.xml
     DESTINATION ${GDCM_INSTALL_CSHARPMODULE_DIR} COMPONENT CSharpModule
     )
 endif()

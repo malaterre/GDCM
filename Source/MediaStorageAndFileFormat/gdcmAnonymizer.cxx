@@ -87,8 +87,7 @@ static Tag BasicApplicationLevelConfidentialityProfileAttributes[] = {
 
 
 Anonymizer::~Anonymizer()
-{
-}
+= default;
 
 bool Anonymizer::Empty( Tag const &t)
 {
@@ -507,7 +506,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     || ds.FindDataElement( Tag(0x0012,0x0062) )
     || ds.FindDataElement( Tag(0x0012,0x0063) ) )
     {
-    gdcmDebugMacro( "EncryptedContentTransferSyntax Attribute is present !" );
+    gdcmErrorMacro( "EncryptedContentTransferSyntax Attribute is present !" );
     return false;
     }
 #if 0
@@ -744,7 +743,7 @@ catch(...)
 }
 
 
-bool IsVRUI(Tag const &tag)
+static bool IsVRUI(Tag const &tag)
 {
   static const Global &g = Global::GetInstance();
   static const Dicts &dicts = g.GetDicts();

@@ -2,6 +2,21 @@
 find_package(DCMTK)
 find_package(DICOM3TOOLS)
 
+# Special CMake Module required when doing Python Testing
+if(GDCM_WRAP_PYTHON)
+  include(${GDCM_SOURCE_DIR}/CMake/UsePythonTest.cmake)
+endif()
+
+# Special CMake Module required when doing Java Testing
+if(GDCM_WRAP_JAVA)
+  include(${GDCM_SOURCE_DIR}/CMake/UseJavaTest.cmake)
+endif()
+
+# Special CMake Module required when doing C# Testing
+if(GDCM_WRAP_CSHARP)
+  include(${GDCM_SOURCE_DIR}/CMake/UseCSharpTest.cmake)
+endif()
+
 add_subdirectory(
   Source
   )

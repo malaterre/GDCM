@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
   int error = 0;
   int help = 0;
   int version = 0;
-  while (1) {
+  while (true) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
     while (optind < argc)
       {
       //printf ("%s\n", argv[optind++]);
-      files.push_back( argv[optind++] );
+      files.emplace_back(argv[optind++] );
       }
     //printf ("\n");
     if( files.size() == 2

@@ -20,12 +20,10 @@ namespace gdcm
 {
 
 SegmentReader::SegmentReader()
-{
-}
+= default;
 
 SegmentReader::~SegmentReader()
-{
-}
+= default;
 
 const SegmentReader::SegmentVector SegmentReader::GetSegments() const
 {

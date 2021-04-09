@@ -32,8 +32,7 @@ PixmapWriter::PixmapWriter():PixelData(new Pixmap)
 }
 
 PixmapWriter::~PixmapWriter()
-{
-}
+= default;
 
 void PixmapWriter::SetPixmap(Pixmap const &img)
 {
@@ -237,6 +236,7 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
 
   FileMetaInformation &fmi_orig = file.GetHeader();
   const TransferSyntax &ts_orig = fmi_orig.GetDataSetTransferSyntax();
+  const PhotometricInterpretation pi_orig = ImageHelper::GetPhotometricInterpretationValue(file);
 
   // col & rows:
 #if 0
@@ -577,13 +577,24 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
     else
       {
       if( ds.FindDataElement( at1.GetTag() ) ) {
-            //assert( ds.FindDataElement( at3.GetTag() ) );
-            at1.Set( ds );
-            if( atoi(at1.GetValue().c_str()) != 1 ) {
-               gdcmWarningMacro( "Invalid value for LossyImageCompression" );
-            }
+        at1.Set( ds );
+        if( atoi(at1.GetValue().c_str()) != 1 ) {
+          gdcmDebugMacro( "Fixing invalid value for LossyImageCompression: " << at1.GetValue() );
+          at1.SetValue( "01" );
+          ds.Replace( at1.GetAsDataElement() );
+        }
       } else {
-               gdcmWarningMacro( "Missing attribute for LossyImageCompression" );
+        if( pi_orig == PhotometricInterpretation::YBR_FULL_422 ) {
+          at1.SetValue( "01" );
+          ds.Replace( at1.GetAsDataElement() );
+
+          static const CSComp newvalues2[] = {"ISO_10918_1"};
+          at3.SetValues(  newvalues2, 1 );
+          ds.Replace( at3.GetAsDataElement() );
+        } else {
+          gdcmErrorMacro( "Unhandled Lossy flag for Pixel Data" );
+          return false;
+        }
       }
       }
     }
@@ -610,7 +621,10 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
       case 12:
       case 16:
       case 32:
-        depixdata.SetVR( VR::OW );
+        if( depixdata.GetSequenceOfFragments() )
+          depixdata.SetVR( VR::OB );
+        else
+          depixdata.SetVR( VR::OW );
         break;
       default:
         assert( 0 && "should not happen" );
@@ -700,7 +714,7 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
     SmartPointer<SequenceOfItems> sq;
     if( ds.FindDataElement( tsourceImageSequence ) )
       {
-      DataElement &de = (DataElement&)ds.GetDataElement( tsourceImageSequence );
+      DataElement &de = const_cast<DataElement&>(ds.GetDataElement( tsourceImageSequence ));
       de.SetVLToUndefined(); // For now
       if( de.IsEmpty() )
         {

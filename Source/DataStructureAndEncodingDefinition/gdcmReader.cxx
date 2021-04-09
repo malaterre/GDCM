@@ -23,6 +23,10 @@
 #include "gdcmExplicitDataElement.h"
 #include "gdcmImplicitDataElement.h"
 
+#ifdef _MSC_VER
+#include <windows.h> // MultiByteToWideChar
+#endif
+
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
 #include "gdcmUNExplicitDataElement.h"
 #include "gdcmCP246ExplicitDataElement.h"
@@ -823,11 +827,18 @@ bool Reader::CanRead() const
   return false;
 }
 
-void Reader::SetFileName(const char *filename)
+void Reader::SetFileName(const char *utf8path)
 {
   if(Ifstream) delete Ifstream;
   Ifstream = new std::ifstream();
-  Ifstream->open(filename, std::ios::binary);
+  if (utf8path && *utf8path) {
+#ifdef _MSC_VER
+    const std::wstring uncpath = System::ConvertToUNC(utf8path);
+    Ifstream->open(uncpath.c_str(), std::ios::binary);
+#else
+    Ifstream->open( utf8path, std::ios::binary);
+#endif
+  }
   if( Ifstream->is_open() )
     {
     Stream = Ifstream;

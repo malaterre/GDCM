@@ -42,7 +42,7 @@
 
 <para><literallayout>     --force-rescale    force rescale (advanced users)
      --force-spacing    force spacing (advanced users)
-  -r --recursive        Recusively descend directory
+  -r --recursive        Recursively descend directory
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmviewer_1general_options">

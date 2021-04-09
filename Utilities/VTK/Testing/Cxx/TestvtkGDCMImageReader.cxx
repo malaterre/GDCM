@@ -17,6 +17,7 @@
 #include "vtkPNGWriter.h"
 #include "vtkImageData.h"
 #include "vtkStringArray.h"
+#include "vtkVersion.h"
 
 #include "gdcmFilename.h"
 #include "gdcmTesting.h"

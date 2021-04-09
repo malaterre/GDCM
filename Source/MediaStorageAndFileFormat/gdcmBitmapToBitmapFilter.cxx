@@ -23,8 +23,7 @@ namespace gdcm
 {
 
 BitmapToBitmapFilter::BitmapToBitmapFilter()
-{
-}
+= default;
 
 void BitmapToBitmapFilter::SetInput(const Bitmap& image)
 {

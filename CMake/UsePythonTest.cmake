@@ -20,7 +20,7 @@
 #
 
 # Need python interpreter:
-find_package(PythonInterp REQUIRED)
+find_package(PythonInterp ${GDCM_DEFAULT_PYTHON_VERSION} REQUIRED)
 mark_as_advanced(PYTHON_EXECUTABLE)
 
 macro(ADD_PYTHON_TEST TESTNAME FILENAME)
@@ -72,7 +72,7 @@ macro(ADD_PYTHON_TEST TESTNAME FILENAME)
     message(\"loc is: \${loc}\")
     message(\"wo is: \${wo_semicolumn}\")
     execute_process(
-      COMMAND ${PYTHON_EXECUTABLE} -v ${loc} ${wo_semicolumn}
+      COMMAND ${PYTHON_EXECUTABLE} ${loc} ${wo_semicolumn}
       RESULT_VARIABLE import2_res
       OUTPUT_VARIABLE import2_output
       ERROR_VARIABLE  import2_output

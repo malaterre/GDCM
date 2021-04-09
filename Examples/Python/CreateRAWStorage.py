@@ -33,7 +33,7 @@ if __name__ == "__main__":
 #  f = gdcm.File()
 #  ds = f.GetDataSet()
   de = gdcm.DataElement( gdcm.Tag(0x0008,0x0016) )
-  de.SetByteValue( uid, gdcm.VL(len(uid)) )
+  de.SetByteStringValue( uid )
   vr = gdcm.VR( gdcm.VR.UI )
   de.SetVR( vr )
   ds.Replace( de )
@@ -138,7 +138,7 @@ if __name__ == "__main__":
 #
 #  uid = gen.Generate()
 #  de.SetTag( gdcm.Tag(0x0008,0x0018) )
-#  de.SetByteValue( uid, gdcm.VL(len(uid)) )
+#  de.SetByteStringValue( uid )
 #  ds.Insert( de )
 
   # init FMI now:
@@ -149,7 +149,7 @@ if __name__ == "__main__":
   #print fmi.GetDataSetTransferSyntax()
   #de.SetTag( gdcm.Tag(0x0002,0x0010) )
   #uid = "1.2.840.10008.1.2"
-  #de.SetByteValue( uid, gdcm.VL(len(uid)) )
+  #de.SetByteStringValue( uid )
   #fmi.Insert( de )
 #  f.SetHeader( r.GetFile().GetHeader() )
 

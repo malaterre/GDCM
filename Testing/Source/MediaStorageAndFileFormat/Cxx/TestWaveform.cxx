@@ -18,6 +18,7 @@ int TestWaveform(int argc, char *argv[])
   (void)argc;
   (void)argv;
   gdcm::Waveform w;
+  (void)w;
 
   return 0;
 }

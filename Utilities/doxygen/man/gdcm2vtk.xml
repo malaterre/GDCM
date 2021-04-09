@@ -54,6 +54,8 @@ file-out  output filename (DICOM or VTK supported)
   -T --study-uid        Study UID.
   -S --series-uid       Series UID.
      --root-uid         Root UID.
+     --imageformat      Image Format [1-8] (aka PhotometricInterpretation).
+     --ipp-sort         When input is directory, sort instances using IOP/IPP.
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcm2vtk_1compression_options">

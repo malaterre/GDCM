@@ -31,8 +31,7 @@ KAKADUCodec::KAKADUCodec()
 }
 
 KAKADUCodec::~KAKADUCodec()
-{
-}
+= default;
 
 bool KAKADUCodec::CanDecode(TransferSyntax const &ts) const
 {

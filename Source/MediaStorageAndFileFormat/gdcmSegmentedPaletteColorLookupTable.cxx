@@ -28,8 +28,8 @@ namespace gdcm
     template <typename EntryType>
     class Segment {
     public:
-        virtual ~Segment() {}
-        typedef std::map<const EntryType*, const Segment*> SegmentMap;
+        virtual ~Segment() = default;
+        using SegmentMap = std::map<const EntryType *, const Segment *>;
         virtual bool Expand(const SegmentMap& instances,
             std::vector<EntryType>& expanded) const = 0;
         const EntryType* First() const { return _first; }
@@ -54,7 +54,7 @@ namespace gdcm
     template <typename EntryType>
     class DiscreteSegment : public Segment<EntryType> {
     public:
-        typedef typename Segment<EntryType>::SegmentMap SegmentMap;
+        using SegmentMap = typename Segment<EntryType>::SegmentMap;
         DiscreteSegment(const EntryType* first)
             : Segment<EntryType>(first, first+2+*(first+1)) {}
         bool Expand(const SegmentMap&,
@@ -69,7 +69,7 @@ namespace gdcm
     template <typename EntryType>
     class LinearSegment : public Segment<EntryType> {
     public:
-        typedef typename Segment<EntryType>::SegmentMap SegmentMap;
+        using SegmentMap = typename Segment<EntryType>::SegmentMap;
         LinearSegment(const EntryType* first)
             : Segment<EntryType>(first, first+3) {}
         bool Expand(const SegmentMap&,
@@ -98,7 +98,7 @@ namespace gdcm
     template <typename EntryType>
     class IndirectSegment : public Segment<EntryType> {
     public:
-        typedef typename Segment<EntryType>::SegmentMap SegmentMap;
+        using SegmentMap = typename Segment<EntryType>::SegmentMap;
         IndirectSegment(const EntryType* first)
             : Segment<EntryType>(first, first+2+4/sizeof(EntryType)) {}
         bool Expand(const SegmentMap& instances,
@@ -135,7 +135,7 @@ namespace gdcm
     void ExpandPalette(const EntryType* raw_values, uint32_t length,
         std::vector<EntryType>& palette)
     {
-        typedef std::deque<Segment<EntryType>*> SegmentList;
+        using SegmentList = std::deque<Segment<EntryType> *>;
         SegmentList segments;
         const EntryType* raw_seg = raw_values;
         while ( (std::distance(raw_values, raw_seg) * sizeof(EntryType)) <length ) {
@@ -170,12 +170,10 @@ namespace gdcm
     }
 
 SegmentedPaletteColorLookupTable::SegmentedPaletteColorLookupTable()
-{
-}
+= default;
 
 SegmentedPaletteColorLookupTable::~SegmentedPaletteColorLookupTable()
-{
-}
+= default;
 
 void SegmentedPaletteColorLookupTable::SetLUT(LookupTableType type, const unsigned char *array,
     unsigned int length)
@@ -186,14 +184,14 @@ void SegmentedPaletteColorLookupTable::SetLUT(LookupTableType type, const unsign
     }
   else if( BitSample == 16 )
     {
-    const uint16_t *array16 = (uint16_t*)array;
+    const uint16_t *array16 = (const uint16_t*)(const void*)array;
     const uint16_t *segment_values = array16;
     std::vector<uint16_t> palette;
     unsigned int num_entries = GetLUTLength(type);
     palette.reserve(num_entries);
     assert( length % 2 == 0 );
     // FIXME: inplace byteswapping (BAD!)
-    SwapperNoOp::SwapArray((uint16_t*)segment_values,length/2);
+    SwapperNoOp::SwapArray(const_cast<uint16_t*>(segment_values),length/2);
     ExpandPalette(segment_values, length, palette);
     LookupTable::SetLUT(type, (unsigned char*)&palette[0], (unsigned int)(palette.size() * 2));
     }

@@ -194,7 +194,7 @@ struct param
     assert( bla < sizeof(name0) );
     is.read( name0, bla);
     size_t l = strlen(name0);
-    assert( l == bla );
+    assert( l == bla ); (void)l;
     char * ptr = strdup( name0 );
     v4.ptr = ptr;
     type = param_string;
@@ -209,7 +209,7 @@ struct param
     assert( bla < sizeof(name0) );
     is.read( name0, bla);
     size_t l = strlen(name0);
-    assert( l == bla );
+    assert( l == bla ); (void)l;
     memcpy( this->name, name0, bla );
     is.read( (char*)&bla, sizeof(bla) );
     assert( bla == 0x1 );
@@ -251,7 +251,7 @@ struct param
     assert( gettypenamefromtype( type ) );
     is.read( (char*)&dim, sizeof( dim ) ); // number of elements
     is.read( (char*)&v4.val, sizeof( v4.val ) );
-    assert( v4.val == 0 ); // always 0 ? sometimes not...
+    //assert( v4.val == 0 ); // always 0 ? sometimes not...
     const uint32_t cur = (uint32_t)is.tellg();
     is.read( (char*)&offset, sizeof( offset ) );
     assert( offset != 0 );

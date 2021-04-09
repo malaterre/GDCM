@@ -70,10 +70,6 @@
 #include <getopt.h>
 #include <string.h>
 
-#ifdef _MSC_VER
-#define atoll _atoi64
-#endif
-
 static unsigned int readsize(const char *str, unsigned int * size)
 {
   int n = sscanf( str, "%i,%i,%i", size, size+1, size+2);
@@ -350,6 +346,7 @@ static bool PopulateSingeFile( gdcm::PixmapWriter & writer,
 
 static bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Directory::FilenamesType const & filenames, unsigned int ndim = 2, std::streampos const & pos = 0 )
 {
+  assert( !filenames.empty() );
   std::vector<std::string>::const_iterator it = filenames.begin();
   bool b = true;
   gdcm::Pixmap &image = writer.GetPixmap();
@@ -456,7 +453,7 @@ int main (int argc, char *argv[])
   // Too early for UID Generation
   std::string series_uid; // = uid.Generate();
   std::string study_uid; // = uid.Generate();
-  while (1) {
+  while (true) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
@@ -515,6 +512,7 @@ int main (int argc, char *argv[])
             assert( strcmp(s, "input") == 0 );
             assert( filename.IsEmpty() );
             filename = optarg;
+            filenames.emplace_back(filename);
             }
           else if( option_index == 2 ) /* depth */
             {
@@ -592,7 +590,7 @@ int main (int argc, char *argv[])
             {
             assert( strcmp(s, "offset") == 0 );
             poffset = 1;
-            start_pos = (size_t)atoll(optarg);
+            start_pos = (size_t)std::atoll(optarg);
             }
           else if( option_index == 17 ) /* template */
             {
@@ -610,6 +608,7 @@ int main (int argc, char *argv[])
       //printf ("option i with value '%s'\n", optarg);
       assert( filename.IsEmpty() );
       filename = optarg;
+      filenames.emplace_back(filename);
       break;
 
     case 'o':
@@ -692,7 +691,7 @@ int main (int argc, char *argv[])
     while (optind < argc)
       {
       //printf ("%s\n", argv[optind++]);
-      files.push_back( argv[optind++] );
+      files.emplace_back(argv[optind++] );
       }
     //printf ("\n");
     if( files.size() >= 2
@@ -914,6 +913,16 @@ int main (int argc, char *argv[])
         }
 
       if( !Populate( writer, raw, filenames, ndimension, start_pos ) ) return 1;
+      // populate will guess pixel format and photometric inter from file, need
+      // to override after calling Populate:
+      if( pformat )
+        {
+        writer.GetPixmap().SetPixelFormat( pfref );
+        }
+      if( pinter )
+        {
+        writer.GetPixmap().SetPhotometricInterpretation( refpi );
+        }
       if( !AddUIDs(sopclassuid, sopclass, study_uid, series_uid, writer ) ) return 1;
 
       writer.SetFileName( outfilename );
@@ -967,6 +976,7 @@ int main (int argc, char *argv[])
 
     if(  gdcm::System::StrCaseCmp(inputextension,".pgm") == 0
       || gdcm::System::StrCaseCmp(inputextension,".pnm") == 0
+      || gdcm::System::StrCaseCmp(inputextension,".pbm") == 0
       || gdcm::System::StrCaseCmp(inputextension,".ppm") == 0 )
       {
       gdcm::PNMCodec pnm;
@@ -1114,6 +1124,7 @@ int main (int argc, char *argv[])
     {
     if(  gdcm::System::StrCaseCmp(outputextension,".pgm") == 0
       || gdcm::System::StrCaseCmp(outputextension,".pnm") == 0
+      || gdcm::System::StrCaseCmp(outputextension,".pbm") == 0
       || gdcm::System::StrCaseCmp(outputextension,".ppm") == 0 )
       {
       gdcm::PNMCodec pnm;
@@ -1205,9 +1216,9 @@ int main (int argc, char *argv[])
     gdcm::ByteValue *bv = new gdcm::ByteValue();
     bv->SetLength( (uint32_t)len );
     //memcpy( bv->GetPointer(), imageori
-    imageori.GetBuffer( (char*)bv->GetPointer() );
+    imageori.GetBuffer( (char*)bv->GetVoidPointer() );
     // Rub out pixels:
-    char *p = (char*)bv->GetPointer();
+    char *p = (char*)bv->GetVoidPointer();
     switch(pixeltype)
       {
     case gdcm::PixelFormat::UINT8:

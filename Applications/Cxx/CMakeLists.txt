@@ -73,6 +73,13 @@ if(GDCM_USE_SYSTEM_POPPLER)
     list(APPEND libpoppler_flags -DLIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM)
   endif()
   CHECK_CXX_SOURCE_COMPILES(
+    "\#include <poppler/GlobalParams.h>\nint main() { globalParams.reset( new GlobalParams()); return 0;}"
+    LIBPOPPLER_GLOBALPARAMS_HAS_RESET)
+  set(libpoppler_flags)
+  if(LIBPOPPLER_GLOBALPARAMS_HAS_RESET)
+    list(APPEND libpoppler_flags -DLIBPOPPLER_GLOBALPARAMS_HAS_RESET)
+  endif()
+  CHECK_CXX_SOURCE_COMPILES(
     "\#include <poppler/PDFDoc.h>\nint main() { PDFDoc d((GooString*)NULL,(GooString*)NULL,(GooString*)NULL); d.getPDFVersion(); return 0;}"
     LIBPOPPLER_PDFDOC_HAS_PDFVERSION)
   if(LIBPOPPLER_PDFDOC_HAS_PDFVERSION)
@@ -87,8 +94,26 @@ if(GDCM_USE_SYSTEM_POPPLER)
   CHECK_CXX_SOURCE_COMPILES(
       "\#include <poppler/Object.h>\nint main() { Object o(42); }"
     LIBPOPPLER_NEW_OBJECT_API)
-if(LIBPOPPLER_NEW_OBJECT_API)
+  if(LIBPOPPLER_NEW_OBJECT_API)
     list(APPEND libpoppler_flags -DLIBPOPPLER_NEW_OBJECT_API)
+  endif()
+  CHECK_CXX_SOURCE_COMPILES(
+	  "\#include <poppler/goo/GooString.h>\nint main() { const GooString gs; gs.getChar(0); return 0; }"
+    LIBPOPPLER_GOOSTRING_HAS_CONSTGETCHAR)
+  if(LIBPOPPLER_GOOSTRING_HAS_CONSTGETCHAR)
+    list(APPEND libpoppler_flags -DLIBPOPPLER_GOOSTRING_HAS_CONSTGETCHAR)
+  endif()
+  CHECK_CXX_SOURCE_COMPILES(
+	  "\#include <poppler/goo/GooString.h>\nint main() { GooString gs; gs.getCString(); return 0; }"
+	  LIBPOPPLER_GOOSTRING_HAS_GETCSTRING)
+  if(LIBPOPPLER_GOOSTRING_HAS_GETCSTRING)
+    list(APPEND libpoppler_flags -DLIBPOPPLER_GOOSTRING_HAS_GETCSTRING)
+  endif()
+  CHECK_CXX_SOURCE_COMPILES(
+          "\#include <poppler/UnicodeMap.h>\nint main() {  Unicode u; char buf[8]; const UnicodeMap *uMap; uMap->mapUnicode(u, buf, sizeof(buf)); return 0; }"
+    LIBPOPPLER_UNICODEMAP_HAS_CONSTMAPUNICODE)
+  if(LIBPOPPLER_UNICODEMAP_HAS_CONSTMAPUNICODE)
+    list(APPEND libpoppler_flags -DLIBPOPPLER_UNICODEMAP_HAS_CONSTMAPUNICODE)
   endif()
   if(libpoppler_flags)
     string(REPLACE ";" " " libpoppler_flags_string "${libpoppler_flags}")

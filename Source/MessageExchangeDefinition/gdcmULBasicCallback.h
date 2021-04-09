@@ -1,6 +1,6 @@
 /*=========================================================================
  *
- *  Copyright Insight Software Consortium
+ *  Copyright NumFOCUS
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -40,8 +40,8 @@ namespace gdcm
     std::vector<DataSet> mDataSets;
     std::vector<DataSet> mResponses;
   public:
-    ULBasicCallback() {};
-    ~ULBasicCallback() override {} //empty, for later inheritance
+    ULBasicCallback() = default;
+    ~ULBasicCallback() override = default; //empty, for later inheritance
 
     void HandleDataSet(const DataSet& inDataSet) override;
     void HandleResponse(const DataSet& inDataSet) override;

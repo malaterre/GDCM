@@ -21,7 +21,7 @@
 #include <cstring>
 #include <cstdio> // snprintf
 #include <numeric>
-#ifdef _WIN32
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
 #define snprintf _snprintf
 #endif
 
@@ -31,7 +31,7 @@ namespace gdcm
 {
 
 /* Part 1  Table A.2 List of markers and marker segments */
-typedef enum {
+using MarkerType = enum {
   FF30 = 0xFF30,
   FF31 = 0xFF31,
   FF32 = 0xFF32,
@@ -69,9 +69,9 @@ typedef enum {
   EPH = 0XFF92,
   SOD = 0xFF93,
   EOC = 0XFFD9  /* EOI in old jpeg */
-} MarkerType;
+};
 
-typedef enum {
+using OtherType = enum {
   JP   = 0x6a502020,
   FTYP = 0x66747970,
   JP2H = 0x6a703268,
@@ -84,7 +84,7 @@ typedef enum {
   CMAP = 0x636D6170,
   PCLR = 0x70636c72,
   RES  = 0x72657320
-} OtherType;
+};
 
 static inline bool hasnolength( uint_fast16_t marker )
 {
@@ -394,12 +394,14 @@ class JPEG2000Internals
 {
 public:
   JPEG2000Internals()
+   
     {
     memset(&coder_param, 0, sizeof(coder_param));
     opj_set_default_encoder_parameters(&coder_param);
     }
 
   opj_cparameters coder_param;
+  int nNumberOfThreadsForDecompression{ -1 };
 };
 
 void JPEG2000Codec::SetRate(unsigned int idx, double rate)
@@ -444,6 +446,24 @@ void JPEG2000Codec::SetNumberOfResolutions(unsigned int nres)
   Internals->coder_param.numresolution = nres;
 }
 
+void JPEG2000Codec::SetNumberOfThreadsForDecompression( int nThreads)
+{
+#if ((OPJ_VERSION_MAJOR == 2 && OPJ_VERSION_MINOR >= 3) || (OPJ_VERSION_MAJOR > 2))
+  if( nThreads < 0 )
+  {
+    const int x = opj_get_num_cpus();
+    Internals->nNumberOfThreadsForDecompression = x == 1 ? 0 : x;
+  }
+  else
+  {
+    Internals->nNumberOfThreadsForDecompression = nThreads;
+  }
+#else
+  (void)nThreads;
+  Internals->nNumberOfThreadsForDecompression = 0;
+#endif
+}
+
 void JPEG2000Codec::SetReversible(bool res)
 {
   LossyFlag = !res;
@@ -453,6 +473,7 @@ void JPEG2000Codec::SetReversible(bool res)
 JPEG2000Codec::JPEG2000Codec()
 {
   Internals = new JPEG2000Internals;
+  SetNumberOfThreadsForDecompression( -1 );
 }
 
 JPEG2000Codec::~JPEG2000Codec()
@@ -617,7 +638,10 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     file_length--;
     }
   // what if 0xd9 is never found ?
-  assert( file_length > 0 && src[file_length-1] == 0xd9 );
+  if( !( file_length > 0 && src[file_length-1] == 0xd9 ) )
+  {
+    return std::make_pair( nullptr, 0 );
+  }
 
   /* set decoding parameters to default values */
   opj_set_default_decoder_parameters(&parameters);
@@ -654,6 +678,9 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     gdcmErrorMacro( "Impossible happen" );
     return std::make_pair<char*,size_t>(0,0);
     }
+#if ((OPJ_VERSION_MAJOR == 2 && OPJ_VERSION_MINOR >= 3) || (OPJ_VERSION_MAJOR > 2))
+  opj_codec_set_threads(dinfo, Internals->nNumberOfThreadsForDecompression);
+#endif
 
   int reversible;
   myfile mysrc;
@@ -757,12 +784,20 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
 
   assert( image->numcomps == this->GetPixelFormat().GetSamplesPerPixel() );
   assert( image->numcomps == this->GetPhotometricInterpretation().GetSamplesPerPixel() );
-  if( this->GetPhotometricInterpretation() == PhotometricInterpretation::RGB )
-    assert( !mct );
-  else if( this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT )
-    assert( mct );
+  if( this->GetPhotometricInterpretation() == PhotometricInterpretation::RGB
+   || this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL )
+  {
+    if( mct ) { gdcmWarningMacro("Invalid PhotometricInterpretation, should be YBR_RCT"); }
+  }
+  else if( this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_RCT
+        || this->GetPhotometricInterpretation() == PhotometricInterpretation::YBR_ICT )
+  {
+    if( !mct ) { gdcmWarningMacro("Invalid PhotometricInterpretation, should be RGB"); }
+  }
   else
-    assert( !mct );
+  {
+    if( mct ) { gdcmWarningMacro("MCT flag was set in SamplesPerPixel = 1 image. corrupt j2k ?"); }
+  }
 
   /* close the byte stream */
   opj_stream_destroy(cio);
@@ -822,7 +857,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     else if (comp->prec <= 16)
       {
       // ELSCINT1_JP2vsJ2K.dcm is a 12bits image
-      uint16_t *data16 = (uint16_t*)raw + compno;
+      uint16_t *data16 = (uint16_t*)(void*)raw + compno;
       for (int i = 0; i < wr * hr; i++)
         {
         int v = image->comps[compno].data[i / wr * w + i % wr];
@@ -832,7 +867,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
       }
     else
       {
-      uint32_t *data32 = (uint32_t*)raw + compno;
+      uint32_t *data32 = (uint32_t*)(void*)raw + compno;
       for (int i = 0; i < wr * hr; i++)
         {
         int v = image->comps[compno].data[i / wr * w + i % wr];
@@ -1001,7 +1036,7 @@ void rawtoimage_fill(const T *inputbuffer, int w, int h, int numcomps, opj_image
     }
 }
 
-opj_image_t* rawtoimage(const char *inputbuffer, opj_cparameters_t *parameters,
+opj_image_t* rawtoimage(const char *inputbuffer8, opj_cparameters_t *parameters,
   size_t fragment_size, int image_width, int image_height, int sample_pixel,
   int bitsallocated, int bitsstored, int highbit, int sign, int quality, int pc)
 {
@@ -1012,6 +1047,7 @@ opj_image_t* rawtoimage(const char *inputbuffer, opj_cparameters_t *parameters,
   OPJ_COLOR_SPACE color_space;
   opj_image_cmptparm_t cmptparm[3]; /* maximum of 3 components */
   opj_image_t * image = nullptr;
+  const void * inputbuffer = inputbuffer8;
 
   assert( sample_pixel == 1 || sample_pixel == 3 );
   if( sample_pixel == 1 )
@@ -1230,12 +1266,13 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
   /* get a J2K compressor handle */
   cinfo = opj_create_compress(CODEC_J2K);
 
+
   /* setup the encoder parameters using the current image and using user parameters */
   opj_setup_encoder(cinfo, &parameters, image);
 
   myfile mysrc;
   myfile *fsrc = &mysrc;
-  char *buffer_j2k = new char[inputlength]; // overallocated
+  char *buffer_j2k = new char[inputlength * 2]; // overallocated for weird case
   fsrc->mem = fsrc->cur = buffer_j2k;
   fsrc->len = 0; //inputlength;
 
@@ -1404,9 +1441,13 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     return false;
     }
 
+#if ((OPJ_VERSION_MAJOR == 2 && OPJ_VERSION_MINOR >= 3) || (OPJ_VERSION_MAJOR > 2)) 
+  opj_codec_set_threads(dinfo, Internals->nNumberOfThreadsForDecompression);
+#endif
+
   myfile mysrc;
   myfile *fsrc = &mysrc;
-  fsrc->mem = fsrc->cur = (char*)src;
+  fsrc->mem = fsrc->cur = (char*)const_cast<unsigned char*>(src);
   fsrc->len = file_length;
 
   // the hack is not used when reading meta-info of a j2k stream:
@@ -1649,6 +1690,8 @@ bool JPEG2000Codec::DecodeExtent(
       {
       size_t fraglen = frag.GetVL();
       size_t oldlen = vdummybuffer.size();
+      if( fraglen == 0 && oldlen == 0 )
+        break;
       // update
       buf_size = fraglen + oldlen;
       vdummybuffer.resize( buf_size );
@@ -1733,7 +1776,14 @@ bool JPEG2000Codec::DecodeExtent(
       if( !raw_len.first || !raw_len.second ) return false;
       // check pixel format *after* DecodeByStreamsCommon !
       const PixelFormat & pf2 = this->GetPixelFormat();
-      if( pf != pf2 ) return false;
+      if( pf.GetSamplesPerPixel() != pf2.GetSamplesPerPixel()
+       || pf.GetBitsAllocated() != pf2.GetBitsAllocated()
+      )
+        {
+        gdcmErrorMacro( "Invalid PixelFormat found (mismatch DICOM vs J2K)" );
+        return false;
+        }
+
 
       char *raw = raw_len.first;
       const unsigned int rowsize = xmax - xmin + 1;

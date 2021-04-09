@@ -19,6 +19,7 @@
 #include "gdcmUIDGenerator.h"
 
 #include <iostream>
+#include <sstream>
 #include <string>
 
 #include <map>
@@ -31,49 +32,11 @@
  * The output file will be stored in `outvid.dcm` as
  * MultiframeGrayscaleByteSecondaryCaptureImageStorage
  */
-int main(int argc, char *argv[])
+
+using namespace gdcm;
+static bool processgroup(Item & item3, std::string const & outfilename)
 {
-  if( argc < 2 ) return 1;
-  using namespace gdcm;
-  const char *filename = argv[1];
-  gdcm::Reader reader;
-  reader.SetFileName( filename );
-  reader.Read();
-
-  gdcm::File &file = reader.GetFile();
-  gdcm::DataSet &ds = file.GetDataSet();
-  const PrivateTag tseq(0x7fe1,0x1,"GEMS_Ultrasound_MovieGroup_001");
-
-  if( !ds.FindDataElement( tseq ) ) return 1;
-  const DataElement& seq = ds.GetDataElement( tseq );
-
-  SmartPointer<SequenceOfItems> sqi = seq.GetValueAsSQ();
-  assert( sqi->GetNumberOfItems() == 1 );
-  Item &item = sqi->GetItem(1);
-  DataSet &subds = item.GetNestedDataSet();
-
-  const PrivateTag tseq1(0x7fe1,0x10,"GEMS_Ultrasound_MovieGroup_001");
-
-  if( !subds.FindDataElement( tseq1 ) ) return 1;
-  const DataElement& seq1 = subds.GetDataElement( tseq1 );
-
-  SmartPointer<SequenceOfItems> sqi2 = seq1.GetValueAsSQ();
-  //int n = sqi2->GetNumberOfItems();
-  int index = 1;
-  Item &item2 = sqi2->GetItem(index);
-  DataSet &subds2 = item2.GetNestedDataSet();
-
-  const PrivateTag tseq2(0x7fe1,0x20,"GEMS_Ultrasound_MovieGroup_001");
-
-  if( !subds2.FindDataElement( tseq2 ) ) return 1;
-  const DataElement& seq2 = subds2.GetDataElement( tseq2 );
-
-//    std::cout << seq2 << std::endl;
-
-  SmartPointer<SequenceOfItems> sqi3 = seq2.GetValueAsSQ();
-  size_t ni3 = sqi3->GetNumberOfItems(); (void)ni3;
-  assert( sqi3->GetNumberOfItems() >= 1 );
-  Item &item3 = sqi3->GetItem(1);
+//  Item &item3 = sqi3->GetItem(1);
   DataSet &subds3 = item3.GetNestedDataSet();
 
   const PrivateTag tseq6(0x7fe1,0x26,"GEMS_Ultrasound_MovieGroup_001");
@@ -93,9 +56,9 @@ int main(int argc, char *argv[])
       {
       Element<VR::SL, VM::VM4> el;
       el.SetFromDataElement( subds6.GetDataElement( tseq7 ) );
-      std::cout << "El= " << el.GetValue() << std::endl;
       dimx = el.GetValue(0);
       dimy = el.GetValue(1);
+      std::cout << "Dims= " << dimx << " " << dimy << std::endl;
       }
     }
 
@@ -123,6 +86,7 @@ int main(int argc, char *argv[])
     const DataElement& de8 = subds4.GetDataElement( tseq8 );
     Element<VR::UL,VM::VM1> ldimz;
     ldimz.SetFromDataElement( de8 );
+    std::cout << "ldimz: " << ldimz.GetValue() << std::endl;
     dimz += ldimz.GetValue();
     if( !subds4.FindDataElement( tseq4 ) ) return 1;
     const DataElement& seq4 = subds4.GetDataElement( tseq4 );
@@ -134,6 +98,16 @@ int main(int argc, char *argv[])
 
     const ByteValue *bv4 = seq4.GetByteValue();
     (void)bv4;
+    Element<VR::FD, VM::VM1_n> el0;
+    el0.SetFromDataElement( seq4 );
+    std::cout << "TimeStamp (" << el0.GetLength() << "): ";
+    // Seems like the 3D volumes is split into chunks of max 100 frames...
+    assert( ldimz.GetValue() == el0.GetLength() );
+    for( unsigned long i = 0; i < el0.GetLength(); ++i ) {
+      if(i) std::cout << ",";
+      std::cout << el0.GetValue(i);
+    }
+    std::cout << std::endl;
 #if 0
       {
       std::ofstream out( "/tmp/mo4", std::ios::binary );
@@ -191,11 +165,65 @@ int main(int argc, char *argv[])
   de.SetByteValue( ms.GetString(), (uint32_t)strlen(ms.GetString()));
   dataset.Replace( de ); // replace !
 
-  w.SetFileName( "outvid.dcm" );
+  w.SetFileName( outfilename.c_str() );
   if( !w.Write() )
     {
-    return 1;
+    return false;
     }
+  return true;
+}
+
+int main(int argc, char *argv[])
+{
+  if( argc < 2 ) return 1;
+  const char *filename = argv[1];
+  gdcm::Reader reader;
+  reader.SetFileName( filename );
+  reader.Read();
+
+  gdcm::File &file = reader.GetFile();
+  gdcm::DataSet &ds = file.GetDataSet();
+  const PrivateTag tseq(0x7fe1,0x1,"GEMS_Ultrasound_MovieGroup_001");
+
+  if( !ds.FindDataElement( tseq ) ) return 1;
+  const DataElement& seq = ds.GetDataElement( tseq );
+
+  SmartPointer<SequenceOfItems> sqi = seq.GetValueAsSQ();
+  assert( sqi->GetNumberOfItems() == 1 );
+  Item &item = sqi->GetItem(1);
+  DataSet &subds = item.GetNestedDataSet();
+
+  const PrivateTag tseq1(0x7fe1,0x10,"GEMS_Ultrasound_MovieGroup_001");
+
+  if( !subds.FindDataElement( tseq1 ) ) return 1;
+  const DataElement& seq1 = subds.GetDataElement( tseq1 );
+
+  SmartPointer<SequenceOfItems> sqi2 = seq1.GetValueAsSQ();
+  assert( sqi2->GetNumberOfItems() == 1 );
+  //int n = sqi2->GetNumberOfItems();
+  int index = 1;
+  Item &item2 = sqi2->GetItem(index);
+  DataSet &subds2 = item2.GetNestedDataSet();
+
+  const PrivateTag tseq2(0x7fe1,0x20,"GEMS_Ultrasound_MovieGroup_001");
+
+  if( !subds2.FindDataElement( tseq2 ) ) return 1;
+  const DataElement& seq2 = subds2.GetDataElement( tseq2 );
+
+//    std::cout << seq2 << std::endl;
+
+  SmartPointer<SequenceOfItems> sqi3 = seq2.GetValueAsSQ();
+  size_t ni3 = sqi3->GetNumberOfItems(); (void)ni3;
+  assert( sqi3->GetNumberOfItems() >= 1 );
+  std::cout << "#Groups = " << sqi3->GetNumberOfItems() << std::endl;
+  for( SequenceOfItems::SizeType i = 1; i <= sqi3->GetNumberOfItems(); ++i) {
+    Item &item3 = sqi3->GetItem(i);
+    std::ostringstream os;
+    os << "outvid";
+    os << i;
+    os << ".dcm";
+    processgroup(item3, os.str());
+  }
 
   return 0;
 }

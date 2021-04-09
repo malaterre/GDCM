@@ -170,8 +170,6 @@ target_link_libraries(${VTKGDCM_NAME} LINK_PRIVATE gdcmMSFF ${vtkgdcm_LIBS})
 if(GDCM_HAVE_PTHREAD_H)
   target_link_libraries(${VTKGDCM_NAME} LINK_PRIVATE pthread)
 endif()
-# prevent viral dep of vtkgdcm
-#set_property(TARGET ${VTKGDCM_NAME} PROPERTY LINK_INTERFACE_LIBRARIES "")
 if(NOT GDCM_INSTALL_NO_LIBRARIES)
   install(TARGETS ${VTKGDCM_NAME}
     EXPORT ${GDCM_TARGETS_NAME}
@@ -221,14 +219,17 @@ if(GDCM_WRAP_PHP)
   #endif()
   #separate_arguments(CMAKE_SWIG_FLAGS)
 
-  SWIG_ADD_MODULE(php_vtkgdcm php vtkgdcm.i)
+  SWIG_ADD_LIBRARY(
+    php_vtkgdcm
+    LANGUAGE php
+    SOURCES vtkgdcm.i
+  )
   SWIG_LINK_LIBRARIES(php_vtkgdcm vtkgdcm)
   target_link_libraries(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} LINK_PRIVATE ${vtkgdcm_LIBS})
   if(UNIX)
     set_target_properties(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES OUTPUT_NAME "vtkgdcm")
   endif()
   set_target_properties(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES PREFIX "")
-  #set_target_properties(${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTIES LINK_INTERFACE_LIBRARIES "")
   set_property(TARGET ${SWIG_MODULE_php_vtkgdcm_REAL_NAME} PROPERTY NO_SONAME 1)
 
 if(NOT GDCM_INSTALL_NO_LIBRARIES)
@@ -289,7 +290,11 @@ if(GDCM_WRAP_CSHARP)
   else()
     set(CMAKE_SWIG_FLAGS "-namespace vtkgdcm -dllimport vtkgdcmsharpglue")
     separate_arguments(CMAKE_SWIG_FLAGS)
-    SWIG_ADD_MODULE(vtkgdcmsharpglue csharp vtkgdcm.i)
+    SWIG_ADD_LIBRARY(
+      vtkgdcmsharpglue
+      LANGUAGE csharp
+      SOURCES vtkgdcm.i
+    )
     target_link_libraries(${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME} LINK_PRIVATE vtkgdcm)
     # Stupid cmake-swig module is doing that for us, when not needed
     if(UNIX)
@@ -608,7 +613,7 @@ if(GDCM_WRAP_CSHARP)
       OUTPUT ${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll
       COMMAND ${CMAKE_CSHARP_COMPILER} ARGS "/t:library" "/out:${GDCM_LIBRARY_DIR}/vtkgdcm-sharp.dll" "*.cs"
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-      DEPENDS "${swig_generated_file_fullname}"
+      DEPENDS ${SWIG_MODULE_vtkgdcmsharpglue_REAL_NAME} 
       ${CMAKE_CURRENT_BINARY_DIR}/AssemblyInfo.cs
       COMMENT "csc *.cs"
       )
@@ -635,6 +640,18 @@ if(GDCM_WRAP_CSHARP)
   #  COMMENT "Copying vtkgdcm-sharp.dll.config"
   #)
 
+endif()
+
+if( (GDCM_WRAP_JAVA AND VTK_WRAP_JAVA) OR
+    (GDCM_WRAP_PYTHON AND VTK_WRAP_PYTHON) )
+  if( ${VTK_MAJOR_VERSION} GREATER 7 )
+    set(MODULE_HIERARCHY_NAME ${VTKGDCM_NAME}Hierarchy)
+    set(${VTKGDCM_NAME}_WRAP_DEPENDS ${vtkgdcm_LIBS})
+    include(vtkWrapHierarchy)
+    vtk_wrap_hierarchy(${VTKGDCM_NAME} ${CMAKE_CURRENT_BINARY_DIR} "${vtkgdcm_SRCS}")
+    set(KIT_HIERARCHY_FILE ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_HIERARCHY_NAME}.txt)
+    set(LIB_HIERARCHY_STAMP ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_HIERARCHY_NAME}.stamp.txt)
+  endif()
 endif()
 
 if(GDCM_WRAP_JAVA)
@@ -768,7 +785,6 @@ if(GDCM_WRAP_PYTHON)
     if(NOT GDCM_NO_PYTHON_LIBS_LINKING)
       target_link_libraries(${VTKGDCM_NAME}Python LINK_PRIVATE ${PYTHON_LIBRARY})
     endif()
-    #set_property(TARGET ${VTKGDCM_NAME}PythonD PROPERTY LINK_INTERFACE_LIBRARIES "")
     set_property(TARGET ${VTKGDCM_NAME}Python PROPERTY NO_SONAME 1)
     #set_property(TARGET ${VTKGDCM_NAME}PythonD PROPERTY NO_SONAME 1)
     # Removing lib prefix if we are at VTK7. Based on a reply by David Gobbi to

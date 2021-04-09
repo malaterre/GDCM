@@ -31,7 +31,7 @@
 #include "vtkPolyDataMapper2D.h"
 #include "vtkImageReslice.h"
 #include "vtkRenderWindowInteractor.h"
-#include "vtkImageViewer.h"
+#include "vtkRenderWindow.h"
 #include "vtkPointData.h"
 #include "vtkImageMapToColors.h"
 #include "vtkLookupTable.h"
@@ -92,39 +92,6 @@ class vtkAngleWidget;
 #ifndef vtkFloatingPointType
 #define vtkFloatingPointType double
 #endif
-
-//----------------------------------------------------------------------------
-// vtkImageViewer2 new interface wants SetSlice, but vtkImageViewer does not have
-// this new interface (what a pain), so let's fake a new interface to
-// vtkImageViewer without patching VTK
-class vtkGDCMImageViewer : public vtkImageViewer
-{
-public:
-  vtkTypeMacro(vtkGDCMImageViewer,vtkImageViewer);
-
-  static vtkGDCMImageViewer *New()
-    {
-#ifdef VTK_DEBUG_LEAKS
-    vtkDebugLeaks::ConstructClass("vtkGDCMImageViewer");
-#endif
-    return new vtkGDCMImageViewer;
-    }
-  int GetSlice() { return this->GetZSlice(); }
-  void SetSlice(int s) { this->SetZSlice(s); }
-
-  int GetSliceMin() { return this->GetWholeZMin(); }
-  int GetSliceMax() { return this->GetWholeZMax(); }
-#if VTK_MAJOR_VERSION >= 5
-  // TODO:
-  void AddInputConnection(vtkAlgorithmOutput* input) {(void)input;}
-#else
-  void AddInput(vtkImageData * input) {(void)input;}
-#endif
-  double GetOverlayVisibility() { return 0; }
-  void SetOverlayVisibility(double vis) {(void)vis;}
-};
-//vtkCxxRevisionMacro(vtkGDCMImageViewer, "$Revision: 1.30 $")
-vtkInstantiatorNewMacro(vtkGDCMImageViewer)
 
 #if VTK_MAJOR_VERSION >= 5
 #else
@@ -787,7 +754,7 @@ void PrintHelp()
   std::cout << "Options:" << std::endl;
   std::cout << "     --force-rescale    force rescale." << std::endl;
   std::cout << "     --force-spacing    force spacing." << std::endl;
-  std::cout << "  -r --recursive        Recusively descend directory." << std::endl;
+  std::cout << "  -r --recursive        Recursively descend directory." << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose    more verbose (warning+error)." << std::endl;
   std::cout << "  -W --warning    print warning info." << std::endl;

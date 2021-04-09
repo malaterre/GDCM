@@ -15,6 +15,7 @@ set(examples
   DecompressImage
   ScanDirectory
   ReadFiles
+  SimplePrint
   FileAnonymize
   )
 foreach(example ${examples})

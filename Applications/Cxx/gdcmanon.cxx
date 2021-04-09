@@ -51,15 +51,15 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
   reader.SetFileName( filename );
   if( !reader.Read() )
     {
-    std::cerr << "Could not read : " << filename << std::endl;
+    std::cerr << "Could not read : " << filename;
     if( continuemode )
       {
-      std::cerr << "Skipping from anonymization process (continue mode)." << std::endl;
+      std::cerr << " -> Skipping from anonymization process (continue mode)." << std::endl;
       return true;
       }
     else
       {
-      std::cerr << "Check [--continue] option for skipping files." << std::endl;
+      std::cerr << " -> Check [--continue] option for skipping files." << std::endl;
       return false;
       }
     }
@@ -318,7 +318,7 @@ int main(int argc, char *argv[])
   gdcm::CryptoFactory::CryptoLib crypto_lib;
   crypto_lib = gdcm::CryptoFactory::DEFAULT;
 
-  while (1) {
+  while (true) {
     //int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
@@ -449,7 +449,7 @@ int main(int argc, char *argv[])
             std::string str;
             //ss >> str;
             std::getline(ss, str); // do not skip whitespace
-            replace_tags_value.push_back( std::make_pair(tag, str) );
+            replace_tags_value.emplace_back(tag, str );
             }
           else if( option_index == 19 ) /* crypto */
             {
@@ -547,7 +547,7 @@ int main(int argc, char *argv[])
     while (optind < argc)
       {
       //printf ("%s\n", argv[optind++]);
-      files.push_back( argv[optind++] );
+      files.emplace_back(argv[optind++] );
       }
     //printf ("\n");
     if( files.size() == 2
@@ -611,7 +611,7 @@ int main(int argc, char *argv[])
     crypto_factory = gdcm::CryptoFactory::GetFactoryInstance(crypto_lib);
     if (!crypto_factory)
       {
-      std::cerr << "Requested cryptoraphic library not configured." << std::endl;
+      std::cerr << "Requested cryptographic library not configured." << std::endl;
       return 1;
       }
     }
@@ -674,6 +674,7 @@ int main(int argc, char *argv[])
       std::cerr << "Input directory should be different from output directory" << std::endl;
       return 1;
       }
+    if( outfilename.back() != '/' ) outfilename += '/';
     nfiles = dir.Load(filename, (recursive > 0 ? true : false));
     filenames = dir.GetFilenames();
     gdcm::Directory::FilenamesType::const_iterator it = filenames.begin();
@@ -723,33 +724,36 @@ int main(int argc, char *argv[])
     }
 
   gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( "gdcmanon" );
-  gdcm::Global& g = gdcm::Global::GetInstance();
-  if( !resourcespath )
-    {
-    const char *xmlpathenv = getenv("GDCM_RESOURCES_PATH");
-    if( xmlpathenv )
+  if( !dumb_mode )
+  {
+    gdcm::Global& g = gdcm::Global::GetInstance();
+    if( !resourcespath )
       {
-      // Make sure to look for XML dict in user explicitly specified dir first:
-      xmlpath = xmlpathenv;
-      resourcespath = 1;
+      const char *xmlpathenv = getenv("GDCM_RESOURCES_PATH");
+      if( xmlpathenv )
+        {
+        // Make sure to look for XML dict in user explicitly specified dir first:
+        xmlpath = xmlpathenv;
+        resourcespath = 1;
+        }
       }
-    }
-  if( resourcespath )
-    {
-    // xmlpath is set either by the cmd line option or the env var
-    if( !g.Prepend( xmlpath.c_str() ) )
+    if( resourcespath )
       {
-      std::cerr << "Specified Resources Path is not valid: " << xmlpath << std::endl;
+      // xmlpath is set either by the cmd line option or the env var
+      if( !g.Prepend( xmlpath.c_str() ) )
+        {
+        std::cerr << "Specified Resources Path is not valid: " << xmlpath << std::endl;
+        return 1;
+        }
+      }
+    // All set, then load the XML files:
+    if( !g.LoadResourcesFiles() )
+      {
+      std::cerr << "Could not load XML file from specified path" << std::endl;
       return 1;
       }
-    }
-  // All set, then load the XML files:
-  if( !g.LoadResourcesFiles() )
-    {
-    std::cerr << "Could not load XML file from specified path" << std::endl;
-    return 1;
-    }
-  const gdcm::Defs &defs = g.GetDefs(); (void)defs;
+    const gdcm::Defs &defs = g.GetDefs(); (void)defs;
+  }
   if( !rootuid )
     {
     // only read the env var if no explicit cmd line option

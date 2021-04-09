@@ -14,6 +14,7 @@
 #include "vtkGDCMImageReader.h"
 
 #include "vtkImageNoiseSource.h"
+#include "vtkVersion.h"
 #include "vtkGDCMImageWriter.h"
 
 #include "gdcmTesting.h"

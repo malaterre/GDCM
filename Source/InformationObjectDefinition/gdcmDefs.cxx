@@ -24,12 +24,10 @@ namespace gdcm
 {
 
 Defs::Defs()
-{
-}
+= default;
 
 Defs::~Defs()
-{
-}
+= default;
 
 void Defs::LoadDefaults()
 {
@@ -57,6 +55,7 @@ void Defs::LoadFromFile(const char *filename)
   tr.Read();
 }
 
+// http://dicom.nema.org/medical/dicom/current/output/chtml/part04/sect_B.5.html#table_B.5-1
 const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
 {
   const char *iodname;
@@ -231,11 +230,20 @@ const char *Defs::GetIODNameFromMediaStorage(MediaStorage const &ms)
     case MediaStorage::XRayRadiationDoseSR:
       iodname = "X Ray Radiation Dose SR IOD Modules";
       break;
+    case MediaStorage::FujiPrivateCRImageStorage:
+      iodname = "Fuji Private CR Image IOD Modules";
+      break;
+    case MediaStorage::FujiPrivateMammoCRImageStorage:
+      iodname = "Fuji Private Mammo CR Image IOD Modules";
+      break;
     case MediaStorage::CSANonImageStorage:
       iodname = "Siemens Non-image IOD Modules";
       break;
     case MediaStorage::VLMicroscopicImageStorage:
       iodname = "VL Microscopic Image IOD Modules";
+      break;
+    case MediaStorage::XRay3DCraniofacialImageStorage:
+      iodname = "X Ray 3D Craniofacial Image IOD Modules";
       break;
     default:
       iodname = nullptr;

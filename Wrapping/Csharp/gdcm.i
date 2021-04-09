@@ -281,6 +281,44 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 %enddef
 #endif
 
+%pragma(csharp) modulecode=%{
+	  internal static byte[] StringToUtf8Bytes(string str)
+	  {
+	    if (str == null)
+	      return null;
+
+	    int bytecount = System.Text.Encoding.UTF8.GetMaxByteCount(str.Length);
+	    byte[] bytes = new byte[bytecount + 1];
+	    System.Text.Encoding.UTF8.GetBytes(str, 0, str.Length, bytes, 0);
+	    return bytes;
+	  }
+
+	  internal static string Utf8BytesToString(System.IntPtr pNativeData)
+	  {
+	    if (pNativeData == System.IntPtr.Zero)
+	        return null;
+	       
+	    int length = global::System.Runtime.InteropServices.Marshal.PtrToStringAnsi(pNativeData).Length;
+	    byte[] strbuf = new byte[length]; 
+	    global::System.Runtime.InteropServices.Marshal.Copy(pNativeData, strbuf, 0, length);
+	    return System.Text.Encoding.UTF8.GetString(strbuf);
+	  }
+%}
+
+
+%typemap(csin) (const char *filename_native)  "$module.StringToUtf8Bytes($csinput)"
+%typemap(imtype, out="IntPtr") (const char *filename_native) "byte[]"
+%typemap(out) (const char *filename_native) %{ $result = $1; %}
+%typemap(csout, excode=SWIGEXCODE) (const char *filename_native) {
+// %typemap(csout) (const char *filename_native)
+IntPtr cPtr = $imcall;
+string ret = $module.Utf8BytesToString(cPtr);
+$excode
+return ret;
+}
+
+//%apply ( const char *filename_native ) { const char* GetFieldAsString };
+
 //%feature("autodoc", "1")
 %include "gdcmConfigure.h"
 //%include "gdcmTypes.h"
@@ -290,14 +328,18 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 %include "gdcmLegacyMacro.h"
 
 // The following must be define early on as gdcmVL.h get included real early
-%rename(GetValueLength) gdcm::VL::operator uint32_t;
-//%csmethodmodifiers gdcm::VL::GetValueLength "private"
-//%csmethodmodifiers GetValueLength "private"
-//%rename(GetValue) VL::operator uint32_t ();
-//  public static implicit operator int( MyType a )
-//        {
-//            return a.value;
-//        }
+%rename(GetValueLength) gdcm::VL::operator uint32_t () const;
+// following does not work:
+//%csmethodmodifiers gdcm::VL::GetValueLength() "private"
+// VR
+%rename(GetVRField) gdcm::VR::operator VRType () const;
+// the following does not work
+//%csmethodmodifiers gdcm::VR::GetVRField() "private"
+// VM
+%rename(GetVMField) gdcm::VM::operator VMType () const;
+// GetType is already used, prefer GetMSType:
+%rename(GetMSType) gdcm::MediaStorage::operator MSType () const;
+
 %include "gdcmSwapCode.h"
 
 //%feature("director") Event;
@@ -306,8 +348,20 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 
 %include "gdcmPixelFormat.h"
 EXTEND_CLASS_PRINT(gdcm::PixelFormat)
+
 %include "gdcmMediaStorage.h"
 EXTEND_CLASS_PRINT(gdcm::MediaStorage)
+%extend gdcm::MediaStorage
+{
+%typemap(cscode) MediaStorage
+%{
+  public static implicit operator MSType( MediaStorage ms )
+    {
+    return ms.GetMSType();
+    }
+%}
+}
+
 //%rename(__getitem__) gdcm::Tag::operator[];
 //%rename(this ) gdcm::Tag::operator[];
 %include "gdcmTag.h"
@@ -347,12 +401,32 @@ EXTEND_CLASS_PRINT(gdcm::VL)
     }
 %}
 }
-%csmethodmodifiers gdcm::VL::GetValueLength "private"
 
+%typemap(csbase) gdcm::VR::VRType "long"
 %include "gdcmVR.h"
 EXTEND_CLASS_PRINT(gdcm::VR)
+%extend gdcm::VR
+{
+%typemap(cscode) VR
+%{
+public static implicit operator VR.VRType( VR vr )
+    {
+    return vr.GetVRField();
+    }
+%}
+}
 %include "gdcmVM.h"
 EXTEND_CLASS_PRINT(gdcm::VM)
+%extend gdcm::VM
+{
+%typemap(cscode) VM
+%{
+public static implicit operator VM.VMType( VM vm )
+    {
+    return vm.GetVMField();
+    }
+%}
+}
 //%template (FilenameType) std::string;
 %template (FilenamesType) std::vector<std::string>;
 %include "gdcmDirectory.h"
@@ -440,6 +514,8 @@ EXTEND_CLASS_PRINT(gdcm::Item)
 EXTEND_CLASS_PRINT(gdcm::SequenceOfItems)
 %rename (CSharpDataSet) SWIGDataSet;
 %rename (CSharpTagToValue) SWIGTagToValue;
+// convert SWIGTYPE_p_std__setT_gdcm__DataElement_t__size_type
+%template() std::set< gdcm::DataElement >;
 %include "gdcmDataSet.h"
 EXTEND_CLASS_PRINT(gdcm::DataSet)
 //%include "gdcmString.h"
@@ -536,8 +612,31 @@ EXTEND_CLASS_PRINT(gdcm::IconImage)
 %include "gdcmPixmap.h"
 EXTEND_CLASS_PRINT(gdcm::Pixmap)
 
+%apply double[] { double spacing[3] }
+%apply float[] { float origin[3] }
+%apply double[] { double origin[3] }
+%apply float[] { float dircos[6] }
+%apply double[] { double dircos[6] }
+//%apply double OUTPUT[] { const double* GetDirectionCosines() const }
+/*
+// https://stackoverflow.com/a/57071144/136285
+%typemap(csout,excode=SWIGEXCODE) const double* gdcm::Image::GetDirectionCosines() const {
+    global::System.IntPtr cPtr = $imcall;$excode
+    double[] tmp = new double[6];
+    // I have no idea why Marshal.Copy does not seem to have any support for unsigned types...
+    global::System.Runtime.InteropServices.Marshal.Copy(cPtr, tmp, 0, 6);
+    // There is probably a better way to go from int[3] -> uint[3], but it is not obvious to me
+    //return new $typemap(cstype, $*1_type)[3]{($typemap(cstype, $*1_type))tmp[0],($typemap(cstype, $*1_type))tmp[1],($typemap(cstype, $*1_type))tmp[2]};
+	return tmp;
+}
+%typemap(cstype) const double *gdcm::Image::GetDirectionCosines() const "$typemap(cstype, $*1_type)[]"
+*/
 %include "gdcmImage.h"
 EXTEND_CLASS_PRINT(gdcm::Image)
+%clear spacing;
+%clear origin;
+%clear dircos;
+
 %include "gdcmFragment.h"
 EXTEND_CLASS_PRINT(gdcm::Fragment)
 // convert SWIGTYPE_p_std__vectorT_gdcm__Fragment_t__size_type

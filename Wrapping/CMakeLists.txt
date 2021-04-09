@@ -16,5 +16,5 @@ if(GDCM_WRAP_PERL)
 endif()
 # C#
 if(GDCM_WRAP_CSHARP)
-#  add_subdirectory(Csharp)
+  add_subdirectory(Csharp)
 endif()

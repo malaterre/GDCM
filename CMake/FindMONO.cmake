@@ -26,9 +26,10 @@ set(MONO_FOUND FALSE)
 # TODO: what are 'cscc' and 'ilrun' ?
 
 find_program(MONO_EXECUTABLE mono)
-find_program(MCS_EXECUTABLE  mcs)    # 1.0
+find_program(MCS_EXECUTABLE  mcs)    # 1.0 (mono >= 2.11 => target all version)
 find_program(GMCS_EXECUTABLE mono-csc gmcs)  # 2.0
-find_program(SMCS_EXECUTABLE smcs)  # Moonlight
+find_program(SMCS_EXECUTABLE smcs)  # 3.0
+find_program(DMCS_EXECUTABLE dmcs)  # 4.0
 # mono-gac: /usr/bin/gacutil
 find_program(GACUTIL_EXECUTABLE gacutil)  # gacutil - Global Assembly Cache management utility.
 # mono-1.0-devel: /usr/bin/ilasm
@@ -45,6 +46,8 @@ set(MONO_FOUND TRUE)
 elseif(MONO_EXECUTABLE AND GMCS_EXECUTABLE)
 set(MONO_FOUND TRUE)
 elseif(MONO_EXECUTABLE AND SMCS_EXECUTABLE)
+set(MONO_FOUND TRUE)
+elseif(MONO_EXECUTABLE AND DMCS_EXECUTABLE)
 set(MONO_FOUND TRUE)
 endif()
 
@@ -66,7 +69,8 @@ mark_as_advanced(
   MCS_EXECUTABLE
   GMCS_EXECUTABLE
   SMCS_EXECUTABLE
+  DMCS_EXECUTABLE
+  GACUTIL_EXECUTABLE
   ILASM_EXECUTABLE
   SN_EXECUTABLE
-  GACUTIL_EXECUTABLE
 )

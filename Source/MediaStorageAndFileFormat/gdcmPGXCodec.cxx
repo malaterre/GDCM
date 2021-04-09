@@ -23,12 +23,10 @@ namespace gdcm
 {
 
 PGXCodec::PGXCodec()
-{
-}
+= default;
 
 PGXCodec::~PGXCodec()
-{
-}
+= default;
 
 bool PGXCodec::CanDecode(TransferSyntax const &) const
 {

@@ -1,6 +1,6 @@
 /*=========================================================================
  *
- *  Copyright Insight Software Consortium
+ *  Copyright NumFOCUS
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ class ULConnection;
 class BaseCompositeMessage
 {
     public:
-      virtual ~BaseCompositeMessage() {}
+      virtual ~BaseCompositeMessage() = default;
       //construct the appropriate pdv and dataset for this message
       //for instance, setting tag 0x0,0x100 to the appropriate value
       //the pdv, as described in Annex E of 3.8-2009, is the first byte

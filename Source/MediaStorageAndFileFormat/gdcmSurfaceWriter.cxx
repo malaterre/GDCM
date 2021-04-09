@@ -24,8 +24,7 @@ SurfaceWriter::SurfaceWriter():
 }
 
 SurfaceWriter::~SurfaceWriter()
-{
-}
+= default;
 
 void SurfaceWriter::ComputeNumberOfSurfaces()
 {

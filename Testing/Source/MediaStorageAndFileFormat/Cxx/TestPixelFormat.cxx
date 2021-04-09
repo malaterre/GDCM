@@ -13,6 +13,10 @@
 =========================================================================*/
 #include "gdcmPixelFormat.h"
 
+struct frame_info {
+  gdcm::PixelFormat pixeltype;
+};
+
 int TestPixelFormat(int , char *[])
 {
   using gdcm::PixelFormat;
@@ -131,6 +135,15 @@ int TestPixelFormat(int , char *[])
   if( pf3.GetBitsStored() != 8 ) return 1;
   pf3.SetHighBit( 8 );
   if( pf3.GetHighBit() != 7 ) return 1;
+
+  gdcm::PixelFormat pf4 = PixelFormat::UINT16;
+  pf4.SetBitsStored(8);
+  if( pf4.GetScalarType() != gdcm::PixelFormat::UINT16 ) return 1;
+  pf4.SetPixelRepresentation(1);
+  if( pf4.GetScalarType() != gdcm::PixelFormat::INT16 ) return 1;
+
+  frame_info fi = {};
+  (void)fi;
 
   return 0;
 }

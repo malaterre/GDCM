@@ -66,6 +66,7 @@
 
 #include "vtkMedicalImageReader2.h"
 #include "vtkImageData.h"
+#include "vtkVersion.h"
 
 #if (VTK_MAJOR_VERSION >= 5) || ( VTK_MAJOR_VERSION == 4 && VTK_MINOR_VERSION > 5 )
 #else

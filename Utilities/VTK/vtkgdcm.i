@@ -31,12 +31,17 @@
 #endif
 
 %{
-//#define VTK_MAJOR_VERSION 6
-//#define VTK_MINOR_VERSION 2
-//#define VTK_BUILD_VERSION 0
-//#define VTK_VERSION "6.2.0"
+//#define VTK_MAJOR_VERSION 7
+//#define VTK_MINOR_VERSION 1
+//#define VTK_BUILD_VERSION 1
+//#define VTK_VERSION "7.1.1"
 %}
 
+#define VTK_OVERRIDE override
+#define VTK_FINAL final
+#define VTK_DELETE_FUNCTION = delete
+#define VTK_NEWINSTANCE
+#define VTK_LEGACY(X)
 
 %{
 // Let's reproduce the stack of include, when one would include vtkSetGet:
@@ -336,37 +341,34 @@ using Kitware.VTK;
 %ignore vtkGDCMImageReader::PrintSelf;
 %ignore vtkGDCMImageWriter::PrintSelf;
 
-%typemap(csdestruct_derived, methodname="Dispose", methodmodifiers="public") vtkGDCMTesting {
+%typemap(csdisposing_derived, methodname="Dispose", methodmodifiers="protected", parameters="bool disposing") vtkGDCMTesting {
   lock(this) {
     if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
       swigCMemOwn = false;
       vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
     }
     swigCPtr = new HandleRef(null, IntPtr.Zero);
-    GC.SuppressFinalize(this);
-    base.Dispose();
+    base.Dispose(disposing);
   }
 }
-%typemap(csdestruct_derived, methodname="Dispose", methodmodifiers="public") vtkGDCMImageReader {
+%typemap(csdisposing_derived, methodname="Dispose", methodmodifiers="protected", parameters="bool disposing") vtkGDCMImageReader {
   lock(this) {
     if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
       swigCMemOwn = false;
       vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
     }
     swigCPtr = new HandleRef(null, IntPtr.Zero);
-    GC.SuppressFinalize(this);
-    base.Dispose();
+    base.Dispose(disposing);
   }
 }
-%typemap(csdestruct_derived, methodname="Dispose", methodmodifiers="public") vtkGDCMImageWriter {
+%typemap(csdisposing_derived, methodname="Dispose", methodmodifiers="protected", parameters="bool disposing") vtkGDCMImageWriter {
   lock(this) {
     if(swigCPtr.Handle != IntPtr.Zero && swigCMemOwn) {
       swigCMemOwn = false;
       vtkgdcmPINVOKE.vtkObjectBase_Delete(swigCPtr);
     }
     swigCPtr = new HandleRef(null, IntPtr.Zero);
-    GC.SuppressFinalize(this);
-    base.Dispose();
+    base.Dispose(disposing);
   }
 }
 

@@ -49,7 +49,7 @@ macro(ADD_JAVA_TEST TESTNAME FILENAME)
 
   set(classpath)
   if(theclasspath)
-    set(classpath "${theclasspath}${JavaProp_PATH_SEPARATOR}.")
+    set(classpath "${theclasspath}${_sep}.")
   else()
     set(classpath ".")
   endif()
@@ -76,7 +76,8 @@ macro(ADD_JAVA_TEST TESTNAME FILENAME)
   message(\"ld_library_path: ${ld_library_path}\")
   message(\"loc: ${loc}\")
   message(\"loc2: ${loc2}\")
-  message(\"classpath: ${classpath}\")
+  message(\"JavaProp_PATH_SEPARATOR: \"${JavaProp_PATH_SEPARATOR}\"\")
+  message(\"classpath: \"${classpath}\"\")
   message(\"java runtime: ${Java_JAVA_EXECUTABLE}\")
   #message( \"wo_semicolumn: ${wo_semicolumn}\" )
   execute_process(
@@ -99,14 +100,3 @@ macro(ADD_JAVA_TEST TESTNAME FILENAME)
 )
   add_test(NAME ${TESTNAME} COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/${TESTNAME}.cmake)
 endmacro()
-
-# Byte compile recursively a directory (DIRNAME)
-#macro(ADD_PYTHON_COMPILEALL_TEST DIRNAME)
-#  # First get the path:
-#  get_filename_component(temp_path "${PYTHON_LIBRARIES}" PATH)
-#  # Find the python script:
-#  get_filename_component(PYTHON_COMPILE_ALL_PY "${temp_path}/../compileall.py" ABSOLUTE)
-#  # add test, use DIRNAME to create uniq name for the test:
-#  add_test(COMPILE_ALL-${DIRNAME} ${PYTHON_EXECUTABLE} "${PYTHON_COMPILE_ALL_PY}" -q ${DIRNAME})
-#endmacro()
-#

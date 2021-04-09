@@ -22,7 +22,7 @@
 namespace gdcm
 {
 SplitMosaicFilter::SplitMosaicFilter():F(new File),I(new Image) {}
-SplitMosaicFilter::~SplitMosaicFilter() {}
+SplitMosaicFilter::~SplitMosaicFilter() = default;
 
 namespace details {
 /*
@@ -378,14 +378,14 @@ bool SplitMosaicFilter::Split()
   if( inverted )
   {
     b = details::reorganize_mosaic_invert(
-        (unsigned short*)&buf[0], inputimage.GetDimensions(), div, dims,
-        (unsigned short*)&outbuf[0] );
+        (unsigned short*)(void*)&buf[0], inputimage.GetDimensions(), div, dims,
+        (unsigned short*)(void*)&outbuf[0] );
   }
   else
   {
     b = details::reorganize_mosaic(
-        (unsigned short*)&buf[0], inputimage.GetDimensions(), div, dims,
-        (unsigned short*)&outbuf[0] );
+        (unsigned short*)(void*)&buf[0], inputimage.GetDimensions(), div, dims,
+        (unsigned short*)(void*)&outbuf[0] );
   }
   if( !b ) return false;
 

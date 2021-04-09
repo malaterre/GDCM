@@ -124,12 +124,12 @@ if(GDCM_DOCUMENTATION)
       COMMAND  ${SED_EXECUTABLE}
       ARGS     -i.tmp -e "'s/${sed_gdcm_source_dir}/gdcm/g'" ${CMAKE_CURRENT_BINARY_DIR}/latex/*.tex
       # Command #3
-      COMMAND  ${CMAKE_MAKE_PROGRAM}
+      COMMAND  make
+      ARGS -C ${CMAKE_CURRENT_BINARY_DIR}/latex
       DEPENDS  #${CMAKE_CURRENT_BINARY_DIR}/latex/refman.tex
-${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
+             ${CMAKE_CURRENT_BINARY_DIR}/latex/Makefile
     #${GDCM_DOC_TARBALL}
       COMMENT  "GDCM: Creating (patched) pdf of documentation"
-      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/latex
     )
     if(PDFOPT_EXECUTABLE)
       add_custom_command(
@@ -252,7 +252,7 @@ find_package(LibXslt)
 if(LIBXSLT_XSLTPROC_EXECUTABLE)
   set(XSLT_PROCESSOR ${LIBXSLT_XSLTPROC_EXECUTABLE})
 # http://docbook.sourceforge.net/release/xsl/current/doc/manpages/man.output.quietly.html
-  set(XSLT_PROCESSOR_ARG --param man.output.quietly 1)
+  set(XSLT_PROCESSOR_ARG --param man.output.quietly 1 --maxdepth 6000 )
   # User can change the behavior at cmake time:
   if(NOT DEFINED GDCM_MANPAGES_USE_NONET)
     set(GDCM_MANPAGES_USE_NONET FALSE)

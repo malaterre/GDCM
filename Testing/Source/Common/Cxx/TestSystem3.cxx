@@ -35,7 +35,7 @@ int TestSystem3(int, char *[])
     if (token == nullptr)
       break;
     //std::cout << "[" << token << "]" << std::endl;
-    v.push_back( token );
+    v.emplace_back(token );
     }
   free( query );
 
@@ -52,11 +52,11 @@ int TestSystem3(int, char *[])
   while ((token = gdcm::System::StrSep(&string, delim)) != nullptr)
     {
     //printf("token=%s\n", token);
-    v.push_back( token );
+    v.emplace_back(token );
     }
   free( copy );
   if( v.size() != 3 ) return 1;
-  if( v[0] != "" ) return 1;
+  if( !v[0].empty() ) return 1;
   if( v[1] != "ISO 2022 IR 13" ) return 1;
   if( v[2] != "ISO 2022 IR 87" ) return 1;
 }

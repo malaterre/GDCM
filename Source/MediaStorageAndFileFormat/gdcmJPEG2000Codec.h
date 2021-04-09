@@ -56,6 +56,10 @@ public:
 
   void SetNumberOfResolutions(unsigned int nres);
 
+  /// Set Number of threads
+  /// @param nThreads : number of threads for decompression codec, if 0 or 1 decompression is done in current thread, if negative value is set determine how many virtual threads are available
+  void SetNumberOfThreadsForDecompression(int nThreads);
+
   void SetReversible(bool res);
 
 protected:

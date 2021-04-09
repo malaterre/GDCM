@@ -1,6 +1,6 @@
 /*=========================================================================
  *
- *  Copyright Insight Software Consortium
+ *  Copyright NumFOCUS
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -129,10 +129,9 @@ class GDCM_EXPORT ULConnection
 
       /// used to establish scp connections
       bool InitializeIncomingConnection();
-private:
-  ULConnection(const ULConnection&);  // Not implemented.
-  void operator=(const ULConnection&);  // Not implemented.
 
+      ULConnection(const ULConnection&) = delete;
+      void operator=(const ULConnection&) = delete;
     };
   }
 }

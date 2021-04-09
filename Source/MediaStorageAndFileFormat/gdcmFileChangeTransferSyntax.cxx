@@ -35,16 +35,15 @@ namespace gdcm
 class FileChangeTransferSyntaxInternals
 {
 public:
-  FileChangeTransferSyntaxInternals():
-    IC(nullptr),
-    InitializeCopy(false)
-  {}
+  FileChangeTransferSyntaxInternals()
+    
+  = default;
   ~FileChangeTransferSyntaxInternals()
     {
     delete IC;
     }
-  ImageCodec *IC;
-  bool InitializeCopy;
+  ImageCodec *IC{nullptr};
+  bool InitializeCopy{false};
   std::streampos PixelDataPos;
   std::string InFilename;
   std::string OutFilename;
@@ -364,6 +363,13 @@ bool FileChangeTransferSyntax::InitializeCopy()
       Internals->Dims = ImageHelper::GetDimensionsValue(file);
       Internals->PF = ImageHelper::GetPixelFormatValue(file);
       Internals->PI = ImageHelper::GetPhotometricInterpretationValue(file);
+      if( Internals->PI == PhotometricInterpretation::YBR_FULL_422 &&
+        ( ts == TransferSyntax::ImplicitVRLittleEndian
+       || ts == TransferSyntax::ExplicitVRLittleEndian ) )
+        {
+        gdcmDebugMacro( "Don't know how to handle YBR_FULL_422/raw" );
+        return false;
+        }
       Internals->PC = ImageHelper::GetPlanarConfigurationValue(file);
       if( Internals->PC )
         {

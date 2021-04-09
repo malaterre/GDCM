@@ -50,6 +50,10 @@ set(BLACK_LIST_READER
   PET-cardio-Multiframe-Papyrus.dcm
 # No way to read this image:
   ELSCINT1_LOSSLESS_RICE.dcm
+# SignedShortLossless has never really been supported anyway:
+  SignedShortLosslessBug.dcm
+# Would need to process ALL Pixel Data element when decompressing:
+  PET-GE-dicomwrite-PixelDataSQUNv3.dcm
 # Toshiba US Private Data Storage 1.2.392.200036.9116.7.8.1.1.1
   TOSHIBA_MDW_HEADER.dcm
 # TODO, nasty:
@@ -70,6 +74,8 @@ set(BLACK_LIST_READER
   JPEG_LS_InvalidEscapeSequence_COM_padding.dcm
 # MITRA_CORNELL
   MITRA_CORNELL.dcm
+# FIXME
+  PET-GE-dicomwrite-PixelDataSQUN.dcm
 )
 if(NOT GDCM_USE_PVRG)
   set(BLACK_LIST_READER

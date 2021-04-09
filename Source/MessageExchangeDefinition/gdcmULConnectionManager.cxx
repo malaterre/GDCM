@@ -1,6 +1,6 @@
 /*=========================================================================
  *
- *  Copyright Insight Software Consortium
+ *  Copyright NumFOCUS
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -907,7 +907,12 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
       //this gathering of the state is for scus that have just sent out a request
       theState = inWhichConnection->GetState();
     }
-    std::istream &is = *inWhichConnection->GetProtocol();
+    std::istream * tempProtocolStream =  inWhichConnection->GetProtocol();
+    if(tempProtocolStream == nullptr)
+    {
+      throw Exception("ProtocolStream as nullptr is invalid");
+    }
+    std::istream &is = *tempProtocolStream;
     //std::ostream &os = *inWhichConnection->GetProtocol();
 
     BasePDU* theFirstPDU = nullptr;// the first pdu read in during this event loop,
@@ -1175,10 +1180,9 @@ EStateID ULConnectionManager::RunEventLoop(ULEvent& currentEvent, ULConnection* 
               receivingData = true; //to continue the loop to process the release
               break;
             case eAABORTPDUReceivedOpen:
-              {
               raisedEvent = eEventDoesNotExist;
               theState = eStaDoesNotExist;
-              } // explicitly declare fall-through for some picky compiler
+              /* fall through */
             case eAABORTRequest:
               waitingForEvent = false;
               inWhichConnection->StopProtocol();

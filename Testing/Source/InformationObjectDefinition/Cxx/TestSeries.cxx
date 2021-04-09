@@ -16,5 +16,6 @@
 int TestSeries(int, char *[])
 {
   gdcm::Series series;
+  (void)series;
   return 0;
 }

@@ -37,19 +37,24 @@
 static std::string getInfoDate(Dict *infoDict, const char *key)
 {
   Object obj;
-  char *s;
+  const char *s;
   int year, mon, day, hour, min, sec, n;
   struct tm tmStruct;
   //char buf[256];
   std::string out;
 
 #ifdef LIBPOPPLER_NEW_OBJECT_API
-  if ((obj = infoDict->lookup((char*)key)).isString())
+  if ((obj = infoDict->lookup(const_cast<char*>(key))).isString())
 #else
   if (infoDict->lookup((char*)key, &obj)->isString())
 #endif
     {
-    s = obj.getString()->getCString();
+    const GooString* gs = obj.getString();
+#ifdef LIBPOPPLER_GOOSTRING_HAS_GETCSTRING
+    s = gs->getCString();
+#else
+    s = gs->c_str();
+#endif
     if (s[0] == 'D' && s[1] == ':')
       {
       s += 2;
@@ -59,11 +64,11 @@ static std::string getInfoDate(Dict *infoDict, const char *key)
       {
       switch (n)
         {
-      case 1: mon = 1;
-      case 2: day = 1;
-      case 3: hour = 0;
-      case 4: min = 0;
-      case 5: sec = 0;
+      case 1: mon = 1;  /* fall through */
+      case 2: day = 1;  /* fall through */
+      case 3: hour = 0; /* fall through */
+      case 4: min = 0;  /* fall through */
+      case 5: sec = 0;  /* fall through */
         }
       tmStruct.tm_year = year - 1900;
       tmStruct.tm_mon = mon - 1;
@@ -101,18 +106,26 @@ static std::string getInfoDate(Dict *infoDict, const char *key)
   return out;
 }
 
-static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap, GBool & unicode)
+#ifdef LIBPOPPLER_UNICODEMAP_HAS_CONSTMAPUNICODE
+static std::string getInfoString(Dict *infoDict, const char *key, const UnicodeMap *uMap, bool & unicode)
+#else
+static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uMap, bool & unicode)
+#endif
 {
   Object obj;
+#ifdef LIBPOPPLER_GOOSTRING_HAS_CONSTGETCHAR
+  const GooString *s1;
+#else
   GooString *s1;
-  GBool isUnicode = gFalse;
+#endif
+  bool isUnicode = false;
   Unicode u;
   char buf[8];
   int i, n;
   std::string out;
 
 #ifdef LIBPOPPLER_NEW_OBJECT_API
-  if ((obj = infoDict->lookup((char*)key)).isString())
+  if ((obj = infoDict->lookup(const_cast<char*>(key))).isString())
 #else
   if (infoDict->lookup((char*)key, &obj)->isString())
 #endif
@@ -121,12 +134,12 @@ static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uM
     if ((s1->getChar(0) & 0xff) == 0xfe &&
       (s1->getChar(1) & 0xff) == 0xff)
       {
-      isUnicode = gTrue;
+      isUnicode = true;
       i = 2;
       }
     else
       {
-      isUnicode = gFalse;
+      isUnicode = false;
       i = 0;
       }
     while (i < obj.getString()->getLength())
@@ -324,13 +337,21 @@ int main (int argc, char *argv[])
   GooString *fileName;
   PDFDoc *doc;
   Object info;
+#ifdef LIBPOPPLER_UNICODEMAP_HAS_CONSTMAPUNICODE
+  const UnicodeMap *uMap;
+#else
   UnicodeMap *uMap;
+#endif
   ownerPW = NULL;
   userPW = NULL;
 #ifdef LIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM
   globalParams = new GlobalParams(0);
 #else
+#ifdef LIBPOPPLER_GLOBALPARAMS_HAS_RESET
+  globalParams.reset(new GlobalParams());
+#else
   globalParams = new GlobalParams();
+#endif
 #endif
   uMap = globalParams->getTextEncoding();
 
@@ -397,7 +418,7 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
   std::string creationdate;
   std::string moddate;
 
-  GBool isUnicode = gFalse;
+  bool isUnicode = false;
   if (doc->isOk())
     {
 #ifdef LIBPOPPLER_NEW_OBJECT_API
@@ -449,7 +470,7 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
   char date[22];
   const size_t datelen = 8;
   int res = gdcm::System::GetCurrentDateTime(date);
-  if( !res ) return false;
+  if( !res ) return 1;
     {
     gdcm::DataElement de( gdcm::Tag(0x0008,0x0020) );
     // Do not copy the whole cstring:
@@ -674,6 +695,17 @@ http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
   at.SetValue( "application/pdf" );
   ds.Insert( at.GetAsDataElement() );
 }
+{
+//  gdcm::Attribute<0x0042, 0x0015> at;
+//  at.SetValue( length );
+//  ds.Insert( at.GetAsDataElement() );
+    gdcm::Element<gdcm::VR::UL,gdcm::VM::VM1> el;
+    el.SetValue( length );
+    gdcm::DataElement de = el.GetAsDataElement();
+    de.SetTag( gdcm::Tag(0x0042, 0x0015) );
+    ds.Insert( de );
+}
+
 
 
   writer.SetFileName( outfilename.c_str() );

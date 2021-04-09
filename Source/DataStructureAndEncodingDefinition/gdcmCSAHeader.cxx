@@ -961,13 +961,13 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
   if( v2 == t1.GetElement() )
     {
     //std::cout << "Image shadow data (0029,xx10)\n\n";
-    DataElementTag = t1;;
+    DataElementTag = t1;
     }
   //else if( de.GetTag().GetPrivateCreator() == t2 )
   else if( v2 == t2.GetElement() )
     {
     //std::cout << "Series shadow data (0029,xx20)\n\n";
-    DataElementTag = t2;;
+    DataElementTag = t2;
     }
   else
     {
@@ -993,7 +993,7 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
   // Some silly software consider the tag to be OW, therefore they byteswap it !!! sigh
   if( strcmp( signature, "VS01" ) == 0 )
   {
-    SwapperDoOp::SwapArray( (unsigned short*)s.c_str(), (s.size() + 1) / 2 );
+    SwapperDoOp::SwapArray( (unsigned short*)(void*)&s[0], (s.size() + 1) / 2 );
     ss.str( s );
     ss.read(signature, 4);
   }

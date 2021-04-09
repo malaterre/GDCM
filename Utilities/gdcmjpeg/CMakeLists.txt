@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 2.8.7)
+if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
+  cmake_minimum_required(VERSION 2.8.7)
+endif()
 
 if(NOT JPEG_NAMESPACE)
   set(JPEG_NAMESPACE "JPEG")
@@ -15,9 +17,14 @@ string(TOLOWER ${JPEG_NAMESPACE} JPEG_LIBRARY_NAME)
 
 project(${JPEG_NAMESPACE} C)
 
-if(POLICY CMP0063)
-  cmake_policy(SET CMP0063 NEW)
-endif()
+foreach(p
+    CMP0042
+    CMP0063
+    )
+  if(POLICY ${p})
+    cmake_policy(SET ${p} NEW)
+  endif()
+endforeach()
 
 # Do full dependency headers.
 include_regular_expression("^.*$")
@@ -115,17 +122,11 @@ foreach(src
     "${CMAKE_CURRENT_SOURCE_DIR}/${src}")
 endforeach()
 
-if (WIN32)
-  if (BUILD_SHARED_LIBS)
-    set(JPEGDLL 1)
-  else ()
-    set(JPEGSTATIC 1)
-  endif ()
+if (BUILD_SHARED_LIBS)
+  set(JPEGDLL 1)
+else ()
+  set(JPEGSTATIC 1)
 endif ()
-
-# By default support DICOMObjects bug, if this is a speed penalty for you
-# you should consider disabling it
-set(SUPPORT_DICOMOBJECTS_BUG ON)
 
 # Generate three libraries: jpeg 8bits, 12bits and 16bits
 # using only one source directory

@@ -47,6 +47,21 @@ int TestGetTimeOfDay()
   return 0;
 }
 
+int TestMakeDirectory()
+{
+  std::string tmpdir = gdcm::Testing::GetTempDirectory();
+  if( !gdcm::System::FileIsDirectory( tmpdir.c_str() ))  return 1;
+  const char subpath[] = "TestSystem1";
+  std::string subdir = gdcm::Testing::GetTempDirectory(subpath);
+  if( !gdcm::System::MakeDirectory( subdir.c_str() ))  return 1;
+  if( !gdcm::System::FileIsDirectory( subdir.c_str() ))  return 1;
+  const char multipath[] = "TestSystem42/another/dir";
+  std::string subdir2 = gdcm::Testing::GetTempDirectory(multipath);
+  if( !gdcm::System::MakeDirectory( subdir2.c_str() ))  return 1;
+  if( !gdcm::System::FileIsDirectory( subdir2.c_str() ))  return 1;
+  return 0;
+}
+
 int TestSystem1(int, char *[])
 {
   const char s1[] = "HELLO, wORLD !";
@@ -277,6 +292,7 @@ int TestSystem1(int, char *[])
     }
   else
   {
+    std::cerr << "cannot get Hostname" << std::endl;
   return 1;
   }
 
@@ -285,6 +301,7 @@ int TestSystem1(int, char *[])
   //gdcm::System::FormatDateTime(date3, t);
   //std::cout << date3 << std::endl;
 
+  std::cout << "Check dates:" << std::endl;
   const char fixed_date[] = "20090428172557.515500";
   if( strlen( fixed_date ) != 21 )
   {
@@ -363,8 +380,12 @@ if( !gdcm::System::ParseDateTime(fixed_timep, fixed_milliseconds, valid_date1) )
 std::cerr << "should accept:" << valid_date1 << std::endl;
 return 1;
 }
+  std::cout << "End Check dates" << std::endl;
   int res = 0;
   res +=  TestGetTimeOfDay();
+  std::cout << "res = " << res << std::endl;
+  res +=  TestMakeDirectory();
+  std::cout << "res = " << res << std::endl;
 
   const char * testfilesize = gdcm::Testing::GetTempFilename( "filesize.bin" );
 if( gdcm::System::FileExists( testfilesize ) )

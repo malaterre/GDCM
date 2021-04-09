@@ -28,8 +28,7 @@ DictPrinter::DictPrinter()
 
 //-----------------------------------------------------------------------------
 DictPrinter::~DictPrinter()
-{
-}
+= default;
 
 VM GuessVMType(DataElement const &de)
 {
@@ -475,7 +474,7 @@ void DictPrinter::PrintDataElement2(std::ostream& os, const DataSet &ds, const D
       os <<  "vr=\"" << pvr << "\" vm=\"" << vm << "\" ";
     if( de.GetTag().IsPrivate() )
       {
-      os << "name=\"?\" owner=\"" << owner
+      os << R"(name="?" owner=")" << owner
         << /*"\"  version=\"" << version << */ "\"/>\n";
       }
     }

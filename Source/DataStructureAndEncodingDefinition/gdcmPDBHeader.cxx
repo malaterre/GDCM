@@ -159,7 +159,8 @@ int PDBHeader::readprotocoldatablock(const char *input, size_t inputlen, bool ve
 {
   (void)verbose;
   // First 4 bytes are the length (again)
-  uint32_t len = *(const uint32_t*)input;
+  uint32_t len; // = *(const uint32_t*)input;
+  memcpy(&len, input, sizeof len);
   SwapperNoOp::SwapArray(&len,1);
   //if( verbose )
   //  std::cout << len << "," << inputlen << std::endl;
@@ -195,7 +196,7 @@ int PDBHeader::readprotocoldatablock(const char *input, size_t inputlen, bool ve
   // We need to handle the old format and the new XML format here:
   // test:
   // <?xml version="1.0" encoding="UTF-8"?>
-  static const char xmlstr[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+  static const char xmlstr[] = R"(<?xml version="1.0" encoding="UTF-8"?>)";
   bool isxml = false;
   while( std::getline(gzis, out) )
     {

@@ -463,10 +463,10 @@ bool JPEGBITSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
       {
       assert( cinfo.num_components == 3 );
       PI = PhotometricInterpretation::YBR_FULL_422;
-  if( cinfo.process == JPROC_LOSSLESS )
-      PI = PhotometricInterpretation::RGB; // wotsit ?
+      if( cinfo.process == JPROC_LOSSLESS )
+        PI = PhotometricInterpretation::RGB; // wotsit ?
       this->PF.SetSamplesPerPixel( 3 );
-  this->PlanarConfiguration = 1;
+      this->PlanarConfiguration = 1;
       }
     else if( cinfo.jpeg_color_space == JCS_CMYK )
       {
@@ -1161,7 +1161,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
 {
   int quality = 100; (void)len;
   (void)quality;
-  JSAMPLE * image_buffer = (JSAMPLE*)input;  /* Points to large array of R,G,B-order data */
+  JSAMPLE * image_buffer = (JSAMPLE*)(void*)const_cast<char*>(input);  /* Points to large array of R,G,B-order data */
   const unsigned int *dims = this->GetDimensions();
   int image_height = dims[1];  /* Number of rows in image */
   int image_width = dims[0];    /* Number of columns in image */
@@ -1181,7 +1181,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
    * Note that this struct must live as long as the main JPEG parameter
    * struct, to avoid dangling-pointer problems.
    */
-  struct jpeg_error_mgr jerr;
+  struct my_error_mgr jerr;
   /* More stuff */
   //FILE * outfile;    /* target file */
   std::ostream * outfile = &os;
@@ -1195,7 +1195,15 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
    * This routine fills in the contents of struct jerr, and returns jerr's
    * address which we place into the link field in cinfo.
    */
-  cinfo.err = jpeg_std_error(&jerr);
+  cinfo.err = jpeg_std_error(&jerr.pub);
+  jerr.pub.error_exit = my_error_exit;
+    // Establish the setjmp return context for my_error_exit to use.
+    if (setjmp(jerr.setjmp_buffer))
+      {
+      jpeg_destroy_compress(&cinfo);
+      return false;
+      }
+
   /* Now we can initialize the JPEG compression object. */
   jpeg_create_compress(&cinfo);
 
@@ -1363,7 +1371,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
 bool JPEGBITSCodec::EncodeBuffer(std::ostream &os, const char *data, size_t datalen)
 {
   (void)datalen;
-  JSAMPLE * image_buffer = (JSAMPLE*)data;  /* Points to large array of R,G,B-order data */
+  JSAMPLE * image_buffer = (JSAMPLE*)(void*)const_cast<char*>(data);  /* Points to large array of R,G,B-order data */
   const unsigned int *dims = this->GetDimensions();
   int image_height = dims[1];  /* Number of rows in image */
   int image_width = dims[0];    /* Number of columns in image */
@@ -1400,6 +1408,14 @@ bool JPEGBITSCodec::EncodeBuffer(std::ostream &os, const char *data, size_t data
      * address which we place into the link field in cinfo.
      */
     cinfo.err = jpeg_std_error(&jerr.pub);
+    jerr.pub.error_exit = my_error_exit;
+    // Establish the setjmp return context for my_error_exit to use.
+    if (setjmp(jerr.setjmp_buffer))
+      {
+      jpeg_destroy_compress(&cinfo);
+      return false;
+      }
+
     /* Now we can initialize the JPEG compression object. */
     jpeg_create_compress(&cinfo);
 

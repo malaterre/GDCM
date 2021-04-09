@@ -29,8 +29,7 @@ StringFilter::StringFilter():F(new File)
 }
 //-----------------------------------------------------------------------------
 StringFilter::~StringFilter()
-{
-}
+= default;
 
 void StringFilter::SetDicts(const Dicts &dicts)
 {
@@ -41,6 +40,13 @@ void StringFilter::SetDicts(const Dicts &dicts)
 std::string StringFilter::ToString(const Tag& t) const
 {
   return ToStringPair(t).second;
+}
+
+std::string StringFilter::ToString(const PrivateTag& privTag) const
+{
+  const DataSet &ds = GetFile().GetDataSet();
+  const DataElement &de = ds.GetDataElement(privTag);
+  return ToStringPair(de).second;
 }
 
 std::string StringFilter::ToString(const DataElement& de) const
@@ -160,7 +166,7 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
       if (subtoken == nullptr)
         break;
       //printf(" --> %s\n", subtoken);
-      subtokens.push_back( subtoken );
+      subtokens.emplace_back(subtoken );
       }
     if( subtokens[0] == "DicomNativeModel" )
       {

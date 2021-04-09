@@ -28,8 +28,7 @@ namespace gdcm
 
 
 StrictScanner::~StrictScanner()
-{
-}
+= default;
 
 void StrictScanner::ClearTags()
 {
@@ -209,6 +208,47 @@ void StrictScanner::Print( std::ostream & os ) const
         os << tag << " -> [" << value << "]\n";
         }
       }
+    }
+}
+
+static bool IsVRUI(Tag const &tag)
+{
+  static const Global &g = Global::GetInstance();
+  static const Dicts &dicts = g.GetDicts();
+  const DictEntry &dictentry = dicts.GetDictEntry(tag);
+  if( dictentry.GetVR() == VR::UI ) return true;
+  //if( tag == Tag(0x0020,0x000d)   // Study Instance UID : UI
+  // || tag == Tag(0x0020,0x0052)   //
+  // || tag == Tag(0x0020,0x000e) ) // Series Instance UID : UI
+  //  {
+  //  return true;
+  //  }
+  return false;
+}
+
+void StrictScanner::PrintTable( std::ostream & os ) const
+{
+  Directory::FilenamesType::const_iterator file = Filenames.begin();
+  for(; file != Filenames.end(); ++file)
+    {
+    const char *filename = file->c_str();
+    assert( filename && *filename );
+    os << '"' << filename << '"' << "\t";
+    TagsType::const_iterator tag = Tags.begin();
+    const TagToValue &mapping = GetMapping(filename);
+    for( ; tag != Tags.end(); ++tag )
+      {
+      const Tag &t = *tag;
+      bool isui = IsVRUI(t);
+      const char *value = "";
+      if( mapping.find(t) != mapping.end() ) {
+        const char * v = mapping.find(t)->second;
+        if(v) value = v;
+      }
+      os << '"' << (isui ? String<>::Trim( value ) : value) << '"';
+      os << "\t";
+      }
+    os << "\n";
     }
 }
 

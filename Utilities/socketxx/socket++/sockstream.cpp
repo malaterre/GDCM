@@ -400,11 +400,15 @@ sockbuf::~sockbuf ()
     int c = closesocket(rep->sock);
 #endif
     delete rep;
+#if 0
     if (c == SOCKET_ERROR)
 #if defined(__CYGWIN__) || !defined(WIN32)
     throw sockerr (errno, "sockbuf::~sockbuf", sockname.text.c_str());
 #else
     throw sockerr(WSAGetLastError(), "sockbuf::~sockbuf", sockname.text.c_str());
+#endif
+#else
+    assert(c != SOCKET_ERROR); (void)c;
 #endif
   }
 }
@@ -577,7 +581,7 @@ sockbuf::sockdesc sockbuf::accept (sockAddr& sa)
   if ((int)(soc = ::accept (rep->sock, sa.addr (),
                        &len)) == -1)
     throw sockerr (errno, "sockbuf::sockdesc", sockname.text.c_str());
-  return sockdesc (soc);
+  return {soc};
 }
 
 sockbuf::sockdesc sockbuf::accept ()
@@ -585,7 +589,7 @@ sockbuf::sockdesc sockbuf::accept ()
   int soc = -1;
   if ((int)(soc = ::accept (rep->sock, nullptr, nullptr)) == -1)
     throw sockerr (errno, "sockbuf::sockdesc", sockname.text.c_str());
-  return sockdesc (soc);
+  return {soc};
 }
 
 int sockbuf::read (void* buf, int len)
@@ -645,7 +649,7 @@ int sockbuf::write(const void* buf, int len)
   int wlen=0;
   while(len>0) {
     //int wval = ::write (rep->sock, (char*) buf, len);
-    int wval = ::send (rep->sock, (char*) buf, len, 0);
+    int wval = ::send (rep->sock, (const char*) buf, len, 0);
     //assert( wval > 0 );
     if (wval == -1) throw wlen;
     len -= wval;
@@ -663,7 +667,7 @@ int sockbuf::send (const void* buf, int len, int msgf)
 
   int wlen=0;
   while(len>0) {
-    int wval = ::send (rep->sock, (char*) buf, len, msgf);
+    int wval = ::send (rep->sock, (const char*) buf, len, msgf);
     if (wval == -1) throw wlen;
     len -= wval;
     wlen += wval;
@@ -680,7 +684,7 @@ int sockbuf::sendto (sockAddr& sa, const void* buf, int len, int msgf)
 
   int wlen=0;
   while(len>0) {
-    int wval = ::sendto (rep->sock, (char*) buf, len, msgf,
+    int wval = ::sendto (rep->sock, (const char*) buf, len, msgf,
                          sa.addr (), sa.size());
     if (wval == -1) throw wlen;
     len -= wval;

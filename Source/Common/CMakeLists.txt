@@ -8,6 +8,7 @@ option(GDCM_SUPPORT_BROKEN_IMPLEMENTATION "Handle broken DICOM" ON)
 mark_as_advanced(
   GDCM_ALWAYS_TRACE_MACRO
   GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  GDCM_AUTOLOAD_GDCMJNI
   )
 
 #if(WIN32)
@@ -39,18 +40,13 @@ CHECK_SYMBOL_EXISTS(nl_langinfo "langinfo.h" GDCM_HAVE_NL_LANGINFO)
 CHECK_SYMBOL_EXISTS(strcasecmp "strings.h" GDCM_HAVE_STRCASECMP)
 #CHECK_FUNCTION_EXISTS(strncasecmp GDCM_HAVE_STRNCASECMP)
 CHECK_SYMBOL_EXISTS(strncasecmp "strings.h" GDCM_HAVE_STRNCASECMP)
-#CHECK_FUNCTION_EXISTS(snprintf    GDCM_HAVE_SNPRINTF)
-CHECK_SYMBOL_EXISTS(snprintf "stdio.h"    GDCM_HAVE_SNPRINTF)
 #CHECK_SYMBOL_EXISTS(strptime "time.h"    GDCM_HAVE_STRPTIME)
 CHECK_FUNCTION_EXISTS(strptime    GDCM_HAVE_STRPTIME)
 #M$ extension:
 CHECK_FUNCTION_EXISTS(_stricmp    GDCM_HAVE__STRICMP)
 CHECK_FUNCTION_EXISTS(_strnicmp   GDCM_HAVE__STRNICMP)
-CHECK_FUNCTION_EXISTS(_snprintf   GDCM_HAVE__SNPRINTF)
-# This is C99
-set(CMAKE_REQUIRED_INCLUDES math.h)
-set(CMAKE_REQUIRED_LIBRARIES m)
-check_function_exists(lround GDCM_HAVE_LROUND)
+unset(CMAKE_REQUIRED_INCLUDES)
+unset(CMAKE_REQUIRED_LIBRARIES)
 
 #include(CheckSymbolExists)
 CHECK_FUNCTION_EXISTS(gettimeofday GDCM_HAVE_GETTIMEOFDAY)
@@ -184,6 +180,9 @@ set(Common_SRCS ${Common_SRCS}
 endif()
 
 add_library(gdcmCommon ${Common_SRCS})
+target_compile_features(gdcmCommon PUBLIC cxx_nullptr)
+# Prefer -std=c++11 over -std=gnu++11
+set_target_properties(gdcmCommon PROPERTIES CXX_EXTENSIONS OFF)
 
 #target_link_libraries(gdcmCommon ${GDCM_ZLIB_LIBRARIES}) # ${GDCM_POLARSSL_LIBRARIES})
 if(GDCM_BUILD_TESTING)
@@ -208,9 +207,6 @@ if(GDCM_USE_SYSTEM_OPENSSL)
   target_link_libraries(gdcmCommon LINK_PRIVATE ${OPENSSL_LIBRARIES})
 endif()
 set_target_properties(gdcmCommon PROPERTIES ${GDCM_LIBRARY_PROPERTIES})
-if(BUILD_SHARED_LIBS)
-  #set_target_properties(gdcmCommon PROPERTIES INTERFACE_LINK_LIBRARIES "" LINK_INTERFACE_LIBRARIES "")
-endif()
 
 # libs
 install_library(gdcmCommon)

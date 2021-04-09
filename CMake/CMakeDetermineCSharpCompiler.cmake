@@ -36,9 +36,10 @@ if(NOT CMAKE_CSharp_COMPILER)
     set(CMAKE_CSharp_COMPILER_LIST ${CMAKE_CSharp_COMPILER_INIT})
   else()
     # Known compilers:
-    # mcs/gmcs/smcs # mono
+    # mcs/gmcs/smcs/dmcs # mono
+    # see: https://www.mono-project.com/docs/about-mono/languages/csharp/
     # csc: DotNet
-    set(CMAKE_CSharp_COMPILER_LIST csc mcs gmcs smcs)
+    set(CMAKE_CSharp_COMPILER_LIST csc mcs gmcs smcs dmcs)
   endif()
 
   # Find the compiler.

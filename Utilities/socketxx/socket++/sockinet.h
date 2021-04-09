@@ -25,7 +25,7 @@ class sockinetaddr: public sockAddr, public sockaddr_in
         void setaddr (const char* hn);
 
     public:
-        ~sockinetaddr () override {}
+        ~sockinetaddr () override = default;
         sockinetaddr ();
         sockinetaddr (unsigned long addr, int port_no=0);
         sockinetaddr (const char* host_name, int port_no=0);
@@ -39,7 +39,7 @@ class sockinetaddr: public sockAddr, public sockaddr_in
 
         operator void* () const override { return addr_in (); }
 
-        sockaddr_in*        addr_in () const { return (sockaddr_in*) this; }
+        sockaddr_in*        addr_in () const { return (sockaddr_in*)const_cast<sockinetaddr*>(this); }
         int                 size  () const override { return sizeof (sockaddr_in); }
         int                 family() const override { return sin_family; }
         sockaddr*           addr  () const override { return (sockaddr*) addr_in (); }
@@ -54,10 +54,10 @@ class MY_API sockinetbuf: public sockbuf
         enum domain { af_inet = AF_INET };
 
         sockinetbuf (const sockbuf::sockdesc& sd);
-        sockinetbuf (const sockinetbuf& si): sockbuf (si) {}
+        sockinetbuf (const sockinetbuf& si) = default;
         sockinetbuf (sockbuf::type ty, int proto=0);
         //sockinetbuf& operator=(const sockinetbuf& si);
-        ~sockinetbuf () override {}
+        ~sockinetbuf () override = default;
 
         sockinetaddr        localaddr() const;
         int                 localport() const;

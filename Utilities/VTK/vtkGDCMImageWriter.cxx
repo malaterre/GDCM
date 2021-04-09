@@ -256,7 +256,7 @@ int vtkGDCMImageWriter::RequestData(
   if( this->FileNames->GetNumberOfValues() )
     {
     const char *filename = this->FileNames->GetValue(0);
-    return (char*)filename;
+    return const_cast<char*>(filename);
     }
   return this->Superclass::GetFileName();
 }
@@ -753,7 +753,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
 //  of.close();
   // re shuffle the line within ByteValue:
   //
-  char *pointer = (char*)bv->GetPointer();
+  char *pointer = const_cast<char*>(bv->GetPointer());
   //const char *tempimage = (char*)data->GetScalarPointer();
   const char *tempimage = (char*)data->GetScalarPointerForExtent(inExt);
   //std::cerr << "Pointer:" << (unsigned int)tempimage << std::endl;

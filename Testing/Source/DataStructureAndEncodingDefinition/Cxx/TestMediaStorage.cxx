@@ -12,6 +12,8 @@
 
 =========================================================================*/
 #include "gdcmMediaStorage.h"
+#include "gdcmFile.h"
+#include "gdcmDataElement.h"
 
 int TestMediaStorage(int argc, char *argv[])
 {
@@ -72,6 +74,37 @@ int TestMediaStorage(int argc, char *argv[])
     std::cerr << "you are shooting yourself in the foot, dear.: " << nMSType << "," << nMSString << "," << nMSMod << std::endl;
     return 1;
     }
+
+{
+  gdcm::File f;
+  gdcm::DataSet &ds = f.GetDataSet();
+  gdcm::DataElement de;
+  de.SetTag( gdcm::Tag(0x8,0x16) );
+  ds.Insert( de );
+  gdcm::MediaStorage ms3;
+  ms3.SetFromFile( f );
+  if( ms3 != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+    {
+    std::cerr << "SecondaryCaptureImageStorage" << std::endl;
+    return 1;
+    }
+}
+{
+  gdcm::File f;
+  gdcm::FileMetaInformation &fmi  = f.GetHeader();
+  gdcm::DataElement de;
+  de.SetTag( gdcm::Tag(0x2,0x2) );
+  // de.SetByteValue( "", 0 );
+  fmi.Insert( de );
+  gdcm::MediaStorage ms4;
+  ms4.SetFromFile( f );
+  if( ms4 != gdcm::MediaStorage::SecondaryCaptureImageStorage )
+    {
+    std::cerr << "SecondaryCaptureImageStorage" << std::endl;
+    return 1;
+    }
+}
+  
 
   return 0;
 }

@@ -28,13 +28,15 @@ public:
   typedef DataEvent Self;
   typedef AnyEvent Superclass;
   DataEvent(const char *bytes = nullptr, size_t len = 0):Bytes(bytes),Length(len) {}
-  ~DataEvent() override {}
+  ~DataEvent() override = default;
+  DataEvent(const Self&s) : AnyEvent(s){};
+  void operator=(const Self&) = delete;
+
   const char * GetEventName() const override { return "DataEvent"; }
   bool CheckEvent(const ::gdcm::Event* e) const override
   { return (dynamic_cast<const Self*>(e) == nullptr ? false : true) ; }
   ::gdcm::Event* MakeObject() const override
     { return new Self; }
-  DataEvent(const Self&s) : AnyEvent(s){};
 
   void SetData(const char *bytes, size_t len) {
     Bytes = bytes;
@@ -46,7 +48,6 @@ public:
   //std::string GetValueAsString() const { return; }
 
 private:
-  void operator=(const Self&);
   const char *Bytes;
   size_t Length;
 };
