@@ -104,8 +104,7 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
       const VR &devr = de.GetVR();
       if( devr != VR::INVALID && devr != VR::UN )
         {
-        const char* ownerString = owner ? owner : "<null>";
-        gdcmWarningMacro("Please report. Missing dict entry for: [" << ownerString << "]" << " de is: "  << de );
+        gdcmWarningMacro("Please report. Missing dict entry for: [" << (owner ? owner : "<null>") << "]" << " de is: "  << de );
         return devr;
         }
       // CP-246
