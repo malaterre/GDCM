@@ -420,6 +420,7 @@ static bool GetUltraSoundSpacingValueFromSequence(const DataSet& ds, std::vector
   if( !ds.FindDataElement( tsqusreg ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tsqusreg ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tsqusreg ).GetValueAsSQ();
+  if( !sqi ) return false;
   assert( sqi );
   // Get first item:
   const Item &item = sqi->GetItem(1);
