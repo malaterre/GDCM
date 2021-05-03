@@ -396,11 +396,18 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
         {
         DoInvertPlanarConfiguration<char>(bufferrgb, ptr_img, (uint32_t)(image_len / sizeof(char)));
         }
-      else /* ( GetPixelFormat().GetBitsAllocated() == 16 ) */
+      else if ( GetPixelFormat().GetBitsAllocated() == 16 )
         {
-        assert( GetPixelFormat().GetBitsAllocated() == 16 );
-        // should not happen right ?
         DoInvertPlanarConfiguration<short>((short*)(void*)bufferrgb, (const short*)(const void*)ptr_img, (uint32_t)(image_len / sizeof(short)));
+        }
+      else /* ( GetPixelFormat().GetBitsAllocated() == 32 ) */
+        {
+        assert( GetPixelFormat().GetBitsAllocated() == 32 );
+        DoInvertPlanarConfiguration<int32_t>(
+          (int32_t*)(void*)bufferrgb,
+          (const int32_t*)(const void*)ptr_img,
+          (uint32_t)(image_len / sizeof(int32_t))
+        );
         }
       ptr_img = bufferrgb;
       }
