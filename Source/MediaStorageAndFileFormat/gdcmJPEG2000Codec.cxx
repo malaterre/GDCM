@@ -394,7 +394,7 @@ class JPEG2000Internals
 {
 public:
   JPEG2000Internals()
-   
+
     {
     memset(&coder_param, 0, sizeof(coder_param));
     opj_set_default_encoder_parameters(&coder_param);
@@ -468,6 +468,13 @@ void JPEG2000Codec::SetReversible(bool res)
 {
   LossyFlag = !res;
   Internals->coder_param.irreversible = !res;
+}
+
+void JPEG2000Codec::SetMCT(unsigned int mct)
+{
+    // Set the Multiple Component Transformation value (COD -> SGcod)
+    // 0 for none, 1 to apply to components 0, 1, 2
+    Internals->coder_param.tcp_mct = mct;
 }
 
 JPEG2000Codec::JPEG2000Codec()
@@ -775,7 +782,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     b = parsejp2_imp( dummy_buffer, buf_size, &lossless, &mct);
   else if( parameters.decod_format == J2K_CFMT )
     b = parsej2k_imp( dummy_buffer, buf_size, &lossless, &mct);
- 
+
   reversible = 0;
   if( b ) {
     reversible = lossless;
@@ -1441,7 +1448,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     return false;
     }
 
-#if ((OPJ_VERSION_MAJOR == 2 && OPJ_VERSION_MINOR >= 3) || (OPJ_VERSION_MAJOR > 2)) 
+#if ((OPJ_VERSION_MAJOR == 2 && OPJ_VERSION_MINOR >= 3) || (OPJ_VERSION_MAJOR > 2))
   opj_codec_set_threads(dinfo, Internals->nNumberOfThreadsForDecompression);
 #endif
 
@@ -1497,7 +1504,7 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
     b = parsejp2_imp( dummy_buffer, buf_size, &lossless, &mctb);
   else if( parameters.decod_format == J2K_CFMT )
     b = parsej2k_imp( dummy_buffer, buf_size, &lossless, &mctb);
- 
+
   reversible = 0;
   if( b ) {
     reversible = lossless;
