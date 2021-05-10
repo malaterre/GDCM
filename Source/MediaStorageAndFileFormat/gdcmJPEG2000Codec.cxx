@@ -470,7 +470,7 @@ void JPEG2000Codec::SetReversible(bool res)
   Internals->coder_param.irreversible = !res;
 }
 
-void JPEG2000Codec::SetMCT(unsigned int mct)
+void JPEG2000Codec::SetMCT(char mct)
 {
     // Set the Multiple Component Transformation value (COD -> SGcod)
     // 0 for none, 1 to apply to components 0, 1, 2
