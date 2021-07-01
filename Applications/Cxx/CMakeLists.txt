@@ -6,7 +6,7 @@
 # gdcmanon
 
 
-if(WIN32 AND NOT CYGWIN)
+if(WIN32 AND NOT CYGWIN AND NOT MINGW)
   include_directories(
     "${GDCM_SOURCE_DIR}/Utilities/getopt"
   )
@@ -183,7 +183,7 @@ foreach(exename ${GDCM_EXECUTABLE_NAME})
   if(GDCM_EXECUTABLE_PROPERTIES)
     set_target_properties(${exename} PROPERTIES ${GDCM_EXECUTABLE_PROPERTIES})
   endif()
-  if(WIN32 AND NOT CYGWIN)
+  if(WIN32 AND NOT CYGWIN AND NOT MINGW)
     target_link_libraries(${exename} gdcmgetopt)
   endif()
   if(NOT GDCM_INSTALL_NO_RUNTIME)
