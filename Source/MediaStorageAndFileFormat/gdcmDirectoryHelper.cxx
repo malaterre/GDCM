@@ -175,11 +175,19 @@ std::string DirectoryHelper::RetrieveSOPInstanceUIDFromZPosition(double inZPos,
   Tag thePosition(0x0020, 0x0032);
   Tag theSOPInstanceUID(0x0008, 0x0018);
   Tag theSpacingBetweenSlice(0x0018, 0x0088);
+  Tag theSliceThickness(0x0018, 0x0050);
   double interSlice = 0.01;
   if (inDS.begin() != inDS.end() && inDS.begin()->FindDataElement(theSpacingBetweenSlice))
     {
     DataElement tmpDe = inDS.begin()->GetDataElement(theSpacingBetweenSlice);
     Attribute<0x0018,0x0088> tmpAt;
+    tmpAt.SetFromDataElement(tmpDe);
+    interSlice = fabs(tmpAt.GetValue())/2.0;
+    }
+  else if (inDS.begin() != inDS.end() && inDS.begin()->FindDataElement(theSliceThickness))
+    {
+    DataElement tmpDe = inDS.begin()->GetDataElement(theSliceThickness);
+    Attribute<0x0018,0x0050> tmpAt;
     tmpAt.SetFromDataElement(tmpDe);
     interSlice = fabs(tmpAt.GetValue())/2.0;
     }
