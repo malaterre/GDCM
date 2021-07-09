@@ -232,8 +232,8 @@ static void difference_of_sequences(const gdcm::DataElement& sqde1,
 {
   gdcm::SmartPointer<gdcm::SequenceOfItems> sqi1 = sqde1.GetValueAsSQ();
   gdcm::SmartPointer<gdcm::SequenceOfItems> sqi2 = sqde2.GetValueAsSQ();
-  size_t n1 = sqi1->GetNumberOfItems();
-  size_t n2 = sqi2->GetNumberOfItems();
+  size_t n1 = sqi1 ? sqi1->GetNumberOfItems() : 0;
+  size_t n2 = sqi2 ? sqi2->GetNumberOfItems() : 0;
   size_t n = (n1 < n2) ? n1 : n2 ;
   std::stringstream sq_note;
   if (n1 != n2)
