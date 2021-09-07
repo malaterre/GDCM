@@ -130,7 +130,7 @@ static bool checkerror(double d, std::string s)
   //larger than pow(10., eo), because the 'pow' result will be 0 in vs2010
   if (log10(error) > eo)
   {
-    std::cout << "ERROR: Absoulte Error is too large (error = " << error << ", should be < " << pow(10., eo) << ")" << std::endl;
+    std::cout << "ERROR: Absolute Error is too large (error = " << error << ", should be < " << pow(10., eo) << ")" << std::endl;
     return true;
   }
   //    else if (error != 0.0) std::cout << "OK (error = " << error << ", is < " << pow(10, eo) << ")" << std::endl;

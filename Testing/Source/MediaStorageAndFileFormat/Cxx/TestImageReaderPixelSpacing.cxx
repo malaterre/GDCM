@@ -23,7 +23,7 @@ int TestImageReaderPixelSpacing(int argc, char *argv[])
   const char *root = gdcm::Testing::GetPixelSpacingDataRoot();
   if( !root || !*root )
     {
-    std::cerr << "root is not defiend" << std::endl;
+    std::cerr << "root is not defined" << std::endl;
     return 1;
     }
   std::string sroot = root;

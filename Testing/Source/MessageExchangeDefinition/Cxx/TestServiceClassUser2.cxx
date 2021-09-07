@@ -65,7 +65,7 @@ int TestServiceClassUser2(int argc, char *argv[])
     return 1;
     }
 
-  // make sure to fail if no pres contexts:
+  // make sure to fail if no pres. contexts:
   if( scu.StartAssociation() )
     {
     return 1;
@@ -243,7 +243,7 @@ int TestServiceClassUser2(int argc, char *argv[])
 
   //std::cerr << "Total number of dataset: " << ndatasets << std::endl;
 
-  // Now let's do this again with a simplier request:
+  // Now let's do this again with a simpler request:
   gdcm::DataSet moveds2;
   moveds2.Insert( pid.GetAsDataElement() );
   gdcm::SmartPointer<gdcm::BaseRootQuery> movequery2 =

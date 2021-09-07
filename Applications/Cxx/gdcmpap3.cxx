@@ -110,7 +110,7 @@ static bool DecompressPapyrus3( int pap3handle, int itemnum, gdcm::TransferSynta
 
     gdcm::DataSet & nested = file.GetDataSet();
 
-    /* position the file pointer to the begining of the data set */
+    /* position the file pointer to the beginning of the data set */
     PapyShort err = Papy3GotoNumber (fileNb, (PapyShort)imageNb, DataSetID);
 
     gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );

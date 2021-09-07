@@ -150,13 +150,13 @@ int TestFilename(int argc, char *argv[])
 
   if( !gdcm::System::RemoveFile(csfn1) )
     {
-    std::cerr << "Could not remvoe #1: " << csfn1 << std::endl;
+    std::cerr << "Could not remove #1: " << csfn1 << std::endl;
     return EXIT_FAILURE;
     }
   // cannot remove twice the same file:
   if( gdcm::System::RemoveFile(csfn2) )
     {
-    std::cerr << "Could remvoe #2 a second time...seriously " << csfn2 << std::endl;
+    std::cerr << "Could remove #2 a second time...seriously " << csfn2 << std::endl;
     return EXIT_FAILURE;
     }
 #endif
@@ -220,7 +220,7 @@ int TestFilename(int argc, char *argv[])
     }
   if( !gdcm::System::RemoveFile(fn) )
     {
-    std::cerr << "Could not remvoe: " << fn << std::endl;
+    std::cerr << "Could not remove: " << fn << std::endl;
     return EXIT_FAILURE;
     }
 

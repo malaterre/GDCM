@@ -119,7 +119,7 @@ public:
         assert( vr == vr2 );
       if( !de.GetTag().IsPrivate() )
         assert( vr == vr2 );
-      //assert( vr.Comptible(vr2) );
+      //assert( vr.Compatible(vr2) );
     }
     return vr;
   }

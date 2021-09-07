@@ -69,7 +69,7 @@ int TestServiceClassUser3(int argc, char *argv[])
     return 1;
     }
 
-  // make sure to fail if no pres contexts:
+  // make sure to fail if no pres. contexts:
   if( scu.StartAssociation() )
     {
     return 1;
