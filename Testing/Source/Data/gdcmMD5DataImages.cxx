@@ -394,7 +394,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 // This one was computed from dcmtk, gdcm 1.x fails to read it...
 //{ "49ca8ad45fa7f24b0406a5a03ba8aff6" , "rle16loo.dcm" },
 { "04b42f011bdcf56e8a22607cb715447c" , "rle16loo.dcm" },
-// Name is poorly choosen since it's actually a Dicom Objects bug
+// Name is poorly chosen since it's actually a Dicom Objects bug
 // Cannot only be read by gdcm 1.2.x
 { "f1436c1800ccbba8da82acb7f2dff29d" , "GE_JPEG-Broken.dcm" },
 // For some reason the numbers gets funny

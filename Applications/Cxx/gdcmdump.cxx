@@ -19,7 +19,7 @@
  * - dcmInfo (SIEMENS)
  * - PrintFile (GDCM 1.x)
  *
- * For now all layout are harcoded (see --color/--xml-dict for instance)
+ * For now all layout are hardcoded (see --color/--xml-dict for instance)
  *
  * gdcmdump has some feature not described in the DICOM standard:
  *   --csa : to print CSA information (dcmInfo.exe compatible)
@@ -190,7 +190,7 @@ static void ProcessSDSDataString( std::istream & is )
 
 static void ProcessSDSData( std::istream & is )
 {
-  // havent been able to figure out what was the begin meant for
+  // haven't been able to figure out what was the begin meant for
   is.seekg( 0x20 - 8 );
   uint32_t version = 0;
   assert( sizeof(uint32_t) == 4 );

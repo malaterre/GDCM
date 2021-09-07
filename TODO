@@ -319,7 +319,7 @@ gdcmdump map-uid-names
 + * Windows _snprintf and _vsnprintf are not compatible to linux versions.
 + * Result value is not size of buffer needed, but -1 if no fit is possible.
 + *
-+ * This fuction tries to 'fix' this by at least suggesting enlarging the
++ * This function tries to 'fix' this by at least suggesting enlarging the
 + * size by 20.
 + */
 -> polarssl

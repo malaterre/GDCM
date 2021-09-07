@@ -74,7 +74,7 @@ int TestWrite(const char *subdir, const char* filename, bool recursing, bool ver
     if (recursing)
       return 1;
     // too bad the file is not identical, so let's be paranoid and
-    // try to reread-rewrite this just-writen file:
+    // try to reread-rewrite this just-written file:
     // TODO: Copy file System::CopyFile( );
     std::string subsubdir = subdir;
     subsubdir += "/";
@@ -90,7 +90,7 @@ int TestWrite(const char *subdir, const char* filename, bool recursing, bool ver
      {
      if( strcmp(ref, outdigest) == 0 )
        {
-       // ok this situation was already analyzed and the writen file is
+       // ok this situation was already analyzed and the written file is
        // readable by dcmtk and such
        //size_t size1 = System::FileSize( filename );
        //size_t size2 = System::FileSize( outfilename.c_str() );
