@@ -1274,7 +1274,7 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
    * predictor = 1
    * point_transform = 0
    * => lossless transformation.
-   * Basicaly you need to have point_transform = 0, but you can pick whichever predictor [1...7] you want
+   * Basically you need to have point_transform = 0, but you can pick whichever predictor [1...7] you want
    * TODO: is there a way to pick the right predictor (best compression/fastest ?)
    */
   if( !LossyFlag )
@@ -1499,7 +1499,7 @@ bool JPEGBITSCodec::EncodeBuffer(std::ostream &os, const char *data, size_t data
    * predictor = 1
    * point_transform = 0
    * => lossless transformation.
-   * Basicaly you need to have point_transform = 0, but you can pick whichever predictor [1...7] you want
+   * Basically you need to have point_transform = 0, but you can pick whichever predictor [1...7] you want
    * TODO: is there a way to pick the right predictor (best compression/fastest ?)
    */
   if( Internals->StateSuspension == 0 )

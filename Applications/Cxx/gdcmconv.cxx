@@ -13,10 +13,10 @@
 =========================================================================*/
 /*
  * HISTORY:
- * In GDCM 1.X the prefered terms was 'ReWrite', however one author of GDCM dislike
+ * In GDCM 1.X the preferred term was 'ReWrite', however one author of GDCM dislike
  * the term ReWrite since it is associated with the highly associated with the Rewrite
  * notion in software programming where using reinvent the wheel and rewrite from scratch code
- * the term convert was prefered
+ * the term convert was preferred
  *
  * Tools to conv. Goals being to 'purify' a DICOM file.
  * For now it will do the minimum:
@@ -25,7 +25,7 @@
  *   simply discarded (not written).
  * - Elements are written in alphabetical order
  * - 32bits VR have the residue bytes sets to 0x0,0x0
- * - Same goes from Item Length end delimitor, sets to 0x0,0x0
+ * - Same goes from Item Length end delimiter, sets to 0x0,0x0
  * - All buggy files (wrong length: GE, 13 and Siemens Leonardo) are fixed
  * - All size are even (no odd length from gdcm 1.x)
  *
@@ -44,7 +44,7 @@
  * - Any broken JPEG file (wrong bits) should be fixed
  * - DicomObject bug should be fixed
  * - Meta and Dataset should have a matching UID (more generally File Meta
- *   should be correct (Explicit!) and consistant with DataSet)
+ *   should be correct (Explicit!) and consistent with DataSet)
  * - User should be able to specify he wants Group Length (or remove them)
  * - Media SOP should be correct (deduct from something else or set to
  *   SOP Secondary if all else fail).
@@ -153,7 +153,7 @@ static void PrintHelp()
   std::cout << "  -F --force                          Force decompression/merging before recompression/splitting." << std::endl;
   std::cout << "     --generate-icon                  Generate icon." << std::endl;
   std::cout << "     --icon-minmax %d,%d              Min/Max value for icon." << std::endl;
-  std::cout << "     --icon-auto-minmax               Automatically commpute best Min/Max values for icon." << std::endl;
+  std::cout << "     --icon-auto-minmax               Automatically compute best Min/Max values for icon." << std::endl;
   std::cout << "     --compress-icon                  Decide whether icon follows main TransferSyntax or remains uncompressed." << std::endl;
   std::cout << "     --planar-configuration [01]      Change planar configuration." << std::endl;
   std::cout << "  -Y --lossy                          Use the lossy (if possible) compressor." << std::endl;

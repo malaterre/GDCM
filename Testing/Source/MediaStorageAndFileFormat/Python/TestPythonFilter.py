@@ -26,7 +26,7 @@ def TestPythonFilter(filename, verbose = False):
   # Change gdcm struct into something swig can digest:
   pds = gdcm.PythonDataSet(ds)
   sf = gdcm.PythonFilter()
-  pds.Start() # Make iterator go at begining
+  pds.Start() # Make iterator go at beginning
   dic1={}
   dic2={}
   sf.SetFile(file) # extremely important

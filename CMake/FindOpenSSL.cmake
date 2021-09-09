@@ -58,7 +58,7 @@ if(WIN32 AND NOT CYGWIN)
     #   * MTd for static-debug
 
     # Implementation details:
-    # We are using the libraries located in the VC subdir instead of the parent directory eventhough :
+    # We are using the libraries located in the VC subdir instead of the parent directory even though :
     # libeay32MD.lib is identical to ../libeay32.lib, and
     # ssleay32MD.lib is identical to ../ssleay32.lib
     find_library(LIB_EAY_DEBUG NAMES libeay32MDd libeay32

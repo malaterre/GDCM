@@ -63,7 +63,7 @@ int TestVM(int, char *[])
   if( count10 != 1 ) return 1;
 
   // store invalid combinations inside an int array to trick the compiler
-  // and avoid unrechable return code warning
+  // and avoid unreachable return code warning
   static const int error_combinations[] = {
     gdcm::VM::VM1 & gdcm::VM::VM2,
     gdcm::VM::VM1 & gdcm::VM::VM2,

@@ -35,7 +35,7 @@ static gdcm::network::ULConnectionManager *GetConnectionManager(gdcm::BaseRootQu
   gdcm::PresentationContextGenerator generator;
   if( !generator.GenerateFromUID( theQuery->GetAbstractSyntaxUID() ) )
     {
-    gdcmErrorMacro( "Failed to generate pres context." );
+    gdcmErrorMacro( "Failed to generate pres. context." );
     return nullptr;
     }
 
@@ -148,13 +148,13 @@ int TestSCUValidation(int , char *[])
 
   //Case 1:
   //Here I want to retrieve Study Information for the known Patient.
-  //Here i pass the PatientID as a input and i need to reterive the StudyId,
+  //Here I pass the PatientID as a input and I need to reterive the StudyId,
   //StudyDate and Series Instance UID.
   std::vector<gdcm::DataSet> theDataSets = GetStudyInfo("Z354998", true, theUseStrictQueries);
   PrintDataSets(theDataSets);
-  //In the above i validated the constructed Query. This will not allow to add the
+  //In the above I validated the constructed Query. This will not allow to add the
   //Series Instance UID as a search parameter for the query. On the result of
-  //this i can't get the SeriesInstanceUID from the study level.
+  //this I can't get the SeriesInstanceUID from the study level.
 
   //Case 2:
   //Here I execute the above same CFind Query with out validating.
@@ -165,9 +165,9 @@ int TestSCUValidation(int , char *[])
   PrintDataSets(theDataSets);
 
   //case 3:
-  //If i validated the Query Like case 1, i cant get the Series Instance UID from
-  //Study level. With out SeriesInstanceUID i can't retrieve the other series Information.
-  //In Series Level also i cant add the StudyInstanceUID or other study information
+  //If I validated the Query Like case 1, I can't get the Series Instance UID from
+  //Study level. With out SeriesInstanceUID I can't retrieve the other series Information.
+  //In Series Level also I can't add the StudyInstanceUID or other study information
   //as a search parameter. It allows only SeriesInstanceUID, Modality and SeriesNumber
   //as a search parameter.
   theDataSets = GetSeriesInfo("Z354998",
@@ -175,14 +175,14 @@ int TestSCUValidation(int , char *[])
   PrintDataSets(theDataSets);
 
   //case 4:
-  //If i execute the above same CFind Query for Get Series with out validating
+  //If I execute the above same CFind Query for Get Series with out validating
   //the query, it will return the requested SeriesInstanceUID for Known Study level.
   theDataSets = GetSeriesInfo("Z354998",
     "1.2.826.0.1.3680043.4.1.19990124221049.2", false, theUseStrictQueries);
   PrintDataSets(theDataSets);
-  //In StudyLevel I cant get the Series information(Ref:Case 2). In Series Level
-  //also i cant get the Series information for the known Study Level(Ref:Case 3).
-  //How should i get the Series level information for the known patient and study
+  //In StudyLevel I can't get the Series information(Ref:Case 2). In Series Level
+  //also I can't get the Series information for the known Study Level(Ref:Case 3).
+  //How should I get the Series level information for the known patient and study
   //level information???
 
   //case 5:

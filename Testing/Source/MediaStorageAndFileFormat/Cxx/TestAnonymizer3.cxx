@@ -176,7 +176,7 @@ int TestAnonymizer3(int , char *[])
 }
 }
 
-// Make sure UID is consistant:
+// Make sure UID is consistent:
 {
   std::string sopinstanceuid_str1;
 {

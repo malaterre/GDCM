@@ -20,7 +20,7 @@
 get_filename_component(current_list_path ${CMAKE_CURRENT_LIST_FILE} PATH)
 find_package(Java 1.5 REQUIRED)
 
-# need to re-run everytime the setting for Java has changed:
+# need to re-run every time the setting for Java has changed:
 # There is technically one caveat still, when one only modify
 # Java_JAVA_EXECUTABLE from cmake-gui, everything is re-run properly except the
 # FIND_PATH for jar and javac

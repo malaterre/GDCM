@@ -152,7 +152,7 @@ void Bitmap::SetPlanarConfiguration(unsigned int pc)
     // LEADTOOLS_FLOWERS-8-MONO2-Uncompressed.dcm
     if( PF.GetSamplesPerPixel() != 3 ) // Please set PixelFormat first
       {
-      gdcmWarningMacro( "Cant have Planar Configuration in non RGB input. Discarding" );
+      gdcmWarningMacro( "Cannot have Planar Configuration in non RGB input. Discarding" );
       PlanarConfiguration = 0;
       }
     const TransferSyntax &ts = GetTransferSyntax();
@@ -176,7 +176,7 @@ void Bitmap::SetPlanarConfiguration(unsigned int pc)
       // manner of encoding components is specified in the JPEG 2000 standard,
       // hence it shall be set to 0.
       // By extension, this behavior has been applied also to JPEG and JPEG-LS
-      gdcmWarningMacro( "Cant have Planar Configuration in JPEG/JPEG-LS/JPEG 2000. Discarding" );
+      gdcmWarningMacro( "Cannot have Planar Configuration in JPEG/JPEG-LS/JPEG 2000. Discarding" );
       PlanarConfiguration = 0;
       }
     }
@@ -989,7 +989,7 @@ bool Bitmap::TryRLECodec(char *buffer, bool &lossyflag ) const
   return false;
 }
 
-// Acces the raw data
+// Access the raw data
 bool Bitmap::GetBuffer(char *buffer) const
 {
   bool dummy;

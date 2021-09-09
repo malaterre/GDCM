@@ -20,7 +20,7 @@ endif ()
 macro(COMPUTE_MD5SUMS DIRECTORY OUTPUT_FILE)
 
 # Super ugly and barely readable but you need that in order to
-# work around a deficiency in EXECUTE_PROCESS which does not have dependencie scanning
+# work around a deficiency in EXECUTE_PROCESS which does not have dependencies scanning
 file(WRITE
 ${CMAKE_BINARY_DIR}/md5sum.cmake
 "

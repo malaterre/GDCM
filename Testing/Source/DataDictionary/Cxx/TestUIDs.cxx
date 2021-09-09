@@ -27,7 +27,7 @@
 // http://cardiacatlas.wiki.sourceforge.net/page/diff/DICOM+Service+Class+Definitions?v1=209104&v2=209124
 // could this be that they copy/paste stuff from gdcm itself ?
 // how else could you explain the:
-// { "1.2.840.113543.6.6.1.3.10002","Unregistred (?) Philips3D" },
+// { "1.2.840.113543.6.6.1.3.10002","Unregistered (?) Philips3D" },
 
 
 static const char * const sopclassuids[][2] = {
@@ -305,12 +305,12 @@ static const char * const sopclassuids[][2] = {
 { "1.2.840.113619.4.26","GE Private 3D Model Storage" },
 { "1.2.840.113619.4.30","GE Advance (PET) Raw Data Storage" },
 { "2.16.840.1.113709.1.5.1","GEPACS_PRIVATE_IMS_INFO Storage" },
-{ "1.2.840.113543.6.6.1.3.10002","Unregistred (?) Philips3D" },
+{ "1.2.840.113543.6.6.1.3.10002","Unregistered (?) Philips3D" },
 { "1.2.392.200036.9116.7.8.1.1.1","Toshiba Private Data Storage" },
 { "1.2.840.113619.4.27","GE Nuclear Medicine private SOP Class" },
 //{ "1.3.46.670589.11.0.0.12.1","Philips Private Gyroscan MR Spectrum" },
 { "1.3.46.670589.11.0.0.12.1","Philips Private MR Spectrum Storage" },
-//{ "1.3.46.670589.11.0.0.12.2","Philips Private Gyroscan MR Serie Data" },
+//{ "1.3.46.670589.11.0.0.12.2","Philips Private Gyroscan MR Series Data" },
 { "1.3.46.670589.11.0.0.12.2","Philips Private MR Series Data Storage" },
 { "1.3.46.670589.2.3.1.1","Philips Private Specialized XA Image" },
 { "1.3.46.670589.2.4.1.1","Philips Private CX Image Storage" },

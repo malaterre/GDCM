@@ -20,7 +20,7 @@
 
 /*
  This test exercise a very obscure section of gdcm::Printer
- when it handles a SQ when it is hiden as VR::UN + undefined
+ when it handles a SQ when it is hidden as VR::UN + undefined
  length which means this is a Implicit VR Little Endian
  encoded SQ in an Explicit VR Little Endian DataSet
 */
