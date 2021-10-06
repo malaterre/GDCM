@@ -363,12 +363,11 @@ static bool DumpToshibaDTI( const char * input, size_t len )
 }
 
 
-static int DumpTOSHIBA_PMTF_INFORMATION_DATA(const gdcm::DataSet & ds)
+static int DumpTOSHIBA_Reverse(const gdcm::DataSet & ds, const gdcm::PrivateTag &tpmtf, const gdcm::PrivateTag &tseq)
 {
   // (0029,0010) ?? (LO) [PMTF INFORMATION DATA ]                      # 22,1 Private Creator
   // (0029,1001) ?? (SQ) (Sequence with undefined length)              # u/l,1 ?
 
-  const gdcm::PrivateTag tpmtf(0x0029,0x1,"PMTF INFORMATION DATA");
   if( !ds.FindDataElement( tpmtf) ) return 1;
   const gdcm::DataElement& pmtf = ds.GetDataElement( tpmtf );
   if ( pmtf.IsEmpty() ) return 1;
@@ -383,7 +382,6 @@ static int DumpTOSHIBA_PMTF_INFORMATION_DATA(const gdcm::DataSet & ds)
     gdcm::DataSet &subds = item.GetNestedDataSet();
     // (0029,0010) ?? (LO) [PMTF INFORMATION DATA ]                  # 22,1 Private Creator
     // (0029,1090) ?? (OB) 00\05\00\13\00\12\00\22\                  # 202,1 ?
-    const gdcm::PrivateTag tseq(0x0029,0x90,"PMTF INFORMATION DATA");
 
     if( subds.FindDataElement( tseq ) )
       {
@@ -863,10 +861,32 @@ static int PrintPMTF(const std::string & filename, bool verbose)
     }
 
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
-  int ret = cleanup::DumpTOSHIBA_PMTF_INFORMATION_DATA( ds );
+  const gdcm::PrivateTag tpmtf(0x0029,0x1,"PMTF INFORMATION DATA");
+  const gdcm::PrivateTag tseq(0x0029,0x90,"PMTF INFORMATION DATA");
+  int ret = cleanup::DumpTOSHIBA_Reverse( ds, tpmtf, tseq );
 
   return ret;
 }
+
+static int PrintMECMR3(const std::string & filename, bool verbose)
+{
+  (void)verbose;
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  const gdcm::PrivateTag tpmtf(0x0029,0x1,"TOSHIBA_MEC_MR3");
+  const gdcm::PrivateTag tseq(0x0029,0x90,"TOSHIBA_MEC_MR3");
+  int ret = cleanup::DumpTOSHIBA_Reverse( ds, tpmtf, tseq );
+
+  return ret;
+}
+
 
 
 static int PrintPDB(const std::string & filename, bool verbose)
@@ -1174,6 +1194,7 @@ int main (int argc, char *argv[])
   int printsds = 0; // MR Series Data Storage
   int printct3 = 0; // TOSHIBA_MEC_CT3
   int printpmtf = 0; // TOSHIBA / PMTF INFORMATION DATA
+  int printmecmr3 = 0; // TOSHIBA / TOSHIBA_MEC_MR3
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -1220,6 +1241,7 @@ int main (int argc, char *argv[])
         {"csa-diffusion", 0, &printcsadiffusion, 1},
         {"mrprotocol", 0, &printmrprotocol, 1},
         {"pmtf", 0, &printpmtf, 1},
+        {"mecmr3", 0, &printmecmr3, 1},
         {nullptr, 0, nullptr, 0} // required
     };
     static const char short_options[] = "i:xrpdcCPAVWDEhvI";
@@ -1441,6 +1463,10 @@ int main (int argc, char *argv[])
         {
         res += PrintPMTF(*it, verbose!= 0);
         }
+      else if( printmecmr3 )
+        {
+        res += PrintMECMR3(*it, verbose!= 0);
+        }
       else if( printelscint )
         {
         res += PrintELSCINT(*it, verbose!= 0);
@@ -1499,6 +1525,10 @@ int main (int argc, char *argv[])
     else if( printpmtf )
       {
       res += PrintPMTF(filename, verbose!= 0);
+      }
+    else if( printmecmr3 )
+      {
+      res += PrintMECMR3(filename, verbose!= 0);
       }
     else if( printelscint )
       {
