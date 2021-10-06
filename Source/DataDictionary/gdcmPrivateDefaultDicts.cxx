@@ -504,6 +504,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x700d,0x0017,"TOSHIBA_MEC_MR3^10",VR::LT,VM::VM1,"Intended Processing",false },
   {0x700d,0x0018,"TOSHIBA_MEC_MR3^10",VR::SS,VM::VM1_n,"Scanned Orientation IDs",false },
   {0x700d,0x0019,"TOSHIBA_MEC_MR3^10",VR::OB,VM::VM1,"PAS Reproduct Information",false },
+  {0x700d,0x0080,"TOSHIBA_MEC_MR3^10",VR::US,VM::VM1,"?",false },
   {0xe201,0x0002,"TOSHIBA_MEC_MR3^10",VR::US,VM::VM1,"?",false },
   {0xe301,0x0000,"TOSHIBA_MEC_MR3^10",VR::SH,VM::VM1,"?",false },
   {0xe401,0x0000,"TOSHIBA_MEC_MR3^10",VR::US,VM::VM1,"?",false },

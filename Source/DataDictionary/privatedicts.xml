@@ -477,6 +477,7 @@
 <entry group="700d" element="0017" vr="LT" vm="1" name="Intended Processing" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="700d" element="0018" vr="SS" vm="1-n" name="Scanned Orientation IDs" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="700d" element="0019" vr="OB" vm="1" name="PAS Reproduct Information" owner="TOSHIBA_MEC_MR3^10"/>
+<entry group="700d" element="0080" vr="US" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="e201" element="0002" vr="US" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="e301" element="0000" vr="SH" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="e401" element="0000" vr="US" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
