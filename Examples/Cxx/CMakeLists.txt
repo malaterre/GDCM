@@ -48,6 +48,7 @@ set(EXAMPLES_SRCS
   CreateJPIPDataSet
   DumpADAC
   DumpToshibaDTI
+  DumpToshibaDTI2
   DumpImageHeaderInfo
   ReadMultiTimesException
   pmsct_rgb1
