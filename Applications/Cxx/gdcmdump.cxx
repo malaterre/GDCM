@@ -884,7 +884,10 @@ static int PrintMECMR3(const std::string & filename, bool verbose)
   const gdcm::PrivateTag tseq(0x0029,0x90,"TOSHIBA_MEC_MR3");
   int ret = cleanup::DumpTOSHIBA_Reverse( ds, tpmtf, tseq );
 
-  return ret;
+  const gdcm::PrivateTag tpmtf2(0x0029,0x2,"TOSHIBA_MEC_MR3");
+  int ret2 = cleanup::DumpTOSHIBA_Reverse( ds, tpmtf2, tseq );
+
+  return ret +ret2;
 }
 
 
@@ -1161,6 +1164,7 @@ static void PrintHelp()
   std::cout << "     --sds            print Philips MR Series Data Storage (1.3.46.670589.11.0.0.12.2) Information (2005,32,Philips MR Imaging DD 002)." << std::endl;
   std::cout << "     --ct3            print CT Private Data 2 (7005,10,TOSHIBA_MEC_CT3)." << std::endl;
   std::cout << "     --pmtf           print PMTF INFORMATION DATA sub-sequences (0029,01,PMTF INFORMATION DATA)." << std::endl;
+  std::cout << "     --mecmr3         print TOSHIBA_MEC_MR3 sub-sequences (0029,01,TOSHIBA_MEC_MR3)." << std::endl;
   std::cout << "  -A --asn1           print encapsulated ASN1 structure >(0400,0520)." << std::endl;
   std::cout << "     --map-uid-names  map UID to names." << std::endl;
   std::cout << "General Options:" << std::endl;
