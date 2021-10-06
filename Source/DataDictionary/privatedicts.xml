@@ -40,12 +40,10 @@
 <entry group="0019" element="0006" vr="FL" vm="1" name="?" owner="TOSHIBA_MEC_MR3^12"/>
 <entry group="0019" element="0006" vr="SL" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="0019" element="0007" vr="FL" vm="3" name="?" owner="TOSHIBA_MEC_MR3^10"/>
-<entry group="0019" element="0007" vr="UL" vm="1" name="?" owner="TOSHIBA_MEC_MR3^12"/>
-<entry group="0019" element="0007" vr="UL" vm="2" name="?" owner="TOSHIBA_MEC_MR3^12"/>
+<entry group="0019" element="0007" vr="UL" vm="1-n" name="?" owner="TOSHIBA_MEC_MR3^12"/>
 <entry group="0019" element="0008" vr="SH" vm="1" name="?" owner="TOSHIBA_MEC_MR3^11"/>
 <entry group="0019" element="0008" vr="SL" vm="1" name="?" owner="TOSHIBA_MEC_MR3^13"/>
-<entry group="0019" element="0008" vr="UL" vm="1" name="?" owner="TOSHIBA_MEC_MR3^12"/>
-<entry group="0019" element="0008" vr="UL" vm="2" name="?" owner="TOSHIBA_MEC_MR3^12"/>
+<entry group="0019" element="0008" vr="UL" vm="1-n" name="?" owner="TOSHIBA_MEC_MR3^12"/>
 <entry group="0019" element="0008" vr="US" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="0019" element="0009" vr="FL" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="0019" element="0009" vr="SL" vm="1" name="?" owner="TOSHIBA_MEC_MR3^12"/>
@@ -287,7 +285,6 @@
 <entry group="0019" element="00a5" vr="FL" vm="1" name="?" owner="TOSHIBA_MEC_MR3^12"/>
 <entry group="0019" element="00a5" vr="US" vm="1" name="?" owner="TOSHIBA_MEC_MR3^11"/>
 <entry group="0019" element="00a6" vr="FL" vm="1-n" name="?" owner="TOSHIBA_MEC_MR3^12"/>
-<entry group="0019" element="00a6" vr="FL" vm="4" name="?" owner="TOSHIBA_MEC_MR3^12"/>
 <entry group="0019" element="00a6" vr="SL" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="0019" element="00a6" vr="US" vm="1" name="?" owner="TOSHIBA_MEC_MR3^11"/>
 <entry group="0019" element="00a7" vr="FL" vm="1" name="?" owner="TOSHIBA_MEC_MR3^12"/>
@@ -370,8 +367,7 @@
 <entry group="0019" element="00d5" vr="FL" vm="1" name="?" owner="TOSHIBA_MEC_MR3^12"/>
 <entry group="0019" element="00d6" vr="FL" vm="3" name="?" owner="TOSHIBA_MEC_MR3^12"/>
 <entry group="0019" element="00d7" vr="US" vm="2" name="?" owner="TOSHIBA_MEC_MR3^12"/>
-<entry group="0019" element="00d8" vr="FL" vm="3" name="?" owner="TOSHIBA_MEC_MR3^12"/>
-<entry group="0019" element="00d8" vr="FL" vm="5" name="?" owner="TOSHIBA_MEC_MR3^12"/>
+<entry group="0019" element="00d8" vr="FL" vm="1-n" name="?" owner="TOSHIBA_MEC_MR3^12"/>
 <entry group="0019" element="00d8" vr="US" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="0019" element="00d9" vr="SQ" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="0019" element="00da" vr="US" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
@@ -471,12 +467,16 @@
 <entry group="0029" element="0068" vr="SS" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="0029" element="006e" vr="OB" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="0029" element="0089" vr="LO" vm="1" name="?" owner="TOSHIBA_MEC_MR3"/>
-<entry group="700d" element="0011" vr="US" vm="2" name="?" owner="TOSHIBA_MEC_MR3^10"/>
-<entry group="700d" element="0014" vr="SL" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
-<entry group="700d" element="0016" vr="LO" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
-<entry group="700d" element="0018" vr="SS" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
-<entry group="700d" element="0018" vr="SS" vm="3" name="?" owner="TOSHIBA_MEC_MR3^10"/>
-<entry group="700d" element="0019" vr="OB" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
+<entry group="700d" element="0010" vr="DS" vm="1" name="2nd Flip Angle [degree]" owner="TOSHIBA_MEC_MR3^10"/>
+<entry group="700d" element="0011" vr="US" vm="2" name="Acquisition Inner Matrix" owner="TOSHIBA_MEC_MR3^10"/>
+<entry group="700d" element="0012" vr="US" vm="1" name="MP2RAGE Flag" owner="TOSHIBA_MEC_MR3^10"/>
+<entry group="700d" element="0013" vr="FL" vm="1" name="Inversion efficiency of inversion recovery pulse" owner="TOSHIBA_MEC_MR3^10"/>
+<entry group="700d" element="0014" vr="SL" vm="1" name="Number of dummy shot" owner="TOSHIBA_MEC_MR3^10"/>
+<entry group="700d" element="0015" vr="FL" vm="1" name="FFE total repetition time[s]" owner="TOSHIBA_MEC_MR3^10"/>
+<entry group="700d" element="0016" vr="LO" vm="3" name="PAS Name" owner="TOSHIBA_MEC_MR3^10"/>
+<entry group="700d" element="0017" vr="LT" vm="1" name="Intended Processing" owner="TOSHIBA_MEC_MR3^10"/>
+<entry group="700d" element="0018" vr="SS" vm="1-n" name="Scanned Orientation IDs" owner="TOSHIBA_MEC_MR3^10"/>
+<entry group="700d" element="0019" vr="OB" vm="1" name="PAS Reproduct Information" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="e201" element="0002" vr="US" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="e301" element="0000" vr="SH" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
 <entry group="e401" element="0000" vr="US" vm="1" name="?" owner="TOSHIBA_MEC_MR3^10"/>
