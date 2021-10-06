@@ -38,6 +38,9 @@ using DICT_ENTRY = struct
 };
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x0029,0x0001,"TOSHIBA_MEC_MR3",VR::SQ,VM::VM1,"Other Private Data",false},
+  {0x700d,0x0011,"TOSHIBA_MEC_MR3^10",VR::US,VM::VM2,"Acquisition Inner Matrix",false},
+  {0x700d,0x0018,"TOSHIBA_MEC_MR3^10",VR::SS,VM::VM1,"Scanned Orientation IDs",false},
   {0x7fdf,0x0050,"TomTec",VR::OB,VM::VM1,"Bookmark Information",false},
   {0x7fdf,0x0051,"TomTec",VR::OB,VM::VM1,"Bookmark Content",false},
   {0x2013,0x0010,"BioDICOMizer",VR::LO,VM::VM1,"Custom Storage Version",false},
