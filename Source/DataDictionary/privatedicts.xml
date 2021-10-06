@@ -9161,11 +9161,13 @@
   <entry owner="TOSHIBA_MEC_MR3" group="700d" element="xx02" vr="DS" vm="9" name="Orientation Vector"/>
   <entry owner="TOSHIBA_MEC_MR3" group="700d" element="xx03" vr="SS" vm="1" name="Flip Flag"/>
   <entry owner="TOSHIBA_MEC_MR3" group="700d" element="xx04" vr="OB" vm="1" name="Rotate Information"/>
-  <entry owner="TOSHIBA_MEC_MR3" group="700d" element="xx05" vr="DS" vm="4" name="FOV"/>
+  <entry owner="TOSHIBA_MEC_MR3" group="700d" element="xx05" vr="DS" vm="1" name="FOV"/>
   <entry owner="TOSHIBA_MEC_MR3" group="700d" element="xx06" vr="US" vm="4" name="Image Matrix"/>
   <entry owner="TOSHIBA_MEC_MR3" group="700d" element="xx07" vr="OB" vm="1" name="Image Information"/>
   <entry owner="TOSHIBA_MEC_MR3" group="700d" element="xx08" vr="OB" vm="1" name="Original Data"/>
   <entry owner="TOSHIBA_MEC_MR3" group="700d" element="xx09" vr="SS" vm="1" name="Original Data Flag"/>
+  <entry owner="TOSHIBA_MEC_MR3" group="700d" element="xx0c" vr="CS" vm="1" name="Receiver Gain Correction Check Flag"/>
+  <entry owner="TOSHIBA_MEC_MR3" group="700d" element="xx20" vr="SH" vm="1" name="Identification Flag of 3D GDC"/>
   <entry owner="TOSHIBA_MEC_MR3" group="700d" element="xx80" vr="US" vm="1" name="Number of PAC channel"/>
   <entry owner="TOSHIBA_MEC_MR3" group="700d" element="xx81" vr="US" vm="1" name="Reference mode"/>
   <entry owner="TOSHIBA_MEC_MR3" group="700d" element="xx82" vr="SQ" vm="1" name="Gain value group for MRS"/>
