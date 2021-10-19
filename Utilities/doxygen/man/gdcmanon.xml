@@ -227,7 +227,7 @@ In this case one could simply do, as a first step execute the reversible anonymi
 
 <para><formalpara><title>Remarks: </title>
 
-<para>As mentionned in DICOM Sup 142, this anonymization is preferred over de-identification since: It is not required that the Encrypted Attributes Data Set be created; indeed, there may be circumstances where the Dataset is expected to be archived long enough that any contemporary encryption technology may be inadequate to provide long term protection against unauthorized recovery of identification</para>
+<para>As mentioned in DICOM Sup 142, this anonymization is preferred over de-identification since: It is not required that the Encrypted Attributes Data Set be created; indeed, there may be circumstances where the Dataset is expected to be archived long enough that any contemporary encryption technology may be inadequate to provide long term protection against unauthorized recovery of identification</para>
 </formalpara>
 </para>
 </refsection>
