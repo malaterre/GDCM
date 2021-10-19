@@ -148,7 +148,7 @@
 <para><literallayout>$ gdcmscu --echo dicom.example.com 11112 --call SERVSCP
 </literallayout></para>
 
-<para>If you want to specifiy your own AE-TITLE (default is GDCMSCU), simply use:</para>
+<para>If you want to specify your own AE-TITLE (default is GDCMSCU), simply use:</para>
 
 <para><literallayout>$ gdcmscu --echo dicom.example.com 11112 --call SERVSCP --aetitle MYSCU
 </literallayout></para>

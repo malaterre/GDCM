@@ -235,7 +235,7 @@ file-out  DICOM output filename
 
 <para><literallayout>$ gdcmimg --sign 1 --template template.dcm input.jpg output.dcm
 </literallayout></para>
-<para>Pay attention that any values from template.dcm that are not consistent with what is found inside the reference image will be overriden (eg. image size). On particular case should be of concern: the Pixel Representation for the JPEG family.</para>
+<para>Pay attention that any values from template.dcm that are not consistent with what is found inside the reference image will be overridden (eg. image size). On particular case should be of concern: the Pixel Representation for the JPEG family.</para>
 
 </refsection>
 </refsection>
