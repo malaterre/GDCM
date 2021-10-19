@@ -72,7 +72,7 @@ file-out  DICOM output filename
   -F --force                          Force decompression/merging before recompression/splitting.
      --generate-icon                  Generate icon.
      --icon-minmax %d,%d              Min/Max value for icon.
-     --icon-auto-minmax               Automatically commpute best Min/Max values for icon.
+     --icon-auto-minmax               Automatically compute best Min/Max values for icon.
      --compress-icon                  Decide whether icon follows main TransferSyntax or remains uncompressed.
      --planar-configuration [01]      Change planar configuration.
   -Y --lossy                          Use the lossy (if possible) compressor.

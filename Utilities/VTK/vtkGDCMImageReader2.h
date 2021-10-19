@@ -34,7 +34,7 @@
 // 0,0 the overlay will have an offset...
 // Only the very first overlay is loaded at the VTK level, for now (even if there are more than one in the file)
 // .SECTION DataOrigin
-// When the reader is instanciated with FileLowerLeftOn the DataOrigin and Image Position (Patient) are
+// When the reader is instantiated with FileLowerLeftOn the DataOrigin and Image Position (Patient) are
 // identical. But when FileLowerLeft is Off, we have to reorder the Y-line of the image, and thus the DataOrigin
 // is then translated to the other side of the image.
 // .SECTION Spacing
@@ -203,7 +203,7 @@ public:
   // Description:
   // \DEPRECATED:
   // Modality LUT
-  // Value returned by GetShift/GetScale might be innacurate since Shift/Scale could be
+  // Value returned by GetShift/GetScale might be inacurate since Shift/Scale could be
   // varying along the Series read. Therefore user are advices not to use those functions
   // anymore
   vtkGetMacro(Shift,double);

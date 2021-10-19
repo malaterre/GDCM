@@ -20,7 +20,7 @@
 // If looking for a single threaded class see: vtkGDCMImageReader
 //
 // .SECTION Warning: Advanced users only. Do not use this class in the general case,
-// you have to understand how physicaly medium works first (sequential reading for
+// you have to understand how physically medium works first (sequential reading for
 // instance) before playing with this class
 //
 // .SECTION Implementation note: when FileLowerLeft is set to on the image is not flipped
@@ -35,7 +35,7 @@
 // subtle trick down in the threading mechanism in VTK were the main thread (talking to the
 // python interpreter) is also part of the execution process (and the N-1 other thread
 // are just there to execute the remaining of ThreadedRequestData), this separation into
-// two types of thread is necessary to acheive a working implementation of UpdateProgress
+// two types of thread is necessary to achieve a working implementation of UpdateProgress
 
 // .SECTION See Also
 // vtkMedicalImageReader2 vtkMedicalImageProperties vtkGDCMImageReader
