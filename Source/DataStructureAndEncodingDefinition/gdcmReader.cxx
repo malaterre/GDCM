@@ -735,6 +735,8 @@ static inline bool isasciiupper( char c ) {
 // scope of this function.
 bool Reader::CanRead() const
 {
+  if( !Stream ) return false;
+
   // fastpath
   std::istream &is = *Stream;
   if( is.bad() ) return false;
