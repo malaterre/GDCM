@@ -32,9 +32,6 @@
 # define GDCM_WORDS_BIGENDIAN
 #endif
 
-/* Allow access to UINT32_MAX , cf gdcmCommon.h */
-#define __STDC_LIMIT_MACROS
-
 /* Hard code the path to the public dictionary */
 #define PUB_DICT_PATH "@GDCM_PUB_DICT_PATH@"
 
@@ -77,10 +74,6 @@
 #cmakedefine GDCM_USE_JPEGLS
 
 #cmakedefine GDCM_AUTOLOAD_GDCMJNI
-
-/* I guess something important */
-#cmakedefine GDCM_HAVE_STDINT_H
-#cmakedefine GDCM_HAVE_INTTYPES_H
 
 /* This variable allows you to have helpful debug statement */
 /* That are in between #ifdef / endif in the gdcm code */

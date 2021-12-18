@@ -180,22 +180,11 @@ macro(CHECK_INCLUDE_FILE_CONCAT FILE VARIABLE)
   endif()
 endmacro()
 
-CHECK_INCLUDE_FILE("stdint.h"       GDCM_HAVE_STDINT_H)
-if(UNIX) #Avoid polluting Win32 cmakecache
-  CHECK_INCLUDE_FILE("inttypes.h"     GDCM_HAVE_INTTYPES_H)
-endif()
-
 #include(${GDCM_SOURCE_DIR}/CMake/gdcmPlatformCxxTests.cmake)
 #
 #GDCM_PLATFORM_CXX_TEST(GDCM_CXX_HAS_FUNCTION
 #    "Checking whether compiler has __FUNCTION__" DIRECT)
 
-
-#-----------------------------------------------------------------------------
-# Build the main lib...
-if(NOT GDCM_HAVE_STDINT_H)
-  message(FATAL_ERROR "You system does not have stdint.h")
-endif()
 
 # --------------------------------------------------------------------------
 # Configure the export configuration
