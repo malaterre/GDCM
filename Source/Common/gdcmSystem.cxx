@@ -1044,13 +1044,13 @@ char *System::StrSep(char **sp, const char *sep)
 #endif
 }
 
+#if defined(_WIN32)
 struct CharsetAliasType
 {
   const char *alias;
   const char *name;
 };
 
-#if defined(_WIN32)
 static const char *CharsetAliasToName(const char *alias)
 {
   assert( alias );

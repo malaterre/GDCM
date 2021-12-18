@@ -153,7 +153,7 @@ const char *SOPClassUIDToIOD::GetIOD(UIDs const & uid)
 //  int ret = 0;
 //  do {
 //    is.read(buf, sizeof(buf));
-//    size_t len = is.gcount();
+//    std::streamsize len = is.gcount();
 //    done = len < sizeof(buf);
 //    if (XML_Parse(parser, buf, len, done) == XML_STATUS_ERROR) {
 //      fprintf(stderr,
