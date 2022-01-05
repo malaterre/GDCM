@@ -4282,7 +4282,7 @@
   <entry owner="HOLOGIC, Inc." group="0019" element="xx37" vr="LO" vm="1" name="?"/>
   <entry owner="HOLOGIC, Inc." group="0019" element="xx40" vr="DS" vm="1" name="?"/>
   <entry owner="HOLOGIC, Inc." group="0019" element="xx41" vr="DS" vm="1" name="?"/>
-  <entry owner="HOLOGIC, Inc." group="0019" element="xx42" vr="IS" vm="1" name="?"/>
+  <entry owner="HOLOGIC, Inc." group="0019" element="xx42" vr="DS" vm="1" name="?"/>
   <entry owner="HOLOGIC, Inc." group="0019" element="xx43" vr="DS" vm="1" name="?"/>
   <entry owner="HOLOGIC, Inc." group="0019" element="xx44" vr="IS" vm="1" name="?"/>
   <entry owner="HOLOGIC, Inc." group="0019" element="xx45" vr="IS" vm="1" name="?"/>
