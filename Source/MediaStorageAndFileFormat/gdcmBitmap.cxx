@@ -731,7 +731,7 @@ bool Bitmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
     assert( len <= outbv->GetLength() );
     // DermaColorLossLess.dcm has a len of 63531, but DICOM will give us: 63532 ...
     assert( len <= outbv->GetLength() );
-    if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
+    memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
 
     //assert( codec.IsLossy() == ts.IsLossy() );
     lossyflag = codec.IsLossy();
@@ -886,7 +886,7 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
     unsigned long check = outbv->GetLength();  // FIXME
     (void)check;
     assert( len <= outbv->GetLength() );
-    if(buffer) memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
+    memcpy(buffer, outbv->GetPointer(), len /*outbv->GetLength()*/ );  // FIXME
 
     lossyflag = codec.IsLossy();
     if( codec.IsLossy() && !ts.IsLossy() )
