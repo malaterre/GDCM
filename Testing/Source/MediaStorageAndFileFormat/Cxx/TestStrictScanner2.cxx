@@ -21,9 +21,8 @@ int TestStrictScanner2(int argc, char *argv[])
 {
   gdcm::Trace::WarningOff();
   gdcm::Trace::ErrorOff();
-  const char *directory = gdcm::Testing::GetDataRoot();
   std::string tmpdir = gdcm::Testing::GetTempDirectory( "TestWriter" );
-  directory = tmpdir.c_str();
+  const char *directory = tmpdir.c_str();
   if( argc == 2 )
     {
     directory = argv[1];

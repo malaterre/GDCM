@@ -56,7 +56,7 @@ class GDCM_EXPORT Scanner : public Subject
 {
   friend std::ostream& operator<<(std::ostream &_os, const Scanner &s);
 public:
-  Scanner():Values(),Filenames(),Mappings() {}
+  Scanner():Values(),Filenames(),Mappings(),Progress(0.0) {}
   ~Scanner() override;
 
   /// struct to map a filename to a value

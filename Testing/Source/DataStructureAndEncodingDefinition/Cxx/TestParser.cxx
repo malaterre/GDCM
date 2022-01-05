@@ -63,7 +63,7 @@ int TestParser(int argc, char *argv[])
   parser.SetElementHandler(gdcm::startElement, gdcm::endElement);
   do {
     is.read(buf, sizeof(buf));
-    size_t len = is.gcount();
+    std::streamsize len = is.gcount();
     done = len < sizeof(buf);
     if ( parser.Parse(buf, len, done) )
       {

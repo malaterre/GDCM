@@ -29,7 +29,7 @@ namespace gdcm
 class GDCM_EXPORT CSAElement
 {
 public:
-  CSAElement(unsigned int kf = 0):KeyField(kf) {}
+  CSAElement(unsigned int kf = 0):KeyField(kf),SyngoDTField(0),NoOfItemsField(0) {}
 
   friend std::ostream& operator<<(std::ostream &os, const CSAElement &val);
 
