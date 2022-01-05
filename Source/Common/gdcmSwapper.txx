@@ -14,6 +14,8 @@
 #ifndef GDCMSWAPPER_TXX
 #define GDCMSWAPPER_TXX
 
+#include <cstring>
+
 #if defined(_MSC_VER)
 
 // http://msdn.microsoft.com/en-us/library/a3140177
