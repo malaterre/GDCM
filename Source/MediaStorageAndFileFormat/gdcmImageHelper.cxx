@@ -978,6 +978,9 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
            ds.Replace(numframes.GetAsDataElement());
         }
       }
+      else if( ms.MediaStorage::GetModalityDimension() == 2 /*&& dims[2] == 1*/ )
+        ds.Remove( numframes.GetTag() );
+
     }
     else // cleanup
       ds.Remove( numframes.GetTag() );
