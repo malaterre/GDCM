@@ -108,9 +108,12 @@ namespace gdcm
     }
   template <> inline float SwapperNoOp::Swap<float>(float val)
     {
-    uint32_t temp;
-    memcpy(&temp, &val, sizeof(uint32_t));
-    return static_cast<float>(Swap(temp));
+    uint32_t tempI;
+    memcpy(&tempI, &val, sizeof(uint32_t));
+    tempI = Swap(tempI);
+    float tempF;
+    memcpy(&tempF, &tempI, sizeof(uint32_t));
+    return tempF;
     }
   template <> inline uint64_t SwapperNoOp::Swap<uint64_t>(uint64_t val)
     {
@@ -122,9 +125,12 @@ namespace gdcm
     }
   template <> inline double SwapperNoOp::Swap<double>(double val)
     {
-    uint64_t temp;
-    memcpy(&temp, &val, sizeof(uint64_t));
-    return static_cast<double>(Swap(temp));
+    uint64_t tempI;
+    memcpy(&tempI, &val, sizeof(uint64_t));
+    tempI = Swap(tempI);
+    double tempF;
+    memcpy(&tempF, &tempI, sizeof(uint64_t));
+    return tempF;
     }
 
   template <> inline Tag SwapperNoOp::Swap<Tag>(Tag val)
@@ -178,9 +184,12 @@ namespace gdcm
     }
   template <> inline float SwapperDoOp::Swap<float>(float val)
     {
-    uint32_t temp;
-    memcpy(&temp, &val, sizeof(uint32_t));
-    return static_cast<float>(Swap(temp));
+    uint32_t tempI;
+    memcpy(&tempI, &val, sizeof(uint32_t));
+    tempI = Swap(tempI);
+    float tempF;
+    memcpy(&tempF, &tempI, sizeof(uint32_t));
+    return tempF;
     }
   template <> inline uint64_t SwapperDoOp::Swap<uint64_t>(uint64_t val)
     {
@@ -192,9 +201,12 @@ namespace gdcm
     }
   template <> inline double SwapperDoOp::Swap<double>(double val)
     {
-    uint64_t temp;
-    memcpy(&temp, &val, sizeof(uint64_t));
-    return static_cast<double>(Swap(temp));
+    uint64_t tempI;
+    memcpy(&tempI, &val, sizeof(uint64_t));
+    tempI = Swap(tempI);
+    double tempF;
+    memcpy(&tempF, &tempI, sizeof(uint64_t));
+    return tempF;
     }
 
   template <> inline Tag SwapperDoOp::Swap<Tag>(Tag val)
