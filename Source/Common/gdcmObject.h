@@ -63,7 +63,7 @@ public:
   // Do NOT copy the reference count !
   /// Special requirement for copy/cstor, assignment operator
   Object(const Object&):ReferenceCount(0){}
-  void operator=(const Object&){ ReferenceCount = 0; }
+  void operator=(const Object&){}
 
   //static Object* New() { return new Object; }
 
