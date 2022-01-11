@@ -835,6 +835,7 @@ bool JPEGBITSCodec::DecodeByStreams(std::istream &is, std::ostream &os)
       break;
     case JCS_YCbCr:
       if( GetPhotometricInterpretation() != PhotometricInterpretation::YBR_FULL &&
+          GetPhotometricInterpretation() != PhotometricInterpretation::YBR_PARTIAL_422 &&
           GetPhotometricInterpretation() != PhotometricInterpretation::YBR_FULL_422 )
         {
         // DermaColorLossLess.dcm (lossless)
@@ -856,6 +857,7 @@ bool JPEGBITSCodec::DecodeByStreams(std::istream &is, std::ostream &os)
         //cinfo.out_color_space = JCS_UNKNOWN;
         }
       if( GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL
+      || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_PARTIAL_422
       || GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 )
         {
         cinfo.jpeg_color_space = JCS_UNKNOWN;

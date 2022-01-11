@@ -645,6 +645,7 @@ bool ImageCodec::DecodeByStreams(std::istream &is, std::ostream &os)
     // Nothing needs to be done
     break;
   case PhotometricInterpretation::YBR_FULL_422:
+  case PhotometricInterpretation::YBR_PARTIAL_422:
       {
       // US-GE-4AICL142.dcm
       // Hopefully it has been done by the JPEG decoder itself...
