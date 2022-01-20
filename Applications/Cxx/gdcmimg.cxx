@@ -1183,9 +1183,9 @@ int main (int argc, char *argv[])
     if ( region[0] > region[1]
       || region[2] > region[3]
       || region[4] > region[5]
-      || region[1] > dims[0]
-      || region[3] > dims[1]
-      || (imageori.GetNumberOfDimensions() > 2 && region[5] > dims[2]) )
+      || region[1] >= dims[0]
+      || region[3] >= dims[1]
+      || (imageori.GetNumberOfDimensions() > 2 && region[5] >= dims[2]) )
       {
       if( imageori.GetNumberOfDimensions() == 2 )
         {
