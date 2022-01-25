@@ -4464,8 +4464,10 @@
   <entry owner="MEDIFACE" group="0029" element="xx30" vr="LT" vm="1" name="?"/>
   <entry owner="MERGE TECHNOLOGIES, INC." group="0009" element="xx00" vr="OB" vm="1" name="?"/>
   <entry owner="MITRA LINKED ATTRIBUTES 1.0" group="0031" element="xx20" vr="LO" vm="1" name="Global Patient ID"/>
+<!--
   <entry owner="MITRA MARKUP 1.0" group="0029" element="xx00" vr="LO" vm="1-n" name="?"/>
   <entry owner="MITRA MARKUP 1.0" group="0029" element="xx01" vr="LO" vm="1-n" name="?"/>
+-->
   <entry owner="MITRA OBJECT ATTRIBUTES 1.0" group="0033" element="xx02" vr="LO" vm="1" name="?"/>
   <entry owner="MITRA OBJECT ATTRIBUTES 1.0" group="0033" element="xx04" vr="LO" vm="1" name="?"/>
   <entry owner="MITRA OBJECT ATTRIBUTES 1.0" group="0033" element="xx06" vr="LO" vm="1" name="?"/>
