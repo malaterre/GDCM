@@ -106,7 +106,7 @@ void Swap4(T &a, SwapCode const &swapcode)
 {
 #ifndef GDCM_WORDS_BIGENDIAN
   if ( swapcode == gdcm::SwapCode::BigEndian || swapcode == gdcm::SwapCode::BadBigEndian )
-    a = (T)(( a << 8 ) | ( a >> 8 ));
+    a = ( a << 8 ) | ( a >> 8 );
 #else
   if ( swapcode == gdcm::SwapCode::LittleEndian || swapcode == gdcm::SwapCode::BadLittleEndian )
     a = ( a << 8 ) | ( a >> 8 );
