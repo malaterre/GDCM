@@ -2325,6 +2325,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x07a1,0x0088,"ELSCINT1",VR::CS,VM::VM1,"?Y/N?",false },
   {0x07a1,0x0098,"ELSCINT1",VR::CS,VM::VM1,"?Y/N?",false },
   {0x07a1,0x009f,"ELSCINT1",VR::CS,VM::VM1,"?",false },
+  {0x07a1,0x00a7,"ELSCINT1",VR::SH,VM::VM1,"?",false },
   {0x07a1,0x00c2,"ELSCINT1",VR::ST,VM::VM1,"?status sent?",false },
   {0x07a1,0x00d0,"ELSCINT1",VR::LO,VM::VM1,"?",false },
   {0x07a3,0x0001,"ELSCINT1",VR::LO,VM::VM1,"Tamar Exe Software Version",false },
