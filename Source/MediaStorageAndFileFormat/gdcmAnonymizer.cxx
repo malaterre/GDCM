@@ -925,6 +925,11 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
 
   static const Global &g = Global::GetInstance();
   static const Defs &defs = g.GetDefs();
+  if( defs.IsEmpty() )
+  {
+    gdcmWarningMacro( "Missing Definitions, see Global.LoadResourcesFiles()" );
+    return;
+  }
   const IOD& iod = defs.GetIODFromFile(*F);
 
   for(const Tag *ptr = start ; ptr != end ; ++ptr)
