@@ -336,7 +336,7 @@ bool JPEGLSCodec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & co
   else if (sample_pixel == 3)
     {
     params.interleaveMode = InterleaveMode::Line;
-    params.colorTransformation = ColorTransformation::HP1;
+    params.colorTransformation = ColorTransformation::None;
     }
 
 
