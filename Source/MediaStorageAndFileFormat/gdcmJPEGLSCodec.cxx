@@ -279,6 +279,7 @@ bool JPEGLSCodec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & co
   int image_height = dims[1];
 
   const PixelFormat &pf = this->GetPixelFormat();
+  unsigned int planarConf = this->GetPlanarConfiguration();
   int sample_pixel = pf.GetSamplesPerPixel();
   int bitsallocated = pf.GetBitsAllocated();
   int bitsstored = pf.GetBitsStored();
@@ -331,13 +332,18 @@ bool JPEGLSCodec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & co
 
   if (sample_pixel == 4)
     {
-    params.interleaveMode = InterleaveMode::Line;
+    params.interleaveMode = InterleaveMode::Sample;
     }
   else if (sample_pixel == 3)
     {
-    params.interleaveMode = InterleaveMode::Line;
+    if(planarConf == 0)
+      params.interleaveMode = InterleaveMode::Sample;
+    else
+      params.interleaveMode = InterleaveMode::None;
     params.colorTransformation = ColorTransformation::None;
     }
+  else if (sample_pixel == 1)
+      params.interleaveMode = InterleaveMode::None;
 
 
   ApiResult error = JpegLsEncode(outdata, outlen, &complen, indata, inlen, &params, nullptr);
