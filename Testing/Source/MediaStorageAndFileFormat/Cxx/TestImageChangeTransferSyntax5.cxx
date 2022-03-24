@@ -19,6 +19,7 @@
 #include "gdcmFileMetaInformation.h"
 #include "gdcmTesting.h"
 #include "gdcmByteSwap.h"
+#include "gdcmImageChangePlanarConfiguration.h"
 
 namespace gdcm
 {
@@ -47,6 +48,7 @@ int TestImageChangeTransferSyntaxJPEGLS(const char *filename, bool verbose = fal
     }
 
   const gdcm::Image &image = reader.GetImage();
+  int pc = image.GetPlanarConfiguration();
 
   gdcm::ImageChangeTransferSyntax change;
   change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLSLossless );
@@ -89,7 +91,17 @@ int TestImageChangeTransferSyntaxJPEGLS(const char *filename, bool verbose = fal
     }
   // Check that after decompression we still find the same thing:
   int res = 0;
-  const gdcm::Image &img = reader2.GetImage();
+  gdcm::Image img = reader2.GetImage();
+  // When recompressing: US-RGB-8-epicard.dcm, make sure to compute the md5 using the
+  // same original Planar Configuration...
+  if( (int)img.GetPlanarConfiguration() !=  pc )
+    {
+    gdcm::ImageChangePlanarConfiguration icpc;
+    icpc.SetInput( reader2.GetImage() );
+    icpc.SetPlanarConfiguration( pc );
+    icpc.Change();
+    img = icpc.GetOutput();
+    }
   //std::cerr << "Success to read image from file: " << filename << std::endl;
   unsigned long len = img.GetBufferLength();
   char* buffer = new char[len];
