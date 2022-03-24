@@ -434,13 +434,6 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
               i->GetPixelFormat().SetBitsAllocated( cpf.GetBitsAllocated() );
               i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
               }
-            else if( cpf.GetBitsStored() < pf.GetBitsStored() )
-              {
-              Bitmap *i = const_cast<Bitmap*>(this);
-              gdcmWarningMacro( "Encapsulated stream has more bits actually stored on disk. correcting." );
-              i->GetPixelFormat().SetBitsAllocated( cpf.GetBitsAllocated() );
-              i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
-              }
             }
           }
         }
@@ -846,6 +839,7 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
               }
             else if( cpf.GetBitsStored() > pf.GetBitsStored() )
               {
+              // Osirix10vs8BitsStored.dcm
               Bitmap *i = const_cast<Bitmap*>(this);
               gdcmWarningMacro( "Encapsulated stream has more bits actually stored on disk. correcting." );
               i->GetPixelFormat().SetBitsAllocated( cpf.GetBitsAllocated() );
