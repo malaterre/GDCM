@@ -400,6 +400,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
       const SequenceOfFragments *sf = PixelData.GetSequenceOfFragments();
       if( !sf ) return false;
       const Fragment &frag = sf->GetFragment(0);
+      if( frag.IsEmpty() ) return false;
       const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
       PixelFormat pf = GetPixelFormat(); // PixelFormat::UINT8;
       codec.SetPixelFormat( pf );
@@ -677,6 +678,7 @@ bool Bitmap::TryJPEGLSCodec(char *buffer, bool &lossyflag) const
       const SequenceOfFragments *sf = PixelData.GetSequenceOfFragments();
       if( !sf ) return false;
       const Fragment &frag = sf->GetFragment(0);
+      if( frag.IsEmpty() ) return false;
       const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
 
       std::stringstream ss;
@@ -805,6 +807,7 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
       const SequenceOfFragments *sf = PixelData.GetSequenceOfFragments();
       if( !sf ) return false;
       const Fragment &frag = sf->GetFragment(0);
+      if( frag.IsEmpty() ) return false;
       const ByteValue &bv2 = dynamic_cast<const ByteValue&>(frag.GetValue());
 
       bool b = codec.GetHeaderInfo( bv2.GetPointer(), bv2.GetLength() , ts2 );
