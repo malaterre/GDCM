@@ -766,7 +766,22 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 //%feature("director") Codec;
 //%include "gdcmCodec.h"
 %feature("director") ImageCodec;
+%typemap(in) const unsigned int d[3] (unsigned int temp[3]) {
+  int i;
+  if (PyTuple_Check($input)) {
+    if (!PyArg_ParseTuple($input,"iii",temp,temp+1,temp+2)) {
+      PyErr_SetString(PyExc_TypeError,"tuple must have 3 elements");
+      return NULL;
+    }
+    $1 = &temp[0];
+  } else {
+    PyErr_SetString(PyExc_TypeError,"expected a tuple.");
+    return NULL;
+  }
+}
+%ignore gdcm::ImageCodec::SetDimensions(const std::vector<unsigned int> &);
 %include "gdcmImageCodec.h"
+%clear const unsigned int d[3];
 %include "gdcmRLECodec.h"
 %include "gdcmJPEGCodec.h"
 %include "gdcmJPEGLSCodec.h"
