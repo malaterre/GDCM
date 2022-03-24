@@ -26,7 +26,6 @@ from  Scott Johnson /Scott Johnson neuwave com/
 to  VTK /vtkusers vtk.org/
 date  Tue, May 11, 2010 at 7:01 PM
 */
-#include <strstream>
 #include <string>
 
 #include <vtkDICOMImageReader.h>
@@ -194,6 +193,9 @@ public:
         _reader->SetFileNames( vtkfiles );
         _reader->Update();
 
+#ifndef vtkFloatingPointType
+#define vtkFloatingPointType double
+#endif
   const vtkFloatingPointType *spacing = _reader->GetOutput()->GetSpacing();
 
   vtkImageChangeInformation *v16 = vtkImageChangeInformation::New();
@@ -360,7 +362,7 @@ public:
     // Set the current slice of the current view.
     void SetSlice(int slice)
     {
-        std::strstream posString;
+        std::stringstream posString;
 
         double    center[3];
         double    spacing[3];
@@ -414,7 +416,7 @@ public:
         // Annotate the image.
         posString << "Position: (" << newPoint[0] << ", " << newPoint[1]
                   << ", " << newPoint[2] << ")  Slice: " << newSlice;
-        _annotation->SetInput(posString.str());
+        _annotation->SetInput(posString.str().c_str());
 
         _imageViewer->Render();
     }
