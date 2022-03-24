@@ -157,7 +157,7 @@ static const StreamOffset gdcmSelectedTagsOffsetDataFiles[] = {
 { "MR_SIEMENS_forceLoad29-1010_29-1020.dcm",60556 },
 { "MR_Spectroscopy_SIEMENS_OF.dcm",2102344 },
 { "NM-MONO2-16-13x-heart.dcm",1222 },
-{ "NM-PAL-16-PixRep1.dcm",4432 },
+{ "NM-PAL-16-PixRep1.dcm", 4456},
 { "NM_Kakadu44_SOTmarkerincons.dcm",1564 },
 { "OT-MONO2-8-a7.dcm",430 },
 { "OT-PAL-8-face.dcm",1646 },

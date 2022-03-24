@@ -110,7 +110,7 @@ bool JPEGLSCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
   else if( metadata.components == 3 )
     {
     PI = PhotometricInterpretation::RGB;
-    PlanarConfiguration = 1;
+    PlanarConfiguration = 0; // CP-1843
     this->PF.SetSamplesPerPixel( 3 );
     }
   else assert(0);
@@ -151,6 +151,32 @@ bool JPEGLSCodec::CanCode(TransferSyntax const &ts) const
 #endif
 }
 
+template<typename T>
+static void ConvPlanar(std::vector<unsigned char> &input)
+{
+  size_t buf_size = input.size();
+  assert( buf_size % sizeof(T) == 0 );
+  size_t npixels = buf_size / sizeof( T );
+  assert( npixels % 3 == 0 );
+  size_t size = npixels / 3;
+  T* buffer = (T*)&input[0];
+
+  const T *r = buffer;
+  const T *g = buffer + size;
+  const T *b = buffer + size + size;
+
+  T *copy = new T[ npixels ];
+  T *p = copy;
+  for (size_t j = 0; j < size; ++j)
+    {
+    *(p++) = *(r++);
+    *(p++) = *(g++);
+    *(p++) = *(b++);
+    }
+  std::memcpy(&input[0], copy, input.size() );
+  delete[] copy;
+}
+
 bool JPEGLSCodec::DecodeByStreamsCommon(const char *buffer, size_t totalLen, std::vector<unsigned char> &rgbyteOut)
 {
   using namespace charls;
@@ -170,6 +196,20 @@ bool JPEGLSCodec::DecodeByStreamsCommon(const char *buffer, size_t totalLen, std
   rgbyteOut.resize(params.height *params.width * ((params.bitsPerSample + 7) / 8) * params.components);
 
   ApiResult result = JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params, nullptr);
+
+  if( params.components == 3 )
+    {
+    const unsigned int nBytes = (params.bitsPerSample + 7) / 8;
+    if( params.interleaveMode == InterleaveMode::None )
+      {
+      if(nBytes == 1 )
+        ConvPlanar<unsigned char>(rgbyteOut);
+      else if(nBytes == 2 )
+        ConvPlanar<unsigned short>(rgbyteOut);
+      else
+        assert(0);
+      }
+    }
 
   if (result != ApiResult::OK)
     {
@@ -279,6 +319,7 @@ bool JPEGLSCodec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & co
   int image_height = dims[1];
 
   const PixelFormat &pf = this->GetPixelFormat();
+  unsigned int planarConf = this->GetPlanarConfiguration();
   int sample_pixel = pf.GetSamplesPerPixel();
   int bitsallocated = pf.GetBitsAllocated();
   int bitsstored = pf.GetBitsStored();
@@ -331,13 +372,18 @@ bool JPEGLSCodec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & co
 
   if (sample_pixel == 4)
     {
-    params.interleaveMode = InterleaveMode::Line;
+    params.interleaveMode = InterleaveMode::Sample;
     }
   else if (sample_pixel == 3)
     {
-    params.interleaveMode = InterleaveMode::Line;
-    params.colorTransformation = ColorTransformation::HP1;
+    if(planarConf == 0)
+      params.interleaveMode = InterleaveMode::Sample;
+    else
+      params.interleaveMode = InterleaveMode::None;
+    params.colorTransformation = ColorTransformation::None;
     }
+  else if (sample_pixel == 1)
+      params.interleaveMode = InterleaveMode::None;
 
 
   ApiResult error = JpegLsEncode(outdata, outlen, &complen, indata, inlen, &params, nullptr);

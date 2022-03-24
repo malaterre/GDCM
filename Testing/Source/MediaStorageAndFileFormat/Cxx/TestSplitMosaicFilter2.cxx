@@ -176,7 +176,13 @@ int TestSplitMosaicFilter2(int argc, char *argv[])
 
   unsigned int modims[3];
   b = filter.ComputeMOSAICDimensions( modims );
-  if( b ) return 1;
+  if( !b ) return 1;
+  const unsigned int ref0[3] = { 64u, 64u, 36u }; // padded with black
+  if( modims[0] != ref0[0] || modims[1] != ref0[1] || modims[2] != ref0[2] )
+  {
+    std::cerr << "Invalid ComputeMOSAICDimensions " << filename << std::endl;
+    return 1;
+  }
  
   // alternate code path:
   gdcm::PrivateTag t2 (0x0019,0x0a, "SIEMENS MR HEADER");
