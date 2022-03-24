@@ -502,8 +502,17 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   //p7.SetCertificate( this->x509 );
 
   DataSet &ds = F->GetDataSet();
+  if( ds.FindDataElement( Tag(0x0012,0x0062) ) )
+    {
+    gdcm::Attribute<0x0012,0x0062> patientIdentityRemoved = {};
+    patientIdentityRemoved.SetFromDataSet( ds );
+    const std::string value = patientIdentityRemoved.GetValue().Trim();
+    if( value != "NO" ) {
+      gdcmErrorMacro( "EncryptedContentTransferSyntax Attribute Patient is set !" );
+      return false;
+    }
+    }
   if(  ds.FindDataElement( Tag(0x0400,0x0500) )
-    || ds.FindDataElement( Tag(0x0012,0x0062) )
     || ds.FindDataElement( Tag(0x0012,0x0063) ) )
     {
     gdcmErrorMacro( "EncryptedContentTransferSyntax Attribute is present !" );
