@@ -434,7 +434,7 @@ bool Bitmap::TryJPEGCodec(char *buffer, bool &lossyflag) const
               i->GetPixelFormat().SetBitsAllocated( cpf.GetBitsAllocated() );
               i->GetPixelFormat().SetBitsStored( cpf.GetBitsStored() );
               }
-            else if( cpf.GetBitsStored() > pf.GetBitsStored() )
+            else if( cpf.GetBitsStored() < pf.GetBitsStored() )
               {
               Bitmap *i = const_cast<Bitmap*>(this);
               gdcmWarningMacro( "Encapsulated stream has more bits actually stored on disk. correcting." );
