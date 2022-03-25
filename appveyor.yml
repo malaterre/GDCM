@@ -162,7 +162,7 @@ artifacts:
 deploy:
   - provider: GitHub
     auth_token:
-      secure: 7HmfZp9O7bVdQo2hRk6FjOUs7jJosftv2rZ6JPBNzjPcAOMXDTvLqv3lvzdAzBfy
+      secure: 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
     release: v3.1.0
     description: 'Beta release of GDCM v$(appveyor_build_version)'
     # github automatically does source zip/tarball for us
