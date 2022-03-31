@@ -25,6 +25,9 @@
 #include <poppler/UnicodeMap.h>
 #include <poppler/PDFDocEncoding.h>
 #include <poppler/GlobalParams.h>
+#ifdef LIBPOPPLER_PDFDOC_HAS_OPTIONAL
+#include <poppler/PDFDocFactory.h>
+#endif
 #endif
 
 #include <string>
@@ -333,17 +336,27 @@ int main (int argc, char *argv[])
     return 0;
     }
 
+#ifdef LIBPOPPLER_PDFDOC_HAS_OPTIONAL
+  std::optional<GooString> ownerPW, userPW;
+#else
   GooString *ownerPW, *userPW;
+#endif
   GooString *fileName;
+#ifdef LIBPOPPLER_PDFDOC_HAS_OPTIONAL
+  std::unique_ptr<PDFDoc> doc;
+#else
   PDFDoc *doc;
+#endif
   Object info;
 #ifdef LIBPOPPLER_UNICODEMAP_HAS_CONSTMAPUNICODE
   const UnicodeMap *uMap;
 #else
   UnicodeMap *uMap;
 #endif
+#ifndef LIBPOPPLER_PDFDOC_HAS_OPTIONAL
   ownerPW = NULL;
   userPW = NULL;
+#endif
 #ifdef LIBPOPPLER_GLOBALPARAMS_CSTOR_HAS_PARAM
   globalParams = new GlobalParams(0);
 #else
@@ -376,7 +389,11 @@ int main (int argc, char *argv[])
 #ifndef LIBPOPPLER_NEW_OBJECT_API
   obj.initNull();
 #endif
+#ifdef LIBPOPPLER_PDFDOC_HAS_OPTIONAL
+  doc = PDFDocFactory().createPDFDoc(*fileName, ownerPW, userPW);
+#else
   doc = new PDFDoc(fileName, ownerPW, userPW);
+#endif
 
   if (doc->isEncrypted())
     {
@@ -405,8 +422,13 @@ return ch;
 http://msdn.microsoft.com/en-us/library/078sfkak(VS.80).aspx
 }
  */
+#ifdef LIBPOPPLER_PDFDOC_HAS_OPTIONAL
+    ownerPW = GooString( password.c_str() );
+    doc = PDFDocFactory().createPDFDoc(*fileName, ownerPW, userPW);
+#else
     ownerPW = new GooString( password.c_str() );
     doc = new PDFDoc(fileName, ownerPW, userPW);
+#endif
     }
 
   std::string title;
