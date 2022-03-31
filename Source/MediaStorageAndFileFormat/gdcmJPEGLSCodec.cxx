@@ -190,7 +190,7 @@ bool JPEGLSCodec::DecodeByStreamsCommon(const char *buffer, size_t totalLen, std
     return false;
     }
 
-  if( params.colorTransformation != charls::color_transformation::none )
+  if( params.colorTransformation != charls::ColorTransformation::None )
     {
     gdcmWarningMacro( "APP8 marker found to contains a color transformation. This is an HP extension" );
     }
