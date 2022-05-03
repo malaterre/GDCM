@@ -95,11 +95,29 @@ bool Anonymizer::Empty( Tag const &t)
   return Replace(t, "", 0);
 }
 
+bool Anonymizer::Empty( PrivateTag const &pt)
+{
+  // There is a secret code path to make it work for VR::SQ since operation is just 'make empty'
+  return Replace(pt, "", 0);
+}
+
 bool Anonymizer::Remove( Tag const &t )
 {
   DataSet &ds = F->GetDataSet();
   if(ds.FindDataElement(t))
     return ds.Remove( t ) == 1;
+  else
+    return true;
+}
+
+bool Anonymizer::Remove( PrivateTag const &pt )
+{
+  DataSet &ds = F->GetDataSet();
+  if(ds.FindDataElement(pt))
+    {
+    const DataElement &de = ds.GetDataElement(pt);
+    return ds.Remove( de.GetTag() ) == 1;
+    }
   else
     return true;
 }
@@ -147,15 +165,19 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
             }
           }
         de.SetByteValue( "", vl );
-        ds.Insert( de );
+        ds.Replace( de );
         ret = true;
         }
       else
         {
         // TODO
-        assert( 0 && "TODO" );
+        gdcmErrorMacro( "Cannot make empty private attribute that does not exist" );
         ret = false;
         }
+      }
+    else
+      {
+      gdcmErrorMacro( "Cannot replace private attribute." );
       }
     }
   else
@@ -261,6 +283,21 @@ bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
       }
     }
   return ret;
+}
+
+bool Anonymizer::Replace( PrivateTag const &pt, const char *value, VL const & vl )
+{
+  DataSet &ds = F->GetDataSet();
+  if(ds.FindDataElement(pt))
+    {
+    const DataElement &de = ds.GetDataElement(pt);
+    return Replace( de.GetTag(), value, vl );
+    }
+  else
+    {
+    gdcmErrorMacro( "Private Tag needs to be present to be replaced" );
+    return false;
+    }
 }
 
 static bool Anonymizer_RemoveRetired(File const &file, DataSet &ds)

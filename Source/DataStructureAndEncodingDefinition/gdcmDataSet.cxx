@@ -58,7 +58,7 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
 
 Tag DataSet::ComputeDataElement(const PrivateTag & t) const
 {
-  gdcmDebugMacro( "Entering ComputeDataElement" );
+  //gdcmDebugMacro( "Entering ComputeDataElement" );
   //assert( t.IsPrivateCreator() ); // No this is wrong to do the assert: eg. (0x07a1,0x000a,"ELSCINT1")
   // is valid because we have not yet done the mapping, so 0xa < 0x10 fails but might not later on
   const Tag start(t.GetGroup(), 0x0010 ); // First possible private creator (0x0 -> 0x9 are reserved...)
@@ -87,7 +87,7 @@ Tag DataSet::ComputeDataElement(const PrivateTag & t) const
       }
     ++it;
     }
-  gdcmDebugMacro( "In compute found is:" << found );
+  //gdcmDebugMacro( "In compute found is:" << found );
   if (!found) return GetDEEnd().GetTag();
   // else
   // ok we found the Private Creator Data Element, let's construct the proper data element

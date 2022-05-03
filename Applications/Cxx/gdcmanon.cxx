@@ -45,7 +45,9 @@ static void PrintVersion()
 
 
 static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, const char *outfilename,
-  std::vector<gdcm::Tag> const &empty_tags, std::vector<gdcm::Tag> const &remove_tags, std::vector< std::pair<gdcm::Tag, std::string> > const & replace_tags, bool continuemode = false)
+ std::vector<gdcm::Tag> const &empty_tags, std::vector<gdcm::Tag> const &remove_tags, std::vector< std::pair<gdcm::Tag, std::string> > const & replace_tags,
+ std::vector<gdcm::PrivateTag> const &empty_privatetags, std::vector<gdcm::PrivateTag> const &remove_privatetags, std::vector< std::pair<gdcm::PrivateTag, std::string> > const & replace_privatetags,
+ bool continuemode = false)
 {
   gdcm::Reader reader;
   reader.SetFileName( filename );
@@ -67,14 +69,17 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
 
   anon.SetFile( file );
 
-  if( empty_tags.empty() && replace_tags.empty() && remove_tags.empty() )
+  if( empty_tags.empty() && replace_tags.empty() && remove_tags.empty() 
+   && empty_privatetags.empty() && replace_privatetags.empty() && remove_privatetags.empty() )
     {
-    std::cerr << "No operation to be done." << std::endl;
+    std::cerr << "No operation(s) to be done." << std::endl;
     return false;
     }
 
-  std::vector<gdcm::Tag>::const_iterator it = empty_tags.begin();
+  // Public
   bool success = true;
+{
+  std::vector<gdcm::Tag>::const_iterator it = empty_tags.begin();
   for(; it != empty_tags.end(); ++it)
     {
     success = success && anon.Empty( *it );
@@ -90,6 +95,28 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
     {
     success = success && anon.Replace( it2->first, it2->second.c_str() );
     }
+}
+
+  // Private
+{
+  std::vector<gdcm::PrivateTag>::const_iterator it = empty_privatetags.begin();
+  bool success = true;
+  for(; it != empty_privatetags.end(); ++it)
+    {
+    success = success && anon.Empty( *it );
+    }
+  it = remove_privatetags.begin();
+  for(; it != remove_privatetags.end(); ++it)
+    {
+    success = success && anon.Remove( *it );
+    }
+
+  std::vector< std::pair<gdcm::PrivateTag, std::string> >::const_iterator it2 = replace_privatetags.begin();
+  for(; it2 != replace_privatetags.end(); ++it2)
+    {
+    success = success && anon.Replace( it2->first, it2->second.c_str() );
+    }
+}
 
   gdcm::Writer writer;
   writer.SetFileName( outfilename );
@@ -314,7 +341,11 @@ int main(int argc, char *argv[])
   std::vector<gdcm::Tag> empty_tags;
   std::vector<gdcm::Tag> remove_tags;
   std::vector< std::pair<gdcm::Tag, std::string> > replace_tags_value;
+  std::vector<gdcm::PrivateTag> empty_privatetags;
+  std::vector<gdcm::PrivateTag> remove_privatetags;
+  std::vector< std::pair<gdcm::PrivateTag, std::string> > replace_privatetags_value;
   gdcm::Tag tag;
+  gdcm::PrivateTag privatetag;
   gdcm::CryptoFactory::CryptoLib crypto_lib;
   crypto_lib = gdcm::CryptoFactory::DEFAULT;
 
@@ -409,47 +440,60 @@ int main(int argc, char *argv[])
           else if( option_index == 15 ) /* empty */
             {
             assert( strcmp(s, "empty") == 0 );
-            if( !tag.ReadFromCommaSeparatedString(optarg) )
+            if( privatetag.ReadFromCommaSeparatedString(optarg) )
+              empty_privatetags.push_back( privatetag );
+            else if( tag.ReadFromCommaSeparatedString(optarg) )
+              empty_tags.push_back( tag );
+            else
               {
-              std::cerr << "Could not read Tag: " << optarg << std::endl;
+              std::cerr << "Could not read Tag/PrivateTag: " << optarg << std::endl;
               return 1;
               }
-            empty_tags.push_back( tag );
             }
           else if( option_index == 16 ) /* remove */
             {
             assert( strcmp(s, "remove") == 0 );
-            if( !tag.ReadFromCommaSeparatedString(optarg) )
+            if( privatetag.ReadFromCommaSeparatedString(optarg) )
+              remove_privatetags.push_back( privatetag );
+            else if( tag.ReadFromCommaSeparatedString(optarg) )
+              remove_tags.push_back( tag );
+            else
               {
-              std::cerr << "Could not read Tag: " << optarg << std::endl;
+              std::cerr << "Could not read Tag/PrivateTag: " << optarg << std::endl;
               return 1;
               }
-            remove_tags.push_back( tag );
             }
           else if( option_index == 17 ) /* replace */
             {
             assert( strcmp(s, "replace") == 0 );
-            if( !tag.ReadFromCommaSeparatedString(optarg) )
+            if( privatetag.ReadFromCommaSeparatedString(optarg) )
               {
-              std::cerr << "Could not read Tag: " << optarg << std::endl;
               return 1;
               }
-            std::stringstream ss;
-            ss.str( optarg );
-            uint16_t dummy;
-            char cdummy; // comma
-            ss >> std::hex >> dummy;
-            assert( tag.GetGroup() == dummy );
-            ss >> cdummy;
-            assert( cdummy == ',' );
-            ss >> std::hex >> dummy;
-            assert( tag.GetElement() == dummy );
-            ss >> cdummy;
-            assert( cdummy == ',' || cdummy == '=' );
-            std::string str;
-            //ss >> str;
-            std::getline(ss, str); // do not skip whitespace
-            replace_tags_value.emplace_back(tag, str );
+            else if( tag.ReadFromCommaSeparatedString(optarg) )
+              {
+              std::stringstream ss;
+              ss.str( optarg );
+              uint16_t dummy;
+              char cdummy; // comma
+              ss >> std::hex >> dummy;
+              assert( tag.GetGroup() == dummy );
+              ss >> cdummy;
+              assert( cdummy == ',' );
+              ss >> std::hex >> dummy;
+              assert( tag.GetElement() == dummy );
+              ss >> cdummy;
+              assert( cdummy == ',' || cdummy == '=' );
+              std::string str;
+              //ss >> str;
+              std::getline(ss, str); // do not skip whitespace
+              replace_tags_value.emplace_back(tag, str );
+              }
+            else
+              {
+              std::cerr << "Could not read Tag/PrivateTag: " << optarg << std::endl;
+              return 1;
+              }
             }
           else if( option_index == 19 ) /* crypto */
             {
@@ -811,7 +855,8 @@ int main(int argc, char *argv[])
       {
       const char *in  = filenames[i].c_str();
       const char *out = outfilenames[i].c_str();
-      if( !AnonymizeOneFileDumb(anon, in, out, empty_tags, remove_tags, replace_tags_value, (continuemode > 0 ? true: false)) )
+      if( !AnonymizeOneFileDumb(anon, in, out, empty_tags, remove_tags, replace_tags_value,
+        empty_privatetags, remove_privatetags, replace_privatetags_value, (continuemode > 0 ? true: false)) )
         {
         //std::cerr << "Could not anonymize: " << in << std::endl;
         delete cms_ptr;

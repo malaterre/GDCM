@@ -83,13 +83,13 @@ public:
   /// Make Tag t empty (if not found tag will be created)
   /// Warning: does not handle SQ element
   bool Empty( Tag const &t );
-  //bool Empty( PrivateTag const &t );
+  bool Empty( PrivateTag const &pt );
   //bool Empty( TagPath const &t );
 
   /// remove a tag (even a SQ can be removed)
   /// Return code is false when tag t cannot be found
   bool Remove( Tag const &t );
-  //bool Remove( PrivateTag const &t );
+  bool Remove( PrivateTag const &pt );
   //bool Remove( TagPath const &t );
 
   /// Replace tag with another value, if tag is not found it will be created:
@@ -99,7 +99,7 @@ public:
   /// when the value contains \0, it is a good idea to specify the length. This function
   /// is required when dealing with VRBINARY tag
   bool Replace( Tag const &t, const char *value, VL const & vl );
-  //bool Replace( PrivateTag const &t, const char *value, VL const & vl );
+  bool Replace( PrivateTag const &t, const char *value, VL const & vl );
   //bool Replace( TagPath const &t, const char *value, VL const & vl );
 
   /// Main function that loop over all elements and remove private tags
