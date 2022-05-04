@@ -83,12 +83,24 @@ public:
   /// Make Tag t empty (if not found tag will be created)
   /// Warning: does not handle SQ element
   bool Empty( Tag const &t );
+
+  /// Make PrivateTag pt empty (if not found tag will be created)
+  /// Warning: does not handle SQ element
+  /// Pay special attention that this code must be done before any call to
+  /// Empty/Remove of the associated Private Creator, but before any call to
+  /// Replace.
   bool Empty( PrivateTag const &pt );
   //bool Empty( TagPath const &t );
 
   /// remove a tag (even a SQ can be removed)
   /// Return code is false when tag t cannot be found
   bool Remove( Tag const &t );
+
+  /// remove a private tag (even a SQ can be removed)
+  /// Return code is false when tag pt cannot be found
+  /// Pay special attention that this code must be done before any call to
+  /// Empty/Remove of the associated Private Creator, but before any call to
+  /// Replace.
   bool Remove( PrivateTag const &pt );
   //bool Remove( TagPath const &t );
 

@@ -76,20 +76,9 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
     return false;
     }
 
-  // Public
   bool success = true;
+  // Private Creator(s) must be done first:
 {
-  std::vector<gdcm::Tag>::const_iterator it = empty_tags.begin();
-  for(; it != empty_tags.end(); ++it)
-    {
-    success = success && anon.Empty( *it );
-    }
-  it = remove_tags.begin();
-  for(; it != remove_tags.end(); ++it)
-    {
-    success = success && anon.Remove( *it );
-    }
-
   std::vector< std::pair<gdcm::Tag, std::string> >::const_iterator it2 = replace_tags.begin();
   for(; it2 != replace_tags.end(); ++it2)
     {
@@ -97,7 +86,7 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
     }
 }
 
-  // Private
+  // Regular Private:
 {
   std::vector<gdcm::PrivateTag>::const_iterator it = empty_privatetags.begin();
   bool success = true;
@@ -115,6 +104,20 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
   for(; it2 != replace_privatetags.end(); ++it2)
     {
     success = success && anon.Replace( it2->first, it2->second.c_str() );
+    }
+}
+
+  // Public Remove or Empty may impact Private Creator, so do them last.
+{
+  std::vector<gdcm::Tag>::const_iterator it = empty_tags.begin();
+  for(; it != empty_tags.end(); ++it)
+    {
+    success = success && anon.Empty( *it );
+    }
+  it = remove_tags.begin();
+  for(; it != remove_tags.end(); ++it)
+    {
+    success = success && anon.Remove( *it );
     }
 }
 
