@@ -38,7 +38,7 @@ using DICT_ENTRY = struct
 };
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
-  {0x0009,0x0000,"MORPHING REPLAY INFO",VR::SQ,VM::VM1,"?",false }, //
+  {0x0009,0x0000,"MORPHING REPLAY INFO",VR::UN,VM::VM1,"?",false }, // wtf: VR is SQ but contains non-SQ nested sub-elements...
   {0x0029,0x0031,"FujiFILM TM",VR::SQ,VM::VM1,"? PHI found ?",false }, //
   {0x7fdd,0x0013,"agfa/originalStudyUID",VR::UI,VM::VM1,"?",false }, // most likely UI ??
   {0x7fdb,0x0012,"agfa/seriesHeader",VR::UN,VM::VM1,"?",false },
