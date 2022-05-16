@@ -51,6 +51,22 @@ public:
   const char *GetOwner() const { return Owner.c_str(); }
   void SetOwner(const char *owner) { if(owner) Owner = LOComp::Trim(owner); }
 
+  PrivateTag &operator=(const PrivateTag &_val)
+    {
+    SetElementTag( _val.GetElementTag() );
+    Owner = _val.Owner;
+    return *this;
+    }
+
+  bool operator==(const PrivateTag &_val) const
+    {
+    return GetElementTag() == _val.GetElementTag() && Owner == _val.Owner;
+    }
+  bool operator!=(const PrivateTag &_val) const
+    {
+    return GetElementTag() != _val.GetElementTag() || Owner != _val.Owner;
+    }
+
   bool operator<(const PrivateTag &_val) const;
 
   /// Read PrivateTag from a string. Element number will be truncated
