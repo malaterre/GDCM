@@ -39,6 +39,7 @@ static int TestAnonymize(const char *subdir, const char* filename)
   anonymizer.Replace( ptag1 , empty );
   anonymizer.Remove( ptag2 );
   anonymizer.Empty( ptag3 );
+  anonymizer.Clear( ptag3 );
 
   // Create directory first:
   std::string tmpdir = Testing::GetTempDirectory( subdir );

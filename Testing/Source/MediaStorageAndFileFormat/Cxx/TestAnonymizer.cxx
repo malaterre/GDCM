@@ -37,6 +37,7 @@ static int TestAnonymize(const char *subdir, const char* filename)
   anonymizer.Replace( pattag , patname );
   anonymizer.Remove( Tag(0x0008,0x2112) );
   anonymizer.Empty( Tag(0x0008,0x0070) );
+  anonymizer.Clear( Tag(0x0010,0x0020) );
   UIDGenerator uid;
   // Those two are very special, since (0008,0016) needs to be propagated to (0002,0002) and
   // (0008,0018) needs to be propagated to (0002,0003)
