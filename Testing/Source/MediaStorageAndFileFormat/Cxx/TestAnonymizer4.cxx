@@ -32,21 +32,13 @@ static int TestAnonymize(const char *subdir, const char* filename)
   Anonymizer anonymizer;
   anonymizer.SetFile( reader.GetFile() );
   // Setup some actions:
-  const char patname[] = "test^anonymize";
-  const Tag pattag = Tag(0x0010,0x0010);
-  anonymizer.Replace( pattag , patname );
-  anonymizer.Remove( Tag(0x0008,0x2112) );
-  anonymizer.Empty( Tag(0x0008,0x0070) );
-  UIDGenerator uid;
-  // Those two are very special, since (0008,0016) needs to be propagated to (0002,0002) and
-  // (0008,0018) needs to be propagated to (0002,0003)
-  std::string newuid = uid.Generate();
-  anonymizer.Replace( Tag(0x0008,0x0018), newuid.c_str() );
-  anonymizer.Replace( Tag(0x0008,0x0016), "1.2.840.10008.5.1.4.1.1.1" ); // Make it a CT
-  if( !anonymizer.RemovePrivateTags() )
-    {
-    return 1;
-    }
+  const char empty[] = "";
+  const PrivateTag ptag1 = PrivateTag(0x0029,0x20,"SIEMENS MEDCOM HEADER");
+  const PrivateTag ptag2 = PrivateTag(0x0029,0x60,"SIEMENS MEDCOM HEADER2");
+  const PrivateTag ptag3 = PrivateTag(0x0029,0x10,"SIEMENS CSA HEADER");
+  anonymizer.Replace( ptag1 , empty );
+  anonymizer.Remove( ptag2 );
+  anonymizer.Empty( ptag3 );
 
   // Create directory first:
   std::string tmpdir = Testing::GetTempDirectory( subdir );
@@ -80,16 +72,12 @@ static int TestAnonymize(const char *subdir, const char* filename)
   const DataSet & ds = reader.GetFile().GetDataSet();
   //std::cout << ds << std::endl;
 
-  const ByteValue *bv = ds.GetDataElement( pattag ).GetByteValue();
+  const ByteValue *bv = ds.GetDataElement( ptag2 ).GetByteValue();
   if( !bv )
     {
     return 1;
     }
-  if (strncmp( bv->GetPointer(), patname, strlen(patname) ) != 0 )
-    {
-    return 1;
-    }
-  if( bv->GetLength() != strlen(patname) )
+  if( bv->GetLength() != 0 )
     {
     return 1;
     }
@@ -98,7 +86,7 @@ static int TestAnonymize(const char *subdir, const char* filename)
 }
 }
 
-int TestAnonymizer(int argc, char *argv[])
+int TestAnonymizer4(int argc, char *argv[])
 {
   if( argc == 2 )
     {

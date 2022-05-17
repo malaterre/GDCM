@@ -2,6 +2,7 @@
 # MSFF
 set(MSFF_TEST_SRCS
   TestAnonymizer.cxx
+  TestAnonymizer4.cxx
   TestDataSetHelper.cxx
   TestEquipmentManufacturer.cxx
   TestFileChangeTransferSyntax1.cxx
