@@ -89,7 +89,6 @@ static bool AnonymizeOneFileDumb(gdcm::Anonymizer &anon, const char *filename, c
   // Regular Private:
 {
   std::vector<gdcm::PrivateTag>::const_iterator it = empty_privatetags.begin();
-  bool success = true;
   for(; it != empty_privatetags.end(); ++it)
     {
     success = success && anon.Empty( *it );
