@@ -107,9 +107,15 @@ file-out  DICOM output directory
 <refsection xml:id="gdcmanon_1dumb_mode_options">
 <title>dumb mode options</title>
 
-<para><literallayout>     --empty   %d,%d           DICOM tag(s) to empty
+<para><literallayout>
+     --empty   %d,%d           DICOM tag(s) to empty
+               %d,%d,%s        DICOM private tag(s) to empty
+     --clear   %d,%d           DICOM tag(s) to clear
+               %d,%d,%s        DICOM private tag(s) to clear
      --remove  %d,%d           DICOM tag(s) to remove
-     --replace %d,%d,%s        DICOM tag(s) to replace
+               %d,%d,%s        DICOM private tag(s) to remove
+     --replace %d,%d=%s        DICOM tag(s) to replace
+               %d,%d,%s=%s     DICOM private tag(s) to replace
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmanon_1general_options">
@@ -179,7 +185,7 @@ file-out  DICOM output directory
 <para>Empty the tag (0010,0010) Patient&apos;s Name, </para>
 </listitem>
 <listitem>
-<para>Empty the tag (0010,0020) Patient ID, </para>
+<para>Clear the tag (0010,0020) Patient ID, </para>
 </listitem>
 <listitem>
 <para>Remove the tag (0010,0040) Patient&apos;s Sex </para>
@@ -191,10 +197,13 @@ file-out  DICOM output directory
 <para>Replace the tag (0010,1030) Patient&apos;s Weight with the value &apos;10&apos;</para>
 </listitem>
 </itemizedlist>
-You are required to check which DICOM attribute is Type 1 and Type 1C, before trying to <emphasis role="bold">&apos;Empty&apos;</emphasis> or <emphasis role="bold">&apos;Remove&apos;</emphasis> a particular DICOM attribute. For the same reason, you are required to check what are valid value in a replace operation.</para>
+You are required to check which DICOM attribute is Type 1 and Type 1C, before trying to <emphasis role="bold">&apos;Empty&apos;</emphasis>,<emphasis role="bold">&apos;Clear&apos;</emphasis> or <emphasis role="bold">&apos;Remove&apos;</emphasis> a particular DICOM attribute. For the same reason, you are required to check what are valid value in a replace operation.</para>
 
-<para><literallayout>$ gdcmanon --dumb --empty 10,10 --empty 10,20 --remove 10,40 --remove 10,1010 --replace 10,1030,10 012345.002.050.dcm out.dcm
+<para><literallayout>$ gdcmanon --dumb --empty 10,10 --clear 10,20 --remove 10,40 --remove 10,1010 --replace 10,1030,10 012345.002.050.dcm out.dcm
 </literallayout></para>
+
+<para>In the following example a private tag (0029,20,SIEMENS MEDCOM HEADER) is cleared out (made empty only when present):
+<literallayout>$ gdcmanon --dumb --clear "0029,20,SIEMENS MEDCOM HEADER" input.dcm output.dcm</literallayout></para>
 
 <para>Multiple operation of &#8211;dumb mode can take place, just reuse the output of the previous operation. Always use gdcmdump on the input and output file to check what was actually achieved. You can use a diff program to check only what changed (see <emphasis role="bold">gdcmdiff</emphasis>(1) for example).</para>
 <refsection xml:id="gdcmanon_1irreversible_anon">

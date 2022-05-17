@@ -27,8 +27,8 @@
  * --bench...
  */
 
-#include "gdcmScanner.h"
-#include "gdcmStrictScanner.h"
+#include "gdcmScanner2.h"
+#include "gdcmStrictScanner2.h"
 #include "gdcmTrace.h"
 #include "gdcmVersion.h"
 #include "gdcmSimpleSubjectWatcher.h"
@@ -84,18 +84,26 @@ static int DoIt(
   gdcm::Directory const & d,
   bool const & print , int table,
     VectorTags const & tags,
-  VectorPrivateTags const & privatetags)
+  VectorPrivateTags const & privatetags, bool header)
 {
   gdcm::SmartPointer<TScanner> ps = new TScanner;
   TScanner &s = *ps;
   //gdcm::SimpleSubjectWatcher watcher(ps, "Scanner");
   for( VectorTags::const_iterator it = tags.begin(); it != tags.end(); ++it)
     {
-    s.AddTag( *it );
+    if(!s.AddPublicTag( *it ))
+      {
+      std::cerr << "Failure to add public tag: " << *it << std::endl;
+      return 1;
+      }
     }
   for( VectorPrivateTags::const_iterator it = privatetags.begin(); it != privatetags.end(); ++it)
     {
-    s.AddPrivateTag( *it );
+    if(!s.AddPrivateTag( *it ))
+      {
+      std::cerr << "Failure to add private tag: " << *it << std::endl;
+      return 1;
+      }
     }
   bool b = s.Scan( d.GetFilenames() );
   if( !b )
@@ -106,7 +114,7 @@ static int DoIt(
   if (print)
     {
     if(table)
-      s.PrintTable( std::cout );
+      s.PrintTable( std::cout, header );
     else
       s.Print( std::cout );
     }
@@ -133,6 +141,7 @@ int main(int argc, char *argv[])
 
   int strict = 0;
   int table = 0;
+  int header = 0;
   int verbose = 0;
   int warning = 0;
   int debug = 0;
@@ -152,6 +161,7 @@ int main(int argc, char *argv[])
         {"keyword", required_argument, nullptr, 'k'},
         {"strict", no_argument, &strict, 1},
         {"table", no_argument, &table, 1},
+        {"header", no_argument, &header, 1},
 
 // General options !
         {"verbose", no_argument, nullptr, 'V'},
@@ -325,6 +335,6 @@ int main(int argc, char *argv[])
     std::cout << "done retrieving file list " << nfiles << " files found." <<  std::endl;
 
   if( strict )
-    return DoIt<gdcm::StrictScanner>(d,print,table,tags,privatetags);
-  return DoIt<gdcm::Scanner>(d,print,table,tags,privatetags);
+    return DoIt<gdcm::StrictScanner2>(d,print,table,tags,privatetags,header>0);
+  return DoIt<gdcm::Scanner2>(d,print,table,tags,privatetags,header > 0);
 }

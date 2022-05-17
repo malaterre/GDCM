@@ -77,6 +77,12 @@
 
 <para><literallayout>$ gdcmscanner -t 10,10 -d gdcmData -p
 </literallayout></para>
+
+<para>For private tag simply do:</para>
+
+<para><literallayout>$ gdcmscanner -P "0029,60,SIEMENS MEDCOM HEADER2" -d gdcmData -p
+</literallayout></para>
+
 </refsection>
 <refsection xml:id="gdcmviewer_1table_usage">
 <title>Table usage</title>

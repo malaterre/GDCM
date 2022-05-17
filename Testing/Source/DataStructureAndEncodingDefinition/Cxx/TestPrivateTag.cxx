@@ -27,6 +27,14 @@ int TestPrivateTag(int , char * [])
     std::cerr << "[" << pt.GetOwner() << "]" << std::endl;
     return 1;
     }
+  gdcm::PrivateTag pt2(0x29,0x1018,"SIEMENS CSA HEADER");
+  if( pt != pt2 )
+    return 1;
+  gdcm::PrivateTag pt3(0x29,0x1018,"SIEMENS CXA HEADER");
+  if( pt == pt3 )
+    return 1;
+  if( pt3 < pt )
+    return 1;
 
   const char str[] = "0029,1019,SIEMENS CSA HEADER";
 
@@ -42,6 +50,21 @@ int TestPrivateTag(int , char * [])
     std::cerr << "[" << pt.GetOwner() << "]" << std::endl;
     return 1;
     }
+
+  const char strc[] = "4453,0d,DR Systems, Inc.";
+  if( !pt.ReadFromCommaSeparatedString( strc ) ) return 1;
+
+  if( pt != gdcm::Tag(0x4453,0x0d) )
+    {
+    std::cerr << pt << std::endl;
+    return 1;
+    }
+  if( pt.GetOwner() != std::string("DR Systems, Inc.") )
+    {
+    std::cerr << "[" << pt.GetOwner() << "]" << std::endl;
+    return 1;
+    }
+
 
   const gdcm::PrivateTag pt1(0x1,0x2,"BLA");
   const char str0[] = "";
@@ -97,7 +120,9 @@ int TestPrivateTag(int , char * [])
     ds.Insert(de);
     // get private tag
     gdcm::PrivateTag pt0(0x0029, 0x0023, "Titi");
-    ds.GetDataElement(pt0);
+    if(ds.FindDataElement(pt0))
+      return 1;
+    auto de0 = ds.GetDataElement(pt0);
     }
 
   return 0;

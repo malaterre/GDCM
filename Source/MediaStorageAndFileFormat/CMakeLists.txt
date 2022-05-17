@@ -50,7 +50,9 @@ set(MSFF_SRCS
   gdcmDictPrinter.cxx
   gdcmXMLPrinter.cxx
   gdcmScanner.cxx
+  gdcmScanner2.cxx
   gdcmStrictScanner.cxx
+  gdcmStrictScanner2.cxx
   gdcmPixmapReader.cxx
   gdcmImageReader.cxx
   gdcmPixmapWriter.cxx

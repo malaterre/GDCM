@@ -101,6 +101,22 @@ bool Anonymizer::Empty( PrivateTag const &pt)
   return Replace(pt, "", 0);
 }
 
+bool Anonymizer::Clear( Tag const &t)
+{
+  DataSet &ds = F->GetDataSet();
+  if(ds.FindDataElement(t))
+    this->Empty(t);
+  return true;
+}
+
+bool Anonymizer::Clear( PrivateTag const &pt)
+{
+  DataSet &ds = F->GetDataSet();
+  if(ds.FindDataElement(pt))
+    this->Empty(pt);
+  return true;
+}
+
 bool Anonymizer::Remove( Tag const &t )
 {
   DataSet &ds = F->GetDataSet();
@@ -131,6 +147,17 @@ bool Anonymizer::Replace( Tag const &t, const char *value )
     //strlen shouldn't be more than 4gb anyway
     }
   return Replace( t, value, len );
+}
+
+bool Anonymizer::Replace( PrivateTag const &pt, const char *value )
+{
+  VL::Type len = 0; //to avoid the size_t warning on 64 bit windows
+  if( value )
+    {
+    len = (VL::Type)strlen( value );//strlen returns size_t, but it should be VL::Type
+    //strlen shouldn't be more than 4gb anyway
+    }
+  return Replace( pt, value, len );
 }
 
 bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
@@ -295,8 +322,58 @@ bool Anonymizer::Replace( PrivateTag const &pt, const char *value, VL const & vl
     }
   else
     {
-    gdcmErrorMacro( "Private Tag needs to be present to be replaced" );
-    return false;
+    Tag start = pt;
+    start.SetElement( 0x0010 );
+    bool needcreator = false;
+    bool found = false;
+    Tag maxCreator = pt;
+    maxCreator.SetElement(0x00ff);
+    do {
+      const DataElement& de = ds.FindNextDataElement( start );
+      const ByteValue* bv = de.GetByteValue();
+      std::string creator_str;
+      if(bv) {
+        creator_str = std::string(bv->GetPointer(),bv->GetLength());
+        creator_str = LOComp::Trim(creator_str.c_str());
+      }
+      if( maxCreator < de.GetTag() )  {
+        needcreator = true;
+        found = true;
+      } else if ( System::StrCaseCmp(creator_str.c_str(), pt.GetOwner()) == 0 ) {
+        needcreator = false;
+        found = true;
+      } else {
+        assert( start.GetElement() != 0xff );
+        start.SetElement( start.GetElement() + 1 );
+      }
+    } while ( !found );
+    assert( start.GetGroup() == pt.GetGroup() );
+    if(needcreator)
+    {
+      // add private creator:
+      Element<VR::LO,VM::VM1> priv_creator;
+      priv_creator.SetValue( pt.GetOwner() );
+      DataElement creator = priv_creator.GetAsDataElement();
+      assert( start.GetElement() <= 0xff );
+      start.SetElement( start.GetElement() );
+      creator.SetTag( start );
+      ds.Insert(creator);
+    }
+    // add empty element:
+    static const Global &g = GlobalInstance;
+    static const Dicts &dicts = g.GetDicts();
+    const DictEntry &dictentry = dicts.GetDictEntry(pt);
+    DataElement fake;
+    Tag privateLocation(pt);
+    assert( pt.GetElement() <= 0xff );
+    privateLocation.SetElement( start.GetElement() << 8 | pt.GetElement() );
+    assert( start == privateLocation.GetPrivateCreator() );
+    fake.SetTag( privateLocation );
+    fake.SetVR( dictentry.GetVR() );
+    ds.Insert( fake );
+
+    assert(ds.FindDataElement(pt));
+    return Replace( privateLocation, value, vl );
     }
 }
 

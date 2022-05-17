@@ -1194,7 +1194,7 @@ void CSAHeader::Print(std::ostream &os) const
 
   for(; it != InternalCSADataSet.end(); ++it)
     {
-    std::cout << *it << std::endl;
+    os << *it << std::endl;
     }
 }
 
