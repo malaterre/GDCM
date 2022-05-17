@@ -108,9 +108,13 @@ if(GDCM_DATA_ROOT)
     ${MSFF_TEST_SRCS}
     TestSplitMosaicFilter3.cxx
     TestStrictScanner1.cxx
+    TestStrictScanner2_1.cxx
     TestStrictScanner2.cxx
+    TestStrictScanner2_2.cxx
     TestScanner1.cxx
+    TestScanner2_1.cxx
     TestScanner2.cxx
+    TestScanner2_2.cxx
     TestImageHelper2.cxx
     TestPrinter2.cxx
     TestIPPSorter.cxx
