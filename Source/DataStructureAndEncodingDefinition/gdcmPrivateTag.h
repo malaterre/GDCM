@@ -58,9 +58,17 @@ public:
     return *this;
     }
 
+  bool operator==(const Tag &_val) const
+    {
+    return GetElementTag() == _val.GetElementTag();
+    }
   bool operator==(const PrivateTag &_val) const
     {
     return GetElementTag() == _val.GetElementTag() && Owner == _val.Owner;
+    }
+  bool operator!=(const Tag &_val) const
+    {
+    return GetElementTag() != _val.GetElementTag();
     }
   bool operator!=(const PrivateTag &_val) const
     {
