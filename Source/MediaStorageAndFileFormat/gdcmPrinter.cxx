@@ -843,7 +843,6 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
     // retired element
     else if( retired )
       {
-      assert( t.IsPublic() || t.GetElement() == 0x0 ); // Is there such thing as private and retired element ?
       os << " " << GDCM_TERMINAL_VT100_FOREGROUND_RED << GDCM_TERMINAL_VT100_UNDERLINE;
       os << name;
       os << GDCM_TERMINAL_VT100_NORMAL;
