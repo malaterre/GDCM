@@ -101,6 +101,22 @@ bool Anonymizer::Empty( PrivateTag const &pt)
   return Replace(pt, "", 0);
 }
 
+bool Anonymizer::Clear( Tag const &t)
+{
+  DataSet &ds = F->GetDataSet();
+  if(ds.FindDataElement(t))
+    this->Empty(t);
+  return true;
+}
+
+bool Anonymizer::Clear( PrivateTag const &pt)
+{
+  DataSet &ds = F->GetDataSet();
+  if(ds.FindDataElement(pt))
+    this->Empty(pt);
+  return true;
+}
+
 bool Anonymizer::Remove( Tag const &t )
 {
   DataSet &ds = F->GetDataSet();
