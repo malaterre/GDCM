@@ -3484,6 +3484,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0009,0x0043,"GEMS_GENIE_1",VR::TM,VM::VM1,"Patient Creation Time",false },
   {0x0009,0x0044,"GEMS_GENIE_1",VR::SL,VM::VM1,"Num Views Acquired (retired)",false },
   {0x0009,0x0045,"GEMS_GENIE_1",VR::LT,VM::VM1,"Dataset UID List",false },
+  {0x0009,0x0046,"GEMS_GENIE_1",VR::UI,VM::VM1,"?DataSet UID?",false },
   {0x0011,0x000a,"GEMS_GENIE_1",VR::SL,VM::VM1,"Series Type",false },
   {0x0011,0x000b,"GEMS_GENIE_1",VR::SL,VM::VM1,"Effective Series Duration",false },
   {0x0011,0x000c,"GEMS_GENIE_1",VR::SL,VM::VM1,"Num Beats",false },
