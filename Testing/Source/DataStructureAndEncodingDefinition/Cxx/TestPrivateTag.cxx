@@ -51,6 +51,21 @@ int TestPrivateTag(int , char * [])
     return 1;
     }
 
+  const char strc[] = "4453,0d,DR Systems, Inc.";
+  if( !pt.ReadFromCommaSeparatedString( strc ) ) return 1;
+
+  if( pt != gdcm::Tag(0x4453,0x0d) )
+    {
+    std::cerr << pt << std::endl;
+    return 1;
+    }
+  if( pt.GetOwner() != std::string("DR Systems, Inc.") )
+    {
+    std::cerr << "[" << pt.GetOwner() << "]" << std::endl;
+    return 1;
+    }
+
+
   const gdcm::PrivateTag pt1(0x1,0x2,"BLA");
   const char str0[] = "";
   const char str1[] = "1,2,BLA";
