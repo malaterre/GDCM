@@ -107,6 +107,7 @@ public:
   /// Replace tag with another value, if tag is not found it will be created:
   /// WARNING: this function can only execute if tag is a VRASCII
   bool Replace( Tag const &t, const char *value );
+  bool Replace( PrivateTag const &t, const char *value );
 
   /// when the value contains \0, it is a good idea to specify the length. This function
   /// is required when dealing with VRBINARY tag
