@@ -52,7 +52,7 @@ bool Scanner2::AddSkipTag( Tag const & t )
 bool Scanner2::AddPrivateTag( PrivateTag const & t )
 {
   if( !( t.IsPrivate() && t.GetOwner() && *t.GetOwner() ) ) return false;
-  if( t.IsIllegal() ) return false;
+  // Do not check IsIllegal at this point
   static const Global &g = GlobalInstance;
   static const Dicts &dicts = g.GetDicts();
   const DictEntry &entry = dicts.GetDictEntry( t );
