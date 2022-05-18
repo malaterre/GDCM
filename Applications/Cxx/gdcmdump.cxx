@@ -53,6 +53,8 @@
 
 #include <string>
 #include <iostream>
+#include <codecvt>
+#include <locale>
 
 #include <stdio.h>     /* for printf */
 #include <stdlib.h>    /* for exit */
@@ -890,7 +892,46 @@ static int PrintMECMR3(const std::string & filename, bool verbose)
   return ret +ret2;
 }
 
+static void print_utf8(std::string const& s)
+{
+  const char delim = 0;
+  auto start = 0U;
+  auto end = s.find(delim);
+  while (end != std::string::npos)
+  {
+      std::cout << s.substr(start, end - start) << std::endl;
+      start = end + 1;
+      end = s.find(delim, start);
+  }
+}
 
+static int PrintMedComHistory(const std::string & filename, bool verbose)
+{
+  (void)verbose;
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+    {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+    }
+
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+  const gdcm::PrivateTag tmedcom(0x0029,0x20,"SIEMENS MEDCOM HEADER");
+  if( !ds.FindDataElement( tmedcom) ) return 1;
+  const gdcm::DataElement& medcom = ds.GetDataElement( tmedcom);
+  if ( medcom.IsEmpty() ) return 1;
+  const gdcm::ByteValue * bv = medcom.GetByteValue();
+
+  const size_t size = bv->GetLength();
+  std::u16string u16((size / 2) + 0, '\0');
+  bv->GetBuffer( (char*)&u16[0], size );
+
+  std::string utf8 = std::wstring_convert<
+    std::codecvt_utf8_utf16<char16_t>, char16_t>{}.to_bytes(u16);
+  print_utf8(utf8);
+  return 0;
+}
 
 static int PrintPDB(const std::string & filename, bool verbose)
 {
@@ -1165,6 +1206,7 @@ static void PrintHelp()
   std::cout << "     --ct3            print CT Private Data 2 (7005,10,TOSHIBA_MEC_CT3)." << std::endl;
   std::cout << "     --pmtf           print PMTF INFORMATION DATA sub-sequences (0029,01,PMTF INFORMATION DATA)." << std::endl;
   std::cout << "     --mecmr3         print TOSHIBA_MEC_MR3 sub-sequences (0029,01,TOSHIBA_MEC_MR3)." << std::endl;
+  std::cout << "     --medcom         print MedCom History Information as UTF-8 (0029,20,SIEMENS MEDCOM HEADER)." << std::endl;
   std::cout << "  -A --asn1           print encapsulated ASN1 structure >(0400,0520)." << std::endl;
   std::cout << "     --map-uid-names  map UID to names." << std::endl;
   std::cout << "General Options:" << std::endl;
@@ -1190,6 +1232,7 @@ int main (int argc, char *argv[])
   int printcsa = 0;
   int printmrprotocol = 0;
   int printcsabase64 = 0;
+  int printmedcom = 0; // MedCom History Information
   int printcsaasl = 0;
   int printcsadiffusion = 0;
   int printpdb = 0;
@@ -1246,6 +1289,7 @@ int main (int argc, char *argv[])
         {"mrprotocol", 0, &printmrprotocol, 1},
         {"pmtf", 0, &printpmtf, 1},
         {"mecmr3", 0, &printmecmr3, 1},
+        {"medcom", 0, &printmedcom, 1},
         {nullptr, 0, nullptr, 0} // required
     };
     static const char short_options[] = "i:xrpdcCPAVWDEhvI";
@@ -1471,6 +1515,10 @@ int main (int argc, char *argv[])
         {
         res += PrintMECMR3(*it, verbose!= 0);
         }
+      else if( printmedcom )
+        {
+        res += PrintMedComHistory(*it, csaname);
+        }
       else if( printelscint )
         {
         res += PrintELSCINT(*it, verbose!= 0);
@@ -1533,6 +1581,10 @@ int main (int argc, char *argv[])
     else if( printmecmr3 )
       {
       res += PrintMECMR3(filename, verbose!= 0);
+      }
+    else if( printmedcom )
+      {
+      res += PrintMedComHistory(filename, verbose!= 0);
       }
     else if( printelscint )
       {
