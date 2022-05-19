@@ -690,7 +690,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0021,0x0062,"SIEMENS MR SDS 01",VR::FL,VM::VM1,"?",false},
   {0x0021,0x0063,"SIEMENS MR SDI 02",VR::IS,VM::VM1,"?Acquisition Number?",false},
   {0x0021,0x0067,"SIEMENS MR SDI 02",VR::ST,VM::VM1,"?DataRole XML?",false },
-  {0x0021,0x0068,"SIEMENS MR SDI 02",VR::OB,VM::VM1,"?",false },
+  {0x0021,0x0068,"SIEMENS MR SDI 02",VR::OB,VM::VM1,"?MRDiffusionSequence as base64 encoded?",false },
   {0x0021,0x0071,"SIEMENS MR SDI 02",VR::UT,VM::VM1,"?may contain PHI?",false},
   {0x0021,0x0075,"SIEMENS MR SDI 02",VR::CS,VM::VM1_n,"Image Type",false},
   {0x0021,0x0076,"SIEMENS MR SDI 02",VR::LO,VM::VM1_n,"Acquisition Info",false},
