@@ -159,6 +159,28 @@ namespace gdcm_ns
             }
           return sqi;
           }
+        else if  ( GetVR() == VR::OB ) // pre-dicom 1993 ?
+          {
+          const ByteValue *bv = GetByteValue();
+          assert( bv );
+          SequenceOfItems *sqi = new SequenceOfItems;
+          sqi->SetLength( bv->GetLength() );
+          std::string s( bv->GetPointer(), bv->GetLength() );
+          try
+            {
+            std::stringstream ss;
+            ss.str( s );
+            sqi->Read<ImplicitDataElement,SwapperNoOp>( ss, true );
+            }
+          catch ( Exception &ex0 )
+            {
+            gdcmErrorMacro( "Could not read SQ as OB. Giving up" );
+            gdcmErrorMacro(ex0.what()); (void)ex0;
+            delete sqi;
+            return 0;
+            }
+          return sqi;
+          }
         else
           {
           assert( GetVR().IsVRFile() );
