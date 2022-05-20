@@ -181,7 +181,7 @@ bool FileExplicitFilter::ProcessDataSet(DataSet &ds, Dicts const & dicts)
       }
     else if( de.GetSequenceOfFragments() )
       {
-      assert( cvr & VR::OB_OW );
+      assert( cvr & VR::OB );
       }
     else
       {
