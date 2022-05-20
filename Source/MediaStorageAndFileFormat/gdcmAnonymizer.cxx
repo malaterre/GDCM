@@ -1080,6 +1080,8 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
     if( sqi )
       {
       de.SetValue( *sqi ); // EXTREMELY IMPORTANT #2912092
+      // Legacy behavior has been to create CP-246 / undefined length SQ as VR:UN...
+      if( de.GetVR() == VR::OB ) de.SetVR( VR::UN );
       de.SetVLToUndefined();
       assert( sqi->IsUndefinedLength() );
       //de.GetVL().SetToUndefined();
