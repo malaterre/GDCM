@@ -63,6 +63,7 @@ dcm_directory   DICOM input directory
      --ct3            print CT Private Data 2 (7005,10,TOSHIBA_MEC_CT3).
      --pmtf           print PMTF INFORMATION DATA sub-sequences (0029,01,PMTF INFORMATION DATA).
      --mecmr3         print TOSHIBA_MEC_MR3 sub-sequences (0029,01,TOSHIBA_MEC_MR3).
+     --medcom         print MedCom History Information as UTF-8 (0029,20,SIEMENS MEDCOM HEADER).
   -A --asn1           print encapsulated ASN1 structure &gt;(0400,0520).
      --map-uid-names  map UID to names.
 </literallayout></para>
