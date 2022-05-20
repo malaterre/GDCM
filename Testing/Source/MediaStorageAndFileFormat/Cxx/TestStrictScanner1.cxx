@@ -230,7 +230,7 @@ int TestStrictScanner1(int argc, char *argv[])
 */
 
   // puposely discard gdcmDataExtra test, this is just an 'extra' test...
-  int b2 = TestScannerExtra(); (void)b2;
+  //int b2 = TestScannerExtra(); (void)b2;
 
 
   return 0;
