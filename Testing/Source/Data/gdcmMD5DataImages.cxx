@@ -712,6 +712,7 @@ static const char * const gdcmMD5DataImages[][2] = {
 { "b7c6fb507da1b7a3f81f821a2e3eaf49" , "Bug_Siemens_PrivateIconNoItem.dcm" },
 { "56238d3665ebdb0251d1161fb7f4edc6" , "HardcopyColor_YBR_RCT_J2K_PC1.dcm" },
 { "5fe2b8742f05a0ba06d354f965266dbc" , "PET-GE-dicomwrite-PixelDataSQUNv2.dcm" },
+{ "20b1e4de7b864d44fcd0dda1fc42402c" , "MEDILABValidCP246_EVRLESQasOB.dcm" },
 
 /* Stopping condition */
 { nullptr ,nullptr }

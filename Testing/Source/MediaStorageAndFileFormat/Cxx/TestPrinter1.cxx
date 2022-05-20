@@ -250,6 +250,7 @@ static const char * const printmd5[][2] = {
 { "a638f2bc00e67f35257f36e5d5caa6b0" , "Bug_Siemens_PrivateIconNoItem.dcm" },
 { "f64bcbdf9396df3eb3cedd28457042da" , "HardcopyColor_YBR_RCT_J2K_PC1.dcm" },
 { "4f9b4e5530f1d60472d85a641105c009" , "PET-GE-dicomwrite-PixelDataSQUNv2.dcm" },
+{ "a7f54f67b6a978813b8ab1a0e2900f30" , "MEDILABValidCP246_EVRLESQasOB.dcm" },
 
 
 { nullptr ,nullptr }

@@ -245,6 +245,7 @@ static const char * const gdcmSHA1SumFiles[][2] = {
 { "31f0556c75829dee3850414e166863220f9e03da" , "Bug_Siemens_PrivateIconNoItem.dcm" },
 { "129b3cebd15fd1edb55c8fae75976501f2601dce" , "HardcopyColor_YBR_RCT_J2K_PC1.dcm" },
 { "2ac195a776c8cb9f0e6eb2e297bd2bf37bb11697" , "PET-GE-dicomwrite-PixelDataSQUNv2.dcm" },
+{ "18463186d3612a04a4338c12c7ac83da69ffaa49" , "MEDILABValidCP246_EVRLESQasOB.dcm" },
 
 { NULL, NULL}
 };
