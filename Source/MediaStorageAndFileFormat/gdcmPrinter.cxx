@@ -463,8 +463,9 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
   std::string strowner;
   const char *owner = nullptr;
   const Tag& t = de.GetTag();
-  if( t.IsPrivate() && !t.IsPrivateCreator() )
+  if( t.IsPrivate() && !t.IsPrivateCreator() && !t.IsGroupLength() )
     {
+    // do not reject illegal at this point to handle group 0x0003 / AEGIS_DICOM_2.00
     strowner = ds.GetPrivateCreator(t);
     owner = strowner.c_str();
     }
