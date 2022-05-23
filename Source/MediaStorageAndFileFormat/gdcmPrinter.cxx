@@ -536,8 +536,14 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
   if( vr != VR::INVALID && (!vr.Compatible( vr_read ) || vr_read == VR::INVALID || vr_read == VR::UN || vr_read != refvr ) )
     {
     assert( vr != VR::INVALID );
+    bool valid = true;
+    if( vr_read == VR::SQ ) {
+      if( !vr.Compatible( vr_read ) ) {
+        valid = false;
+      }
+    }
     // FIXME : if terminal supports it: print in red/green !
-    os << GDCM_TERMINAL_VT100_FOREGROUND_GREEN;
+    os << (valid ? GDCM_TERMINAL_VT100_FOREGROUND_GREEN : GDCM_TERMINAL_VT100_FOREGROUND_RED);
     if( vr == VR::US_SS || vr == VR::OB_OW )
       {
       os << "(" << vr << " => " << refvr << ") ";
