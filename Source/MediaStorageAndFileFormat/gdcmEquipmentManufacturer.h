@@ -23,7 +23,9 @@ class DataSet;
 /**
  * \brief 
  * \details  
- *
+ * The intent is for private tags handling. This class is not meant to handle
+ * all possible vendors in the world, simply those well known where we intend
+ * to read private tags afterwards (typically SIEMENS+CSA, GEMS+PDB ...)
  */
 class GDCM_EXPORT EquipmentManufacturer
 {
@@ -46,6 +48,7 @@ public:
   static const char *TypeToString( Type type );
 
 private:
+  static EquipmentManufacturer::Type GuessFromPrivateAttributes( DataSet const & ds );
 };
 
 } // end namespace gdcm
