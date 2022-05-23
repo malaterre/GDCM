@@ -21,9 +21,10 @@ static int TestEquipmentManufacturerFunc(const char* filename, bool verbose = fa
 {
   if( verbose )
     std::cerr << "Reading: " << filename << std::endl;
+  const gdcm::Tag pixeldata(0x7fe0, 0x0010);
   gdcm::Reader reader;
   reader.SetFileName( filename );
-  if ( !reader.Read() )
+  if (!reader.ReadUpToTag(pixeldata)) 
     {
     std::cerr << "TestReadError: Failed to read: " << filename << std::endl;
     return 1;
@@ -95,7 +96,7 @@ static int TestEquipmentManufacturerFunc(const char* filename, bool verbose = fa
   gdcm::EquipmentManufacturer::Type manufacturer = gdcm::EquipmentManufacturer::Compute( ds );
   if( verbose )
     {
-    std::cout << "Found: " << manufacturer << std::endl;
+    std::cout << "Found: " << gdcm::EquipmentManufacturer::TypeToString(manufacturer) << " -> " << manufacturer << std::endl;
     }
   if( manufacturer == gdcm::EquipmentManufacturer::UNKNOWN )
     {
