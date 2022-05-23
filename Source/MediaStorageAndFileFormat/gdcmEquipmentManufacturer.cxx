@@ -94,7 +94,7 @@ EquipmentManufacturer::Type EquipmentManufacturer::Compute( DataSet const & ds )
     const gdcm::DataElement & de = ds.GetDataElement( elscint1 );
     gdcm::Element<VR::LO, VM::VM1> priv_creator;
     priv_creator.SetFromDataElement( de );
-    if( priv_creator.GetValue() == "ELSCINT1" ) return GEMS;
+    if( priv_creator.GetValue() == "ELSCINT1" ) return PMS;
   }
 
   return UNKNOWN;
