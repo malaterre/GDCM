@@ -33,6 +33,8 @@ public:
       // DX_GE_FALCON_SNOWY-VOI.dcm
       const PrivateTag pt2(0x0045,0x72,"GEMS_FALCON_03");
       const PrivateTag pt3(0x0045,0x73,"GEMS_FALCON_03");
+      // MEDILABValidCP246_EVRLESQasOB.dcm
+      const PrivateTag pt4(0x0029,0x1140,"SIEMENS MEDCOM HEADER");
       if( PrivateTag(de.GetTag(),"GEMS_IMAG_01") == pt1 )
       {
         assert( vr == VR::UL );
@@ -44,6 +46,12 @@ public:
       {
         assert( vr == VR::IS );
         assert( vr2 == VR::DS );
+        return vr;
+      }
+      if( PrivateTag(de.GetTag(),"SIEMENS MEDCOM HEADER") == pt4 )
+      {
+        assert( vr == VR::OB );
+        assert( vr2 == VR::SQ );
         return vr;
       }
       // ELSCINT1_PMSCT_RLE1.dcm

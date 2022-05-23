@@ -240,6 +240,7 @@ static const StreamOffset gdcmSelectedPrivateGroupOffsetDataFiles[] = {
 { "Bug_Siemens_PrivateIconNoItem.dcm",1360},
 { "HardcopyColor_YBR_RCT_J2K_PC1.dcm",1284},
 { "PET-GE-dicomwrite-PixelDataSQUNv2.dcm",4620},
+{ "MEDILABValidCP246_EVRLESQasOB.dcm",1148},
 { "dicomdir_With_embedded_icons",7125212 },
 { "dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents",37218 },
 { "dicomdir_Acusson_WithPrivate_WithSR",3826 },

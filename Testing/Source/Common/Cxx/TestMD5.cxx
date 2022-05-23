@@ -248,6 +248,7 @@ static const char * const gdcmMD5SumFiles[][2] = {
 { "5141fe286ad2e39259dac231e3d10b41" , "Bug_Siemens_PrivateIconNoItem.dcm" },
 { "3155af485dc3f490cc9e212f95499615" , "HardcopyColor_YBR_RCT_J2K_PC1.dcm" },
 { "ab93bd11ce0f48e2e9e1c700df160a30" , "PET-GE-dicomwrite-PixelDataSQUNv2.dcm" },
+{ "8425e60ca4d6745e8a39c437cae25b74" , "MEDILABValidCP246_EVRLESQasOB.dcm" },
 
 { nullptr, nullptr}
 };

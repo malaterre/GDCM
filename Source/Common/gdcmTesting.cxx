@@ -451,6 +451,7 @@ static const LossyFile gdcmLossyFilenames[] = {
 { 0,"Bug_Siemens_PrivateIconNoItem.dcm" },
 { 0,"HardcopyColor_YBR_RCT_J2K_PC1.dcm" },
 { 0,"PET-GE-dicomwrite-PixelDataSQUNv2.dcm" },
+{ 0,"MEDILABValidCP246_EVRLESQasOB.dcm" },
 { 0, nullptr }
 };
 

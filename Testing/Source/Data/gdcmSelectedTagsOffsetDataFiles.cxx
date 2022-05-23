@@ -242,6 +242,7 @@ static const StreamOffset gdcmSelectedTagsOffsetDataFiles[] = {
 { "Bug_Siemens_PrivateIconNoItem.dcm",12966},
 { "HardcopyColor_YBR_RCT_J2K_PC1.dcm",2614},
 { "PET-GE-dicomwrite-PixelDataSQUNv2.dcm",7706},
+{ "MEDILABValidCP246_EVRLESQasOB.dcm",18996},
 { "dicomdir_Acusson_WithPrivate_WithSR",3826 },
 { "dicomdir_Pms_WithVisit_WithPrivate_WithStudyComponents",37218 },
 { "dicomdir_Pms_With_heavy_embedded_sequence",3003414 },

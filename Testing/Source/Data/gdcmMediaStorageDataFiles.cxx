@@ -261,6 +261,7 @@ static const char * const gdcmMediaStorageDataFiles[][2] = {
 { "HardcopyColor_YBR_RCT_J2K_PC1.dcm" , "1.2.840.10008.5.1.1.30" },
 { "PET-GE-dicomwrite-PixelDataSQUNv2.dcm" , "1.2.840.10008.5.1.4.1.1.128" },
 { "PET-GE-dicomwrite-PixelDataSQUNv3.dcm" , "1.2.840.10008.5.1.4.1.1.128" },
+{ "MEDILABValidCP246_EVRLESQasOB.dcm" , "1.2.840.10008.5.1.4.1.1.2" },
 
 /* Stopping condition */
 { nullptr ,nullptr }
