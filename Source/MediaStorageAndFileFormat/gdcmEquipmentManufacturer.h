@@ -43,6 +43,8 @@ public:
 
   static Type Compute( DataSet const & ds );
 
+  static const char *TypeToString( Type type );
+
 private:
 };
 

@@ -19,6 +19,23 @@
 namespace gdcm
 {
 
+static const char *TypeStrings[] = {
+    "UNKNOWN",
+    "FUJI",
+    "GEMS",
+    "HITACHI",
+    "KODAK",
+    "MARCONI",
+    "PMS",
+    "SIEMENS",
+    "TOSHIBA"
+};
+
+const char *EquipmentManufacturer::TypeToString( Type type )
+{
+  return TypeStrings[type];
+}
+
 struct Mapping
 {
   EquipmentManufacturer::Type type;
@@ -69,6 +86,7 @@ EquipmentManufacturer::Type EquipmentManufacturer::Compute( DataSet const & ds )
     }
   }
 
+  gdcmWarningMacro( "Unknown Manufacturer, trying guess: " << manufacturer );
   // try against with well known private tag:
   gdcm::Tag gems_iden_01(0x0009,0x0010);
   if( ds.FindDataElement( gems_iden_01 ) )
