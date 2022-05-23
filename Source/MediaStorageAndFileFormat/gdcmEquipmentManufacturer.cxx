@@ -31,7 +31,7 @@ static const char* const gems[] = {"GE MEDICAL SYSTEMS", "GE_MEDICAL_SYSTEMS", "
 static const char* const hitachi[] = {"Hitachi Medical Corporation","ALOKA CO., LTD."};
 static const char* const kodak[] = {"Kodak"};
 static const char* const pms[] = { "Philips Medical Systems", "Philips Healthcare", "Philips Medical Systems, Inc.","Philips","Picker International, Inc." };
-static const char* const siemens[] = { "SIEMENS", "Siemens HealthCare GmbH", "Siemens Health Services","Acuson" };
+static const char* const siemens[] = { "Siemens Healthineers", "SIEMENS", "Siemens HealthCare GmbH", "Siemens Health Services","Acuson" };
 static const char* const marconi[] = { "Marconi Medical Systems, Inc." };
 static const char* const toshiba[] = { "TOSHIBA_MEC", "Toshiba" };
 
