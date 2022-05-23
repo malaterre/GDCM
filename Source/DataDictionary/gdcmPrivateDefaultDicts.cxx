@@ -702,7 +702,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0021,0x0088,"SIEMENS MR SDI 02",VR::DS,VM::VM1,"Slice Location",false},
   {0x0021,0x0089,"SIEMENS MR SDI 02",VR::SH,VM::VM1,"?",false },
   {0x0021,0x008a,"SIEMENS MR SDI 02",VR::IS,VM::VM1,"Instance/Frame Number",false},
-  {0x0021,0x008b,"SIEMENS MR SDI 02",VR::LO,VM::VM1,"?",false},
+  {0x0021,0x008b,"SIEMENS MR SDI 02",VR::SH,VM::VM1,"?",false},
   {0x0021,0x008c,"SIEMENS MR SDI 02",VR::FD,VM::VM1,"?",false},
   {0x0021,0x008d,"SIEMENS MR SDI 02",VR::FD,VM::VM1,"?",false},
   {0x0021,0x008e,"SIEMENS MR SDI 02",VR::ST,VM::VM1,"?",false},
