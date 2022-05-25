@@ -1198,6 +1198,7 @@ static void PrintHelp()
   std::cout << "     --csa-asl        print decoded SIEMENS CSA MR_ASL (base64)." << std::endl;
   std::cout << "     --csa-diffusion  print decoded SIEMENS CSA MRDiffusion (base64)." << std::endl;
   std::cout << "     --mrprotocol     print SIEMENS CSA MrProtocol only (within ASCCONV BEGIN/END)." << std::endl;
+  std::cout << "                      or Phoenix Meta Protocol (0021,19,SIEMENS MR SDS 01)." << std::endl;
   std::cout << "  -P --pdb            print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
   std::cout << "     --elscint        print ELSCINT Protocol Information (01f7,26,ELSCINT1)." << std::endl;
   std::cout << "     --vepro          print VEPRO Protocol Information (0055,20,VEPRO VIF 3.0 DATA)." << std::endl;
