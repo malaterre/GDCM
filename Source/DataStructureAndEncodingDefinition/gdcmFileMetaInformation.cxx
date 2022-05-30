@@ -71,9 +71,10 @@ void FileMetaInformation::AppendImplementationClassUID(const char * imp)
 {
   if( imp )
     {
-    ImplementationClassUID = GetGDCMImplementationClassUID();
-    ImplementationClassUID += ".";
-    ImplementationClassUID += imp;
+    std::string tmp = GetGDCMImplementationClassUID();
+    tmp += ".";
+    tmp += imp;
+    if( tmp.size() <= 64 ) { ImplementationClassUID = tmp; }
     }
 }
 

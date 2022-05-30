@@ -38,6 +38,9 @@ using DICT_ENTRY = struct
 };
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x6001,0x0003,"Merge eFilm Fusion",VR::CS,VM::VM1,"?",false },
+  {0x6001,0x0030,"Merge eFilm Fusion",VR::US,VM::VM1,"?",false },
+  {0x6001,0x0032,"Merge eFilm Fusion",VR::US,VM::VM1,"?",false },
   {0x0031,0x0000,"GEMS_MRPT_01",VR::SH,VM::VM1,"?",false },
   {0x0027,0x0001,"SIEMENS SYNGO ENHANCED IDATASET API",VR::CS,VM::VM1,"Business Unit Code",false },
   {0x0027,0x0002,"SIEMENS SYNGO ENHANCED IDATASET API",VR::LO,VM::VM1,"Application Type",false },
@@ -8950,7 +8953,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0051,0x0009,"SIEMENS MR HEADER",VR::LO,VM::VM1,"CSA Image Header Version ??",false },
   {0x0051,0x000a,"SIEMENS MR HEADER",VR::SH,VM::VM1,"TimeOfAcquisition",false },
   {0x0051,0x000b,"SIEMENS MR HEADER",VR::SH,VM::VM1,"Acquisition Matrix",false },
-  {0x0051,0x000c,"SIEMENS MR HEADER",VR::SH,VM::VM1,"Field of View",false },
+  {0x0051,0x000c,"SIEMENS MR HEADER",VR::LO,VM::VM1,"Field of View",false },
   {0x0051,0x000d,"SIEMENS MR HEADER",VR::SH,VM::VM1,"Slice Position",false },
   {0x0051,0x000e,"SIEMENS MR HEADER",VR::LO,VM::VM1,"Slice Orientation",false },
   {0x0051,0x000f,"SIEMENS MR HEADER",VR::LO,VM::VM1,"Coil String",false },
