@@ -674,7 +674,7 @@ int main(int argc, char *argv[])
       std::cerr << "Input directory should be different from output directory" << std::endl;
       return 1;
       }
-    if( outfilename.back() != '/' ) outfilename += '/';
+    if( *outfilename.rbegin() != '/' ) outfilename += '/';
     nfiles = dir.Load(filename, (recursive > 0 ? true : false));
     filenames = dir.GetFilenames();
     gdcm::Directory::FilenamesType::const_iterator it = filenames.begin();
