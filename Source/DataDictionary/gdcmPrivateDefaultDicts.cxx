@@ -8952,7 +8952,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0051,0x0008,"SIEMENS MR HEADER",VR::CS,VM::VM1,"CSA Image Header Type",false },
   {0x0051,0x0009,"SIEMENS MR HEADER",VR::LO,VM::VM1,"CSA Image Header Version ??",false },
   {0x0051,0x000a,"SIEMENS MR HEADER",VR::SH,VM::VM1,"TimeOfAcquisition",false },
-  {0x0051,0x000b,"SIEMENS MR HEADER",VR::SH,VM::VM1,"Acquisition Matrix",false },
+  {0x0051,0x000b,"SIEMENS MR HEADER",VR::LO,VM::VM1,"Acquisition Matrix",false },
   {0x0051,0x000c,"SIEMENS MR HEADER",VR::LO,VM::VM1,"Field of View",false },
   {0x0051,0x000d,"SIEMENS MR HEADER",VR::SH,VM::VM1,"Slice Position",false },
   {0x0051,0x000e,"SIEMENS MR HEADER",VR::LO,VM::VM1,"Slice Orientation",false },
