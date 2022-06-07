@@ -3,6 +3,7 @@
 set(MSFF_SRCS
   gdcmEmptyMaskGenerator.cxx
   gdcmFileStreamer.cxx
+  gdcmCleaner.cxx
   gdcmJSON.cxx
   gdcmFileChangeTransferSyntax.cxx
   gdcmAnonymizer.cxx
@@ -101,6 +102,10 @@ set(MSFF_SRCS
     ${GDCM_SOURCE_DIR}/Utilities/gdcmrle/rle.cxx
     ${GDCM_SOURCE_DIR}/Utilities/gdcmrle/info.cxx
     ${GDCM_SOURCE_DIR}/Utilities/gdcmrle/io.cxx
+  )
+
+  list(APPEND MSFF_SRCS
+    ${GDCM_SOURCE_DIR}/Utilities/gdcmcsa/csa.c
   )
 
 # Do the proper thing when building static...if only there was configured
