@@ -14,6 +14,7 @@
 #ifndef GDCMCLEANER_H
 #define GDCMCLEANER_H
 
+#include "gdcmDPath.h"
 #include "gdcmFile.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmSubject.h"
@@ -34,28 +35,35 @@ class GDCM_EXPORT Cleaner : public Subject {
   ///
   bool Empty(Tag const &t);
   bool Empty(PrivateTag const &pt);
-  bool Empty(const char *tag_path);
+  bool Empty(DPath const &dpath);
+  bool Empty(VR const &vr);
 
   bool Remove(Tag const &t);
   bool Remove(PrivateTag const &pt);
-  bool Remove(const char *tag_path);
+  bool Remove(DPath const &dpath);
+  bool Remove(VR const &vr);
 
   /// Clean digital tash (typically SIEMENS CSA header):
   bool Wipe(Tag const &t);
   bool Wipe(PrivateTag const &pt);
-  bool Wipe(const char *tag_path);
+  bool Wipe(DPath const &dpath);
+  bool Wipe(VR const &vr);
 
-  /// Should I remove all private tag for which no private creator is found
+  bool Preserve(DPath const &dpath);
+
+  /// Should I remove all private tag for which no private creator is found.
+  /// Default: yes
   void RemoveAllMissingPrivateCreator(bool remove);
+
   /// Specify a private tag (odd number) without a private creator (root level
   /// only for now):
   bool RemoveMissingPrivateCreator(Tag const &t);
 
-  /// Should I remove all group length (deprecated)
+  /// Should I remove all group length (deprecated). Default: yes
   void RemoveAllGroupLength(bool remove);
 
-  /// Should I remove all specified Value Representation:
-  bool RemoveAllValueRepresentation(VR const &vr);
+  /// Should I remove all illegal attribute. Default: yes
+  void RemoveAllIllegal(bool remove);
 
   /// main loop
   bool Clean();

@@ -15,11 +15,13 @@
  */
 #include "gdcmCSAHeader.h"
 #include "gdcmCleaner.h"
+#include "gdcmDPath.h"
 #include "gdcmDefs.h"
 #include "gdcmDirectory.h"
 #include "gdcmGlobal.h"
 #include "gdcmReader.h"
 #include "gdcmSystem.h"
+#include "gdcmVR.h"
 #include "gdcmVersion.h"
 #include "gdcmWriter.h"
 
@@ -36,7 +38,6 @@ static bool CleanOneFile(gdcm::Cleaner &cleaner, const char *filename,
                          const char *outfilename, bool skipmeta,
                          std::vector<gdcm::Tag> const &empty_tags,
                          std::vector<gdcm::PrivateTag> const &empty_privatetags,
-
                          bool continuemode = false) {
   gdcm::Reader reader;
   reader.SetFileName(filename);
@@ -65,13 +66,6 @@ static bool CleanOneFile(gdcm::Cleaner &cleaner, const char *filename,
     }
   }
 
-#if 0
-  if (scrub_csa && !CleanAllCSA(file.GetDataSet())) {
-    std::cerr << "Failure to clean CSA header: " << filename << std::endl;
-    return false;
-  }
-#endif
-
   gdcm::Writer writer;
   writer.SetFileName(outfilename);
   writer.SetCheckFileMetaInformation(!skipmeta);
@@ -92,16 +86,6 @@ static bool CleanOneFile(gdcm::Cleaner &cleaner, const char *filename,
 static void PrintHelp() {
   PrintVersion();
   std::cout << "Usage: gdcmclean [OPTION]... FILE..." << std::endl;
-  std::cout << "PS 3.15 / E.1 / Basic Application Level Confidentiality Profile"
-            << std::endl;
-  std::cout << "Implementation of E.1.1 De-identify & E.1.2 Re-identify"
-            << std::endl;
-  std::cout << "Parameter (required):" << std::endl;
-  std::cout << "  -e --de-identify (encrypt)  De-identify DICOM (default)"
-            << std::endl;
-  std::cout << "  -d --re-identify (decrypt)  Re-identify DICOM" << std::endl;
-  std::cout << "     --dumb                   Dumb mode anonymizer"
-            << std::endl;
   std::cout << "Options:" << std::endl;
   std::cout << "  -i --input                  DICOM filename / directory"
             << std::endl;
@@ -113,35 +97,26 @@ static void PrintHelp() {
   std::cout << "     --continue               Do not stop when file found is "
                "not DICOM."
             << std::endl;
-  std::cout << "     --root-uid               Root UID." << std::endl;
-  std::cout << "     --resources-path         Resources path." << std::endl;
-  std::cout << "  -k --key                    Path to RSA Private Key."
+  std::cout << "Edition options:" << std::endl;
+  std::cout << "     --empty    %d,%d         DICOM tag(s) to empty"
             << std::endl;
-  std::cout << "  -c --certificate            Path to Certificate."
+  std::cout << "                %d,%d,%s      DICOM private tag(s) to empty"
             << std::endl;
-  std::cout << "  -p --password               Encryption passphrase."
+  std::cout << "                %s            DICOM path(s) to empty"
             << std::endl;
-  std::cout << "Crypto Library Options:" << std::endl;
-  std::cout << "  --crypto=" << std::endl;
-  std::cout << "           openssl            OpenSSL (default on non-Windows "
-               "systems)."
+  std::cout << "     --remove   %d,%d         DICOM tag(s) to remove"
             << std::endl;
-  std::cout << "           capi               Microsoft CryptoAPI (default on "
-               "Windows systems)."
+  std::cout << "                %d,%d,%s      DICOM private tag(s) to remove"
             << std::endl;
-  std::cout << "           openssl-p7         Old OpenSSL implementation."
+  std::cout << "                %s            DICOM path(s) to remove"
             << std::endl;
-  std::cout << "Encryption Algorithm Options:" << std::endl;
-  std::cout << "     --des3                   Triple DES." << std::endl;
-  std::cout << "     --aes128                 AES 128." << std::endl;
-  std::cout << "     --aes192                 AES 192." << std::endl;
-  std::cout << "     --aes256                 AES 256 (default)." << std::endl;
-  std::cout << "Dumb mode options:" << std::endl;
-  std::cout << "     --empty   %d,%d          DICOM tag(s) to empty"
+  std::cout << "     --wipe     %d,%d         DICOM tag(s) to wipe"
             << std::endl;
-  std::cout << "     --remove  %d,%d          DICOM tag(s) to remove"
+  std::cout << "                %d,%d,%s      DICOM private tag(s) to wipe"
             << std::endl;
-  std::cout << "     --replace %d,%d=%s       DICOM tag(s) to replace"
+  std::cout << "                %s            DICOM path(s) to wipe"
+            << std::endl;
+  std::cout << "     --preserve %s            DICOM path(s) to preserve"
             << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose                more verbose (warning+error)."
@@ -151,11 +126,6 @@ static void PrintHelp() {
   std::cout << "  -E --error                  print error info." << std::endl;
   std::cout << "  -h --help                   print help." << std::endl;
   std::cout << "  -v --version                print version." << std::endl;
-  std::cout << "Env var:" << std::endl;
-  std::cout << "  GDCM_ROOT_UID Root UID" << std::endl;
-  std::cout << "  GDCM_RESOURCES_PATH path pointing to resources files "
-               "(Part3.xml, ...)"
-            << std::endl;
 }
 
 int main(int argc, char *argv[]) {
@@ -177,14 +147,22 @@ int main(int argc, char *argv[]) {
   int empty_tag = 0;
   int remove_tag = 0;
   int wipe_tag = 0;
+  int preserve_tag = 0;
+  std::vector<gdcm::DPath> empty_dpaths;
+  std::vector<gdcm::DPath> remove_dpaths;
+  std::vector<gdcm::DPath> wipe_dpaths;
+  std::vector<gdcm::DPath> preserve_dpaths;
+  std::vector<gdcm::VR> empty_vrs;
   std::vector<gdcm::Tag> empty_tags;
   std::vector<gdcm::PrivateTag> empty_privatetags;
+  std::vector<gdcm::VR> remove_vrs;
   std::vector<gdcm::Tag> remove_tags;
   std::vector<gdcm::PrivateTag> remove_privatetags;
   std::vector<gdcm::Tag> wipe_tags;                // clean-digital-trash
   std::vector<gdcm::PrivateTag> wipe_privatetags;  // clean-digital-trash
   gdcm::Tag tag;
   gdcm::PrivateTag privatetag;
+  gdcm::DPath dpath;
 
   while (1) {
     // int this_option_optind = optind ? optind : 1;
@@ -193,11 +171,12 @@ int main(int argc, char *argv[]) {
         {"input", required_argument, NULL, 'i'},   // i
         {"output", required_argument, NULL, 'o'},  // o
         {"recursive", no_argument, NULL, 'r'},
-        {"empty", required_argument, &empty_tag, 1},    // 3
-        {"remove", required_argument, &remove_tag, 1},  // 4
-        {"wipe", required_argument, &wipe_tag, 1},      // 5
+        {"empty", required_argument, &empty_tag, 1},        // 3
+        {"remove", required_argument, &remove_tag, 1},      // 4
+        {"wipe", required_argument, &wipe_tag, 1},          // 5
+        {"preserve", required_argument, &preserve_tag, 1},  // 5
         {"continue", no_argument, NULL, 'c'},
-        {"skip-meta", 0, &skipmeta, 1},  //
+        {"skip-meta", 0, &skipmeta, 1},  // should I document this one ?
 
         {"verbose", no_argument, NULL, 'V'},
         {"warning", no_argument, NULL, 'W'},
@@ -221,24 +200,32 @@ int main(int argc, char *argv[]) {
           if (option_index == 3) /* empty */
           {
             assert(strcmp(s, "empty") == 0);
-            if (privatetag.ReadFromCommaSeparatedString(optarg))
+            if (gdcm::VR::IsValid(optarg))
+              empty_vrs.push_back(gdcm::VR::GetVRTypeFromFile(optarg));
+            else if (privatetag.ReadFromCommaSeparatedString(optarg))
               empty_privatetags.push_back(privatetag);
             else if (tag.ReadFromCommaSeparatedString(optarg))
               empty_tags.push_back(tag);
+            else if (dpath.ConstructFromString(optarg))
+              empty_dpaths.push_back(dpath);
             else {
-              std::cerr << "Could not read Tag/PrivateTag: " << optarg
+              std::cerr << "Could not read Tag/PrivateTag/DPath: " << optarg
                         << std::endl;
               return 1;
             }
 
           } else if (option_index == 4) /* remove */
           {
+            if (gdcm::VR::IsValid(optarg))
+              remove_vrs.push_back(gdcm::VR::GetVRTypeFromFile(optarg));
             if (privatetag.ReadFromCommaSeparatedString(optarg))
               remove_privatetags.push_back(privatetag);
             else if (tag.ReadFromCommaSeparatedString(optarg))
               remove_tags.push_back(tag);
+            else if (dpath.ConstructFromString(optarg))
+              remove_dpaths.push_back(dpath);
             else {
-              std::cerr << "Could not read Tag/PrivateTag: " << optarg
+              std::cerr << "Could not read Tag/PrivateTag/DPath: " << optarg
                         << std::endl;
               return 1;
             }
@@ -250,11 +237,18 @@ int main(int argc, char *argv[]) {
             else if (tag.ReadFromCommaSeparatedString(optarg))
               wipe_tags.push_back(tag);
             else {
-              std::cerr << "Could not read Tag/PrivateTag: " << optarg
+              std::cerr << "Could not read Tag/PrivateTag/DPath: " << optarg
                         << std::endl;
               return 1;
             }
-
+          } else if (option_index == 6) /* preserve */
+          {
+            if (dpath.ConstructFromString(optarg))
+              preserve_dpaths.push_back(dpath);
+            else {
+              std::cerr << "Could not read DPath: " << optarg << std::endl;
+              return 1;
+            }
           } else {
             assert(0);
           }
@@ -340,9 +334,15 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  if (empty_tags.empty() && empty_privatetags.empty() && remove_tags.empty() &&
-      remove_privatetags.empty() && wipe_tags.empty() &&
-      wipe_privatetags.empty()) {
+  // preserving is not an actual 'operation':
+  if (empty_tags.empty() && empty_privatetags.empty() &&
+      empty_dpaths.empty()  // empty
+      && remove_tags.empty() && remove_privatetags.empty() &&
+      remove_dpaths.empty()  // remove
+      && wipe_tags.empty() && wipe_privatetags.empty() &&
+      wipe_dpaths.empty()                         // wipe
+      && empty_vrs.empty() && remove_vrs.empty()  // VR
+  ) {
     std::cerr << "No operations to be done." << std::endl;
     return false;
   }
@@ -414,6 +414,14 @@ int main(int argc, char *argv[]) {
 
   // Setup gdcm::Cleaner
   gdcm::Cleaner cleaner;
+  // Preserve
+  for (std::vector<gdcm::DPath>::const_iterator it = preserve_dpaths.begin();
+       it != preserve_dpaths.end(); ++it) {
+    if (!cleaner.Preserve(*it)) {
+      std::cerr << "Impossible to Preserve: " << *it << std::endl;
+      return 1;
+    }
+  }
   // Empty
   for (std::vector<gdcm::Tag>::const_iterator it = empty_tags.begin();
        it != empty_tags.end(); ++it) {
@@ -425,6 +433,13 @@ int main(int argc, char *argv[]) {
   for (std::vector<gdcm::PrivateTag>::const_iterator it =
            empty_privatetags.begin();
        it != empty_privatetags.end(); ++it) {
+    if (!cleaner.Empty(*it)) {
+      std::cerr << "Impossible to Empty: " << *it << std::endl;
+      return 1;
+    }
+  }
+  for (std::vector<gdcm::DPath>::const_iterator it = empty_dpaths.begin();
+       it != empty_dpaths.end(); ++it) {
     if (!cleaner.Empty(*it)) {
       std::cerr << "Impossible to Empty: " << *it << std::endl;
       return 1;
@@ -446,6 +461,13 @@ int main(int argc, char *argv[]) {
       return 1;
     }
   }
+  for (std::vector<gdcm::DPath>::const_iterator it = remove_dpaths.begin();
+       it != remove_dpaths.end(); ++it) {
+    if (!cleaner.Remove(*it)) {
+      std::cerr << "Impossible to Remove: " << *it << std::endl;
+      return 1;
+    }
+  }
   // Wipe
   for (std::vector<gdcm::Tag>::const_iterator it = wipe_tags.begin();
        it != wipe_tags.end(); ++it) {
@@ -459,6 +481,28 @@ int main(int argc, char *argv[]) {
        it != wipe_privatetags.end(); ++it) {
     if (!cleaner.Wipe(*it)) {
       std::cerr << "Impossible to Wipe: " << *it << std::endl;
+      return 1;
+    }
+  }
+  for (std::vector<gdcm::DPath>::const_iterator it = wipe_dpaths.begin();
+       it != wipe_dpaths.end(); ++it) {
+    if (!cleaner.Wipe(*it)) {
+      std::cerr << "Impossible to Wipe: " << *it << std::endl;
+      return 1;
+    }
+  }
+  // VR
+  for (std::vector<gdcm::VR>::const_iterator it = empty_vrs.begin();
+       it != empty_vrs.end(); ++it) {
+    if (!cleaner.Empty(*it)) {
+      std::cerr << "Impossible to Empty: " << *it << std::endl;
+      return 1;
+    }
+  }
+  for (std::vector<gdcm::VR>::const_iterator it = remove_vrs.begin();
+       it != remove_vrs.end(); ++it) {
+    if (!cleaner.Remove(*it)) {
+      std::cerr << "Impossible to Remove: " << *it << std::endl;
       return 1;
     }
   }

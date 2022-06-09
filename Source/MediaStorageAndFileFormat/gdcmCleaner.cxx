@@ -28,16 +28,30 @@ typedef std::set<DataElement> DataElementSet;
 typedef DataElementSet::const_iterator ConstIterator;
 
 struct Cleaner::impl {
+  std::set<DPath> preserve_dpaths;
+  std::set<DPath> empty_dpaths;
+  std::set<DPath> remove_dpaths;
+  std::set<DPath> wipe_dpaths;
   std::set<Tag> empty_tags;
   std::set<PrivateTag> empty_privatetags;
   std::set<Tag> remove_tags;
   std::set<PrivateTag> remove_privatetags;
   std::set<Tag> wipe_tags;
   std::set<PrivateTag> wipe_privatetags;
+  std::set<VR> empty_vrs;
+  std::set<VR> remove_vrs;
   bool AllMissingPrivateCreator;
   bool AllGroupLength;
-  std::set<VR> AllValueRepresentation;
-  impl() : AllMissingPrivateCreator(false), AllGroupLength(true) {}
+  bool AllIllegal;
+  impl()
+      : AllMissingPrivateCreator(true),
+        AllGroupLength(true),
+        AllIllegal(true) {}
+
+  enum ACTION { NONE, EMPTY, REMOVE, WIPE };
+  enum ACTION ComputeAction(File const &file, DataSet &ds,
+                            const DataElement &de, VR const &ref_dict_vr,
+                            const std::string &tag_path);
 
   bool Clean(File const &file, DataSet &ds, const DataElement &de,
              VR const &ref_dict_vr, const std::string &tag_path);
@@ -45,24 +59,58 @@ struct Cleaner::impl {
   bool ProcessDataSet(File &file, DataSet &ds, const std::string &tag_path);
 
   bool Empty(Tag const &t) {
-    empty_tags.insert(t);
-    return true;
+    if (t.IsPublic() && !t.IsGroupLength()) {
+      empty_tags.insert(t);
+      return true;
+    }
+    return false;
   }
   bool Empty(PrivateTag const &pt) {
-    empty_privatetags.insert(pt);
+    const char *owner = pt.GetOwner();
+    if (pt.IsPrivate() && *owner) {
+      empty_privatetags.insert(pt);
+      return true;
+    }
+    return false;
+  }
+  bool Empty(DPath const &dpath) {
+    empty_dpaths.insert(dpath);
     return true;
   }
-  bool Empty(const char *tag_path) { return false; }
+  bool Empty(VR const &vr) {
+    if (vr == VR::PN) {
+      empty_vrs.insert(vr);
+      return true;
+    }
+    return false;
+  }
 
   bool Remove(Tag const &t) {
-    remove_tags.insert(t);
-    return true;
+    if (t.IsPublic() && !t.IsGroupLength()) {
+      remove_tags.insert(t);
+      return true;
+    }
+    return false;
   }
   bool Remove(PrivateTag const &pt) {
-    remove_privatetags.insert(pt);
+    const char *owner = pt.GetOwner();
+    if (pt.IsPrivate() && *owner) {
+      remove_privatetags.insert(pt);
+      return true;
+    }
+    return false;
+  }
+  bool Remove(DPath const &dpath) {
+    remove_dpaths.insert(dpath);
     return true;
   }
-  bool Remove(const char *tag_path) { return false; }
+  bool Remove(VR const &vr) {
+    if (vr == VR::PN) {
+      remove_vrs.insert(vr);
+      return true;
+    }
+    return false;
+  }
 
   bool Wipe(Tag const &t) { return false; }
   bool Wipe(PrivateTag const &pt) {
@@ -74,20 +122,24 @@ struct Cleaner::impl {
     }
     return false;
   }
-  bool Wipe(const char *tag_path) { return false; }
+  bool Wipe(DPath const &dpath) {
+    wipe_dpaths.insert(dpath);
+    return true;
+  }
+
+  bool Wipe(VR const &vr) { return false; }
+
+  bool Preserve(DPath const &dpath) {
+    preserve_dpaths.insert(dpath);
+    return true;
+  }
 
   void RemoveAllMissingPrivateCreator(bool remove) {
     AllMissingPrivateCreator = remove;
   }
   bool RemoveMissingPrivateCreator(Tag const &t) { return false; }
   void RemoveAllGroupLength(bool remove) { AllGroupLength = remove; }
-  bool RemoveAllValueRepresentation(VR const &vr) {
-    if (vr == VR::PN) {
-      AllValueRepresentation.insert(vr);
-      return true;
-    }
-    return false;
-  }
+  void RemoveAllIllegal(bool remove) { AllIllegal = remove; }
 };
 
 static VR ComputeDictVR(File &file, DataSet &ds, DataElement const &de) {
@@ -97,7 +149,9 @@ static VR ComputeDictVR(File &file, DataSet &ds, DataElement const &de) {
   if (tag.IsPublic() || tag.IsGroupLength() || tag.IsPrivateCreator()) {
   } else {
     const PrivateTag pt = ds.GetPrivateTag(tag);
-    compute_dict_vr = "" != pt.GetOwner();
+    const char *owner = pt.GetOwner();
+    assert(owner);
+    compute_dict_vr = *owner != 0;
   }
   if (compute_dict_vr) dict_vr = DataSetHelper::ComputeVR(file, ds, tag);
 
@@ -129,8 +183,7 @@ static inline std::string tostring(uint16_t const val, int const width = 4) {
   return oss.str();
 }
 
-static std::vector<std::string> tag2strings(
-    DataSet const &ds, Tag const &tag, std::string const &fallback_creator) {
+static std::vector<std::string> tag2strings(DataSet const &ds, Tag const &tag) {
   std::vector<std::string> ret;
   if (tag.IsPublic() || tag.IsPrivateCreator() || tag.IsGroupLength()) {
     ret.push_back(tostring(tag.GetGroup()));
@@ -186,58 +239,172 @@ static bool CleanCSA(DataSet &ds, const DataElement &de) {
     ds.Replace(clean);
     return true;
   }
+  gdcmErrorMacro("Failure to call CleanCSA");
   return false;
+}
+
+static DPath ConstructDPath(std::string const &tag_path, const DataSet &ds,
+                            const Tag &tag) {
+  DPath dpath;
+  std::ostringstream oss;
+  oss << tag_path;
+  const std::vector<std::string> tag_strings = tag2strings(ds, tag);
+  print_contents(oss, tag_strings);
+  dpath.ConstructFromString(oss.str().c_str());
+  return dpath;
+}
+
+static bool IsDPathInSet(std::set<DPath> const &aset, DPath const dpath) {
+  bool found = false;
+  for (std::set<DPath>::const_iterator it = aset.begin();
+       found == false && it != aset.end(); ++it) {
+    found = it->Match(dpath);
+  }
+
+  return found;
+}
+
+Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
+    File const &file, DataSet &ds, const DataElement &de, VR const &ref_dict_vr,
+    const std::string &tag_path) {
+  const Tag &tag = de.GetTag();
+  if (tag.IsGroupLength()) {
+    if (AllGroupLength) return Cleaner::impl::REMOVE;
+  } else if (tag.IsIllegal()) {
+    if (AllIllegal) return Cleaner::impl::REMOVE;
+  }
+
+  if (tag.IsPublic()) {
+    const DPath dpath = ConstructDPath(tag_path, ds, tag);
+    // Preserve
+    if (IsDPathInSet(preserve_dpaths, dpath)) return Cleaner::impl::NONE;
+    // Wipe
+    if (wipe_tags.find(tag) != wipe_tags.end() ||
+        IsDPathInSet(wipe_dpaths, dpath)) {
+      return Cleaner::impl::WIPE;
+    }
+    // Empty
+    if (empty_tags.find(tag) != empty_tags.end() ||
+        IsDPathInSet(empty_dpaths, dpath)) {
+      assert(!tag.IsGroupLength());
+      assert(!tag.IsPrivateCreator());
+      assert(ds.FindDataElement(tag));
+      return Cleaner::impl::EMPTY;
+    }
+    // Remove
+    if (remove_tags.find(tag) != remove_tags.end() ||
+        IsDPathInSet(remove_dpaths, dpath)) {
+      return Cleaner::impl::REMOVE;
+    }
+  }
+
+  if (tag.IsPrivate() && !tag.IsPrivateCreator() && !tag.IsGroupLength()) {
+    const PrivateTag pt = ds.GetPrivateTag(tag);
+    const char *owner = pt.GetOwner();
+    assert(owner);
+    if (*owner == 0 && AllMissingPrivateCreator) {
+      return Cleaner::impl::REMOVE;
+    }
+    // At this point we have a private creator, it makes sense to check for
+    // preserve: Preserve
+    const DPath dpath = ConstructDPath(tag_path, ds, tag);
+    if (IsDPathInSet(preserve_dpaths, dpath)) return Cleaner::impl::NONE;
+    // Wipe
+    if (wipe_privatetags.find(pt) != wipe_privatetags.end() ||
+        IsDPathInSet(wipe_dpaths, dpath)) {
+      return Cleaner::impl::WIPE;
+    }
+    // Empty
+    if (empty_privatetags.find(pt) != empty_privatetags.end() ||
+        IsDPathInSet(empty_dpaths, dpath)) {
+      return Cleaner::impl::EMPTY;
+    }
+    // Remove
+    if (remove_privatetags.find(pt) != remove_privatetags.end() ||
+        IsDPathInSet(remove_dpaths, dpath)) {
+      return Cleaner::impl::REMOVE;
+    }
+  }
+
+  // VR cleanup
+  if (!empty_vrs.empty() || !remove_vrs.empty()) {
+    VR vr = de.GetVR();
+    // we want to clean VR==PN; but this is a problem for implicit transfer
+    // syntax, so let's be nice to the user and prefer dict_vr. however for
+    // explicit, do not assume value in dict can take over the read VR
+    assert(ref_dict_vr != VR::INVALID);
+    if (vr == VR::INVALID) {
+      vr = ref_dict_vr;
+    }
+    if (vr == VR::UN && ref_dict_vr != VR::UN) {
+      vr = ref_dict_vr;
+    }
+    // Empty
+    if (empty_vrs.find(vr) != empty_vrs.end()) {
+      return Cleaner::impl::EMPTY;
+    }
+    // Remove
+    if (remove_vrs.find(vr) != remove_vrs.end()) {
+      return Cleaner::impl::REMOVE;
+    }
+  }
+
+  // default action:
+  return Cleaner::impl::NONE;
 }
 
 bool Cleaner::impl::Clean(File const &file, DataSet &ds, const DataElement &de,
                           VR const &ref_dict_vr, const std::string &tag_path) {
-  const Tag &tag = de.GetTag();
+  const Tag tag = de.GetTag();  // important make a copy
   if (tag.IsGroupLength()) {
     if (AllGroupLength) ds.Remove(tag);
+    return true;
+  } else if (tag.IsIllegal()) {
+    if (AllIllegal) ds.Remove(tag);
     return true;
   }
 
   if (tag.IsPublic()) {
-    const bool is_in = empty_tags.find(tag) != empty_tags.end();
+    const DPath dpath = ConstructDPath(tag_path, ds, tag);
+    // Preserve
+    if (IsDPathInSet(preserve_dpaths, dpath)) return true;
+    // Wipe
+    if (wipe_tags.find(tag) != wipe_tags.end() ||
+        IsDPathInSet(wipe_dpaths, dpath)) {
+      gdcmErrorMacro("Not Implemented");
+      return false;
+    }
     // Empty
-    if (is_in) {
+    if (empty_tags.find(tag) != empty_tags.end() ||
+        IsDPathInSet(empty_dpaths, dpath)) {
       assert(!tag.IsGroupLength());
       assert(!tag.IsPrivateCreator());
       assert(ds.FindDataElement(tag));
-      // fast path
-      const ByteValue *bv = de.GetByteValue();
-      if (!bv) return true;
       DataElement clean(de.GetTag());
       clean.SetVR(de.GetVR());
       ds.Replace(clean);
     }
     // Remove
-    if (remove_tags.find(tag) != remove_tags.end()) {
+    if (remove_tags.find(tag) != remove_tags.end() ||
+        IsDPathInSet(remove_dpaths, dpath)) {
       ds.Remove(tag);
-    }
-    // Wipe
-    if (wipe_tags.find(tag) != wipe_tags.end()) {
-      assert(0);
     }
   }
 
-  if (tag.IsPrivate()) {
+  if (tag.IsPrivate() && !tag.IsPrivateCreator()) {
     const PrivateTag pt = ds.GetPrivateTag(tag);
-    // Empty
-    if (empty_privatetags.find(pt) != empty_privatetags.end()) {
-      // fast path
-      const ByteValue *bv = de.GetByteValue();
-      if (!bv) return true;
-      DataElement clean(de.GetTag());
-      clean.SetVR(de.GetVR());
-      ds.Replace(clean);
-    }
-    // Remove
-    if (remove_privatetags.find(pt) != remove_privatetags.end()) {
+    const char *owner = pt.GetOwner();
+    assert(owner);
+    if (*owner == 0 && AllMissingPrivateCreator) {
       ds.Remove(tag);
     }
+    // At this point we have a private creator, it makes sense to check for
+    // preserve: Preserve
+    const DPath dpath = ConstructDPath(tag_path, ds, tag);
+    if (IsDPathInSet(preserve_dpaths, dpath)) return true;
     // Wipe
-    if (wipe_privatetags.find(pt) != wipe_privatetags.end()) {
+    if (wipe_privatetags.find(pt) != wipe_privatetags.end() ||
+        IsDPathInSet(wipe_dpaths, dpath)) {
       static const PrivateTag &csa1 = CSAHeader::GetCSAImageHeaderInfoTag();
       static const PrivateTag &csa2 = CSAHeader::GetCSASeriesHeaderInfoTag();
 
@@ -248,8 +415,46 @@ bool Cleaner::impl::Clean(File const &file, DataSet &ds, const DataElement &de,
         const bool ret = CleanCSA(ds, de);
         if (!ret) return false;
       } else {
-        assert(0);
+        gdcmErrorMacro(" not implemented");
+        return false;
       }
+    }
+    // Empty
+    if (empty_privatetags.find(pt) != empty_privatetags.end() ||
+        IsDPathInSet(empty_dpaths, dpath)) {
+      DataElement clean(de.GetTag());
+      clean.SetVR(de.GetVR());
+      ds.Replace(clean);
+    }
+    // Remove
+    if (remove_privatetags.find(pt) != remove_privatetags.end() ||
+        IsDPathInSet(remove_dpaths, dpath)) {
+      ds.Remove(tag);
+    }
+  }
+
+  // VR cleanup
+  if (!empty_vrs.empty() || !remove_vrs.empty()) {
+    VR vr = de.GetVR();
+    // we want to clean VR==PN; but this is a problem for implicit transfer
+    // syntax, so let's be nice to the user and prefer dict_vr. however for
+    // explicit, do not assume value in dict can take over the read VR
+    assert(ref_dict_vr != VR::INVALID);
+    if (vr == VR::INVALID) {
+      vr = ref_dict_vr;
+    }
+    if (vr == VR::UN && ref_dict_vr != VR::UN) {
+      vr = ref_dict_vr;
+    }
+    // Empty
+    if (empty_vrs.find(vr) != empty_vrs.end()) {
+      DataElement clean(de.GetTag());
+      clean.SetVR(vr);
+      ds.Replace(clean);
+    }
+    // Remove
+    if (remove_vrs.find(vr) != remove_vrs.end()) {
+      ds.Remove(tag);
     }
   }
 
@@ -262,45 +467,74 @@ bool Cleaner::impl::ProcessDataSet(File &file, DataSet &ds,
 
   for (; it != ds.GetDES().end(); /*++it*/) {
     const DataElement &de = *it;
-    ++it;
+    ++it;  // 'Remove/Empty' may invalidate iterator
     const Tag &tag = de.GetTag();
     VR dict_vr = ComputeDictVR(file, ds, de);
-    if (dict_vr != VR::SQ) {
-      Clean(file, ds, de, dict_vr, tag_path);
-    } else if (dict_vr == VR::SQ) {
-      SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
-      if (sqi) {
-        SequenceOfItems::SizeType s = sqi->GetNumberOfItems();
-        for (SequenceOfItems::SizeType i = 1; i <= s; ++i) {
-          Item &item = sqi->GetItem(i);
+    Cleaner::impl::ACTION action =
+        Cleaner::impl::ComputeAction(file, ds, de, dict_vr, tag_path);
 
-          DataSet &nestedds = item.GetNestedDataSet();
-          const std::vector<std::string> tag_strings = tag2strings(ds, tag, "");
+    if (action == Cleaner::impl::NONE) {
+      // nothing to do, but recurse in nested-dataset:
+      if (dict_vr == VR::SQ) {
+        SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
+        if (sqi) {
+          SequenceOfItems::SizeType s = sqi->GetNumberOfItems();
+          for (SequenceOfItems::SizeType i = 1; i <= s; ++i) {
+            Item &item = sqi->GetItem(i);
 
-          std::ostringstream os;
-          os << tag_path;  // already padded with trailing '/'
-          print_contents(os, tag_strings);
-          os << '/';
-          os << '*';  // no need for item numbering
-          os << '/';
+            DataSet &nestedds = item.GetNestedDataSet();
+            const std::vector<std::string> tag_strings = tag2strings(ds, tag);
 
-          if (!ProcessDataSet(file, nestedds, os.str())) {
-            gdcmErrorMacro("Error processing Item #" << i);
+            std::ostringstream os;
+            os << tag_path;  // already padded with trailing '/'
+            print_contents(os, tag_strings);
+            os << '/';
+            os << '*';  // no need for item numbering
+            os << '/';
+
+            if (!ProcessDataSet(file, nestedds, os.str())) {
+              gdcmErrorMacro("Error processing Item #" << i);
+              return false;
+            }
+          }
+          // Simple mechanism to avoid recomputation of Sequence Length: make
+          // them undefined length
+          DataElement dup(de.GetTag());
+          dup.SetVR(VR::SQ);
+          dup.SetValue(*sqi);
+          dup.SetVLToUndefined();
+          ds.Replace(dup);
+        } else {
+          // SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
+          assert(de.GetVL() == 0);
+          if (!de.IsEmpty()) {
+            gdcmErrorMacro("Impossible happen" << de);
             return false;
           }
         }
-        DataElement dup(de.GetTag());
-        dup.SetVR(VR::SQ);
-        dup.SetValue(*sqi);
-        dup.SetVLToUndefined();
-        ds.Replace(dup);
+      }
+    } else if (action == Cleaner::impl::EMPTY) {
+      DataElement clean(de.GetTag());
+      clean.SetVR(de.GetVR());
+      ds.Replace(clean);
+
+    } else if (action == Cleaner::impl::REMOVE) {
+      ds.Remove(tag);
+    } else if (action == Cleaner::impl::WIPE) {
+      const PrivateTag pt = ds.GetPrivateTag(tag);
+
+      static const PrivateTag &csa1 = CSAHeader::GetCSAImageHeaderInfoTag();
+      static const PrivateTag &csa2 = CSAHeader::GetCSASeriesHeaderInfoTag();
+
+      if (pt == csa1) {
+        const bool ret = CleanCSA(ds, de);
+        if (!ret) return false;
+      } else if (pt == csa2) {
+        const bool ret = CleanCSA(ds, de);
+        if (!ret) return false;
       } else {
-        // SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
-        assert(de.GetVL() == 0);
-        if (!de.IsEmpty()) {
-          gdcmErrorMacro("Impossible happen" << de);
-          return false;
-        }
+        gdcmErrorMacro(" not implemented");
+        return false;
       }
     }
   }
@@ -313,16 +547,31 @@ Cleaner::~Cleaner() { delete pimpl; }
 
 bool Cleaner::Empty(Tag const &t) { return pimpl->Empty(t); }
 bool Cleaner::Empty(PrivateTag const &pt) { return pimpl->Empty(pt); }
+bool Cleaner::Empty(DPath const &dpath) { return pimpl->Empty(dpath); }
+bool Cleaner::Empty(VR const &vr) { return pimpl->Empty(vr); }
 
 bool Cleaner::Remove(Tag const &t) { return pimpl->Remove(t); }
 bool Cleaner::Remove(PrivateTag const &pt) { return pimpl->Remove(pt); }
+bool Cleaner::Remove(DPath const &dpath) { return pimpl->Remove(dpath); }
+bool Cleaner::Remove(VR const &vr) { return pimpl->Remove(vr); }
 
 bool Cleaner::Wipe(Tag const &t) { return pimpl->Wipe(t); }
 bool Cleaner::Wipe(PrivateTag const &pt) { return pimpl->Wipe(pt); }
+bool Cleaner::Wipe(DPath const &dpath) { return pimpl->Wipe(dpath); }
+bool Cleaner::Wipe(VR const &vr) { return pimpl->Wipe(vr); }
 
-bool Cleaner::RemoveAllValueRepresentation(VR const &vr) {
-  return pimpl->RemoveAllValueRepresentation(vr);
+bool Cleaner::Preserve(DPath const &dpath) { return pimpl->Preserve(dpath); }
+
+void Cleaner::RemoveAllMissingPrivateCreator(bool remove) {
+  pimpl->RemoveAllMissingPrivateCreator(remove);
 }
+bool Cleaner::RemoveMissingPrivateCreator(Tag const &t) {
+  return pimpl->RemoveMissingPrivateCreator(t);
+}
+void Cleaner::RemoveAllGroupLength(bool remove) {
+  pimpl->RemoveAllGroupLength(remove);
+}
+void Cleaner::RemoveAllIllegal(bool remove) { pimpl->RemoveAllIllegal(remove); }
 
 bool Cleaner::Clean() {
   DataSet &ds = F->GetDataSet();
