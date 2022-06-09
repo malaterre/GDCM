@@ -49,6 +49,9 @@ int TestPrivateTag(int , char * [])
   const char str2[] = "1,65536,BLU";
   const char str3[] = "65536,2,BLU";
   const char str4[] = "65536,2";
+  const char str5[] = "0028,1019,SIEMENS CSA HEADER";
+  const char str6[] = "0029,1019,SIEMENS\\CSA HEADER";
+  const char str7[] = "0029,1019,SIEMENS\"CSA HEADER";
   if( pt.ReadFromCommaSeparatedString( NULL ) )
     {
     return 1;
@@ -74,6 +77,18 @@ int TestPrivateTag(int , char * [])
     return 1;
     }
   if( pt.ReadFromCommaSeparatedString( str4 ) )
+    {
+    return 1;
+    }
+  if( pt.ReadFromCommaSeparatedString( str5 ) )
+    {
+    return 1;
+    }
+  if( pt.ReadFromCommaSeparatedString( str6 ) )
+    {
+    return 1;
+    }
+  if( !pt.ReadFromCommaSeparatedString( str7 ) )
     {
     return 1;
     }
