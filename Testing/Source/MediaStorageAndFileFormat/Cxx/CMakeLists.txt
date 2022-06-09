@@ -32,6 +32,7 @@ set(MSFF_TEST_SRCS
   TestFileExplicitFilter
   TestImageFragmentSplitter
   TestTagPath
+  TestDPath
   TestOrientation
   TestIconImage
   TestImageHelper
