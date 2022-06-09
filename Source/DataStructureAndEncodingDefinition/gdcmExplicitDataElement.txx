@@ -413,11 +413,14 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       {
       gdcmAssertAlwaysMacro( !vr16bitsimpossible );
       VR lo = VR::LO;
-      if( TagField.IsGroupLength() )
-        {
-        lo = VR::UL;
-        }
       lo.Write(os);
+      ValueLengthField.Write16<TSwap>(os);
+      }
+    else if ( TagField.IsGroupLength() )
+      {
+      gdcmAssertAlwaysMacro( !vr16bitsimpossible );
+      VR ul = VR::UL;
+      ul.Write(os);
       ValueLengthField.Write16<TSwap>(os);
       }
     else if ( TagField == Tag(0x7fe0,0x0010) )
