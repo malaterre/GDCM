@@ -405,8 +405,9 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
       }
     return os;
     }
-  bool vr16bitsimpossible = (VRField & VR::VL16) && (ValueLengthField > (uint32_t)VL::GetVL16Max());
-  if( VRField == VR::INVALID || vr16bitsimpossible )
+  const bool vr16bitsimpossible = (VRField & VR::VL16) && (ValueLengthField > (uint32_t)VL::GetVL16Max());
+  const bool vrOWpixeldata = (VRField == VR::OW) && ValueLengthField.IsUndefined();
+  if( VRField == VR::INVALID || vr16bitsimpossible || vrOWpixeldata )
     {
     if ( TagField.IsPrivateCreator() )
       {
@@ -418,6 +419,12 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
         }
       lo.Write(os);
       ValueLengthField.Write16<TSwap>(os);
+      }
+    else if ( TagField == Tag(0x7fe0,0x0010) )
+      {
+      const VR ob = VR::OB;
+      ob.Write(os);
+      ValueLengthField.Write<TSwap>(os);
       }
     else
       {
