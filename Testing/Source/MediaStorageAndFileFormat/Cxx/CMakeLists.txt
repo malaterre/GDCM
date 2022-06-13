@@ -106,6 +106,8 @@ if(GDCM_DATA_ROOT)
     ${MSFF_TEST_SRCS}
     TestCleaner1
     TestCleaner2
+    TestCleaner3
+    TestCleaner4
     TestSplitMosaicFilter3
     TestStrictScanner1
     TestStrictScanner2
