@@ -233,6 +233,11 @@ static bool CleanCSA(DataSet &ds, const DataElement &de) {
   const ByteValue *bv = de.GetByteValue();
   // fast path:
   if (!bv) return true;
+  static const char vs01[] = "VS01";
+  // bogus big-endian conversion
+  if (bv->GetLength() >= 4 && memcmp(bv->GetPointer(), vs01, 4) == 0) {
+    return true;
+  }
   static const char pds_com[] = "<pds><com>";
   // PET_REPLAY_PARAM case:
   if (bv->GetLength() >= 10 && memcmp(bv->GetPointer(), pds_com, 10) == 0) {
