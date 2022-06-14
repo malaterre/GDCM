@@ -407,7 +407,8 @@ const std::ostream &ExplicitDataElement::Write(std::ostream &os) const
     }
   const bool vr16bitsimpossible = (VRField & VR::VL16) && (ValueLengthField > (uint32_t)VL::GetVL16Max());
   const bool vrOWpixeldata = (VRField == VR::OW) && ValueLengthField.IsUndefined();
-  if( VRField == VR::INVALID || vr16bitsimpossible || vrOWpixeldata )
+  const bool vrUNbutSpecial = (VRField == VR::UN && (TagField.IsPrivateCreator() || TagField.IsGroupLength()));
+  if( VRField == VR::INVALID || vr16bitsimpossible || vrOWpixeldata || vrUNbutSpecial)
     {
     if ( TagField.IsPrivateCreator() )
       {
