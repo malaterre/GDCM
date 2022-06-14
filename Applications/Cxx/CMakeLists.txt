@@ -46,6 +46,7 @@ set(GDCM_EXECUTABLE_NAME
   gdcmraw
   gdcmscanner
   gdcmanon
+  gdcmclean
   gdcmgendir
   #gdcmoverlay
   gdcmimg

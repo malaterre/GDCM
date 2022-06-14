@@ -1,0 +1,522 @@
+/*=========================================================================
+
+  Program: GDCM (Grassroots DICOM). A DICOM library
+
+  Copyright (c) 2006-2011 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+/*
+ */
+#include "gdcmCSAHeader.h"
+#include "gdcmCleaner.h"
+#include "gdcmDPath.h"
+#include "gdcmDefs.h"
+#include "gdcmDirectory.h"
+#include "gdcmGlobal.h"
+#include "gdcmReader.h"
+#include "gdcmSystem.h"
+#include "gdcmVR.h"
+#include "gdcmVersion.h"
+#include "gdcmWriter.h"
+
+#include <getopt.h>
+#include <memory>
+
+static void PrintVersion() {
+  std::cout << "gdcmclean: gdcm " << gdcm::Version::GetVersion() << " ";
+  const char date[] = "$Date$";
+  std::cout << date << std::endl;
+}
+
+static bool CleanOneFile(gdcm::Cleaner &cleaner, const char *filename,
+                         const char *outfilename, bool skipmeta,
+                         std::vector<gdcm::Tag> const &empty_tags,
+                         std::vector<gdcm::PrivateTag> const &empty_privatetags,
+                         bool continuemode = false) {
+  gdcm::Reader reader;
+  reader.SetFileName(filename);
+  if (!reader.Read()) {
+    std::cerr << "Could not read : " << filename << std::endl;
+    if (continuemode) {
+      std::cerr << "Skipping from anonymization process (continue mode)."
+                << std::endl;
+      return true;
+    } else {
+      std::cerr << "Check [--continue] option for skipping files." << std::endl;
+      return false;
+    }
+  }
+  gdcm::File &file = reader.GetFile();
+  cleaner.SetFile(file);
+  if (!cleaner.Clean()) {
+    std::cerr << "Could not clean: " << filename << std::endl;
+    if (continuemode) {
+      std::cerr << "Skipping from anonymization process (continue mode)."
+                << std::endl;
+      return true;
+    } else {
+      std::cerr << "Check [--continue] option for skipping files." << std::endl;
+      return false;
+    }
+  }
+
+  gdcm::Writer writer;
+  writer.SetFileName(outfilename);
+  writer.SetCheckFileMetaInformation(!skipmeta);
+  writer.SetFile(file);
+  if (!writer.Write()) {
+    std::cerr << "Could not Write : " << outfilename << std::endl;
+    if (strcmp(filename, outfilename) != 0) {
+      gdcm::System::RemoveFile(outfilename);
+    } else {
+      std::cerr << "gdcmclean just corrupted: " << filename
+                << " for you (data lost)." << std::endl;
+    }
+    return false;
+  }
+  return true;
+}
+
+static void PrintHelp() {
+  PrintVersion();
+  std::cout << "Usage: gdcmclean [OPTION]... FILE..." << std::endl;
+  std::cout << "Options:" << std::endl;
+  std::cout << "  -i --input                  DICOM filename / directory"
+            << std::endl;
+  std::cout << "  -o --output                 DICOM filename / directory"
+            << std::endl;
+  std::cout
+      << "  -r --recursive              recursively process (sub-)directories."
+      << std::endl;
+  std::cout << "     --continue               Do not stop when file found is "
+               "not DICOM."
+            << std::endl;
+  std::cout << "Edition options:" << std::endl;
+  std::cout << "     --empty    %d,%d         DICOM tag(s) to empty"
+            << std::endl;
+  std::cout << "                %d,%d,%s      DICOM private tag(s) to empty"
+            << std::endl;
+  std::cout << "                %s            DICOM path(s) to empty"
+            << std::endl;
+  std::cout << "     --remove   %d,%d         DICOM tag(s) to remove"
+            << std::endl;
+  std::cout << "                %d,%d,%s      DICOM private tag(s) to remove"
+            << std::endl;
+  std::cout << "                %s            DICOM path(s) to remove"
+            << std::endl;
+  std::cout << "     --wipe     %d,%d         DICOM tag(s) to wipe"
+            << std::endl;
+  std::cout << "                %d,%d,%s      DICOM private tag(s) to wipe"
+            << std::endl;
+  std::cout << "                %s            DICOM path(s) to wipe"
+            << std::endl;
+  std::cout << "     --preserve %s            DICOM path(s) to preserve"
+            << std::endl;
+  std::cout << "General Options:" << std::endl;
+  std::cout << "  -V --verbose                more verbose (warning+error)."
+            << std::endl;
+  std::cout << "  -W --warning                print warning info." << std::endl;
+  std::cout << "  -D --debug                  print debug info." << std::endl;
+  std::cout << "  -E --error                  print error info." << std::endl;
+  std::cout << "  -h --help                   print help." << std::endl;
+  std::cout << "  -v --version                print version." << std::endl;
+}
+
+int main(int argc, char *argv[]) {
+  int c;
+
+  std::string filename;
+  gdcm::Directory::FilenamesType filenames;
+  std::string outfilename;
+  gdcm::Directory::FilenamesType outfilenames;
+  int skipmeta = 0;
+  int continuemode = 0;
+  int verbose = 0;
+  int warning = 0;
+  int debug = 0;
+  int error = 0;
+  int help = 0;
+  int version = 0;
+  int recursive = 0;
+  int empty_tag = 0;
+  int remove_tag = 0;
+  int wipe_tag = 0;
+  int preserve_tag = 0;
+  std::vector<gdcm::DPath> empty_dpaths;
+  std::vector<gdcm::DPath> remove_dpaths;
+  std::vector<gdcm::DPath> wipe_dpaths;
+  std::vector<gdcm::DPath> preserve_dpaths;
+  std::vector<gdcm::VR> empty_vrs;
+  std::vector<gdcm::Tag> empty_tags;
+  std::vector<gdcm::PrivateTag> empty_privatetags;
+  std::vector<gdcm::VR> remove_vrs;
+  std::vector<gdcm::Tag> remove_tags;
+  std::vector<gdcm::PrivateTag> remove_privatetags;
+  std::vector<gdcm::Tag> wipe_tags;                // clean-digital-trash
+  std::vector<gdcm::PrivateTag> wipe_privatetags;  // clean-digital-trash
+  gdcm::Tag tag;
+  gdcm::PrivateTag privatetag;
+  gdcm::DPath dpath;
+
+  while (1) {
+    // int this_option_optind = optind ? optind : 1;
+    int option_index = 0;
+    static struct option long_options[] = {
+        {"input", required_argument, NULL, 'i'},   // i
+        {"output", required_argument, NULL, 'o'},  // o
+        {"recursive", no_argument, NULL, 'r'},
+        {"empty", required_argument, &empty_tag, 1},        // 3
+        {"remove", required_argument, &remove_tag, 1},      // 4
+        {"wipe", required_argument, &wipe_tag, 1},          // 5
+        {"preserve", required_argument, &preserve_tag, 1},  // 5
+        {"continue", no_argument, NULL, 'c'},
+        {"skip-meta", 0, &skipmeta, 1},  // should I document this one ?
+
+        {"verbose", no_argument, NULL, 'V'},
+        {"warning", no_argument, NULL, 'W'},
+        {"debug", no_argument, NULL, 'D'},
+        {"error", no_argument, NULL, 'E'},
+        {"help", no_argument, NULL, 'h'},
+        {"version", no_argument, NULL, 'v'},
+
+        {0, 0, 0, 0}};
+
+    c = getopt_long(argc, argv, "i:o:rcVWDEhv", long_options, &option_index);
+    if (c == -1) {
+      break;
+    }
+
+    switch (c) {
+      case 0: {
+        const char *s = long_options[option_index].name;
+        (void)s;
+        if (optarg) {
+          if (option_index == 3) /* empty */
+          {
+            assert(strcmp(s, "empty") == 0);
+            if (gdcm::VR::IsValid(optarg))
+              empty_vrs.push_back(gdcm::VR::GetVRTypeFromFile(optarg));
+            else if (privatetag.ReadFromCommaSeparatedString(optarg))
+              empty_privatetags.push_back(privatetag);
+            else if (tag.ReadFromCommaSeparatedString(optarg))
+              empty_tags.push_back(tag);
+            else if (dpath.ConstructFromString(optarg))
+              empty_dpaths.push_back(dpath);
+            else {
+              std::cerr << "Could not read Tag/PrivateTag/DPath: " << optarg
+                        << std::endl;
+              return 1;
+            }
+
+          } else if (option_index == 4) /* remove */
+          {
+            if (gdcm::VR::IsValid(optarg))
+              remove_vrs.push_back(gdcm::VR::GetVRTypeFromFile(optarg));
+            if (privatetag.ReadFromCommaSeparatedString(optarg))
+              remove_privatetags.push_back(privatetag);
+            else if (tag.ReadFromCommaSeparatedString(optarg))
+              remove_tags.push_back(tag);
+            else if (dpath.ConstructFromString(optarg))
+              remove_dpaths.push_back(dpath);
+            else {
+              std::cerr << "Could not read Tag/PrivateTag/DPath: " << optarg
+                        << std::endl;
+              return 1;
+            }
+
+          } else if (option_index == 5) /* wipe */
+          {
+            if (privatetag.ReadFromCommaSeparatedString(optarg))
+              wipe_privatetags.push_back(privatetag);
+            else if (tag.ReadFromCommaSeparatedString(optarg))
+              wipe_tags.push_back(tag);
+            else {
+              std::cerr << "Could not read Tag/PrivateTag/DPath: " << optarg
+                        << std::endl;
+              return 1;
+            }
+          } else if (option_index == 6) /* preserve */
+          {
+            if (dpath.ConstructFromString(optarg))
+              preserve_dpaths.push_back(dpath);
+            else {
+              std::cerr << "Could not read DPath: " << optarg << std::endl;
+              return 1;
+            }
+          } else {
+            assert(0);
+          }
+        }
+      } break;
+
+      case 'i':
+        assert(filename.empty());
+        filename = optarg;
+        break;
+
+      case 'o':
+        assert(outfilename.empty());
+        outfilename = optarg;
+        break;
+
+      case 'c':
+        continuemode = 1;
+        break;
+
+      case 'r':
+        recursive = 1;
+        break;
+
+      case 'V':
+        verbose = 1;
+        break;
+
+      case 'W':
+        warning = 1;
+        break;
+
+      case 'D':
+        debug = 1;
+        break;
+
+      case 'E':
+        error = 1;
+        break;
+
+      case 'h':
+        help = 1;
+        break;
+
+      case 'v':
+        version = 1;
+        break;
+
+      case '?':
+        break;
+
+      default:
+        printf("?? getopt returned character code 0%o ??\n", c);
+    }
+  }
+
+  if (optind < argc) {
+    std::vector<std::string> files;
+    while (optind < argc) {
+      files.push_back(argv[optind++]);
+    }
+    if (files.size() == 2 && filename.empty() && outfilename.empty()) {
+      filename = files[0];
+      outfilename = files[1];
+    } else {
+      PrintHelp();
+      return 1;
+    }
+  }
+
+  if (version) {
+    PrintVersion();
+    return 0;
+  }
+
+  if (help) {
+    PrintHelp();
+    return 0;
+  }
+
+  if (filename.empty()) {
+    PrintHelp();
+    return 1;
+  }
+
+  // preserving is not an actual 'operation':
+  if (empty_tags.empty() && empty_privatetags.empty() &&
+      empty_dpaths.empty()  // empty
+      && remove_tags.empty() && remove_privatetags.empty() &&
+      remove_dpaths.empty()  // remove
+      && wipe_tags.empty() && wipe_privatetags.empty() &&
+      wipe_dpaths.empty()                         // wipe
+      && empty_vrs.empty() && remove_vrs.empty()  // VR
+  ) {
+    std::cerr << "No operations to be done." << std::endl;
+    return false;
+  }
+
+  if (!gdcm::System::FileExists(filename.c_str())) {
+    std::cerr << "Could not find file: " << filename << std::endl;
+    return 1;
+  }
+
+  // Are we in single file or directory mode:
+  unsigned int nfiles = 1;
+  gdcm::Directory dir;
+  if (gdcm::System::FileIsDirectory(filename.c_str())) {
+    if (!gdcm::System::FileIsDirectory(outfilename.c_str())) {
+      if (gdcm::System::FileExists(outfilename.c_str())) {
+        std::cerr << "Could not create directory since " << outfilename
+                  << " is already a file" << std::endl;
+        return 1;
+      }
+    }
+    // For now avoid user mistake
+    if (filename == outfilename) {
+      std::cerr << "Input directory should be different from output directory"
+                << std::endl;
+      return 1;
+    }
+    if (*outfilename.rbegin() != '/') outfilename += '/';
+    nfiles = dir.Load(filename, (recursive > 0 ? true : false));
+    filenames = dir.GetFilenames();
+    gdcm::Directory::FilenamesType::const_iterator it = filenames.begin();
+    // Prepare outfilenames
+    for (; it != filenames.end(); ++it) {
+      std::string dup = *it;  // make a copy
+      std::string &out = dup.replace(0, filename.size(), outfilename);
+      outfilenames.push_back(out);
+    }
+    // Prepare outdirectory
+    gdcm::Directory::FilenamesType const &dirs = dir.GetDirectories();
+    gdcm::Directory::FilenamesType::const_iterator itdir = dirs.begin();
+    for (; itdir != dirs.end(); ++itdir) {
+      std::string dirdup = *itdir;  // make a copy
+      std::string &dirout = dirdup.replace(0, filename.size(), outfilename);
+      if (!gdcm::System::MakeDirectory(dirout.c_str())) {
+        std::cerr << "Could not create directory: " << dirout << std::endl;
+        return 1;
+      }
+    }
+  } else {
+    filenames.push_back(filename);
+    outfilenames.push_back(outfilename);
+  }
+
+  if (filenames.size() != outfilenames.size()) {
+    std::cerr << "Something went really wrong" << std::endl;
+    return 1;
+  }
+
+  // Debug is a little too verbose
+  gdcm::Trace::SetDebug((debug > 0 ? true : false));
+  gdcm::Trace::SetWarning((warning > 0 ? true : false));
+  gdcm::Trace::SetError((error > 0 ? true : false));
+  // when verbose is true, make sure warning+error are turned on:
+  if (verbose) {
+    gdcm::Trace::SetWarning((verbose > 0 ? true : false));
+    gdcm::Trace::SetError((verbose > 0 ? true : false));
+  }
+
+  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle("gdcmclean");
+
+  // Setup gdcm::Cleaner
+  gdcm::Cleaner cleaner;
+  // Preserve
+  for (std::vector<gdcm::DPath>::const_iterator it = preserve_dpaths.begin();
+       it != preserve_dpaths.end(); ++it) {
+    if (!cleaner.Preserve(*it)) {
+      std::cerr << "Impossible to Preserve: " << *it << std::endl;
+      return 1;
+    }
+  }
+  // Empty
+  for (std::vector<gdcm::Tag>::const_iterator it = empty_tags.begin();
+       it != empty_tags.end(); ++it) {
+    if (!cleaner.Empty(*it)) {
+      std::cerr << "Impossible to Empty: " << *it << std::endl;
+      return 1;
+    }
+  }
+  for (std::vector<gdcm::PrivateTag>::const_iterator it =
+           empty_privatetags.begin();
+       it != empty_privatetags.end(); ++it) {
+    if (!cleaner.Empty(*it)) {
+      std::cerr << "Impossible to Empty: " << *it << std::endl;
+      return 1;
+    }
+  }
+  for (std::vector<gdcm::DPath>::const_iterator it = empty_dpaths.begin();
+       it != empty_dpaths.end(); ++it) {
+    if (!cleaner.Empty(*it)) {
+      std::cerr << "Impossible to Empty: " << *it << std::endl;
+      return 1;
+    }
+  }
+  // Remove
+  for (std::vector<gdcm::Tag>::const_iterator it = remove_tags.begin();
+       it != remove_tags.end(); ++it) {
+    if (!cleaner.Remove(*it)) {
+      std::cerr << "Impossible to Remove: " << *it << std::endl;
+      return 1;
+    }
+  }
+  for (std::vector<gdcm::PrivateTag>::const_iterator it =
+           remove_privatetags.begin();
+       it != remove_privatetags.end(); ++it) {
+    if (!cleaner.Remove(*it)) {
+      std::cerr << "Impossible to Remove: " << *it << std::endl;
+      return 1;
+    }
+  }
+  for (std::vector<gdcm::DPath>::const_iterator it = remove_dpaths.begin();
+       it != remove_dpaths.end(); ++it) {
+    if (!cleaner.Remove(*it)) {
+      std::cerr << "Impossible to Remove: " << *it << std::endl;
+      return 1;
+    }
+  }
+  // Wipe
+  for (std::vector<gdcm::Tag>::const_iterator it = wipe_tags.begin();
+       it != wipe_tags.end(); ++it) {
+    if (!cleaner.Wipe(*it)) {
+      std::cerr << "Impossible to Wipe: " << *it << std::endl;
+      return 1;
+    }
+  }
+  for (std::vector<gdcm::PrivateTag>::const_iterator it =
+           wipe_privatetags.begin();
+       it != wipe_privatetags.end(); ++it) {
+    if (!cleaner.Wipe(*it)) {
+      std::cerr << "Impossible to Wipe: " << *it << std::endl;
+      return 1;
+    }
+  }
+  for (std::vector<gdcm::DPath>::const_iterator it = wipe_dpaths.begin();
+       it != wipe_dpaths.end(); ++it) {
+    if (!cleaner.Wipe(*it)) {
+      std::cerr << "Impossible to Wipe: " << *it << std::endl;
+      return 1;
+    }
+  }
+  // VR
+  for (std::vector<gdcm::VR>::const_iterator it = empty_vrs.begin();
+       it != empty_vrs.end(); ++it) {
+    if (!cleaner.Empty(*it)) {
+      std::cerr << "Impossible to Empty: " << *it << std::endl;
+      return 1;
+    }
+  }
+  for (std::vector<gdcm::VR>::const_iterator it = remove_vrs.begin();
+       it != remove_vrs.end(); ++it) {
+    if (!cleaner.Remove(*it)) {
+      std::cerr << "Impossible to Remove: " << *it << std::endl;
+      return 1;
+    }
+  }
+
+  {
+    for (unsigned int i = 0; i < nfiles; ++i) {
+      const char *in = filenames[i].c_str();
+      const char *out = outfilenames[i].c_str();
+      if (!CleanOneFile(cleaner, in, out, skipmeta > 0 ? true : false,
+                        empty_tags, empty_privatetags, continuemode)) {
+        return 1;
+      }
+    }
+  }
+
+  return 0;
+}
