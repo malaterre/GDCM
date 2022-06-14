@@ -44,7 +44,7 @@ static bool CleanOneFile(gdcm::Cleaner &cleaner, const char *filename,
   if (!reader.Read()) {
     std::cerr << "Could not read : " << filename << std::endl;
     if (continuemode) {
-      std::cerr << "Skipping from anonymization process (continue mode)."
+      std::cerr << "Skipping from cleaning process (continue mode)."
                 << std::endl;
       return true;
     } else {
@@ -57,7 +57,7 @@ static bool CleanOneFile(gdcm::Cleaner &cleaner, const char *filename,
   if (!cleaner.Clean()) {
     std::cerr << "Could not clean: " << filename << std::endl;
     if (continuemode) {
-      std::cerr << "Skipping from anonymization process (continue mode)."
+      std::cerr << "Skipping from cleaning process (continue mode)."
                 << std::endl;
       return true;
     } else {
@@ -422,6 +422,21 @@ int main(int argc, char *argv[]) {
       return 1;
     }
   }
+  // VR
+  for (std::vector<gdcm::VR>::const_iterator it = empty_vrs.begin();
+       it != empty_vrs.end(); ++it) {
+    if (!cleaner.Empty(*it)) {
+      std::cerr << "Impossible to Empty: " << *it << std::endl;
+      return 1;
+    }
+  }
+  for (std::vector<gdcm::VR>::const_iterator it = remove_vrs.begin();
+       it != remove_vrs.end(); ++it) {
+    if (!cleaner.Remove(*it)) {
+      std::cerr << "Impossible to Remove: " << *it << std::endl;
+      return 1;
+    }
+  }
   // Empty
   for (std::vector<gdcm::Tag>::const_iterator it = empty_tags.begin();
        it != empty_tags.end(); ++it) {
@@ -491,22 +506,6 @@ int main(int argc, char *argv[]) {
       return 1;
     }
   }
-  // VR
-  for (std::vector<gdcm::VR>::const_iterator it = empty_vrs.begin();
-       it != empty_vrs.end(); ++it) {
-    if (!cleaner.Empty(*it)) {
-      std::cerr << "Impossible to Empty: " << *it << std::endl;
-      return 1;
-    }
-  }
-  for (std::vector<gdcm::VR>::const_iterator it = remove_vrs.begin();
-       it != remove_vrs.end(); ++it) {
-    if (!cleaner.Remove(*it)) {
-      std::cerr << "Impossible to Remove: " << *it << std::endl;
-      return 1;
-    }
-  }
-
   {
     for (unsigned int i = 0; i < nfiles; ++i) {
       const char *in = filenames[i].c_str();

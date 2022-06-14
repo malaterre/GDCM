@@ -58,18 +58,36 @@ struct Cleaner::impl {
 
   bool ProcessDataSet(File &file, DataSet &ds, const std::string &tag_path);
 
+  template <typename T>
+  bool CheckVRBeforeInsert(T const &t, std::set<T> &set) {
+    if (empty_vrs.empty()) {
+      set.insert(t);
+      return true;
+    } else {
+      // Let's check if VR of tag is already contained in VR
+      static const Global &g = GlobalInstance;
+      static const Dicts &dicts = g.GetDicts();
+      const DictEntry &entry = dicts.GetDictEntry(t);
+      const VR &refvr = entry.GetVR();
+      if (empty_vrs.find(refvr) != empty_vrs.end()) {
+        gdcmWarningMacro(
+            "Tag: " << t << " is also cleanup with VR cleaning. skipping");
+      } else {
+        set.insert(t);
+      }
+      return true;
+    }
+  }
   bool Empty(Tag const &t) {
     if (t.IsPublic() && !t.IsGroupLength()) {
-      empty_tags.insert(t);
-      return true;
+      return CheckVRBeforeInsert(t, empty_tags);
     }
     return false;
   }
   bool Empty(PrivateTag const &pt) {
     const char *owner = pt.GetOwner();
     if (pt.IsPrivate() && *owner) {
-      empty_privatetags.insert(pt);
-      return true;
+      return CheckVRBeforeInsert(pt, empty_privatetags);
     }
     return false;
   }
@@ -87,16 +105,14 @@ struct Cleaner::impl {
 
   bool Remove(Tag const &t) {
     if (t.IsPublic() && !t.IsGroupLength()) {
-      remove_tags.insert(t);
-      return true;
+      return CheckVRBeforeInsert(t, remove_tags);
     }
     return false;
   }
   bool Remove(PrivateTag const &pt) {
     const char *owner = pt.GetOwner();
     if (pt.IsPrivate() && *owner) {
-      remove_privatetags.insert(pt);
-      return true;
+      return CheckVRBeforeInsert(pt, remove_privatetags);
     }
     return false;
   }
@@ -217,6 +233,11 @@ static bool CleanCSA(DataSet &ds, const DataElement &de) {
   const ByteValue *bv = de.GetByteValue();
   // fast path:
   if (!bv) return true;
+  static const char vs01[] = "VS01";
+  // bogus big-endian conversion
+  if (bv->GetLength() >= 4 && memcmp(bv->GetPointer(), vs01, 4) == 0) {
+    return true;
+  }
   static const char pds_com[] = "<pds><com>";
   // PET_REPLAY_PARAM case:
   if (bv->GetLength() >= 10 && memcmp(bv->GetPointer(), pds_com, 10) == 0) {

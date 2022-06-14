@@ -133,6 +133,9 @@ static bool read_magic(struct app *self) {
   {
     //	  'PET_REPLAY_PARAM'
     return false;
+  } else if (n == 0x31305356 && unused == 0x2010403) {  // aka 'VS01' ...
+    // technically could be reserved; should not happen in the wild
+    return false;
   } else {
     assert(0);
     return false;
