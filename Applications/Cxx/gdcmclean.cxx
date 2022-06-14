@@ -44,7 +44,7 @@ static bool CleanOneFile(gdcm::Cleaner &cleaner, const char *filename,
   if (!reader.Read()) {
     std::cerr << "Could not read : " << filename << std::endl;
     if (continuemode) {
-      std::cerr << "Skipping from anonymization process (continue mode)."
+      std::cerr << "Skipping from cleaning process (continue mode)."
                 << std::endl;
       return true;
     } else {
@@ -57,7 +57,7 @@ static bool CleanOneFile(gdcm::Cleaner &cleaner, const char *filename,
   if (!cleaner.Clean()) {
     std::cerr << "Could not clean: " << filename << std::endl;
     if (continuemode) {
-      std::cerr << "Skipping from anonymization process (continue mode)."
+      std::cerr << "Skipping from cleaning process (continue mode)."
                 << std::endl;
       return true;
     } else {
