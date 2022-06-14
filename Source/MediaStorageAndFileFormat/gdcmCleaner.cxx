@@ -549,8 +549,9 @@ struct Cleaner::impl {
   bool ProcessDataSet(File &file, DataSet &ds, const std::string &tag_path);
 
   template <typename T>
-  bool CheckVRBeforeInsert(T const &t, std::set<T> &set) {
-    if (empty_vrs.empty()) {
+  bool CheckVRBeforeInsert(std::set<VR> &empty_or_remove_vrs, T const &t,
+                           std::set<T> &set) {
+    if (empty_or_remove_vrs.empty()) {
       set.insert(t);
       return true;
     } else {
@@ -559,9 +560,13 @@ struct Cleaner::impl {
       static const Dicts &dicts = g.GetDicts();
       const DictEntry &entry = dicts.GetDictEntry(t);
       const VR &refvr = entry.GetVR();
-      if (empty_vrs.find(refvr) != empty_vrs.end()) {
+      if (empty_or_remove_vrs.find(refvr) != empty_or_remove_vrs.end()) {
         gdcmWarningMacro(
             "Tag: " << t << " is also cleanup with VR cleaning. skipping");
+      } else if (refvr == VR::INVALID) {
+        gdcmWarningMacro("inserting unknown tag "
+                         << t << " . not check on VR is done");
+        set.insert(t);
       } else {
         set.insert(t);
       }
@@ -570,7 +575,7 @@ struct Cleaner::impl {
   }
   bool Empty(Tag const &t) {
     if (t.IsPublic() && !t.IsGroupLength()) {
-      return CheckVRBeforeInsert(t, empty_tags);
+      return CheckVRBeforeInsert(empty_vrs, t, empty_tags);
     }
     return false;
   }
@@ -581,7 +586,7 @@ struct Cleaner::impl {
         gdcmErrorMacro("Cannot add Part 15 attribute for now");
         return false;
       }
-      return CheckVRBeforeInsert(pt, empty_privatetags);
+      return CheckVRBeforeInsert(empty_vrs, pt, empty_privatetags);
     }
     return false;
   }
@@ -599,7 +604,7 @@ struct Cleaner::impl {
 
   bool Remove(Tag const &t) {
     if (t.IsPublic() && !t.IsGroupLength()) {
-      return CheckVRBeforeInsert(t, remove_tags);
+      return CheckVRBeforeInsert(remove_vrs, t, remove_tags);
     }
     return false;
   }
@@ -610,7 +615,7 @@ struct Cleaner::impl {
         gdcmErrorMacro("Cannot add Part 15 attribute for now");
         return false;
       }
-      return CheckVRBeforeInsert(pt, remove_privatetags);
+      return CheckVRBeforeInsert(remove_vrs, pt, remove_privatetags);
     }
     return false;
   }
@@ -848,15 +853,20 @@ Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
   // VR cleanup
   if (!empty_vrs.empty() || !remove_vrs.empty()) {
     VR vr = de.GetVR();
-    // we want to clean VR==PN; but this is a problem for implicit transfer
-    // syntax, so let's be nice to the user and prefer dict_vr. however for
-    // explicit, do not assume value in dict can take over the read VR
     assert(ref_dict_vr != VR::INVALID);
-    if (vr == VR::INVALID) {
-      vr = ref_dict_vr;
-    }
-    if (vr == VR::UN && ref_dict_vr != VR::UN) {
-      vr = ref_dict_vr;
+    // be careful with vr handling since we must always prefer the one from the
+    // dict in case of attribute written as 'OB' but dict states 'PN':
+    if (ref_dict_vr != VR::UN /*&& ref_dict_vr != VR::INVALID*/) {
+      // we want to clean VR==PN; but this is a problem for implicit transfer
+      // syntax, so let's be nice to the user and prefer dict_vr. however for
+      // explicit, do not assume value in dict can take over the read VR
+      if (vr == VR::UN || vr == VR::INVALID) {
+        vr = ref_dict_vr;
+      }
+      if (vr != ref_dict_vr) {
+        // assert(vr == VR::OB || vr == VR::OW);
+        vr = ref_dict_vr;
+      }
     }
     // Empty
     if (empty_vrs.find(vr) != empty_vrs.end()) {
