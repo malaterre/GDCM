@@ -546,9 +546,6 @@ struct Cleaner::impl {
                             const DataElement &de, VR const &ref_dict_vr,
                             const std::string &tag_path);
 
-  bool Clean(File const &file, DataSet &ds, const DataElement &de,
-             VR const &ref_dict_vr, const std::string &tag_path);
-
   bool ProcessDataSet(File &file, DataSet &ds, const std::string &tag_path);
 
   template <typename T>
@@ -873,114 +870,6 @@ Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
 
   // default action:
   return Cleaner::impl::NONE;
-}
-
-bool Cleaner::impl::Clean(File const &file, DataSet &ds, const DataElement &de,
-                          VR const &ref_dict_vr, const std::string &tag_path) {
-  const Tag tag = de.GetTag();  // important make a copy
-  if (tag.IsGroupLength()) {
-    if (AllGroupLength) ds.Remove(tag);
-    return true;
-  } else if (tag.IsIllegal()) {
-    if (AllIllegal) ds.Remove(tag);
-    return true;
-  }
-
-  if (tag.IsPublic()) {
-    const DPath dpath = ConstructDPath(tag_path, ds, tag);
-    // Preserve
-    if (IsDPathInSet(preserve_dpaths, dpath)) return true;
-    // Wipe
-    if (wipe_tags.find(tag) != wipe_tags.end() ||
-        IsDPathInSet(wipe_dpaths, dpath)) {
-      gdcmErrorMacro("Not Implemented");
-      return false;
-    }
-    // Empty
-    if (empty_tags.find(tag) != empty_tags.end() ||
-        IsDPathInSet(empty_dpaths, dpath)) {
-      assert(!tag.IsGroupLength());
-      assert(!tag.IsPrivateCreator());
-      assert(ds.FindDataElement(tag));
-      DataElement clean(de.GetTag());
-      clean.SetVR(de.GetVR());
-      ds.Replace(clean);
-    }
-    // Remove
-    if (remove_tags.find(tag) != remove_tags.end() ||
-        IsDPathInSet(remove_dpaths, dpath)) {
-      ds.Remove(tag);
-    }
-  }
-
-  if (tag.IsPrivate() && !tag.IsPrivateCreator()) {
-    const PrivateTag pt = ds.GetPrivateTag(tag);
-    const char *owner = pt.GetOwner();
-    assert(owner);
-    if (*owner == 0 && AllMissingPrivateCreator) {
-      ds.Remove(tag);
-    }
-    // At this point we have a private creator, it makes sense to check for
-    // preserve: Preserve
-    const DPath dpath = ConstructDPath(tag_path, ds, tag);
-    if (IsDPathInSet(preserve_dpaths, dpath)) return true;
-    // Wipe
-    if (wipe_privatetags.find(pt) != wipe_privatetags.end() ||
-        IsDPathInSet(wipe_dpaths, dpath)) {
-      static const PrivateTag &csa1 = CSAHeader::GetCSAImageHeaderInfoTag();
-      static const PrivateTag &csa2 = CSAHeader::GetCSASeriesHeaderInfoTag();
-
-      if (pt == csa1) {
-        const bool ret = CleanCSA(ds, de);
-        if (!ret) return false;
-      } else if (pt == csa2) {
-        const bool ret = CleanCSA(ds, de);
-        if (!ret) return false;
-      } else {
-        gdcmErrorMacro(" not implemented");
-        return false;
-      }
-    }
-    // Empty
-    if (empty_privatetags.find(pt) != empty_privatetags.end() ||
-        IsDPathInSet(empty_dpaths, dpath)) {
-      DataElement clean(de.GetTag());
-      clean.SetVR(de.GetVR());
-      ds.Replace(clean);
-    }
-    // Remove
-    if (remove_privatetags.find(pt) != remove_privatetags.end() ||
-        IsDPathInSet(remove_dpaths, dpath)) {
-      ds.Remove(tag);
-    }
-  }
-
-  // VR cleanup
-  if (!empty_vrs.empty() || !remove_vrs.empty()) {
-    VR vr = de.GetVR();
-    // we want to clean VR==PN; but this is a problem for implicit transfer
-    // syntax, so let's be nice to the user and prefer dict_vr. however for
-    // explicit, do not assume value in dict can take over the read VR
-    assert(ref_dict_vr != VR::INVALID);
-    if (vr == VR::INVALID) {
-      vr = ref_dict_vr;
-    }
-    if (vr == VR::UN && ref_dict_vr != VR::UN) {
-      vr = ref_dict_vr;
-    }
-    // Empty
-    if (empty_vrs.find(vr) != empty_vrs.end()) {
-      DataElement clean(de.GetTag());
-      clean.SetVR(vr);
-      ds.Replace(clean);
-    }
-    // Remove
-    if (remove_vrs.find(vr) != remove_vrs.end()) {
-      ds.Remove(tag);
-    }
-  }
-
-  return true;
 }
 
 bool Cleaner::impl::ProcessDataSet(File &file, DataSet &ds,
