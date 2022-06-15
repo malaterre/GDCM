@@ -17,6 +17,8 @@
 #include "gdcmCleaner.h"
 #include "gdcmDPath.h"
 #include "gdcmDefs.h"
+#include "gdcmDict.h"
+#include "gdcmDicts.h"
 #include "gdcmDirectory.h"
 #include "gdcmGlobal.h"
 #include "gdcmReader.h"
@@ -81,6 +83,16 @@ static bool CleanOneFile(gdcm::Cleaner &cleaner, const char *filename,
   return true;
 }
 
+static inline bool isValidPublicKeyword(const char *keyword, gdcm::Tag &tag) {
+  static const gdcm::Global &g = gdcm::Global::GetInstance();
+  static const gdcm::Dicts &dicts = g.GetDicts();
+  static const gdcm::Dict &pubdict = dicts.GetPublicDict();
+
+  pubdict.GetDictEntryByKeyword(keyword, tag);
+  if (tag != gdcm::Tag(0xffff, 0xffff)) return true;
+  return false;
+}
+
 static void PrintHelp() {
   PrintVersion();
   std::cout << "Usage: gdcmclean [OPTION]... FILE..." << std::endl;
@@ -100,19 +112,19 @@ static void PrintHelp() {
             << std::endl;
   std::cout << "                %d,%d,%s      DICOM private tag(s) to empty"
             << std::endl;
-  std::cout << "                %s            DICOM path(s) to empty"
+  std::cout << "                %s            DICOM keyword/path(s) to empty"
             << std::endl;
   std::cout << "     --remove   %d,%d         DICOM tag(s) to remove"
             << std::endl;
   std::cout << "                %d,%d,%s      DICOM private tag(s) to remove"
             << std::endl;
-  std::cout << "                %s            DICOM path(s) to remove"
+  std::cout << "                %s            DICOM keyword/path(s) to remove"
             << std::endl;
   std::cout << "     --wipe     %d,%d         DICOM tag(s) to wipe"
             << std::endl;
   std::cout << "                %d,%d,%s      DICOM private tag(s) to wipe"
             << std::endl;
-  std::cout << "                %s            DICOM path(s) to wipe"
+  std::cout << "                %s            DICOM keyword/path(s) to wipe"
             << std::endl;
   std::cout << "     --preserve %s            DICOM path(s) to preserve"
             << std::endl;
@@ -221,6 +233,8 @@ int main(int argc, char *argv[]) {
               empty_privatetags.push_back(privatetag);
             else if (tag.ReadFromCommaSeparatedString(optarg))
               empty_tags.push_back(tag);
+            else if (isValidPublicKeyword(optarg, tag))
+              empty_tags.push_back(tag);
             else if (dpath.ConstructFromString(optarg))
               empty_dpaths.push_back(dpath);
             else {
@@ -237,6 +251,8 @@ int main(int argc, char *argv[]) {
               remove_privatetags.push_back(privatetag);
             else if (tag.ReadFromCommaSeparatedString(optarg))
               remove_tags.push_back(tag);
+            else if (isValidPublicKeyword(optarg, tag))
+              remove_tags.push_back(tag);
             else if (dpath.ConstructFromString(optarg))
               remove_dpaths.push_back(dpath);
             else {
@@ -250,6 +266,8 @@ int main(int argc, char *argv[]) {
             if (privatetag.ReadFromCommaSeparatedString(optarg))
               wipe_privatetags.push_back(privatetag);
             else if (tag.ReadFromCommaSeparatedString(optarg))
+              wipe_tags.push_back(tag);
+            else if (isValidPublicKeyword(optarg, tag))
               wipe_tags.push_back(tag);
             else {
               std::cerr << "Could not read Tag/PrivateTag/DPath: " << optarg

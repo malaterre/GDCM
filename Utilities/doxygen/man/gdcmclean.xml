@@ -62,14 +62,17 @@ file-out  DICOM output directory
 
 <para><literallayout>     --empty    %d,%d         DICOM tag(s) to empty
                 %d,%d,%s      DICOM private tag(s) to empty
-                %s            DICOM path(s) to empty
+                %s            DICOM keyword/path(s) to empty
      --remove   %d,%d         DICOM tag(s) to remove
                 %d,%d,%s      DICOM private tag(s) to remove
-                %s            DICOM path(s) to remove
+                %s            DICOM keyword/path(s) to remove
      --wipe     %d,%d         DICOM tag(s) to wipe
                 %d,%d,%s      DICOM private tag(s) to wipe
-                %s            DICOM path(s) to wipe
+                %s            DICOM keyword/path(s) to wipe
      --preserve %s            DICOM path(s) to preserve
+     --preserve-missing-private-creator             Whether or not preserve private attributes with missing private creator.
+     --preserve-group-length                        Whether or not preserve deprecated group length attributes (will not be re-computed).
+     --preserve-illegal                             Whether or not preserve illegal attributes (eg. group 0003...).
 </literallayout></para>
 </refsection>
 <refsection xml:id="gdcmclean_1general_options">
