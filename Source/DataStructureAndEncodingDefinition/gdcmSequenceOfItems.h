@@ -148,7 +148,7 @@ public:
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
         if( item.GetTag() == seqDelItem )
           {
-          gdcmWarningMacro( "SegDelItem found in defined length Sequence. Skipping" );
+          gdcmWarningMacro( "SeqDelItem found in defined length Sequence. Skipping" );
           assert( item.GetVL() == 0 );
           assert( item.GetNestedDataSet().Size() == 0 );
           // we need to pay attention that the length of the Sequence of Items will be wrong
