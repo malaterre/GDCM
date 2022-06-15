@@ -565,7 +565,7 @@ struct Cleaner::impl {
             "Tag: " << t << " is also cleanup with VR cleaning. skipping");
       } else if (refvr == VR::INVALID) {
         gdcmWarningMacro("inserting unknown tag "
-                         << t << " . not check on VR is done");
+                         << t << ". no check on VR is done");
         set.insert(t);
       } else {
         set.insert(t);
@@ -739,6 +739,8 @@ static bool CleanCSA(DataSet &ds, const DataElement &de) {
   static const char vs01[] = "VS01";
   // bogus big-endian conversion
   if (bv->GetLength() >= 4 && memcmp(bv->GetPointer(), vs01, 4) == 0) {
+    // technically there is digital trash, but since it is written in byte-swap
+    // mode, it cannot be detected easily.
     return true;
   }
   static const char pds_com[] = "<pds><com>";
@@ -792,6 +794,7 @@ Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
     File const &file, DataSet &ds, const DataElement &de, VR const &ref_dict_vr,
     const std::string &tag_path) {
   const Tag &tag = de.GetTag();
+  // Group Length & Illegal cannot be preserved so it is safe to do them now:
   if (tag.IsGroupLength()) {
     if (AllGroupLength) return Cleaner::impl::REMOVE;
   } else if (tag.IsIllegal()) {
@@ -917,6 +920,10 @@ bool Cleaner::impl::ProcessDataSet(File &file, DataSet &ds,
               gdcmErrorMacro("Error processing Item #" << i);
               return false;
             }
+            // Simple memcmp to avoid recomputation of Item Length: make them
+            // undefined length. TODO would be nice to only do this when
+            // strictly needed.
+            item.SetVLToUndefined();
           }
           // Simple mechanism to avoid recomputation of Sequence Length: make
           // them undefined length

@@ -52,17 +52,17 @@ class GDCM_EXPORT Cleaner : public Subject {
   bool Preserve(DPath const &dpath);
 
   /// Should I remove all private tag for which no private creator is found.
-  /// Default: yes
+  /// Default: true
   void RemoveAllMissingPrivateCreator(bool remove);
 
   /// Specify a private tag (odd number) without a private creator (root level
   /// only for now):
   bool RemoveMissingPrivateCreator(Tag const &t);
 
-  /// Should I remove all group length (deprecated). Default: yes
+  /// Should I remove all group length (deprecated). Default: true
   void RemoveAllGroupLength(bool remove);
 
-  /// Should I remove all illegal attribute. Default: yes
+  /// Should I remove all illegal attribute. Default: true
   void RemoveAllIllegal(bool remove);
 
   /// main loop
