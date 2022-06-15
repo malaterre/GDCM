@@ -546,7 +546,8 @@ struct Cleaner::impl {
                             const DataElement &de, VR const &ref_dict_vr,
                             const std::string &tag_path);
 
-  bool ProcessDataSet(File &file, DataSet &ds, const std::string &tag_path);
+  bool ProcessDataSet(Subject &s, File &file, DataSet &ds,
+                      const std::string &tag_path);
 
   template <typename T>
   bool CheckVRBeforeInsert(std::set<VR> &empty_or_remove_vrs, T const &t,
@@ -885,14 +886,18 @@ Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
   return Cleaner::impl::NONE;
 }
 
-bool Cleaner::impl::ProcessDataSet(File &file, DataSet &ds,
+bool Cleaner::impl::ProcessDataSet(Subject &subject, File &file, DataSet &ds,
                                    const std::string &tag_path) {
+  subject.InvokeEvent(IterationEvent());
   ConstIterator it = ds.GetDES().begin();
 
   for (; it != ds.GetDES().end(); /*++it*/) {
     const DataElement &de = *it;
     ++it;  // 'Remove/Empty' may invalidate iterator
     const Tag &tag = de.GetTag();
+    AnonymizeEvent ae;
+    ae.SetTag(tag);
+
     VR dict_vr = ComputeDictVR(file, ds, de);
     Cleaner::impl::ACTION action =
         Cleaner::impl::ComputeAction(file, ds, de, dict_vr, tag_path);
@@ -916,7 +921,7 @@ bool Cleaner::impl::ProcessDataSet(File &file, DataSet &ds,
             os << '*';  // no need for item numbering
             os << '/';
 
-            if (!ProcessDataSet(file, nestedds, os.str())) {
+            if (!ProcessDataSet(subject, file, nestedds, os.str())) {
               gdcmErrorMacro("Error processing Item #" << i);
               return false;
             }
@@ -945,9 +950,10 @@ bool Cleaner::impl::ProcessDataSet(File &file, DataSet &ds,
       DataElement clean(de.GetTag());
       clean.SetVR(de.GetVR());
       ds.Replace(clean);
-
+      subject.InvokeEvent(ae);
     } else if (action == Cleaner::impl::REMOVE) {
       ds.Remove(tag);
+      subject.InvokeEvent(ae);
     } else if (action == Cleaner::impl::WIPE) {
       const PrivateTag pt = ds.GetPrivateTag(tag);
 
@@ -964,6 +970,10 @@ bool Cleaner::impl::ProcessDataSet(File &file, DataSet &ds,
         gdcmErrorMacro(" not implemented");
         return false;
       }
+      subject.InvokeEvent(ae);
+    } else {
+      gdcmErrorMacro("Missing handling of action: " << action);
+      return false;
     }
   }
   return true;
@@ -1003,7 +1013,10 @@ void Cleaner::RemoveAllIllegal(bool remove) { pimpl->RemoveAllIllegal(remove); }
 
 bool Cleaner::Clean() {
   DataSet &ds = F->GetDataSet();
-  return pimpl->ProcessDataSet(*F, ds, "/");
+  this->InvokeEvent(StartEvent());
+  const bool ret = pimpl->ProcessDataSet(*this, *F, ds, "/");
+  this->InvokeEvent(EndEvent());
+  return ret;
 }
 
 }  // end namespace gdcm
