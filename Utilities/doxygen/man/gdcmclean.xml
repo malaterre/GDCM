@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<?xml-stylesheet type="text/xsl" href="http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl" ?>
+<!DOCTYPE Data [ <!ENTITY version SYSTEM 'version.txt'> ]>
+<refentry xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+<info>
+<author><personname><firstname>Mathieu</firstname><surname>Malaterre</surname></personname><contrib>Main developer</contrib></author>
+<copyright><year>2006</year><year>2011</year><holder>Mathieu Malaterre</holder></copyright>
+</info>
+  <refmeta>
+    <refentrytitle>gdcmclean</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="source">GDCM</refmiscinfo>
+    <refmiscinfo class="version">&version;</refmiscinfo>
+    <refmiscinfo class="manual">DICOM Manipulation.</refmiscinfo>
+  </refmeta>
+  <refnamediv><refname>gdcmclean</refname>
+    <refpurpose>Tool to clean a DICOM file.</refpurpose>
+</refnamediv>
+<refsection xml:id="gdcmclean_1synopsis">
+<title>SYNOPSIS</title>
+
+<para><literallayout>gdcmclean [options] file-in file-out
+gdcmclean [options] dir-in  dir-out
+</literallayout></para>
+</refsection>
+<refsection xml:id="gdcmclean_1description">
+<title>DESCRIPTION</title>
+
+<para>The <emphasis role="bold">gdcmclean</emphasis> tool is an cleaning tool.</para>
+
+</refsection>
+<refsection xml:id="gdcmclean_1parameters">
+<title>PARAMETERS</title>
+
+<para><literallayout>file-in   DICOM input filename
+
+file-out  DICOM output filename
+</literallayout></para>
+
+<para>or</para>
+
+<para><literallayout>file-in   DICOM input directory
+
+file-out  DICOM output directory
+</literallayout></para>
+</refsection>
+<refsection xml:id="gdcmclean_1options">
+<title>OPTIONS</title>
+
+<para>You need to :</para>
+<refsection xml:id="gdcmclean_1specific_options">
+<title>specific options</title>
+
+<para><literallayout>  -i --input                  DICOM filename / directory
+  -o --output                 DICOM filename / directory
+  -r --recursive              recursively process (sub-)directories.
+     --continue               Do not stop when file found is not DICOM.
+</literallayout></para>
+</refsection>
+<refsection xml:id="gdcmclean_1editing_mode_options">
+<title>Editing mode options</title>
+
+<para><literallayout>     --empty    %d,%d         DICOM tag(s) to empty
+                %d,%d,%s      DICOM private tag(s) to empty
+                %s            DICOM keyword/path(s) to empty
+     --remove   %d,%d         DICOM tag(s) to remove
+                %d,%d,%s      DICOM private tag(s) to remove
+                %s            DICOM keyword/path(s) to remove
+     --wipe     %d,%d         DICOM tag(s) to wipe
+                %d,%d,%s      DICOM private tag(s) to wipe
+                %s            DICOM keyword/path(s) to wipe
+     --preserve %s            DICOM path(s) to preserve
+     --preserve-missing-private-creator             Whether or not preserve private attributes with missing private creator.
+     --preserve-group-length                        Whether or not preserve deprecated group length attributes (will not be re-computed).
+     --preserve-illegal                             Whether or not preserve illegal attributes (eg. group 0003...).
+</literallayout></para>
+</refsection>
+<refsection xml:id="gdcmclean_1general_options">
+<title>general options</title>
+
+<para><literallayout>  -h   --help
+         print this help text and exit
+
+  -v   --version
+         print version information and exit
+
+  -V   --verbose
+         verbose mode (warning+error).
+
+  -W   --warning
+         warning mode, print warning information
+
+  -E   --error
+         error mode, print error information
+
+  -D   --debug
+         debug mode, print debug information
+</literallayout></para>
+</refsection>
+</refsection>
+<refsection xml:id="gdcmviewer_1usage">
+<title>Typical usage</title>
+<refsection xml:id="gdcmclean_1editing">
+<title>Editing mode</title>
+
+<para>This functionality is not described in the DICOM standard.</para>
+
+<para>The following example shows how to use editing mode and achieve 3 operations at the same time: <itemizedlist>
+<listitem>
+<para>Empty the tag (0010,0010) Patient&apos;s Name, </para>
+</listitem>
+<listitem>
+<para>Empty the private tag (0009,0020) Patient ID, </para>
+</listitem>
+<listitem>
+<para>Remove the tag (0010,0040) Patient&apos;s Sex </para>
+</listitem>
+<listitem>
+<para>Remove the tag (0010,1010) Patient&apos;s Age </para>
+</listitem>
+<listitem>
+<para>Wipe the tag (0010,1030) Patient&apos;s Weight with the value &apos;10&apos;</para>
+</listitem>
+</itemizedlist>
+</para>
+
+<para><literallayout>$ gdcmclean --dumb --empty 10,10 --empty 10,20 --remove 10,40 --remove 10,1010 --replace 10,1030,10 012345.002.050.dcm out.dcm
+</literallayout></para>
+
+</refsection>
+</refsection>
+<refsection xml:id="gdcmclean_1see_also">
+<title>SEE ALSO</title>
+
+<para><emphasis role="bold">gdcmconv</emphasis>(1), <emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmdiff</emphasis>(1)</para>
+</refsection>
+</refentry>

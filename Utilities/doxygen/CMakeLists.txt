@@ -232,6 +232,7 @@ set(MANPAGES_XML
     gdcm2pnm
     gdcm2vtk
     gdcmanon
+    gdcmclean
     gdcmconv
     gdcmdiff
     gdcmdump

@@ -35,6 +35,7 @@ set(MSFF_TEST_SRCS
   TestFileExplicitFilter.cxx
   TestImageFragmentSplitter.cxx
   TestTagPath.cxx
+  TestDPath.cxx
   TestOrientation.cxx
   TestIconImage.cxx
   TestImageHelper.cxx
@@ -107,6 +108,10 @@ set(MSFF_TEST_SRCS
 if(GDCM_DATA_ROOT)
   set(MSFF_TEST_SRCS
     ${MSFF_TEST_SRCS}
+    TestCleaner1.cxx
+    TestCleaner2.cxx
+    TestCleaner3.cxx
+    TestCleaner4.cxx
     TestSplitMosaicFilter3.cxx
     TestStrictScanner1.cxx
     TestStrictScanner2_1.cxx
