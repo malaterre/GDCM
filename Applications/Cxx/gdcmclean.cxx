@@ -36,8 +36,6 @@ static void PrintVersion() {
 
 static bool CleanOneFile(gdcm::Cleaner &cleaner, const char *filename,
                          const char *outfilename, bool skipmeta,
-                         std::vector<gdcm::Tag> const &empty_tags,
-                         std::vector<gdcm::PrivateTag> const &empty_privatetags,
                          bool continuemode = false) {
   gdcm::Reader reader;
   reader.SetFileName(filename);
@@ -118,6 +116,16 @@ static void PrintHelp() {
             << std::endl;
   std::cout << "     --preserve %s            DICOM path(s) to preserve"
             << std::endl;
+  std::cout << "     --preserve-missing-private-creator             Whether or "
+               "not preserve private attributes with missing private creator."
+            << std::endl;
+  std::cout << "     --preserve-group-length                        Whether or "
+               "not preserve deprecated group length attributes (will not be "
+               "re-computed)."
+            << std::endl;
+  std::cout << "     --preserve-illegal                             Whether or "
+               "not preserve illegal attributes (eg. group 0003...)."
+            << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose                more verbose (warning+error)."
             << std::endl;
@@ -148,6 +156,9 @@ int main(int argc, char *argv[]) {
   int remove_tag = 0;
   int wipe_tag = 0;
   int preserve_tag = 0;
+  int preserveAllMissingPrivateCreator = 0;
+  int preserveAllGroupLength = 0;
+  int preserveAllIllegal = 0;
   std::vector<gdcm::DPath> empty_dpaths;
   std::vector<gdcm::DPath> remove_dpaths;
   std::vector<gdcm::DPath> wipe_dpaths;
@@ -177,6 +188,10 @@ int main(int argc, char *argv[]) {
         {"preserve", required_argument, &preserve_tag, 1},  // 5
         {"continue", no_argument, NULL, 'c'},
         {"skip-meta", 0, &skipmeta, 1},  // should I document this one ?
+        {"preserve-missing-private-creator", 0,
+         &preserveAllMissingPrivateCreator, 1},                    //
+        {"preserve-group-length", 0, &preserveAllGroupLength, 1},  //
+        {"preserve-illegal", 0, &preserveAllIllegal, 1},           //
 
         {"verbose", no_argument, NULL, 'V'},
         {"warning", no_argument, NULL, 'W'},
@@ -414,6 +429,9 @@ int main(int argc, char *argv[]) {
 
   // Setup gdcm::Cleaner
   gdcm::Cleaner cleaner;
+  cleaner.RemoveAllMissingPrivateCreator(!preserveAllMissingPrivateCreator);
+  cleaner.RemoveAllGroupLength(!preserveAllGroupLength);
+  cleaner.RemoveAllIllegal(!preserveAllIllegal);
   // Preserve
   for (std::vector<gdcm::DPath>::const_iterator it = preserve_dpaths.begin();
        it != preserve_dpaths.end(); ++it) {
@@ -511,7 +529,7 @@ int main(int argc, char *argv[]) {
       const char *in = filenames[i].c_str();
       const char *out = outfilenames[i].c_str();
       if (!CleanOneFile(cleaner, in, out, skipmeta > 0 ? true : false,
-                        empty_tags, empty_privatetags, continuemode)) {
+                        continuemode)) {
         return 1;
       }
     }

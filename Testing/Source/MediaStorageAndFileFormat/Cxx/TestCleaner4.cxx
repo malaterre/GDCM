@@ -264,15 +264,18 @@ struct TestCleaner4Impl3 : public TestCleaner4Impl {
   }
   virtual bool check_after(gdcm::DataSet &ds, bool preservePatientName) {
     const gdcm::Tag t1(0x0008, 0x0090);  //
-    const gdcm::Tag t2(0x0008, 0x1050);  //
-    const gdcm::Tag t3(0x0008, 0x1070);  //
-    const gdcm::Tag t4(0x0010, 0x0010);  //
+    const gdcm::Tag t2(0x0008, 0x1070);  //
+    const gdcm::Tag t3(0x0010, 0x0010);  //
+    const gdcm::PrivateTag path1(0x2001, 0x00, "Philips Imaging DD 129");
+    const gdcm::Tag t4(0x0070, 0x0084);                                     //
+    const gdcm::PrivateTag pt5(0x2005, 0x91, "Philips MR Imaging DD 004");  //
     const bool b1 = IsTagEmpty(ds, t1);
     const bool b2 = IsTagEmpty(ds, t2);
     const bool b3 = IsTagEmpty(ds, t3);
-    const bool b4 = IsTagEmpty(ds, t4);
+    const bool b4 = IsTagEmpty(ds, path1, t4);
+    const bool b5 = IsTagEmpty(ds, pt5);
 
-    if (!b1 || !b2 || !b3 || !b4) {
+    if (!b1 || !b2 || !b3 || !b4 || !b5) {
       return false;
     }
     return true;
@@ -364,7 +367,7 @@ int TestCleaner4(int, char *[]) {
   TestCleaner4Impl4 testCleaner4;
   int res1 = testCleaner1.run(filename1, outfilename1, false);
   int res2 = testCleaner2.run(filename2, outfilename2, false);
-  int res3 = 0;  // testCleaner3.run(filename3, outfilename3, false); // FIXME
+  int res3 = testCleaner3.run(filename3, outfilename3, false);
   int res4 = testCleaner4.run(filename4, outfilename4, false, false);
   int res5 = testCleaner4.run(filename4, outfilename4, false, true);
 
