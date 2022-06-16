@@ -159,7 +159,7 @@ namespace gdcm_ns
             }
           return sqi;
           }
-        else if  ( GetVR() == VR::OB ) // pre-dicom 1993 ?
+        else if  ( GetVR() & VR::OB_OW ) // pre-dicom 1993 ?
           {
           const ByteValue *bv = GetByteValue();
           assert( bv );

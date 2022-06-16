@@ -105,33 +105,54 @@ file-out  DICOM output directory
 
 <para>This functionality is not described in the DICOM standard.</para>
 
-<para>The following example shows how to use editing mode and achieve 3 operations at the same time: <itemizedlist>
+<para>The following example shows how to use editing mode and achieve multiple operations at the same time: <itemizedlist>
 <listitem>
-<para>Empty the tag (0010,0010) Patient&apos;s Name, </para>
+<para>Preserve illegal attributes (removed by default), </para>
 </listitem>
 <listitem>
-<para>Empty the private tag (0009,0020) Patient ID, </para>
+<para>Empty any 'PN' attributes anywhere in the hierarchy tree, but preserve the DICOM attribute value only at location "0010,0010",</para>
 </listitem>
 <listitem>
-<para>Remove the tag (0010,0040) Patient&apos;s Sex </para>
+<para>Empty the tag (0010,0020) Patient ID, (only if keyword is know internally),</para>
 </listitem>
 <listitem>
-<para>Remove the tag (0010,1010) Patient&apos;s Age </para>
+<para>Empty the tag (0070,0084),</para>
 </listitem>
 <listitem>
-<para>Wipe the tag (0010,1030) Patient&apos;s Weight with the value &apos;10&apos;</para>
+<para>Remove the private attributes: (0029,20, SIEMENS MEDCOM HEADER) / (0033,02,MITRA OBJECT UTF8 ATTRIBUTES 1.0) / (0043,2a,GEMS_PARM_01). Since (0033,02,MITRA OBJECT UTF8 ATTRIBUTES 1.0) is defined internally in the private dictionary with Value Representation = PN, this attribute will be skipped (since redundant).</para>
+</listitem>
+<listitem>
+<para>Wipe the private attributes: (0029,10,SIEMENS CSA HEADER) / (0029,20,SIEMENS CSA HEADER)</para>
 </listitem>
 </itemizedlist>
 </para>
-
-<para><literallayout>$ gdcmclean --dumb --empty 10,10 --empty 10,20 --remove 10,40 --remove 10,1010 --replace 10,1030,10 012345.002.050.dcm out.dcm
+<para><literallayout>$ gdcmclean \
+    --recursive --continue \
+    --preserve-illegal \
+    --empty PN --preserve /0010,0010 \
+    --empty PatientID --empty "0070,0084" \
+    --remove "0029,20,SIEMENS MEDCOM HEADER" --remove "0033,02,MITRA OBJECT UTF8 ATTRIBUTES 1.0" --remove "0043,2a,GEMS_PARM_01" \
+    --wipe "0029,10,SIEMENS CSA HEADER" --wipe "0029,20,SIEMENS CSA HEADER" \
+    input_folder output_folder
 </literallayout></para>
+</refsection>
+<refsection xml:id="gdcmclean_1caveat">
+<title>DICOM Path</title>
 
+<para>For ease of use on shell cmmand the syntax allow for the '/' separator in the DICOM Path notation. So the following is valid</para>
+<para><literallayout>"/0040,0100/1/0040,0006"</literallayout></para>
+<para>However Private Creator can use all of Value Representation LO definition. So in some case you will be required to use backslash as separator (since illegal in VR:LO):</para>
+<para><literallayout>"\\4109,2,Applicare/Centricity Radiology Web/Version 1.0"</literallayout></para>
+</refsection>
+<refsection xml:id="gdcmclean_1part15">
+<title>Safe Private Attributes</title>
+<para>It is currently not possible to empty/remove any private attribute listed in the Safe Private Attributes table at:</para>
+<para><link xlink:href="https://dicom.nema.org/medical/dicom/current/output/chtml/part15/sect_E.3.10.html#table_E.3.10-1">https://dicom.nema.org/medical/dicom/current/output/chtml/part15/sect_E.3.10.html#table_E.3.10-1</link></para>
 </refsection>
 </refsection>
 <refsection xml:id="gdcmclean_1see_also">
 <title>SEE ALSO</title>
 
-<para><emphasis role="bold">gdcmconv</emphasis>(1), <emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmdiff</emphasis>(1)</para>
+<para><emphasis role="bold">gdcmanon</emphasis>(1), <emphasis role="bold">gdcmdump</emphasis>(1), <emphasis role="bold">gdcmdiff</emphasis>(1)</para>
 </refsection>
 </refentry>
