@@ -102,7 +102,8 @@ static size_t fread_mirror_clean(void *ptr, size_t size, size_t nmemb,
     char *str = (char *)ptr;
     const size_t len = strnlen(str, nmemb);
     assert(len < nmemb);
-    for (size_t i = len; i < nmemb; ++i) {
+    size_t i;
+    for (i = len; i < nmemb; ++i) {
       str[i] = 0;
     }
     s = outstream->write(ptr, size, nmemb, outstream);
@@ -154,7 +155,8 @@ static bool write_trailer(struct app *self) {
     ERROR_RETURN(s, 1);
   } else if (self->csa_type == NOMAGIC) {
     // no magic
-    for (uint32_t i = 0; i < 28u; ++i) {
+    uint32_t i;
+    for (i = 0; i < 28u; ++i) {
       uint32_t unused;
       s = fread_mirror(&unused, sizeof unused, 1, self);
       ERROR_RETURN(s, 1);
@@ -211,7 +213,8 @@ static bool read_info(struct app *self, struct csa_info *i) {
 static bool read_data(struct app *self, struct csa_item_data *d) {
   size_t s = fread_mirror(&d->len, sizeof d->len, 1, self);
   ERROR_RETURN(s, 1);
-  for (int j = 0; j < 3; j++) {
+  int j;
+  for (j = 0; j < 3; j++) {
     uint32_t unused;
     s = fread_mirror(&unused, sizeof unused, 1, self);
     ERROR_RETURN(s, 1);
@@ -245,14 +248,16 @@ static bool csa_scrub(void *output, const void *input, size_t len) {
   struct csa_item_data data;
   data.len = 0;
   data.buffer = NULL;
-  for (uint32_t element = 0; good && element < self->nelements; ++element) {
+  uint32_t element;
+  for (element = 0; good && element < self->nelements; ++element) {
     // read csa key info
     if (!read_info(self, &info)) {
       good = false;
       break;
     }
     // read all csa item data:
-    for (uint32_t item = 0; good && item < info.nitems; ++item) {
+    uint32_t item;
+    for (item = 0; good && item < info.nitems; ++item) {
       if (!read_data(self, &data)) {
         good = false;
         break;

@@ -201,7 +201,10 @@ static std::string getInfoDate(Dict *infoDict, const char *key)
   if (infoDict->lookup((char*)key, &obj)->isString())
 #endif
     {
-    const GooString* gs = obj.getString();
+#ifdef LIBPOPPLER_GOOSTRING_HAS_CONST_GETCSTRING
+    const
+#endif
+    GooString* gs = obj.getString();
 #ifdef LIBPOPPLER_GOOSTRING_HAS_GETCSTRING
     s = gs->getCString();
 #else
