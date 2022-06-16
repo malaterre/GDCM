@@ -939,10 +939,11 @@ bool Cleaner::impl::ProcessDataSet(Subject &subject, File &file, DataSet &ds,
           ds.Replace(dup);
         } else {
           // SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
-          assert(de.GetVL() == 0);
           if (!de.IsEmpty()) {
-            gdcmErrorMacro("Impossible happen" << de);
-            return false;
+            gdcmWarningMacro(
+                "Please report. Dictionary states this should be a SQ. But we "
+                "failed to load it as such. Passing-through as-is"
+                << de);
           }
         }
       }
