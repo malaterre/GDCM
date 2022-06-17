@@ -1100,8 +1100,8 @@ const char *System::GetLocaleCharset()
   const char *codeset2;
   codeset1 = buf1;
   codeset2 = buf2;
-  sprintf(buf1, "CP%d", GetConsoleCP());
-  sprintf(buf2, "CP%d", GetConsoleOutputCP());
+  snprintf(buf1, sizeof(buf1), "CP%d", GetConsoleCP());
+  snprintf(buf2, sizeof(buf2), "CP%d", GetConsoleOutputCP());
 
   // BUG: both returns 'CP437' on debian + mingw32...
   // instead prefer GetACP() call:
@@ -1109,7 +1109,7 @@ const char *System::GetLocaleCharset()
   static char buf[2+10+1]; // 2 char, 10 bytes + 0
   // GetACP: Retrieves the current Windows ANSI code page identifier for the
   // operating system.
-  sprintf (buf, "CP%u", GetACP ());
+  snprintf (buf, sizeof(buf), "CP%u", GetACP ());
   codeset = CharsetAliasToName(buf);
 #endif
 

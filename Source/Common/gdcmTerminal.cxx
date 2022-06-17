@@ -75,12 +75,12 @@ public:
   void setbgcolor(int col) { bgcolor = col; }
   //std::string resettextcolor() const {
   //  char command[13];
-  //  sprintf(command, "%c[%d;%d;%dm", 0x1B, 0, 0, 0);
+  //  snprintf(command, sizeof(command), "%c[%d;%d;%dm", 0x1B, 0, 0, 0);
   //  return command;
   //}
   std::string textcolor() const {
     char command[16];
-    int n = sprintf(command, "%c[%d;%d;%dm", 0x1B, attribute, fgcolor + 30, bgcolor + 40);
+    int n = snprintf(command, sizeof(command), "%c[%d;%d;%dm", 0x1B, attribute, fgcolor + 30, bgcolor + 40);
     assert( n < 16 ); (void)n;
     return command;
   }
