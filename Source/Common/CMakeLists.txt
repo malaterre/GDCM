@@ -179,6 +179,11 @@ set(Common_SRCS ${Common_SRCS}
   gdcmOpenSSLCryptoFactory.cxx
   gdcmOpenSSLCryptographicMessageSyntax.cxx
 )
+if(OPENSSL_HAS_CONST_VOID_BIO_NEW_MEM_BUF)
+set_source_files_properties(
+  gdcmOpenSSLCryptographicMessageSyntax.cxx
+  PROPERTIES COMPILE_FLAGS "-DOPENSSL_HAS_CONST_VOID_BIO_NEW_MEM_BUF")
+endif()
 endif()
 
 if(GDCM_BUILD_TESTING)
