@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
     while (std::find(theFileNames.begin(), theFileNames.end(), thePotentialName) != theFileNames.end())
       {
         char buff[255];
-        sprintf(buff,"%d",count);
+        snprintf(buff,sizeof(buff),"%d",count);
         thePotentialName = theDirName + "/" + "GDCMTestRTStruct." + buff + "." + theRTSeries[q] + ".dcm";
       }
     writer->SetFileName( thePotentialName.c_str());
