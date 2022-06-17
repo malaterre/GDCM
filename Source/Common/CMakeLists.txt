@@ -74,6 +74,9 @@ CHECK_CXX_SOURCE_COMPILES(
   #HAVE_CMS_RECIPIENT_KEY)
     "\#include <openssl/cms.h>\nint main() { CMS_add0_recipient_password(0,0,0,0,0,0,0); return 0;}"
   GDCM_HAVE_CMS_RECIPIENT_PASSWORD)
+CHECK_CXX_SOURCE_COMPILES(
+    "\#include <openssl/bio.h>\nint main() { const void*mem; int len; BIO_new_mem_buf(mem, len); }"
+    OPENSSL_HAS_CONST_VOID_BIO_NEW_MEM_BUF)
 endif()
 
 #-----------------------------------------------------------------------------
@@ -164,6 +167,11 @@ set(Common_SRCS ${Common_SRCS}
   gdcmOpenSSLP7CryptoFactory.cxx
   gdcmOpenSSLP7CryptographicMessageSyntax.cxx
 )
+if(OPENSSL_HAS_CONST_VOID_BIO_NEW_MEM_BUF)
+set_source_files_properties(
+  gdcmOpenSSLP7CryptographicMessageSyntax.cxx
+  PROPERTIES COMPILE_FLAGS "-DOPENSSL_HAS_CONST_VOID_BIO_NEW_MEM_BUF")
+endif()
 endif()
 
 if(GDCM_USE_SYSTEM_OPENSSL AND GDCM_HAVE_CMS_RECIPIENT_PASSWORD)
