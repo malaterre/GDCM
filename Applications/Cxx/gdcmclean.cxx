@@ -120,11 +120,11 @@ static void PrintHelp() {
             << std::endl;
   std::cout << "                %s            DICOM keyword/path(s) to remove"
             << std::endl;
-  std::cout << "     --wipe     %d,%d         DICOM tag(s) to wipe"
+  std::cout << "     --scrub    %d,%d         DICOM tag(s) to scrub"
             << std::endl;
-  std::cout << "                %d,%d,%s      DICOM private tag(s) to wipe"
+  std::cout << "                %d,%d,%s      DICOM private tag(s) to scrub"
             << std::endl;
-  std::cout << "                %s            DICOM keyword/path(s) to wipe"
+  std::cout << "                %s            DICOM keyword/path(s) to scrub"
             << std::endl;
   std::cout << "     --preserve %s            DICOM path(s) to preserve"
             << std::endl;
@@ -166,14 +166,14 @@ int main(int argc, char *argv[]) {
   int recursive = 0;
   int empty_tag = 0;
   int remove_tag = 0;
-  int wipe_tag = 0;
+  int scrub_tag = 0;
   int preserve_tag = 0;
   int preserveAllMissingPrivateCreator = 0;
   int preserveAllGroupLength = 0;
   int preserveAllIllegal = 0;
   std::vector<gdcm::DPath> empty_dpaths;
   std::vector<gdcm::DPath> remove_dpaths;
-  std::vector<gdcm::DPath> wipe_dpaths;
+  std::vector<gdcm::DPath> scrub_dpaths;
   std::vector<gdcm::DPath> preserve_dpaths;
   std::vector<gdcm::VR> empty_vrs;
   std::vector<gdcm::Tag> empty_tags;
@@ -181,8 +181,8 @@ int main(int argc, char *argv[]) {
   std::vector<gdcm::VR> remove_vrs;
   std::vector<gdcm::Tag> remove_tags;
   std::vector<gdcm::PrivateTag> remove_privatetags;
-  std::vector<gdcm::Tag> wipe_tags;                // clean-digital-trash
-  std::vector<gdcm::PrivateTag> wipe_privatetags;  // clean-digital-trash
+  std::vector<gdcm::Tag> scrub_tags;                // clean-digital-trash
+  std::vector<gdcm::PrivateTag> scrub_privatetags;  // clean-digital-trash
   gdcm::Tag tag;
   gdcm::PrivateTag privatetag;
   gdcm::DPath dpath;
@@ -196,7 +196,7 @@ int main(int argc, char *argv[]) {
         {"recursive", no_argument, NULL, 'r'},
         {"empty", required_argument, &empty_tag, 1},        // 3
         {"remove", required_argument, &remove_tag, 1},      // 4
-        {"wipe", required_argument, &wipe_tag, 1},          // 5
+        {"scrub", required_argument, &scrub_tag, 1},          // 5
         {"preserve", required_argument, &preserve_tag, 1},  // 5
         {"continue", no_argument, NULL, 'c'},
         {"skip-meta", 0, &skipmeta, 1},  // should I document this one ?
@@ -261,14 +261,14 @@ int main(int argc, char *argv[]) {
               return 1;
             }
 
-          } else if (option_index == 5) /* wipe */
+          } else if (option_index == 5) /* scrub */
           {
             if (privatetag.ReadFromCommaSeparatedString(optarg))
-              wipe_privatetags.push_back(privatetag);
+              scrub_privatetags.push_back(privatetag);
             else if (tag.ReadFromCommaSeparatedString(optarg))
-              wipe_tags.push_back(tag);
+              scrub_tags.push_back(tag);
             else if (isValidPublicKeyword(optarg, tag))
-              wipe_tags.push_back(tag);
+              scrub_tags.push_back(tag);
             else {
               std::cerr << "Could not read Tag/PrivateTag/DPath: " << optarg
                         << std::endl;
@@ -372,8 +372,8 @@ int main(int argc, char *argv[]) {
       empty_dpaths.empty()  // empty
       && remove_tags.empty() && remove_privatetags.empty() &&
       remove_dpaths.empty()  // remove
-      && wipe_tags.empty() && wipe_privatetags.empty() &&
-      wipe_dpaths.empty()                         // wipe
+      && scrub_tags.empty() && scrub_privatetags.empty() &&
+      scrub_dpaths.empty()                         // scrub
       && empty_vrs.empty() && remove_vrs.empty()  // VR
   ) {
     std::cerr << "No operations to be done." << std::endl;
@@ -519,26 +519,26 @@ int main(int argc, char *argv[]) {
       return 1;
     }
   }
-  // Wipe
-  for (std::vector<gdcm::Tag>::const_iterator it = wipe_tags.begin();
-       it != wipe_tags.end(); ++it) {
-    if (!cleaner.Wipe(*it)) {
-      std::cerr << "Impossible to Wipe: " << *it << std::endl;
+  // Scrub
+  for (std::vector<gdcm::Tag>::const_iterator it = scrub_tags.begin();
+       it != scrub_tags.end(); ++it) {
+    if (!cleaner.Scrub(*it)) {
+      std::cerr << "Impossible to Scrub: " << *it << std::endl;
       return 1;
     }
   }
   for (std::vector<gdcm::PrivateTag>::const_iterator it =
-           wipe_privatetags.begin();
-       it != wipe_privatetags.end(); ++it) {
-    if (!cleaner.Wipe(*it)) {
-      std::cerr << "Impossible to Wipe: " << *it << std::endl;
+           scrub_privatetags.begin();
+       it != scrub_privatetags.end(); ++it) {
+    if (!cleaner.Scrub(*it)) {
+      std::cerr << "Impossible to Scrub: " << *it << std::endl;
       return 1;
     }
   }
-  for (std::vector<gdcm::DPath>::const_iterator it = wipe_dpaths.begin();
-       it != wipe_dpaths.end(); ++it) {
-    if (!cleaner.Wipe(*it)) {
-      std::cerr << "Impossible to Wipe: " << *it << std::endl;
+  for (std::vector<gdcm::DPath>::const_iterator it = scrub_dpaths.begin();
+       it != scrub_dpaths.end(); ++it) {
+    if (!cleaner.Scrub(*it)) {
+      std::cerr << "Impossible to Scrub: " << *it << std::endl;
       return 1;
     }
   }

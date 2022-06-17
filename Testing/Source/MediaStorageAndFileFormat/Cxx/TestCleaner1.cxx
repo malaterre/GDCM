@@ -93,17 +93,17 @@ int TestCleaner1Impl(std::string const &filename,
     Cleaner cleaner;
     cleaner.SetFile(file);
     if (useDPath) {
-      if (!cleaner.Wipe(dpath1)) {
+      if (!cleaner.Scrub(dpath1)) {
         return 1;
       }
-      if (!cleaner.Wipe(dpath2)) {
+      if (!cleaner.Scrub(dpath2)) {
         return 1;
       }
     } else {
-      if (!cleaner.Wipe(t1)) {
+      if (!cleaner.Scrub(t1)) {
         return 1;
       }
-      if (!cleaner.Wipe(t2)) {
+      if (!cleaner.Scrub(t2)) {
         return 1;
       }
     }
