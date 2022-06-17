@@ -53,7 +53,9 @@
 
 #include <string>
 #include <iostream>
+#ifdef GDCM_HAVE_CODECVT
 #include <codecvt>
+#endif
 #include <locale>
 
 #include <stdio.h>     /* for printf */
@@ -923,9 +925,13 @@ static int PrintMedComHistory(const std::string & filename, bool verbose)
   std::u16string u16((size / 2) + 0, '\0');
   bv->GetBuffer( (char*)&u16[0], size );
 
+#ifdef GDCM_HAVE_CODECVT
   std::string utf8 = std::wstring_convert<
     std::codecvt_utf8_utf16<char16_t>, char16_t>{}.to_bytes(u16);
   print_utf8(utf8);
+#else
+  std::cerr << "Missing GDCM_HAVE_CODECVT support" << std::endl;
+#endif
   return 0;
 }
 
