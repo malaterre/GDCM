@@ -44,10 +44,10 @@ class GDCM_EXPORT Cleaner : public Subject {
   bool Remove(VR const &vr);
 
   /// Clean digital tash (typically SIEMENS CSA header):
-  bool Wipe(Tag const &t);
-  bool Wipe(PrivateTag const &pt);
-  bool Wipe(DPath const &dpath);
-  bool Wipe(VR const &vr);
+  bool Scrub(Tag const &t);
+  bool Scrub(PrivateTag const &pt);
+  bool Scrub(DPath const &dpath);
+  bool Scrub(VR const &vr);
 
   bool Preserve(DPath const &dpath);
 

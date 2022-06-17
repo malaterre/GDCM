@@ -524,13 +524,13 @@ struct Cleaner::impl {
   std::set<DPath> preserve_dpaths;
   std::set<DPath> empty_dpaths;
   std::set<DPath> remove_dpaths;
-  std::set<DPath> wipe_dpaths;
+  std::set<DPath> scrub_dpaths;
   std::set<Tag> empty_tags;
   std::set<PrivateTag> empty_privatetags;
   std::set<Tag> remove_tags;
   std::set<PrivateTag> remove_privatetags;
-  std::set<Tag> wipe_tags;
-  std::set<PrivateTag> wipe_privatetags;
+  std::set<Tag> scrub_tags;
+  std::set<PrivateTag> scrub_privatetags;
   std::set<VR> empty_vrs;
   std::set<VR> remove_vrs;
   bool AllMissingPrivateCreator;
@@ -541,7 +541,7 @@ struct Cleaner::impl {
         AllGroupLength(true),
         AllIllegal(true) {}
 
-  enum ACTION { NONE, EMPTY, REMOVE, WIPE };
+  enum ACTION { NONE, EMPTY, REMOVE, SCRUB };
   enum ACTION ComputeAction(File const &file, DataSet &ds,
                             const DataElement &de, VR const &ref_dict_vr,
                             const std::string &tag_path);
@@ -632,22 +632,22 @@ struct Cleaner::impl {
     return false;
   }
 
-  bool Wipe(Tag const &t) { return false; }
-  bool Wipe(PrivateTag const &pt) {
+  bool Scrub(Tag const &t) { return false; }
+  bool Scrub(PrivateTag const &pt) {
     static const PrivateTag &csa1 = CSAHeader::GetCSAImageHeaderInfoTag();
     static const PrivateTag &csa2 = CSAHeader::GetCSASeriesHeaderInfoTag();
     if (pt == csa1 || pt == csa2) {
-      wipe_privatetags.insert(pt);
+      scrub_privatetags.insert(pt);
       return true;
     }
     return false;
   }
-  bool Wipe(DPath const &dpath) {
-    wipe_dpaths.insert(dpath);
+  bool Scrub(DPath const &dpath) {
+    scrub_dpaths.insert(dpath);
     return true;
   }
 
-  bool Wipe(VR const &vr) { return false; }
+  bool Scrub(VR const &vr) { return false; }
 
   bool Preserve(DPath const &dpath) {
     preserve_dpaths.insert(dpath);
@@ -806,10 +806,10 @@ Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
     const DPath dpath = ConstructDPath(tag_path, ds, tag);
     // Preserve
     if (IsDPathInSet(preserve_dpaths, dpath)) return Cleaner::impl::NONE;
-    // Wipe
-    if (wipe_tags.find(tag) != wipe_tags.end() ||
-        IsDPathInSet(wipe_dpaths, dpath)) {
-      return Cleaner::impl::WIPE;
+    // Scrub
+    if (scrub_tags.find(tag) != scrub_tags.end() ||
+        IsDPathInSet(scrub_dpaths, dpath)) {
+      return Cleaner::impl::SCRUB;
     }
     // Empty
     if (empty_tags.find(tag) != empty_tags.end() ||
@@ -837,10 +837,10 @@ Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
     // preserve: Preserve
     const DPath dpath = ConstructDPath(tag_path, ds, tag);
     if (IsDPathInSet(preserve_dpaths, dpath)) return Cleaner::impl::NONE;
-    // Wipe
-    if (wipe_privatetags.find(pt) != wipe_privatetags.end() ||
-        IsDPathInSet(wipe_dpaths, dpath)) {
-      return Cleaner::impl::WIPE;
+    // Scrub
+    if (scrub_privatetags.find(pt) != scrub_privatetags.end() ||
+        IsDPathInSet(scrub_dpaths, dpath)) {
+      return Cleaner::impl::SCRUB;
     }
     // Empty
     if (empty_privatetags.find(pt) != empty_privatetags.end() ||
@@ -955,7 +955,7 @@ bool Cleaner::impl::ProcessDataSet(Subject &subject, File &file, DataSet &ds,
     } else if (action == Cleaner::impl::REMOVE) {
       ds.Remove(tag);
       subject.InvokeEvent(ae);
-    } else if (action == Cleaner::impl::WIPE) {
+    } else if (action == Cleaner::impl::SCRUB) {
       const PrivateTag pt = ds.GetPrivateTag(tag);
 
       static const PrivateTag &csa1 = CSAHeader::GetCSAImageHeaderInfoTag();
@@ -994,10 +994,10 @@ bool Cleaner::Remove(PrivateTag const &pt) { return pimpl->Remove(pt); }
 bool Cleaner::Remove(DPath const &dpath) { return pimpl->Remove(dpath); }
 bool Cleaner::Remove(VR const &vr) { return pimpl->Remove(vr); }
 
-bool Cleaner::Wipe(Tag const &t) { return pimpl->Wipe(t); }
-bool Cleaner::Wipe(PrivateTag const &pt) { return pimpl->Wipe(pt); }
-bool Cleaner::Wipe(DPath const &dpath) { return pimpl->Wipe(dpath); }
-bool Cleaner::Wipe(VR const &vr) { return pimpl->Wipe(vr); }
+bool Cleaner::Scrub(Tag const &t) { return pimpl->Scrub(t); }
+bool Cleaner::Scrub(PrivateTag const &pt) { return pimpl->Scrub(pt); }
+bool Cleaner::Scrub(DPath const &dpath) { return pimpl->Scrub(dpath); }
+bool Cleaner::Scrub(VR const &vr) { return pimpl->Scrub(vr); }
 
 bool Cleaner::Preserve(DPath const &dpath) { return pimpl->Preserve(dpath); }
 
