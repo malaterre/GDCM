@@ -64,6 +64,9 @@ CHECK_CXX_SOURCE_COMPILES(
 CHECK_CXX_SOURCE_COMPILES(
   "\#include <fstream>\nint main() { const wchar_t fn[10] = {}; std::ifstream is( fn ); return 0;}"
   GDCM_HAVE_WCHAR_IFSTREAM)
+CHECK_CXX_SOURCE_COMPILES(
+  "\#include <string>\n#include <codecvt>\n#include <locale>\nint main() { std::u16string u16; std::string utf8 = std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t>{}.to_bytes(u16); }"
+  GDCM_HAVE_CODECVT)
 if(GDCM_USE_SYSTEM_OPENSSL)
 set(CMAKE_REQUIRED_INCLUDES ${OPENSSL_INCLUDE_DIR})
 set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_LIBRARIES}
