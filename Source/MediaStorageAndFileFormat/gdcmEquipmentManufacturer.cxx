@@ -72,6 +72,8 @@ static const Mapping mappings[] = {
 EquipmentManufacturer::Type EquipmentManufacturer::GuessFromPrivateAttributes( DataSet const & ds )
 {
   // try against with well known private tag:
+  // watch out for private creator such as ELSCINT1 which can be found in
+  // GEMS/PEMS and maybe even SIEMENS !
   gdcm::Tag gems_iden_01(0x0009,0x0010);
   if( ds.FindDataElement( gems_iden_01 ) )
   {
@@ -89,15 +91,6 @@ EquipmentManufacturer::Type EquipmentManufacturer::GuessFromPrivateAttributes( D
     gdcm::Element<VR::SH, VM::VM1> value;
     value.SetFromDataElement( de );
     if( value.GetValue().Trim() == "SIEMENS" ) return SIEMENS;
-  }
-
-  gdcm::Tag elscint1(0x00e1,0x0010);
-  if( ds.FindDataElement( elscint1 ) )
-  {
-    const gdcm::DataElement & de = ds.GetDataElement( elscint1 );
-    gdcm::Element<VR::LO, VM::VM1> priv_creator;
-    priv_creator.SetFromDataElement( de );
-    if( priv_creator.GetValue() == "ELSCINT1" ) return PMS;
   }
 
   return UNKNOWN;
