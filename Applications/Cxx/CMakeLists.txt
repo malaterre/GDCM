@@ -105,12 +105,6 @@ if(GDCM_USE_SYSTEM_POPPLER)
     list(APPEND libpoppler_flags -DLIBPOPPLER_GOOSTRING_HAS_CONSTGETCHAR)
   endif()
   CHECK_CXX_SOURCE_COMPILES(
-	  "\#include <poppler/goo/GooString.h>\nint main() { const GooString gs; const char *s = gs.getCString(); return 0; }"
-    LIBPOPPLER_GOOSTRING_HAS_CONST_GETCSTRING)
-  if(LIBPOPPLER_GOOSTRING_HAS_CONST_GETCSTRING)
-    list(APPEND libpoppler_flags -DLIBPOPPLER_GOOSTRING_HAS_CONST_GETCSTRING)
-  endif()
-  CHECK_CXX_SOURCE_COMPILES(
 	  "\#include <poppler/goo/GooString.h>\nint main() { GooString gs; gs.getCString(); return 0; }"
 	  LIBPOPPLER_GOOSTRING_HAS_GETCSTRING)
   if(LIBPOPPLER_GOOSTRING_HAS_GETCSTRING)
