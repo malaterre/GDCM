@@ -9,7 +9,12 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    test:
+      name: Test on os ${{ matrix.os }}
+      runs-on: ${{ matrix.os }}
+      stategy:
+        matrix:
+          os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
     - uses: actions/checkout@v3
@@ -22,3 +27,10 @@ jobs:
       run: cmake --build build
     - name: make check
       run: ctest --test-dir build --parallel 2 --output-on-failure || true
+#    - name: Upload a Build Artifact
+#      uses: actions/upload-artifact@v3.1.0
+#      with:
+#        # A file, directory or wildcard pattern that describes what to upload
+#        path: *.zip
+#        # The desired behavior if no files are found using the provided path.
+#        if-no-files-found: error
