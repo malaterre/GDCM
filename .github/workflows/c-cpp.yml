@@ -1,0 +1,26 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "release" ]
+  pull_request:
+    branches: [ "release" ]
+
+jobs:
+  example_matrix:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: checkout source
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+        fetch-depth: 2
+    - name: configure
+      run: cmake -DCMAKE_BUILD_TYPE:STRING=None -B build
+    - name: make
+      run: cmake --build build
+    - name: make check
+      run: ctest --test-dir build --parallel 2 --output-on-failure || true
