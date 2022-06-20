@@ -166,12 +166,12 @@ artifacts:
 deploy:
   - provider: NuGet
     api_key:
-      secure: Fn2cUcuBMVpvBXDzTQiUm2kqZ4AA39z4iyFUS3BsaPWjJEbJgFpmJYoJm2twjVpk
+      secure: T6GXp3POj8sDGZWmZ5tkLgdbyLjllar/ZVLNn96SkrI3IDBq+L3GFMH13FEZs0uR
     skip_symbols: true
     artifact: nuget_package
   - provider: GitHub
     auth_token:
-      secure: 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
+      secure: Fn2cUcuBMVpvBXDzTQiUm2kqZ4AA39z4iyFUS3BsaPWjJEbJgFpmJYoJm2twjVpk
     release: $(appveyor_repo_tag_name)
     description: 'Release of GDCM $(appveyor_repo_tag_name)'
     # github automatically does source zip/tarball for us
