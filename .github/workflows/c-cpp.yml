@@ -23,6 +23,7 @@ jobs:
         cmake \
           -DCMAKE_BUILD_TYPE:STRING=None \
           -B build \
+          #
     - name: make
       run: cmake --build build
     - name: make check
