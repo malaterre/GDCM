@@ -7,8 +7,6 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
-
     test:
       name: Test on os ${{ matrix.os }}
       runs-on: ${{ matrix.os }}
