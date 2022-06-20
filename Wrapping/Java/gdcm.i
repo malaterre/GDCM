@@ -70,6 +70,7 @@
 #include "gdcmBasicOffsetTable.h"
 //#include "gdcmLO.h"
 #include "gdcmCSAElement.h"
+#include "gdcmMrProtocol.h"
 #include "gdcmPDBElement.h"
 #include "gdcmFileSet.h"
 
@@ -195,6 +196,8 @@
 #include "gdcmImageRegionReader.h"
 #include "gdcmJSON.h"
 #include "gdcmFileDecompressLookupTable.h"
+#include "gdcmEmptyMaskGenerator.h"
+#include "gdcmEquipmentManufacturer.h"
 
 using namespace gdcm;
 %}
@@ -646,6 +649,8 @@ EXTEND_CLASS_PRINT(gdcm::Fragment)
 EXTEND_CLASS_PRINT(gdcm::PDBElement)
 %include "gdcmPDBHeader.h"
 EXTEND_CLASS_PRINT(gdcm::PDBHeader)
+%include "gdcmMrProtocol.h"
+EXTEND_CLASS_PRINT(gdcm::MrProtocol)
 %include "gdcmCSAElement.h"
 EXTEND_CLASS_PRINT(gdcm::CSAElement)
 %include "gdcmCSAHeader.h"
@@ -1022,3 +1027,5 @@ EXTEND_CLASS_PRINT(gdcm::BoxRegion)
 %clear signed char* inreadbuffer;
 %include "gdcmJSON.h"
 %include "gdcmFileDecompressLookupTable.h"
+%include "gdcmEmptyMaskGenerator.h"
+%include "gdcmEquipmentManufacturer.h"
