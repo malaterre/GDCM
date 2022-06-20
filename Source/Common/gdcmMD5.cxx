@@ -39,7 +39,7 @@ bool MD5::Compute(const char *buffer, size_t buf_len, char digest_str[33])
   MD5_Update(&ctx, buffer, buf_len);
   MD5_Final(digest, &ctx);
   for (int di = 0; di < 16; ++di)
-    sprintf(digest_str+2*di, "%02x", digest[di]);
+    snprintf(digest_str+2*di, 3, "%02x", digest[di]);
   digest_str[2*16] = '\0';
   return true;
 #elif defined(GDCM_BUILD_TESTING)
@@ -49,7 +49,7 @@ bool MD5::Compute(const char *buffer, size_t buf_len, char digest_str[33])
   md5_append(&state, (const md5_byte_t *)buffer, buf_len);
   md5_finish(&state, digest);
   for (int di = 0; di < 16; ++di)
-    sprintf(digest_str+2*di, "%02x", digest[di]);
+    snprintf(digest_str+2*di, 3, "%02x", digest[di]);
   digest_str[2*16] = '\0';
   return true;
 #else
@@ -124,7 +124,7 @@ bool MD5::ComputeFile(const char *filename, char digest_str[33])
 
   for (int di = 0; di < 16; ++di)
     {
-    sprintf(digest_str+2*di, "%02x", digest[di]);
+    snprintf(digest_str+2*di, 3, "%02x", digest[di]);
     }
   digest_str[2*16] = '\0';
   return true;
