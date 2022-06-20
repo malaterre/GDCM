@@ -32,6 +32,7 @@ set(CSHARP_EXAMPLES
 if(BUILD_TESTING)
   list(APPEND CSHARP_EXAMPLES
     BasicAnonymizer
+    Cleaner
     ClinicalTrialIdentificationWorkflow
     )
 endif()

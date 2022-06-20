@@ -70,6 +70,7 @@
 #include "gdcmBasicOffsetTable.h"
 //#include "gdcmLO.h"
 #include "gdcmCSAElement.h"
+#include "gdcmMrProtocol.h"
 #include "gdcmPDBElement.h"
 #include "gdcmFileSet.h"
 
@@ -95,6 +96,8 @@
 #include "gdcmSubject.h"
 #include "gdcmCommand.h"
 #include "gdcmAnonymizer.h"
+#include "gdcmDPath.h"
+#include "gdcmCleaner.h"
 #include "gdcmFileAnonymizer.h"
 #include "gdcmFileStreamer.h"
 #include "gdcmSystem.h"
@@ -193,6 +196,8 @@
 #include "gdcmImageRegionReader.h"
 #include "gdcmJSON.h"
 #include "gdcmFileDecompressLookupTable.h"
+#include "gdcmEmptyMaskGenerator.h"
+#include "gdcmEquipmentManufacturer.h"
 
 using namespace gdcm;
 %}
@@ -644,6 +649,8 @@ EXTEND_CLASS_PRINT(gdcm::Fragment)
 EXTEND_CLASS_PRINT(gdcm::PDBElement)
 %include "gdcmPDBHeader.h"
 EXTEND_CLASS_PRINT(gdcm::PDBHeader)
+%include "gdcmMrProtocol.h"
+EXTEND_CLASS_PRINT(gdcm::MrProtocol)
 %include "gdcmCSAElement.h"
 EXTEND_CLASS_PRINT(gdcm::CSAElement)
 %include "gdcmCSAHeader.h"
@@ -817,6 +824,7 @@ EXTEND_CLASS_PRINT(gdcm::StrictScanner)
 %clear MappingType;
 
 %template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
+%template(SmartPtrCleaner) gdcm::SmartPointer<gdcm::Cleaner>;
 //%ignore gdcm::Anonymizer::Anonymizer;
 
 
@@ -826,6 +834,8 @@ EXTEND_CLASS_PRINT(gdcm::StrictScanner)
 //%feature("unref") Anonymizer "coucou $this->Delete();"
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus%5Fnn34
 %include "gdcmAnonymizer.h"
+%include "gdcmDPath.h"
+%include "gdcmCleaner.h"
 %include "gdcmFileAnonymizer.h"
 %apply char[] { char* array }
 %template(SmartPtrFStreamer) gdcm::SmartPointer<gdcm::FileStreamer>;
@@ -1017,3 +1027,5 @@ EXTEND_CLASS_PRINT(gdcm::BoxRegion)
 %clear signed char* inreadbuffer;
 %include "gdcmJSON.h"
 %include "gdcmFileDecompressLookupTable.h"
+%include "gdcmEmptyMaskGenerator.h"
+%include "gdcmEquipmentManufacturer.h"

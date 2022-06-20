@@ -96,6 +96,8 @@
 #include "gdcmSubject.h"
 #include "gdcmCommand.h"
 #include "gdcmAnonymizer.h"
+#include "gdcmDPath.h"
+#include "gdcmCleaner.h"
 #include "gdcmFileAnonymizer.h"
 #include "gdcmFileStreamer.h"
 #include "gdcmSystem.h"
@@ -581,6 +583,7 @@ EXTEND_CLASS_PRINT(gdcm::Scanner)
 EXTEND_CLASS_PRINT(gdcm::StrictScanner)
 
 %template(SmartPtrAno) gdcm::SmartPointer<gdcm::Anonymizer>;
+%template(SmartPtrCleaner) gdcm::SmartPointer<gdcm::Cleaner>;
 //%ignore gdcm::Anonymizer::Anonymizer;
 
 
@@ -590,6 +593,8 @@ EXTEND_CLASS_PRINT(gdcm::StrictScanner)
 //%feature("unref") Anonymizer "coucou $this->Delete();"
 // http://www.swig.org/Doc1.3/SWIGPlus.html#SWIGPlus%5Fnn34
 %include "gdcmAnonymizer.h"
+%include "gdcmDPath.h"
+%include "gdcmCleaner.h"
 %apply char[] { char* value_data }
 %include "gdcmFileAnonymizer.h"
 %clear char* value_data;
