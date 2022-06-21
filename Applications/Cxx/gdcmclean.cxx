@@ -367,19 +367,6 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  // preserving is not an actual 'operation':
-  if (empty_tags.empty() && empty_privatetags.empty() &&
-      empty_dpaths.empty()  // empty
-      && remove_tags.empty() && remove_privatetags.empty() &&
-      remove_dpaths.empty()  // remove
-      && scrub_tags.empty() && scrub_privatetags.empty() &&
-      scrub_dpaths.empty()                         // scrub
-      && empty_vrs.empty() && remove_vrs.empty()  // VR
-  ) {
-    std::cerr << "No operations to be done." << std::endl;
-    return false;
-  }
-
   if (!gdcm::System::FileExists(filename.c_str())) {
     std::cerr << "Could not find file: " << filename << std::endl;
     return 1;
