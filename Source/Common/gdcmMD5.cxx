@@ -22,6 +22,9 @@
 #include <fstream>
 #include <vector>
 #include <stdio.h>
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+#define snprintf _snprintf
+#endif
 
 // http://stackoverflow.com/questions/13256446/compute-md5-hash-value-by-c-winapi
 namespace gdcm
