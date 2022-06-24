@@ -16,6 +16,10 @@
 #include <iostream>
 #include <iostream>
 #include <fstream>
+#include <stdio.h>
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+#define snprintf _snprintf
+#endif
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
