@@ -30,7 +30,7 @@ namespace gdcm {
 class GDCM_EXPORT Cleaner : public Subject {
  public:
   Cleaner();
-  ~Cleaner();
+  ~Cleaner() override;
 
   ///
   bool Empty(Tag const &t);
