@@ -21,6 +21,7 @@
 #endif
 #include <fstream>
 #include <vector>
+#include <stdio.h>
 
 // http://stackoverflow.com/questions/13256446/compute-md5-hash-value-by-c-winapi
 namespace gdcm
