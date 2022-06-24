@@ -314,6 +314,10 @@ static int doround(char *buf, unsigned int n) {
   return 0;
 }
 
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+#define snprintf _snprintf
+#endif
+
 static int roundat(char *buf, size_t bufLen, unsigned int i, int iexp) {
   if (doround(buf, i) != 0) {
     iexp += 1;
@@ -410,6 +414,10 @@ static void x16printf(char *buf, int size, Float f) {
     clean(buf);
   }
 }
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+#undef snprintf
+#endif
+
 #endif
 
 template<> inline void EncodingImplementation<VR::VRASCII>::Write(const double* data, unsigned long length, std::ostream &_os)  {
