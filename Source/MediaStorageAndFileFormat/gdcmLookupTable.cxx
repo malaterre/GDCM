@@ -306,7 +306,7 @@ void LookupTable::Encode(std::istream &is, std::ostream &os)
     {
 #if 0
     // FIXME:
-    // There is a very subbtle issue here. We are trying to compress a 8bits RGB image
+    // There is a very subtle issue here. We are trying to compress a 8bits RGB image
     // into an 8bits allocated indexed Pixel Data with 8bits LUT... this is just not
     // possible in the general case
     typedef std::set< U8, ltstr8 > RGBColorIndexer;
