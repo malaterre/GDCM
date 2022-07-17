@@ -89,7 +89,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
   mConnection->GetTimer().SetTimeout(inTimeout);
 
   // Warning PresentationContextID is important
-  // this is a sort of uniq key used by the recevier. Eg.
+  // this is a sort of uniq key used by the receiver. Eg.
   // if one push_pack
   //  (1, Secondary)
   //  (1, Verification)
@@ -274,7 +274,7 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
 
 
   // Warning PresentationContextID is important
-  // this is a sort of uniq key used by the recevier. Eg.
+  // this is a sort of uniq key used by the receiver. Eg.
   // if one push_pack
   //  (1, Secondary)
   //  (1, Verification)
