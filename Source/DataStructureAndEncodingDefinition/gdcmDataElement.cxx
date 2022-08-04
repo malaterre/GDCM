@@ -156,6 +156,12 @@ namespace gdcm_ns
                 return nullptr;
                 }
               }
+            catch ( ... )
+              {
+              gdcmErrorMacro( "Could not read SQ, unknown exception" );
+              delete sqi;
+              return nullptr;
+              }
             }
           return sqi;
           }
