@@ -2123,7 +2123,7 @@
   <entry owner="GE ??? From Adantage Review CS" group="0019" element="xx70" vr="LO" vm="1" name="CR Image Serial Number"/>
   <entry owner="GE ??? From Adantage Review CS" group="0019" element="xx80" vr="LO" vm="1" name="CR Bar Code Number"/>
   <entry owner="GE ??? From Adantage Review CS" group="0019" element="xx90" vr="LO" vm="1" name="CR Film Output Exposures"/>
-  <entry owner="GE LUT Asymmetry Parameter" group="0045" element="xx67" vr="DS" vm="1" name="LUT Assymetry"/>
+  <entry owner="GE LUT Asymmetry Parameter" group="0045" element="xx67" vr="DS" vm="1" name="LUT Asymmetry"/>
   <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx20" vr="IS" vm="1" name="ShuttleFlag"/>
   <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx21" vr="IS" vm="1" name="TableSpeedNotReachesTargetFlag"/>
   <entry owner="GEHC_CT_ADVAPP_001" group="0053" element="xx40" vr="SH" vm="1" name="IterativeReconAnnotation"/>
@@ -2832,7 +2832,7 @@
   <entry owner="GEMS_FALCON_03" group="0045" element="xx62" vr="IS" vm="1" name="User Window Center"/>
   <entry owner="GEMS_FALCON_03" group="0045" element="xx63" vr="IS" vm="1" name="User Window Width"/>
   <entry owner="GEMS_FALCON_03" group="0045" element="xx65" vr="IS" vm="1" name="Requested Detector Entrance Dose"/>
-  <entry owner="GEMS_FALCON_03" group="0045" element="xx67" vr="DS" vm="3" name="VOI LUT Assymmetry parameter beta"/>
+  <entry owner="GEMS_FALCON_03" group="0045" element="xx67" vr="DS" vm="3" name="VOI LUT Asymmetry parameter beta"/>
   <entry owner="GEMS_FALCON_03" group="0045" element="xx69" vr="IS" vm="1" name="Collimator rotation"/>
   <entry owner="GEMS_FALCON_03" group="0045" element="xx72" vr="DS" vm="1" name="Collimator Width"/>
   <entry owner="GEMS_FALCON_03" group="0045" element="xx73" vr="DS" vm="1" name="Collimator Height"/>
@@ -7310,7 +7310,7 @@
   <entry owner="SIEMENS MED NM" group="0055" element="xx93" vr="FL" vm="1" name="Filter Cutoff Frequency"/>
   <entry owner="SIEMENS MED NM" group="0055" element="xx94" vr="FL" vm="1" name="Filter Alpha Coefficient"/>
   <entry owner="SIEMENS MED NM" group="0055" element="xx95" vr="FL" vm="1" name="Filter Order"/>
-  <entry owner="SIEMENS MED NM" group="0055" element="xx96" vr="FL" vm="1" name="Attenuation Cooefficient"/>
+  <entry owner="SIEMENS MED NM" group="0055" element="xx96" vr="FL" vm="1" name="Attenuation Coefficient"/>
   <entry owner="SIEMENS MED NM" group="0055" element="xx97" vr="SS" vm="1" name="Percent Ray"/>
   <entry owner="SIEMENS MED NM" group="0055" element="xx98" vr="SS" vm="1" name="Astigmatic Collimator 1 Neuro 2 Cardiac"/>
   <entry owner="SIEMENS MED NM" group="0055" element="xx99" vr="SS" vm="1" name="XP0"/>

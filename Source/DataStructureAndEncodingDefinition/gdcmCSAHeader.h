@@ -67,7 +67,7 @@ public :
   CSAHeader():InternalDataSet(),InternalType(UNKNOWN),InterfileData(nullptr) {};
   ~CSAHeader() = default;
 
-  /// Divers format of CSAHeader as found 'in the wild'
+  /// Diverse format of CSAHeader as found 'in the wild'
   typedef enum {
     UNKNOWN = 0,
     SV10,
