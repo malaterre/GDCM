@@ -1,3 +1,17 @@
+/*=========================================================================
+
+  Program: GDCM (Grassroots DICOM). A DICOM library
+
+  Copyright (c) 2006-2011 Mathieu Malaterre
+  All rights reserved.
+  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notice for more information.
+
+=========================================================================*/
+
 #include <assert.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -76,7 +90,7 @@ static void setup_buffer(struct app *self, void *output, const void *input,
 }
 
 #define ERROR_RETURN(X, Y) \
-  if (X != Y) return false
+  if ((X) != (Y)) return false
 
 static size_t fread_mirror(void *ptr, size_t size, size_t nmemb,
                            struct app *self) {
