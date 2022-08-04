@@ -20,7 +20,7 @@
 #include "gdcmEvent.h"
 #include "gdcmGlobal.h"
 
-#include "gdcmcsa/csa.h"
+#include "gdcmext/csa.h"
 
 namespace gdcm {
 

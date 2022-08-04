@@ -108,7 +108,7 @@ set(MSFF_SRCS
   )
 
   list(APPEND MSFF_SRCS
-    ${GDCM_SOURCE_DIR}/Utilities/gdcmcsa/csa.c
+    ${GDCM_SOURCE_DIR}/Utilities/gdcmext/csa.c
   )
 
 # Do the proper thing when building static...if only there was configured
