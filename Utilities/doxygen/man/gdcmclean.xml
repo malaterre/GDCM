@@ -132,8 +132,9 @@ file-out  DICOM output directory
     --empty PN --preserve /0010,0010 \
     --empty PatientID --empty "0070,0084" \
     --remove "0029,20,SIEMENS MEDCOM HEADER" --remove "0033,02,MITRA OBJECT UTF8 ATTRIBUTES 1.0" --remove "0043,2a,GEMS_PARM_01" \
-	--scrub "0029,10,SIEMENS CSA HEADER" --scrub "0029,20,SIEMENS CSA HEADER" --scrub "700d,08,TOSHIBA_MEC_MR3" \
-	--scrub "0029,90,PMTF INFORMATION DATA" \
+	--scrub "0029,10,SIEMENS CSA HEADER" --scrub "0029,20,SIEMENS CSA HEADER" \
+	--scrub "700d,08,TOSHIBA_MEC_MR3" \
+	--scrub "0029,90,PMTF INFORMATION DATA" --scrub "0029,90,TOSHIBA_MEC_MR3" \
     input_folder output_folder
 </literallayout></para>
 </refsection>
