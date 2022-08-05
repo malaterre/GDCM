@@ -20,7 +20,8 @@
 #include "gdcmEvent.h"
 #include "gdcmGlobal.h"
 
-#include "gdcmcsa/csa.h"
+#include "gdcmext/csa.h"
+#include "gdcmext/mec_mr3.h"
 
 namespace gdcm {
 
@@ -636,7 +637,8 @@ struct Cleaner::impl {
   bool Scrub(PrivateTag const &pt) {
     static const PrivateTag &csa1 = CSAHeader::GetCSAImageHeaderInfoTag();
     static const PrivateTag &csa2 = CSAHeader::GetCSASeriesHeaderInfoTag();
-    if (pt == csa1 || pt == csa2) {
+    const PrivateTag mec_mr3(0x700d,0x08,"TOSHIBA_MEC_MR3");
+    if (pt == csa1 || pt == csa2 || pt == mec_mr3) {
       scrub_privatetags.insert(pt);
       return true;
     }
@@ -767,6 +769,24 @@ static bool CleanCSA(DataSet &ds, const DataElement &de) {
     return true;
   }
   gdcmErrorMacro("Failure to call CleanCSA");
+  return false;
+}
+
+static bool CleanMEC_MR3(DataSet &ds, const DataElement &de) {
+  const ByteValue *bv = de.GetByteValue();
+  // fast path:
+  if (!bv) return true;
+
+  DataElement clean(de.GetTag());
+  clean.SetVR(de.GetVR());
+  std::vector<char> v;
+  v.resize(bv->GetLength());
+  if (mec_mr3_memcpy(&v[0], bv->GetPointer(), bv->GetLength())) {
+    clean.SetByteValue(&v[0], v.size());
+    ds.Replace(clean);
+    return true;
+  }
+  gdcmErrorMacro("Failure to call CleanMEC_MR3");
   return false;
 }
 
@@ -960,12 +980,16 @@ bool Cleaner::impl::ProcessDataSet(Subject &subject, File &file, DataSet &ds,
 
       static const PrivateTag &csa1 = CSAHeader::GetCSAImageHeaderInfoTag();
       static const PrivateTag &csa2 = CSAHeader::GetCSASeriesHeaderInfoTag();
+      const PrivateTag mec_mr3(0x700d,0x08,"TOSHIBA_MEC_MR3");
 
       if (pt == csa1) {
         const bool ret = CleanCSA(ds, de);
         if (!ret) return false;
       } else if (pt == csa2) {
         const bool ret = CleanCSA(ds, de);
+        if (!ret) return false;
+      } else if (pt == mec_mr3) {
+        const bool ret = CleanMEC_MR3(ds, de);
         if (!ret) return false;
       } else {
         gdcmErrorMacro(" not implemented");
