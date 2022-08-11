@@ -292,7 +292,7 @@ static const uint32_t with_phi[] = {
     0x00006d8a, /* */
 };
 
-static inline bool key_is_phi(const uint32_t val) {
+static bool key_is_phi(const uint32_t val) {
   unsigned int i;
   for (i = 0; i < sizeof(with_phi) / sizeof(*with_phi); i++) {
     if (with_phi[i] == val)
