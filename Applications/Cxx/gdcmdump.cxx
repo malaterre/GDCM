@@ -865,7 +865,7 @@ static int PrintPMTF(const std::string & filename, bool verbose)
     }
 
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
-  int ret;
+  int ret = 0;
   {
   const gdcm::PrivateTag tpmtf(0x0029,0x1,"PMTF INFORMATION DATA");
   const gdcm::PrivateTag tseq(0x0029,0x90,"PMTF INFORMATION DATA");
@@ -1516,7 +1516,7 @@ int main (int argc, char *argv[])
         }
       else if( printmedcom )
         {
-        res += PrintMedComHistory(*it, csaname);
+        res += PrintMedComHistory(*it, verbose!=0);
         }
       else if( printelscint )
         {
