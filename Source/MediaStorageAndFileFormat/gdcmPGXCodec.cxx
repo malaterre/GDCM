@@ -62,8 +62,8 @@ bool PGXCodec::Write(const char *filename, const DataElement &out) const
       "You need to decompress first." );
     return false;
     }
+#if 1
   gdcm::PhotometricInterpretation pi = this->GetPhotometricInterpretation();
-#if 0
   if( pi != gdcm::PhotometricInterpretation::MONOCHROME2 ) {
     gdcmErrorMacro( "Bogus PI" << pi );
     return false;
