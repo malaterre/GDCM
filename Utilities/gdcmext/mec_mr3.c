@@ -106,7 +106,7 @@ static size_t fread_mirror(void *ptr, size_t size, size_t nmemb,
 // uncomment the following to validate the parser:
 //#define NOOP
 
-static inline void clean_buffer(char *str, size_t buf_len) {
+static void clean_buffer(char *str, size_t buf_len) {
 #ifndef NOOP
   size_t i;
   const size_t len = strnlen(str, buf_len);
