@@ -106,7 +106,7 @@ static size_t fread_mirror(void *ptr, size_t size, size_t nmemb,
 // uncomment the following to validate the parser:
 //#define NOOP
 
-static inline void clean_buffer(char *str, size_t buf_len) {
+static void clean_buffer(char *str, size_t buf_len) {
 #ifndef NOOP
   size_t i;
   const size_t len = strnlen(str, buf_len);
@@ -292,7 +292,7 @@ static const uint32_t with_phi[] = {
     0x00006d8a, /* */
 };
 
-static inline bool key_is_phi(const uint32_t val) {
+static bool key_is_phi(const uint32_t val) {
   unsigned int i;
   for (i = 0; i < sizeof(with_phi) / sizeof(*with_phi); i++) {
     if (with_phi[i] == val)

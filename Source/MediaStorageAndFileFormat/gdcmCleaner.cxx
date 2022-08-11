@@ -809,6 +809,8 @@ static bool CleanPMTF(DataSet &ds, const DataElement &de) {
       is.str(dup);
     }
 
+    // FIXME gdcm::Cleaner will by default change defined length SQ into undef
+    // length...there is a risk of incompatibily with vendor
     gdcm::Cleaner cleaner;
     gdcm::File &file = cleaner.GetFile();
     gdcm::FileMetaInformation &fmi = file.GetHeader();

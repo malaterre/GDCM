@@ -534,7 +534,7 @@ int main(int argc, char *argv[]) {
       const char *in = filenames[i].c_str();
       const char *out = outfilenames[i].c_str();
       if (!CleanOneFile(cleaner, in, out, skipmeta > 0 ? true : false,
-                        continuemode)) {
+                        continuemode > 0 ? true : false)) {
         return 1;
       }
     }
