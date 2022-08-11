@@ -124,8 +124,9 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
       const VR &devr = de.GetVR();
       if( devr != refvr )
         {
-        if(!refvr.Compatible(devr))
+        if(!refvr.Compatible(devr)) {
           gdcmWarningMacro("Inconsistent VR: " << devr << " should be " << refvr << " for: [" << (owner ? owner : "<null>") << "]" << " de is: "  << de );
+	}
         }
       }
 
