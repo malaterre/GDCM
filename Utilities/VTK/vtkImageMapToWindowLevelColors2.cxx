@@ -37,6 +37,8 @@
 #include "vtkScalarsToColors.h"
 #include "vtkPointData.h"
 
+#include <cmath>
+
 //vtkCxxRevisionMacro(vtkImageMapToWindowLevelColors2, "$Revision: 1.3 $")
 vtkStandardNewMacro(vtkImageMapToWindowLevelColors2)
 
