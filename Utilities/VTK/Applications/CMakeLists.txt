@@ -40,9 +40,23 @@ foreach(app ${GDCM_VTK_APPS})
     if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
       target_link_libraries(${app} vtkWidgets vtkHybrid)
     endif()
-  else()
-    # >= 6.0
+  elseif(VTK_VERSION VERSION_LESS 8.90)
+    # >= 6.0 and < 8.90
     target_link_libraries(${app} ${VTK_LIBRARIES} vtkIOXML)
+  else()
+    # >= 8.90
+    target_link_libraries(${app}
+      VTK::CommonCore VTK::CommonMisc
+      VTK::FiltersModeling VTK::ImagingColor
+      VTK::IOImage VTK::IOMINC VTK::IOXML
+      VTK::tiff)
+    set(_rendering_libs
+      VTK::InteractionWidgets VTK::RenderingAnnotation VTK::RenderingCore
+      VTK::InteractionStyle VTK::RenderingFreeType VTK::RenderingOpenGL2)
+    if(VTK_USE_RENDERING)
+      target_link_libraries(${app} ${_rendering_libs})
+      vtk_module_autoinit(TARGETS ${app} MODULES ${_rendering_libs})
+    endif()
   endif()
   if(WIN32 AND NOT CYGWIN)
     target_link_libraries(${app} gdcmgetopt)

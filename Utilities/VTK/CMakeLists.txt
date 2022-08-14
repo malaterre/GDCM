@@ -16,9 +16,14 @@ if(GDCM_HAVE_PTHREAD_H AND CMAKE_USE_PTHREADS)
   )
 endif()
 
-#if( ${VTK_VERSION_MAJOR} LESS 7 )
+if(VTK_VERSION VERSION_LESS 8.90)
   include(${VTK_USE_FILE})
-#endif()
+else()
+  if(VTK::RenderingCore IN_LIST VTK_LIBRARIES)
+    # VTK 5 used to export VTK_USE_RENDERING, now we set it ourselves
+    set(VTK_USE_RENDERING 1)
+  endif()
+endif()
 
 if( ${VTK_MAJOR_VERSION} GREATER 5 )
   list(APPEND vtkgdcm_SRCS
@@ -63,7 +68,7 @@ if("${VTK_MAJOR_VERSION}" LESS 6)
       vtkRendering
       )
   endif()
-else()
+elseif(VTK_VERSION VERSION_LESS 8.90)
   set(vtkgdcm_LIBS
     vtkCommonCore
     vtkImagingCore
@@ -92,13 +97,13 @@ else()
       endif()
     endforeach()
   endforeach()
+elseif() # (VTK_VERSION VERSION_LESS 8.90)
+  # for VTK 9, target dependencies are handled automatically
+  set(vtkgdcm_LIBS)
 endif()
 
 # Use wrapping hints for this project.
 #set(VTK_WRAP_HINTS "${PROJECT_SOURCE_DIR}/hints")
-
-set(VTKGDCM_NAME vtkgdcm CACHE STRING "vtk-gdcm lib name")
-mark_as_advanced(VTKGDCM_NAME)
 
 # Create the instantiator for these classes.
 # FIXME: Are instantiator really needed when only doing python wrapping ?
@@ -158,6 +163,8 @@ else()
   endif()
 endif()
 
+if(VTK_VERSION VERSION_LESS 8.90)
+
 #Hum... not sure why this is needed.
 #if(NOT VTK_BUILD_SHARED_LIBS AND GDCM_BUILD_SHARED_LIBS)
 #  add_library(vtkgdcm STATIC ${vtkgdcm_SRCS} ${vtkgdcmInstantiator_SRCS})
@@ -195,6 +202,20 @@ if(NOT GDCM_INSTALL_NO_DEVELOPMENT)
   install(FILES ${header_files}
     DESTINATION ${GDCM_INSTALL_INCLUDE_DIR} COMPONENT VTKHeaders
   )
+endif()
+
+elseif(DEFINED VTK_MODULE_ENABLE_GDCM_vtkgdcm)
+  # When building as a module for VTK 8.90 or later
+  set(vtkgdcm_SRC_HDRS)
+  foreach(_src ${vtkgdcm_SRCS})
+    get_filename_component(_base ${_src} NAME_WE)
+    list(APPEND vtkgdcm_SRC_HDRS ${_base}.h)
+  endforeach()
+  vtk_module_add_module(GDCM::vtkgdcm
+    SOURCES ${vtkgdcm_SRCS}
+    HEADERS ${vtkgdcm_SRC_HDRS} ${vtkgdcm_HDRS})
+  vtk_module_link(GDCM::vtkgdcm
+    PRIVATE gdcmMSFF)
 endif()
 
 if(GDCM_WRAP_PHP)
@@ -642,6 +663,8 @@ if(GDCM_WRAP_CSHARP)
 
 endif()
 
+if(VTK_VERSION VERSION_LESS 8.90)
+
 if( (GDCM_WRAP_JAVA AND VTK_WRAP_JAVA) OR
     (GDCM_WRAP_PYTHON AND VTK_WRAP_PYTHON) )
   if( ${VTK_MAJOR_VERSION} GREATER 7 )
@@ -832,6 +855,8 @@ endif()
 if(BUILD_TESTING)
   add_subdirectory(Testing)
 endif()
+
+endif() #(VTK_VERSION VERSION_LESS 8.90)
 
 if(BUILD_APPLICATIONS)
   add_subdirectory(Applications)

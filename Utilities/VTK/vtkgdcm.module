@@ -1,0 +1,22 @@
+NAME
+  GDCM::vtkgdcm
+LIBRARY_NAME
+  vtkgdcm
+GROUPS
+  StandAlone
+DEPENDS
+  VTK::CommonCore
+  VTK::CommonDataModel
+  VTK::CommonExecutionModel
+  VTK::IOImage
+  VTK::IOLegacy
+  VTK::ImagingSources
+PRIVATE_DEPENDS
+  VTK::CommonMisc
+  VTK::ImagingCore
+  VTK::IOCore
+OPTIONAL_DEPENDS
+  VTK::InteractionStyle
+  VTK::RenderingCore
+TEST_DEPENDS
+  VTK::TestingCore
