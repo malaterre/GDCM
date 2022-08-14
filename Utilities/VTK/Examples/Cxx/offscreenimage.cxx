@@ -19,6 +19,7 @@
 #include "vtkPNGWriter.h"
 #include "vtkWindowToImageFilter.h"
 #include "vtkMedicalImageProperties.h"
+#include "vtkVersion.h"
 
 int main(int argc, char *argv[])
 {

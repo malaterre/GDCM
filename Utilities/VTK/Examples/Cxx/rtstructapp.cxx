@@ -27,6 +27,7 @@
 #include "vtkProperty2D.h"
 #include "vtkAppendPolyData.h"
 #include "vtkImageData.h"
+#include "vtkVersion.h"
 
 /*
  * Small example to read in a RTSTUCT and write it out (displays it too).

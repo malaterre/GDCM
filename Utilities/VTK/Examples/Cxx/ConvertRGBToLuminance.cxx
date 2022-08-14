@@ -15,6 +15,7 @@
 #include "vtkGDCMImageWriter.h"
 #include "vtkImageData.h"
 #include "vtkImageLuminance.h"
+#include "vtkVersion.h"
 
 #include "gdcmTesting.h"
 
