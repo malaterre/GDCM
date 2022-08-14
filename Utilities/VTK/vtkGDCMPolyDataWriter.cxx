@@ -496,7 +496,11 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
   sqi = new SequenceOfItems;
 
   vtkIdType npts = 0;
+#if VTK_MAJOR_VERSION >= 9 
+  const vtkIdType *indx = 0;
+#else
   vtkIdType *indx = 0;
+#endif
   double v[3];
   unsigned int cellnum = 0;
 
@@ -759,7 +763,11 @@ void vtkGDCMPolyDataWriter::InitializeRTStructSet(vtkStdString inDirectory,
     vtkPoints *pts;
     vtkCellArray *polys;
     vtkIdType npts = 0;
+#if VTK_MAJOR_VERSION >= 9 
+    const vtkIdType *indx = 0;
+#else
     vtkIdType *indx = 0;
+#endif
     pts = theData->GetPoints();
     polys = theData->GetPolys();
     vtkCellArray* lines = theData->GetLines();
