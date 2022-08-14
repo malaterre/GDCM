@@ -45,6 +45,7 @@
 #include "vtkGDCMImageReader.h"
 #include "vtkGDCMImageWriter.h"
 #include "vtkStringArray.h"
+#include "vtkVersion.h"
 
 #include "gdcmSystem.h"
 #include "gdcmDirectory.h"

@@ -14,6 +14,7 @@
 #include "vtkGDCMImageReader2.h"
 #include "vtkImageChangeInformation.h"
 #include "vtkStringArray.h"
+#include "vtkVersion.h"
 #include "gdcmIPPSorter.h"
 
 #ifndef vtkFloatingPointType

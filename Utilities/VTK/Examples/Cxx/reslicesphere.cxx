@@ -59,6 +59,7 @@ date  Tue, May 11, 2010 at 7:01 PM
 #include <vtkProperty2D.h>
 #include <vtkGDCMImageReader.h>
 #include <vtkImageChangeInformation.h>
+#include <vtkVersion.h>
 
 #include "gdcmDirectory.h"
 #include "gdcmTesting.h"
