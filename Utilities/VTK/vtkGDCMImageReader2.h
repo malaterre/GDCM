@@ -64,6 +64,7 @@
 #ifndef VTKGDCMIMAGEREADER2_H
 #define VTKGDCMIMAGEREADER2_H
 
+#include "vtkgdcmModule.h"
 #include "vtkMedicalImageReader2.h"
 #include "vtkImageData.h"
 
@@ -91,7 +92,7 @@ class vtkPolyData;
 namespace gdcm { class ImageReader; }
 //ETX
 class vtkMatrix4x4;
-class VTK_EXPORT vtkGDCMImageReader2 : public vtkMedicalImageReader2
+class VTKGDCM_EXPORT vtkGDCMImageReader2 : public vtkMedicalImageReader2
 {
 public:
   static vtkGDCMImageReader2 *New();

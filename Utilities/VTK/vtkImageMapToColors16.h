@@ -42,11 +42,12 @@
 #define VTKIMAGEMAPTOCOLORS16_H
 
 
+#include "vtkgdcmModule.h"
 #include "vtkThreadedImageAlgorithm.h"
 
 class vtkScalarsToColors;
 
-class VTK_EXPORT vtkImageMapToColors16 : public vtkThreadedImageAlgorithm
+class VTKGDCM_EXPORT vtkImageMapToColors16 : public vtkThreadedImageAlgorithm
 {
 public:
   static vtkImageMapToColors16 *New();

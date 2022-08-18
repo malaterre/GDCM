@@ -28,6 +28,7 @@
 #ifndef VTKGDCMPOLYDATAREADER_H
 #define VTKGDCMPOLYDATAREADER_H
 
+#include "vtkgdcmModule.h"
 #include "vtkPolyDataAlgorithm.h"
 
 class vtkMedicalImageProperties;
@@ -35,7 +36,7 @@ class vtkRTStructSetProperties;
 //BTX
 namespace gdcm { class Reader; }
 //ETX
-class VTK_EXPORT vtkGDCMPolyDataReader : public vtkPolyDataAlgorithm
+class VTKGDCM_EXPORT vtkGDCMPolyDataReader : public vtkPolyDataAlgorithm
 {
 public:
   static vtkGDCMPolyDataReader *New();

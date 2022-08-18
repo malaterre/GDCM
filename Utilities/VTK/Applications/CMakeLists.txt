@@ -1,5 +1,6 @@
 # Build the vtk-gdcm simple viewer
 include_directories(
+  ${GDCM_BINARY_DIR}/Utilities/VTK
   ${GDCM_SOURCE_DIR}/Utilities/VTK
   )
 

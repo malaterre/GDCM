@@ -37,10 +37,11 @@
 #ifndef VTKGDCMTHREADEDIMAGEREADER_H
 #define VTKGDCMTHREADEDIMAGEREADER_H
 
+#include "vtkgdcmModule.h"
 #include "vtkGDCMImageReader.h"
 #include "vtkVersion.h"
 
-class VTK_EXPORT vtkGDCMThreadedImageReader : public vtkGDCMImageReader
+class VTKGDCM_EXPORT vtkGDCMThreadedImageReader : public vtkGDCMImageReader
 {
 public:
   static vtkGDCMThreadedImageReader *New();
