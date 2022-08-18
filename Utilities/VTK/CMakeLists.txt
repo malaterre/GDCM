@@ -46,6 +46,7 @@ include_directories(
   ${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition
   ${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat
   ${GDCM_SOURCE_DIR}/Source/DataDictionary
+  ${GDCM_BINARY_DIR}/Utilities/VTK
   ${GDCM_SOURCE_DIR}/Utilities/VTK
   )
 
@@ -191,8 +192,12 @@ if(NOT GDCM_INSTALL_NO_LIBRARIES)
 #  endif()
 endif()
 
+# Generate the header file for VTKGDCM_EXPORT
+configure_file(vtkgdcmModule.h.in
+  "${CMAKE_CURRENT_BINARY_DIR}/vtkgdcmModule.h" COPYONLY)
+
 if(NOT GDCM_INSTALL_NO_DEVELOPMENT)
-  set(header_files_glob "*.h" "*.txx")
+  set(header_files_glob "${CMAKE_CURRENT_BINARY_DIR}/*.h" "*.h" "*.txx")
   if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     set(header_files_glob ${header_files_glob}
       "VTK4/*.h"

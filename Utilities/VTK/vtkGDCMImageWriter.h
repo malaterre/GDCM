@@ -38,6 +38,7 @@
 #ifndef VTKGDCMIMAGEWRITER_H
 #define VTKGDCMIMAGEWRITER_H
 
+#include "vtkgdcmModule.h"
 #include "vtkImageWriter.h"
 #include "vtkVersion.h"
 
@@ -45,7 +46,7 @@ class vtkLookupTable;
 class vtkMedicalImageProperties;
 class vtkMatrix4x4;
 class vtkStringArray;
-class VTK_EXPORT vtkGDCMImageWriter : public vtkImageWriter
+class VTKGDCM_EXPORT vtkGDCMImageWriter : public vtkImageWriter
 {
 public:
   static vtkGDCMImageWriter *New();

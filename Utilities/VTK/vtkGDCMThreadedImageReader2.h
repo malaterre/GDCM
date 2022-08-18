@@ -43,10 +43,11 @@
 #ifndef VTKGDCMTHREADEDIMAGEREADER2_H
 #define VTKGDCMTHREADEDIMAGEREADER2_H
 
+#include "vtkgdcmModule.h"
 #include "vtkThreadedImageAlgorithm.h"
 
 class vtkStringArray;
-class VTK_EXPORT vtkGDCMThreadedImageReader2 : public vtkThreadedImageAlgorithm
+class VTKGDCM_EXPORT vtkGDCMThreadedImageReader2 : public vtkThreadedImageAlgorithm
 {
 public:
   static vtkGDCMThreadedImageReader2 *New();

@@ -38,10 +38,11 @@
 #ifndef VTKLOOKUPTABLE16_H
 #define VTKLOOKUPTABLE16_H
 
+#include "vtkgdcmModule.h"
 #include "vtkLookupTable.h"
 #include "vtkUnsignedShortArray.h"
 
-class VTK_EXPORT vtkLookupTable16 : public vtkLookupTable
+class VTKGDCM_EXPORT vtkLookupTable16 : public vtkLookupTable
 {
 public:
   static vtkLookupTable16 *New();

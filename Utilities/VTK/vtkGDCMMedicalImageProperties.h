@@ -23,6 +23,7 @@
 #ifndef VTKGDCMMEDICALIMAGEPROPERTIES_H
 #define VTKGDCMMEDICALIMAGEPROPERTIES_H
 
+#include "vtkgdcmModule.h"
 #include "vtkMedicalImageProperties.h"
 
 class vtkGDCMMedicalImagePropertiesInternals;
@@ -30,7 +31,7 @@ class vtkGDCMMedicalImagePropertiesInternals;
 namespace gdcm { class File; }
 //ETX
 
-class VTK_EXPORT vtkGDCMMedicalImageProperties : public vtkMedicalImageProperties
+class VTKGDCM_EXPORT vtkGDCMMedicalImageProperties : public vtkMedicalImageProperties
 {
 public:
   static vtkGDCMMedicalImageProperties *New();

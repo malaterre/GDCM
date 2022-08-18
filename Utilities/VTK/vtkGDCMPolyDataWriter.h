@@ -25,6 +25,7 @@
 #ifndef VTKGDCMPOLYDATAWRITER_H
 #define VTKGDCMPOLYDATAWRITER_H
 
+#include "vtkgdcmModule.h"
 #include "vtkPolyDataWriter.h"
 #include "vtkStringArray.h"
 #include "vtkStdString.h"
@@ -35,7 +36,7 @@ class vtkRTStructSetProperties;
 //BTX
 namespace gdcm { class File; }
 //ETX
-class VTK_EXPORT vtkGDCMPolyDataWriter : public vtkPolyDataWriter
+class VTKGDCM_EXPORT vtkGDCMPolyDataWriter : public vtkPolyDataWriter
 {
 public:
   static vtkGDCMPolyDataWriter *New();

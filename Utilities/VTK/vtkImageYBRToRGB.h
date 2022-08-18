@@ -39,9 +39,10 @@
 #ifndef VTKIMAGEYBRTORGB_H
 #define VTKIMAGEYBRTORGB_H
 
+#include "vtkgdcmModule.h"
 #include "vtkThreadedImageAlgorithm.h"
 
-class VTK_EXPORT vtkImageYBRToRGB : public vtkThreadedImageAlgorithm
+class VTKGDCM_EXPORT vtkImageYBRToRGB : public vtkThreadedImageAlgorithm
 {
 public:
   static vtkImageYBRToRGB *New();

@@ -57,6 +57,7 @@ endif()
 # Add the include paths
 if(VTK_VERSION VERSION_LESS 8.90)
   include_directories(
+    "${GDCM_BINARY_DIR}/Utilities/VTK"
     "${GDCM_SOURCE_DIR}/Utilities/VTK"
     )
 else()
