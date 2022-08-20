@@ -126,6 +126,7 @@ using Kitware.VTK;
 
 #define GDCM_EXPORT
 #define VTK_EXPORT
+#define VTKGDCM_EXPORT
 #define VTK_COMMON_EXPORT
 #define VTK_FILTERING_EXPORT
 #define VTK_IO_EXPORT
