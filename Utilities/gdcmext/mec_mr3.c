@@ -58,8 +58,6 @@ static size_t stream_write(const void *ptr, size_t size, size_t nmemb,
   return nmemb;
 }
 
-enum CSA_TYPE { INVALID = 0, NOMAGIC = 1, SV10 = 2 };
-
 struct app {
   struct stream *in;
   struct stream *out;
