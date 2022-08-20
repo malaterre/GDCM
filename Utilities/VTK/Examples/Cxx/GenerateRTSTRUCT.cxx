@@ -31,6 +31,7 @@
 #include "vtkProperty.h"
 #include "vtkProperty2D.h"
 #include "vtkImageData.h"
+#include "vtkVersion.h"
 
 #include <algorithm> //for std::find
 

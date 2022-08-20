@@ -15,6 +15,7 @@
 #include "vtkGDCMImageWriter.h"
 #include "vtkImageData.h"
 #include "vtkImageCast.h"
+#include "vtkVersion.h"
 
 #include "gdcmTesting.h"
 // The following file is 16/16/15 but the scalar range of the image is [0,192]

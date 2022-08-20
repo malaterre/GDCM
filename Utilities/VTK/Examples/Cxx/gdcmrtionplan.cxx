@@ -25,6 +25,7 @@
 #include <vtkXMLPolyDataWriter.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkImageColorViewer.h>
+#include "vtkVersion.h"
 
 #include "gdcmReader.h"
 #include "gdcmAttribute.h"

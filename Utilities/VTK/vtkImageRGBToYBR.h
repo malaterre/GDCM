@@ -39,9 +39,10 @@
 #ifndef VTKIMAGERGBTOYBR_H
 #define VTKIMAGERGBTOYBR_H
 
+#include "vtkgdcmModule.h"
 #include "vtkThreadedImageAlgorithm.h"
 
-class VTK_EXPORT vtkImageRGBToYBR : public vtkThreadedImageAlgorithm
+class VTKGDCM_EXPORT vtkImageRGBToYBR : public vtkThreadedImageAlgorithm
 {
 public:
   static vtkImageRGBToYBR *New();

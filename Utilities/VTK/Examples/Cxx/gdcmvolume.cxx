@@ -26,6 +26,7 @@
 #include "vtkRenderWindow.h"
 #include "vtkImageClip.h"
 #include "vtkRenderWindowInteractor.h"
+#include "vtkVersion.h"
 
 
 // gdcmvolume gdcmData/GE_DLX-8-MONO2-Multiframe-Jpeg_Lossless.dcm

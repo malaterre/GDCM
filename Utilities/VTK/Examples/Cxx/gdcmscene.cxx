@@ -25,6 +25,7 @@
 #include "vtkCamera.h"
 #include "vtkProperty.h"
 #include "vtkProperty2D.h"
+#include "vtkVersion.h"
 
 
 // gdcmDataExtra/gdcmNonImageData/exRT_Structure_Set_Storage.dcm

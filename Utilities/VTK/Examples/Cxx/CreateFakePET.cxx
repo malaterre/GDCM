@@ -19,6 +19,7 @@
 #include "vtkDataArray.h"
 #include "vtkMedicalImageProperties.h"
 #include "vtkStringArray.h"
+#include "vtkVersion.h"
 
 #include "gdcmTrace.h"
 #include "gdcmReader.h"

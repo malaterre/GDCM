@@ -43,9 +43,10 @@
 #ifndef VTKIMAGEMAPTOWINDOWLEVELCOLORS2_H
 #define VTKIMAGEMAPTOWINDOWLEVELCOLORS2_H
 
+#include "vtkgdcmModule.h"
 #include "vtkImageMapToColors.h"
 
-class VTK_EXPORT vtkImageMapToWindowLevelColors2 : public vtkImageMapToColors
+class VTKGDCM_EXPORT vtkImageMapToWindowLevelColors2 : public vtkImageMapToColors
 {
 public:
   static vtkImageMapToWindowLevelColors2 *New();

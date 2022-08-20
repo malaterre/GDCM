@@ -53,6 +53,7 @@
 #ifndef VTKIMAGECOLORVIEWER_H
 #define VTKIMAGECOLORVIEWER_H
 
+#include "vtkgdcmModule.h"
 #include "vtkObject.h"
 #include "vtkVersion.h"
 
@@ -68,7 +69,7 @@ class vtkRenderer;
 class vtkRenderWindowInteractor;
 class vtkPolyData;
 
-class VTK_EXPORT vtkImageColorViewer : public vtkObject
+class VTKGDCM_EXPORT vtkImageColorViewer : public vtkObject
 {
 public:
   static vtkImageColorViewer *New();

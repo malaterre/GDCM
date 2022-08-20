@@ -55,8 +55,22 @@ if(VTK_USE_RENDERING)
 endif()
 
 # Add the include paths
+if(VTK_VERSION VERSION_LESS 8.90)
+  include_directories(
+    "${GDCM_BINARY_DIR}/Utilities/VTK"
+    "${GDCM_SOURCE_DIR}/Utilities/VTK"
+    )
+else()
+  include_directories(
+    "${GDCM_BINARY_DIR}/Source/Common"
+    "${GDCM_SOURCE_DIR}/Source/Common"
+    "${GDCM_SOURCE_DIR}/Source/DataDictionary"
+    "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
+    "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
+    )
+endif()
+
 include_directories(
-  "${GDCM_SOURCE_DIR}/Utilities/VTK"
   "${GDCM_BINARY_DIR}/Testing/Source/Data" # for gdcmDataImages.h
   )
 
@@ -65,18 +79,23 @@ create_test_sourcelist(vtkGDCMTests gdcmvtkGDCMTests.cxx ${VTK_GDCM_TEST_SRCS}
   )
 add_executable(gdcmvtkGDCMTests ${vtkGDCMTests})
 target_link_libraries(gdcmvtkGDCMTests ${VTKGDCM_NAME} gdcmMSFF)
-target_link_libraries(gdcmvtkGDCMTests vtksys)
-if(VTK_USE_RENDERING)
-  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
-    target_link_libraries(gdcmvtkGDCMTests vtkRendering)
-  elseif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 6.0 )
-    target_link_libraries(gdcmvtkGDCMTests vtkVolumeRendering)
+
+if(VTK_VERSION VERSION_LESS 8.90)
+  target_link_libraries(gdcmvtkGDCMTests vtksys)
+  if(VTK_USE_RENDERING)
+    if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
+      target_link_libraries(gdcmvtkGDCMTests vtkRendering)
+    elseif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 6.0 )
+      target_link_libraries(gdcmvtkGDCMTests vtkVolumeRendering)
+    endif()
   endif()
-endif()
-# VTK 6.0 does not set VTK_USE_RENDERING anymore ?
-if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 6.0 )
-  target_link_libraries(gdcmvtkGDCMTests ${vtkgdcm_LIBS})
-  target_link_libraries(gdcmvtkGDCMTests vtkIOLegacy vtkCommonCore)
+  # VTK 6.0 does not set VTK_USE_RENDERING anymore ?
+  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 6.0 )
+    target_link_libraries(gdcmvtkGDCMTests ${vtkgdcm_LIBS})
+    target_link_libraries(gdcmvtkGDCMTests vtkIOLegacy vtkCommonCore)
+  endif()
+else()
+  target_link_libraries(gdcmvtkGDCMTests VTK::vtksys VTK::RenderingCore)
 endif()
 
 # Need full path to executable:
