@@ -37,6 +37,7 @@
 #ifndef VTKIMAGEPLANARCOMPONENTSTOCOMPONENTS_H
 #define VTKIMAGEPLANARCOMPONENTSTOCOMPONENTS_H
 
+#include "vtkgdcmModule.h"
 #include "vtkImageAlgorithm.h"
 
 // everything is now handled within the vtkGDCMImageReader as Planar Configuration can not
@@ -44,8 +45,8 @@
 
 #error do not use this class
 
-//class VTK_EXPORT vtkImagePlanarComponentsToComponents : public vtkThreadedImageAlgorithm
-class VTK_EXPORT vtkImagePlanarComponentsToComponents : public vtkImageAlgorithm
+//class VTKGDCM_EXPORT vtkImagePlanarComponentsToComponents : public vtkThreadedImageAlgorithm
+class VTKGDCM_EXPORT vtkImagePlanarComponentsToComponents : public vtkImageAlgorithm
 {
 public:
   static vtkImagePlanarComponentsToComponents *New();

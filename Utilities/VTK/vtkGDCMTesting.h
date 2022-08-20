@@ -21,9 +21,10 @@
 #ifndef VTKGDCMTESTING_H
 #define VTKGDCMTESTING_H
 
+#include "vtkgdcmModule.h"
 #include "vtkObject.h"
 
-class VTK_EXPORT vtkGDCMTesting : public vtkObject
+class VTKGDCM_EXPORT vtkGDCMTesting : public vtkObject
 {
 public:
   static vtkGDCMTesting *New();

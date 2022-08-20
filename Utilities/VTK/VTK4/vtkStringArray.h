@@ -25,12 +25,13 @@
 #error Something went terribly wrong
 #endif
 
+#include "vtkgdcmModule.h"
 #include "vtkObject.h"
 
 #include <string>
 
 class vtkStringArrayInternals;
-class VTK_EXPORT vtkStringArray : public vtkObject
+class VTKGDCM_EXPORT vtkStringArray : public vtkObject
 {
 public:
   static vtkStringArray *New();

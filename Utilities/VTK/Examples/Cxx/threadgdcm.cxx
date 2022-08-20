@@ -18,6 +18,7 @@
 
 #include "vtkImageData.h"
 #include "vtkStructuredPointsWriter.h"
+#include "vtkVersion.h"
 
 #include <pthread.h>
 

@@ -32,6 +32,7 @@
 #include "vtkLookupTable.h"
 #include "vtkTexture.h"
 #include "vtkPlaneSource.h"
+#include "vtkVersion.h"
 
 int main( int argc, char *argv[] )
 {

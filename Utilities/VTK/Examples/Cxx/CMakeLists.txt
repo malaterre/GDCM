@@ -1,4 +1,5 @@
 include_directories(
+  ${GDCM_BINARY_DIR}/Utilities/VTK
   ${GDCM_SOURCE_DIR}/Utilities/VTK
   )
 
@@ -8,9 +9,14 @@ if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )
     CreateFakeRTDOSE
     CreateFakePET
     ConvertSingleBitTo8Bits
-    GenerateRTSTRUCT
-    offscreenimage
   )
+  if(VTK_USE_RENDERING OR vtkRenderingCore_LOADED)
+    set(GDCM_VTK_APPS
+      ${GDCM_VTK_APPS}
+      GenerateRTSTRUCT
+      offscreenimage
+      )
+  endif()
   if( ${VTK_MAJOR_VERSION} GREATER 5 )
     set(GDCM_VTK_APPS
       ${GDCM_VTK_APPS}
@@ -58,7 +64,18 @@ foreach(app ${GDCM_VTK_APPS})
     # gdcmTesting is in Common:
     target_link_libraries(${app} gdcmCommon)
   endif()
-  if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 6.0 )
+  if(NOT VTK_VERSION VERSION_LESS 8.90)
+    target_link_libraries(${app}
+      VTK::FiltersCore VTK::FiltersModeling VTK::ImagingColor VTK::IOXML)
+    set(_rendering_libs
+      VTK::InteractionWidgets VTK::RenderingAnnotation VTK::RenderingCore
+      VTK::InteractionStyle VTK::RenderingFreeType VTK::RenderingOpenGL2
+      VTK::RenderingVolume VTK::RenderingVolumeOpenGL2)
+    if(VTK_USE_RENDERING)
+      target_link_libraries(${app} ${_rendering_libs})
+      vtk_module_autoinit(TARGETS ${app} MODULES ${_rendering_libs})
+    endif()
+  elseif( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 6.0 )
     target_link_libraries(${app} ${VTK_LIBRARIES})
   else()
     if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" GREATER 5.0 )

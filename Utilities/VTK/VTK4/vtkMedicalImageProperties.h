@@ -43,11 +43,12 @@
 #error Something went terribly wrong
 #endif
 
+#include "vtkgdcmModule.h"
 #include "vtkObject.h"
 
 class vtkMedicalImagePropertiesInternals;
 
-class VTK_IO_EXPORT vtkMedicalImageProperties : public vtkObject
+class VTKGDCM_EXPORT vtkMedicalImageProperties : public vtkObject
 {
 public:
   static vtkMedicalImageProperties *New();

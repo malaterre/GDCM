@@ -16,6 +16,7 @@
 #include "vtkImageData.h"
 #include "vtkImageMagnify.h"
 #include "vtkImageCast.h"
+#include "vtkVersion.h"
 
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"

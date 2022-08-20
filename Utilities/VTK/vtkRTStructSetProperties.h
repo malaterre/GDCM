@@ -20,11 +20,12 @@
 #ifndef VTKRTSTRUCTSETPROPERTIES_H
 #define VTKRTSTRUCTSETPROPERTIES_H
 
+#include "vtkgdcmModule.h"
 #include "vtkObject.h"
 
 class vtkRTStructSetPropertiesInternals;
 
-class VTK_EXPORT vtkRTStructSetProperties : public vtkObject
+class VTKGDCM_EXPORT vtkRTStructSetProperties : public vtkObject
 {
 public:
   static vtkRTStructSetProperties *New();

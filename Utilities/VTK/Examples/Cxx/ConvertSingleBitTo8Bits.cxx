@@ -18,6 +18,7 @@
 #include "vtkPointData.h"
 #include "vtkBitArray.h"
 #include "vtkUnsignedCharArray.h"
+#include "vtkVersion.h"
 
 int main(int argc, char *argv[])
 {
