@@ -1009,10 +1009,19 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
       const Tag tfgs(0x5200,0x9230);
       if( ds.FindDataElement( tfgs ) )
       {
-        SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
+        const DataElement &de = ds.GetDataElement( tfgs );
+        SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
         assert( sqi );
-        sqi->SetLengthToUndefined();
         sqi->SetNumberOfItems( dims[2] );
+        {
+          // Simple mechanism to avoid recomputation of Sequence Length: make
+          // them undefined length
+          DataElement dup(de.GetTag());
+          dup.SetVR(VR::SQ);
+          dup.SetValue(*sqi);
+          dup.SetVLToUndefined();
+          ds.Replace(dup);
+        }
       }
     }
 
