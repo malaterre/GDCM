@@ -32,9 +32,9 @@ static const struct mec_mr3_dict dict[] = {
     {0x01, 0x000013ec, 0xff002900, "Imaging Frequency"},         //
     {0x01, 0x00004e23, 0xff002c00, "Software Version"},          //
     {0x01, 0x000055f0, 0x0007d000, ""},                          //
-    {0x01, 0x000055f1, 0x00000300, ""},                          //
-    {0x01, 0x000055f2, 0x00000300, ""},                          //
-    {0x01, 0x000055f3, 0x00000300, ""},                          //
+    {0x01, 0x000055f1, 0x00000300, "Patient ID"},                //
+    {0x01, 0x000055f2, 0x00000300, "Patient Name 1"},            //
+    {0x01, 0x000055f3, 0x00000300, "Patient Name 2"},            //
     {0x01, 0x000055f6, 0x00000200, ""},                          //
     {0x01, 0x000055f7, 0xff000400, ""},                          //
     {0x01, 0x000055f8, 0xff000800, "Patient Size (cm)"},         //
@@ -49,9 +49,9 @@ static const struct mec_mr3_dict dict[] = {
     {0x01, 0x00005604, 0xff000400, ""},                          //
     {0x01, 0x00005606, 0x00000300, "Institution Name"},          //
     {0x01, 0x0000560a, 0xff002c00, "Patient Age"},               //
-    {0x01, 0x0000560b, 0xff002c00, ""},                          //
-    {0x01, 0x0000560c, 0xff002c00, ""},                          //
-    {0x01, 0x0000560d, 0xff002c00, ""},                          //
+    {0x01, 0x0000560b, 0xff002c00, "Patient ID"},                //
+    {0x01, 0x0000560c, 0xff002c00, "Patient Name 1"},            //
+    {0x01, 0x0000560d, 0xff002c00, "Patient Name 2"},            //
     {0x01, 0x00005610, 0xff002c00, "Patient Comments"},          //
     {0x01, 0x00005611, 0xff002c00, ""},                          //
     {0x01, 0x00005612, 0xff002c00, "Referring Physician Name"},  //
