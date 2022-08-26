@@ -13,9 +13,12 @@
 =========================================================================*/
 #include "gdcmMEC_MR3.h"
 
+#include "gdcmext/mec_mr3_io.h"
+
 namespace gdcm
 {
-  void MEC_MR3::Print(const char *src, size_t srclen)
+  bool MEC_MR3::Print(const char *src, size_t srclen)
   {
+    return mec_mr3_print(src, srclen);   
   }
 } // end namespace gdcm

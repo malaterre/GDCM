@@ -25,7 +25,7 @@ namespace gdcm
 class GDCM_EXPORT MEC_MR3
 {
 public:
-  static void Print(const char *src, size_t srclen);
+  static bool Print(const char *src, size_t srclen);
 };
 
 } // end namespace gdcm

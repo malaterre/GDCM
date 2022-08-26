@@ -49,9 +49,8 @@
 #include "gdcmASN1.h"
 #include "gdcmAttribute.h"
 #include "gdcmBase64.h"
+#include "gdcmMEC_MR3.h"
 #include "gdcmTagKeywords.h"
-
-#include "gdcmext/mec_mr3_io.h"
 
 #include <string>
 #include <iostream>
@@ -879,7 +878,7 @@ static int PrintMEC_MR3(const std::string & filename, bool verbose)
   const size_t buf_len= bv->GetLength();
 
   int ret = 0;
-  if (!mec_mr3_print(inbuffer, buf_len))
+  if (!gdcm::MEC_MR3::Print(inbuffer, buf_len))
   {
     ret = 1;
   }
