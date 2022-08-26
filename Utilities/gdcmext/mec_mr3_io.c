@@ -17,12 +17,15 @@
 #include "mec_mr3_dict.h"
 
 #include <assert.h>
-#include <iconv.h>
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifndef _MSC_VER
+#include <iconv.h>
+#endif
 
 struct stream {
   const void *start;
@@ -48,14 +51,18 @@ static size_t stream_read(void *ptr, size_t size, size_t nmemb,
 
 struct app {
   struct stream *in;
+#ifndef _MSC_VER
   iconv_t conv;
+#endif 
   void *shift_jis_buffer;
 };
 
 static struct app *create_app(struct app *self, struct stream *in) {
   self->in = in;
+#ifndef _MSC_VER
   self->conv = iconv_open("utf-8", "shift-jis");
   assert(self->conv != (iconv_t)-1);
+ #endif
   self->shift_jis_buffer = NULL;
 
   return self;
@@ -146,7 +153,7 @@ mec_mr3_aligned_realloc(struct mec_mr3_item_data *data, size_t size) {
   return data;
 }
 
-static inline bool is_aligned(const void *restrict pointer, size_t byte_count) {
+static inline bool is_aligned(const void * pointer, size_t byte_count) {
   // https://stackoverflow.com/questions/1898153/how-to-determine-if-memory-is-aligned
   return (uintptr_t)pointer % byte_count == 0;
 }
@@ -241,6 +248,7 @@ static bool print_iso(void *ptr, size_t size, size_t nmemb, struct app *self) {
       char *out = dest_str;
       size_t inbytes = b19.len4;
       size_t outbytes = sizeof dest_str;
+#ifndef _MSC_VER
       if (iconv(self->conv, &gbk_str, &inbytes, &out, &outbytes) ==
           (size_t)-1) {
         dump2file(gbk_str, inbytes);
@@ -249,6 +257,9 @@ static bool print_iso(void *ptr, size_t size, size_t nmemb, struct app *self) {
         assert(0);
       }
       dest_str[sizeof dest_str - outbytes] = 0;
+#else
+      strcpy(dest_str, "FIXME: iconv support");
+#endif
       // printf("{%.*s : %.*s}", 9, b19.iso, (int)outbytes, dest_str);
       printf("{%.*s : %s}", 9, b19.iso, dest_str);
     }
@@ -398,6 +409,7 @@ static bool print_shift_jis(void *ptr, size_t size, size_t nmemb,
     char *out = dest_str;
     size_t inbytes = nmemb;
     size_t outbytes = nmemb * 2;
+#ifndef _MSC_VER
     if (iconv(self->conv, &gbk_str, &inbytes, &out, &outbytes) == (size_t)-1) {
       dump2file(gbk_str, inbytes);
       printf("[%.*s]", (int)nmemb, str);
@@ -405,6 +417,9 @@ static bool print_shift_jis(void *ptr, size_t size, size_t nmemb,
       assert(0);
     }
     dest_str[nmemb * 2 - outbytes] = 0;
+#else
+    strcpy(dest_str, "FIXME: iconv support");
+#endif
     // printf("[%.*s]", (int)outbytes, dest_str);
     printf("[%s]", dest_str);
   }
@@ -667,7 +682,9 @@ bool mec_mr3_print(const void *input, size_t len) {
   }
   // release memory:
   free(data.buffer);
+#ifndef _MSC_VER
   iconv_close(self->conv);
+#endif
   free(self->shift_jis_buffer);
   if (!good)
     return false;
