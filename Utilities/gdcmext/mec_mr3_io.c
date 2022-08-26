@@ -153,7 +153,7 @@ mec_mr3_aligned_realloc(struct mec_mr3_item_data *data, size_t size) {
   return data;
 }
 
-static inline bool is_aligned(const void * pointer, size_t byte_count) {
+static bool is_aligned(const void * pointer, size_t byte_count) {
   // https://stackoverflow.com/questions/1898153/how-to-determine-if-memory-is-aligned
   return (uintptr_t)pointer % byte_count == 0;
 }
