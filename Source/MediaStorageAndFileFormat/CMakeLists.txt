@@ -110,6 +110,8 @@ set(MSFF_SRCS
   list(APPEND MSFF_SRCS
     ${GDCM_SOURCE_DIR}/Utilities/gdcmext/csa.c
     ${GDCM_SOURCE_DIR}/Utilities/gdcmext/mec_mr3.c
+    ${GDCM_SOURCE_DIR}/Utilities/gdcmext/mec_mr3_io.c
+    ${GDCM_SOURCE_DIR}/Utilities/gdcmext/mec_mr3_dict.c
   )
 
 # Do the proper thing when building static...if only there was configured
