@@ -2,6 +2,7 @@
 # MSFF
 set(MSFF_SRCS
   gdcmEmptyMaskGenerator.cxx
+  gdcmMEC_MR3.cxx
   gdcmEquipmentManufacturer.cxx
   gdcmFileStreamer.cxx
   gdcmCleaner.cxx
