@@ -11,7 +11,6 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-
 #include "mec_mr3_dict.h"
 
 #include <assert.h>
@@ -46,6 +45,8 @@ static const struct mec_mr3_dict dict[] = {
     {0x01, 0x000055fe, 0x00000300, ""},                          //
     {0x01, 0x000055ff, 0x00000100, ""},                          //
     {0x01, 0x00005601, 0x00000300, "Study Description"},         //
+    {0x01, 0x00005602, 0x00000300, ""},                          //
+    {0x01, 0x00005603, 0x00000100, ""},                          //
     {0x01, 0x00005604, 0xff000400, ""},                          //
     {0x01, 0x00005606, 0x00000300, "Institution Name"},          //
     {0x01, 0x0000560a, 0xff002c00, "Patient Age"},               //
@@ -58,9 +59,11 @@ static const struct mec_mr3_dict dict[] = {
     {0x01, 0x00005613, 0xff002c00, ""},                          //
     {0x01, 0x00005614, 0xff002c00, ""},                          //
     {0x01, 0x00005616, 0xff002c00, "Study Description"},         //
+    {0x01, 0x00005617, 0xff002c00, ""},                          //
     {0x01, 0x00005618, 0xff002c00, "Institution Name"},          //
     {0x01, 0x00005619, 0xff002c00, ""},                          //
     {0x01, 0x0000561a, 0x00000e00, "Study DateTime"},            //
+    {0x01, 0x0000561b, 0x00000e00, "Study Date"},                //
     {0x01, 0x000059d8, 0xff002400, ""},                          //
     {0x01, 0x00006d61, 0xff002c00, "Requested Procedure ID"},    //
     {0x01, 0x00006d62, 0xff002c00, ""},                          //
@@ -95,6 +98,7 @@ static const struct mec_mr3_dict dict[] = {
     {0x02, 0x00000007, 0xfff00200, ""},                                       //
     {0x02, 0x0000000b, 0xfff00200, ""},                                       //
     {0x02, 0x0000006e, 0xff002400, ""},                                       //
+    {0x02, 0x00000070, 0xff002400, ""}, //
     {0x02, 0x00001006, 0xff002800, ""},                                       //
     {0x02, 0x00001007, 0xff002800, ""},                                       //
     {0x02, 0x000017d4, 0xff002a00, ""},                                       //
@@ -533,6 +537,7 @@ static const struct mec_mr3_dict dict[] = {
     {0x02, 0x0000affc, 0xff002400, ""},                                       //
     {0x02, 0x0000affd, 0xff002400, ""},                                       //
     {0x02, 0x0000afff, 0xff002200, ""},                                       //
+    {0x02, 0x0000b002, 0xff002400, ""}, //
     {0x02, 0x0000b004, 0xff002400, ""},                                       //
     {0x02, 0x0000b005, 0xff002400, ""},                                       //
     {0x02, 0x0000b006, 0x00000500, ""},                                       //
@@ -739,8 +744,10 @@ static const struct mec_mr3_dict dict[] = {
     {0x05, 0x0000006b, 0xff002800, ""},                                       //
     {0x05, 0x0000006c, 0xff002800, ""},                                       //
     {0x05, 0x00001bc3, 0xff002200, ""},                                       //
+    {0x05, 0x00005603, 0x00000100, ""},                                       //
     {0x05, 0x0000a819, 0xff002400, ""},                                       //
     {0x05, 0x0000fdea, 0xff002400, ""},                                       //
+    {0x05, 0x0002bf20, 0xff002a00, ""},                                       //
     {0x05, 0x0002c6f0, 0x00000100, ""},                                       //
     {0x05, 0x0002d691, 0xff002800, "Slice Location (/1000)"},                 //
     {0x05, 0x0002d695, 0xff002400, "Instance Number"},                        //
