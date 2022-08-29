@@ -53,7 +53,7 @@ struct app {
   struct stream *in;
 #ifndef _MSC_VER
   iconv_t conv;
-#endif 
+#endif
   void *shift_jis_buffer;
 };
 
@@ -62,7 +62,7 @@ static struct app *create_app(struct app *self, struct stream *in) {
 #ifndef _MSC_VER
   self->conv = iconv_open("utf-8", "shift-jis");
   assert(self->conv != (iconv_t)-1);
- #endif
+#endif
   self->shift_jis_buffer = NULL;
 
   return self;
@@ -75,9 +75,8 @@ static void setup_buffer(struct app *self, const void *input, size_t len) {
   self->in->read = stream_read;
 }
 
-#define ERROR_RETURN(X, Y)                                                     \
-  if ((X) != (Y))                                                              \
-  return false
+#define ERROR_RETURN(X, Y) \
+  if ((X) != (Y)) return false
 
 static size_t fread_mirror(void *ptr, size_t size, size_t nmemb,
                            struct app *self) {
@@ -93,8 +92,7 @@ static size_t fread_mirror(void *ptr, size_t size, size_t nmemb,
 
 static bool write_trailer(struct app *self) {
   assert(self->in->cur <= self->in->end);
-  if (self->in->cur == self->in->end)
-    return true;
+  if (self->in->cur == self->in->end) return true;
   // else it is missing one byte (nul byte):
   char padding;
   size_t s = fread_mirror(&padding, sizeof padding, 1, self);
@@ -112,7 +110,7 @@ struct mec_mr3_info {
 struct mec_mr3_item_data {
   uint32_t len;
   void *buffer;
-  size_t size; // aligned/realloc implementation detail
+  size_t size;  // aligned/realloc implementation detail
 };
 
 static const unsigned char magic2[] = {0, 0, 0, 0, 0, 0, 0, 0, 0xc, 0,
@@ -123,8 +121,10 @@ static bool read_info(struct app *self, const uint8_t group,
   // read key and type at once:
   size_t s = fread_mirror(info, sizeof *info, 1, self);
   ERROR_RETURN(s, 1);
+#ifdef MEC_MR3_IO_DEBUG
   bool found = check_mec_mr3_info(group, info->key, info->type);
   ERROR_RETURN(found, true);
+#endif
 
   return true;
 }
@@ -137,10 +137,9 @@ static void *aligned_alloc_impl(size_t alignment, size_t size) {
 #endif
 }
 
-static struct mec_mr3_item_data *
-mec_mr3_aligned_realloc(struct mec_mr3_item_data *data, size_t size) {
-  if (!data)
-    return NULL;
+static struct mec_mr3_item_data *mec_mr3_aligned_realloc(
+    struct mec_mr3_item_data *data, size_t size) {
+  if (!data) return NULL;
   // fast path
   if (size <= data->size) {
     return data;
@@ -148,16 +147,14 @@ mec_mr3_aligned_realloc(struct mec_mr3_item_data *data, size_t size) {
   // else need to reallocate
   const size_t guesstimate = size < 4096 ? 4096 : 2 * size;
   void *buffer = aligned_alloc_impl(64u, guesstimate);
-  if (!buffer)
-    return NULL;
-  if (data->buffer)
-    free(data->buffer);
+  if (!buffer) return NULL;
+  if (data->buffer) free(data->buffer);
   data->buffer = buffer;
   data->size = guesstimate;
   return data;
 }
 
-static bool is_aligned(const void * pointer, size_t byte_count) {
+static bool is_aligned(const void *pointer, size_t byte_count) {
   // https://stackoverflow.com/questions/1898153/how-to-determine-if-memory-is-aligned
   return (uintptr_t)pointer % byte_count == 0;
 }
@@ -189,21 +186,25 @@ static bool read_data(struct app *self, const uint8_t group,
 
 enum Type {
   ISO_8859_1_STRING =
-      0x00000300, // ASCII string / or struct with 'ISO-8859-1' marker
-  FLOAT32_VM2N = 0x00000500, // float/32bits VM:2n
-  FLOAT32_VM3N = 0x00000600, // float/32bits VM:3n
-  DATETIME = 0x00000e00,     // Date/Time stored as ASCII
-  STRUCT_136 = 0x001f4100, // Fixed struct 136 bytes (struct with ASCII strings)
-  STRUCT_436 = 0x001f4300, // Fixed struct 436 bytes (struct with ASCII strings)
-  STRUCT_516 = 0x001f4400, // Fixed struct 516 bytes (struct with ASCII strings)
-  STRUCT_325 = 0x001f4600, // Fixed struct 325 bytes (struct with ASCII strings)
-  BOOL_04 = 0xff000400,    // bool/32bits
-  FLOAT32_VM1 = 0xff000800,      // float/32bits
-  INT32_VM1N = 0xff002400,       // int32_t (signed)
-  FLOAT32_VM1N = 0xff002800,     // float/32bits
-  FLOAT64_VM1 = 0xff002900,      // float/64bits
-  BOOL_2A = 0xff002a00,          // bool/32bits
-  SHIFT_JIS_STRING = 0xff002c00, // SHIFT-JIS string
+      0x00000300,  // ASCII string / or struct with 'ISO-8859-1' marker
+  FLOAT32_VM2N = 0x00000500,  // float/32bits VM:2n
+  FLOAT32_VM3N = 0x00000600,  // float/32bits VM:3n
+  DATETIME = 0x00000e00,      // Date/Time stored as ASCII
+  STRUCT_136 =
+      0x001f4100,  // Fixed struct 136 bytes (struct with ASCII strings)
+  STRUCT_436 =
+      0x001f4300,  // Fixed struct 436 bytes (struct with ASCII strings)
+  STRUCT_516 =
+      0x001f4400,  // Fixed struct 516 bytes (struct with ASCII strings)
+  STRUCT_325 =
+      0x001f4600,        // Fixed struct 325 bytes (struct with ASCII strings)
+  UINT32_VM1 = 0xff000400,  // uint32_t, range [0, 4]
+  FLOAT32_VM1 = 0xff000800,       // float/32bits
+  INT32_VM1N = 0xff002400,        // int32_t (signed)
+  FLOAT32_VM1N = 0xff002800,      // float/32bits
+  FLOAT64_VM1 = 0xff002900,       // float/64bits
+  BOOL_2A = 0xff002a00,           // bool/32bits
+  SHIFT_JIS_STRING = 0xff002c00,  // SHIFT-JIS string
 };
 
 struct buffer19 {
@@ -234,17 +235,14 @@ static bool print_iso(void *ptr, size_t size, size_t nmemb, struct app *self) {
   if (nmemb >= sizeof magic && memcmp(ptr, magic, sizeof(magic)) == 0) {
     // iso
     struct buffer19 b19;
-    if (nmemb < sizeof b19)
-      return 0;
+    if (nmemb < sizeof b19) return 0;
     memcpy(&b19, ptr, sizeof b19);
     if (b19.sig2 != 0x1 || b19.sig3 != 0x0 || b19.sig4 != 0x2 ||
         b19.sig5 != 0x0)
       return 0;
     const size_t diff = nmemb - sizeof b19;
-    if (b19.len2 != nmemb - 4 || b19.len3 != 9 || b19.len4 != diff)
-      return 0;
-    if (strncmp(b19.iso, "ISO8859-1", 9) != 0)
-      return 0;
+    if (b19.len2 != nmemb - 4 || b19.len3 != 9 || b19.len4 != diff) return 0;
+    if (strncmp(b19.iso, "ISO8859-1", 9) != 0) return 0;
     char *str = (char *)ptr + sizeof b19;
     {
       char *gbk_str = str;
@@ -298,8 +296,9 @@ typedef char str64[64 + 1];
 
 struct buffer136 {
   uint32_t zero1;
-  str64 uid1; // Detached Study Management SOP Class (1.2.840.10008.3.1.2.3.1) ?
-  str64 uid2; // 1.2.840.113745.101000.1098000.X.Y.Z
+  str64
+      uid1;  // Detached Study Management SOP Class (1.2.840.10008.3.1.2.3.1) ?
+  str64 uid2;  // 1.2.840.113745.101000.1098000.X.Y.Z
   uint16_t zero2;
 };
 
@@ -312,7 +311,7 @@ void print_buffer136(struct buffer136 *b136) {
 struct buffer436 {
   uint32_t zero;
   char iver[0x45];
-  char buf3[0x100]; // phi
+  char buf3[0x100];  // phi
   str64 buf4;
   str16 buf5;
   char modality[0x15];
@@ -330,17 +329,17 @@ static void print_buffer436(struct buffer436 *b436) {
          strcmp(b436->iver, vers3) == 0 || strcmp(b436->iver, vers4) == 0);
 #endif
   assert(strcmp(b436->modality, "MR") == 0);
-  assert(b436->val == 1 || b436->val == 3);
+  assert(b436->val == 1 || b436->val == 3 || b436->val == 4);
   printf("{%u;%s;%s;%s;%s;%s;%u}", b436->zero, b436->iver, b436->buf3,
          b436->buf4, b436->buf5, b436->modality, b436->val);
 }
 
 struct buffer516 {
-  str64 zero; // aka 'none'
+  str64 zero;  // aka 'none'
   char buf2[0x15];
-  char buf3[0x100]; // phi
+  char buf3[0x100];  // phi
   str16 buf4;
-  str64 buf5; // Study Instance UID
+  str64 buf5;  // Study Instance UID
   str64 buf6;
   uint32_t bools[6];
 };
@@ -368,8 +367,7 @@ static void print_buffer325(struct buffer325 *b325) {
   int c;
   printf("{");
   for (c = 0; c < 5; ++c) {
-    if (c)
-      printf(";");
+    if (c) printf(";");
     printf("%s", b325->array[c]);
   }
   printf("}");
@@ -377,7 +375,6 @@ static void print_buffer325(struct buffer325 *b325) {
 
 static bool print_struct(void *ptr, size_t size, size_t nmemb,
                          struct app *self) {
-
   (void)self;
   assert(size == 1);
   const size_t s = nmemb;
@@ -398,7 +395,7 @@ static bool print_struct(void *ptr, size_t size, size_t nmemb,
     memcpy(&b325, ptr, nmemb);
     print_buffer325(&b325);
   } else {
-    assert(0); // programmer error
+    assert(0);  // programmer error
     return 0;
   }
   return true;
@@ -439,8 +436,7 @@ static void print_int(const int32_t *buffer, int len) {
   int i;
   printf("[");
   for (i = 0; i < len / m; i++) {
-    if (i)
-      printf(",");
+    if (i) printf(",");
     int32_t cur = -1;
     memcpy(&cur, buffer + i, sizeof cur);
     printf("%d", cur);
@@ -455,8 +451,7 @@ static void print_float(const float *buffer, int len) {
   int i;
   printf("[");
   for (i = 0; i < len / m; i++) {
-    if (i)
-      printf(",");
+    if (i) printf(",");
     float cur = -1;
     memcpy(&cur, buffer + i, sizeof cur);
     assert(isfinite(cur) && !isnan(cur));
@@ -472,8 +467,7 @@ static void print_double(const double *buffer, int len) {
   int i;
   printf("[");
   for (i = 0; i < len / m; i++) {
-    if (i)
-      printf(",");
+    if (i) printf(",");
     const double cur = buffer[i];
     assert(isfinite(cur) && !isnan(cur));
     printf("%g", cur);
@@ -545,6 +539,19 @@ static bool print_float64(void *ptr, size_t size, size_t nmemb,
   return true;
 }
 
+static bool print_uint32(void *ptr, size_t size, size_t nmemb,
+                         struct app *self) {
+  assert(size == 1);
+  assert(is_aligned(ptr, 4));
+  (void)self;
+  assert(nmemb == 4);
+  uint32_t u;
+  memcpy(&u, ptr, nmemb);
+  assert(u == 0x0 || u == 0x1 || u == 0x4);
+  printf("%u", u);
+  return true;
+}
+
 static bool print_bool32(void *ptr, size_t size, size_t nmemb,
                          struct app *self) {
   assert(size == 1);
@@ -553,12 +560,8 @@ static bool print_bool32(void *ptr, size_t size, size_t nmemb,
   assert(nmemb == 4);
   uint32_t u;
   memcpy(&u, ptr, nmemb);
-  assert(u == 0x0 || u == 0x1);
-#if 0
-  printf("%u", u);
-#else
+  assert(u == 0x0 || u == 0x1 );
   printf("%s", u ? "true" : "false");
-#endif
   return true;
 }
 
@@ -576,51 +579,58 @@ static bool print(struct app *self, const uint8_t group,
          (info->type & 0x00ffff00) >> 8);
   // print data:
   switch (info->type) {
-  case ISO_8859_1_STRING:
-    ret = print_iso(data->buffer, 1, data->len, self);
-    break;
-  case FLOAT32_VM2N:
-    ret = print_float32_vm2n(data->buffer, 1, data->len, self);
-    break;
-  case FLOAT32_VM3N:
-    ret = print_float32_vm3n(data->buffer, 1, data->len, self);
-    break;
-  case DATETIME:
-    ret = print_datetime(data->buffer, 1, data->len, self);
-    break;
-  case STRUCT_136:
-  case STRUCT_436:
-  case STRUCT_516:
-  case STRUCT_325:
-    ret = print_struct(data->buffer, 1, data->len, self);
-    break;
-  case SHIFT_JIS_STRING:
-    ret = print_shift_jis(data->buffer, 1, data->len, self);
-    break;
-  case FLOAT32_VM1:
-    ret = print_float32(data->buffer, 1, data->len, self);
-    break;
-  case INT32_VM1N:
-    ret = print_int32(data->buffer, 1, data->len, self);
-    break;
-  case FLOAT32_VM1N:
-    ret = print_float32_vm1n(data->buffer, 1, data->len, self);
-    break;
-  case FLOAT64_VM1:
-    ret = print_float64(data->buffer, 1, data->len, self);
-    break;
-  case BOOL_04:
-  case BOOL_2A:
-    ret = print_bool32(data->buffer, 1, data->len, self);
-    break;
-  default:
-    printf("|NotImplemented|");
-    ret = true;
+    case ISO_8859_1_STRING:
+      ret = print_iso(data->buffer, 1, data->len, self);
+      break;
+    case FLOAT32_VM2N:
+      ret = print_float32_vm2n(data->buffer, 1, data->len, self);
+      break;
+    case FLOAT32_VM3N:
+      ret = print_float32_vm3n(data->buffer, 1, data->len, self);
+      break;
+    case DATETIME:
+      ret = print_datetime(data->buffer, 1, data->len, self);
+      break;
+    case STRUCT_136:
+    case STRUCT_436:
+    case STRUCT_516:
+    case STRUCT_325:
+      ret = print_struct(data->buffer, 1, data->len, self);
+      break;
+    case SHIFT_JIS_STRING:
+      ret = print_shift_jis(data->buffer, 1, data->len, self);
+      break;
+    case FLOAT32_VM1:
+      ret = print_float32(data->buffer, 1, data->len, self);
+      break;
+    case INT32_VM1N:
+      ret = print_int32(data->buffer, 1, data->len, self);
+      break;
+    case FLOAT32_VM1N:
+      ret = print_float32_vm1n(data->buffer, 1, data->len, self);
+      break;
+    case FLOAT64_VM1:
+      ret = print_float64(data->buffer, 1, data->len, self);
+      break;
+    case UINT32_VM1:
+      ret = print_uint32(data->buffer, 1, data->len, self);
+      break;
+    case BOOL_2A:
+      ret = print_bool32(data->buffer, 1, data->len, self);
+      break;
+    default:
+      printf("|NotImplemented|");
+      ret = true;
   }
   // print key name
-  printf(" # %u,%u %s", data->len, mult, name);
+  if (!name) {
+    static char buf[512];
+    snprintf(buf, sizeof buf, "Missing: {0x%02x, 0x%08x, 0x%08x, \"\"}, //",
+             group, info->key, info->type);
+    name = buf;
+  }
+  printf(" # %u,%u %s\n", data->len, mult, name);
 
-  printf("\n");
   return ret;
 }
 
@@ -639,8 +649,7 @@ static bool read_group(struct app *self, uint8_t group, uint32_t nitems,
 }
 
 bool mec_mr3_print(const void *input, size_t len) {
-  if (!input)
-    return false;
+  if (!input) return false;
   struct stream sin;
   struct app a;
   struct app *self = create_app(&a, &sin);
@@ -696,8 +705,7 @@ bool mec_mr3_print(const void *input, size_t len) {
   iconv_close(self->conv);
 #endif
   free(self->shift_jis_buffer);
-  if (!good)
-    return false;
+  if (!good) return false;
 
   // write trailer:
   if (!write_trailer(self)) {
@@ -705,7 +713,7 @@ bool mec_mr3_print(const void *input, size_t len) {
   }
 
   // make sure the whole input was processed:
-  assert(self->in->cur <= self->in->end); // programmer error
+  assert(self->in->cur <= self->in->end);  // programmer error
   if (self->in->cur < self->in->end) {
     return false;
   }
