@@ -147,8 +147,8 @@ static struct mec_mr3_item_data *mec_mr3_aligned_realloc(
   // else need to reallocate
   const size_t guesstimate = size < 4096 ? 4096 : 2 * size;
   void *buffer = aligned_alloc_impl(64u, guesstimate);
-  if (!buffer) return NULL;
   if (data->buffer) free(data->buffer);
+  if (!buffer) return NULL;
   data->buffer = buffer;
   data->size = guesstimate;
   return data;
@@ -202,7 +202,7 @@ enum Type {
       0x00000300,  // ASCII string / or struct with 'ISO-8859-1' marker
   FLOAT32_VM2N = 0x00000500,  // float/32bits VM:2n
   FLOAT32_VM3N = 0x00000600,  // float/32bits VM:3n
-  DATETIME = 0x00000e00,      // Date/Time stored as ASCII
+  DATETIME = 0x00000e00,      // Date/Time stored as ASCII VM:1
   STRUCT_136 =
       0x001f4100,  // Fixed struct 136 bytes (struct with ASCII strings)
   STRUCT_436 =
@@ -211,12 +211,12 @@ enum Type {
       0x001f4400,  // Fixed struct 516 bytes (struct with ASCII strings)
   STRUCT_325 =
       0x001f4600,  // Fixed struct 325 bytes (struct with ASCII strings)
-  UINT32_VM1 = 0xff000400,        // uint32_t, range [0, 4]
-  FLOAT32_VM1 = 0xff000800,       // float/32bits
-  INT32_VM1N = 0xff002400,        // int32_t (signed)
-  FLOAT32_VM1N = 0xff002800,      // float/32bits
-  FLOAT64_VM1 = 0xff002900,       // float/64bits
-  BOOL_2A = 0xff002a00,           // bool/32bits
+  UINT32_VM1 = 0xff000400,        // uint32_t, range [0, 4] VM:1
+  FLOAT32_VM1 = 0xff000800,       // float/32bits VM:1
+  INT32_VM1N = 0xff002400,        // int32_t (signed) VM:1n
+  FLOAT32_VM1N = 0xff002800,      // float/32bits VM:1n
+  FLOAT64_VM1 = 0xff002900,       // float/64bits VM:1
+  BOOL32_VM1 = 0xff002a00,        // bool/32bits VM:1
   SHIFT_JIS_STRING = 0xff002c00,  // SHIFT-JIS string
 };
 
@@ -332,15 +332,15 @@ struct buffer436 {
 };
 
 static void print_buffer436(struct buffer436 *b436) {
+#if 0
   static const char vers1[] = "TM_MR_DCM_V1.0";
   static const char vers2[] = "TM_MR_DCM_V2.0";
   static const char vers3[] = "TM_MR_DCM_V1.0_3";
   static const char vers4[] = "TM_MR1_DCM_V1.0";
-  assert(b436->zero == 0);
-#if 0
   assert(strcmp(b436->iver, vers1) == 0 || strcmp(b436->iver, vers2) == 0 ||
          strcmp(b436->iver, vers3) == 0 || strcmp(b436->iver, vers4) == 0);
 #endif
+  assert(b436->zero == 0);
   assert(strcmp(b436->modality, "MR") == 0);
 #if 0
   assert(b436->val == 0 || b436->val == 1 || b436->val == 3 || b436->val == 4);
@@ -630,7 +630,7 @@ static bool print(struct app *self, const uint8_t group,
     case UINT32_VM1:
       ret = print_uint32(data->buffer, 1, data->len, self);
       break;
-    case BOOL_2A:
+    case BOOL32_VM1:
       ret = print_bool32(data->buffer, 1, data->len, self);
       break;
     default:
@@ -663,6 +663,10 @@ static bool read_group(struct app *self, uint8_t group, uint32_t nitems,
   return good;
 }
 
+// If the number of element read is below the magic value, this indicate the
+// last group of elements:
+#define MAGIC_NUM_ELEMENTS 5
+
 bool mec_mr3_print(const void *input, size_t len) {
   if (!input) return false;
   struct stream sin;
@@ -678,19 +682,19 @@ bool mec_mr3_print(const void *input, size_t len) {
 
   uint32_t remain = 1;
   size_t s;
-  bool last_element = false;
+  bool last_group = false;
   uint8_t group = 0;
   // read until last set of group found:
-  while (!last_element && good) {
+  while (!last_group && good) {
     uint32_t nitems;
     s = fread_mirror(&nitems, sizeof nitems, 1, self);
     if (s != 1 || nitems == 0) {
       good = false;
     }
-    if (good && nitems <= 3) {
+    if (good && nitems <= MAGIC_NUM_ELEMENTS) {
       // special case to handle last element
       remain = nitems;
-      last_element = true;
+      last_group = true;
       s = fread_mirror(&nitems, sizeof nitems, 1, self);
       if (s != 1 || nitems == 0) {
         good = false;
@@ -704,7 +708,7 @@ bool mec_mr3_print(const void *input, size_t len) {
   while (good && --remain != 0) {
     uint32_t nitems;
     s = fread_mirror(&nitems, sizeof nitems, 1, self);
-    if (s != 1 || nitems <= 3) {
+    if (s != 1 || nitems <= MAGIC_NUM_ELEMENTS) {
       good = false;
     }
     ++group;

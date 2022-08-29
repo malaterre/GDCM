@@ -83,9 +83,8 @@ static void setup_buffer(struct app *self, void *output, const void *input,
   self->out->write = stream_write;
 }
 
-#define ERROR_RETURN(X, Y)                                                     \
-  if ((X) != (Y))                                                              \
-  return false
+#define ERROR_RETURN(X, Y) \
+  if ((X) != (Y)) return false
 
 static size_t fread_mirror(void *ptr, size_t size, size_t nmemb,
                            struct app *self) {
@@ -95,8 +94,7 @@ static size_t fread_mirror(void *ptr, size_t size, size_t nmemb,
   size_t s = instream->read(ptr, size, nmemb, instream);
   if (s == nmemb) {
     s = outstream->write(ptr, size, nmemb, outstream);
-    if (s == nmemb)
-      return nmemb;
+    if (s == nmemb) return nmemb;
   }
   return 0;
 }
@@ -137,17 +135,14 @@ static size_t fread_mirror_clean_iso(void *ptr, size_t size, size_t nmemb,
     if (nmemb >= sizeof magic && memcmp(ptr, magic, sizeof(magic)) == 0) {
       // iso
       struct buffer19 b19;
-      if (nmemb < sizeof b19)
-        return 0;
+      if (nmemb < sizeof b19) return 0;
       memcpy(&b19, ptr, sizeof b19);
       if (b19.sig2 != 0x1 || b19.sig3 != 0x0 || b19.sig4 != 0x2 ||
           b19.sig5 != 0x0)
         return 0;
       const size_t diff = nmemb - sizeof b19;
-      if (b19.len2 != nmemb - 4 || b19.len3 != 9 || b19.len4 != diff)
-        return 0;
-      if (strncmp(b19.iso, "ISO8859-1", 9) != 0)
-        return 0;
+      if (b19.len2 != nmemb - 4 || b19.len3 != 9 || b19.len4 != diff) return 0;
+      if (strncmp(b19.iso, "ISO8859-1", 9) != 0) return 0;
       char *str = (char *)ptr + sizeof b19;
       clean_buffer(str, b19.len4);
     } else {
@@ -155,8 +150,7 @@ static size_t fread_mirror_clean_iso(void *ptr, size_t size, size_t nmemb,
       clean_buffer(ptr, nmemb);
     }
     s = outstream->write(ptr, size, nmemb, outstream);
-    if (s == nmemb)
-      return nmemb;
+    if (s == nmemb) return nmemb;
   }
   return 0;
 }
@@ -167,7 +161,7 @@ typedef char str64[64 + 1];
 struct buffer436 {
   uint32_t zero;
   char iver[0x45];
-  char buf3[0x100]; // phi
+  char buf3[0x100];  // phi
   str64 buf4;
   str16 buf5;
   char modality[0x15];
@@ -176,7 +170,7 @@ struct buffer436 {
 struct buffer516 {
   str64 zero;
   char buf2[0x15];
-  char buf3[0x100]; // phi
+  char buf3[0x100];  // phi
   str16 buf4;
   str64 buf5;
   str64 buf6;
@@ -212,12 +206,11 @@ static size_t fread_mirror_clean_struct(void *ptr, size_t size, size_t nmemb,
       }
       memcpy(ptr, &b325, nmemb);
     } else {
-      assert(0); // programmer error
+      assert(0);  // programmer error
       return 0;
     }
     s = outstream->write(ptr, size, nmemb, outstream);
-    if (s == nmemb)
-      return nmemb;
+    if (s == nmemb) return nmemb;
   }
   return 0;
 }
@@ -231,8 +224,7 @@ static size_t fread_mirror_clean_shift_jis(void *ptr, size_t size, size_t nmemb,
   if (s == nmemb) {
     clean_buffer(ptr, nmemb);
     s = outstream->write(ptr, size, nmemb, outstream);
-    if (s == nmemb)
-      return nmemb;
+    if (s == nmemb) return nmemb;
   }
   return 0;
 }
@@ -244,8 +236,7 @@ static bool read_magic(struct app *self) {
 
 static bool write_trailer(struct app *self) {
   assert(self->in->cur <= self->in->end);
-  if (self->in->cur == self->in->end)
-    return true;
+  if (self->in->cur == self->in->end) return true;
   // else it is missing one byte (nul byte):
   char padding;
   size_t s = fread_mirror(&padding, sizeof padding, 1, self);
@@ -293,19 +284,21 @@ static const uint32_t with_phi[] = {
 static bool key_is_phi(const uint32_t val) {
   unsigned int i;
   for (i = 0; i < sizeof(with_phi) / sizeof(*with_phi); i++) {
-    if (with_phi[i] == val)
-      return true;
+    if (with_phi[i] == val) return true;
   }
   return false;
 }
 
 enum Type {
   ISO_8859_1_STRING =
-      0x00000300,          // ASCII string / or struct with 'ISO-8859-1' marker
-  STRUCT_436 = 0x001f4300, // Fixed struct 436 bytes (struct with ASCII strings)
-  STRUCT_516 = 0x001f4400, // Fixed struct 516 bytes (struct with ASCII strings)
-  STRUCT_325 = 0x001f4600, // Fixed struct 325 bytes (struct with ASCII strings)
-  SHIFT_JIS_STRING = 0xff002c00, // SHIFT-JIS string
+      0x00000300,  // ASCII string / or struct with 'ISO-8859-1' marker
+  STRUCT_436 =
+      0x001f4300,  // Fixed struct 436 bytes (struct with ASCII strings)
+  STRUCT_516 =
+      0x001f4400,  // Fixed struct 516 bytes (struct with ASCII strings)
+  STRUCT_325 =
+      0x001f4600,  // Fixed struct 325 bytes (struct with ASCII strings)
+  SHIFT_JIS_STRING = 0xff002c00,  // SHIFT-JIS string
 };
 
 static bool read_data(struct app *self, const struct mec_mr3_info *info,
@@ -327,21 +320,21 @@ static bool read_data(struct app *self, const struct mec_mr3_info *info,
   if (key_is_phi(info->key)) {
     // found a key indicating potential phi
     switch (info->type) {
-      // clean string depending on its type:
-    case ISO_8859_1_STRING:
-      s = fread_mirror_clean_iso(data->buffer, 1, data->len, self);
-      break;
-    case STRUCT_436:
-    case STRUCT_516:
-    case STRUCT_325:
-      s = fread_mirror_clean_struct(data->buffer, 1, data->len, self);
-      break;
-    case SHIFT_JIS_STRING:
-      s = fread_mirror_clean_shift_jis(data->buffer, 1, data->len, self);
-      break;
-    default:
-      assert(0); // programmer error
-      return false;
+        // clean string depending on its type:
+      case ISO_8859_1_STRING:
+        s = fread_mirror_clean_iso(data->buffer, 1, data->len, self);
+        break;
+      case STRUCT_436:
+      case STRUCT_516:
+      case STRUCT_325:
+        s = fread_mirror_clean_struct(data->buffer, 1, data->len, self);
+        break;
+      case SHIFT_JIS_STRING:
+        s = fread_mirror_clean_shift_jis(data->buffer, 1, data->len, self);
+        break;
+      default:
+        assert(0);  // programmer error
+        return false;
     }
   } else {
     s = fread_mirror(data->buffer, 1, data->len, self);
@@ -371,15 +364,13 @@ static bool read_group(struct app *self, uint32_t nitems,
 #define MAGIC_NUM_ELEMENTS 5
 
 static bool mec_mr3_scrub(void *output, const void *input, size_t len) {
-  if (!input || !output)
-    return false;
+  if (!input || !output) return false;
   struct stream sin;
   struct stream sout;
   struct app a;
   struct app *self = create_app(&a, &sin, &sout);
   setup_buffer(self, output, input, len);
-  if (!read_magic(self))
-    return false;
+  if (!read_magic(self)) return false;
 
   bool good = true;
   struct mec_mr3_info info;
@@ -420,8 +411,7 @@ static bool mec_mr3_scrub(void *output, const void *input, size_t len) {
   }
   // release memory:
   free(data.buffer);
-  if (!good)
-    return false;
+  if (!good) return false;
 
   // write trailer:
   if (!write_trailer(self)) {
@@ -429,11 +419,11 @@ static bool mec_mr3_scrub(void *output, const void *input, size_t len) {
   }
 
   // make sure the whole input was processed:
-  assert(self->in->cur <= self->in->end); // programmer error
+  assert(self->in->cur <= self->in->end);  // programmer error
   if (self->in->cur < self->in->end) {
     return false;
   }
-  assert(self->out->cur == self->out->end); // programmer error
+  assert(self->out->cur == self->out->end);  // programmer error
   return true;
 }
 
