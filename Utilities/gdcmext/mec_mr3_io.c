@@ -211,13 +211,13 @@ enum Type {
       0x001f4400,  // Fixed struct 516 bytes (struct with ASCII strings)
   STRUCT_325 =
       0x001f4600,  // Fixed struct 325 bytes (struct with ASCII strings)
-  UINT32_VM1 = 0xff000400,        // uint32_t, range [0, 4] VM:1
-  FLOAT32_VM1 = 0xff000800,       // float/32bits VM:1
-  INT32_VM1N = 0xff002400,        // int32_t (signed) VM:1n
-  FLOAT32_VM1N = 0xff002800,      // float/32bits VM:1n
-  FLOAT64_VM1 = 0xff002900,       // float/64bits VM:1
-  BOOL32_VM1 = 0xff002a00,        // bool/32bits VM:1
-  SHIFT_JIS_STRING = 0xff002c00,  // SHIFT-JIS string
+  UINT32_VM1 = 0xff000400,      // uint32_t, range [0, 4] VM:1
+  FLOAT32_VM1 = 0xff000800,     // float/32bits VM:1
+  INT32_VM1N = 0xff002400,      // int32_t (signed) VM:1n
+  FLOAT32_VM1N = 0xff002800,    // float/32bits VM:1n
+  FLOAT64_VM1 = 0xff002900,     // float/64bits VM:1
+  BOOL32_VM1 = 0xff002a00,      // bool/32bits VM:1
+  UNICODE_STRING = 0xff002c00,  // ASCII, UTF-8 or SHIFT-JIS string
 };
 
 struct buffer19 {
@@ -242,6 +242,138 @@ static void dump2file(const char *in, int len) {
   fclose(f);
 }
 
+// https://stackoverflow.com/questions/28270310/how-to-easily-detect-utf8-encoding-in-the-string
+static bool is_valid_utf8(const char *string) {
+  if (!string) return true;
+
+  const unsigned char *bytes = (const unsigned char *)string;
+  unsigned int cp;
+  int num;
+
+  while (*bytes != 0x00) {
+    if ((*bytes & 0x80) == 0x00) {
+      // U+0000 to U+007F
+      cp = (*bytes & 0x7F);
+      num = 1;
+    } else if ((*bytes & 0xE0) == 0xC0) {
+      // U+0080 to U+07FF
+      cp = (*bytes & 0x1F);
+      num = 2;
+    } else if ((*bytes & 0xF0) == 0xE0) {
+      // U+0800 to U+FFFF
+      cp = (*bytes & 0x0F);
+      num = 3;
+    } else if ((*bytes & 0xF8) == 0xF0) {
+      // U+10000 to U+10FFFF
+      cp = (*bytes & 0x07);
+      num = 4;
+    } else
+      return false;
+
+    bytes += 1;
+    for (int i = 1; i < num; ++i) {
+      if ((*bytes & 0xC0) != 0x80) return false;
+      cp = (cp << 6) | (*bytes & 0x3F);
+      bytes += 1;
+    }
+
+    if ((cp > 0x10FFFF) || ((cp >= 0xD800) && (cp <= 0xDFFF)) ||
+        ((cp <= 0x007F) && (num != 1)) ||
+        ((cp >= 0x0080) && (cp <= 0x07FF) && (num != 2)) ||
+        ((cp >= 0x0800) && (cp <= 0xFFFF) && (num != 3)) ||
+        ((cp >= 0x10000) && (cp <= 0x1FFFFF) && (num != 4)))
+      return false;
+  }
+
+  return true;
+}
+
+// return -1 to indicate error:
+static int remove_control_character_utf8(char *string) {
+  if (!string) return 0;
+
+  unsigned char *bytes = (unsigned char *)string;
+  unsigned int cp;
+  int num;
+  int modified = 0;
+
+  while (*bytes != 0x00) {
+    if ((*bytes & 0x80) == 0x00) {
+      // U+0000 to U+007F
+      cp = (*bytes & 0x7F);
+      num = 1;
+    } else if ((*bytes & 0xE0) == 0xC0) {
+      // U+0080 to U+07FF
+      cp = (*bytes & 0x1F);
+      num = 2;
+    } else if ((*bytes & 0xF0) == 0xE0) {
+      // U+0800 to U+FFFF
+      cp = (*bytes & 0x0F);
+      num = 3;
+    } else if ((*bytes & 0xF8) == 0xF0) {
+      // U+10000 to U+10FFFF
+      cp = (*bytes & 0x07);
+      num = 4;
+    } else
+      return -1;
+
+    bytes += 1;
+    for (int i = 1; i < num; ++i) {
+      if ((*bytes & 0xC0) != 0x80) return -1;
+      cp = (cp << 6) | (*bytes & 0x3F);
+      bytes += 1;
+    }
+
+    if ((cp > 0x10FFFF) || ((cp >= 0xD800) && (cp <= 0xDFFF)) ||
+        ((cp <= 0x007F) && (num != 1)) ||
+        ((cp >= 0x0080) && (cp <= 0x07FF) && (num != 2)) ||
+        ((cp >= 0x0800) && (cp <= 0xFFFF) && (num != 3)) ||
+        ((cp >= 0x10000) && (cp <= 0x1FFFFF) && (num != 4)))
+      return -1;
+
+    if (cp <= 0x001F && num == 1) {
+      bytes[-1] = '?';
+      modified++;
+    } else if (cp == 0x007F && num == 1) {
+      bytes[-1] = '?';
+      modified++;
+    }
+  }
+
+  return modified;
+}
+
+static char *shift_jis_to_utf8(char *str, size_t len, struct app *self) {
+  if (len == 0) {
+    return "";
+  }
+  const size_t guesstimate = len < 128 ? 128 : len * 2;
+  self->shift_jis_buffer = realloc(self->shift_jis_buffer, guesstimate);
+#ifndef _MSC_VER
+  char *dest_str = self->shift_jis_buffer;
+  char *in_str = str;
+  char *out_str = dest_str;
+  size_t inbytes = len;
+  size_t outbytes = guesstimate;
+  if (iconv(self->conv, &in_str, &inbytes, &out_str, &outbytes) == (size_t)-1) {
+#if 0
+    // at this point both gbk_str & inbytes have been modified, prefer original
+    // values:
+    dump2file(str, len);
+    printf("[%.*s]", (int)len, str);
+    fflush(stdout);
+#endif
+    return NULL;
+  }
+  dest_str[guesstimate - outbytes] = 0;
+#else
+  // guesstimate imply at least 128 bytes:
+  strcpy(dest_str, "No iconv support");
+#endif
+  assert(is_valid_utf8(dest_str));
+  return dest_str;
+}
+
 static bool print_iso(void *ptr, size_t size, size_t nmemb, struct app *self) {
   assert(size == 1);
   static const char magic[] = {0xdf, 0xff, 0x79};
@@ -258,24 +390,10 @@ static bool print_iso(void *ptr, size_t size, size_t nmemb, struct app *self) {
     if (strncmp(b19.iso, "ISO8859-1", 9) != 0) return 0;
     char *str = (char *)ptr + sizeof b19;
     {
-      char *gbk_str = str;
-      char dest_str[100];
-      char *out = dest_str;
-      size_t inbytes = b19.len4;
-      size_t outbytes = sizeof dest_str;
-#ifndef _MSC_VER
-      if (iconv(self->conv, &gbk_str, &inbytes, &out, &outbytes) ==
-          (size_t)-1) {
-        dump2file(gbk_str, inbytes);
-        printf("{%.*s : %.*s}", 9, b19.iso, b19.len4, str);
-        fflush(stdout);
-        assert(0);
-      }
-      dest_str[sizeof dest_str - outbytes] = 0;
-#else
-      strcpy(dest_str, "FIXME: iconv support");
-#endif
-      // printf("{%.*s : %.*s}", 9, b19.iso, (int)outbytes, dest_str);
+      char *dest_str = shift_jis_to_utf8(str, b19.len4, self);
+      assert(dest_str != NULL);
+      const int modified = remove_control_character_utf8(dest_str);
+      assert(modified == 0);
       printf("{%.*s : %s}", 9, b19.iso, dest_str);
     }
   } else {
@@ -419,27 +537,23 @@ static bool print_struct(void *ptr, size_t size, size_t nmemb,
 static bool print_shift_jis(void *ptr, size_t size, size_t nmemb,
                             struct app *self) {
   assert(size == 1);
-  char *str = ptr;
-  {
-    char *gbk_str = str;
-    self->shift_jis_buffer = realloc(self->shift_jis_buffer, nmemb * 2);
-    char *dest_str = self->shift_jis_buffer;
-    char *out = dest_str;
-    size_t inbytes = nmemb;
-    size_t outbytes = nmemb * 2;
-#ifndef _MSC_VER
-    if (iconv(self->conv, &gbk_str, &inbytes, &out, &outbytes) == (size_t)-1) {
-      dump2file(gbk_str, inbytes);
-      printf("[%.*s]", (int)nmemb, str);
-      fflush(stdout);
-      assert(0);
+  char *dest_str = shift_jis_to_utf8(ptr, nmemb, self);
+  if (dest_str) {
+    const int modified = remove_control_character_utf8(dest_str);
+    assert(modified >= 0);
+    printf("[%sSJIS : %s]", modified > 0 ? "?-" : "", dest_str);
+  } else {
+    char *str = ptr;
+    const size_t len = strlen(str);
+    assert(len == nmemb || (len + 1 == nmemb && str[len] == 0));
+    const bool ok = is_valid_utf8(str);
+    if (ok) {
+      const int modified = remove_control_character_utf8(str);
+      assert(modified >= 0);
+      printf("[%sUTF-8 : %s]", modified > 0 ? "?-" : "", str);
+    } else {
+      printf("[FIXME : %s]", str);
     }
-    dest_str[nmemb * 2 - outbytes] = 0;
-#else
-    strcpy(dest_str, "FIXME: iconv support");
-#endif
-    // printf("[%.*s]", (int)outbytes, dest_str);
-    printf("[%s]", dest_str);
   }
   return true;
 }
@@ -527,7 +641,7 @@ static bool print_float32_vm2n(void *ptr, size_t size, size_t nmemb,
   assert(size == 1);
   (void)self;
   assert((nmemb / 4) % 2 == 0);
-  assert(nmemb == 8 || nmemb == 40 || nmemb == 80);
+  assert(nmemb == 8 || nmemb == 40 || nmemb == 80 || nmemb == 88);
   // FIXME: low/high value for nmemb==40&80 makes them look like double...
   print_float(ptr, nmemb);
 
@@ -612,7 +726,7 @@ static bool print(struct app *self, const uint8_t group,
     case STRUCT_325:
       ret = print_struct(data->buffer, 1, data->len, self);
       break;
-    case SHIFT_JIS_STRING:
+    case UNICODE_STRING:
       ret = print_shift_jis(data->buffer, 1, data->len, self);
       break;
     case FLOAT32_VM1:
