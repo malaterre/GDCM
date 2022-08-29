@@ -325,8 +325,10 @@ static void print_buffer436(struct buffer436 *b436) {
   static const char vers3[] = "TM_MR_DCM_V1.0_3";
   static const char vers4[] = "TM_MR1_DCM_V1.0";
   assert(b436->zero == 0);
+#if 0
   assert(strcmp(b436->iver, vers1) == 0 || strcmp(b436->iver, vers2) == 0 ||
          strcmp(b436->iver, vers3) == 0 || strcmp(b436->iver, vers4) == 0);
+#endif
   assert(strcmp(b436->modality, "MR") == 0);
   assert(b436->val == 1 || b436->val == 3);
   printf("{%u;%s;%s;%s;%s;%s;%u}", b436->zero, b436->iver, b436->buf3,
@@ -516,8 +518,8 @@ static bool print_float32_vm2n(void *ptr, size_t size, size_t nmemb,
   assert(size == 1);
   (void)self;
   assert((nmemb / 4) % 2 == 0);
-  assert(nmemb == 8 || nmemb == 40);
-  // FIXME: low/high value for nmemb==40 makes them look like double...
+  assert(nmemb == 8 || nmemb == 40 || nmemb == 80);
+  // FIXME: low/high value for nmemb==40&80 makes them look like double...
   print_float(ptr, nmemb);
 
   return true;
