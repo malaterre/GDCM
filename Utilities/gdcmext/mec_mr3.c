@@ -366,6 +366,10 @@ static bool read_group(struct app *self, uint32_t nitems,
 
 #undef ERROR_RETURN
 
+// If the number of element read is below the magic value, this indicate the
+// last group of elements:
+#define MAGIC_NUM_ELEMENTS 5
+
 static bool mec_mr3_scrub(void *output, const void *input, size_t len) {
   if (!input || !output)
     return false;
@@ -385,18 +389,18 @@ static bool mec_mr3_scrub(void *output, const void *input, size_t len) {
 
   uint32_t remain = 1;
   size_t s;
-  bool last_element = false;
+  bool last_group = false;
   // read until last set of group found:
-  while (!last_element && good) {
+  while (!last_group && good) {
     uint32_t nitems;
     s = fread_mirror(&nitems, sizeof nitems, 1, self);
     if (s != 1 || nitems == 0) {
       good = false;
     }
-    if (good && nitems <= 3) {
+    if (good && nitems <= MAGIC_NUM_ELEMENTS) {
       // special case to handle last element
       remain = nitems;
-      last_element = true;
+      last_group = true;
       s = fread_mirror(&nitems, sizeof nitems, 1, self);
       if (s != 1 || nitems == 0) {
         good = false;
@@ -409,7 +413,7 @@ static bool mec_mr3_scrub(void *output, const void *input, size_t len) {
   while (good && --remain != 0) {
     uint32_t nitems;
     s = fread_mirror(&nitems, sizeof nitems, 1, self);
-    if (s != 1 || nitems <= 3) {
+    if (s != 1 || nitems <= MAGIC_NUM_ELEMENTS) {
       good = false;
     }
     good = good && read_group(self, nitems, &info, &data);
