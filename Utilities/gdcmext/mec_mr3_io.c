@@ -159,6 +159,19 @@ static bool is_aligned(const void *pointer, size_t byte_count) {
   return (uintptr_t)pointer % byte_count == 0;
 }
 
+enum SignatureType { SIG_UNK = 0, SIG_SIMPLE = 1, SIG_COMPLEX = 2 };
+static enum SignatureType compute_signature(const uint32_t sig[5]) {
+  // fast path: {0, 0, 12, 0, 0}
+  const int b = memcmp(sig, magic2, sizeof(magic2));
+  if (b == 0) return SIG_SIMPLE;
+  // check the complex one:
+  // [0,67937544,12,0,235348672] #20
+  // [0,226469240,12,0,235348704] #20
+  const bool sig_complex = sig[0] == 0 && sig[2] == 12 && sig[3] == 0;
+  if (sig_complex) return SIG_COMPLEX;
+  return SIG_UNK;
+}
+
 static bool read_data(struct app *self, const uint8_t group,
                       const struct mec_mr3_info *info,
                       struct mec_mr3_item_data *data) {
@@ -167,12 +180,12 @@ static bool read_data(struct app *self, const uint8_t group,
   size_t s = fread_mirror(&data->len, sizeof data->len, 1, self);
   ERROR_RETURN(s, 1);
   // in the wild we have: data->len <= 9509
-  unsigned char separator[20];
+  uint32_t separator[5];
   s = fread_mirror(separator, sizeof *separator,
                    sizeof separator / sizeof *separator, self);
   ERROR_RETURN(s, sizeof separator / sizeof *separator);
-  int b = memcmp(separator, magic2, sizeof(magic2));
-  ERROR_RETURN(b, 0);
+  const enum SignatureType sig_ok = compute_signature(separator);
+  ERROR_RETURN(sig_ok != SIG_UNK, true);
   data = mec_mr3_aligned_realloc(data, data->len);
   if (data == NULL) {
     return false;
@@ -197,8 +210,8 @@ enum Type {
   STRUCT_516 =
       0x001f4400,  // Fixed struct 516 bytes (struct with ASCII strings)
   STRUCT_325 =
-      0x001f4600,        // Fixed struct 325 bytes (struct with ASCII strings)
-  UINT32_VM1 = 0xff000400,  // uint32_t, range [0, 4]
+      0x001f4600,  // Fixed struct 325 bytes (struct with ASCII strings)
+  UINT32_VM1 = 0xff000400,        // uint32_t, range [0, 4]
   FLOAT32_VM1 = 0xff000800,       // float/32bits
   INT32_VM1N = 0xff002400,        // int32_t (signed)
   FLOAT32_VM1N = 0xff002800,      // float/32bits
@@ -329,7 +342,9 @@ static void print_buffer436(struct buffer436 *b436) {
          strcmp(b436->iver, vers3) == 0 || strcmp(b436->iver, vers4) == 0);
 #endif
   assert(strcmp(b436->modality, "MR") == 0);
-  assert(b436->val == 1 || b436->val == 3 || b436->val == 4);
+#if 0
+  assert(b436->val == 0 || b436->val == 1 || b436->val == 3 || b436->val == 4);
+#endif
   printf("{%u;%s;%s;%s;%s;%s;%u}", b436->zero, b436->iver, b436->buf3,
          b436->buf4, b436->buf5, b436->modality, b436->val);
 }
@@ -560,7 +575,7 @@ static bool print_bool32(void *ptr, size_t size, size_t nmemb,
   assert(nmemb == 4);
   uint32_t u;
   memcpy(&u, ptr, nmemb);
-  assert(u == 0x0 || u == 0x1 );
+  assert(u == 0x0 || u == 0x1);
   printf("%s", u ? "true" : "false");
   return true;
 }
