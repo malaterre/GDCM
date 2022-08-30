@@ -24,49 +24,49 @@ struct mec_mr3_dict {
 };
 
 static const struct mec_mr3_dict dict[] = {
-    {0x01, 0x00000001, 0xfff00200, ""},                          //
-    {0x01, 0x0000006d, 0xff002400, ""},                          //
-    {0x01, 0x00001004, 0xff002400, ""},                          //
-    {0x01, 0x00001005, 0xff002400, ""},                          //
-    {0x01, 0x000013ec, 0xff002900, "Imaging Frequency"},         //
-    {0x01, 0x00004e23, 0xff002c00, "Software Version"},          //
-    {0x01, 0x000055f0, 0x0007d000, ""},                          //
-    {0x01, 0x000055f1, 0x00000300, "Patient ID"},                //
-    {0x01, 0x000055f2, 0x00000300, "Patient Name 1"},            //
-    {0x01, 0x000055f3, 0x00000300, "Patient Name 2"},            //
-    {0x01, 0x000055f6, 0x00000200, ""},                          //
-    {0x01, 0x000055f7, 0xff000400, ""},                          //
-    {0x01, 0x000055f8, 0xff000800, "Patient Size (cm)"},         //
-    {0x01, 0x000055f9, 0xff000800, "Patient Weight"},            //
-    {0x01, 0x000055fa, 0x00000300, "Patient Comments"},          //
-    {0x01, 0x000055fb, 0x00000300, ""},                          //
-    {0x01, 0x000055fc, 0x00000300, "Referring Physician Name"},  //
-    {0x01, 0x000055fd, 0x00000300, ""},                          //
-    {0x01, 0x000055fe, 0x00000300, ""},                          //
-    {0x01, 0x000055ff, 0x00000100, ""},                          //
-    {0x01, 0x00005601, 0x00000300, "Study Description"},         //
-    {0x01, 0x00005602, 0x00000300, ""},                          //
-    {0x01, 0x00005603, 0x00000100, ""},                          //
-    {0x01, 0x00005604, 0xff000400, ""},                          //
-    {0x01, 0x00005606, 0x00000300, "Institution Name"},          //
-    {0x01, 0x0000560a, 0xff002c00, "Patient Age"},               //
-    {0x01, 0x0000560b, 0xff002c00, "Patient ID"},                //
-    {0x01, 0x0000560c, 0xff002c00, "Patient Name 1"},            //
-    {0x01, 0x0000560d, 0xff002c00, "Patient Name 2"},            //
-    {0x01, 0x00005610, 0xff002c00, "Patient Comments"},          //
-    {0x01, 0x00005611, 0xff002c00, ""},                          //
-    {0x01, 0x00005612, 0xff002c00, "Referring Physician Name"},  //
-    {0x01, 0x00005613, 0xff002c00, ""},                          //
-    {0x01, 0x00005614, 0xff002c00, ""},                          //
-    {0x01, 0x00005616, 0xff002c00, "Study Description"},         //
-    {0x01, 0x00005617, 0xff002c00, ""},                          //
-    {0x01, 0x00005618, 0xff002c00, "Institution Name"},          //
-    {0x01, 0x00005619, 0xff002c00, ""},                          //
-    {0x01, 0x0000561a, 0x00000e00, "Study DateTime"},            //
-    {0x01, 0x0000561b, 0x00000e00, "Study Date"},                //
-    {0x01, 0x000059d8, 0xff002400, ""},                          //
-    {0x01, 0x00006d61, 0xff002c00, "Requested Procedure ID"},    //
-    {0x01, 0x00006d62, 0xff002c00, ""},                          //
+    {0x01, 0x00000001, 0xfff00200, ""},                                 //
+    {0x01, 0x0000006d, 0xff002400, ""},                                 //
+    {0x01, 0x00001004, 0xff002400, ""},                                 //
+    {0x01, 0x00001005, 0xff002400, ""},                                 //
+    {0x01, 0x000013ec, 0xff002900, "Imaging Frequency"},                //
+    {0x01, 0x00004e23, 0xff002c00, "Software Version"},                 //
+    {0x01, 0x000055f0, 0x0007d000, ""},                                 //
+    {0x01, 0x000055f1, 0x00000300, "Patient ID"},                       //
+    {0x01, 0x000055f2, 0x00000300, "Patient Name Ideographic"},         //
+    {0x01, 0x000055f3, 0x00000300, "Patient Name Alphabetic"},          //
+    {0x01, 0x000055f6, 0x00000200, ""},                                 //
+    {0x01, 0x000055f7, 0xff000400, ""},                                 //
+    {0x01, 0x000055f8, 0xff000800, "Patient Size (cm)"},                //
+    {0x01, 0x000055f9, 0xff000800, "Patient Weight"},                   //
+    {0x01, 0x000055fa, 0x00000300, "Patient Comments"},                 //
+    {0x01, 0x000055fb, 0x00000300, "Name of Physician Reading Study"},  //
+    {0x01, 0x000055fc, 0x00000300, "Referring Physician Name"},         //
+    {0x01, 0x000055fd, 0x00000300, "Department Name (surgery)"},        //
+    {0x01, 0x000055fe, 0x00000300, "Operator Name"},                    //
+    {0x01, 0x000055ff, 0x00000100, ""},                                 //
+    {0x01, 0x00005601, 0x00000300, "Study Description"},                //
+    {0x01, 0x00005602, 0x00000300, ""},                                 //
+    {0x01, 0x00005603, 0x00000100, ""},                                 //
+    {0x01, 0x00005604, 0xff000400, ""},                                 //
+    {0x01, 0x00005606, 0x00000300, "Institution Name"},                 //
+    {0x01, 0x0000560a, 0xff002c00, "Patient Age"},                      //
+    {0x01, 0x0000560b, 0xff002c00, "Patient ID"},                       //
+    {0x01, 0x0000560c, 0xff002c00, "Patient Name Ideographic"},         //
+    {0x01, 0x0000560d, 0xff002c00, "Patient Name Alphabetic"},          //
+    {0x01, 0x00005610, 0xff002c00, "Patient Comments"},                 //
+    {0x01, 0x00005611, 0xff002c00, "Name of Physician Reading Study"},  //
+    {0x01, 0x00005612, 0xff002c00, "Referring Physician Name"},         //
+    {0x01, 0x00005613, 0xff002c00, "Department Name (surgery)"},        //
+    {0x01, 0x00005614, 0xff002c00, "Operator Name"},                    //
+    {0x01, 0x00005616, 0xff002c00, "Study Description"},                //
+    {0x01, 0x00005617, 0xff002c00, ""},                                 //
+    {0x01, 0x00005618, 0xff002c00, "Institution Name"},                 //
+    {0x01, 0x00005619, 0xff002c00, ""},                                 //
+    {0x01, 0x0000561a, 0x00000e00, "Study DateTime"},                   //
+    {0x01, 0x0000561b, 0x00000e00, "Study Date"},                       //
+    {0x01, 0x000059d8, 0xff002400, ""},                                 //
+    {0x01, 0x00006d61, 0xff002c00, "Requested Procedure ID"},           //
+    {0x01, 0x00006d62, 0xff002c00, ""},                                 //
     {0x01, 0x00006d63, 0xff002c00,
      "Procedure Code Sequence: Coding Scheme Designator"},                    //
     {0x01, 0x00006d64, 0xff002c00, "Procedure Code Sequence: Code Meaning"},  //
@@ -82,9 +82,9 @@ static const struct mec_mr3_dict dict[] = {
     {0x01, 0x00006d74, 0xff002c00, "Procedure Code Sequence: Code Meaning"},  //
     {0x01, 0x00006d75, 0xff002c00, ""},                                       //
     {0x01, 0x00006d76, 0xff002c00, "Scheduled Procedure Step Description"},   //
-    {0x01, 0x00006d77, 0xff002c00, ""},                                       //
-    {0x01, 0x00006d78, 0xff002c00, ""},                                       //
-    {0x01, 0x00006d79, 0xff002c00, ""},                                       //
+    {0x01, 0x00006d77, 0xff002c00, "Referring Physician Name"},               //
+    {0x01, 0x00006d78, 0xff002c00, "DetachedStudyManagement UID"},            //
+    {0x01, 0x00006d79, 0xff002c00, "Referenced Study Instance UID"},          //
     {0x01, 0x00006d80, 0x001f4400, ""},                                       //
     {0x01, 0x00006d81, 0x001f4000, ""},                                       //
     {0x01, 0x00006d82, 0x001f4100, ""},                                       //
@@ -622,8 +622,8 @@ static const struct mec_mr3_dict dict[] = {
     {0x02, 0x0000b406, 0xff002400, ""},                                       //
     {0x02, 0x0000b407, 0xff002400, ""},                                       //
     {0x02, 0x0000b798, 0xff002c00, ""},                                       //
-    {0x02, 0x0000b799, 0xff002c00, ""},                                       //
-    {0x02, 0x0000b79a, 0xff002c00, ""},                                       //
+    {0x02, 0x0000b799, 0xff002c00, "Coil"},                                   //
+    {0x02, 0x0000b79a, 0xff002c00, "Coil"},                                   //
     {0x02, 0x0000fa09, 0xff002800, ""},                                       //
     {0x02, 0x0000fa0b, 0xff002800, ""},                                       //
     {0x02, 0x0000fa0d, 0xff002800, ""},                                       //
@@ -797,11 +797,18 @@ static const struct mec_mr3_dict dict[] = {
     {0x08, 0x00036728, 0xff002400, ""},                                       //
     {0x08, 0x0003672a, 0xff002400, ""},                                       //
     {0x08, 0x0003672b, 0x00000600, ""},                                       //
+    {0x09, 0x00000c1d, 0xff002400, ""},                                       //
+    {0x09, 0x00036718, 0xff002400, ""},                                       //
+    {0x09, 0x00036719, 0x00000600, ""},                                       //
+    {0x09, 0x0003671a, 0x00000600, ""},                                       //
+    {0x09, 0x0003671b, 0x00000600, ""},                                       //
     {0x09, 0x0003671c, 0xff002800, ""},                                       //
     {0x09, 0x0003671e, 0xff002a00, ""},                                       //
+    {0x09, 0x00036721, 0xff002400, ""},                                       //
     {0x09, 0x00036722, 0xff002a00, ""},                                       //
     {0x09, 0x00036723, 0x00000600, ""},                                       //
     {0x09, 0x00036724, 0x00000600, ""},                                       //
+    {0x09, 0x00036725, 0xff002400, ""},                                       //
     {0x09, 0x00036727, 0xff002400, ""},                                       //
     {0x09, 0x00036728, 0xff002400, ""},                                       //
     {0x09, 0x0003672a, 0xff002400, ""},                                       //

@@ -256,8 +256,7 @@ struct mec_mr3_item_data {
   char *buffer;
 };
 
-static const unsigned char magic2[] = {0, 0, 0, 0, 0, 0, 0, 0, 0xc, 0,
-                                       0, 0, 0, 0, 0, 0, 0, 0, 0,   0};
+static const uint32_t magic2[] = {0, 0, 12, 0, 0};
 
 static bool read_info(struct app *self, struct mec_mr3_info *info) {
   // read key and type at once:
@@ -301,17 +300,30 @@ enum Type {
   SHIFT_JIS_STRING = 0xff002c00,  // SHIFT-JIS string
 };
 
+enum SignatureType { SIG_UNK = 0, SIG_SIMPLE = 1, SIG_COMPLEX = 2 };
+static enum SignatureType compute_signature(const uint32_t sig[5]) {
+  // fast path: {0, 0, 12, 0, 0}
+  const int b = memcmp(sig, magic2, sizeof(magic2));
+  if (b == 0) return SIG_SIMPLE;
+  // check the complex one:
+  // [0,67937544,12,0,235348672] #20
+  // [0,226469240,12,0,235348704] #20
+  const bool sig_complex = sig[0] == 0 && sig[2] == 12 && sig[3] == 0;
+  if (sig_complex) return SIG_COMPLEX;
+  return SIG_UNK;
+}
+
 static bool read_data(struct app *self, const struct mec_mr3_info *info,
                       struct mec_mr3_item_data *data) {
   size_t s = fread_mirror(&data->len, sizeof data->len, 1, self);
   ERROR_RETURN(s, 1);
   // in the wild we have: data->len <= 9509
-  unsigned char separator[20];
+  uint32_t separator[5];
   s = fread_mirror(separator, sizeof *separator,
                    sizeof separator / sizeof *separator, self);
   ERROR_RETURN(s, sizeof separator / sizeof *separator);
-  int b = memcmp(separator, magic2, sizeof(magic2));
-  ERROR_RETURN(b, 0);
+  const enum SignatureType sig_ok = compute_signature(separator);
+  ERROR_RETURN(sig_ok != SIG_UNK, true);
   data->buffer = (char *)realloc(data->buffer, data->len);
   if (data->len != 0 && data->buffer == NULL) {
     return false;

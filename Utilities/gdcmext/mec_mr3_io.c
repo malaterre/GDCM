@@ -113,8 +113,7 @@ struct mec_mr3_item_data {
   size_t size;  // aligned/realloc implementation detail
 };
 
-static const unsigned char magic2[] = {0, 0, 0, 0, 0, 0, 0, 0, 0xc, 0,
-                                       0, 0, 0, 0, 0, 0, 0, 0, 0,   0};
+static const uint32_t magic2[] = {0, 0, 12, 0, 0};
 
 static bool read_info(struct app *self, const uint8_t group,
                       struct mec_mr3_info *info) {
@@ -332,7 +331,7 @@ static int remove_control_character_utf8(char *string) {
       return -1;
 
     if (cp <= 0x001F && num == 1) {
-      bytes[-1] = '?';
+      bytes[-1] = '.';
       modified++;
     } else if (cp == 0x007F && num == 1) {
       bytes[-1] = '?';
@@ -398,7 +397,7 @@ static bool print_iso(void *ptr, size_t size, size_t nmemb, struct app *self) {
     }
   } else {
     // raw string buffer
-    printf("[%.*s]", (int)nmemb, (char *)ptr);
+    printf("\"%.*s\"", (int)nmemb, (char *)ptr);
   }
   return true;
 }
@@ -418,7 +417,7 @@ static bool print_datetime(void *ptr, size_t size, size_t nmemb,
            str[i] == ':');
   }
 
-  printf("[%.*s]", (int)nmemb, str);
+  printf("\"%.*s\"", (int)nmemb, str);
   return true;
 }
 
@@ -541,7 +540,7 @@ static bool print_shift_jis(void *ptr, size_t size, size_t nmemb,
   if (dest_str) {
     const int modified = remove_control_character_utf8(dest_str);
     assert(modified >= 0);
-    printf("|%sSJIS| [%s]", modified > 0 ? "?-" : "", dest_str);
+    printf("|%sSJIS| \"%s\"", modified > 0 ? "?-" : "", dest_str);
   } else {
     char *str = ptr;
     const size_t len = strlen(str);
@@ -550,7 +549,7 @@ static bool print_shift_jis(void *ptr, size_t size, size_t nmemb,
     if (ok) {
       const int modified = remove_control_character_utf8(str);
       assert(modified >= 0);
-      printf("|%sUTF-8| [%s]", modified > 0 ? "?-" : "", str);
+      printf("|%sUTF-8| \"%s\"", modified > 0 ? "?-" : "", str);
     } else {
       printf("|FIXME: Invalid SHIFT-JIS/UTF-8|");
     }
