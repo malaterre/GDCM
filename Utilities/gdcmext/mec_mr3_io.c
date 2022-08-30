@@ -26,6 +26,9 @@
 #ifndef _MSC_VER
 #include <iconv.h>
 #endif
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+#define snprintf _snprintf
+#endif
 
 struct stream {
   const void *start;
@@ -348,8 +351,8 @@ static char *shift_jis_to_utf8(char *str, size_t len, struct app *self) {
   }
   const size_t guesstimate = len < 128 ? 128 : len * 2;
   self->shift_jis_buffer = realloc(self->shift_jis_buffer, guesstimate);
-#ifndef _MSC_VER
   char *dest_str = self->shift_jis_buffer;
+#ifndef _MSC_VER
   char *in_str = str;
   char *out_str = dest_str;
   size_t inbytes = len;

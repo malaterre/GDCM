@@ -494,7 +494,7 @@ struct Data2
    os << "  UserAdress4: " << std::string(UserAdress4,32) << "\n";
    os << "  UserAdress5: " << std::string(UserAdress5,32) << "\n";
    os << "  RecDate: "     << std::string(RecDate,8) << "\n";
-   os << "  RecTime: "     << std::string(RecTime,64) << "\n";
+   os << "  RecTime: "     << std::string(RecTime,6) << "\n";
    os << "  RecPlace: "    << std::string(RecPlace,64) << "\n";
    os << "  RecSource: "   << std::string(RecSource,64) << "\n";
    os << "  DF1: "         << std::string(DF1,64) << "\n";
