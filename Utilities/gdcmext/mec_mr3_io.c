@@ -541,7 +541,7 @@ static bool print_shift_jis(void *ptr, size_t size, size_t nmemb,
   if (dest_str) {
     const int modified = remove_control_character_utf8(dest_str);
     assert(modified >= 0);
-    printf("[%sSJIS : %s]", modified > 0 ? "?-" : "", dest_str);
+    printf("|%sSJIS| [%s]", modified > 0 ? "?-" : "", dest_str);
   } else {
     char *str = ptr;
     const size_t len = strlen(str);
@@ -550,9 +550,9 @@ static bool print_shift_jis(void *ptr, size_t size, size_t nmemb,
     if (ok) {
       const int modified = remove_control_character_utf8(str);
       assert(modified >= 0);
-      printf("[%sUTF-8 : %s]", modified > 0 ? "?-" : "", str);
+      printf("|%sUTF-8| [%s]", modified > 0 ? "?-" : "", str);
     } else {
-      printf("[FIXME : %s]", str);
+      printf("|FIXME: Invalid SHIFT-JIS/UTF-8|");
     }
   }
   return true;
