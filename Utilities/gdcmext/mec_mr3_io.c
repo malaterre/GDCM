@@ -26,6 +26,9 @@
 #ifndef _MSC_VER
 #include <iconv.h>
 #endif
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+#define snprintf _snprintf
+#endif
 
 struct stream {
   const void *start;
