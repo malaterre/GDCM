@@ -449,7 +449,9 @@
 <entry group="0029" element="0067" vr="FD" vm="4" name="?" owner="CANON_MEC_MR3^10"/>
 <entry group="0029" element="0068" vr="SS" vm="1" name="?" owner="CANON_MEC_MR3^10"/>
 <entry group="0029" element="006e" vr="OB" vm="1" name="?" owner="CANON_MEC_MR3^10"/>
+<entry group="0029" element="0001" vr="SQ" vm="1" name="Other Private Data" owner="CANON_MEC_MR3"/>
 <entry group="0029" element="0089" vr="LO" vm="1" name="?" owner="CANON_MEC_MR3"/>
+<entry group="0029" element="0090" vr="OB" vm="1" name="Reversed EVRLE DataSet" owner="CANON_MEC_MR3"/>
 <entry group="700d" element="0005" vr="DS" vm="4" name="?" owner="CANON_MEC_MR3"/>
 <entry group="700d" element="000c" vr="CS" vm="1" name="?" owner="CANON_MEC_MR3"/>
 <entry group="700d" element="0011" vr="US" vm="2" name="?" owner="CANON_MEC_MR3^10"/>
