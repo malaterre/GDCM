@@ -360,6 +360,7 @@ static bool DumpToshibaDTI( const char * input, size_t len )
   ds.Read<gdcm::ExplicitDataElement,gdcm::SwapperNoOp>( is );
 
   gdcm::Printer p;
+  //gdcm::DictPrinter p;
   p.SetFile( file );
   p.SetColor( color != 0 );
   p.Print( std::cout );
@@ -373,7 +374,7 @@ static int DumpTOSHIBA_Reverse(const gdcm::DataSet & ds, const gdcm::PrivateTag 
   // (0029,0010) ?? (LO) [PMTF INFORMATION DATA ]                      # 22,1 Private Creator
   // (0029,1001) ?? (SQ) (Sequence with undefined length)              # u/l,1 ?
 
-  if( !ds.FindDataElement( tpmtf) ) return 1;
+  if( !ds.FindDataElement( tpmtf) ) return 0; // this is not an error at this point
   const gdcm::DataElement& pmtf = ds.GetDataElement( tpmtf );
   if ( pmtf.IsEmpty() ) return 1;
   gdcm::SmartPointer<gdcm::SequenceOfItems> seq = pmtf.GetValueAsSQ();
@@ -901,19 +902,35 @@ static int PrintPMTF(const std::string & filename, bool verbose)
   int ret = 0;
   {
   const gdcm::PrivateTag tpmtf(0x0029,0x1,"PMTF INFORMATION DATA");
-  const gdcm::PrivateTag tseq(0x0029,0x90,"PMTF INFORMATION DATA");
+  static const gdcm::PrivateTag &tseq = gdcm::MEC_MR3::GetPMTFInformationDataTag();
   ret += cleanup::DumpTOSHIBA_Reverse( ds, tpmtf, tseq );
   }
 
   {
   const gdcm::PrivateTag tpmtf(0x0029,0x1,"CANON_MEC_MR3");
-  const gdcm::PrivateTag tseq(0x0029,0x90,"CANON_MEC_MR3");
+  static const gdcm::PrivateTag &tseq = gdcm::MEC_MR3::GetCanonMECMR3Tag();
   ret += cleanup::DumpTOSHIBA_Reverse( ds, tpmtf, tseq );
+
+  // PAS Reproduct Information
+  const gdcm::PrivateTag tpasri(0x700d,0x19,"CANON_MEC_MR3^10");
+  if( ds.FindDataElement( tpasri) ) {
+  const gdcm::DataElement& pasri = ds.GetDataElement( tpasri );
+  if (! pasri.IsEmpty() ) {
+  const gdcm::ByteValue * bv = pasri.GetByteValue();
+  std::string s(bv->GetPointer(), bv->GetLength() );
+  std::cout << std::endl;
+  std::cout << "PAS Reproduct Information (XML)" << std::endl;
+  // header states: 
+  // <?xml version="1.0" encoding="UTF-8"?>
+  // so simply dump without further cleanup:
+  std::cout << s.c_str() << std::endl;
+  }
+  }
   }
 
   {
   const gdcm::PrivateTag tpmtf(0x0029,0x1,"TOSHIBA_MEC_MR3");
-  const gdcm::PrivateTag tseq(0x0029,0x90,"TOSHIBA_MEC_MR3");
+  static const gdcm::PrivateTag &tseq = gdcm::MEC_MR3::GetToshibaMECMR3Tag();
   ret += cleanup::DumpTOSHIBA_Reverse( ds, tpmtf, tseq );
 
   const gdcm::PrivateTag tpmtf2(0x0029,0x2,"TOSHIBA_MEC_MR3");
