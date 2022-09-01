@@ -18,6 +18,7 @@
 #include "gdcmDataSetHelper.h"
 #include "gdcmDicts.h"
 #include "gdcmEvent.h"
+#include "gdcmMEC_MR3.h"
 #include "gdcmGlobal.h"
 
 #include "gdcmext/csa.h"
@@ -638,9 +639,11 @@ struct Cleaner::impl {
     static const PrivateTag &csa1 = CSAHeader::GetCSAImageHeaderInfoTag();
     static const PrivateTag &csa2 = CSAHeader::GetCSASeriesHeaderInfoTag();
     const PrivateTag mec_mr3(0x700d, 0x08, "TOSHIBA_MEC_MR3");
-    const PrivateTag pmtf1(0x0029, 0x90, "PMTF INFORMATION DATA");
-    const PrivateTag pmtf2(0x0029, 0x90, "TOSHIBA_MEC_MR3");
-    if (pt == csa1 || pt == csa2 || pt == mec_mr3 || pt == pmtf1 || pt == pmtf2) {
+    static const PrivateTag &pmtf1 = gdcm::MEC_MR3::GetPMTFInformationDataTag();
+    static const PrivateTag &pmtf2 = gdcm::MEC_MR3::GetToshibaMECMR3Tag();
+    static const PrivateTag &pmtf3 = gdcm::MEC_MR3::GetCanonMECMR3Tag();
+
+    if (pt == csa1 || pt == csa2 || pt == mec_mr3 || pt == pmtf1 || pt == pmtf2 || pt == pmtf3) {
       scrub_privatetags.insert(pt);
       return true;
     }
@@ -1036,8 +1039,9 @@ bool Cleaner::impl::ProcessDataSet(Subject &subject, File &file, DataSet &ds,
       static const PrivateTag &csa1 = CSAHeader::GetCSAImageHeaderInfoTag();
       static const PrivateTag &csa2 = CSAHeader::GetCSASeriesHeaderInfoTag();
       const PrivateTag mec_mr3(0x700d, 0x08, "TOSHIBA_MEC_MR3");
-      const PrivateTag pmtf1(0x0029, 0x90, "PMTF INFORMATION DATA");
-      const PrivateTag pmtf2(0x0029, 0x90, "TOSHIBA_MEC_MR3");
+      static const PrivateTag &pmtf1 = gdcm::MEC_MR3::GetPMTFInformationDataTag();
+      static const PrivateTag &pmtf2 = gdcm::MEC_MR3::GetToshibaMECMR3Tag();
+      static const PrivateTag &pmtf3 = gdcm::MEC_MR3::GetCanonMECMR3Tag();
 
       if (pt == csa1) {
         const bool ret = CleanCSA(ds, de);
@@ -1052,6 +1056,9 @@ bool Cleaner::impl::ProcessDataSet(Subject &subject, File &file, DataSet &ds,
         const bool ret = CleanPMTF(ds, de);
         if (!ret) return false;
       } else if (pt == pmtf2) {
+        const bool ret = CleanPMTF(ds, de);
+        if (!ret) return false;
+      } else if (pt == pmtf3) {
         const bool ret = CleanPMTF(ds, de);
         if (!ret) return false;
       } else {
