@@ -452,13 +452,22 @@
 <entry group="0029" element="0001" vr="SQ" vm="1" name="Other Private Data" owner="CANON_MEC_MR3"/>
 <entry group="0029" element="0089" vr="LO" vm="1" name="?" owner="CANON_MEC_MR3"/>
 <entry group="0029" element="0090" vr="OB" vm="1" name="Reversed EVRLE DataSet" owner="CANON_MEC_MR3"/>
-<entry group="700d" element="0005" vr="DS" vm="4" name="?" owner="CANON_MEC_MR3"/>
-<entry group="700d" element="000c" vr="CS" vm="1" name="?" owner="CANON_MEC_MR3"/>
-<entry group="700d" element="0011" vr="US" vm="2" name="?" owner="CANON_MEC_MR3^10"/>
-<entry group="700d" element="0014" vr="SL" vm="1" name="?" owner="CANON_MEC_MR3^10"/>
-<entry group="700d" element="0016" vr="LO" vm="3" name="?" owner="CANON_MEC_MR3^10"/>
-<entry group="700d" element="0018" vr="SS" vm="1" name="?" owner="CANON_MEC_MR3^10"/>
-<entry group="700d" element="0019" vr="OB" vm="1" name="?" owner="CANON_MEC_MR3^10"/>
+<entry group="700d" element="0000" vr="DS" vm="1" name="Scale Factor" owner="CANON_MEC_MR3"/>
+<entry group="700d" element="0005" vr="DS" vm="4" name="FOV" owner="CANON_MEC_MR3"/>
+<entry group="700d" element="000c" vr="CS" vm="1" name="Receiver Gain Correction Check Flag" owner="CANON_MEC_MR3"/>
+<entry group="700d" element="0020" vr="SH" vm="1" name="Identification Flag of 3D GDC" owner="CANON_MEC_MR3"/>
+<entry group="700d" element="0010" vr="DS" vm="1" name="2nd Flip Angle [degree]" owner="CANON_MEC_MR3^10"/>
+<entry group="700d" element="0011" vr="US" vm="2" name="Acquisition Inner Matrix" owner="CANON_MEC_MR3^10"/>
+<entry group="700d" element="0012" vr="US" vm="1" name="MP2RAGE Flag" owner="CANON_MEC_MR3^10"/>
+<entry group="700d" element="0013" vr="FL" vm="1" name="Inversion efficiency of inversion recovery pulse" owner="CANON_MEC_MR3^10"/>
+<entry group="700d" element="0014" vr="SL" vm="1" name="Number of dummy shot" owner="CANON_MEC_MR3^10"/>
+<entry group="700d" element="0015" vr="FL" vm="1" name="FFE total repetition time[s]" owner="CANON_MEC_MR3^10"/>
+<entry group="700d" element="0016" vr="LO" vm="3" name="PAS Name" owner="CANON_MEC_MR3^10"/>
+<entry group="700d" element="0017" vr="LT" vm="1" name="Intended Processing" owner="CANON_MEC_MR3^10"/>
+<entry group="700d" element="0018" vr="SS" vm="1" name="Scanned Orientation IDs" owner="CANON_MEC_MR3^10"/>
+<entry group="700d" element="0019" vr="OB" vm="1" name="PAS Reproduct Information" owner="CANON_MEC_MR3^10"/>
+<entry group="700d" element="001a" vr="DS" vm="1" name="ASTAR Inversion Time" owner="CANON_MEC_MR3^10"/>
+<entry group="700d" element="001b" vr="DS" vm="1" name="Saturation Recovery Time" owner="CANON_MEC_MR3^10"/>
 <entry group="e201" element="0002" vr="US" vm="1" name="?" owner="CANON_MEC_MR3^10"/>
 <entry group="e301" element="0000" vr="SH" vm="1" name="?" owner="CANON_MEC_MR3^10"/>
 <entry group="e401" element="0000" vr="US" vm="1" name="?" owner="CANON_MEC_MR3^10"/>
