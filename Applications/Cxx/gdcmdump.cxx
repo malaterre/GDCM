@@ -901,19 +901,19 @@ static int PrintPMTF(const std::string & filename, bool verbose)
   int ret = 0;
   {
   const gdcm::PrivateTag tpmtf(0x0029,0x1,"PMTF INFORMATION DATA");
-  const gdcm::PrivateTag tseq(0x0029,0x90,"PMTF INFORMATION DATA");
+  const gdcm::PrivateTag &tseq = gdcm::MEC_MR3::GetPMTFInformationDataTag();
   ret += cleanup::DumpTOSHIBA_Reverse( ds, tpmtf, tseq );
   }
 
   {
   const gdcm::PrivateTag tpmtf(0x0029,0x1,"CANON_MEC_MR3");
-  const gdcm::PrivateTag tseq(0x0029,0x90,"CANON_MEC_MR3");
+  const gdcm::PrivateTag &tseq = gdcm::MEC_MR3::GetCanonMECMR3Tag();
   ret += cleanup::DumpTOSHIBA_Reverse( ds, tpmtf, tseq );
   }
 
   {
   const gdcm::PrivateTag tpmtf(0x0029,0x1,"TOSHIBA_MEC_MR3");
-  const gdcm::PrivateTag tseq(0x0029,0x90,"TOSHIBA_MEC_MR3");
+  const gdcm::PrivateTag &tseq = gdcm::MEC_MR3::GetToshibaMECMR3Tag();
   ret += cleanup::DumpTOSHIBA_Reverse( ds, tpmtf, tseq );
 
   const gdcm::PrivateTag tpmtf2(0x0029,0x2,"TOSHIBA_MEC_MR3");
