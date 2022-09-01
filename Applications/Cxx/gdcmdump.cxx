@@ -360,6 +360,7 @@ static bool DumpToshibaDTI( const char * input, size_t len )
   ds.Read<gdcm::ExplicitDataElement,gdcm::SwapperNoOp>( is );
 
   gdcm::Printer p;
+  //gdcm::DictPrinter p;
   p.SetFile( file );
   p.SetColor( color != 0 );
   p.Print( std::cout );
