@@ -94,15 +94,15 @@ public :
   CSAHeaderType GetFormat() const;
 
   /// Return the private tag used by SIEMENS to store the CSA Image Header
-  /// This is: PrivateTag(0x0029,0x0010,"SIEMENS CSA HEADER");
+  /// This is: PrivateTag(0x0029,0x10,"SIEMENS CSA HEADER");
   static const PrivateTag & GetCSAImageHeaderInfoTag();
 
   /// Return the private tag used by SIEMENS to store the CSA Series Header
-  /// This is: PrivateTag(0x0029,0x0020,"SIEMENS CSA HEADER");
+  /// This is: PrivateTag(0x0029,0x20,"SIEMENS CSA HEADER");
   static const PrivateTag & GetCSASeriesHeaderInfoTag();
 
   /// Return the private tag used by SIEMENS to store the CSA Data Info
-  /// This is: PrivateTag(0x0029,0x0010,"SIEMENS CSA NON-IMAGE");
+  /// This is: PrivateTag(0x0029,0x10,"SIEMENS CSA NON-IMAGE");
   static const PrivateTag & GetCSADataInfo();
 
   /// Return the CSAElement corresponding to name 'name'
