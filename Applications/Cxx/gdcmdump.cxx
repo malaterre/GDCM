@@ -374,7 +374,7 @@ static int DumpTOSHIBA_Reverse(const gdcm::DataSet & ds, const gdcm::PrivateTag 
   // (0029,0010) ?? (LO) [PMTF INFORMATION DATA ]                      # 22,1 Private Creator
   // (0029,1001) ?? (SQ) (Sequence with undefined length)              # u/l,1 ?
 
-  if( !ds.FindDataElement( tpmtf) ) return 1;
+  if( !ds.FindDataElement( tpmtf) ) return 0; // this is not an error at this point
   const gdcm::DataElement& pmtf = ds.GetDataElement( tpmtf );
   if ( pmtf.IsEmpty() ) return 1;
   gdcm::SmartPointer<gdcm::SequenceOfItems> seq = pmtf.GetValueAsSQ();
@@ -913,9 +913,9 @@ static int PrintPMTF(const std::string & filename, bool verbose)
 
   // PAS Reproduct Information
   const gdcm::PrivateTag tpasri(0x700d,0x19,"CANON_MEC_MR3^10");
-  if( !ds.FindDataElement( tpasri) ) return 1;
+  if( ds.FindDataElement( tpasri) ) {
   const gdcm::DataElement& pasri = ds.GetDataElement( tpasri );
-  if ( pasri.IsEmpty() ) return 1;
+  if (! pasri.IsEmpty() ) {
   const gdcm::ByteValue * bv = pasri.GetByteValue();
   std::string s(bv->GetPointer(), bv->GetLength() );
   std::cout << std::endl;
@@ -923,7 +923,9 @@ static int PrintPMTF(const std::string & filename, bool verbose)
   // header states: 
   // <?xml version="1.0" encoding="UTF-8"?>
   // so simply dump without further cleanup:
-  std::cout << s << std::endl;
+  std::cout << s.c_str() << std::endl;
+  }
+  }
   }
 
   {
