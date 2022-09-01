@@ -51,11 +51,14 @@
 <entry group="0019" element="0009" vr="SL" vm="1" name="?" owner="CANON_MEC_MR3^12"/>
 <entry group="0019" element="0009" vr="SL" vm="2" name="?" owner="CANON_MEC_MR3^11"/>
 <entry group="0019" element="0009" vr="SQ" vm="1" name="?" owner="CANON_MEC_MR3^13"/>
+<entry group="0019" element="000a" vr="FD" vm="3" name="?" owner="CANON_MEC_MR3^13"/>
 <entry group="0019" element="000a" vr="FL" vm="1" name="?" owner="CANON_MEC_MR3^10"/>
 <entry group="0019" element="000a" vr="SL" vm="1" name="?" owner="CANON_MEC_MR3^11"/>
 <entry group="0019" element="000a" vr="SL" vm="1" name="?" owner="CANON_MEC_MR3^12"/>
+<entry group="0019" element="000b" vr="FD" vm="1" name="?" owner="CANON_MEC_MR3^13"/>
 <entry group="0019" element="000b" vr="FL" vm="1" name="?" owner="CANON_MEC_MR3^10"/>
 <entry group="0019" element="000b" vr="SL" vm="1" name="?" owner="CANON_MEC_MR3^12"/>
+<entry group="0019" element="000c" vr="FD" vm="1" name="?" owner="CANON_MEC_MR3^13"/>
 <entry group="0019" element="000c" vr="SL" vm="1" name="?" owner="CANON_MEC_MR3^11"/>
 <entry group="0019" element="000c" vr="UL" vm="1" name="?" owner="CANON_MEC_MR3^12"/>
 <entry group="0019" element="000c" vr="US" vm="3" name="?" owner="CANON_MEC_MR3^10"/>
