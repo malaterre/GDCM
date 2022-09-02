@@ -504,11 +504,14 @@ endif()
 #-----------------------------------------------------------------------------
 # Wrapping
 if(GDCM_STANDALONE)
-  option(GDCM_WRAP_PYTHON "build python wrapping" OFF)
+  option(GDCM_WRAP_PYTHON "build gdcm/python wrapping" OFF)
+  option(VTKGDCM_WRAP_PYTHON "build vtkgdcm/python wrapping" OFF)
   option(GDCM_WRAP_PERL "build perl wrapping (experimental !)" OFF)
   option(GDCM_WRAP_PHP "build php wrapping" OFF)
-  option(GDCM_WRAP_JAVA "build java wrapping" OFF)
-  option(GDCM_WRAP_CSHARP "build csharp wrapping" OFF)
+  option(GDCM_WRAP_JAVA "build gdcm/java wrapping" OFF)
+  option(VTKGDCM_WRAP_JAVA "build vtkgdcm/java wrapping" OFF)
+  option(GDCM_WRAP_CSHARP "build gdcm/csharp wrapping" OFF)
+  option(VTKGDCM_WRAP_CSHARP "build vtkgdcm/csharp wrapping" OFF)
   mark_as_advanced(GDCM_WRAP_PHP)
   mark_as_advanced(GDCM_WRAP_PERL)
   mark_as_advanced(GDCM_USE_ACTIVIZ)
@@ -706,7 +709,7 @@ if(GDCM_STANDALONE)
         #TEST_OUTPUT_DATA_DIRECTORY "${vtkgdcm_test_data_directory_output}"
       )
 
-      if(GDCM_WRAP_PYTHON AND VTK_WRAP_PYTHON)
+      if(VTKGDCM_WRAP_PYTHON)
         find_package(PythonInterp ${VTK_PYTHON_VERSION} QUIET)
 
         vtk_module_wrap_python(
@@ -739,7 +742,7 @@ if(GDCM_STANDALONE)
           DESTINATION "${GDCM_INSTALL_PACKAGE_DIR}")
       endif()
 
-      if(GDCM_WRAP_JAVA AND VTK_WRAP_JAVA)
+      if(VTKGDCM_WRAP_JAVA)
         # TODO: this is broken, incomplete, needs lots of work
         vtk_module_wrap_java(
           MODULES         ${vtkgdcm_modules}
@@ -901,11 +904,11 @@ if(GDCM_STANDALONE) # disabled for ITK distribution of gdcm
   if(GDCM_USE_VTK)
     foreach(comp ${components})
       if( "${comp}" STREQUAL "PythonModule" )
-        if(VTK_WRAP_PYTHON)
+        if(VTK_WRAP_PYTHON AND VTKGDCM_WRAP_PYTHON)
           list(APPEND components VTK${comp})
         endif()
       elseif( "${comp}" STREQUAL "JavaModule" )
-        if(VTK_WRAP_JAVA)
+        if(VTK_WRAP_JAVA AND VTKGDCM_WRAP_JAVA)
           list(APPEND components VTK${comp})
         endif()
       else()

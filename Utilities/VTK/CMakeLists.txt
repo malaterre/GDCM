@@ -297,7 +297,7 @@ add_custom_target(VTKGDCMPHP ALL
 endif()
 endif()
 
-if(GDCM_WRAP_CSHARP)
+if(VTKGDCM_WRAP_CSHARP)
   if( "${VTK_MAJOR_VERSION}.${VTK_MINOR_VERSION}" LESS 4.5 )
     message(FATAL_ERROR "you need a newer VTK version >= 5.0")
   endif()
