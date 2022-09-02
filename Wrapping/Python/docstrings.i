@@ -156,8 +156,7 @@ gdcm::network::AAssociateRQPDU::GetNumberOfPresentationContext() const
 ";
 
 %feature("docstring")
-gdcm::network::AAssociateRQPDU::GetPresentationContext "const
-PresentationContextRQ&
+gdcm::network::AAssociateRQPDU::GetPresentationContext "PresentationContextRQ const&
 gdcm::network::AAssociateRQPDU::GetPresentationContext(SizeType i)
 const ";
 
@@ -174,8 +173,7 @@ gdcm::network::AAssociateRQPDU::GetPresentationContextByID(uint8_t i)
 const ";
 
 %feature("docstring")
-gdcm::network::AAssociateRQPDU::GetPresentationContexts "const
-PresentationContextArrayType&
+gdcm::network::AAssociateRQPDU::GetPresentationContexts "PresentationContextArrayType const&
 gdcm::network::AAssociateRQPDU::GetPresentationContexts() ";
 
 %feature("docstring")
@@ -290,7 +288,7 @@ char* gdcm::AnonymizeEvent::GetEventName() const override
 
 Return the StringName associated with the event. ";
 
-%feature("docstring")  gdcm::AnonymizeEvent::GetTag "const Tag&
+%feature("docstring")  gdcm::AnonymizeEvent::GetTag "Tag const&
 gdcm::AnonymizeEvent::GetTag() const ";
 
 %feature("docstring")  gdcm::AnonymizeEvent::MakeObject "::gdcm::Event* gdcm::AnonymizeEvent::MakeObject() const override
@@ -731,7 +729,7 @@ const ";
 gdcm::Attribute< Group, Element, TVR, TVM >::GetValue(unsigned int
 idx=0) ";
 
-%feature("docstring")  gdcm::Attribute::GetValue "const ArrayType&
+%feature("docstring")  gdcm::Attribute::GetValue "ArrayType const&
 gdcm::Attribute< Group, Element, TVR, TVM >::GetValue(unsigned int
 idx=0) const ";
 
@@ -797,7 +795,7 @@ TVR, VM::VM1 >::GetNumberOfValues() const ";
 >::GetValue() ";
 
 %feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
->::GetValue " const ArrayType& gdcm::Attribute< Group, Element, TVR,
+>::GetValue " ArrayType const& gdcm::Attribute< Group, Element, TVR,
 VM::VM1 >::GetValue() const ";
 
 %feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1
@@ -884,7 +882,7 @@ TVR, VM::VM1_n >::GetNumberOfValues() const ";
 VM::VM1_n >::GetValue(unsigned int idx=0) ";
 
 %feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1_n
->::GetValue " const ArrayType& gdcm::Attribute< Group, Element, TVR,
+>::GetValue " ArrayType const& gdcm::Attribute< Group, Element, TVR,
 VM::VM1_n >::GetValue(unsigned int idx=0) const ";
 
 %feature("docstring")  gdcm::Attribute< Group, Element, TVR, VM::VM1_n
@@ -1136,8 +1134,8 @@ UIDs::TSName gdcm::BaseQuery::GetAbstractSyntaxUID() const =0 ";
 %feature("docstring")  gdcm::BaseQuery::GetQueryDataSet "DataSet&
 gdcm::BaseQuery::GetQueryDataSet() ";
 
-%feature("docstring")  gdcm::BaseQuery::GetQueryDataSet "const
-DataSet& gdcm::BaseQuery::GetQueryDataSet() const
+%feature("docstring")  gdcm::BaseQuery::GetQueryDataSet "DataSet
+const& gdcm::BaseQuery::GetQueryDataSet() const
 
 Set/Get the internal representation of the query as a DataSet. ";
 
@@ -1690,10 +1688,10 @@ gdcm::ByteValue::Read(std::istream &is, bool readvalues=true) ";
 %feature("docstring")  gdcm::ByteValue::SetLength "void
 gdcm::ByteValue::SetLength(VL vl) override ";
 
-%feature("docstring")  gdcm::ByteValue::Write "const std::ostream&
+%feature("docstring")  gdcm::ByteValue::Write "std::ostream const&
 gdcm::ByteValue::Write(std::ostream &os) const ";
 
-%feature("docstring")  gdcm::ByteValue::Write "const std::ostream&
+%feature("docstring")  gdcm::ByteValue::Write "std::ostream const&
 gdcm::ByteValue::Write(std::ostream &os) const ";
 
 %feature("docstring")  gdcm::ByteValue::WriteBuffer "bool
@@ -2292,7 +2290,7 @@ Set/Get SyngoDT. ";
 %feature("docstring")  gdcm::CSAElement::GetValue "Value&
 gdcm::CSAElement::GetValue() ";
 
-%feature("docstring")  gdcm::CSAElement::GetValue "const Value&
+%feature("docstring")  gdcm::CSAElement::GetValue "Value const&
 gdcm::CSAElement::GetValue() const
 
 Set/Get Value (bytes array, SQ of items, SQ of fragments): ";
@@ -2302,7 +2300,7 @@ gdcm::CSAElement::GetVM() const
 
 Set/Get VM. ";
 
-%feature("docstring")  gdcm::CSAElement::GetVR "const VR&
+%feature("docstring")  gdcm::CSAElement::GetVR "VR const&
 gdcm::CSAElement::GetVR() const
 
 Set/Get VR. ";
@@ -2554,9 +2552,8 @@ gdcm::Curve::Decode(std::istream &is, std::ostream &os) ";
 %feature("docstring")  gdcm::Curve::GetAsPoints "void
 gdcm::Curve::GetAsPoints(float *array) const ";
 
-%feature("docstring")  gdcm::Curve::GetCurveDataDescriptor "const
-std::vector<unsigned short>& gdcm::Curve::GetCurveDataDescriptor()
-const ";
+%feature("docstring")  gdcm::Curve::GetCurveDataDescriptor "std::vector<unsigned short> const&
+gdcm::Curve::GetCurveDataDescriptor() const ";
 
 %feature("docstring")  gdcm::Curve::GetDataValueRepresentation "unsigned short gdcm::Curve::GetDataValueRepresentation() const ";
 
@@ -2684,7 +2681,7 @@ Get Tag. ";
 %feature("docstring")  gdcm::DataElement::GetValue "Value&
 gdcm::DataElement::GetValue() ";
 
-%feature("docstring")  gdcm::DataElement::GetValue "const Value&
+%feature("docstring")  gdcm::DataElement::GetValue "Value const&
 gdcm::DataElement::GetValue() const
 
 Set/Get Value (bytes array, SQ of items, SQ of fragments): ";
@@ -2707,7 +2704,7 @@ gdcm::DataElement::GetVL() const
 
 Get VL. ";
 
-%feature("docstring")  gdcm::DataElement::GetVR "const VR&
+%feature("docstring")  gdcm::DataElement::GetVR "VR const&
 gdcm::DataElement::GetVR() const
 
 Get VR do not set VR::SQ on bytevalue data element ";
@@ -2976,7 +2973,7 @@ Only replace a DICOM attribute when it is missing or empty. ";
 %feature("docstring")  gdcm::DataSet::Size "SizeType
 gdcm::DataSet::Size() const ";
 
-%feature("docstring")  gdcm::DataSet::Write "const std::ostream&
+%feature("docstring")  gdcm::DataSet::Write "std::ostream const&
 gdcm::DataSet::Write(std::ostream &os) const ";
 
 
@@ -3001,7 +2998,7 @@ C++ includes: gdcmDataSetEvent.h ";
 gdcm::DataSetEvent::CheckEvent(const ::gdcm::Event *e) const override
 ";
 
-%feature("docstring")  gdcm::DataSetEvent::GetDataSet "const DataSet&
+%feature("docstring")  gdcm::DataSetEvent::GetDataSet "DataSet const&
 gdcm::DataSetEvent::GetDataSet() const ";
 
 %feature("docstring")  gdcm::DataSetEvent::GetEventName "const char*
@@ -3550,18 +3547,18 @@ C++ includes: gdcmDirectory.h ";
 
 %feature("docstring")  gdcm::Directory::~Directory "gdcm::Directory::~Directory()=default ";
 
-%feature("docstring")  gdcm::Directory::GetDirectories "const
-FilenamesType& gdcm::Directory::GetDirectories() const
+%feature("docstring")  gdcm::Directory::GetDirectories "FilenamesType
+const& gdcm::Directory::GetDirectories() const
 
 Return the Directories traversed. ";
 
-%feature("docstring")  gdcm::Directory::GetFilenames "const
-FilenamesType& gdcm::Directory::GetFilenames() const
+%feature("docstring")  gdcm::Directory::GetFilenames "FilenamesType
+const& gdcm::Directory::GetFilenames() const
 
 Set/Get the file names within the directory. ";
 
-%feature("docstring")  gdcm::Directory::GetToplevel "const
-FilenameType& gdcm::Directory::GetToplevel() const
+%feature("docstring")  gdcm::Directory::GetToplevel "FilenameType
+const& gdcm::Directory::GetToplevel() const
 
 Get the name of the toplevel directory. ";
 
@@ -3920,9 +3917,7 @@ gdcm::EncapsulatedDocument::EncapsulatedDocument "gdcm::EncapsulatedDocument::En
 
 EncodingImplementation.
 
-TODO
-
-C++ includes: gdcmElement.h ";
+TODO ";
 
 
 // File: classgdcm_1_1EncodingImplementation_3_01VR_1_1VRASCII_01_4.xml
@@ -4177,7 +4172,7 @@ gdcm::File::SetHeader(const FileMetaInformation &fmi)
 
 Set File Meta Information. ";
 
-%feature("docstring")  gdcm::File::Write "const std::ostream&
+%feature("docstring")  gdcm::File::Write "std::ostream const&
 gdcm::File::Write(std::ostream &os) const
 
 Write. ";
@@ -4705,8 +4700,7 @@ char* gdcm::FilenameGenerator::GetFilename(SizeType n) const
 
 Get a particular filename (call after Generate) ";
 
-%feature("docstring")  gdcm::FilenameGenerator::GetFilenames "const
-FilenamesType& gdcm::FilenameGenerator::GetFilenames() const
+%feature("docstring")  gdcm::FilenameGenerator::GetFilenames "FilenamesType const& gdcm::FilenameGenerator::GetFilenames() const
 
 Return all filenames. ";
 
@@ -4755,7 +4749,7 @@ gdcm::FileSet::AddFile(File const &)
 
 Deprecated . Does nothing ";
 
-%feature("docstring")  gdcm::FileSet::GetFiles "const FilesType&
+%feature("docstring")  gdcm::FileSet::GetFiles "FilesType const&
 gdcm::FileSet::GetFiles() const ";
 
 %feature("docstring")  gdcm::FileSet::SetFiles "void
@@ -5030,7 +5024,7 @@ gdcm::Global::Append(const char *path)
 
 Append path at the end of the path list WARNING:  not thread safe ! ";
 
-%feature("docstring")  gdcm::Global::GetDefs "const Defs&
+%feature("docstring")  gdcm::Global::GetDefs "Defs const&
 gdcm::Global::GetDefs() const
 
 retrieve the default/internal (Part 3) You need to explicitly call
@@ -5039,7 +5033,7 @@ LoadResourcesFiles before ";
 %feature("docstring")  gdcm::Global::GetDicts "Dicts&
 gdcm::Global::GetDicts() ";
 
-%feature("docstring")  gdcm::Global::GetDicts "const Dicts&
+%feature("docstring")  gdcm::Global::GetDicts "Dicts const&
 gdcm::Global::GetDicts() const
 
 retrieve the default/internal dicts (Part 6) This dict is filled up at
@@ -5074,10 +5068,10 @@ C++ includes: gdcmGroupDict.h ";
 
 %feature("docstring")  gdcm::GroupDict::~GroupDict "gdcm::GroupDict::~GroupDict()=default ";
 
-%feature("docstring")  gdcm::GroupDict::GetAbbreviation "const
-std::string& gdcm::GroupDict::GetAbbreviation(uint16_t num) const ";
+%feature("docstring")  gdcm::GroupDict::GetAbbreviation "std::string
+const& gdcm::GroupDict::GetAbbreviation(uint16_t num) const ";
 
-%feature("docstring")  gdcm::GroupDict::GetName "const std::string&
+%feature("docstring")  gdcm::GroupDict::GetName "std::string const&
 gdcm::GroupDict::GetName(uint16_t num) const ";
 
 %feature("docstring")  gdcm::GroupDict::Size "size_t
@@ -5765,8 +5759,8 @@ Explicit call which will compute the minimal buffer length that can
 hold the whole uncompressed image as defined by Region region. 0 upon
 error ";
 
-%feature("docstring")  gdcm::ImageRegionReader::GetRegion "const
-Region& gdcm::ImageRegionReader::GetRegion() const ";
+%feature("docstring")  gdcm::ImageRegionReader::GetRegion "Region
+const& gdcm::ImageRegionReader::GetRegion() const ";
 
 %feature("docstring")  gdcm::ImageRegionReader::ReadInformation "bool
 gdcm::ImageRegionReader::ReadInformation()
@@ -6558,6 +6552,75 @@ gdcm::JPEGLSCodec::SetLossyError(int error)
 [0-3] generally ";
 
 
+// File: classgdcm_1_1JPEGXLCodec.xml
+%feature("docstring") gdcm::JPEGXLCodec "
+
+JPEG-LS.
+
+codec that implement the JPEG-LS compression this is an implementation
+of ImageCodec for JPEG-LS  It uses the CharLS JPEG-LS
+implementationhttps://github.com/team-charls/charls
+
+C++ includes: gdcmJPEGXLCodec.h ";
+
+%feature("docstring")  gdcm::JPEGXLCodec::JPEGXLCodec "gdcm::JPEGXLCodec::JPEGXLCodec() ";
+
+%feature("docstring")  gdcm::JPEGXLCodec::~JPEGXLCodec "gdcm::JPEGXLCodec::~JPEGXLCodec() override ";
+
+%feature("docstring")  gdcm::JPEGXLCodec::CanCode "bool
+gdcm::JPEGXLCodec::CanCode(TransferSyntax const &ts) const override
+
+Return whether this coder support this transfer syntax (can code it)
+";
+
+%feature("docstring")  gdcm::JPEGXLCodec::CanDecode "bool
+gdcm::JPEGXLCodec::CanDecode(TransferSyntax const &ts) const override
+
+Return whether this decoder support this transfer syntax (can decode
+it) ";
+
+%feature("docstring")  gdcm::JPEGXLCodec::Clone "ImageCodec*
+gdcm::JPEGXLCodec::Clone() const override ";
+
+%feature("docstring")  gdcm::JPEGXLCodec::Code "bool
+gdcm::JPEGXLCodec::Code(DataElement const &in, DataElement &out)
+override
+
+Code. ";
+
+%feature("docstring")  gdcm::JPEGXLCodec::Decode "bool
+gdcm::JPEGXLCodec::Decode(DataElement const &in, char *outBuffer,
+size_t inBufferLength, uint32_t inXMin, uint32_t inXMax, uint32_t
+inYMin, uint32_t inYMax, uint32_t inZMin, uint32_t inZMax) ";
+
+%feature("docstring")  gdcm::JPEGXLCodec::Decode "bool
+gdcm::JPEGXLCodec::Decode(DataElement const &is, DataElement &os)
+override
+
+Decode. ";
+
+%feature("docstring")  gdcm::JPEGXLCodec::GetBufferLength "unsigned
+long gdcm::JPEGXLCodec::GetBufferLength() const ";
+
+%feature("docstring")  gdcm::JPEGXLCodec::GetHeaderInfo "bool
+gdcm::JPEGXLCodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
+override ";
+
+%feature("docstring")  gdcm::JPEGXLCodec::GetLossless "bool
+gdcm::JPEGXLCodec::GetLossless() const ";
+
+%feature("docstring")  gdcm::JPEGXLCodec::SetBufferLength "void
+gdcm::JPEGXLCodec::SetBufferLength(unsigned long l) ";
+
+%feature("docstring")  gdcm::JPEGXLCodec::SetLossless "void
+gdcm::JPEGXLCodec::SetLossless(bool l) ";
+
+%feature("docstring")  gdcm::JPEGXLCodec::SetLossyError "void
+gdcm::JPEGXLCodec::SetLossyError(int error)
+
+[0-3] generally ";
+
+
 // File: classgdcm_1_1JSON.xml
 %feature("docstring") gdcm::JSON "C++ includes: gdcmJSON.h ";
 
@@ -6771,24 +6834,24 @@ gdcm::LookupTable::WriteBufferAsRGBA(const unsigned char *rgba)
 Write the LUT as RGBA. ";
 
 
-// File: structgdcm_1_1Scanner_1_1ltstr.xml
-%feature("docstring") gdcm::Scanner::ltstr "C++ includes:
-gdcmScanner.h ";
-
-
 // File: structgdcm_1_1Scanner2_1_1ltstr.xml
 %feature("docstring") gdcm::Scanner2::ltstr "C++ includes:
 gdcmScanner2.h ";
 
 
-// File: structgdcm_1_1StrictScanner_1_1ltstr.xml
-%feature("docstring") gdcm::StrictScanner::ltstr "C++ includes:
-gdcmStrictScanner.h ";
+// File: structgdcm_1_1Scanner_1_1ltstr.xml
+%feature("docstring") gdcm::Scanner::ltstr "C++ includes:
+gdcmScanner.h ";
 
 
 // File: structgdcm_1_1StrictScanner2_1_1ltstr.xml
 %feature("docstring") gdcm::StrictScanner2::ltstr "C++ includes:
 gdcmStrictScanner2.h ";
+
+
+// File: structgdcm_1_1StrictScanner_1_1ltstr.xml
+%feature("docstring") gdcm::StrictScanner::ltstr "C++ includes:
+gdcmStrictScanner.h ";
 
 
 // File: classgdcm_1_1Macro.xml
@@ -6913,6 +6976,14 @@ the one from OpenSSL (when GDCM_USE_SYSTEM_OPENSSL is turned ON)
 In all other cases it will return an error
 
 C++ includes: gdcmMD5.h ";
+
+
+// File: classgdcm_1_1MEC__MR3.xml
+%feature("docstring") gdcm::MEC_MR3 "
+
+Class for MEC_MR3.
+
+C++ includes: gdcmMEC_MR3.h ";
 
 
 // File: classgdcm_1_1MediaStorage.xml
@@ -8051,8 +8122,7 @@ gdcm::network::PDataTFPDU::GetNumberOfPresentationDataValues() const
 ";
 
 %feature("docstring")
-gdcm::network::PDataTFPDU::GetPresentationDataValue "const
-PresentationDataValue&
+gdcm::network::PDataTFPDU::GetPresentationDataValue "PresentationDataValue const&
 gdcm::network::PDataTFPDU::GetPresentationDataValue(SizeType i) const
 ";
 
@@ -8697,7 +8767,7 @@ gdcm::Preamble::Valid()
 
 Set Preamble to the default one. ";
 
-%feature("docstring")  gdcm::Preamble::Write "const std::ostream&
+%feature("docstring")  gdcm::Preamble::Write "std::ostream const&
 gdcm::Preamble::Write(std::ostream &os) const
 
 Write Preamble. ";
@@ -8772,8 +8842,7 @@ gdcm::network::PresentationContextAC::GetPresentationContextID() const
 "uint8_t gdcm::network::PresentationContextAC::GetReason() const ";
 
 %feature("docstring")
-gdcm::network::PresentationContextAC::GetTransferSyntax "const
-TransferSyntaxSub&
+gdcm::network::PresentationContextAC::GetTransferSyntax "TransferSyntaxSub const&
 gdcm::network::PresentationContextAC::GetTransferSyntax() const ";
 
 %feature("docstring")  gdcm::network::PresentationContextAC::Print "void gdcm::network::PresentationContextAC::Print(std::ostream &os)
@@ -8862,8 +8931,7 @@ Generate the PresentationContext array from a UID (eg.
 VerificationSOPClass) ";
 
 %feature("docstring")
-gdcm::PresentationContextGenerator::GetPresentationContexts "const
-PresentationContextArrayType&
+gdcm::PresentationContextGenerator::GetPresentationContexts "PresentationContextArrayType const&
 gdcm::PresentationContextGenerator::GetPresentationContexts() ";
 
 %feature("docstring")
@@ -8919,8 +8987,7 @@ gdcm::network::PresentationContextRQ::GetAbstractSyntax "AbstractSyntax&
 gdcm::network::PresentationContextRQ::GetAbstractSyntax() ";
 
 %feature("docstring")
-gdcm::network::PresentationContextRQ::GetAbstractSyntax "const
-AbstractSyntax&
+gdcm::network::PresentationContextRQ::GetAbstractSyntax "AbstractSyntax const&
 gdcm::network::PresentationContextRQ::GetAbstractSyntax() const ";
 
 %feature("docstring")
@@ -8938,14 +9005,12 @@ gdcm::network::PresentationContextRQ::GetTransferSyntax "TransferSyntaxSub&
 gdcm::network::PresentationContextRQ::GetTransferSyntax(SizeType i) ";
 
 %feature("docstring")
-gdcm::network::PresentationContextRQ::GetTransferSyntax "const
-TransferSyntaxSub&
+gdcm::network::PresentationContextRQ::GetTransferSyntax "TransferSyntaxSub const&
 gdcm::network::PresentationContextRQ::GetTransferSyntax(SizeType i)
 const ";
 
 %feature("docstring")
-gdcm::network::PresentationContextRQ::GetTransferSyntaxes "const
-std::vector<TransferSyntaxSub>&
+gdcm::network::PresentationContextRQ::GetTransferSyntaxes "std::vector<TransferSyntaxSub> const&
 gdcm::network::PresentationContextRQ::GetTransferSyntaxes() const ";
 
 %feature("docstring")  gdcm::network::PresentationContextRQ::Print "void gdcm::network::PresentationContextRQ::Print(std::ostream &os)
@@ -9962,27 +10027,25 @@ const char *valueref) const
 Will loop over all files and return the first file where value match
 the reference value 'valueref' ";
 
-%feature("docstring")  gdcm::Scanner::GetFilenames "const
-Directory::FilenamesType& gdcm::Scanner::GetFilenames() const ";
+%feature("docstring")  gdcm::Scanner::GetFilenames "Directory::FilenamesType const& gdcm::Scanner::GetFilenames() const ";
 
 %feature("docstring")  gdcm::Scanner::GetKeys "Directory::FilenamesType gdcm::Scanner::GetKeys() const
 
 Return the list of filename that are key in the internal map, which
 means those filename were properly parsed ";
 
-%feature("docstring")  gdcm::Scanner::GetMapping "const TagToValue&
+%feature("docstring")  gdcm::Scanner::GetMapping "TagToValue const&
 gdcm::Scanner::GetMapping(const char *filename) const
 
 Get the std::map mapping filenames to value for file 'filename'. ";
 
-%feature("docstring")  gdcm::Scanner::GetMappingFromTagToValue "const
-TagToValue& gdcm::Scanner::GetMappingFromTagToValue(Tag const &t,
-const char *value) const
+%feature("docstring")  gdcm::Scanner::GetMappingFromTagToValue "TagToValue const& gdcm::Scanner::GetMappingFromTagToValue(Tag const
+&t, const char *value) const
 
 See GetFilenameFromTagToValue(). This is simply
 GetFilenameFromTagToValue followed. ";
 
-%feature("docstring")  gdcm::Scanner::GetMappings "const MappingType&
+%feature("docstring")  gdcm::Scanner::GetMappings "MappingType const&
 gdcm::Scanner::GetMappings() const
 
 Mappings are the mapping from a particular tag to the map, mapping
@@ -10004,7 +10067,7 @@ tags) should be done, prefer the GetMapping function, and then reuse
 the TagToValue hash table. WARNING:   Tag 't' should have been added
 via AddTag() prior to the Scan() call ! ";
 
-%feature("docstring")  gdcm::Scanner::GetValues "const ValuesType&
+%feature("docstring")  gdcm::Scanner::GetValues "ValuesType const&
 gdcm::Scanner::GetValues() const
 
 Get all the values found (in lexicographic order) ";
@@ -10122,8 +10185,7 @@ const &t, const char *valueref) const
 Will loop over all files and return the first file where value match
 the reference value 'valueref' ";
 
-%feature("docstring")  gdcm::Scanner2::GetFilenames "const
-Directory::FilenamesType& gdcm::Scanner2::GetFilenames() const
+%feature("docstring")  gdcm::Scanner2::GetFilenames "Directory::FilenamesType const& gdcm::Scanner2::GetFilenames() const
 
 Return the list of filenames. ";
 
@@ -10133,24 +10195,23 @@ Return the list of filename that are key in the internal map, which
 means those filename were properly parsed ";
 
 %feature("docstring")  gdcm::Scanner2::GetMappingFromPrivateTagToValue
-"const PrivateTagToValue&
+"PrivateTagToValue const&
 gdcm::Scanner2::GetMappingFromPrivateTagToValue(PrivateTag const &pt,
 const char *value) const ";
 
 %feature("docstring")  gdcm::Scanner2::GetMappingFromPublicTagToValue
-"const PublicTagToValue&
+"PublicTagToValue const&
 gdcm::Scanner2::GetMappingFromPublicTagToValue(Tag const &t, const
 char *value) const
 
 See GetFilenameFromTagToValue(). This is simply
 GetFilenameFromTagToValue followed. ";
 
-%feature("docstring")  gdcm::Scanner2::GetPrivateMapping "const
-PrivateTagToValue& gdcm::Scanner2::GetPrivateMapping(const char
+%feature("docstring")  gdcm::Scanner2::GetPrivateMapping "PrivateTagToValue const& gdcm::Scanner2::GetPrivateMapping(const char
 *filename) const ";
 
-%feature("docstring")  gdcm::Scanner2::GetPrivateMappings "const
-PrivateMappingType& gdcm::Scanner2::GetPrivateMappings() const ";
+%feature("docstring")  gdcm::Scanner2::GetPrivateMappings "PrivateMappingType const& gdcm::Scanner2::GetPrivateMappings() const
+";
 
 %feature("docstring")  gdcm::Scanner2::GetPrivateOrderedValues "Directory::FilenamesType
 gdcm::Scanner2::GetPrivateOrderedValues(PrivateTag const &pt) const ";
@@ -10165,14 +10226,12 @@ gdcm::Scanner2::GetPrivateValues(PrivateTag const &pt) const
 Get all the values found (in lexicographic order) associated with
 PrivateTag 'pt'. ";
 
-%feature("docstring")  gdcm::Scanner2::GetPublicMapping "const
-PublicTagToValue& gdcm::Scanner2::GetPublicMapping(const char
+%feature("docstring")  gdcm::Scanner2::GetPublicMapping "PublicTagToValue const& gdcm::Scanner2::GetPublicMapping(const char
 *filename) const
 
 Get the std::map mapping filenames to value for file 'filename'. ";
 
-%feature("docstring")  gdcm::Scanner2::GetPublicMappings "const
-PublicMappingType& gdcm::Scanner2::GetPublicMappings() const
+%feature("docstring")  gdcm::Scanner2::GetPublicMappings "PublicMappingType const& gdcm::Scanner2::GetPublicMappings() const
 
 Mappings are the mapping from a particular tag to the map, mapping
 filename to value: ";
@@ -10200,7 +10259,7 @@ gdcm::Scanner2::GetPublicValues(Tag const &t) const
 Get all the values found (in lexicographic order) associated with Tag
 't'. ";
 
-%feature("docstring")  gdcm::Scanner2::GetValues "const ValuesType&
+%feature("docstring")  gdcm::Scanner2::GetValues "ValuesType const&
 gdcm::Scanner2::GetValues() const
 
 Get all the values found (in lexicographic order) ";
@@ -10253,33 +10312,29 @@ gdcm::Segment::AddSurface(SmartPointer< Surface > surface) ";
 
 %feature("docstring")  gdcm::Segment::GetAnatomicRegion "SegmentHelper::BasicCodedEntry& gdcm::Segment::GetAnatomicRegion() ";
 
-%feature("docstring")  gdcm::Segment::GetAnatomicRegion "const
-SegmentHelper::BasicCodedEntry& gdcm::Segment::GetAnatomicRegion()
-const ";
+%feature("docstring")  gdcm::Segment::GetAnatomicRegion "SegmentHelper::BasicCodedEntry const&
+gdcm::Segment::GetAnatomicRegion() const ";
 
 %feature("docstring")  gdcm::Segment::GetAnatomicRegionModifiers "BasicCodedEntryVector& gdcm::Segment::GetAnatomicRegionModifiers() ";
 
-%feature("docstring")  gdcm::Segment::GetAnatomicRegionModifiers "const BasicCodedEntryVector&
+%feature("docstring")  gdcm::Segment::GetAnatomicRegionModifiers "BasicCodedEntryVector const&
 gdcm::Segment::GetAnatomicRegionModifiers() const ";
 
 %feature("docstring")  gdcm::Segment::GetPropertyCategory "SegmentHelper::BasicCodedEntry& gdcm::Segment::GetPropertyCategory()
 ";
 
-%feature("docstring")  gdcm::Segment::GetPropertyCategory "const
-SegmentHelper::BasicCodedEntry& gdcm::Segment::GetPropertyCategory()
-const ";
+%feature("docstring")  gdcm::Segment::GetPropertyCategory "SegmentHelper::BasicCodedEntry const&
+gdcm::Segment::GetPropertyCategory() const ";
 
 %feature("docstring")  gdcm::Segment::GetPropertyType "SegmentHelper::BasicCodedEntry& gdcm::Segment::GetPropertyType() ";
 
-%feature("docstring")  gdcm::Segment::GetPropertyType "const
-SegmentHelper::BasicCodedEntry& gdcm::Segment::GetPropertyType() const
-";
+%feature("docstring")  gdcm::Segment::GetPropertyType "SegmentHelper::BasicCodedEntry const& gdcm::Segment::GetPropertyType()
+const ";
 
 %feature("docstring")  gdcm::Segment::GetPropertyTypeModifiers "BasicCodedEntryVector& gdcm::Segment::GetPropertyTypeModifiers() ";
 
-%feature("docstring")  gdcm::Segment::GetPropertyTypeModifiers "const
-BasicCodedEntryVector& gdcm::Segment::GetPropertyTypeModifiers() const
-";
+%feature("docstring")  gdcm::Segment::GetPropertyTypeModifiers "BasicCodedEntryVector const& gdcm::Segment::GetPropertyTypeModifiers()
+const ";
 
 %feature("docstring")  gdcm::Segment::GetSegmentAlgorithmName "const
 char* gdcm::Segment::GetSegmentAlgorithmName() const ";
@@ -10304,8 +10359,8 @@ gdcm::Segment::GetSurfaceCount() ";
 %feature("docstring")  gdcm::Segment::GetSurfaces "SurfaceVector&
 gdcm::Segment::GetSurfaces() ";
 
-%feature("docstring")  gdcm::Segment::GetSurfaces "const
-SurfaceVector& gdcm::Segment::GetSurfaces() const ";
+%feature("docstring")  gdcm::Segment::GetSurfaces "SurfaceVector
+const& gdcm::Segment::GetSurfaces() const ";
 
 %feature("docstring")  gdcm::Segment::SetAnatomicRegion "void
 gdcm::Segment::SetAnatomicRegion(SegmentHelper::BasicCodedEntry const
@@ -10526,9 +10581,8 @@ gdcm::SequenceOfFragments::SetLength(VL length) override
 
 Sets the actual SQ length. ";
 
-%feature("docstring")  gdcm::SequenceOfFragments::Write "const
-std::ostream& gdcm::SequenceOfFragments::Write(std::ostream &os) const
-";
+%feature("docstring")  gdcm::SequenceOfFragments::Write "std::ostream
+const& gdcm::SequenceOfFragments::Write(std::ostream &os) const ";
 
 %feature("docstring")  gdcm::SequenceOfFragments::WriteBuffer "bool
 gdcm::SequenceOfFragments::WriteBuffer(std::ostream &os) const ";
@@ -10634,8 +10688,8 @@ Properly set the Sequence of Item to be undefined length. ";
 %feature("docstring")  gdcm::SequenceOfItems::SetNumberOfItems "void
 gdcm::SequenceOfItems::SetNumberOfItems(SizeType n) ";
 
-%feature("docstring")  gdcm::SequenceOfItems::Write "const
-std::ostream& gdcm::SequenceOfItems::Write(std::ostream &os) const ";
+%feature("docstring")  gdcm::SequenceOfItems::Write "std::ostream
+const& gdcm::SequenceOfItems::Write(std::ostream &os) const ";
 
 
 // File: classgdcm_1_1SerieHelper.xml
@@ -10978,7 +11032,7 @@ Hubauer:http://groups.google.com/group/comp.lang.c++/msg/173ddc38a827a930
 See:  http://www.davethehat.com/articles/smartp.htm  and
 itk::SmartPointer
 
-C++ includes: gdcmObject.h ";
+C++ includes: gdcmSmartPointer.h ";
 
 %feature("docstring")  gdcm::SmartPointer::SmartPointer "gdcm::SmartPointer< ObjectType >::SmartPointer() ";
 
@@ -11255,8 +11309,7 @@ gdcmStaticAssert.h ";
 
 
 // File: structgdcm_1_1STATIC__ASSERTION__FAILURE.xml
-%feature("docstring") gdcm::STATIC_ASSERTION_FAILURE "C++ includes:
-gdcmStaticAssert.h ";
+%feature("docstring") gdcm::STATIC_ASSERTION_FAILURE "";
 
 
 // File: structgdcm_1_1STATIC__ASSERTION__FAILURE_3_01true_01_4.xml
@@ -11321,7 +11374,7 @@ gdcm::StreamImageReader::GetDimensionsValueForResolution "std::vector<unsigned i
 gdcm::StreamImageReader::GetDimensionsValueForResolution(unsigned int)
 ";
 
-%feature("docstring")  gdcm::StreamImageReader::GetFile "const File&
+%feature("docstring")  gdcm::StreamImageReader::GetFile "File const&
 gdcm::StreamImageReader::GetFile() const
 
 Returns the dataset read by ReadImageInformation Couple this with the
@@ -11526,28 +11579,27 @@ filenames where value match the reference value 'valueref' ";
 Will loop over all files and return the first file where value match
 the reference value 'valueref' ";
 
-%feature("docstring")  gdcm::StrictScanner::GetFilenames "const
-Directory::FilenamesType& gdcm::StrictScanner::GetFilenames() const ";
+%feature("docstring")  gdcm::StrictScanner::GetFilenames "Directory::FilenamesType const& gdcm::StrictScanner::GetFilenames()
+const ";
 
 %feature("docstring")  gdcm::StrictScanner::GetKeys "Directory::FilenamesType gdcm::StrictScanner::GetKeys() const
 
 Return the list of filename that are key in the internal map, which
 means those filename were properly parsed ";
 
-%feature("docstring")  gdcm::StrictScanner::GetMapping "const
-TagToValue& gdcm::StrictScanner::GetMapping(const char *filename)
-const
+%feature("docstring")  gdcm::StrictScanner::GetMapping "TagToValue
+const& gdcm::StrictScanner::GetMapping(const char *filename) const
 
 Get the std::map mapping filenames to value for file 'filename'. ";
 
-%feature("docstring")  gdcm::StrictScanner::GetMappingFromTagToValue "const TagToValue& gdcm::StrictScanner::GetMappingFromTagToValue(Tag
+%feature("docstring")  gdcm::StrictScanner::GetMappingFromTagToValue "TagToValue const& gdcm::StrictScanner::GetMappingFromTagToValue(Tag
 const &t, const char *value) const
 
 See GetFilenameFromTagToValue(). This is simply
 GetFilenameFromTagToValue followed. ";
 
-%feature("docstring")  gdcm::StrictScanner::GetMappings "const
-MappingType& gdcm::StrictScanner::GetMappings() const
+%feature("docstring")  gdcm::StrictScanner::GetMappings "MappingType
+const& gdcm::StrictScanner::GetMappings() const
 
 Mappings are the mapping from a particular tag to the map, mapping
 filename to value: ";
@@ -11569,8 +11621,8 @@ tags) should be done, prefer the GetMapping function, and then reuse
 the TagToValue hash table. WARNING:   Tag 't' should have been added
 via AddTag() prior to the Scan() call ! ";
 
-%feature("docstring")  gdcm::StrictScanner::GetValues "const
-ValuesType& gdcm::StrictScanner::GetValues() const
+%feature("docstring")  gdcm::StrictScanner::GetValues "ValuesType
+const& gdcm::StrictScanner::GetValues() const
 
 Get all the values found (in lexicographic order) ";
 
@@ -11687,8 +11739,8 @@ const char *valueref) const
 Will loop over all files and return the first file where value match
 the reference value 'valueref' ";
 
-%feature("docstring")  gdcm::StrictScanner2::GetFilenames "const
-Directory::FilenamesType& gdcm::StrictScanner2::GetFilenames() const
+%feature("docstring")  gdcm::StrictScanner2::GetFilenames "Directory::FilenamesType const& gdcm::StrictScanner2::GetFilenames()
+const
 
 Return the list of filenames. ";
 
@@ -11698,25 +11750,22 @@ Return the list of filename that are key in the internal map, which
 means those filename were properly parsed ";
 
 %feature("docstring")
-gdcm::StrictScanner2::GetMappingFromPrivateTagToValue "const
-PrivateTagToValue&
+gdcm::StrictScanner2::GetMappingFromPrivateTagToValue "PrivateTagToValue const&
 gdcm::StrictScanner2::GetMappingFromPrivateTagToValue(PrivateTag const
 &pt, const char *value) const ";
 
 %feature("docstring")
-gdcm::StrictScanner2::GetMappingFromPublicTagToValue "const
-PublicTagToValue&
+gdcm::StrictScanner2::GetMappingFromPublicTagToValue "PublicTagToValue const&
 gdcm::StrictScanner2::GetMappingFromPublicTagToValue(Tag const &t,
 const char *value) const
 
 See GetFilenameFromTagToValue(). This is simply
 GetFilenameFromTagToValue followed ";
 
-%feature("docstring")  gdcm::StrictScanner2::GetPrivateMapping "const
-PrivateTagToValue& gdcm::StrictScanner2::GetPrivateMapping(const char
-*filename) const ";
+%feature("docstring")  gdcm::StrictScanner2::GetPrivateMapping "PrivateTagToValue const& gdcm::StrictScanner2::GetPrivateMapping(const
+char *filename) const ";
 
-%feature("docstring")  gdcm::StrictScanner2::GetPrivateMappings "const PrivateMappingType& gdcm::StrictScanner2::GetPrivateMappings()
+%feature("docstring")  gdcm::StrictScanner2::GetPrivateMappings "PrivateMappingType const& gdcm::StrictScanner2::GetPrivateMappings()
 const ";
 
 %feature("docstring")  gdcm::StrictScanner2::GetPrivateOrderedValues "Directory::FilenamesType
@@ -11733,14 +11782,13 @@ PrivateTag const &t) const ";
 Get all the values found (in lexicographic order) associated with
 PrivateTag 'pt' ";
 
-%feature("docstring")  gdcm::StrictScanner2::GetPublicMapping "const
-PublicTagToValue& gdcm::StrictScanner2::GetPublicMapping(const char
-*filename) const
+%feature("docstring")  gdcm::StrictScanner2::GetPublicMapping "PublicTagToValue const& gdcm::StrictScanner2::GetPublicMapping(const
+char *filename) const
 
 Get the std::map mapping filenames to value for file 'filename'. ";
 
-%feature("docstring")  gdcm::StrictScanner2::GetPublicMappings "const
-PublicMappingType& gdcm::StrictScanner2::GetPublicMappings() const
+%feature("docstring")  gdcm::StrictScanner2::GetPublicMappings "PublicMappingType const& gdcm::StrictScanner2::GetPublicMappings()
+const
 
 Mappings are the mapping from a particular tag to the map, mapping
 filename to value: ";
@@ -11767,8 +11815,8 @@ via AddTag() prior to the Scan() call ! ";
 Get all the values found (in lexicographic order) associated with Tag
 't'. ";
 
-%feature("docstring")  gdcm::StrictScanner2::GetValues "const
-ValuesType& gdcm::StrictScanner2::GetValues() const
+%feature("docstring")  gdcm::StrictScanner2::GetValues "ValuesType
+const& gdcm::StrictScanner2::GetValues() const
 
 Get all the values found (in lexicographic order) ";
 
@@ -12010,9 +12058,8 @@ C++ includes: gdcmSurface.h ";
 
 %feature("docstring")  gdcm::Surface::GetAlgorithmFamily "SegmentHelper::BasicCodedEntry& gdcm::Surface::GetAlgorithmFamily() ";
 
-%feature("docstring")  gdcm::Surface::GetAlgorithmFamily "const
-SegmentHelper::BasicCodedEntry& gdcm::Surface::GetAlgorithmFamily()
-const ";
+%feature("docstring")  gdcm::Surface::GetAlgorithmFamily "SegmentHelper::BasicCodedEntry const&
+gdcm::Surface::GetAlgorithmFamily() const ";
 
 %feature("docstring")  gdcm::Surface::GetAlgorithmName "const char*
 gdcm::Surface::GetAlgorithmName() const ";
@@ -12044,8 +12091,8 @@ gdcm::Surface::GetMeanPointDistance() const ";
 
 %feature("docstring")  gdcm::Surface::GetMeshPrimitive "MeshPrimitive& gdcm::Surface::GetMeshPrimitive() ";
 
-%feature("docstring")  gdcm::Surface::GetMeshPrimitive "const
-MeshPrimitive& gdcm::Surface::GetMeshPrimitive() const ";
+%feature("docstring")  gdcm::Surface::GetMeshPrimitive "MeshPrimitive
+const& gdcm::Surface::GetMeshPrimitive() const ";
 
 %feature("docstring")  gdcm::Surface::GetNumberOfSurfacePoints "unsigned long gdcm::Surface::GetNumberOfSurfacePoints() const ";
 
@@ -12070,8 +12117,7 @@ Pointer is null if undefined ";
 %feature("docstring")  gdcm::Surface::GetProcessingAlgorithm "SegmentHelper::BasicCodedEntry&
 gdcm::Surface::GetProcessingAlgorithm() ";
 
-%feature("docstring")  gdcm::Surface::GetProcessingAlgorithm "const
-SegmentHelper::BasicCodedEntry&
+%feature("docstring")  gdcm::Surface::GetProcessingAlgorithm "SegmentHelper::BasicCodedEntry const&
 gdcm::Surface::GetProcessingAlgorithm() const ";
 
 %feature("docstring")  gdcm::Surface::GetRecommendedDisplayCIELabValue
@@ -13182,10 +13228,10 @@ C++ includes: gdcmULBasicCallback.h ";
 %feature("docstring")
 gdcm::network::ULBasicCallback::~ULBasicCallback "gdcm::network::ULBasicCallback::~ULBasicCallback() override=default ";
 
-%feature("docstring")  gdcm::network::ULBasicCallback::GetDataSets "const std::vector<DataSet>&
+%feature("docstring")  gdcm::network::ULBasicCallback::GetDataSets "std::vector<DataSet> const&
 gdcm::network::ULBasicCallback::GetDataSets() const ";
 
-%feature("docstring")  gdcm::network::ULBasicCallback::GetResponses "const std::vector<DataSet>&
+%feature("docstring")  gdcm::network::ULBasicCallback::GetResponses "std::vector<DataSet> const&
 gdcm::network::ULBasicCallback::GetResponses() const ";
 
 %feature("docstring")  gdcm::network::ULBasicCallback::HandleDataSet "void gdcm::network::ULBasicCallback::HandleDataSet(const DataSet
@@ -13245,8 +13291,7 @@ gdcm::network::ULConnection::GetAcceptedPresentationContexts "std::vector<Presen
 gdcm::network::ULConnection::GetAcceptedPresentationContexts() ";
 
 %feature("docstring")
-gdcm::network::ULConnection::GetAcceptedPresentationContexts "const
-std::vector<PresentationContextAC>&
+gdcm::network::ULConnection::GetAcceptedPresentationContexts "std::vector<PresentationContextAC> const&
 gdcm::network::ULConnection::GetAcceptedPresentationContexts() const
 ";
 
@@ -13277,8 +13322,7 @@ gdcm::network::ULConnection::GetPresentationContextRQByID(uint8_t id)
 const ";
 
 %feature("docstring")
-gdcm::network::ULConnection::GetPresentationContexts "const
-std::vector<PresentationContextRQ>&
+gdcm::network::ULConnection::GetPresentationContexts "std::vector<PresentationContextRQ> const&
 gdcm::network::ULConnection::GetPresentationContexts() const ";
 
 %feature("docstring")  gdcm::network::ULConnection::GetProtocol "std::iostream* gdcm::network::ULConnection::GetProtocol() ";
@@ -13585,8 +13629,8 @@ gdcm::network::ULEvent::GetEvent() const ";
 
 %feature("docstring")  gdcm::network::ULEvent::GetIStream "std::istream* gdcm::network::ULEvent::GetIStream() const ";
 
-%feature("docstring")  gdcm::network::ULEvent::GetPDUs "const
-std::vector<BasePDU*>& gdcm::network::ULEvent::GetPDUs() const ";
+%feature("docstring")  gdcm::network::ULEvent::GetPDUs "std::vector<BasePDU*> const& gdcm::network::ULEvent::GetPDUs() const
+";
 
 %feature("docstring")  gdcm::network::ULEvent::SetEvent "void
 gdcm::network::ULEvent::SetEvent(const EEventID &inEvent) ";
@@ -13982,7 +14026,7 @@ gdcm::VM::GetLength() const ";
 
 
 // File: structgdcm_1_1VMToLength.xml
-%feature("docstring") gdcm::VMToLength "C++ includes: gdcmVM.h ";
+%feature("docstring") gdcm::VMToLength "";
 
 
 // File: classgdcm_1_1VR.xml
@@ -14056,16 +14100,15 @@ gdcm::VR16ExplicitDataElement::ReadWithLength(std::istream &is, VL
 
 
 // File: structgdcm_1_1VRToEncoding.xml
-%feature("docstring") gdcm::VRToEncoding "C++ includes: gdcmVR.h ";
+%feature("docstring") gdcm::VRToEncoding "";
 
 
 // File: structgdcm_1_1VRToType.xml
-%feature("docstring") gdcm::VRToType "C++ includes: gdcmVR.h ";
+%feature("docstring") gdcm::VRToType "";
 
 
 // File: classgdcm_1_1VRVLSize.xml
-%feature("docstring") gdcm::VRVLSize "C++ includes: gdcmAttribute.h
-";
+%feature("docstring") gdcm::VRVLSize "";
 
 
 // File: classgdcm_1_1VRVLSize_3_010_01_4.xml
@@ -14521,6 +14564,81 @@ int) ";
 "vtkGDCMThreadedImageReader2::vtkSetVector6Macro(DataExtent, int) ";
 
 %feature("docstring")  vtkGDCMThreadedImageReader2::vtkTypeMacro "vtkGDCMThreadedImageReader2::vtkTypeMacro(vtkGDCMThreadedImageReader2,
+vtkThreadedImageAlgorithm) ";
+
+
+// File: classvtkGDCMThreadedImageReader3.xml
+%feature("docstring") vtkGDCMThreadedImageReader3 "C++ includes:
+vtkGDCMThreadedImageReader3.h ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::GetFileName "virtual const char* vtkGDCMThreadedImageReader3::GetFileName(int i=0)
+";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::PrintSelf "virtual void vtkGDCMThreadedImageReader3::PrintSelf(ostream &os,
+vtkIndent indent) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::SetFileName "virtual void vtkGDCMThreadedImageReader3::SetFileName(const char
+*filename) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::SetFileNames "virtual void vtkGDCMThreadedImageReader3::SetFileNames(vtkStringArray
+*) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::SplitExtent "int
+vtkGDCMThreadedImageReader3::SplitExtent(int splitExt[6], int
+startExt[6], int num, int total) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkBooleanMacro "vtkGDCMThreadedImageReader3::vtkBooleanMacro(FileLowerLeft, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkBooleanMacro "vtkGDCMThreadedImageReader3::vtkBooleanMacro(LoadOverlays, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetMacro "vtkGDCMThreadedImageReader3::vtkGetMacro(DataScalarType, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetMacro "vtkGDCMThreadedImageReader3::vtkGetMacro(FileLowerLeft, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetMacro "vtkGDCMThreadedImageReader3::vtkGetMacro(LoadOverlays, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetMacro "vtkGDCMThreadedImageReader3::vtkGetMacro(NumberOfOverlays, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetMacro "vtkGDCMThreadedImageReader3::vtkGetMacro(NumberOfScalarComponents,
+int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetObjectMacro
+"vtkGDCMThreadedImageReader3::vtkGetObjectMacro(FileNames,
+vtkStringArray) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetVector3Macro
+"vtkGDCMThreadedImageReader3::vtkGetVector3Macro(DataOrigin, double)
+";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetVector3Macro
+"vtkGDCMThreadedImageReader3::vtkGetVector3Macro(DataSpacing, double)
+";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkGetVector6Macro
+"vtkGDCMThreadedImageReader3::vtkGetVector6Macro(DataExtent, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkSetMacro "vtkGDCMThreadedImageReader3::vtkSetMacro(DataScalarType, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkSetMacro "vtkGDCMThreadedImageReader3::vtkSetMacro(FileLowerLeft, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkSetMacro "vtkGDCMThreadedImageReader3::vtkSetMacro(LoadOverlays, int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkSetMacro "vtkGDCMThreadedImageReader3::vtkSetMacro(NumberOfScalarComponents,
+int) ";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkSetVector3Macro
+"vtkGDCMThreadedImageReader3::vtkSetVector3Macro(DataOrigin, double)
+";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkSetVector3Macro
+"vtkGDCMThreadedImageReader3::vtkSetVector3Macro(DataSpacing, double)
+";
+
+%feature("docstring")  vtkGDCMThreadedImageReader3::vtkSetVector6Macro
+"vtkGDCMThreadedImageReader3::vtkSetVector6Macro(DataExtent, int) ";
+
+%feature("docstring")
+vtkGDCMThreadedImageReader3::vtkTypeRevisionMacro "vtkGDCMThreadedImageReader3::vtkTypeRevisionMacro(vtkGDCMThreadedImageReader3,
 vtkThreadedImageAlgorithm) ";
 
 
@@ -15175,7 +15293,7 @@ gdcm::XMLPrivateDictReader::StartElement(const char *name, const char
 %feature("docstring")  gdcm::network::add1 "static int
 gdcm::add1(char *buf, int n) ";
 
-%feature("docstring")  gdcm::network::backslash "const ignore_char
+%feature("docstring")  gdcm::network::backslash "ignore_char const
 gdcm::backslash('\\\\\\\\') ";
 
 %feature("docstring")  gdcm::network::Clamp "static T gdcm::Clamp(int
@@ -15632,6 +15750,9 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmJPEGLSCodec_8h.xml
 
 
+// File: gdcmJPEGXLCodec_8h.xml
+
+
 // File: gdcmJSON_8h.xml
 
 
@@ -15660,6 +15781,9 @@ gdcm::terminal::setmode(Mode m) ";
 
 
 // File: gdcmMD5_8h.xml
+
+
+// File: gdcmMEC__MR3_8h.xml
 
 
 // File: gdcmMediaStorage_8h.xml
@@ -16163,6 +16287,9 @@ gdcm::terminal::setmode(Mode m) ";
 // File: vtkGDCMThreadedImageReader2_8h.xml
 
 
+// File: vtkGDCMThreadedImageReader3_8h.xml
+
+
 // File: vtkImageColorViewer_8h.xml
 
 
@@ -16196,64 +16323,82 @@ gdcm::terminal::setmode(Mode m) ";
 // File: bug.xml
 
 
-// File: dir_e040de17c0346d6e352713ff147418d5.xml
+// File: dir_041d54874d9fecec94d9cb4ae010b51e.xml
 
 
-// File: dir_c76daeb6f6dec6f3ea799fce56f7d2d8.xml
+// File: dir_8021392154ea27d3da33100afd5b42a1.xml
 
 
-// File: dir_dbf95c1d90c5a901881337453263e002.xml
+// File: dir_83a82e6a2bc4a0f6429532cb237ca746.xml
 
 
-// File: dir_244a85202b55a1c80976dd6ddbfc1a01.xml
+// File: dir_9760e222fce508c3b7270d68e6523d76.xml
 
 
-// File: dir_18f0eb58264c0e5251b09e2a1c43e69e.xml
+// File: dir_90174c188c639015dd869d1a853f914f.xml
 
 
-// File: dir_3f5e1a94e35e29d80741a422ee07169d.xml
+// File: dir_aceed280bd27dc60f64c2cb4efae4f90.xml
 
 
-// File: dir_43e0a1f539e00dcfa1a6bc4d4fee4fc2.xml
+// File: dir_5aab2906425e8d9a7aa9fea4f8d0a2fa.xml
 
 
-// File: dir_dbf5bd6b6031826eb661c0a6cc15a5dc.xml
+// File: dir_5daaa9a41ac240f7de3019ff61b11839.xml
 
 
-// File: dir_9bf5ea929d074a4376f8e7ab62cf44cb.xml
+// File: dir_b138abe427a068e1da5116454e79caa4.xml
 
 
-// File: dir_1bf6655710ee689b67564d3c1ea81ded.xml
+// File: dir_6b1a62c3f439db8dff4e3363f340e91f.xml
 
 
-// File: dir_1703a9a86ce09b357d10c179ef37187c.xml
+// File: dir_776c231028699256e0cc13f46def7474.xml
 
 
-// File: dir_7d8a53dc7c6e118dc326634b1445bfbd.xml
+// File: dir_6285418b2babf39982c6f35dbd05cbb5.xml
 
 
-// File: dir_c65ec574e088a3fb8c01ccf67a472041.xml
+// File: TestByteSwap_8cxx-example.xml
 
 
-// File: dir_0fafd23c42ab1b7284b507a31c976ae7.xml
+// File: PatchFile_8cxx-example.xml
 
 
-// File: dir_b7bc1d3f8c76b5f778038891003f2f25.xml
+// File: SimplePrint_8cs-example.xml
 
 
-// File: dir_2e6026c62002f4bb8a32f565fccc2e09.xml
+// File: TestReader_8cxx-example.xml
 
 
-// File: dir_6737ba0c6e4d2f00b8b2ea67e96033d0.xml
+// File: TestReader_8py-example.xml
 
 
-// File: dir_fc26ec98c29cdba1e5d03a2a0f4491e0.xml
+// File: DecompressJPEGFile_8cs-example.xml
 
 
-// File: AddPrivateAttribute_8py-example.xml
+// File: ManipulateFile_8cs-example.xml
 
 
-// File: AWTMedical3_8java-example.xml
+// File: ClinicalTrialIdentificationWorkflow_8cs-example.xml
+
+
+// File: GenerateDICOMDIR_8cs-example.xml
+
+
+// File: GenFakeImage_8cxx-example.xml
+
+
+// File: ReformatFile_8cs-example.xml
+
+
+// File: DecompressImage_8cs-example.xml
+
+
+// File: StandardizeFiles_8cs-example.xml
+
+
+// File: ScanDirectory_8cs-example.xml
 
 
 // File: BasicAnonymizer_8cs-example.xml
@@ -16262,7 +16407,67 @@ gdcm::terminal::setmode(Mode m) ";
 // File: BasicImageAnonymizer_8cs-example.xml
 
 
-// File: CastConvertPhilips_8py-example.xml
+// File: Cleaner_8cs-example.xml
+
+
+// File: CompressLossyJPEG_8cs-example.xml
+
+
+// File: DecompressImageMultiframe_8cs-example.xml
+
+
+// File: DumpCSA_8cs-example.xml
+
+
+// File: EncodeJPEGFile_8cs-example.xml
+
+
+// File: ExtractEncapsulatedFile_8cs-example.xml
+
+
+// File: ExtractImageRegion_8cs-example.xml
+
+
+// File: ExtractImageRegionWithLUT_8cs-example.xml
+
+
+// File: ExtractOneFrame_8cs-example.xml
+
+
+// File: FileAnonymize_8cs-example.xml
+
+
+// File: FileChangeTS_8cs-example.xml
+
+
+// File: FileChangeTSLossy_8cs-example.xml
+
+
+// File: FileStreaming_8cs-example.xml
+
+
+// File: GetArray_8cs-example.xml
+
+
+// File: MpegVideoInfo_8cs-example.xml
+
+
+// File: NewSequence_8cs-example.xml
+
+
+// File: RescaleImage_8cs-example.xml
+
+
+// File: SendFileSCU_8cs-example.xml
+
+
+// File: SimplePrintPatientName_8cs-example.xml
+
+
+// File: SortImage2_8cs-example.xml
+
+
+// File: CStoreQtProgress_8cxx-example.xml
 
 
 // File: ChangePrivateTags_8cxx-example.xml
@@ -16271,46 +16476,16 @@ gdcm::terminal::setmode(Mode m) ";
 // File: ChangeSequenceUltrasound_8cxx-example.xml
 
 
+// File: ChangeSpacing_8cxx-example.xml
+
+
 // File: CheckBigEndianBug_8cxx-example.xml
-
-
-// File: Cleaner_8cs-example.xml
 
 
 // File: ClinicalTrialAnnotate_8cxx-example.xml
 
 
-// File: ClinicalTrialIdentificationWorkflow_8cs-example.xml
-
-
 // File: CompressImage_8cxx-example.xml
-
-
-// File: CompressLossyJPEG_8cs-example.xml
-
-
-// File: Compute3DSpacing_8cxx-example.xml
-
-
-// File: Convert16BitsTo8Bits_8cxx-example.xml
-
-
-// File: ConvertMPL_8py-example.xml
-
-
-// File: ConvertMultiFrameToSingleFrame_8cxx-example.xml
-
-
-// File: ConvertNumpy_8py-example.xml
-
-
-// File: ConvertPIL_8py-example.xml
-
-
-// File: ConvertRGBToLuminance_8cxx-example.xml
-
-
-// File: ConvertSingleBitTo8Bits_8cxx-example.xml
 
 
 // File: ConvertToQImage_8cxx-example.xml
@@ -16322,40 +16497,7 @@ gdcm::terminal::setmode(Mode m) ";
 // File: CreateCMYKImage_8cxx-example.xml
 
 
-// File: CreateFakePET_8cxx-example.xml
-
-
-// File: CreateFakeRTDOSE_8cxx-example.xml
-
-
 // File: CreateJPIPDataSet_8cxx-example.xml
-
-
-// File: CreateRAWStorage_8py-example.xml
-
-
-// File: csa2img_8cxx-example.xml
-
-
-// File: CStoreQtProgress_8cxx-example.xml
-
-
-// File: DecompressImage_8cs-example.xml
-
-
-// File: DecompressImage_8java-example.xml
-
-
-// File: DecompressImage_8py-example.xml
-
-
-// File: DecompressImageMultiframe_8cs-example.xml
-
-
-// File: DecompressJPEGFile_8cs-example.xml
-
-
-// File: DecompressPixmap_8java-example.xml
 
 
 // File: DeriveSeries_8cxx-example.xml
@@ -16367,19 +16509,10 @@ gdcm::terminal::setmode(Mode m) ";
 // File: DiscriminateVolume_8cxx-example.xml
 
 
-// File: DumbAnonymizer_8py-example.xml
-
-
 // File: DumpADAC_8cxx-example.xml
 
 
-// File: DumpCSA_8cs-example.xml
-
-
 // File: DumpExamCard_8cxx-example.xml
-
-
-// File: DumpGEMS_8cxx-example.xml
 
 
 // File: DumpGEMSMovieGroup_8cxx-example.xml
@@ -16394,13 +16527,13 @@ gdcm::terminal::setmode(Mode m) ";
 // File: DumpSiemensBase64_8cxx-example.xml
 
 
+// File: DumpToSQLITE3_8cxx-example.xml
+
+
 // File: DumpToshibaDTI_8cxx-example.xml
 
 
 // File: DumpToshibaDTI2_8cxx-example.xml
-
-
-// File: DumpToSQLITE3_8cxx-example.xml
 
 
 // File: DumpVisusChange_8cxx-example.xml
@@ -16421,64 +16554,295 @@ gdcm::terminal::setmode(Mode m) ";
 // File: ExtractBinaryIntoCSV_8cxx-example.xml
 
 
-// File: ExtractEncapsulatedFile_8cs-example.xml
-
-
 // File: ExtractEncryptedContent_8cxx-example.xml
 
 
 // File: ExtractIconFromFile_8cxx-example.xml
 
 
-// File: ExtractImageRegion_8cs-example.xml
-
-
-// File: ExtractImageRegion_8java-example.xml
-
-
-// File: ExtractImageRegion_8py-example.xml
-
-
-// File: ExtractImageRegionWithLUT_8cs-example.xml
-
-
 // File: Extracting_All_Resolution_8cxx-example.xml
-
-
-// File: ExtractOneFrame_8cs-example.xml
 
 
 // File: Fake_Image_Using_Stream_Image_Writer_8cxx-example.xml
 
 
-// File: FileAnonymize_8cs-example.xml
-
-
-// File: FileAnonymize_8java-example.xml
-
-
-// File: FileChangeTS_8cs-example.xml
-
-
-// File: FileChangeTSLossy_8cs-example.xml
-
-
-// File: FileStreaming_8cs-example.xml
-
-
-// File: FindAllPatientName_8py-example.xml
-
-
 // File: FixBrokenJ2K_8cxx-example.xml
-
-
-// File: FixCommaBug_8py-example.xml
 
 
 // File: FixJAIBugJPEGLS_8cxx-example.xml
 
 
 // File: FixOrientation_8cxx-example.xml
+
+
+// File: GenAllVR_8cxx-example.xml
+
+
+// File: GenFakeIdentifyFile_8cxx-example.xml
+
+
+// File: GenLongSeqs_8cxx-example.xml
+
+
+// File: GenSeqs_8cxx-example.xml
+
+
+// File: GenerateStandardSOPClasses_8cxx-example.xml
+
+
+// File: GetJPEGSamplePrecision_8cxx-example.xml
+
+
+// File: GetSequenceUltrasound_8cxx-example.xml
+
+
+// File: GetSubSequenceData_8cxx-example.xml
+
+
+// File: HelloVizWorld_8cxx-example.xml
+
+
+// File: HelloWorld_8cxx-example.xml
+
+
+// File: LargeVRDSExplicit_8cxx-example.xml
+
+
+// File: MakeTemplate_8cxx-example.xml
+
+
+// File: MergeTwoFiles_8cxx-example.xml
+
+
+// File: MrProtocol_8cxx-example.xml
+
+
+// File: PrintLUT_8cxx-example.xml
+
+
+// File: Priv_8cxx-example.xml
+
+
+// File: PublicDict_8cxx-example.xml
+
+
+// File: QIDO-RS_8cxx-example.xml
+
+
+// File: ReadAndDumpDICOMDIR_8cxx-example.xml
+
+
+// File: ReadAndDumpDICOMDIR2_8cxx-example.xml
+
+
+// File: ReadAndPrintAttributes_8cxx-example.xml
+
+
+// File: ReadExplicitLengthSQIVR_8cxx-example.xml
+
+
+// File: ReadGEMSSDO_8cxx-example.xml
+
+
+// File: ReadMultiTimesException_8cxx-example.xml
+
+
+// File: ReadUTF8QtDir_8cxx-example.xml
+
+
+// File: Rescale_8cxx-example.xml
+
+
+// File: SimpleScanner_8cxx-example.xml
+
+
+// File: SortImage_8cxx-example.xml
+
+
+// File: StreamImageReaderTest_8cxx-example.xml
+
+
+// File: TemplateEmptyImage_8cxx-example.xml
+
+
+// File: TraverseModules_8cxx-example.xml
+
+
+// File: VolumeSorter_8cxx-example.xml
+
+
+// File: WrapCustomStorage_8cxx-example.xml
+
+
+// File: csa2img_8cxx-example.xml
+
+
+// File: iU22tomultisc_8cxx-example.xml
+
+
+// File: pmsct_rgb1_8cxx-example.xml
+
+
+// File: rle2img_8cxx-example.xml
+
+
+// File: sample_8cxx-example.xml
+
+
+// File: uid_unique_8cxx-example.xml
+
+
+// File: DecompressImage_8java-example.xml
+
+
+// File: DecompressPixmap_8java-example.xml
+
+
+// File: ExtractImageRegion_8java-example.xml
+
+
+// File: FileAnonymize_8java-example.xml
+
+
+// File: HelloSimple_8java-example.xml
+
+
+// File: ReadFiles_8java-example.xml
+
+
+// File: ScanDirectory_8java-example.xml
+
+
+// File: SimplePrint_8java-example.xml
+
+
+// File: AddPrivateAttribute_8py-example.xml
+
+
+// File: ConvertMPL_8py-example.xml
+
+
+// File: ConvertNumpy_8py-example.xml
+
+
+// File: ConvertPIL_8py-example.xml
+
+
+// File: CreateRAWStorage_8py-example.xml
+
+
+// File: DecompressImage_8py-example.xml
+
+
+// File: DumbAnonymizer_8py-example.xml
+
+
+// File: ExtractImageRegion_8py-example.xml
+
+
+// File: FindAllPatientName_8py-example.xml
+
+
+// File: FixCommaBug_8py-example.xml
+
+
+// File: GetPortionCSAHeader_8py-example.xml
+
+
+// File: HelloWorld_8py-example.xml
+
+
+// File: ManipulateFile_8py-example.xml
+
+
+// File: ManipulateSequence_8py-example.xml
+
+
+// File: MergeFile_8py-example.xml
+
+
+// File: NewSequence_8py-example.xml
+
+
+// File: PhilipsPrivateRescaleInterceptSlope_8py-example.xml
+
+
+// File: PlaySound_8py-example.xml
+
+
+// File: PrivateDict_8py-example.xml
+
+
+// File: ReWriteSCAsMR_8py-example.xml
+
+
+// File: ReadAndDumpDICOMDIR_8py-example.xml
+
+
+// File: RemovePrivateTags_8py-example.xml
+
+
+// File: ScanDirectory_8py-example.xml
+
+
+// File: SortImage_8py-example.xml
+
+
+// File: WriteBuffer_8py-example.xml
+
+
+// File: HelloActiviz_8cs-example.xml
+
+
+// File: HelloActiviz2_8cs-example.xml
+
+
+// File: HelloActiviz3_8cs-example.xml
+
+
+// File: HelloActiviz4_8cs-example.xml
+
+
+// File: HelloActiviz5_8cs-example.xml
+
+
+// File: HelloVTKWorld_8cs-example.xml
+
+
+// File: HelloVTKWorld2_8cs-example.xml
+
+
+// File: MetaImageMD5Activiz_8cs-example.xml
+
+
+// File: RefCounting_8cs-example.xml
+
+
+// File: Compute3DSpacing_8cxx-example.xml
+
+
+// File: Convert16BitsTo8Bits_8cxx-example.xml
+
+
+// File: ConvertMultiFrameToSingleFrame_8cxx-example.xml
+
+
+// File: ConvertRGBToLuminance_8cxx-example.xml
+
+
+// File: ConvertSingleBitTo8Bits_8cxx-example.xml
+
+
+// File: CreateFakePET_8cxx-example.xml
+
+
+// File: CreateFakeRTDOSE_8cxx-example.xml
+
+
+// File: GenerateRTSTRUCT_8cxx-example.xml
+
+
+// File: MagnifyFile_8cxx-example.xml
 
 
 // File: gdcmorthoplanes_8cxx-example.xml
@@ -16502,118 +16866,25 @@ gdcm::terminal::setmode(Mode m) ";
 // File: gdcmvolume_8cxx-example.xml
 
 
-// File: GenAllVR_8cxx-example.xml
+// File: offscreenimage_8cxx-example.xml
 
 
-// File: GenerateDICOMDIR_8cs-example.xml
+// File: reslicesphere_8cxx-example.xml
 
 
-// File: GenerateRTSTRUCT_8cxx-example.xml
+// File: rtstructapp_8cxx-example.xml
 
 
-// File: GenerateStandardSOPClasses_8cxx-example.xml
+// File: threadgdcm_8cxx-example.xml
 
 
-// File: GenFakeIdentifyFile_8cxx-example.xml
-
-
-// File: GenFakeImage_8cxx-example.xml
-
-
-// File: GenLongSeqs_8cxx-example.xml
-
-
-// File: GenSeqs_8cxx-example.xml
-
-
-// File: GetArray_8cs-example.xml
-
-
-// File: GetJPEGSamplePrecision_8cxx-example.xml
-
-
-// File: GetPortionCSAHeader_8py-example.xml
-
-
-// File: GetSequenceUltrasound_8cxx-example.xml
-
-
-// File: GetSubSequenceData_8cxx-example.xml
-
-
-// File: headsq2dcm_8py-example.xml
-
-
-// File: HelloActiviz_8cs-example.xml
-
-
-// File: HelloActiviz2_8cs-example.xml
-
-
-// File: HelloActiviz3_8cs-example.xml
-
-
-// File: HelloActiviz4_8cs-example.xml
-
-
-// File: HelloActiviz5_8cs-example.xml
-
-
-// File: HelloSimple_8java-example.xml
-
-
-// File: HelloVizWorld_8cxx-example.xml
-
-
-// File: HelloVTKWorld_8cs-example.xml
+// File: AWTMedical3_8java-example.xml
 
 
 // File: HelloVTKWorld_8java-example.xml
 
 
-// File: HelloVTKWorld2_8cs-example.xml
-
-
-// File: HelloWorld_8cxx-example.xml
-
-
-// File: HelloWorld_8py-example.xml
-
-
-// File: iU22tomultisc_8cxx-example.xml
-
-
-// File: LargeVRDSExplicit_8cxx-example.xml
-
-
-// File: MagnifyFile_8cxx-example.xml
-
-
-// File: MakeTemplate_8cxx-example.xml
-
-
-// File: ManipulateFile_8cs-example.xml
-
-
-// File: ManipulateFile_8py-example.xml
-
-
-// File: ManipulateSequence_8py-example.xml
-
-
-// File: MergeFile_8py-example.xml
-
-
-// File: MergeTwoFiles_8cxx-example.xml
-
-
-// File: MetaImageMD5Activiz_8cs-example.xml
-
-
 // File: MIPViewer_8java-example.xml
-
-
-// File: MpegVideoInfo_8cs-example.xml
 
 
 // File: MPRViewer_8java-example.xml
@@ -16622,160 +16893,13 @@ gdcm::terminal::setmode(Mode m) ";
 // File: MPRViewer2_8java-example.xml
 
 
-// File: MrProtocol_8cxx-example.xml
-
-
-// File: NewSequence_8cs-example.xml
-
-
-// File: NewSequence_8py-example.xml
-
-
-// File: offscreenimage_8cxx-example.xml
-
-
-// File: PatchFile_8cxx-example.xml
-
-
-// File: PhilipsPrivateRescaleInterceptSlope_8py-example.xml
-
-
-// File: PlaySound_8py-example.xml
-
-
-// File: pmsct_rgb1_8cxx-example.xml
-
-
-// File: PrintLUT_8cxx-example.xml
-
-
-// File: PrivateDict_8py-example.xml
-
-
-// File: PublicDict_8cxx-example.xml
-
-
-// File: QIDO-RS_8cxx-example.xml
-
-
-// File: ReadAndDumpDICOMDIR_8cxx-example.xml
-
-
-// File: ReadAndDumpDICOMDIR_8py-example.xml
-
-
-// File: ReadAndDumpDICOMDIR2_8cxx-example.xml
-
-
-// File: ReadAndPrintAttributes_8cxx-example.xml
-
-
-// File: ReadExplicitLengthSQIVR_8cxx-example.xml
-
-
-// File: ReadFiles_8java-example.xml
-
-
-// File: ReadGEMSSDO_8cxx-example.xml
-
-
-// File: ReadMultiTimesException_8cxx-example.xml
-
-
 // File: ReadSeriesIntoVTK_8java-example.xml
 
 
-// File: ReadUTF8QtDir_8cxx-example.xml
+// File: CastConvertPhilips_8py-example.xml
 
 
-// File: RefCounting_8cs-example.xml
-
-
-// File: ReformatFile_8cs-example.xml
-
-
-// File: RemovePrivateTags_8py-example.xml
-
-
-// File: RescaleImage_8cs-example.xml
-
-
-// File: reslicesphere_8cxx-example.xml
-
-
-// File: ReWriteSCAsMR_8py-example.xml
-
-
-// File: rle2img_8cxx-example.xml
-
-
-// File: rtstructapp_8cxx-example.xml
-
-
-// File: ScanDirectory_8cs-example.xml
-
-
-// File: ScanDirectory_8java-example.xml
-
-
-// File: ScanDirectory_8py-example.xml
-
-
-// File: SendFileSCU_8cs-example.xml
-
-
-// File: SimplePrint_8cs-example.xml
-
-
-// File: SimplePrint_8java-example.xml
-
-
-// File: SimplePrintPatientName_8cs-example.xml
-
-
-// File: SimpleScanner_8cxx-example.xml
-
-
-// File: SortImage_8cxx-example.xml
-
-
-// File: SortImage_8py-example.xml
-
-
-// File: SortImage2_8cs-example.xml
-
-
-// File: StandardizeFiles_8cs-example.xml
-
-
-// File: StreamImageReaderTest_8cxx-example.xml
-
-
-// File: TemplateEmptyImage_8cxx-example.xml
-
-
-// File: TestByteSwap_8cxx-example.xml
-
-
-// File: TestReader_8cxx-example.xml
-
-
-// File: TestReader_8py-example.xml
-
-
-// File: threadgdcm_8cxx-example.xml
-
-
-// File: TraverseModules_8cxx-example.xml
-
-
-// File: uid_unique_8cxx-example.xml
-
-
-// File: VolumeSorter_8cxx-example.xml
-
-
-// File: WriteBuffer_8py-example.xml
+// File: headsq2dcm_8py-example.xml
 
 
 // File: indexpage.xml
