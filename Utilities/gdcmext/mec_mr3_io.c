@@ -135,7 +135,11 @@ static void *aligned_alloc_impl(size_t alignment, size_t size) {
 #ifdef _MSC_VER
   return _aligned_malloc(size, alignment);
 #else
-  return aligned_alloc(alignment, size);
+  // return aligned_alloc(alignment, size);
+  void *allocPtr;
+  int error = posix_memalign(&allocPtr, alignment, size);
+  // posix_memalign() returns zero on success
+  return error == 0 ? allocPtr : NULL;
 #endif
 }
 
