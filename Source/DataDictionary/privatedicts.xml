@@ -2638,66 +2638,68 @@
   <entry owner="FDMS 1.0" group="0021" element="xx70" vr="IS" vm="1" name="Film Number within the Series"/>
   <entry owner="FDMS 1.0" group="0021" element="xx80" vr="OB" vm="1" name="Equipment Type-Specific Information"/>
   <entry owner="FDMS 1.0" group="0021" element="xx90" vr="CS" vm="1" name="LUT Number"/>
-  <entry owner="FDMS 1.0" group="0023" element="xx10" vr="SQ" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0023" element="xx20" vr="SQ" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0023" element="xx30" vr="SQ" vm="1" name="?"/>
+  <entry owner="FDMS 1.0" group="0023" element="xx10" vr="SQ" vm="1" name="Left-image Processing Parameter Sequence"/>
+  <entry owner="FDMS 1.0" group="0023" element="xx20" vr="SQ" vm="1" name="Right-image Processing Parameter Sequence"/>
+  <entry owner="FDMS 1.0" group="0023" element="xx30" vr="SQ" vm="1" name="Single-image Processing Parameter Sequence"/>
   <entry owner="FDMS 1.0" group="0025" element="xx10" vr="US" vm="1" name="Relative Light Emission Amount Sk"/>
   <entry owner="FDMS 1.0" group="0025" element="xx11" vr="US" vm="1" name="Term of Correction for Each IP Type St"/>
   <entry owner="FDMS 1.0" group="0025" element="xx12" vr="US" vm="1" name="Reading Gain Gp"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx13" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx15" vr="CS" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx20" vr="US" vm="2" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx21" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx30" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx31" vr="SS" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx32" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx33" vr="SS" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx34" vr="SS" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx40" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx41" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx42" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx43" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx50" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx51" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx52" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx53" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx60" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx61" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx62" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx63" vr="CS" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx70" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx71" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx72" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx73" vr="US" vm="6" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx74" vr="US" vm="6" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx80" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx81" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx82" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx83" vr="US" vm="6" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx84" vr="US" vm="6" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx90" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx91" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx92" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx93" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx94" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx95" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xx96" vr="CS" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xxa0" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xxa1" vr="SS" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xxa2" vr="US" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0025" element="xxa3" vr="SS" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0027" element="xx10" vr="SQ" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0027" element="xx20" vr="SQ" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0027" element="xx30" vr="SQ" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0027" element="xx40" vr="SQ" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0027" element="xx50" vr="SQ" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0027" element="xx60" vr="SQ" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0027" element="xx70" vr="SQ" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0027" element="xx80" vr="SQ" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0027" element="xxa0" vr="IS" vm="1" name="?"/>
-  <entry owner="FDMS 1.0" group="0027" element="xxa1" vr="CS" vm="2" name="?"/>
-  <entry owner="FDMS 1.0" group="0027" element="xxa2" vr="CS" vm="2" name="?"/>
-  <entry owner="FDMS 1.0" group="0027" element="xxa3" vr="SS" vm="1-n" name="?"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx13" vr="US" vm="1" name="Latitude"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx15" vr="CS" vm="1" name="Image Processing Selection Flag"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx16" vr="US" vm="1" name="Min"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx17" vr="US" vm="1" name="Max"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx20" vr="US" vm="2" name="Sensitivity Shift (S-SHFT)"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx21" vr="US" vm="1" name="Contrast Shift (C-SHIFT)"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx30" vr="US" vm="1" name="GT"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx31" vr="SS" vm="1" name="GA"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx32" vr="US" vm="1" name="GC"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx33" vr="SS" vm="1" name="GS"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx34" vr="SS" vm="1" name="tan θ"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx40" vr="US" vm="1" name="RT"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx41" vr="US" vm="1" name="RN"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx42" vr="US" vm="1" name="RE"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx43" vr="US" vm="1" name="N"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx50" vr="US" vm="1" name="DRT"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx51" vr="US" vm="1" name="DRN"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx52" vr="US" vm="1" name="DRE"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx53" vr="US" vm="1" name="DN"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx60" vr="US" vm="1" name="ORN"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx61" vr="US" vm="1" name="ORE"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx62" vr="US" vm="1" name="ON"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx63" vr="CS" vm="1" name="ORD"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx70" vr="US" vm="1" name="MDT"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx71" vr="US" vm="1" name="MDB"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx72" vr="US" vm="1" name="MDE"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx73" vr="US" vm="1-n" name="MFP-DRC Suppression Characteristics Parameters"/> <!-- 6-8 -->
+  <entry owner="FDMS 1.0" group="0025" element="xx74" vr="US" vm="1-n" name="MFP-DRC Frequency Characteristics Parameters"/> <!-- 6-8 -->
+  <entry owner="FDMS 1.0" group="0025" element="xx80" vr="US" vm="1" name="MRT"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx81" vr="US" vm="1" name="MRB"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx82" vr="US" vm="1" name="MRE"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx83" vr="US" vm="1-n" name="MFP-USM Suppression Characteristics Parameters"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx84" vr="US" vm="1-n" name="MFP-USM Frequency Characteristics Parameters"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx90" vr="US" vm="1" name="PTE (α edge)"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx91" vr="US" vm="1" name="PTR (α calc)"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx92" vr="US" vm="1" name="PRN"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx93" vr="US" vm="1" name="PRE"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx94" vr="US" vm="1" name="PEM Sstd"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx95" vr="US" vm="1" name="PEM Lstd"/>
+  <entry owner="FDMS 1.0" group="0025" element="xx96" vr="CS" vm="1" name="PEM Unsharp Mask Value N"/>
+  <entry owner="FDMS 1.0" group="0025" element="xxa0" vr="US" vm="1" name="MFP GT"/>
+  <entry owner="FDMS 1.0" group="0025" element="xxa1" vr="SS" vm="1" name="MFP GA"/>
+  <entry owner="FDMS 1.0" group="0025" element="xxa2" vr="US" vm="1" name="MFP GC"/>
+  <entry owner="FDMS 1.0" group="0025" element="xxa3" vr="SS" vm="1" name="MFP GS"/>
+  <entry owner="FDMS 1.0" group="0027" element="xx10" vr="SQ" vm="1" name="γ Raw Data Table Sequence"/>
+  <entry owner="FDMS 1.0" group="0027" element="xx20" vr="SQ" vm="1" name="β Raw Data Table Sequence"/>
+  <entry owner="FDMS 1.0" group="0027" element="xx30" vr="SQ" vm="1" name="DRC Raw Data Table Sequence"/>
+  <entry owner="FDMS 1.0" group="0027" element="xx40" vr="SQ" vm="1" name="MFP-DRC Raw Data Table Sequence"/>
+  <entry owner="FDMS 1.0" group="0027" element="xx50" vr="SQ" vm="1" name="MFP-USM Raw Data Table Sequence"/>
+  <entry owner="FDMS 1.0" group="0027" element="xx60" vr="SQ" vm="1" name="PEM α Edge Raw Data Table Sequence"/>
+  <entry owner="FDMS 1.0" group="0027" element="xx70" vr="SQ" vm="1" name="PEM α Calc Raw Data Table Sequence"/>
+  <entry owner="FDMS 1.0" group="0027" element="xx80" vr="SQ" vm="1" name="MFP γ Raw Data Table Sequence"/>
+  <entry owner="FDMS 1.0" group="0027" element="xxa0" vr="IS" vm="1" name="No. of Data"/>
+  <entry owner="FDMS 1.0" group="0027" element="xxa1" vr="CS" vm="2" name="Data Input Type"/>
+  <entry owner="FDMS 1.0" group="0027" element="xxa2" vr="CS" vm="2" name="Data Output Type"/>
+  <entry owner="FDMS 1.0" group="0027" element="xxa3" vr="US_SS" vm="1-n" name="Raw Data"/> <!-- 4-n -->
   <entry owner="FDMS 1.0" group="0029" element="xx20" vr="CS" vm="1" name="Image Scanning Direction"/>
   <entry owner="FDMS 1.0" group="0029" element="xx25" vr="CS" vm="1" name="Image Rotation/Reversal Information"/>
   <entry owner="FDMS 1.0" group="0029" element="xx30" vr="CS" vm="1" name="Extended Reading Size Value"/>
@@ -3814,17 +3816,26 @@
   <entry owner="GEMS_HELIOS_01" group="0045" element="xx1f" vr="SS" vm="1" name="Cross Talk Calibration Date"/>
   <entry owner="GEMS_HELIOS_01" group="0045" element="xx20" vr="SS" vm="1" name="Cross Talk Calibration Time"/>
   <entry owner="GEMS_HELIOS_01" group="0045" element="xx21" vr="SS" vm="1" name="Iterbone Flag"/>
-  <entry owner="GEMS_HELIOS_01" group="0045" element="xx22" vr="SS" vm="1" name="Perisstaltic Flag"/>
+  <entry owner="GEMS_HELIOS_01" group="0045" element="xx22" vr="SS" vm="1" name="Peristaltic Flag"/>
   <entry owner="GEMS_HELIOS_01" group="0045" element="xx30" vr="CS" vm="1" name="CardiacReconAlgorithm"/>
   <entry owner="GEMS_HELIOS_01" group="0045" element="xx31" vr="CS" vm="1" name="AvgHeartRateForImage"/>
-  <entry owner="GEMS_HELIOS_01" group="0045" element="xx32" vr="FL" vm="1" name="TemporalResolution"/>
+  <entry owner="GEMS_HELIOS_01" group="0045" element="xx32" vr="FL" vm="1" name="Temporal Resolution"/>
   <entry owner="GEMS_HELIOS_01" group="0045" element="xx33" vr="CS" vm="1" name="PctRpeakDelay"/>
   <entry owner="GEMS_HELIOS_01" group="0045" element="xx34" vr="CS" vm="1" name="ActualPctRpeakDelay"/>
   <entry owner="GEMS_HELIOS_01" group="0045" element="xx36" vr="CS" vm="1" name="EkgFullMaStartPhase"/>
   <entry owner="GEMS_HELIOS_01" group="0045" element="xx37" vr="CS" vm="1" name="EkgFullMaEndPhase"/>
   <entry owner="GEMS_HELIOS_01" group="0045" element="xx38" vr="CS" vm="1" name="EkgModulationMaxMa"/>
   <entry owner="GEMS_HELIOS_01" group="0045" element="xx39" vr="CS" vm="1" name="EkgModulationMinMa"/>
-  <entry owner="GEMS_HELIOS_01" group="0045" element="xx3b" vr="LO" vm="1" name="NoiseReductionImageFilterDesc"/>
+  <entry owner="GEMS_HELIOS_01" group="0045" element="xx3b" vr="LO" vm="1" name="Noise Reduction Image Filter Description"/>
+  <entry owner="GEMS_HELIOS_01" group="0045" element="xx3f" vr="IS" vm="1" name="RPeakTimeDelay"/>
+  <entry owner="GEMS_HELIOS_01" group="0045" element="xx44" vr="IS" vm="1" name="ActualRPeakTimeDelay"/>
+  <entry owner="GEMS_HELIOS_01" group="0045" element="xx45" vr="ST" vm="1" name="CardiacScanOptions"/>
+  <entry owner="GEMS_HELIOS_01" group="0045" element="xx50" vr="FD" vm="1" name="Temporal Center View Angle"/>
+  <entry owner="GEMS_HELIOS_01" group="0045" element="xx51" vr="FD" vm="1" name="Recon Center View Angle"/>
+  <entry owner="GEMS_HELIOS_01" group="0045" element="xx52" vr="CS" vm="1" name="WideCone Masking"/>
+  <entry owner="GEMS_HELIOS_01" group="0045" element="xx53" vr="FD" vm="1" name="WideCone Corner Blending Radius"/>
+  <entry owner="GEMS_HELIOS_01" group="0045" element="xx54" vr="FD" vm="1" name="WideCone Corner Blending Radius Offset"/>
+  <entry owner="GEMS_HELIOS_01" group="0045" element="xx55" vr="CS" vm="1" name="Internal Recon Algorithm"/>
   <entry owner="GEMS_HINO_CT_01" group="004b" element="xx01" vr="DS" vm="1-n" name="Beam Thickness"/>
   <entry owner="GEMS_HINO_CT_01" group="004b" element="xx02" vr="DS" vm="1-n" name="R Time"/>
   <entry owner="GEMS_HINO_CT_01" group="004b" element="xx03" vr="IS" vm="1" name="HBC number"/>
