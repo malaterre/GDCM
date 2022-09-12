@@ -5220,6 +5220,21 @@
   <entry owner="MMCPrivate" group="0009" element="xx48" vr="LO" vm="1" name="ProtocolName"/>
   <entry owner="MMCPrivate" group="0009" element="xx4e" vr="LO" vm="1" name="Cms_BodyPartExamined"/>
   <entry owner="MMCPrivate" group="0009" element="xx4f" vr="LO" vm="1" name="IsProtected"/>
+  <entry owner="MMCPrivate" group="0009" element="xx50" vr="CS" vm="1" name="Cms_PatientPosition"/>
+  <entry owner="MMCPrivate" group="0009" element="xx51" vr="LO" vm="1" name="Cmi_contrastBolusAgent"/>
+  <entry owner="MMCPrivate" group="0009" element="xx52" vr="LO" vm="1" name="Cms_institutionName"/>
+  <entry owner="MMCPrivate" group="0009" element="xx53" vr="LO" vm="1" name="Cms_institutionalDepartmentName"/>
+  <entry owner="MMCPrivate" group="0009" element="xx54" vr="LO" vm="1" name="Cms_seriesDescription"/>
+  <entry owner="MMCPrivate" group="0009" element="xx55" vr="LO" vm="1" name="Cms_operatorsName"/>
+  <entry owner="MMCPrivate" group="0009" element="xx56" vr="LO" vm="1" name="Cms_PerformingPhysiciansName"/>
+  <entry owner="MMCPrivate" group="0009" element="xx57" vr="ST" vm="1" name="Cms_institutionAddress"/>
+  <entry owner="MMCPrivate" group="0009" element="xx58" vr="LO" vm="1" name="Cmi_imageComments"/>
+  <entry owner="MMCPrivate" group="0009" element="xx59" vr="LO" vm="1" name="Cmi_instanceCreationDateTime"/>
+  <entry owner="MMCPrivate" group="0009" element="xx5a" vr="LO" vm="1" name="MppsStepStatus"/>
+  <entry owner="MMCPrivate" group="0009" element="xx5b" vr="IS" vm="1" name="FilmedCount"/>
+  <entry owner="MMCPrivate" group="0009" element="xx5c" vr="LO" vm="1" name="IsAllowCascadeSave"/>
+  <entry owner="MMCPrivate" group="0009" element="xx5d" vr="LO" vm="1" name="IsAllowCascadeProtect"/>
+  <entry owner="MMCPrivate" group="0009" element="xx5e" vr="LO" vm="1" name="IsDeleted"/>
   <entry owner="MMCPrivate" group="0009" element="xx5f" vr="UI" vm="1" name="ProtocolObjectID"/>
   <entry owner="MMCPrivate" group="0009" element="xx60" vr="OB" vm="1" name="TaskInfoAppData"/>
   <entry owner="MMCPrivate" group="0009" element="xx72" vr="UI" vm="1" name="ProtocolTaskInfoObjectID"/>
@@ -5231,6 +5246,11 @@
   <entry owner="MMCPrivate" group="0011" element="xx00" vr="LO" vm="1" name="Private Creator"/>
   <entry owner="MMCPrivate" group="0011" element="xx01" vr="LO" vm="1" name="IsRapidRegistration"/>
   <entry owner="MMCPrivate" group="0011" element="xx02" vr="LO" vm="1" name="IsProtected"/>
+  <entry owner="MMCPrivate" group="0011" element="xx03" vr="IS" vm="1" name="FilmedCount"/>
+  <entry owner="MMCPrivate" group="0011" element="xx04" vr="OB" vm="1" name="ApplicationData"/>
+  <entry owner="MMCPrivate" group="0011" element="xx05" vr="LO" vm="1" name="IsAllowCascadeSave"/>
+  <entry owner="MMCPrivate" group="0011" element="xx06" vr="LO" vm="1" name="IsAllowCascadeProtect"/>
+  <entry owner="MMCPrivate" group="0011" element="xx07" vr="LO" vm="1" name="IsDeleted"/>
   <entry owner="MMCPrivate" group="0019" element="xx00" vr="LO" vm="1" name="Private Creator"/>
   <entry owner="MMCPrivate" group="0019" element="xx01" vr="LO" vm="1" name="ProcType"/>
   <entry owner="MMCPrivate" group="0019" element="xx02" vr="LO" vm="1" name="Plane"/>
@@ -5248,6 +5268,18 @@
   <entry owner="MMCPrivate" group="0019" element="xx0f" vr="IS" vm="1" name="MultiSliceNumber"/>
   <entry owner="MMCPrivate" group="0019" element="xx10" vr="LO" vm="1" name="ImageScanTime"/>
   <entry owner="MMCPrivate" group="0019" element="xx11" vr="LO" vm="1" name="IsProtected"/>
+  <entry owner="MMCPrivate" group="0019" element="xx12" vr="IS" vm="1" name="ImageIncrement"/>
+  <entry owner="MMCPrivate" group="0019" element="xx13" vr="LO" vm="1" name="MppsStepStatus"/>
+  <entry owner="MMCPrivate" group="0019" element="xx14" vr="IS" vm="1" name="StorageCommittedCount"/>
+  <entry owner="MMCPrivate" group="0019" element="xx15" vr="IS" vm="1" name="ArchivedCount"/>
+  <entry owner="MMCPrivate" group="0019" element="xx16" vr="IS" vm="1" name="TransferredCount"/>
+  <entry owner="MMCPrivate" group="0019" element="xx17" vr="LO" vm="1" name="IsAllowCascadeSave"/>
+  <entry owner="MMCPrivate" group="0019" element="xx18" vr="LO" vm="1" name="IsAllowCascadeProtect"/>
+  <entry owner="MMCPrivate" group="0019" element="xx19" vr="LO" vm="1" name="IsDeleted"/>
+  <entry owner="MMCPrivate" group="0019" element="xx1a" vr="UI" vm="1" name="CharacterizedImageInstanceUid"/>
+  <entry owner="MMCPrivate" group="0019" element="xx1b" vr="IS" vm="1" name="CharacterizedImageCount"/>
+  <entry owner="MMCPrivate" group="0019" element="xx1c" vr="LO" vm="1" name="InternalWindowWidth"/>
+  <entry owner="MMCPrivate" group="0019" element="xx1d" vr="LO" vm="1" name="InternalWindowLevel"/>
   <entry owner="MMCPrivate" group="0019" element="xx20" vr="UI" vm="1" name="MultiFrameSopInstanceUid"/>
   <entry owner="MMCPrivate" group="0029" element="xx00" vr="LO" vm="1" name="Private Creator"/>
   <entry owner="MMCPrivate" group="0029" element="xx01" vr="IS" vm="1" name="SliceNumber"/>
@@ -5418,6 +5450,31 @@
   <entry owner="MMCPrivate" group="0029" element="xxaa" vr="CS" vm="1" name="PixelPresentation"/>
   <entry owner="MMCPrivate" group="0029" element="xxab" vr="CS" vm="1" name="VolumetricProperties"/>
   <entry owner="MMCPrivate" group="0029" element="xxac" vr="CS" vm="1" name="VolumeBasedCalculationTechnique"/>
+  <entry owner="MMCPrivate" group="0029" element="xxad" vr="IS" vm="1" name="FilmedCount"/>
+  <entry owner="MMCPrivate" group="0029" element="xxae" vr="LO" vm="1" name="IsTransferred"/>
+  <entry owner="MMCPrivate" group="0029" element="xxaf" vr="LO" vm="1" name="IsArchived"/>
+  <entry owner="MMCPrivate" group="0029" element="xxb0" vr="LO" vm="1" name="MppsStepStatus"/>
+  <entry owner="MMCPrivate" group="0029" element="xxb1" vr="LO" vm="1" name="CommitmentStatus"/>
+  <entry owner="MMCPrivate" group="0029" element="xxb2" vr="LO" vm="1" name="IsStorageCommitted"/>
+  <entry owner="MMCPrivate" group="0029" element="xxb3" vr="LO" vm="1" name="IsDicom"/>
+  <entry owner="MMCPrivate" group="0029" element="xxb4" vr="LO" vm="1" name="IsAllowCascadeSave"/>
+  <entry owner="MMCPrivate" group="0029" element="xxb5" vr="LO" vm="1" name="IsAllowCascadeProtect"/>
+  <entry owner="MMCPrivate" group="0029" element="xxb6" vr="LO" vm="1" name="IsDeleted"/>
+  <entry owner="MMCPrivate" group="0029" element="xxb7" vr="OB" vm="1" name="ApplicationData"/>
+  <entry owner="MMCPrivate" group="0029" element="xxb8" vr="LO" vm="1" name="IsAllowCascadeSave"/>
+  <entry owner="MMCPrivate" group="0029" element="xxb9" vr="LO" vm="1" name="IsAllowCascadeProtect"/>
+  <entry owner="MMCPrivate" group="0029" element="xxba" vr="LO" vm="1" name="IsDeleted"/>
+  <entry owner="MMCPrivate" group="0029" element="xxbb" vr="IS" vm="1" name="VOI1"/>
+  <entry owner="MMCPrivate" group="0029" element="xxbc" vr="IS" vm="1" name="VOI2"/>
+  <entry owner="MMCPrivate" group="0029" element="xxbd" vr="DS" vm="1" name="MixingTime"/>
+  <entry owner="MMCPrivate" group="0029" element="xxbe" vr="FD" vm="1" name="SelectiveIRPosition"/>
+  <entry owner="MMCPrivate" group="0029" element="xxbf" vr="FD" vm="1" name="SelectiveIRRow"/>
+  <entry owner="MMCPrivate" group="0029" element="xxc0" vr="FD" vm="1" name="SelectiveIRColumn"/>
+  <entry owner="MMCPrivate" group="0029" element="xxc1" vr="FD" vm="1" name="SelectiveIROrientation"/>
+  <entry owner="MMCPrivate" group="0029" element="xxc2" vr="DS" vm="1" name="SelectiveIRThickness"/>
+  <entry owner="MMCPrivate" group="0029" element="xxc3" vr="CS" vm="1" name="RephaseOrderSlice"/>
+  <entry owner="MMCPrivate" group="0029" element="xxc4" vr="CS" vm="1" name="RephaseOrderPhase"/>
+  <entry owner="MMCPrivate" group="0029" element="xxc5" vr="CS" vm="1" name="RephaseOrderFreq"/>
   <entry owner="MMCPrivate" group="0029" element="xxbd" vr="UI" vm="1" name="BackgroundImageInstanceUID"/>
   <entry owner="MMCPrivate" group="0029" element="xxbe" vr="LO" vm="1" name="IsStoredToPortableMedia"/>
   <entry owner="MMCPrivate" group="0029" element="xxbf" vr="DS" vm="1" name="Voi1"/>
