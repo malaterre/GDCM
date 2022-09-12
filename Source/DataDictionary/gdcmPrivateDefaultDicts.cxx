@@ -6013,6 +6013,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0019,0x001b,"MMCPrivate",VR::IS,VM::VM1,"CharacterizedImageCount",false },
   {0x0019,0x001c,"MMCPrivate",VR::LO,VM::VM1,"InternalWindowWidth",false },
   {0x0019,0x001d,"MMCPrivate",VR::LO,VM::VM1,"InternalWindowLevel",false },
+  {0x0019,0x001e,"MMCPrivate",VR::LO,VM::VM1,"?FlipAngle?",false },
   {0x0019,0x0020,"MMCPrivate",VR::UI,VM::VM1,"MultiFrameSopInstanceUid",false },
   {0x0029,0x0000,"MMCPrivate",VR::LO,VM::VM1,"Private Creator",false },
   {0x0029,0x0001,"MMCPrivate",VR::IS,VM::VM1,"SliceNumber",false },
