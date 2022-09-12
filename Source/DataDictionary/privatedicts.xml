@@ -5344,7 +5344,7 @@
   <entry owner="MMCPrivate" group="0029" element="xx3a" vr="LT" vm="1" name="SOPAuthorizationComment"/>
   <entry owner="MMCPrivate" group="0029" element="xx3b" vr="LO" vm="1" name="AuthorizationEquipmentCertificationNumber"/>
   <entry owner="MMCPrivate" group="0029" element="xx3c" vr="UL" vm="1" name="ConcatenationFrameOffsetNumber"/>
-  <entry owner="MMCPrivate" group="0029" element="xx3d" vr="CS" vm="1" name="RepresentativeFrameNumber"/>
+  <entry owner="MMCPrivate" group="0029" element="xx3d" vr="US" vm="1" name="RepresentativeFrameNumber"/>
   <entry owner="MMCPrivate" group="0029" element="xx3e" vr="UI" vm="1" name="ConcatenationUID"/>
   <entry owner="MMCPrivate" group="0029" element="xx3f" vr="US" vm="1" name="InConcatenationNumber"/>
   <entry owner="MMCPrivate" group="0029" element="xx40" vr="CS" vm="1" name="CardiacSynchronizationTechnique"/>

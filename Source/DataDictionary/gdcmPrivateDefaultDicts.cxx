@@ -6074,7 +6074,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0029,0x003a,"MMCPrivate",VR::LT,VM::VM1,"SOPAuthorizationComment",false },
   {0x0029,0x003b,"MMCPrivate",VR::LO,VM::VM1,"AuthorizationEquipmentCertificationNumber",false },
   {0x0029,0x003c,"MMCPrivate",VR::UL,VM::VM1,"ConcatenationFrameOffsetNumber",false },
-  {0x0029,0x003d,"MMCPrivate",VR::CS,VM::VM1,"RepresentativeFrameNumber",false },
+  {0x0029,0x003d,"MMCPrivate",VR::US,VM::VM1,"RepresentativeFrameNumber",false },
   {0x0029,0x003e,"MMCPrivate",VR::UI,VM::VM1,"ConcatenationUID",false },
   {0x0029,0x003f,"MMCPrivate",VR::US,VM::VM1,"InConcatenationNumber",false },
   {0x0029,0x0040,"MMCPrivate",VR::CS,VM::VM1,"CardiacSynchronizationTechnique",false },
