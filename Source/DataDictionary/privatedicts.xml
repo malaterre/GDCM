@@ -5466,18 +5466,20 @@
   <entry owner="MMCPrivate" group="0029" element="xxba" vr="LO" vm="1" name="IsDeleted"/>
   <entry owner="MMCPrivate" group="0029" element="xxbb" vr="IS" vm="1" name="VOI1"/>
   <entry owner="MMCPrivate" group="0029" element="xxbc" vr="IS" vm="1" name="VOI2"/>
+  <!--
   <entry owner="MMCPrivate" group="0029" element="xxbd" vr="DS" vm="1" name="MixingTime"/>
   <entry owner="MMCPrivate" group="0029" element="xxbe" vr="FD" vm="1" name="SelectiveIRPosition"/>
   <entry owner="MMCPrivate" group="0029" element="xxbf" vr="FD" vm="1" name="SelectiveIRRow"/>
-  <entry owner="MMCPrivate" group="0029" element="xxc0" vr="FD" vm="1" name="SelectiveIRColumn"/>
   <entry owner="MMCPrivate" group="0029" element="xxc1" vr="FD" vm="1" name="SelectiveIROrientation"/>
   <entry owner="MMCPrivate" group="0029" element="xxc2" vr="DS" vm="1" name="SelectiveIRThickness"/>
   <entry owner="MMCPrivate" group="0029" element="xxc3" vr="CS" vm="1" name="RephaseOrderSlice"/>
   <entry owner="MMCPrivate" group="0029" element="xxc4" vr="CS" vm="1" name="RephaseOrderPhase"/>
   <entry owner="MMCPrivate" group="0029" element="xxc5" vr="CS" vm="1" name="RephaseOrderFreq"/>
+  -->
   <entry owner="MMCPrivate" group="0029" element="xxbd" vr="UI" vm="1" name="BackgroundImageInstanceUID"/>
   <entry owner="MMCPrivate" group="0029" element="xxbe" vr="LO" vm="1" name="IsStoredToPortableMedia"/>
   <entry owner="MMCPrivate" group="0029" element="xxbf" vr="DS" vm="1" name="Voi1"/>
+  <entry owner="MMCPrivate" group="0029" element="xxc0" vr="FD" vm="1" name="SelectiveIRColumn"/>
   <entry owner="MMCPrivate" group="0029" element="xxc1" vr="DS" vm="1" name="Voi2"/>
   <entry owner="MMCPrivate" group="0029" element="xxc2" vr="DS" vm="1" name="MixingTime"/>
   <entry owner="MMCPrivate" group="0029" element="xxc3" vr="DS" vm="1" name="SelectiveIRPosition"/>
