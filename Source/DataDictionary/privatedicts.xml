@@ -5283,6 +5283,7 @@
   <entry owner="MMCPrivate" group="0019" element="xx1e" vr="LO" vm="1" name="?FlipAngle?"/>
   <entry owner="MMCPrivate" group="0019" element="xx1f" vr="LO" vm="1" name="?InversionTime?"/>
   <entry owner="MMCPrivate" group="0019" element="xx20" vr="UI" vm="1" name="MultiFrameSopInstanceUid"/>
+  <entry owner="MMCPrivate" group="0019" element="xx21" vr="OB" vm="1" name="?ScanInterface.GroupParamArchive"/>
   <entry owner="MMCPrivate" group="0029" element="xx00" vr="LO" vm="1" name="Private Creator"/>
   <entry owner="MMCPrivate" group="0029" element="xx01" vr="IS" vm="1" name="SliceNumber"/>
   <entry owner="MMCPrivate" group="0029" element="xx02" vr="IS" vm="1" name="PhaseNumber"/>
