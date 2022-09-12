@@ -5503,6 +5503,7 @@
   <entry owner="MMCPrivate" group="0029" element="xxd5" vr="UI" vm="1" name="EnhancedSopInstanceUid"/>
   <entry owner="MMCPrivate" group="0029" element="xxd6" vr="LO" vm="1" name="PolarityOfPhaseEncoding"/>
   <entry owner="MMCPrivate" group="0029" element="xxd7" vr="OB" vm="1" name="PresentationStates"/>
+  <entry owner="MMCPrivate" group="0029" element="xxd9" vr="DS" vm="1" name="Magnetic Field Direction"/>
   <entry owner="MMCPrivate" group="0041" element="xx01" vr="OB" vm="1" name="RawDataAppData"/>
   <entry owner="MMCPrivate" group="0041" element="xx02" vr="SQ" vm="1" name="RawDataIndex"/>
   <entry owner="MMCPrivate" group="0041" element="xx03" vr="LO" vm="1" name="ChannelNumber"/>
