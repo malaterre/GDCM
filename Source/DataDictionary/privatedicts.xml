@@ -5261,10 +5261,10 @@
   <entry owner="MMCPrivate" group="0019" element="xx04" vr="DS" vm="1" name="MaxFsColor"/>
   <entry owner="MMCPrivate" group="0019" element="xx05" vr="LO" vm="1" name="SeriesCategoryType"/>
   <entry owner="MMCPrivate" group="0019" element="xx07" vr="LO" vm="1" name="ImageContrastBolusAgent"/>
-  <entry owner="MMCPrivate" group="0019" element="xx08" vr="LO" vm="1" name="ImageSliceThickness"/>
-  <entry owner="MMCPrivate" group="0019" element="xx09" vr="LO" vm="1" name="ImageReconstructionDiameter"/>
+  <entry owner="MMCPrivate" group="0019" element="xx08" vr="DS" vm="1" name="ImageSliceThickness"/>
+  <entry owner="MMCPrivate" group="0019" element="xx09" vr="DS" vm="1" name="ImageReconstructionDiameter"/>
   <entry owner="MMCPrivate" group="0019" element="xx0a" vr="LO" vm="1" name="ImageEchoTime"/>
-  <entry owner="MMCPrivate" group="0019" element="xx0b" vr="LO" vm="1" name="ImageRepetitionTime"/>
+  <entry owner="MMCPrivate" group="0019" element="xx0b" vr="DS" vm="1" name="ImageRepetitionTime"/>
   <entry owner="MMCPrivate" group="0019" element="xx0c" vr="LO" vm="1" name="SequenceType"/>
   <entry owner="MMCPrivate" group="0019" element="xx0d" vr="LO" vm="1" name="TaskUid"/>
   <entry owner="MMCPrivate" group="0019" element="xx0e" vr="OB" vm="1" name="SeriesAppData"/>
