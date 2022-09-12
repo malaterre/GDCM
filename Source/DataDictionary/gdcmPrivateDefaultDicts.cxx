@@ -5953,7 +5953,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0009,0x0048,"MMCPrivate",VR::LO,VM::VM1,"ProtocolName",false },
   {0x0009,0x004e,"MMCPrivate",VR::LO,VM::VM1,"Cms_BodyPartExamined",false },
   {0x0009,0x004f,"MMCPrivate",VR::LO,VM::VM1,"IsProtected",false },
-  {0x0009,0x0050,"MMCPrivate",VR::CS,VM::VM1,"Cms_PatientPosition",false },
+  {0x0009,0x0050,"MMCPrivate",VR::OB,VM::VM1,"?StudyReservationInfo",false },
   {0x0009,0x0051,"MMCPrivate",VR::LO,VM::VM1,"Cmi_contrastBolusAgent",false },
   {0x0009,0x0052,"MMCPrivate",VR::LO,VM::VM1,"Cms_institutionName",false },
   {0x0009,0x0053,"MMCPrivate",VR::LO,VM::VM1,"Cms_institutionalDepartmentName",false },

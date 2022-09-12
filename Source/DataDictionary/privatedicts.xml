@@ -5220,7 +5220,10 @@
   <entry owner="MMCPrivate" group="0009" element="xx48" vr="LO" vm="1" name="ProtocolName"/>
   <entry owner="MMCPrivate" group="0009" element="xx4e" vr="LO" vm="1" name="Cms_BodyPartExamined"/>
   <entry owner="MMCPrivate" group="0009" element="xx4f" vr="LO" vm="1" name="IsProtected"/>
+  <!--
   <entry owner="MMCPrivate" group="0009" element="xx50" vr="CS" vm="1" name="Cms_PatientPosition"/>
+  -->
+  <entry owner="MMCPrivate" group="0009" element="xx50" vr="OB" vm="1" name="?StudyReservationInfo"/>
   <entry owner="MMCPrivate" group="0009" element="xx51" vr="LO" vm="1" name="Cmi_contrastBolusAgent"/>
   <entry owner="MMCPrivate" group="0009" element="xx52" vr="LO" vm="1" name="Cms_institutionName"/>
   <entry owner="MMCPrivate" group="0009" element="xx53" vr="LO" vm="1" name="Cms_institutionalDepartmentName"/>
