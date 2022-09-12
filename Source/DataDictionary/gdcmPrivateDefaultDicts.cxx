@@ -6229,7 +6229,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0029,0x00d5,"MMCPrivate",VR::UI,VM::VM1,"EnhancedSopInstanceUid",false },
   {0x0029,0x00d6,"MMCPrivate",VR::LO,VM::VM1,"PolarityOfPhaseEncoding",false },
   {0x0029,0x00d7,"MMCPrivate",VR::OB,VM::VM1,"PresentationStates",false },
-  {0x0029,0x00d9,"MMCPrivate",VR::DS,VM::VM1,"Magnetic Field Direction",false },
+  {0x0029,0x00d9,"MMCPrivate",VR::DS,VM::VM3,"Magnetic Field Direction",false },
   {0x0041,0x0001,"MMCPrivate",VR::OB,VM::VM1,"RawDataAppData",false },
   {0x0041,0x0002,"MMCPrivate",VR::SQ,VM::VM1,"RawDataIndex",false },
   {0x0041,0x0003,"MMCPrivate",VR::LO,VM::VM1,"ChannelNumber",false },
