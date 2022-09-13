@@ -756,6 +756,11 @@ static bool CleanCSA(DataSet &ds, const DataElement &de) {
   if (bv->GetLength() >= 10 && memcmp(bv->GetPointer(), pds_com, 10) == 0) {
     return true;
   }
+  static const char psd_ocm[] = "p<sd<>oc>m";
+  // byte-swap PET_REPLAY_PARAM case:
+  if (bv->GetLength() >= 10 && memcmp(bv->GetPointer(), psd_ocm, 10) == 0) {
+    return true;
+  }
   static const char end[] = "END!      ";
   if (bv->GetLength() >= 10 &&
       memcmp(bv->GetPointer() + bv->GetLength() - 10, end, 10) == 0) {
