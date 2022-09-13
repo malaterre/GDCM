@@ -761,9 +761,16 @@ static bool CleanCSA(DataSet &ds, const DataElement &de) {
   if (bv->GetLength() >= 10 && memcmp(bv->GetPointer(), psd_ocm, 10) == 0) {
     return true;
   }
+  // ANGIOHEAD case. This is a DICOM Explicit with a odd ending:
   static const char end[] = "END!      ";
   if (bv->GetLength() >= 10 &&
       memcmp(bv->GetPointer() + bv->GetLength() - 10, end, 10) == 0) {
+    return true;
+  }
+  // byte-swapped ANGIOHEAD
+  static const char ned[] = "NE!D      ";
+  if (bv->GetLength() >= 10 &&
+      memcmp(bv->GetPointer() + bv->GetLength() - 10, ned, 10) == 0) {
     return true;
   }
   const bool zero = isAllZero(bv->GetPointer(), bv->GetLength());
