@@ -1232,7 +1232,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0021,0x005a,"SIEMENS MR SDS 01",VR::CS,VM::VM1,"?Sequence Variant 1?",false},
   {0x0021,0x005b,"SIEMENS MR SDI 02",VR::FD,VM::VM3,"Image Position (Patient)",false},
   {0x0021,0x005b,"SIEMENS MR SDS 01",VR::CS,VM::VM1_n,"?Sequence Variant 2?",false},
-  {0x0021,0x005c,"SIEMENS MR SDS 01",VR::CS,VM::VM1,"MTR flag. MT => ON",false},
+  {0x0021,0x005c,"SIEMENS MR SDS 01",VR::CS,VM::VM1_n,"MTR flag. MT => ON",false},
   {0x0021,0x005d,"SIEMENS MR SDS 01",VR::SL,VM::VM1,"??",false},
   {0x0021,0x005e,"SIEMENS MR SDI 02",VR::IS,VM::VM1,"?FrameIndex?",false},
   {0x0021,0x005e,"SIEMENS MR SDS 01",VR::LO,VM::VM1,"?",false},
