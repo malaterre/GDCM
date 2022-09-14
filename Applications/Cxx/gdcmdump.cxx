@@ -51,6 +51,7 @@
 #include "gdcmBase64.h"
 #include "gdcmMEC_MR3.h"
 #include "gdcmTagKeywords.h"
+#include "gdcmDeflateStream.h"
 
 #include <string>
 #include <iostream>
@@ -702,6 +703,26 @@ static int DumpEl2_new(const gdcm::DataSet & ds)
   const gdcm::ByteValue * bv = de01f7_26.GetByteValue();
 
   const char *begin = bv->GetPointer();
+  const size_t buf_len= bv->GetLength();
+
+  bool isgzip = false;
+  if( buf_len > (0x15f + 3) ) {
+    const unsigned char *sig = (const unsigned char*)begin + 0x15f;
+    isgzip = sig[0] == 0x1f && sig[1] == 0x8b && sig[2] == 0x08 /* DEFLATE */;
+  }
+
+  if( isgzip ) {
+    size_t offset = 0x15f;
+    size_t len = buf_len - 0x15f;
+    std::string str( begin + offset, begin + len );
+    std::istringstream is( str );
+  
+    zlib_stream::zip_istream gzis( is );
+    std::string out;
+    while( std::getline(gzis, out) ) {
+      std::cout << out << std::endl;
+    }
+  } else {
   uint32_t val0[3];
   memcpy( &val0, begin, sizeof( val0 ) );
   assert( val0[0] == 0xF22D );
@@ -721,6 +742,7 @@ static int DumpEl2_new(const gdcm::DataSet & ds)
     std::cout << std::endl;
     begin += o;
     }
+  }
 
   return 0;
 }
