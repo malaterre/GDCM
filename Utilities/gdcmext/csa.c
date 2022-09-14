@@ -141,15 +141,17 @@ static bool read_magic(struct app *self) {
     ERROR_RETURN(s, 1);
     s = fread_mirror(&unused, sizeof unused, 1, self);
     ERROR_RETURN(s, 1);
+    ERROR_RETURN(unused, 0x4d);  // 'M'
     magic = SV10;
   } else if (n < 0x100 && unused == 0x4d) {  // 'M'
     magic = NOMAGIC;
-  } else if (n == 0x7364703c && unused == 0x6f633c3e)  // aka '<pds><co'
-  {
+  } else if (n == 0x7364703c && unused == 0x6f633c3e) {  // aka '<pds><co'
     // 'PET_REPLAY_PARAM'
+    assert(0);
     return false;
   } else if (n == 0x31305356 && unused == 0x2010403) {  // aka 'VS01' ...
     // technically could be reserved; should not happen in the wild
+    assert(0);
     return false;
   } else {
     assert(0);
