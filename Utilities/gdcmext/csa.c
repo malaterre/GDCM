@@ -251,7 +251,7 @@ static bool read_data(struct app *self, struct csa_item_data *d) {
     uint32_t unused;
     s = fread_mirror(&unused, sizeof unused, 1, self);
     ERROR_RETURN(s, 1);
-    assert(unused == d->len || unused == 0x4d);
+    assert(unused == d->len || unused == 0x4d || unused == 0xcd);
   }
 
   if (d->len != 0) {
