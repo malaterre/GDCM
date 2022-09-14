@@ -17,7 +17,7 @@ endif()
 #----------------------------------------------------------------------------
 
 project(GDCM
-  VERSION 3.0.17
+  VERSION 3.0.18
   LANGUAGES CXX C
 )
 ## NOTE: the "DESCRIPTION" feature of project() was introduced in cmake 3.10.0
