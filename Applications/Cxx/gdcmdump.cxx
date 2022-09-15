@@ -1040,26 +1040,14 @@ static int PrintPDB(const std::string & filename, bool verbose)
   return ret;
 }
 
-static int PrintCSABase64(const std::string & filename, const char * name)
+static int PrintCSABase64Impl(gdcm::CSAHeader &csa, std::string const & csaname )
 {
-  gdcm::Reader reader;
-  reader.SetFileName( filename.c_str() );
-  if( !reader.Read() )
-  {
-    std::cerr << "Failed to read: " << filename << std::endl;
-    return 1;
-  }
-  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
-
-  gdcm::CSAHeader csa;
-  const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
-  if( !ds.FindDataElement( t1 ) ) return 1;
-  csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
-
+  const char *name = csaname.c_str();
   if( csa.FindCSAElementByName(name) )
   {
     const gdcm::CSAElement & el = csa.GetCSAElementByName(name);
-    if( el.IsEmpty() ) return 1;
+    // this is not error if empty:
+    if( el.IsEmpty() ) return 0;
     const gdcm::ByteValue* bv = el.GetByteValue();
     std::string str( bv->GetPointer(), bv->GetLength() );
     str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
@@ -1087,9 +1075,43 @@ static int PrintCSABase64(const std::string & filename, const char * name)
     }
     gdcm::Printer p;
     p.SetFile( file );
+    std::cout << "--" << csaname << "--" << std::endl;
     p.Print(std::cout);
   }
   return 0;
+}
+
+static int PrintCSABase64(const std::string & filename, std::vector<std::string> const & csanames )
+{
+  gdcm::Reader reader;
+  reader.SetFileName( filename.c_str() );
+  if( !reader.Read() )
+  {
+    std::cerr << "Failed to read: " << filename << std::endl;
+    return 1;
+  }
+  const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
+
+  int ret = 0;
+
+  gdcm::CSAHeader csa;
+  const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
+  if( !ds.FindDataElement( t1 ) ) return 1;
+  csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
+  for( std::vector<std::string>::const_iterator it = csanames.begin();
+		  it != csanames.end(); ++it ) {
+    ret += PrintCSABase64Impl(csa, *it );
+  }
+
+  const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
+  if( !ds.FindDataElement( t2 ) ) return 1;
+  csa.LoadFromDataElement( ds.GetDataElement( t2 ) );
+  for( std::vector<std::string>::const_iterator it = csanames.begin();
+		  it != csanames.end(); ++it ) {
+    ret += PrintCSABase64Impl(csa, *it );
+  }
+
+  return ret;
 }
 
 static int PrintCSA(const std::string & filename)
@@ -1271,6 +1293,7 @@ static void PrintHelp()
   std::cout << "  -C --csa            print SIEMENS CSA Header (0029,[12]0,SIEMENS CSA HEADER)." << std::endl;
   std::cout << "     --csa-asl        print decoded SIEMENS CSA MR_ASL (base64)." << std::endl;
   std::cout << "     --csa-diffusion  print decoded SIEMENS CSA MRDiffusion (base64)." << std::endl;
+  std::cout << "     --csa64          print decoded SIEMENS CSA FMRI/MR_ASL/MRDiffusion... (base64)." << std::endl;
   std::cout << "     --mrprotocol     print SIEMENS CSA MrProtocol only (within ASCCONV BEGIN/END)." << std::endl;
   std::cout << "                      or Phoenix Meta Protocol (0021,19,SIEMENS MR SDS 01)." << std::endl;
   std::cout << "  -P --pdb            print GEMS Protocol Data Block (0025,1b,GEMS_SERS_01)." << std::endl;
@@ -1312,6 +1335,7 @@ int main (int argc, char *argv[])
   int printmedcom = 0; // MedCom History Information
   int printcsaasl = 0;
   int printcsadiffusion = 0;
+  int printcsa64 = 0;
   int printpdb = 0;
   int printelscint = 0;
   int printvepro = 0;
@@ -1363,6 +1387,7 @@ int main (int argc, char *argv[])
         {"ct3", 0, &printct3, 1},
         {"csa-asl", 0, &printcsaasl, 1},
         {"csa-diffusion", 0, &printcsadiffusion, 1},
+        {"csa64", 0, &printcsa64, 1},
         {"mrprotocol", 0, &printmrprotocol, 1},
         {"pmtf", 0, &printpmtf, 1},
         {"mecmr3", 0, &printpmtf, 1},
@@ -1539,16 +1564,26 @@ int main (int argc, char *argv[])
     std::cerr << "Not handled for now" << std::endl;
     }
 
-  const char * csaname = nullptr;
+  std::vector<std::string> csanames;
   if( printcsaasl )
   {
     printcsabase64 = 1;
-    csaname = "MR_ASL";
+    csanames.push_back( "MR_ASL" );
   }
   else if( printcsadiffusion )
   {
     printcsabase64 = 1;
-    csaname = "MRDiffusion";
+    csanames.push_back( "MRDiffusion" );
+  }
+  else if( printcsa64 )
+  {
+    printcsabase64 = 1;
+    // keep me sorted
+    csanames.push_back( "FmriAcquisitionDescriptionSequence" );
+    csanames.push_back( "FmriConditionsDataSequence" );
+    csanames.push_back( "FmriResultSequence" );
+    csanames.push_back( "MR_ASL" );
+    csanames.push_back( "MRDiffusion" );
   }
 
   // else
@@ -1615,7 +1650,7 @@ int main (int argc, char *argv[])
         }
       else if( printcsabase64 )
         {
-        res += PrintCSABase64(*it, csaname);
+        res += PrintCSABase64(*it, csanames);
         }
       else if( dump )
         {
@@ -1682,7 +1717,7 @@ int main (int argc, char *argv[])
       }
     else if( printcsabase64 )
       {
-      res += PrintCSABase64(filename, csaname);
+      res += PrintCSABase64(filename, csanames);
       }
     else if( dump )
       {
