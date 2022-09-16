@@ -11,6 +11,29 @@
      PURPOSE.  See the above copyright notice for more information.
 -->
 <dict>
+<entry group="0021" element="0010" vr="SQ" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0011" vr="LO" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0012" vr="SQ" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0013" vr="US" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0014" vr="SQ" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0015" vr="US" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0016" vr="LO" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0017" vr="US" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0018" vr="UL" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0019" vr="FL" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0031" vr="SQ" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0040" vr="SQ" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0041" vr="LO" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0042" vr="SQ" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0043" vr="LO" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0044" vr="US" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0045" vr="LO" vm="1-n" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0046" vr="SQ" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0047" vr="UL" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0048" vr="LO" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="0049" vr="FD" vm="1" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="004a" vr="FD" vm="1-n" name="?" owner="SIEMENS MR FMRI"/>
+<entry group="0021" element="004b" vr="FL" vm="1" name="?" owner="SIEMENS MR FMRI"/>
 <entry group="0009" element="0002" vr="SH" vm="1" name="?" owner="CANON_MEC_MR3^10"/>
 <entry group="0011" element="0003" vr="US" vm="1" name="?" owner="CANON_MEC_MR3^10"/>
 <entry group="0011" element="0004" vr="SQ" vm="1" name="?" owner="CANON_MEC_MR3^10"/>
