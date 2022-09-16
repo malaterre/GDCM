@@ -2517,6 +2517,7 @@
   <entry owner="ELSCINT1" group="07a1" element="xx43" vr="IS" vm="1" name="?"/>
   <entry owner="ELSCINT1" group="07a1" element="xx50" vr="US" vm="1" name="Tamar Site Id"/>
   <entry owner="ELSCINT1" group="07a1" element="xx56" vr="US" vm="1" name="?"/>
+  <entry owner="ELSCINT1" group="07a1" element="xx5a" vr="CS" vm="1" name="?"/>
   <entry owner="ELSCINT1" group="07a1" element="xx75" vr="LO" vm="2" name="?"/>
   <entry owner="ELSCINT1" group="07a1" element="xx85" vr="UL" vm="1" name="Tamar Translate Flags"/>
   <entry owner="ELSCINT1" group="07a1" element="xx9f" vr="CS" vm="1" name="?"/>
@@ -9286,11 +9287,12 @@
   <entry owner="SIENET" group="0009" element="xx75" vr="LO" vm="1" name="?"/>
   <entry owner="SIENET" group="0091" element="xx20" vr="PN" vm="1-n" name="Patient Name"/>
   <entry owner="SIENET" group="0095" element="xx01" vr="LO" vm="1" name="Examination Folder ID"/>
-  <entry owner="SIENET" group="0095" element="xx04" vr="UL" vm="1" name="Folder Reported Status"/>
+  <entry owner="SIENET" group="0095" element="xx04" vr="SL" vm="1" name="Folder Reported Status"/>
   <entry owner="SIENET" group="0095" element="xx05" vr="LO" vm="1" name="Folder Reporting Radiologist"/>
   <entry owner="SIENET" group="0095" element="xx07" vr="LO" vm="1" name="SIENET ISA PLA"/>
-  <entry owner="SIENET" group="0095" element="xx0c" vr="UL" vm="1" name="Folder Rebuild Status"/>
+  <entry owner="SIENET" group="0095" element="xx0c" vr="SL" vm="1" name="Folder Rebuild Status"/>
   <entry owner="SIENET" group="0095" element="xx20" vr="UN" vm="1" name="?"/>
+  <entry owner="SIENET" group="0095" element="xxfb" vr="ST" vm="1" name="?"/>
   <entry owner="SIENET" group="0099" element="xx02" vr="UL" vm="1" name="Key Images"/>
   <entry owner="SIENET" group="0099" element="xx05" vr="SL" vm="1" name="Image Number"/>
   <entry owner="SPI" group="0009" element="xx10" vr="LO" vm="1" name="Comments"/>
