@@ -1074,7 +1074,9 @@ static int PrintCSABase64Impl(gdcm::CSAHeader &csa, std::string const & csaname 
       return 1;
     }
     gdcm::Printer p;
+    //gdcm::DictPrinter p;
     p.SetFile( file );
+    //p.SetColor( 1 );
     std::cout << "--" << csaname << "--" << std::endl;
     p.Print(std::cout);
   }
