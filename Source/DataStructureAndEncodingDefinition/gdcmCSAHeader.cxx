@@ -1116,6 +1116,7 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
     ss.read((char*)&nitems, sizeof(nitems));
     SwapperNoOp::SwapArray(&nitems,1);
     csael.SetNoOfItems( nitems );
+    if( InternalType == SV10) { assert( nitems % 6 == 0 );}
     //std::cout << "NoOfItems " << nitems << ", ";
     uint32_t xx;
     ss.read((char*)&xx, sizeof(xx));
