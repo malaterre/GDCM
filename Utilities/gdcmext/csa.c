@@ -160,6 +160,7 @@ static bool read_magic(struct app *self) {
     assert(0);
     return false;
   }
+  assert(n > 0 && n < 128);
   self->nelements = n;
   self->csa_type = magic;
   return true;
@@ -227,11 +228,19 @@ static bool read_info(struct app *self, struct csa_info *i) {
   // vr
   s = fread_mirror(i->vr, sizeof *i->vr, sizeof i->vr / sizeof *i->vr, self);
   ERROR_RETURN(s, 4);
+  {
+    const char *s = i->vr;
+    assert(s[0] >= 'A' && s[0] <= 'Z');
+    assert(s[1] >= 'A' && s[1] <= 'Z');
+    assert(s[2] == 0);
+    if (self->csa_type == SV10) assert(s[3] == 0);
+  }
   // syngodt (signed)
   s = fread_mirror(&i->syngodt, sizeof i->syngodt, 1, self);
   ERROR_RETURN(s, 1);
   // numer of items
   s = fread_mirror(&i->nitems, sizeof i->nitems, 1, self);
+  if (self->csa_type == SV10) assert(i->nitems % 6 == 0);
   ERROR_RETURN(s, 1);
   {
     uint32_t unused;
