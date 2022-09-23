@@ -752,6 +752,10 @@ int main(int argc, char *argv[])
       std::cerr << "Input directory should be different from output directory" << std::endl;
       return 1;
       }
+#ifdef _MSC_VER
+    if (outfilename.back() == '\\')
+      outfilename = outfilename.substr(0, outfilename.size() - 1);
+#endif
     if( outfilename.back() != '/' ) outfilename += '/';
     nfiles = dir.Load(filename, (recursive > 0 ? true : false));
     filenames = dir.GetFilenames();
