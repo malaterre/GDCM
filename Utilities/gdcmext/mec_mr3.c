@@ -400,6 +400,7 @@ static bool mec_mr3_scrub(void *output, const void *input, size_t len) {
     if (s != 1 || nitems == 0) {
       good = false;
     }
+    assert(nitems < 512);
     if (good && nitems <= MAGIC_NUM_ELEMENTS) {
       // special case to handle last groups
       remain = nitems;

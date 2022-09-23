@@ -163,6 +163,12 @@ if(GDCM_USE_SYSTEM_PAPYRUS3)
     )
 endif()
 
+if(NOT GDCM_USE_SYSTEM_ZLIB)
+  include_directories(
+    "${GDCM_BINARY_DIR}/Utilities/gdcmzlib"
+    )
+endif()
+
 foreach(exename ${GDCM_EXECUTABLE_NAME})
   if(${exename} STREQUAL "gdcminfo")
     add_executable(${exename} ${exename}.cxx puff.c)

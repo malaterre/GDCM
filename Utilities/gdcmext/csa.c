@@ -137,24 +137,30 @@ static bool read_magic(struct app *self) {
 
   // Handle very special case hopefully no conflict with case of no-magic
   if (n == 0x30315653 && unused == 0x01020304) {  // aka 'SV10'
+    // SIEMENS_CSA2.dcm
     s = fread_mirror(&n, sizeof n, 1, self);
     ERROR_RETURN(s, 1);
+    ERROR_RETURN(n < 0x100, true);
     s = fread_mirror(&unused, sizeof unused, 1, self);
     ERROR_RETURN(s, 1);
+    ERROR_RETURN(unused, 0x4d);  // 'M'
     magic = SV10;
   } else if (n < 0x100 && unused == 0x4d) {  // 'M'
+    // SIEMENS_Sonata-16-MONO2-Value_Multiplicity.dcm
     magic = NOMAGIC;
-  } else if (n == 0x7364703c && unused == 0x6f633c3e)  // aka '<pds><co'
-  {
+  } else if (n == 0x7364703c && unused == 0x6f633c3e) {  // aka '<pds><co'
     // 'PET_REPLAY_PARAM'
+    assert(0);
     return false;
   } else if (n == 0x31305356 && unused == 0x2010403) {  // aka 'VS01' ...
     // technically could be reserved; should not happen in the wild
+    assert(0);
     return false;
   } else {
     assert(0);
     return false;
   }
+  assert(n > 0 && n < 128);
   self->nelements = n;
   self->csa_type = magic;
   return true;
@@ -167,14 +173,27 @@ static bool write_trailer(struct app *self) {
     uint32_t unused;
     s = fread_mirror(&unused, sizeof unused, 1, self);
     ERROR_RETURN(s, 1);
+    ERROR_RETURN(unused, 0);
   } else if (self->csa_type == NOMAGIC) {
-    // no magic
+    // no magic. seems to contains some kind of data, hopefully no PHI
+#if 1
     uint32_t i;
     for (i = 0; i < 28u; ++i) {
       uint32_t unused;
       s = fread_mirror(&unused, sizeof unused, 1, self);
       ERROR_RETURN(s, 1);
     }
+#else
+    char unused[28 * 4];
+    s = fread_mirror(unused, sizeof *unused, sizeof unused / sizeof *unused,
+                     self);
+    ERROR_RETURN(s, 28 * 4);
+    int i;
+    for (i = 0; i < 4 * 28; ++i) {
+      const char c = unused[i];
+      assert(c == 0x0 || c == ' ' || c == '.' || (c >= '0' && c <= '9'));
+    }
+#endif
   } else {
     assert(0);
     return false;
@@ -209,16 +228,25 @@ static bool read_info(struct app *self, struct csa_info *i) {
   // vr
   s = fread_mirror(i->vr, sizeof *i->vr, sizeof i->vr / sizeof *i->vr, self);
   ERROR_RETURN(s, 4);
+  {
+    const char *s = i->vr;
+    assert(s[0] >= 'A' && s[0] <= 'Z');
+    assert(s[1] >= 'A' && s[1] <= 'Z');
+    assert(s[2] == 0);
+    if (self->csa_type == SV10) assert(s[3] == 0);
+  }
   // syngodt (signed)
   s = fread_mirror(&i->syngodt, sizeof i->syngodt, 1, self);
   ERROR_RETURN(s, 1);
   // numer of items
   s = fread_mirror(&i->nitems, sizeof i->nitems, 1, self);
+  if (self->csa_type == SV10) assert(i->nitems % 6 == 0);
   ERROR_RETURN(s, 1);
   {
     uint32_t unused;
     s = fread_mirror(&unused, sizeof unused, 1, self);
     ERROR_RETURN(s, 1);
+    ERROR_RETURN(unused == 0x4d || unused == 0xcd, true);
   }
 
   return true;
@@ -232,6 +260,7 @@ static bool read_data(struct app *self, struct csa_item_data *d) {
     uint32_t unused;
     s = fread_mirror(&unused, sizeof unused, 1, self);
     ERROR_RETURN(s, 1);
+    assert(unused == d->len || unused == 0x4d || unused == 0xcd);
   }
 
   if (d->len != 0) {
@@ -239,6 +268,8 @@ static bool read_data(struct app *self, struct csa_item_data *d) {
     const uint32_t padded_len = ((d->len + 3u) / 4u) * 4u;  // (len + 3) & ~0x03
     assert(padded_len == d->len + padding_len);             // programmer error
     d->buffer = (char *)realloc(d->buffer, padded_len);
+    assert(padded_len != 0);
+    ERROR_RETURN(d->buffer != NULL, true);
     s = fread_mirror(d->buffer, sizeof *d->buffer, padded_len, self);
     ERROR_RETURN(s, padded_len);
   }
