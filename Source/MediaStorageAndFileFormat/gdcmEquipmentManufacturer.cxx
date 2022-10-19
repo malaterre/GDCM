@@ -16,112 +16,197 @@
 #include "gdcmAttribute.h"
 #include "gdcmSystem.h"
 
-namespace gdcm
-{
+namespace gdcm {
 
-static const char *TypeStrings[] = {
-    "UNKNOWN",
-    "FUJI",
-    "GEMS",
-    "HITACHI",
-    "KODAK",
-    "MARCONI",
-    "PMS",
-    "SIEMENS",
-    "TOSHIBA"
-};
+// FIXME: fuji and hitashi are the same now
+static const char* TypeStrings[] = {"UNKNOWN", "FUJI",    "GEMS",
+                                    "HITACHI", "KODAK",   "MARCONI",
+                                    "PMS",     "SIEMENS", "TOSHIBA"};
 
-const char *EquipmentManufacturer::TypeToString( Type type )
-{
+const char* EquipmentManufacturer::TypeToString(Type type) {
   return TypeStrings[type];
 }
 
-struct Mapping
-{
+struct Mapping {
   EquipmentManufacturer::Type type;
   size_t nstrings;
-  const char* const *strings;
+  const char* const* strings;
 };
 
-static const char* const fuji[] = {"FUJI", "FUJI PHOTO FILM Co., ltd.","FUJIFILM Corporation","FUJI PHOTO FILM CO. LTD."};
-static const char* const gems[] = {"GE MEDICAL SYSTEMS", "GE_MEDICAL_SYSTEMS", "GE Healthcare", "G.E. Medical Systems","GE Vingmed Ultrasound","\"GE Healthcare\""/*sigh*/};
-static const char* const hitachi[] = {"Hitachi Medical Corporation","ALOKA CO., LTD."};
+static const char* const fuji[] = {"FUJI", "FUJI PHOTO FILM Co., ltd.",
+                                   "FUJIFILM Corporation",
+                                   "FUJI PHOTO FILM CO. LTD."};
+static const char* const gems[] = {
+    "GE MEDICAL SYSTEMS",    "GE_MEDICAL_SYSTEMS",
+    "GE Healthcare",         "G.E. Medical Systems",
+    "GE Vingmed Ultrasound", "\"GE Healthcare\"" /*sigh*/};
+static const char* const hitachi[] = {"Hitachi Medical Corporation",
+                                      "ALOKA CO., LTD."};
 static const char* const kodak[] = {"Kodak"};
-static const char* const pms[] = { "Philips Medical Systems", "Philips Healthcare", "Philips Medical Systems, Inc.","Philips","Picker International, Inc." };
-static const char* const siemens[] = { "Siemens Healthineers", "SIEMENS", "Siemens HealthCare GmbH", "Siemens Health Services","Acuson" };
-static const char* const marconi[] = { "Marconi Medical Systems, Inc." };
-static const char* const toshiba[] = { "TOSHIBA_MEC", "Toshiba" };
+static const char* const pms[] = {
+    "Philips Medical Systems", "Philips Healthcare",
+    "Philips Medical Systems, Inc.", "Philips", "Picker International, Inc."};
+static const char* const siemens[] = {"Siemens Healthineers", "SIEMENS",
+                                      "Siemens HealthCare GmbH",
+                                      "Siemens Health Services", "Acuson"};
+static const char* const marconi[] = {"Marconi Medical Systems, Inc."};
+static const char* const toshiba[] = {"TOSHIBA_MEC",
+                                      "Toshiba"};  // must include canon
 
-#define ARRAY_SIZE( X ) \
-  sizeof(X) / sizeof(*X)
+#define ARRAY_SIZE(X) sizeof(X) / sizeof(*X)
 
 #define MAPPING(X, Y) \
   { X, ARRAY_SIZE(Y), Y }
 
 static const Mapping mappings[] = {
-  MAPPING( EquipmentManufacturer::FUJI, fuji ),
-  MAPPING( EquipmentManufacturer::GEMS, gems ),
-  MAPPING( EquipmentManufacturer::HITACHI, hitachi ),
-  MAPPING( EquipmentManufacturer::KODAK, kodak ),
-  MAPPING( EquipmentManufacturer::PMS, pms ),
-  MAPPING( EquipmentManufacturer::SIEMENS, siemens ),
-  MAPPING( EquipmentManufacturer::MARCONI, marconi ),
-  MAPPING( EquipmentManufacturer::TOSHIBA, toshiba )
-};
+    MAPPING(EquipmentManufacturer::FUJI, fuji),
+    MAPPING(EquipmentManufacturer::GEMS, gems),
+    MAPPING(EquipmentManufacturer::HITACHI, hitachi),
+    MAPPING(EquipmentManufacturer::KODAK, kodak),
+    MAPPING(EquipmentManufacturer::PMS, pms),
+    MAPPING(EquipmentManufacturer::SIEMENS, siemens),
+    MAPPING(EquipmentManufacturer::MARCONI, marconi),
+    MAPPING(EquipmentManufacturer::TOSHIBA, toshiba)};
 
-EquipmentManufacturer::Type EquipmentManufacturer::GuessFromPrivateAttributes( DataSet const & ds )
-{
+// long story short, private creator could be moved around, what we are trying
+// to achieve here is true modality check, so generally they should not have
+// been moved in the process.
+static bool IsPrivateCreatorFound(DataSet const& ds, Tag const& private_tag,
+                                  std::string const& creator_value) {
+  if (ds.FindDataElement(private_tag)) {
+    const DataElement& de = ds.GetDataElement(private_tag);
+    Element<VR::LO, VM::VM1> priv_creator;
+    priv_creator.SetFromDataElement(de);
+    if (priv_creator.GetValue().Trim() == creator_value) return true;
+  }
+  return false;
+}
+
+template <long long TVR, int TVM>
+static std::string GetPrivateTagValueOrEmpty(DataSet const& ds,
+                                             PrivateTag const& pt) {
+  if (ds.FindDataElement(pt)) {
+    const DataElement& de = ds.GetDataElement(pt);
+    Element<TVR, TVM> value = {""};
+    value.SetFromDataElement(de);
+    return value.GetValue().Trim();
+  }
+  return "";
+}
+
+EquipmentManufacturer::Type EquipmentManufacturer::GuessFromPrivateAttributes(
+    DataSet const& ds) {
   // try against with well known private tag:
   // watch out for private creator such as ELSCINT1 which can be found in
   // GEMS/PEMS and maybe even SIEMENS !
-  gdcm::Tag gems_iden_01(0x0009,0x0010);
-  if( ds.FindDataElement( gems_iden_01 ) )
-  {
-    const gdcm::DataElement & de = ds.GetDataElement( gems_iden_01 );
-    gdcm::Element<VR::LO, VM::VM1> priv_creator;
-    priv_creator.SetFromDataElement( de );
-    if( priv_creator.GetValue() == "GEMS_IDEN_01" ) return GEMS;
-    if( priv_creator.GetValue() == "GEMS_PETD_01" ) return GEMS;
-  }
+  // Try to prefer those listed at:
+  // https://dicom.nema.org/medical/dicom/current/output/chtml/part15/sect_E.3.10.html#table_E.3.10-1
+  if (ds.FindDataElement(PrivateTag(0x0019, 0x0023, "GEMS_ACQU_01")) ||
+      ds.FindDataElement(PrivateTag(0x0043, 0x0039, "GEMS_PARM_01")) ||
+      ds.FindDataElement(PrivateTag(0x0045, 0x0001, "GEMS_HELIOS_01")) ||
+      ds.FindDataElement(PrivateTag(0x0025, 0x0007, "GEMS_SERS_01"))
+      /* extra */
+      || ds.FindDataElement(
+             PrivateTag(0x6003, 0x0010, "GEMS_Ultrasound_ImageGroup_001")) ||
+      ds.FindDataElement(PrivateTag(0x0019, 0x0007, "DLX_SERIE_01")) ||
+      ds.FindDataElement(PrivateTag(0x0009, 0x0001, "GEMS_GENIE_1")) ||
+      ds.FindDataElement(PrivateTag(0x0011, 0x0003, "GEMS_GDXE_FALCON_04")))
+    return GEMS;
 
-  gdcm::PrivateTag siemens_manu(0x0021,0x0022,"SIEMENS MR SDS 01");
-  if( ds.FindDataElement( siemens_manu ) )
-  {
-    const gdcm::DataElement & de = ds.GetDataElement( siemens_manu );
-    gdcm::Element<VR::SH, VM::VM1> value;
-    value.SetFromDataElement( de );
-    if( value.GetValue().Trim() == "SIEMENS" ) return SIEMENS;
-  }
+#if 0
+  if (IsPrivateCreatorFound(ds, Tag(0x0025, 0x0010), "GEMS_IDEN_01") ||
+      IsPrivateCreatorFound(ds, Tag(0x0009, 0x0010), "GEMS_IDEN_01") ||
+      IsPrivateCreatorFound(ds, Tag(0x0009, 0x0010), "GEMS_GENIE_1") ||
+      IsPrivateCreatorFound(ds, Tag(0x0009, 0x0010), "GEMS_PETD_01"))
+    return GEMS;
+#endif
 
+  // Philips:
+  if (ds.FindDataElement(
+          PrivateTag(0x2005, 0x000d, "Philips MR Imaging DD 001")) ||
+      ds.FindDataElement(
+          PrivateTag(0x2005, 0x000e, "Philips MR Imaging DD 001")))
+    return PMS;
+#if 0
+  if (IsPrivateCreatorFound(ds, Tag(0x2005, 0x0014),
+                            "Philips MR Imaging DD 005"))
+    return PMS;
+#endif
+  if (IsPrivateCreatorFound(ds, Tag(0x0019, 0x0010), "PHILIPS MR/PART") &&
+      IsPrivateCreatorFound(ds, Tag(0x0021, 0x0010), "PHILIPS MR/PART"))
+    return PMS;
+  if (IsPrivateCreatorFound(ds, Tag(0x0009, 0x0010), "SPI-P Release 1") &&
+      IsPrivateCreatorFound(ds, Tag(0x0019, 0x0010), "SPI-P Release 1"))
+    return PMS;
+
+  // Siemens:
+  if (ds.FindDataElement(PrivateTag(0x0029, 0x0010, "SIEMENS CSA HEADER")) ||
+      ds.FindDataElement(PrivateTag(0x0029, 0x0020, "SIEMENS CSA HEADER")) ||
+      ds.FindDataElement(PrivateTag(0x0029, 0x0010, "SIEMENS MEDCOM OOG")) ||
+      ds.FindDataElement(
+          PrivateTag(0x7fdf, 0x0000, "ACUSON:1.2.840.113680.1.0:7ffe")) ||
+      ds.FindDataElement(PrivateTag(0x0019, 0x0012, "SIEMENS CM VA0  ACQU")) ||
+      ds.FindDataElement(PrivateTag(0x0009, 0x0010, "SIEMENS CT VA0  IDE")))
+    return SIEMENS;
+#if 0
+  if (GetPrivateTagValueOrEmpty<VR::SH, VM::VM1>(
+          ds, PrivateTag(0x0021, 0x0022, "SIEMENS MR SDS 01")) == "SIEMENS")
+    return SIEMENS;
+  // gdcm-MR-SIEMENS-16-2.acr
+  if (GetPrivateTagValueOrEmpty<VR::LO, VM::VM1>(
+          ds, PrivateTag(0x0019, 0x0012, "SIEMENS CM VA0  ACQU")) == "SIEMENS")
+    return SIEMENS;
+#endif
+
+  // toshiba:
+  if (ds.FindDataElement(PrivateTag(0x7005, 0x0008, "TOSHIBA_MEC_CT3")))
+    return TOSHIBA;
+  // fuji
+  if (ds.FindDataElement(PrivateTag(0x0021, 0x0010, "FDMS 1.0"))) return FUJI;
+  // hitachi
+  if (ds.FindDataElement(PrivateTag(0x0009, 0x0000, "HMC - CT - ID")))
+    return HITACHI;
   return UNKNOWN;
 }
 
-EquipmentManufacturer::Type EquipmentManufacturer::Compute( DataSet const & ds )
-{
-  EquipmentManufacturer::Type ret = GuessFromPrivateAttributes( ds );
+EquipmentManufacturer::Type EquipmentManufacturer::Compute(DataSet const& ds) {
+  EquipmentManufacturer::Type ret = GuessFromPrivateAttributes(ds);
 
   // proper anonymizer should not touch Manufacturer attribute value:
   // http://dicom.nema.org/medical/dicom/current/output/chtml/part15/chapter_E.html#table_E.1-1
-  gdcm::Attribute<0x0008,0x0070> manu = { "" }; // Manufacturer
-  manu.SetFromDataSet( ds );
-  const std::string manufacturer = manu.GetValue().Trim();
-  for( const Mapping * mapping = mappings; mapping != mappings + ARRAY_SIZE(mappings); ++mapping )
-  {
-    for( size_t i = 0; i < mapping->nstrings; ++i )
-    {
-      // case insensitive to handle: "GE MEDICAL SYSTEMS" vs "GE Medical Systems"
-      if( System::StrCaseCmp( mapping->strings[i], manufacturer.c_str() ) == 0 ) {
-        if( ret != UNKNOWN && ret != mapping->type ) {
-          gdcmErrorMacro(" Impossible happen: " << ret << " vs " << mapping->type  );
-          return UNKNOWN;
+  Attribute<0x0008, 0x0070> manu = {""};  // Manufacturer
+  std::string manufacturer;
+  if (ds.FindDataElement(manu.GetTag())) {
+    manu.SetFromDataSet(ds);
+    manufacturer = manu.GetValue().Trim();
+    // TODO: contributing equipement ?
+  } else {
+    // MFSPLIT export seems to remove the attribute completely:
+    manufacturer = GetPrivateTagValueOrEmpty<VR::SH, VM::VM1>(
+        ds, PrivateTag(0x0021, 0x0022, "SIEMENS MR SDS 01"));
+  }
+  if (!manufacturer.empty()) {
+    for (const Mapping* mapping = mappings;
+         mapping != mappings + ARRAY_SIZE(mappings); ++mapping) {
+      for (size_t i = 0; i < mapping->nstrings; ++i) {
+        // case insensitive to handle: "GE MEDICAL SYSTEMS" vs "GE Medical
+        // Systems"
+        if (System::StrCaseCmp(mapping->strings[i], manufacturer.c_str()) ==
+            0) {
+          if (ret != UNKNOWN && ret != mapping->type) {
+            gdcmErrorMacro(" Impossible happen: " << ret << " vs "
+                                                  << mapping->type);
+            return UNKNOWN;
+          }
+          return mapping->type;
         }
-        return mapping->type;
       }
     }
   }
 
-  gdcmWarningMacro( "Unknown Manufacturer [" << manufacturer << "] trying guess." );
+  gdcmWarningMacro("Unknown Manufacturer [" << manufacturer
+                                            << "] trying guess.");
   return ret;
 }
 
-} // end namespace gdcm
+}  // end namespace gdcm
