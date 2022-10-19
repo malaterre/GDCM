@@ -30,16 +30,16 @@ class GDCM_EXPORT EquipmentManufacturer {
  public:
   typedef enum {
     UNKNOWN = 0,
+    AGFA,
     FUJI,
     GEMS,
     HITACHI,
     KODAK,
     MARCONI,
     PMS,
+    SAMSUNG,
     SIEMENS,
     TOSHIBA,
-    AGFA,
-    SAMSUNG,
     UIH
   } Type;
 
