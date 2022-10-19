@@ -18,10 +18,10 @@
 
 namespace gdcm {
 
-// FIXME: fuji and hitashi are the same now
-static const char* TypeStrings[] = {"UNKNOWN", "FUJI",    "GEMS",
-                                    "HITACHI", "KODAK",   "MARCONI",
-                                    "PMS",     "SIEMENS", "TOSHIBA"};
+// FIXME: fuji and hitachi are the same now
+static const char* TypeStrings[] = {"UNKNOWN", "FUJI",    "GEMS",    "HITACHI",
+                                    "KODAK",   "MARCONI", "PMS",     "SIEMENS",
+                                    "TOSHIBA", "AGFA",    "SAMSUNG", "UIH"};
 
 const char* EquipmentManufacturer::TypeToString(Type type) {
   return TypeStrings[type];
@@ -33,25 +33,44 @@ struct Mapping {
   const char* const* strings;
 };
 
-static const char* const fuji[] = {"FUJI", "FUJI PHOTO FILM Co., ltd.",
+static const char* const agfa[] = {"Agfa"};
+static const char* const fuji[] = {"FUJI",
+                                   "FUJI PHOTO FILM Co., ltd.",
+                                   "FUJIFILM Healthcare Corporation",
+                                   "FUJIFILM SonoSite",
                                    "FUJIFILM Corporation",
                                    "FUJI PHOTO FILM CO. LTD."};
-static const char* const gems[] = {
-    "GE MEDICAL SYSTEMS",    "GE_MEDICAL_SYSTEMS",
-    "GE Healthcare",         "G.E. Medical Systems",
-    "GE Vingmed Ultrasound", "\"GE Healthcare\"" /*sigh*/};
+static const char* const gems[] = {"GE MEDICAL SYSTEMS",
+                                   "GE_MEDICAL_SYSTEMS",
+                                   "GE Healthcare",
+                                   "G.E. Medical Systems",
+                                   "GE Healthcare IT Cardiology",
+                                   "GE Healthcare Austria GmbH & Co OG",
+                                   "GE Healthcare Ultrasound",
+                                   "GE MEDICAL SYSTEMS, NUCLEAR",
+                                   "GEMS Ultrasound",
+                                   "GE OEC Medical Systems GmbH",
+                                   "GE Vingmed Ultrasound",
+                                   "\"GE Healthcare\"" /*sigh*/};
 static const char* const hitachi[] = {"Hitachi Medical Corporation",
-                                      "ALOKA CO., LTD."};
+                                      "Hitachi, Ltd.", "ALOKA CO., LTD."};
 static const char* const kodak[] = {"Kodak"};
 static const char* const pms[] = {
     "Philips Medical Systems", "Philips Healthcare",
     "Philips Medical Systems, Inc.", "Philips", "Picker International, Inc."};
-static const char* const siemens[] = {"Siemens Healthineers", "SIEMENS",
+static const char* const siemens[] = {"Siemens Healthineers",
+                                      "SIEMENS",
+                                      "SIEMENS NM",
                                       "Siemens HealthCare GmbH",
-                                      "Siemens Health Services", "Acuson"};
+                                      "Siemens Health Services",
+                                      "Acuson"};
 static const char* const marconi[] = {"Marconi Medical Systems, Inc."};
-static const char* const toshiba[] = {"TOSHIBA_MEC",
+static const char* const samsung[] = {"SAMSUNG MEDISON CO., LTD.",
+                                      "SAMSUNG MEDISON CO.,LTD." /*sigh*/};
+static const char* const toshiba[] = {"TOSHIBA_MEC", "CANON_MEC",
+                                      "TOSHIBA_MEC_US",
                                       "Toshiba"};  // must include canon
+static const char* const uih[] = {"UIH"};          // United Imaging Healthcare
 
 #define ARRAY_SIZE(X) sizeof(X) / sizeof(*X)
 
@@ -59,6 +78,7 @@ static const char* const toshiba[] = {"TOSHIBA_MEC",
   { X, ARRAY_SIZE(Y), Y }
 
 static const Mapping mappings[] = {
+    MAPPING(EquipmentManufacturer::AGFA, agfa),
     MAPPING(EquipmentManufacturer::FUJI, fuji),
     MAPPING(EquipmentManufacturer::GEMS, gems),
     MAPPING(EquipmentManufacturer::HITACHI, hitachi),
@@ -66,7 +86,9 @@ static const Mapping mappings[] = {
     MAPPING(EquipmentManufacturer::PMS, pms),
     MAPPING(EquipmentManufacturer::SIEMENS, siemens),
     MAPPING(EquipmentManufacturer::MARCONI, marconi),
-    MAPPING(EquipmentManufacturer::TOSHIBA, toshiba)};
+    MAPPING(EquipmentManufacturer::SAMSUNG, samsung),
+    MAPPING(EquipmentManufacturer::TOSHIBA, toshiba),
+    MAPPING(EquipmentManufacturer::UIH, uih)};
 
 // long story short, private creator could be moved around, what we are trying
 // to achieve here is true modality check, so generally they should not have
@@ -104,7 +126,7 @@ EquipmentManufacturer::Type EquipmentManufacturer::GuessFromPrivateAttributes(
   if (ds.FindDataElement(PrivateTag(0x0019, 0x0023, "GEMS_ACQU_01")) ||
       ds.FindDataElement(PrivateTag(0x0043, 0x0039, "GEMS_PARM_01")) ||
       ds.FindDataElement(PrivateTag(0x0045, 0x0001, "GEMS_HELIOS_01")) ||
-      ds.FindDataElement(PrivateTag(0x0025, 0x0007, "GEMS_SERS_01"))
+      ds.FindDataElement(PrivateTag(0x0025, 0x001b, "GEMS_SERS_01"))
       /* extra */
       || ds.FindDataElement(
              PrivateTag(0x6003, 0x0010, "GEMS_Ultrasound_ImageGroup_001")) ||
@@ -125,7 +147,10 @@ EquipmentManufacturer::Type EquipmentManufacturer::GuessFromPrivateAttributes(
   if (ds.FindDataElement(
           PrivateTag(0x2005, 0x000d, "Philips MR Imaging DD 001")) ||
       ds.FindDataElement(
-          PrivateTag(0x2005, 0x000e, "Philips MR Imaging DD 001")))
+          PrivateTag(0x2005, 0x000e, "Philips MR Imaging DD 001")) ||
+      ds.FindDataElement(
+          PrivateTag(0x2001, 0x0003, "Philips Imaging DD 001")) ||
+      ds.FindDataElement(PrivateTag(0x2001, 0x005f, "Philips Imaging DD 001")))
     return PMS;
 #if 0
   if (IsPrivateCreatorFound(ds, Tag(0x2005, 0x0014),
@@ -159,13 +184,27 @@ EquipmentManufacturer::Type EquipmentManufacturer::GuessFromPrivateAttributes(
 #endif
 
   // toshiba:
-  if (ds.FindDataElement(PrivateTag(0x7005, 0x0008, "TOSHIBA_MEC_CT3")))
+  if (ds.FindDataElement(PrivateTag(0x7005, 0x0008, "TOSHIBA_MEC_CT3")) ||
+      ds.FindDataElement(PrivateTag(0x700d, 0x0008, "TOSHIBA_MEC_MR3")) ||
+      ds.FindDataElement(PrivateTag(0x0029, 0x0001, "PMTF INFORMATION DATA")) ||
+      ds.FindDataElement(PrivateTag(0x0029, 0x0001, "CANON_MEC_MR3")) ||
+      ds.FindDataElement(PrivateTag(0x0029, 0x0001, "TOSHIBA_MEC_MR3")))
     return TOSHIBA;
   // fuji
   if (ds.FindDataElement(PrivateTag(0x0021, 0x0010, "FDMS 1.0"))) return FUJI;
   // hitachi
-  if (ds.FindDataElement(PrivateTag(0x0009, 0x0000, "HMC - CT - ID")))
+  if (ds.FindDataElement(PrivateTag(0x0009, 0x0000, "HMC - CT - ID")) ||
+      ds.FindDataElement(PrivateTag(0x0009, 0x0003, "MMCPrivate")) ||
+      ds.FindDataElement(PrivateTag(0x0009, 0x0050, "MMCPrivate")) ||
+      ds.FindDataElement(PrivateTag(0x0019, 0x000e, "MMCPrivate")) ||
+      ds.FindDataElement(PrivateTag(0x0019, 0x0021, "MMCPrivate")) ||
+      ds.FindDataElement(PrivateTag(0x0029, 0x002f, "MMCPrivate")) ||
+      ds.FindDataElement(PrivateTag(0x0029, 0x00d7, "MMCPrivate")))
     return HITACHI;
+  // UIH
+  if (ds.FindDataElement(PrivateTag(0x0065, 0x000a, "Image Private Header")))
+    return UIH;
+
   return UNKNOWN;
 }
 
