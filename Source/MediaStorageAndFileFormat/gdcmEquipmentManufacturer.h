@@ -30,17 +30,17 @@ class GDCM_EXPORT EquipmentManufacturer {
  public:
   typedef enum {
     UNKNOWN = 0,
-    FUJI = 1,
-    GEMS = 2,
-    HITACHI = 3,
-    KODAK = 4,
-    MARCONI = 5,
-    PMS = 6,
-    SIEMENS = 7,
-    TOSHIBA = 8,
-    AGFA = 9,
-    SAMSUNG = 10,
-    UIH = 11
+    FUJI,
+    GEMS,
+    HITACHI,
+    KODAK,
+    MARCONI,
+    PMS,
+    SIEMENS,
+    TOSHIBA,
+    AGFA,
+    SAMSUNG,
+    UIH
   } Type;
 
   static Type Compute(DataSet const &ds);
