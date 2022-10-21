@@ -11,4 +11,7 @@ SHA 256 checksum:
 
 Changes:
  - CMakeLists.txt added
- - more...
+ - COPYING file added
+ - #cmakedefine ZLIB_DLL was added at zconf.in.h:11
+ - the ZEXTERN definition was tweaked in zconf.in.h
+ 
