@@ -20,13 +20,10 @@ set(ZLIB_SRCS
   compress.c
   crc32.c
   deflate.c
-  #example.c
-  gzio.c
   infback.c
   inffast.c
   inflate.c
   inftrees.c
-  #minigzip.c
   trees.c
   uncompr.c
   zutil.c
