@@ -8232,7 +8232,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0029,0x0004,"SECTRA_ImageInfo_01",VR::OB,VM::VM1,"Image Info new",false },
   {0x0029,0x0005,"SECTRA_ImageInfo_01",VR::SS,VM::VM1,"?",false },
   {0x6001,0x0001,"SECTRA_OverlayInfo_01",VR::LO,VM::VM1,"Sectra Overlay",false },
-  {0x0031,0x0098,"SEGAMI MIML",VR::OW,VM::VM1,"?",false },
+  {0x0031,0x0098,"SEGAMI MIML",VR::OW,VM::VM1,"?Binary XML with PHI?",false },
   {0x0035,0x0097,"SEGAMI__MEMO",VR::SH,VM::VM1,"?",false },
   {0x0035,0x0098,"SEGAMI__MEMO",VR::LT,VM::VM1,"?",false },
   {0x0019,0x0000,"SET WINDOW",VR::UN,VM::VM1,"Set Window Image Filter",false },
