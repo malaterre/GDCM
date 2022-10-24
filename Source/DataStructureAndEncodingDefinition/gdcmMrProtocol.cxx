@@ -60,14 +60,19 @@ bool MrProtocol::Load( const ByteValue * bv, const char * csastr, int version )
     // ### ASCCONV BEGIN ###
     // as well as:
     // ### ASCCONV BEGIN object=MrProtDataImpl@MrProtocolData version=41310008 converter=%MEASCONST%/ConverterList/Prot_Converter.txt ###
+    // and
+    //       "### ASCCONV BEGIN object=MrProtDataImpl@MrProtocolData version=51130001 converter=%MEASCONST%/ConverterList/Prot_Converter.txt ###
     static const char begin[] = "### ASCCONV BEGIN ";
+    static const char begin2[] = "\"### ASCCONV BEGIN ";
     static const char end[] = "### ASCCONV END ###";
     bool hasstarted = false;
     while( std::getline(is, s ) )
     {
       if( !hasstarted )
       {
-        hasstarted = starts_with(s, begin);
+        // syngo E11C does not write on begin of line anymore
+        s.erase(0, s.find_first_not_of(' '));
+        hasstarted = starts_with(s, begin) || starts_with(s, begin2);
         if( hasstarted ) {
           if( version == -1 ) {
             // find version if not specified:
