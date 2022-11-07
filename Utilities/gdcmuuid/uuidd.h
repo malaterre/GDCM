@@ -1,7 +1,7 @@
 /*
- * Internal routine for unpacking UUID
+ * Definitions used by the uuidd daemon
  *
- * Copyright (C) 1996, 1997 Theodore Ts'o.
+ * Copyright (C) 2007 Theodore Ts'o.
  *
  * %Begin-Header%
  * Redistribution and use in source and binary forms, with or without
@@ -32,33 +32,23 @@
  * %End-Header%
  */
 
-#include "config.h"
-#include <string.h>
-#include "uuidP.h"
+#ifndef _UUID_UUIDD_H
+#define _UUID_UUIDD_H
 
-void uuid_unpack(const uuid_t in, struct uuid *uu)
-{
-	const uint8_t	*ptr = in;
-	uint32_t		tmp;
+#define UUIDD_DIR		"/var/lib/libuuid"
+#define UUIDD_SOCKET_PATH	UUIDD_DIR "/request"
+#define UUIDD_PIDFILE_PATH	UUIDD_DIR "/uuidd.pid"
+#define UUIDD_PATH		"/usr/sbin/uuidd"
 
-	tmp = *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	uu->time_low = tmp;
+#define UUIDD_OP_GETPID			0
+#define UUIDD_OP_GET_MAXOP		1
+#define UUIDD_OP_TIME_UUID		2
+#define UUIDD_OP_RANDOM_UUID		3
+#define UUIDD_OP_BULK_TIME_UUID		4
+#define UUIDD_OP_BULK_RANDOM_UUID	5
+#define UUIDD_MAX_OP			UUIDD_OP_BULK_RANDOM_UUID
 
-	tmp = *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	uu->time_mid = tmp;
+extern void uuid__generate_time(uuid_t out, int *num);
+extern void uuid__generate_random(uuid_t out, int *num);
 
-	tmp = *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	uu->time_hi_and_version = tmp;
-
-	tmp = *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	uu->clock_seq = tmp;
-
-	memcpy(uu->node, ptr, 6);
-}
-
+#endif /* _UUID_UUID_H */

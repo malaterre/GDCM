@@ -1,5 +1,5 @@
 /*
- * Internal routine for unpacking UUID
+ * copy.c --- copy UUIDs
  *
  * Copyright (C) 1996, 1997 Theodore Ts'o.
  *
@@ -33,32 +33,14 @@
  */
 
 #include "config.h"
-#include <string.h>
 #include "uuidP.h"
 
-void uuid_unpack(const uuid_t in, struct uuid *uu)
+void uuid_copy(uuid_t dst, const uuid_t src)
 {
-	const uint8_t	*ptr = in;
-	uint32_t		tmp;
+	unsigned char		*cp1;
+	const unsigned char	*cp2;
+	int			i;
 
-	tmp = *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	uu->time_low = tmp;
-
-	tmp = *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	uu->time_mid = tmp;
-
-	tmp = *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	uu->time_hi_and_version = tmp;
-
-	tmp = *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	uu->clock_seq = tmp;
-
-	memcpy(uu->node, ptr, 6);
+	for (i=0, cp1 = dst, cp2 = src; i < 16; i++)
+		*cp1++ = *cp2++;
 }
-

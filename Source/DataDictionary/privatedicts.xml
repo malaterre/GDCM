@@ -7127,7 +7127,7 @@
   <entry owner="SECTRA_ImageInfo_01" group="0029" element="xx03" vr="LO" vm="1" name="No Decompression"/>
   <entry owner="SECTRA_ImageInfo_01" group="0029" element="xx04" vr="OB" vm="1" name="Image Info new"/>
   <entry owner="SECTRA_OverlayInfo_01" group="6001" element="xx01" vr="LO" vm="1" name="Sectra Overlay"/>
-  <entry owner="SEGAMI MIML" group="0031" element="xx98" vr="OW" vm="1" name="?"/>
+  <entry owner="SEGAMI MIML" group="0031" element="xx98" vr="OW" vm="1" name="?Binary XML with PHI?"/>
   <entry owner="SEGAMI__MEMO" group="0035" element="xx97" vr="SH" vm="1" name="?"/>
   <entry owner="SEGAMI__MEMO" group="0035" element="xx98" vr="LT" vm="1" name="?"/>
   <entry owner="SET WINDOW" group="0019" element="xx00" vr="UN" vm="1" name="Set Window Image Filter"/>

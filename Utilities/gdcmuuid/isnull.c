@@ -1,5 +1,5 @@
 /*
- * Internal routine for unpacking UUID
+ * isnull.c --- Check whether or not the UUID is null
  *
  * Copyright (C) 1996, 1997 Theodore Ts'o.
  *
@@ -33,32 +33,17 @@
  */
 
 #include "config.h"
-#include <string.h>
 #include "uuidP.h"
 
-void uuid_unpack(const uuid_t in, struct uuid *uu)
+/* Returns 1 if the uuid is the NULL uuid */
+int uuid_is_null(const uuid_t uu)
 {
-	const uint8_t	*ptr = in;
-	uint32_t		tmp;
+	const unsigned char 	*cp;
+	int			i;
 
-	tmp = *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	uu->time_low = tmp;
-
-	tmp = *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	uu->time_mid = tmp;
-
-	tmp = *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	uu->time_hi_and_version = tmp;
-
-	tmp = *ptr++;
-	tmp = (tmp << 8) | *ptr++;
-	uu->clock_seq = tmp;
-
-	memcpy(uu->node, ptr, 6);
+	for (i=0, cp = uu; i < 16; i++)
+		if (*cp++)
+			return 0;
+	return 1;
 }
 
