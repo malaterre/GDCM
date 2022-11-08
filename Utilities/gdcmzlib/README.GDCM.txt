@@ -1,15 +1,17 @@
 This is the venerable zlib:
 http://zlib.net/
 
-A subset of version 1.2.13 is included here.  There are a few small changes.
+A subset of version 1.2.3 is included here.  There are a few small changes.
 
 Source:
-http://zlib.net/zlib-1.2.13.tar.gz
+http://zlib.net/fossils/zlib-1.2.3.tar.gz
 
 SHA 256 checksum:
-b3a24de97a8fdbc835b9833169501030b8977031bcb54b3b3ac13740f846ab30
+1795c7d067a43174113fdf03447532f373e1c6c57c08d61d9e4e9be5e244b05e
 
 Changes:
  - CMakeLists.txt added
- - Duplicated the LICENSE file as COPYING, as such a filename is expected by the build system
-
+ - COPYING file added
+ - #cmakedefine ZLIB_DLL was added at zconf.in.h:11
+ - the ZEXTERN definition was tweaked in zconf.in.h
+ 
