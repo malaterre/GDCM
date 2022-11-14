@@ -751,12 +751,13 @@ enum CSAImageHeaderType {
   SOM_5,  // SOM 5
 };
 
-static const char *CSAImageHeaderTypeStrings[]{
-    "HG IRECORD",   //
-    "IMAGE NUM 4",  //
-    "IMAGE_MR",    "NUC_FLOOD", "PET_NUM_4", "SOM_5",
-    nullptr  // sentinel
-};
+static const char *CSAImageHeaderTypeStrings[]{                //
+                                               "HG IRECORD",   //
+                                               "IMAGE NUM 4",  //
+                                               "IMAGE_MR",     //
+                                               "NUC_FLOOD",    //
+                                               "PET NUM 4",    //
+                                               "SOM 5"};
 
 enum CSASeriesHeaderType {
   SERIES_UNK = -1,
@@ -778,7 +779,7 @@ static const char *CSASeriesHeaderTypeStrings[]{
 };
 
 template <typename T, int N>
-static T GetCSAType(CSComp &ref, const DataSet &ds, const PrivateTag &pt,
+static T GetCSAType(std::string &ref, const DataSet &ds, const PrivateTag &pt,
                     const char *(&array)[N]) {
   T series_type = (T)-1;  // UNK
   ref = "";
@@ -786,7 +787,7 @@ static T GetCSAType(CSComp &ref, const DataSet &ds, const PrivateTag &pt,
     const gdcm::DataElement &de1 = ds.GetDataElement(pt);
     Element<VR::CS, VM::VM1> el = {};
     el.SetFromDataElement(de1);
-    ref = el.GetValue();
+    ref = el.GetValue().Trim();
     for (int i = 0; i < N; i++) {
       if (strcmp(array[i], ref.c_str()) == 0) {
         series_type = (T)(i);
@@ -794,6 +795,80 @@ static T GetCSAType(CSComp &ref, const DataSet &ds, const PrivateTag &pt,
     }
   }
   return series_type;
+}
+
+// byte-swapped memcmp implementation:
+static inline int bs_memcmp(const void *s1, const void *s2, size_t n) {
+  size_t i;
+  const unsigned char *us1 = (const unsigned char *)s1;
+  const unsigned char *us2 = (const unsigned char *)s2;
+  assert(n % 2 == 0);
+
+  for (i = 0; i < n; i += 2, us1 += 2, us2 += 2) {
+    if (*us1 < *(us2 + 1)) {
+      return -1;
+    } else if (*us1 > *(us2 + 1)) {
+      return 1;
+    }
+
+    if (*(us1 + 1) < *us2) {
+      return -1;
+    } else if (*(us1 + 1) > *us2) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+static inline bool is_signature(const ByteValue *bv, const char *str) {
+  const size_t len = strlen(str);
+  if (bv->GetLength() >= len && memcmp(bv->GetPointer(), str, len) == 0) {
+    return true;
+  }
+  return false;
+}
+
+static inline bool bs_is_signature(const ByteValue *bv, const char *str) {
+  const size_t len = strlen(str);
+  if (bv->GetLength() >= len && bs_memcmp(bv->GetPointer(), str, len) == 0) {
+    return true;
+  }
+  return false;
+}
+
+static inline bool is_signature_end(const ByteValue *bv, const char *str) {
+  const size_t len = strlen(str);
+  if (bv->GetLength() >= len &&
+      memcmp(bv->GetPointer() + bv->GetLength() - len, str, len) == 0) {
+    return true;
+  }
+
+  return false;
+}
+
+static inline bool bs_is_signature_end(const ByteValue *bv, const char *str) {
+  const size_t len = strlen(str);
+  if (bv->GetLength() >= len &&
+      bs_memcmp(bv->GetPointer() + bv->GetLength() - len, str, len) == 0) {
+    return true;
+  }
+
+  return false;
+}
+
+bool isSV10Legacy(const ByteValue *bv) {
+  // 4 bytes aligned:
+  if (bv->GetLength() % 4 == 0) {
+    uint32_t n;
+    uint32_t unused;
+    if (bv->GetLength() >= 8) {
+      const char *buffer = bv->GetPointer();
+      memcpy(&n, buffer, 4);
+      memcpy(&unused, buffer + 4, 4);
+      if (n < 0x100 && unused == 0x4d) return true;
+    }
+  }
+  return false;
 }
 
 static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
@@ -804,7 +879,7 @@ static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
   CSAImageHeaderType image_type = IMAGE_UNK;
   {
     const PrivateTag ihtTag(0x0029, 0x08, "SIEMENS CSA HEADER");
-    CSComp ref;
+    std::string ref;
     image_type = GetCSAType<CSAImageHeaderType>(ref, ds, ihtTag,
                                                 CSAImageHeaderTypeStrings);
     // handle unknown cases first:
@@ -815,11 +890,38 @@ static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
     }
   }
 
+  bool isSV104321 = false;
   CSAImageHeaderType image_guesstype = IMAGE_UNK;
-  static const char xml_root[] = "<?xml version=\"1.0\" ?>";
-  // ParameterBlock case:
-  if (bv->GetLength() >= 22 && memcmp(bv->GetPointer(), xml_root, 22) == 0) {
+  static const char sv10[] = "SV10\4\3\2\1";    // 8
+  static const char ini2[] = "label:=Standar";  // 14
+  static const char end[] = "END!      ";       // 10
+  if (is_signature(bv, sv10) || isSV10Legacy(bv)) {
+    assert(image_type == IMAGE_NUM_4  // MR Image Storage / NUMARIS/4
+           || image_type ==
+                  PET_NUM_4  // Positron Emission Tomography Image Storage
+           || image_type == IMAGE_MR);  // Enhanced SR Storage
+    image_guesstype = image_type;
+    isSV104321 = true;
+  } else if (bs_is_signature(bv, sv10)) {
+    assert(image_type == IMAGE_NUM_4  // MR Image Storage / NUMARIS/4
+           || image_type ==
+                  PET_NUM_4  // Positron Emission Tomography Image Storage
+           || image_type == IMAGE_MR);  // Enhanced SR Storage
+    image_guesstype = image_type;
+    gdcmWarningMacro("Found byte-swapped SV10");
+  } else if (is_signature(bv, ini2) || bs_is_signature(bv, ini2)) {
+    // some kind of INI style structured with base64 thumbnail (zlib)
+    image_guesstype = HG_IRECORD;
+  } else if (is_signature_end(bv, end) || bs_is_signature_end(bv, end)) {
+    image_guesstype = SOM_5;
+  } else {
+    const bool zero = isAllZero(bv->GetPointer(), bv->GetLength());
+    if (zero) {
+      gdcmWarningMacro("Zero out SV10");
+      image_guesstype = image_type;
+    }
   }
+
   //  this is an implementation error must return error
   if (image_guesstype == IMAGE_UNK || image_guesstype != image_type) {
     gdcmErrorMacro("Implementation error CSA: " << image_type);
@@ -828,7 +930,7 @@ static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
 
   // else
   assert(image_guesstype == image_type);
-  if (image_type == IMAGE_MR) {
+  if (isSV104321) {
     DataElement clean(de.GetTag());
     clean.SetVR(de.GetVR());
     std::vector<char> v;
@@ -841,7 +943,8 @@ static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
     gdcmErrorMacro("Failure to call CleanCSA");
     return false;
   } else {
-    gdcmDebugMacro("Scrubbing is no-op for " << image_type);
+    gdcmDebugMacro("Scrubbing is no-op for "
+                   << CSAImageHeaderTypeStrings[image_type]);
     return true;
   }
 }
@@ -854,23 +957,50 @@ static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
   CSASeriesHeaderType series_type = SERIES_UNK;
   {
     const PrivateTag shtTag(0x0029, 0x18, "SIEMENS CSA HEADER");
-    CSComp ref;
+    std::string ref;
     series_type = GetCSAType<CSASeriesHeaderType>(ref, ds, shtTag,
                                                   CSASeriesHeaderTypeStrings);
     // handle unknown cases first:
     if (series_type == SERIES_UNK) {
       // not implemented, assume no PHI for now:
-      gdcmDebugMacro("NotImplemented CSA: " << ref);
+      gdcmWarningMacro("NotImplemented CSA: " << ref);
       return true;
     }
   }
 
+  bool isSV104321 = false;
   CSASeriesHeaderType series_guesstype = SERIES_UNK;
-  static const char xml_root[] = "<?xml version=\"1.0\" ?>";
-  // ParameterBlock case:
-  if (bv->GetLength() >= 22 && memcmp(bv->GetPointer(), xml_root, 22) == 0) {
+  static const char sv10[] = "SV10\4\3\2\1";                  // 8
+  static const char xml_root[] = "<?xml version=\"1.0\" ?>";  // 22
+  static const char pds_com[] = "<pds><com>";                 // 10
+  static const char som7dev[] = "ORIGINALSERIES";             // 14
+  if (is_signature(bv, sv10) || isSV10Legacy(bv)) {
+    assert(series_type == PT ||
+           series_type == SERIES_MR);  // Enhanced SR Storage
+    series_guesstype = series_type;
+    isSV104321 = true;
+  } else if (bs_is_signature(bv, sv10)) {
+    assert(series_type == PT ||
+           series_type == SERIES_MR);  // Enhanced SR Storage
+    series_guesstype = series_type;
+    gdcmWarningMacro("Found byte-swapped SV10");
+  } else if (is_signature(bv, xml_root) || bs_is_signature(bv, xml_root)) {
+    // ParameterBlock case:
     series_guesstype = ParameterBlock;
+  } else if (is_signature(bv, pds_com) || bs_is_signature(bv, pds_com)) {
+    // PET_REPLAY_PARAM case:
+    series_guesstype = PET_REPLAY_PARAM;
+  } else if (is_signature(bv, som7dev) || bs_is_signature(bv, som7dev)) {
+    // SOM 7 DEV
+    series_guesstype = SOM_7_DEV;
+  } else {
+    const bool zero = isAllZero(bv->GetPointer(), bv->GetLength());
+    if (zero) {
+      gdcmWarningMacro("Zero out SV10");
+      series_guesstype = series_type;
+    }
   }
+
   //  this is an implementation error must return error
   if (series_guesstype == SERIES_UNK || series_guesstype != series_type) {
     gdcmErrorMacro("Implementation error CSA: " << series_type);
@@ -879,7 +1009,7 @@ static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
 
   // else
   assert(series_guesstype == series_type);
-  if (series_type == SERIES_MR) {
+  if (isSV104321) {
     DataElement clean(de.GetTag());
     clean.SetVR(de.GetVR());
     std::vector<char> v;
@@ -892,7 +1022,8 @@ static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
     gdcmErrorMacro("Failure to call CleanCSA");
     return false;
   } else {
-    gdcmDebugMacro("Scrubbing is no-op for " << series_type);
+    gdcmDebugMacro("Scrubbing is no-op for "
+                   << CSASeriesHeaderTypeStrings[series_type]);
     return true;
   }
 }
