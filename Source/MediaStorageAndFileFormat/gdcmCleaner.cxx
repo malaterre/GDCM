@@ -895,7 +895,7 @@ static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
     std::vector<char> v;
     v.resize(bv->GetLength());
     if (csa_memcpy(&v[0], bv->GetPointer(), bv->GetLength())) {
-      clean.SetByteValue(&v[0], v.size());
+      clean.SetByteValue(&v[0], (uint32_t)v.size());
       ds.Replace(clean);
       return true;
     }
@@ -939,7 +939,7 @@ static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
     std::vector<char> v;
     v.resize(bv->GetLength());
     if (csa_memcpy(&v[0], bv->GetPointer(), bv->GetLength())) {
-      clean.SetByteValue(&v[0], v.size());
+      clean.SetByteValue(&v[0], (uint32_t)v.size());
       ds.Replace(clean);
       return true;
     }
@@ -958,7 +958,6 @@ static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
   // add a dummy check for SV10 signature
   if (is_signature(bv, sv10)) {
     gdcmWarningMacro("SV10 Header found for new type: " << ref);
-    assert(0);
   }
   return true;
 }
@@ -979,12 +978,12 @@ static bool CleanMEC_MR3(DataSet &ds, const DataElement &de) {
       memcpy(&magic, bv->GetPointer(), sizeof magic);
     }
     if (magic > 512) {
-      gdcmDebugMacro("Cannot handle MEC_MR3");
+      gdcmWarningMacro("Cannot handle MEC_MR3");
       return true;
     }
   }
   if (mec_mr3_memcpy(&v[0], bv->GetPointer(), bv->GetLength())) {
-    clean.SetByteValue(&v[0], v.size());
+    clean.SetByteValue(&v[0], (uint32_t)v.size());
     ds.Replace(clean);
     return true;
   }
@@ -1036,7 +1035,7 @@ static bool CleanPMTF(DataSet &ds, const DataElement &de) {
 
       DataElement clean(de.GetTag());
       clean.SetVR(de.GetVR());
-      clean.SetByteValue(&v[0], v.size());
+      clean.SetByteValue(&v[0], (uint32_t)v.size());
       ds.Replace(clean);
     }
   } catch (...) {
