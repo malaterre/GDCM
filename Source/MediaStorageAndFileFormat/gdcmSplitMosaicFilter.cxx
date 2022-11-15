@@ -31,11 +31,11 @@ namespace details {
 static bool reorganize_mosaic(const unsigned short *input, const unsigned int *inputdims,
   unsigned int square, const unsigned int *outputdims, unsigned short *output )
 {
-  for(unsigned int x = 0; x < outputdims[0]; ++x)
+  for(unsigned int z = 0; z < outputdims[2]; ++z)
     {
     for(unsigned int y = 0; y < outputdims[1]; ++y)
       {
-      for(unsigned int z = 0; z < outputdims[2]; ++z)
+      for(unsigned int x = 0; x < outputdims[0]; ++x)
         {
         const size_t outputidx = x + y*outputdims[0] + z*outputdims[0]*outputdims[1];
         const size_t inputidx = (x + (z%square)*outputdims[0]) +
@@ -50,11 +50,11 @@ static bool reorganize_mosaic(const unsigned short *input, const unsigned int *i
 static bool reorganize_mosaic_invert(const unsigned short *input, const unsigned int *inputdims,
   unsigned int square, const unsigned int *outputdims, unsigned short *output )
 {
-  for(unsigned int x = 0; x < outputdims[0]; ++x)
+  for(unsigned int z = 0; z < outputdims[2]; ++z)
     {
     for(unsigned int y = 0; y < outputdims[1]; ++y)
       {
-      for(unsigned int z = 0; z < outputdims[2]; ++z)
+      for(unsigned int x = 0; x < outputdims[0]; ++x)
         {
         const size_t outputidx = x + y*outputdims[0] + (outputdims[2]-1-z)*outputdims[0]*outputdims[1];
         const size_t inputidx = (x + (z%square)*outputdims[0]) +

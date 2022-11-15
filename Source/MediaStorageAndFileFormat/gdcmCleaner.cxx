@@ -741,53 +741,236 @@ static bool isAllZero(const char *buffer, size_t len) {
   return true;
 }
 
-static bool CleanCSA(DataSet &ds, const DataElement &de) {
+enum CSAImageHeaderType {
+  IMAGE_UNK = -1,
+  HG_IRECORD = 0,  // label:=Standard, no PHI
+  IMAGE_NUM_4,     // SV10
+  IMAGE_MR,        // SV10
+  NONIMAGE_NUM_4,  // SV10
+  NUC_FLOOD,       // binary data, no PHI
+  PET_NUM_4,       // SV10
+  SOM_5,           // Explicit LE, "END!      ", no PHI
+};
+
+static const char *CSAImageHeaderTypeStrings[]{
+    "HG IRECORD",      //
+    "IMAGE NUM 4",     //
+    "MR",              //
+    "NONIMAGE NUM 4",  //
+    "NUC FLOOD",       //
+    "PET NUM 4",       //
+    "SOM 5"            //
+};
+
+enum CSASeriesHeaderType {
+  SERIES_UNK = -1,
+  HG_RECORD_SERIES =
+      0,           // => 0029,xx40 contains a sequence with "HG RECORD", no PHI
+  SERIES_MR,       // SV10
+  ParameterBlock,  // <?xml version=\"1.0\" ?>, no PHI
+  PET_REPLAY_PARAM,  // <pds><com>, no PHI
+  PT,                // SV10
+  SOM_7_DEV,         // ORIGINALSERIES=, no PHI
+};
+
+static const char *CSASeriesHeaderTypeStrings[]{
+    "HG RECORD SERIES",  // HG_RECORD_SERIES
+    "MR",                // SERIES_MR
+    "ParameterBlock",    // ParameterBlock
+    "PET_REPLAY_PARAM",  //
+    "PT",                //
+    "SOM 7 DEV"          // SOM_7_DEV
+};
+
+template <typename T, int N>
+static T GetCSAType(std::string &ref, const DataSet &ds, const PrivateTag &pt,
+                    const char *(&array)[N]) {
+  T series_type = (T)-1;  // UNK
+  ref = "";
+  if (ds.FindDataElement(pt)) {
+    const gdcm::DataElement &de1 = ds.GetDataElement(pt);
+    Element<VR::CS, VM::VM1> el = {};
+    el.SetFromDataElement(de1);
+    ref = el.GetValue().Trim();
+    for (int i = 0; i < N; i++) {
+      if (strcmp(array[i], ref.c_str()) == 0) {
+        series_type = (T)(i);
+      }
+    }
+  }
+  return series_type;
+}
+
+// byte-swapped memcmp implementation:
+static inline int bs_memcmp(const void *s1, const void *s2, size_t n) {
+  size_t i;
+  const unsigned char *us1 = (const unsigned char *)s1;
+  const unsigned char *us2 = (const unsigned char *)s2;
+  assert(n % 2 == 0);
+
+  for (i = 0; i < n; i += 2, us1 += 2, us2 += 2) {
+    if (*us1 < *(us2 + 1)) {
+      return -1;
+    } else if (*us1 > *(us2 + 1)) {
+      return 1;
+    }
+
+    if (*(us1 + 1) < *us2) {
+      return -1;
+    } else if (*(us1 + 1) > *us2) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+static inline bool is_signature(const ByteValue *bv, const char *str) {
+  const size_t len = strlen(str);
+  if (bv->GetLength() >= len && memcmp(bv->GetPointer(), str, len) == 0) {
+    return true;
+  }
+  return false;
+}
+
+static inline bool bs_is_signature(const ByteValue *bv, const char *str) {
+  const size_t len = strlen(str);
+  if (bv->GetLength() >= len && bs_memcmp(bv->GetPointer(), str, len) == 0) {
+    return true;
+  }
+  return false;
+}
+
+static inline bool is_signature_end(const ByteValue *bv, const char *str) {
+  const size_t len = strlen(str);
+  if (bv->GetLength() >= len &&
+      memcmp(bv->GetPointer() + bv->GetLength() - len, str, len) == 0) {
+    return true;
+  }
+
+  return false;
+}
+
+static inline bool bs_is_signature_end(const ByteValue *bv, const char *str) {
+  const size_t len = strlen(str);
+  if (bv->GetLength() >= len &&
+      bs_memcmp(bv->GetPointer() + bv->GetLength() - len, str, len) == 0) {
+    return true;
+  }
+
+  return false;
+}
+
+static inline bool isSV10Legacy(const ByteValue *bv) {
+  // 4 bytes aligned:
+  if (bv->GetLength() % 4 == 0) {
+    uint32_t n;
+    uint32_t unused;
+    if (bv->GetLength() >= 8) {
+      const char *buffer = bv->GetPointer();
+      memcpy(&n, buffer, 4);
+      memcpy(&unused, buffer + 4, 4);
+      if (n < 0x100 && unused == 0x4d) return true;
+    }
+  }
+  return false;
+}
+
+static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
   const ByteValue *bv = de.GetByteValue();
   // fast path:
   if (!bv) return true;
-  static const char vs01[] = "VS01";
-  // bogus big-endian conversion
-  if (bv->GetLength() >= 4 && memcmp(bv->GetPointer(), vs01, 4) == 0) {
-    // technically there is digital trash, but since it is written in byte-swap
-    // mode, it cannot be detected easily.
-    return true;
-  }
-  static const char pds_com[] = "<pds><com>";
-  // PET_REPLAY_PARAM case:
-  if (bv->GetLength() >= 10 && memcmp(bv->GetPointer(), pds_com, 10) == 0) {
-    return true;
-  }
-  static const char psd_ocm[] = "p<sd<>oc>m";
-  // byte-swap PET_REPLAY_PARAM case:
-  if (bv->GetLength() >= 10 && memcmp(bv->GetPointer(), psd_ocm, 10) == 0) {
-    return true;
-  }
-  // ANGIOHEAD case. This is a DICOM Explicit with a odd ending:
-  static const char end[] = "END!      ";
-  if (bv->GetLength() >= 10 &&
-      memcmp(bv->GetPointer() + bv->GetLength() - 10, end, 10) == 0) {
-    return true;
-  }
-  // byte-swapped ANGIOHEAD
-  static const char ned[] = "NE!D      ";
-  if (bv->GetLength() >= 10 &&
-      memcmp(bv->GetPointer() + bv->GetLength() - 10, ned, 10) == 0) {
-    return true;
-  }
-  const bool zero = isAllZero(bv->GetPointer(), bv->GetLength());
-  if (zero) return true;
 
-  DataElement clean(de.GetTag());
-  clean.SetVR(de.GetVR());
-  std::vector<char> v;
-  v.resize(bv->GetLength());
-  if (csa_memcpy(&v[0], bv->GetPointer(), bv->GetLength())) {
-    clean.SetByteValue(&v[0], v.size());
-    ds.Replace(clean);
-    return true;
+  CSAImageHeaderType image_type = IMAGE_UNK;
+  std::string ref;
+  {
+    const PrivateTag ihtTag(0x0029, 0x08, "SIEMENS CSA HEADER");
+    image_type = GetCSAType<CSAImageHeaderType>(ref, ds, ihtTag,
+                                                CSAImageHeaderTypeStrings);
   }
-  gdcmErrorMacro("Failure to call CleanCSA");
-  return false;
+  static const char sv10[] = "SV10\4\3\2\1";  // 8
+
+  // easy case: recognized keywords:
+  if (image_type == IMAGE_NUM_4        // MR Image Storage / NUMARIS/4
+      || image_type == IMAGE_MR        // Enhanced SR Storage
+      || image_type == NONIMAGE_NUM_4  // CSA Non-Image Storage
+      || image_type == PET_NUM_4  // Positron Emission Tomography Image Storage
+  ) {
+    DataElement clean(de.GetTag());
+    clean.SetVR(de.GetVR());
+    std::vector<char> v;
+    v.resize(bv->GetLength());
+    if (csa_memcpy(&v[0], bv->GetPointer(), bv->GetLength())) {
+      clean.SetByteValue(&v[0], (uint32_t)v.size());
+      ds.Replace(clean);
+      return true;
+    }
+    // we failed to clean CSA, let's check possible well known errors
+    if (bs_is_signature(bv, sv10)) {
+      gdcmWarningMacro("Found byte-swapped SV10. Skipping.");
+      return true;
+    } else if (isAllZero(bv->GetPointer(), bv->GetLength())) {
+      gdcmDebugMacro("Zero-out CSA header");
+      return true;
+    }
+    gdcmErrorMacro("Failure to call CleanCSAImage");
+    return false;
+  }
+  // else
+  // add a dummy check for SV10 signature
+  if (is_signature(bv, sv10)) {
+    if (image_type == IMAGE_UNK) {
+      gdcmErrorMacro("Please report. SV10 Header found for new type: " << ref);
+      return false;
+    }
+  }
+  return true;
+}
+
+static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
+  const ByteValue *bv = de.GetByteValue();
+  // fast path:
+  if (!bv) return true;
+
+  CSASeriesHeaderType series_type = SERIES_UNK;
+  std::string ref;
+  {
+    const PrivateTag shtTag(0x0029, 0x18, "SIEMENS CSA HEADER");
+    series_type = GetCSAType<CSASeriesHeaderType>(ref, ds, shtTag,
+                                                  CSASeriesHeaderTypeStrings);
+  }
+  static const char sv10[] = "SV10\4\3\2\1";  // 8
+
+  // easy case: recognized keywords:
+  if (series_type == PT || series_type == SERIES_MR) {
+    DataElement clean(de.GetTag());
+    clean.SetVR(de.GetVR());
+    std::vector<char> v;
+    v.resize(bv->GetLength());
+    if (csa_memcpy(&v[0], bv->GetPointer(), bv->GetLength())) {
+      clean.SetByteValue(&v[0], (uint32_t)v.size());
+      ds.Replace(clean);
+      return true;
+    }
+    // we failed to clean CSA, let's check possible well known errors
+    if (bs_is_signature(bv, sv10)) {
+      gdcmWarningMacro("Found byte-swapped SV10. Skipping.");
+      return true;
+    } else if (isAllZero(bv->GetPointer(), bv->GetLength())) {
+      gdcmDebugMacro("Zero-out CSA header");
+      return true;
+    }
+    gdcmErrorMacro("Failure to call CleanCSASeries");
+    return false;
+  }
+  // else
+  // add a dummy check for SV10 signature
+  if (is_signature(bv, sv10)) {
+    if (series_type == SERIES_UNK) {
+      gdcmErrorMacro("Please report. SV10 Header found for new type: " << ref);
+      return false;
+    }
+  }
+  return true;
 }
 
 static bool CleanMEC_MR3(DataSet &ds, const DataElement &de) {
@@ -806,12 +989,12 @@ static bool CleanMEC_MR3(DataSet &ds, const DataElement &de) {
       memcpy(&magic, bv->GetPointer(), sizeof magic);
     }
     if (magic > 512) {
-      gdcmDebugMacro("Cannot handle MEC_MR3");
+      gdcmWarningMacro("Cannot handle MEC_MR3");
       return true;
     }
   }
   if (mec_mr3_memcpy(&v[0], bv->GetPointer(), bv->GetLength())) {
-    clean.SetByteValue(&v[0], v.size());
+    clean.SetByteValue(&v[0], (uint32_t)v.size());
     ds.Replace(clean);
     return true;
   }
@@ -863,7 +1046,7 @@ static bool CleanPMTF(DataSet &ds, const DataElement &de) {
 
       DataElement clean(de.GetTag());
       clean.SetVR(de.GetVR());
-      clean.SetByteValue(&v[0], v.size());
+      clean.SetByteValue(&v[0], (uint32_t)v.size());
       ds.Replace(clean);
     }
   } catch (...) {
@@ -965,8 +1148,8 @@ Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
   if (!empty_vrs.empty() || !remove_vrs.empty()) {
     VR vr = de.GetVR();
     assert(ref_dict_vr != VR::INVALID);
-    // be careful with vr handling since we must always prefer the one from the
-    // dict in case of attribute written as 'OB' but dict states 'PN':
+    // be careful with vr handling since we must always prefer the one from
+    // the dict in case of attribute written as 'OB' but dict states 'PN':
     if (ref_dict_vr != VR::UN /*&& ref_dict_vr != VR::INVALID*/) {
       // we want to clean VR==PN; but this is a problem for implicit transfer
       // syntax, so let's be nice to the user and prefer dict_vr. however for
@@ -1048,7 +1231,8 @@ bool Cleaner::impl::ProcessDataSet(Subject &subject, File &file, DataSet &ds,
           // SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
           if (!de.IsEmpty()) {
             gdcmWarningMacro(
-                "Please report. Dictionary states this should be a SQ. But we "
+                "Please report. Dictionary states this should be a SQ. But "
+                "we "
                 "failed to load it as such. Passing-through as-is"
                 << de);
           }
@@ -1074,10 +1258,10 @@ bool Cleaner::impl::ProcessDataSet(Subject &subject, File &file, DataSet &ds,
       static const PrivateTag &pmtf3 = gdcm::MEC_MR3::GetCanonMECMR3Tag();
 
       if (pt == csa1) {
-        const bool ret = CleanCSA(ds, de);
+        const bool ret = CleanCSAImage(ds, de);
         if (!ret) return false;
       } else if (pt == csa2) {
-        const bool ret = CleanCSA(ds, de);
+        const bool ret = CleanCSASeries(ds, de);
         if (!ret) return false;
       } else if (pt == mec_mr3) {
         const bool ret = CleanMEC_MR3(ds, de);

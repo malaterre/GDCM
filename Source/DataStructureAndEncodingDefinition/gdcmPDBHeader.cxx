@@ -181,7 +181,7 @@ int PDBHeader::readprotocoldatablock(const char *input, size_t inputlen, bool ve
     if( len == 0x8088b1f )
       {
       offset = 0;
-      len = inputlen;
+      len = (uint32_t)inputlen;
       }
       else
       {

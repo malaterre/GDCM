@@ -32,7 +32,8 @@ namespace gdcm_ns
       || group % 2 == 0
       /*|| strlen(owner.c_str()) == 0*/ ) // can't use owner.empty()
       {
-      gdcmDebugMacro( "Problem reading Private Tag: " << str );
+      // comment out the following since too verbose
+      //gdcmDebugMacro( "Problem reading Private Tag: " << str );
       return false;
       }
     SetGroup( (uint16_t)group );

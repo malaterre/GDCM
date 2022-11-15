@@ -148,19 +148,9 @@ static bool read_magic(struct app *self) {
   } else if (n < 0x100 && unused == 0x4d) {  // 'M'
     // SIEMENS_Sonata-16-MONO2-Value_Multiplicity.dcm
     magic = NOMAGIC;
-  } else if (n == 0x7364703c && unused == 0x6f633c3e) {  // aka '<pds><co'
-    // 'PET_REPLAY_PARAM'
-    assert(0);
-    return false;
-  } else if (n == 0x31305356 && unused == 0x2010403) {  // aka 'VS01' ...
-    // technically could be reserved; should not happen in the wild
-    assert(0);
-    return false;
   } else {
-    assert(0);
     return false;
   }
-  assert(n > 0 && n < 128);
   self->nelements = n;
   self->csa_type = magic;
   return true;
