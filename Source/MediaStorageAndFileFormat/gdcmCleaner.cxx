@@ -754,8 +754,8 @@ enum CSAImageHeaderType {
 static const char *CSAImageHeaderTypeStrings[]{                //
                                                "HG IRECORD",   //
                                                "IMAGE NUM 4",  //
-                                               "IMAGE_MR",     //
-                                               "NUC_FLOOD",    //
+                                               "MR",           //
+                                               "NUC FLOOD",    //
                                                "PET NUM 4",    //
                                                "SOM 5"};
 
@@ -856,7 +856,7 @@ static inline bool bs_is_signature_end(const ByteValue *bv, const char *str) {
   return false;
 }
 
-bool isSV10Legacy(const ByteValue *bv) {
+static inline bool isSV10Legacy(const ByteValue *bv) {
   // 4 bytes aligned:
   if (bv->GetLength() % 4 == 0) {
     uint32_t n;
@@ -877,60 +877,19 @@ static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
   if (!bv) return true;
 
   CSAImageHeaderType image_type = IMAGE_UNK;
+  std::string ref;
   {
     const PrivateTag ihtTag(0x0029, 0x08, "SIEMENS CSA HEADER");
-    std::string ref;
     image_type = GetCSAType<CSAImageHeaderType>(ref, ds, ihtTag,
                                                 CSAImageHeaderTypeStrings);
-    // handle unknown cases first:
-    if (image_type == IMAGE_UNK) {
-      // not implemented, assume no PHI for now:
-      gdcmDebugMacro("NotImplemented CSA: " << ref);
-      return true;
-    }
   }
+  static const char sv10[] = "SV10\4\3\2\1";  // 8
 
-  bool isSV104321 = false;
-  CSAImageHeaderType image_guesstype = IMAGE_UNK;
-  static const char sv10[] = "SV10\4\3\2\1";    // 8
-  static const char ini2[] = "label:=Standar";  // 14
-  static const char end[] = "END!      ";       // 10
-  if (is_signature(bv, sv10) || isSV10Legacy(bv)) {
-    assert(image_type == IMAGE_NUM_4  // MR Image Storage / NUMARIS/4
-           || image_type ==
-                  PET_NUM_4  // Positron Emission Tomography Image Storage
-           || image_type == IMAGE_MR);  // Enhanced SR Storage
-    image_guesstype = image_type;
-    isSV104321 = true;
-  } else if (bs_is_signature(bv, sv10)) {
-    assert(image_type == IMAGE_NUM_4  // MR Image Storage / NUMARIS/4
-           || image_type ==
-                  PET_NUM_4  // Positron Emission Tomography Image Storage
-           || image_type == IMAGE_MR);  // Enhanced SR Storage
-    image_guesstype = image_type;
-    gdcmWarningMacro("Found byte-swapped SV10");
-  } else if (is_signature(bv, ini2) || bs_is_signature(bv, ini2)) {
-    // some kind of INI style structured with base64 thumbnail (zlib)
-    image_guesstype = HG_IRECORD;
-  } else if (is_signature_end(bv, end) || bs_is_signature_end(bv, end)) {
-    image_guesstype = SOM_5;
-  } else {
-    const bool zero = isAllZero(bv->GetPointer(), bv->GetLength());
-    if (zero) {
-      gdcmWarningMacro("Zero out SV10");
-      image_guesstype = image_type;
-    }
-  }
-
-  //  this is an implementation error must return error
-  if (image_guesstype == IMAGE_UNK || image_guesstype != image_type) {
-    gdcmErrorMacro("Implementation error CSA: " << image_type);
-    return false;
-  }
-
-  // else
-  assert(image_guesstype == image_type);
-  if (isSV104321) {
+  // easy case: recognized keywords:
+  if (image_type == IMAGE_NUM_4   // MR Image Storage / NUMARIS/4
+      || image_type == PET_NUM_4  // Positron Emission Tomography Image Storage
+      || image_type == IMAGE_MR)  // Enhanced SR Storage
+  {
     DataElement clean(de.GetTag());
     clean.SetVR(de.GetVR());
     std::vector<char> v;
@@ -940,13 +899,23 @@ static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
       ds.Replace(clean);
       return true;
     }
-    gdcmErrorMacro("Failure to call CleanCSA");
+    // we failed to clean CSA, let's check possible well known errors
+    if (bs_is_signature(bv, sv10)) {
+      gdcmWarningMacro("Found byte-swapped SV10. Skipping.");
+      return true;
+    } else if (isAllZero(bv->GetPointer(), bv->GetLength())) {
+      gdcmDebugMacro("Zero-out CSA header");
+      return true;
+    }
+    gdcmErrorMacro("Failure to call CleanCSAImage");
     return false;
-  } else {
-    gdcmDebugMacro("Scrubbing is no-op for "
-                   << CSAImageHeaderTypeStrings[image_type]);
-    return true;
   }
+  // else
+  // add a dummy check for SV10 signature
+  if (is_signature(bv, sv10)) {
+    gdcmWarningMacro("Please report. SV10 Header found for new type: " << ref);
+  }
+  return true;
 }
 
 static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
@@ -955,61 +924,16 @@ static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
   if (!bv) return true;
 
   CSASeriesHeaderType series_type = SERIES_UNK;
+  std::string ref;
   {
     const PrivateTag shtTag(0x0029, 0x18, "SIEMENS CSA HEADER");
-    std::string ref;
     series_type = GetCSAType<CSASeriesHeaderType>(ref, ds, shtTag,
                                                   CSASeriesHeaderTypeStrings);
-    // handle unknown cases first:
-    if (series_type == SERIES_UNK) {
-      // not implemented, assume no PHI for now:
-      gdcmWarningMacro("NotImplemented CSA: " << ref);
-      return true;
-    }
   }
+  static const char sv10[] = "SV10\4\3\2\1";  // 8
 
-  bool isSV104321 = false;
-  CSASeriesHeaderType series_guesstype = SERIES_UNK;
-  static const char sv10[] = "SV10\4\3\2\1";                  // 8
-  static const char xml_root[] = "<?xml version=\"1.0\" ?>";  // 22
-  static const char pds_com[] = "<pds><com>";                 // 10
-  static const char som7dev[] = "ORIGINALSERIES";             // 14
-  if (is_signature(bv, sv10) || isSV10Legacy(bv)) {
-    assert(series_type == PT ||
-           series_type == SERIES_MR);  // Enhanced SR Storage
-    series_guesstype = series_type;
-    isSV104321 = true;
-  } else if (bs_is_signature(bv, sv10)) {
-    assert(series_type == PT ||
-           series_type == SERIES_MR);  // Enhanced SR Storage
-    series_guesstype = series_type;
-    gdcmWarningMacro("Found byte-swapped SV10");
-  } else if (is_signature(bv, xml_root) || bs_is_signature(bv, xml_root)) {
-    // ParameterBlock case:
-    series_guesstype = ParameterBlock;
-  } else if (is_signature(bv, pds_com) || bs_is_signature(bv, pds_com)) {
-    // PET_REPLAY_PARAM case:
-    series_guesstype = PET_REPLAY_PARAM;
-  } else if (is_signature(bv, som7dev) || bs_is_signature(bv, som7dev)) {
-    // SOM 7 DEV
-    series_guesstype = SOM_7_DEV;
-  } else {
-    const bool zero = isAllZero(bv->GetPointer(), bv->GetLength());
-    if (zero) {
-      gdcmWarningMacro("Zero out SV10");
-      series_guesstype = series_type;
-    }
-  }
-
-  //  this is an implementation error must return error
-  if (series_guesstype == SERIES_UNK || series_guesstype != series_type) {
-    gdcmErrorMacro("Implementation error CSA: " << series_type);
-    return false;
-  }
-
-  // else
-  assert(series_guesstype == series_type);
-  if (isSV104321) {
+  // easy case: recognized keywords:
+  if (series_type == PT || series_type == SERIES_MR) {
     DataElement clean(de.GetTag());
     clean.SetVR(de.GetVR());
     std::vector<char> v;
@@ -1019,66 +943,24 @@ static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
       ds.Replace(clean);
       return true;
     }
-    gdcmErrorMacro("Failure to call CleanCSA");
+    // we failed to clean CSA, let's check possible well known errors
+    if (bs_is_signature(bv, sv10)) {
+      gdcmWarningMacro("Found byte-swapped SV10. Skipping.");
+      return true;
+    } else if (isAllZero(bv->GetPointer(), bv->GetLength())) {
+      gdcmDebugMacro("Zero-out CSA header");
+      return true;
+    }
+    gdcmErrorMacro("Failure to call CleanCSASeries");
     return false;
-  } else {
-    gdcmDebugMacro("Scrubbing is no-op for "
-                   << CSASeriesHeaderTypeStrings[series_type]);
-    return true;
   }
-}
-
-static bool CleanCSA(DataSet &ds, const DataElement &de) {
-  const ByteValue *bv = de.GetByteValue();
-  // fast path:
-  if (!bv) return true;
-  static const char vs01[] = "VS01";
-  // bogus big-endian conversion
-  if (bv->GetLength() >= 4 && memcmp(bv->GetPointer(), vs01, 4) == 0) {
-    // technically there is digital trash, but since it is written in
-    // byte-swap mode, it cannot be detected easily.
-    return true;
+  // else
+  // add a dummy check for SV10 signature
+  if (is_signature(bv, sv10)) {
+    gdcmWarningMacro("SV10 Header found for new type: " << ref);
+    assert(0);
   }
-  static const char pds_com[] = "<pds><com>";
-  // PET_REPLAY_PARAM case:
-  if (bv->GetLength() >= 10 && memcmp(bv->GetPointer(), pds_com, 10) == 0) {
-    return true;
-  }
-  static const char psd_ocm[] = "p<sd<>oc>m";
-  // byte-swap PET_REPLAY_PARAM case:
-  if (bv->GetLength() >= 10 && memcmp(bv->GetPointer(), psd_ocm, 10) == 0) {
-    return true;
-  }
-  // ANGIOHEAD case. This is a DICOM Explicit with a odd ending:
-  static const char end[] = "END!      ";
-  // const char *debug = bv->GetPointer() + bv->GetLength() - 10;
-  // size_t d = strlen(end);
-  // int i1 = memcmp(bv->GetPointer() + bv->GetLength() - 10, end, 10) ;
-  // int i2 = memcmp(debug, end, 10) ;
-  if (bv->GetLength() >= 10 &&
-      memcmp(bv->GetPointer() + bv->GetLength() - 10, end, 10) == 0) {
-    return true;
-  }
-  // byte-swapped ANGIOHEAD
-  static const char ned[] = "NE!D      ";
-  if (bv->GetLength() >= 10 &&
-      memcmp(bv->GetPointer() + bv->GetLength() - 10, ned, 10) == 0) {
-    return true;
-  }
-  const bool zero = isAllZero(bv->GetPointer(), bv->GetLength());
-  if (zero) return true;
-
-  DataElement clean(de.GetTag());
-  clean.SetVR(de.GetVR());
-  std::vector<char> v;
-  v.resize(bv->GetLength());
-  if (csa_memcpy(&v[0], bv->GetPointer(), bv->GetLength())) {
-    clean.SetByteValue(&v[0], v.size());
-    ds.Replace(clean);
-    return true;
-  }
-  gdcmErrorMacro("Failure to call CleanCSA");
-  return false;
+  return true;
 }
 
 static bool CleanMEC_MR3(DataSet &ds, const DataElement &de) {
