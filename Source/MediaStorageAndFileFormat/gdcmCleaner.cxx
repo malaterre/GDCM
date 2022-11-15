@@ -743,30 +743,34 @@ static bool isAllZero(const char *buffer, size_t len) {
 
 enum CSAImageHeaderType {
   IMAGE_UNK = -1,
-  HG_IRECORD = 0,  // HG IRECORD,
-  IMAGE_NUM_4,     // IMAGE NUM 4 ,
-  IMAGE_MR,
-  NUC_FLOOD,
-  PET_NUM_4,
-  SOM_5,  // SOM 5
+  HG_IRECORD = 0,  // label:=Standard, no PHI
+  IMAGE_NUM_4,     // SV10
+  IMAGE_MR,        // SV10
+  NONIMAGE_NUM_4,  // SV10
+  NUC_FLOOD,       // binary data, no PHI
+  PET_NUM_4,       // SV10
+  SOM_5,           // Explicit LE, "END!      ", no PHI
 };
 
-static const char *CSAImageHeaderTypeStrings[]{                //
-                                               "HG IRECORD",   //
-                                               "IMAGE NUM 4",  //
-                                               "MR",           //
-                                               "NUC FLOOD",    //
-                                               "PET NUM 4",    //
-                                               "SOM 5"};
+static const char *CSAImageHeaderTypeStrings[]{
+    "HG IRECORD",      //
+    "IMAGE NUM 4",     //
+    "MR",              //
+    "NONIMAGE NUM 4",  //
+    "NUC FLOOD",       //
+    "PET NUM 4",       //
+    "SOM 5"            //
+};
 
 enum CSASeriesHeaderType {
   SERIES_UNK = -1,
-  HG_RECORD_SERIES = 0,  // HG RECORD SERIES,
-  SERIES_MR,
-  ParameterBlock,
-  PET_REPLAY_PARAM,
-  PT,
-  SOM_7_DEV,  // SOM 7 DEV
+  HG_RECORD_SERIES =
+      0,           // => 0029,xx40 contains a sequence with "HG RECORD", no PHI
+  SERIES_MR,       // SV10
+  ParameterBlock,  // <?xml version=\"1.0\" ?>, no PHI
+  PET_REPLAY_PARAM,  // <pds><com>, no PHI
+  PT,                // SV10
+  SOM_7_DEV,         // ORIGINALSERIES=, no PHI
 };
 
 static const char *CSASeriesHeaderTypeStrings[]{
@@ -775,7 +779,7 @@ static const char *CSASeriesHeaderTypeStrings[]{
     "ParameterBlock",    // ParameterBlock
     "PET_REPLAY_PARAM",  //
     "PT",                //
-    "SOM 7 DEV",         // SOM_7_DEV
+    "SOM 7 DEV"          // SOM_7_DEV
 };
 
 template <typename T, int N>
@@ -886,10 +890,11 @@ static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
   static const char sv10[] = "SV10\4\3\2\1";  // 8
 
   // easy case: recognized keywords:
-  if (image_type == IMAGE_NUM_4   // MR Image Storage / NUMARIS/4
+  if (image_type == IMAGE_NUM_4        // MR Image Storage / NUMARIS/4
+      || image_type == IMAGE_MR        // Enhanced SR Storage
+      || image_type == NONIMAGE_NUM_4  // CSA Non-Image Storage
       || image_type == PET_NUM_4  // Positron Emission Tomography Image Storage
-      || image_type == IMAGE_MR)  // Enhanced SR Storage
-  {
+  ) {
     DataElement clean(de.GetTag());
     clean.SetVR(de.GetVR());
     std::vector<char> v;
@@ -913,7 +918,10 @@ static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
   // else
   // add a dummy check for SV10 signature
   if (is_signature(bv, sv10)) {
-    gdcmWarningMacro("Please report. SV10 Header found for new type: " << ref);
+    if (image_type == IMAGE_UNK) {
+      gdcmErrorMacro("Please report. SV10 Header found for new type: " << ref);
+      return false;
+    }
   }
   return true;
 }
@@ -957,7 +965,10 @@ static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
   // else
   // add a dummy check for SV10 signature
   if (is_signature(bv, sv10)) {
-    gdcmWarningMacro("SV10 Header found for new type: " << ref);
+    if (series_type == SERIES_UNK) {
+      gdcmErrorMacro("Please report. SV10 Header found for new type: " << ref);
+      return false;
+    }
   }
   return true;
 }
