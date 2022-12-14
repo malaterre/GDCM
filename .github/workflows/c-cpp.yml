@@ -11,6 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
+        shared: [ON, OFF]
     runs-on: ${{ matrix.os }}
     steps:
     - name: checkout source
@@ -19,7 +20,7 @@ jobs:
         submodules: true
         fetch-depth: 2
     - name: configure
-      run: cmake -DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=None -B build
+      run: cmake -DGDCM_BUILD_SHARED_LIBS=${{matrix.shared}} -DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING=None -B build
     - name: make
       run: cmake --build build
     - name: make check
