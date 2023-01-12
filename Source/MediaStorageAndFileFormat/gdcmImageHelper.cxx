@@ -1183,7 +1183,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       if( GetRescaleInterceptSlopeValueFromDataSet(ds, dummy) )
         {
         // for everyone else, read your DCS, and set: ForceRescaleInterceptSlope = true if needed
-        gdcmDebugMacro( "Modality LUT unused for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
+        gdcmWarningMacro( "Modality LUT unused for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
         }
       }
 #endif
