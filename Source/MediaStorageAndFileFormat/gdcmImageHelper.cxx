@@ -1177,13 +1177,17 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
         gdcmWarningMacro( "PMS Modality LUT loaded for MR Image Storage: [" << interceptslope[0] << "," << interceptslope[1] << "]" );
       }
       }
-    else
       {
       std::vector<double> dummy(2);
       if( GetRescaleInterceptSlopeValueFromDataSet(ds, dummy) )
         {
-        // for everyone else, read your DCS, and set: ForceRescaleInterceptSlope = true if needed
-        gdcmWarningMacro( "Modality LUT unused for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
+        // SIEMENS is sending MFSPLIT with Modality LUT
+	// Case is: MAGNETOM Prisma / syngo MR XA30A with MFSPLIT
+        interceptslope[0] = dummy[0];
+        interceptslope[1] = dummy[1];
+        if( interceptslope[1] == 0 )
+          interceptslope[1] = 1;
+        gdcmWarningMacro( "Forcing Modality LUT used for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
         }
       }
 #endif
