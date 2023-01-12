@@ -2481,7 +2481,7 @@ bool ImageHelper::GetRealWorldValueMappingContent(File const & f, RealWorldValue
   ms.SetFromFile(f);
   const DataSet& ds = f.GetDataSet();
 
-  if( ms == MediaStorage::MRImageStorage )
+  if( ms == MediaStorage::MRImageStorage || ms == MediaStorage::NuclearMedicineImageStorage )
   {
 	  const Tag trwvms(0x0040,0x9096); // Real World Value Mapping Sequence
 	  if( ds.FindDataElement( trwvms ) )
