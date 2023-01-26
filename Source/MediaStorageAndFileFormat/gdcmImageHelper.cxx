@@ -801,7 +801,7 @@ bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<dou
         }
       }
     }
-  return intercept || slope;
+  return intercept || slope || (intercept && slope && intercept[0] != 0 intercept[1] != 1);
 }
 
 
@@ -1177,6 +1177,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
         gdcmDebugMacro( "PMS Modality LUT loaded for MR Image Storage: [" << interceptslope[0] << "," << interceptslope[1] << "]" );
       }
       }
+    else
       {
       std::vector<double> dummy(2);
       if( GetRescaleInterceptSlopeValueFromDataSet(ds, dummy) )
@@ -1185,9 +1186,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
 	// Case is: MAGNETOM Prisma / syngo MR XA30A with MFSPLIT
         interceptslope[0] = dummy[0];
         interceptslope[1] = dummy[1];
-        if( interceptslope[1] == 0 )
-          interceptslope[1] = 1;
-        gdcmDebugMacro( "Forcing Modality LUT used for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
+        gdcmWarningMacro( "Forcing Modality LUT used for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
         }
       }
 #endif
