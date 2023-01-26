@@ -801,7 +801,7 @@ bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<dou
         }
       }
     }
-  return intercept || slope || (intercept && slope && intercept[0] != 0 intercept[1] != 1);
+  return intercept || slope || (intercept && slope && interceptslope[0] != 0 && interceptslope[1] != 1);
 }
 
 
