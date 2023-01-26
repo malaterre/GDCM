@@ -801,7 +801,7 @@ bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<dou
         }
       }
     }
-  return intercept || slope || (intercept && slope && interceptslope[0] != 0 && interceptslope[1] != 1);
+  return intercept || slope;
 }
 
 
@@ -1182,11 +1182,13 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       std::vector<double> dummy(2);
       if( GetRescaleInterceptSlopeValueFromDataSet(ds, dummy) )
         {
+        if(dummy[0] != 0 && dummy[1] != 1) {
         // SIEMENS is sending MFSPLIT with Modality LUT
 	// Case is: MAGNETOM Prisma / syngo MR XA30A with MFSPLIT
         interceptslope[0] = dummy[0];
         interceptslope[1] = dummy[1];
         gdcmWarningMacro( "Forcing Modality LUT used for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
+        }
         }
       }
 #endif
