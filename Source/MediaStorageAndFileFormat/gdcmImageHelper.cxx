@@ -1182,7 +1182,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
       std::vector<double> dummy(2);
       if( GetRescaleInterceptSlopeValueFromDataSet(ds, dummy) )
         {
-        if(dummy[0] != 0 && dummy[1] != 1) {
+        if(dummy[0] != 0 || dummy[1] != 1) {
         // SIEMENS is sending MFSPLIT with Modality LUT
 	// Case is: MAGNETOM Prisma / syngo MR XA30A with MFSPLIT
         interceptslope[0] = dummy[0];
