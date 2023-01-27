@@ -1241,7 +1241,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0021,0x0048,"SIEMENS MR SDS 01",VR::CS,VM::VM1,"??",false},
   {0x0021,0x0049,"SIEMENS MR SDI 02",VR::IS,VM::VM1,"??",false},
   {0x0021,0x0049,"SIEMENS MR SDS 01",VR::CS,VM::VM1,"??",false},
-  {0x0021,0x004e,"SIEMENS MR SDI 02",VR::IS,VM::VM1,"??",false},
+  {0x0021,0x004e,"SIEMENS MR SDI 02",VR::IS,VM::VM1,"Actual 3D Ima Part Number",false},
   {0x0021,0x004f,"SIEMENS MR SDI 02",VR::LO,VM::VM1,"ImaCoilString",false},
   {0x0021,0x0050,"SIEMENS MR SDS 01",VR::US,VM::VM1,"??",false},
   {0x0021,0x0051,"SIEMENS MR SDI 02",VR::UL,VM::VM1,"?SequenceMask?",false},
