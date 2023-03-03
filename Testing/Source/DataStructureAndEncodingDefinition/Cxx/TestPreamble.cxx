@@ -29,3 +29,18 @@ int TestPreamble(int, char *[])
     delete p;
   return 0;
 }
+
+int TestPreambleCopyConstructor(int, char *[])
+{
+  gdcm::Preamble p;
+  gdcm::Preamble p_2(p);
+  return 0;
+}
+
+int TestPreambleAssignmentOperator(int, char* [])
+{
+  gdcm::Preamble p;
+  gdcm::Preamble p_2;
+  p_2 = p;
+  return 0;
+}
