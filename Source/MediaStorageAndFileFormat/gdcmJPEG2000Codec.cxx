@@ -776,8 +776,8 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
 #endif
 
   bool b = false;
-  bool lossless;
-  bool mct;
+  bool lossless = false;
+  bool mct = false;
   if( parameters.decod_format == JP2_CFMT )
     b = parsejp2_imp( dummy_buffer, buf_size, &lossless, &mct);
   else if( parameters.decod_format == J2K_CFMT )
@@ -1498,8 +1498,8 @@ bool JPEG2000Codec::GetHeaderInfo(const char * dummy_buffer, size_t buf_size, Tr
   assert( mct == 0 || mct == 1 );
 #else
   bool b = false;
-  bool lossless;
-  bool mctb;
+  bool lossless = false;
+  bool mctb = false;
   if( parameters.decod_format == JP2_CFMT )
     b = parsejp2_imp( dummy_buffer, buf_size, &lossless, &mctb);
   else if( parameters.decod_format == J2K_CFMT )
