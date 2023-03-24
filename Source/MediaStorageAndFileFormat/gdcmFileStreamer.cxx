@@ -51,7 +51,7 @@ namespace gdcm
 // much guarantee to be 32bits only.
 static inline int FSeeko(FILE *stream, off64_t offset, int whence)
 {
-#if _WIN32
+#ifdef _WIN32
 #if defined(__MINGW32__)
   return fseek(stream, offset, whence); // 32bits
 #else
@@ -64,7 +64,7 @@ static inline int FSeeko(FILE *stream, off64_t offset, int whence)
 
 static inline off64_t FTello(FILE *stream)
 {
-#if _WIN32
+#ifdef _WIN32
 #if defined(__MINGW32__)
   return ftell( stream ); // 32bits
 #else
@@ -77,7 +77,7 @@ static inline off64_t FTello(FILE *stream)
 
 static inline bool FTruncate( const int fd, const off64_t len )
 {
-#if _WIN32
+#ifdef _WIN32
 #if defined(__MINGW32__)
   const long size = len;
   const int ret = _chsize( fd, size ); // 32bits
