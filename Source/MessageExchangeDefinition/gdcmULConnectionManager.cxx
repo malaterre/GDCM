@@ -80,10 +80,7 @@ bool ULConnectionManager::EstablishConnection(const std::string& inAETitle,
     return false;
     }
 
-  if (mConnection != nullptr)
-    {
-    delete mConnection;
-    }
+  delete mConnection;
   mConnection = new ULConnection(connectInfo);
 
   mConnection->GetTimer().SetTimeout(inTimeout);
