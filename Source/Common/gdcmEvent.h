@@ -71,7 +71,7 @@ inline std::ostream& operator<<(std::ostream& os, Event &e)
        { return dynamic_cast<const Self*>(e) ? true : false; } \
      virtual ::gdcm::Event* MakeObject() const override \
        { return new Self; } \
-     classname(const Self&s) : super(s){}; \
+     classname(const Self&s) : super(s){} \
    private: \
      void operator=(const Self&); \
  }

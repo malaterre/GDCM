@@ -64,7 +64,7 @@ class GDCM_EXPORT CSAHeader
 {
   friend std::ostream& operator<<(std::ostream &_os, const CSAHeader &d);
 public :
-  CSAHeader():InternalDataSet(),InternalType(UNKNOWN),InterfileData(nullptr) {};
+  CSAHeader():InternalDataSet(),InternalType(UNKNOWN),InterfileData(nullptr) {}
   ~CSAHeader() = default;
 
   /// Diverse format of CSAHeader as found 'in the wild'
