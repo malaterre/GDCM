@@ -19,10 +19,6 @@
 #include <fstream>
 #include <cstdlib> // EXIT_FAILURE
 
-/*!
- * \test TestFilename
- * bla coucou
- */
 int TestFilename(int argc, char *argv[])
 {
   (void)argc;(void)argv;

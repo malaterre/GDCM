@@ -20,7 +20,6 @@ namespace gdcm {
 
 class DataSet;
 /**
- * \brief
  * \details
  * The intent is for private tags handling. This class is not meant to handle
  * all possible vendors in the world, simply those well known where we intend
