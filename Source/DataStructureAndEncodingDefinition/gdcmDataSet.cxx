@@ -49,7 +49,7 @@ std::string DataSet::GetPrivateCreator(const Tag &t) const
         // osirix/AbdominalCT/36382443
         owner.erase(owner.size()-1,1);
         }
-      assert( owner.size() == 0 || owner[owner.size()-1] != ' ' );
+      assert( owner.empty() || owner[owner.size()-1] != ' ' );
       return owner;
       }
     }
@@ -85,7 +85,7 @@ Tag DataSet::ComputeDataElement(const PrivateTag & t) const
       std::string tmp(bv->GetPointer(),bv->GetLength());
       // trim trailing whitespaces:
       tmp.erase(tmp.find_last_not_of(' ') + 1);
-      assert( tmp.size() == 0 || tmp[ tmp.size() - 1 ] != ' ' ); // FIXME
+      assert( tmp.empty() || tmp[ tmp.size() - 1 ] != ' ' ); // FIXME
       if( System::StrCaseCmp( tmp.c_str(), refowner ) == 0 )
         {
         // found !

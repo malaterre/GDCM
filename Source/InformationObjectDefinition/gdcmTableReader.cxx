@@ -73,7 +73,7 @@ void TableReader::HandleMacroEntryDescription(const char **atts)
   assert( ParsingMacroEntryDescription == false );
   ParsingMacroEntryDescription = true;
   assert( *atts == nullptr );
-  assert( Description == "" );
+  assert( Description.empty() );
 }
 
 void TableReader::HandleModuleInclude(const char **atts)
@@ -92,7 +92,7 @@ void TableReader::HandleModuleEntryDescription(const char **atts)
   assert( ParsingModuleEntryDescription == false );
   ParsingModuleEntryDescription = true;
   assert( *atts == nullptr );
-  assert( Description == "" );
+  assert( Description.empty() );
 }
 
 void TableReader::HandleMacroEntry(const char **atts)

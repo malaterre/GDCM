@@ -326,7 +326,7 @@ bool ServiceClassUser::SendFind(const BaseRootQuery* query, std::vector<DataSet>
   std::vector<DataSet> const & theResponses = theCallback.GetResponses();
 
   bool ret = false; // by default an error
-  assert( theResponses.size() >= 1 );
+  assert( !theResponses.empty() );
   // take the last one:
   const DataSet &ds = theResponses[ theResponses.size() - 1 ]; // FIXME
   assert ( ds.FindDataElement(Tag(0x0, 0x0900)) );
