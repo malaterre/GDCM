@@ -36,7 +36,6 @@
 #ifdef GDCM_HAVE_WINSOCK_H
 #include <winsock.h>
 #endif
-#include <cstdio> // snprintf
 #if defined(_MSC_VER) && (_MSC_VER < 1900)
 #define snprintf _snprintf
 #endif
