@@ -163,7 +163,7 @@ struct TestCleaner4Impl1 : public TestCleaner4Impl {
     }
     return true;
   }
-  bool check_after(gdcm::DataSet &ds, bool preservePatientName) override {
+  bool check_after(gdcm::DataSet &ds, bool /*preservePatientName*/) override {
     const gdcm::Tag t1(0x0008, 0x0090);  //
     const gdcm::Tag t2(0x0008, 0x1050);  //
     const gdcm::Tag t3(0x0008, 0x1070);  //
@@ -212,7 +212,7 @@ struct TestCleaner4Impl2 : public TestCleaner4Impl {
     }
     return true;
   }
-  bool check_after(gdcm::DataSet &ds, bool preservePatientName) override {
+  bool check_after(gdcm::DataSet &ds, bool /*preservePatientName*/) override {
     const gdcm::Tag t1(0x0008, 0x0090);  //     PN      6       EU^^^^
     const gdcm::Tag t2(0x0008, 0x1050);  //     PN      4       ^^^^
     const gdcm::Tag t3(0x0008, 0x1060);  //     PN      16      DR.H.DOOLITTLER
@@ -263,7 +263,7 @@ struct TestCleaner4Impl3 : public TestCleaner4Impl {
     }
     return true;
   }
-  bool check_after(gdcm::DataSet &ds, bool preservePatientName) override {
+  bool check_after(gdcm::DataSet &ds, bool /*preservePatientName*/) override {
     const gdcm::Tag t1(0x0008, 0x0090);  //
     const gdcm::Tag t2(0x0008, 0x1070);  //
     const gdcm::Tag t3(0x0010, 0x0010);  //

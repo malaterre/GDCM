@@ -634,7 +634,7 @@ struct Cleaner::impl {
     return false;
   }
 
-  bool Scrub(Tag const &t) { return false; }
+  bool Scrub(Tag const & /*t*/) { return false; }
   bool Scrub(PrivateTag const &pt) {
     static const PrivateTag &csa1 = CSAHeader::GetCSAImageHeaderInfoTag();
     static const PrivateTag &csa2 = CSAHeader::GetCSASeriesHeaderInfoTag();
@@ -655,7 +655,7 @@ struct Cleaner::impl {
     return true;
   }
 
-  bool Scrub(VR const &vr) { return false; }
+  bool Scrub(VR const & /*vr*/) { return false; }
 
   bool Preserve(DPath const &dpath) {
     preserve_dpaths.insert(dpath);
@@ -665,7 +665,7 @@ struct Cleaner::impl {
   void RemoveAllMissingPrivateCreator(bool remove) {
     AllMissingPrivateCreator = remove;
   }
-  bool RemoveMissingPrivateCreator(Tag const &t) { return false; }
+  bool RemoveMissingPrivateCreator(Tag const & /*t*/) { return false; }
   void RemoveAllGroupLength(bool remove) { AllGroupLength = remove; }
   void RemoveAllIllegal(bool remove) { AllIllegal = remove; }
 };
@@ -1065,7 +1065,7 @@ static bool IsDPathInSet(std::set<DPath> const &aset, DPath const dpath) {
 }
 
 Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
-    File const &file, DataSet &ds, const DataElement &de, VR const &ref_dict_vr,
+    File const & /*file*/, DataSet &ds, const DataElement &de, VR const &ref_dict_vr,
     const std::string &tag_path) {
   const Tag &tag = de.GetTag();
   // Group Length & Illegal cannot be preserved so it is safe to do them now:
