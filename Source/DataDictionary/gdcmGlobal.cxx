@@ -27,7 +27,7 @@ namespace gdcm
 
 // Must NOT be initialized.  Default initialization to zero is
 // necessary.
-unsigned int GlobalCount;
+static unsigned int GlobalCount;
 
 class GlobalInternal
 {

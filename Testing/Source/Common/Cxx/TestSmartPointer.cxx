@@ -40,7 +40,7 @@ void Fill(SmartPointer<Foo> &p)
   p = &rp;
 }
 
-SmartPointer<Foo> gf;
+static SmartPointer<Foo> gf;
 
 SmartPointer<Foo> TestReturn(int i)
 {
