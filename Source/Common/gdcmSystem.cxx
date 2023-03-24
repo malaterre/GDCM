@@ -20,19 +20,19 @@
 #include <iostream>
 #include <string>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h> // strspn
-#include <assert.h>
-#include <errno.h>
+#include <cassert>
+#include <cerrno>
+#include <climits> // PATH_MAX
+#include <cstdio>
+#include <cstdlib>
+#include <cstring> // strspn
 #include <sys/stat.h>
-#include <limits.h> // PATH_MAX
 
 // gettimeofday
 #ifdef GDCM_HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
-#include <time.h>
+#include <ctime>
 #ifdef GDCM_HAVE_WINSOCK_H
 #include <winsock.h>
 #endif

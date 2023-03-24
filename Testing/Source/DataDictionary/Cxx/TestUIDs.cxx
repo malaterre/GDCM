@@ -16,8 +16,8 @@
 
 #include <iostream>
 
-#include <string.h> // strcmp
-#include <stdlib.h> // strcmp
+#include <cstdlib> // strcmp
+#include <cstring> // strcmp
 
 
 // This list was retrieved from:

@@ -12,8 +12,8 @@
 
 =========================================================================*/
 #include "gdcmCryptoFactory.h"
-#include <string.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstring>
 #include <memory>
 #include <vector>
 

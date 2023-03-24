@@ -21,8 +21,8 @@
 #include "gdcmJPEG12Codec.h"
 #include "gdcmJPEG16Codec.h"
 
+#include <cstring>
 #include <numeric>
-#include <string.h>
 
 namespace gdcm
 {

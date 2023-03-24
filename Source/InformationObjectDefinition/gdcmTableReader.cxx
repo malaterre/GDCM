@@ -18,8 +18,8 @@
 #include <fstream>
 #include "gdcm_expat.h"
 
-#include <stdio.h> // for stderr
-#include <string.h>
+#include <cstdio> // for stderr
+#include <cstring>
 
 namespace gdcm
 {

@@ -19,7 +19,7 @@
 #include "gdcmSystem.h"
 #include "gdcmAttribute.h"
 
-#include <time.h>
+#include <ctime>
 
 namespace gdcm
 {

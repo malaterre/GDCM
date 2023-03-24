@@ -17,7 +17,7 @@
 #include <string>
 #include <set>
 
-#include <string.h>
+#include <cstring>
 
 int TestUIDGeneratorValid()
 {

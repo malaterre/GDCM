@@ -15,7 +15,7 @@
 
 #include <iostream>
 
-#include <string.h> // strlen
+#include <cstring> // strlen
 
 int TestString2(int , char *[])
 {

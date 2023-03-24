@@ -18,7 +18,7 @@
 #include "gdcmAttribute.h"
 #include "gdcmDataSetHelper.h"
 
-#include <string.h> // strtok
+#include <cstring> // strtok
 
 namespace gdcm
 {

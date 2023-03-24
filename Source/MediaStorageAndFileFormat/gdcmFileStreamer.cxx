@@ -24,9 +24,9 @@
 
 #define _FILE_OFFSET_BITS 64
 
+#include <cstdio>
 #include <limits>
 #include <sys/stat.h> // fstat
-#include <stdio.h>
 
 #if defined(_WIN32) && (defined(_MSC_VER) || defined(__MINGW32__))
 #include <io.h>

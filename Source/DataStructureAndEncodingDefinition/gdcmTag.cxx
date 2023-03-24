@@ -14,7 +14,7 @@
 #include "gdcmTag.h"
 #include "gdcmTrace.h"
 
-#include <stdio.h> // sscanf
+#include <cstdio> // sscanf
 
 namespace gdcm
 {

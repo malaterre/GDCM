@@ -14,8 +14,8 @@
 #include "gdcmTransferSyntax.h"
 #include "gdcmTrace.h"
 
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <cstring>
 
 #include <string>
 #include <iostream>
