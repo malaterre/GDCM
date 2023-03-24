@@ -18,7 +18,7 @@ struct dummy
 {
   unsigned short I[3];
 };
-//<entry group="0018" element="1624" retired="false" version="3">
+// <entry group="0018" element="1624" retired="false" version="3">
 //      <representation vr="US" vm="3"/>
 
 template<int,int> struct TagToElement;
