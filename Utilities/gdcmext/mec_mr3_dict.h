@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-void check_mec_mr3_dict();
+void check_mec_mr3_dict(void);
 bool check_mec_mr3_info(uint8_t group, uint32_t key, uint32_t type);
 const char *get_mec_mr3_info_name(uint8_t group, uint32_t key);
 
