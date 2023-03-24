@@ -238,6 +238,7 @@ struct buffer19 {
   char sig5;
 };
 
+#if 0
 static void dump2file(const char *in, int len) {
   static int debug = 0;
   char buffer[512];
@@ -247,6 +248,7 @@ static void dump2file(const char *in, int len) {
   fwrite(in, 1, len, f);
   fclose(f);
 }
+#endif
 
 // https://stackoverflow.com/questions/28270310/how-to-easily-detect-utf8-encoding-in-the-string
 static bool is_valid_utf8(const char *string) {
