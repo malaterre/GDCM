@@ -82,7 +82,7 @@ public:
   /// Index starts at 1 not 0
   bool RemoveItemByIndex( const SizeType index );
 
-  bool IsEmpty() const { return Items.empty(); };
+  bool IsEmpty() const { return Items.empty(); }
   SizeType GetNumberOfItems() const {  return Items.size(); }
   void SetNumberOfItems(SizeType n) {  Items.resize(n); }
 
