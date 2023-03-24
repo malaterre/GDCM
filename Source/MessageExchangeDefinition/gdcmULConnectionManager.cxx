@@ -333,7 +333,7 @@ bool ULConnectionManager::EstablishConnectionMove(const std::string& inAETitle,
       std::vector<BasePDU*>::iterator itor;
       for (itor = thePDUs.begin(); itor != thePDUs.end(); itor++)
         {
-        if (*itor == NULL) continue; //can have a nulled pdu, apparently
+        if (*itor == nullptr) continue; //can have a nulled pdu, apparently
         (*itor)->Print(Trace::GetStream());
         }
     }
