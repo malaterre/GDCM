@@ -24,7 +24,7 @@
 #include "gdcm_charls.h"
 
 
-#if defined(__GNUC__) && GCC_VERSION < 50101
+#if defined(GCC_VERSION) && GCC_VERSION < 50101
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #endif
 

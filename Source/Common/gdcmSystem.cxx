@@ -229,7 +229,7 @@ bool System::FileIsDirectory(const char* name)
   if(stat(name, &fs) == 0)
 #endif
     {
-#if _WIN32
+#ifdef _WIN32
     return ((fs.st_mode & _S_IFDIR) != 0);
 #else
     return S_ISDIR(fs.st_mode);
@@ -960,7 +960,7 @@ bool System::GetHostName(char name[255])
 {
 // http://msdn.microsoft.com/en-us/library/ms738527.aspx
 // WSANOTINITIALISED A successful WSAStartup call must occur before using this function.
-#if _WIN32
+#ifdef _WIN32
   // Get the hostname
   WORD wVersionRequested;
   WSADATA wsaData;
