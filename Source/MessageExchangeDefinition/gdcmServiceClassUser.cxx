@@ -123,10 +123,8 @@ bool ServiceClassUser::InitializeConnection()
     }
 
   ULConnection* mConnection = Internals->mConnection;
-  if (mConnection)
-    {
-    delete mConnection;
-    }
+  delete mConnection;
+
   Internals->mConnection = new ULConnection(connectInfo);
   Internals->mConnection->GetTimer().SetTimeout(Internals->timeout);
 
@@ -404,10 +402,8 @@ bool ServiceClassUser::SendMove(const BaseRootQuery* query, const char *outputdi
 
   // let's start the secondary connection
   ULConnection* mSecondaryConnection = Internals->mSecondaryConnection;
-  if (mSecondaryConnection)
-    {
-    delete mSecondaryConnection;
-    }
+  delete mSecondaryConnection;
+
   Internals->mSecondaryConnection = new ULConnection(connectInfo2);
   Internals->mSecondaryConnection->GetTimer().SetTimeout(Internals->timeout);
 
@@ -439,10 +435,8 @@ bool ServiceClassUser::SendMove(const BaseRootQuery* query, std::vector<DataSet>
 
   // let's start the secondary connection
   ULConnection* mSecondaryConnection = Internals->mSecondaryConnection;
-  if (mSecondaryConnection)
-    {
-    delete mSecondaryConnection;
-    }
+  delete mSecondaryConnection;
+
   Internals->mSecondaryConnection = new ULConnection(connectInfo2);
   Internals->mSecondaryConnection->GetTimer().SetTimeout(Internals->timeout);
 

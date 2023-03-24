@@ -831,7 +831,7 @@ bool Reader::CanRead() const
 
 void Reader::SetFileName(const char *utf8path)
 {
-  if(Ifstream) delete Ifstream;
+  delete Ifstream;
   Ifstream = new std::ifstream();
   if (utf8path && *utf8path) {
 #ifdef _MSC_VER
