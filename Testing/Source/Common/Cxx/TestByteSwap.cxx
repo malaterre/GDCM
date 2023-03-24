@@ -15,7 +15,7 @@
 #include "gdcmSwapCode.h"
 #include "gdcmByteSwap.h"
 
-#include <string.h> // memcpy
+#include <cstring> // memcpy
 
 int myfunc()
 {

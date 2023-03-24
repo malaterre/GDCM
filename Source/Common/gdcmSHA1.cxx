@@ -18,9 +18,9 @@
 #include <openssl/sha.h>
 #endif
 
-#include <string.h> // memcmp
-#include <stdlib.h> // malloc
-#include <stdio.h> // snprintf
+#include <cstdio> // snprintf
+#include <cstdlib> // malloc
+#include <cstring> // memcmp
 
 /*
  */

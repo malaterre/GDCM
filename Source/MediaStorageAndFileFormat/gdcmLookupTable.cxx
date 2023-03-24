@@ -18,7 +18,7 @@
 #include <iomanip>
 #include <algorithm>
 
-#include <string.h>
+#include <cstring>
 
 namespace gdcm
 {

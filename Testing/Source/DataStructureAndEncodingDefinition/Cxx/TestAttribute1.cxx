@@ -13,8 +13,8 @@
 =========================================================================*/
 #include "gdcmAttribute.h"
 
+#include <cmath> // fabs
 #include <limits>
-#include <math.h> // fabs
 
 int TestAttributeAE() { return 0; }
 int TestAttributeAS() { return 0; }

@@ -21,8 +21,8 @@
 #include <iomanip>
 #include <iterator>
 
+#include <climits>
 #include <cstring>
-#include <limits.h>
 
 namespace gdcm
 {

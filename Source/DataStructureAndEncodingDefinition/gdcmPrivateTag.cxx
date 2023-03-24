@@ -15,7 +15,7 @@
 #include "gdcmTrace.h"
 #include "gdcmSystem.h" // FIXME
 
-#include <stdio.h> // sscanf
+#include <cstdio> // sscanf
 #include <limits> // numeric_limits
 
 namespace gdcm_ns

@@ -15,7 +15,7 @@
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"
 
-#include <string.h>
+#include <cstring>
 
 int TestBase64(int , char *[])
 {

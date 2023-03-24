@@ -17,7 +17,7 @@
 #include <set>
 #include <vector>
 
-#include <stdlib.h>
+#include <cstdlib>
 
 int TestUnpacker12Bits(int, char *[])
 {

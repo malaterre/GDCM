@@ -19,9 +19,9 @@
 #elif defined(GDCM_BUILD_TESTING)
 #include "gdcm_md5.h"
 #endif
+#include <cstdio>
 #include <fstream>
 #include <vector>
-#include <stdio.h>
 #if defined(_MSC_VER) && (_MSC_VER < 1900)
 #define snprintf _snprintf
 #endif

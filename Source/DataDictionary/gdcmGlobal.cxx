@@ -16,8 +16,8 @@
 #include "gdcmDefs.h"
 #include "gdcmFilename.h"
 
-#include <limits.h> // PATH_MAX
-#include <string.h> // strcpy
+#include <climits> // PATH_MAX
+#include <cstring> // strcpy
 #ifdef _WIN32
 #include <windows.h> // MAX_PATH
 #endif

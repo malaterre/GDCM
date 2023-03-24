@@ -14,7 +14,7 @@
 #include "gdcmRescaler.h"
 #include <limits>
 
-#include <stdlib.h> // atof
+#include <cstdlib> // atof
 
 static bool check_roundtrip(const gdcm::PixelFormat & pf )
 {

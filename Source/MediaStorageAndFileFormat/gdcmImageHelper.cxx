@@ -27,7 +27,7 @@
 #include "gdcmSegmentedPaletteColorLookupTable.h"
 #include "gdcmByteValue.h"
 
-#include <math.h> // fabs
+#include <cmath> // fabs
 
   /* TODO:
    *

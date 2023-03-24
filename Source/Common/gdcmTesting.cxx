@@ -16,8 +16,8 @@
 #include "gdcmSystem.h"
 #include "gdcmMD5.h"
 
-#include <string.h> // strcmp
-#include <stdlib.h> // malloc
+#include <cstdlib> // malloc
+#include <cstring> // strcmp
 
 
 namespace gdcm

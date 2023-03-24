@@ -18,7 +18,7 @@
 #include <fstream>
 #include <iostream>
 
-#include <string.h> // strstr
+#include <cstring> // strstr
 // fstat
 #include <sys/types.h>
 #include <sys/stat.h>

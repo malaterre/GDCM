@@ -12,10 +12,10 @@
 
 =========================================================================*/
 #include "gdcmFilename.h"
-#include <limits.h>
-#include <stdlib.h> // realpath
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <climits>
+#include <cstdlib> // realpath
+#include <cstring>
 
 namespace gdcm
 {
