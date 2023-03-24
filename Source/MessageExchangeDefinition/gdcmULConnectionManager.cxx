@@ -565,7 +565,7 @@ void ULConnectionManager::BreakConnectionNow(){
 EStateID ULConnectionManager::RunMoveEventLoop(ULEvent& currentEvent, ULConnectionCallback* inCallback){
   gdcmDebugMacro( "Start RunMoveEventLoop" );
   EStateID theState = eStaDoesNotExist;
-  bool waitingForEvent;
+  bool waitingForEvent = false;
   EEventID raisedEvent;
 
   bool receivingData = false;

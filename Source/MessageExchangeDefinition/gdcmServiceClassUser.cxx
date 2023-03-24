@@ -773,7 +773,7 @@ EStateID ServiceClassUser::RunEventLoop(network::ULEvent& currentEvent,
 
 EStateID ServiceClassUser::RunMoveEventLoop(ULEvent& currentEvent, ULConnectionCallback* inCallback){
   EStateID theState = eStaDoesNotExist;
-  bool waitingForEvent;
+  bool waitingForEvent = false;
   EEventID raisedEvent;
 
   bool receivingData = false;
