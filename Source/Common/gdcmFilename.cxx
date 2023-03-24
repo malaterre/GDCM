@@ -28,7 +28,7 @@ const char *Filename::GetPath()
 {
   std::string fn = ToUnixSlashes();
 
-  std::string::size_type slash_pos = fn.rfind("/");
+  std::string::size_type slash_pos = fn.rfind('/');
   if(slash_pos != std::string::npos)
     {
     Path = fn.substr(0, slash_pos);
@@ -52,7 +52,7 @@ const char *Filename::GetName()
 #if defined(_WIN32)
   std::string::size_type slash_pos = filename.find_last_of("/\\");
 #else
-  std::string::size_type slash_pos = filename.find_last_of("/");
+  std::string::size_type slash_pos = filename.find_last_of('/');
 #endif
   if(slash_pos != std::string::npos)
     {
@@ -142,7 +142,7 @@ inline void Realpath(const char *path, std::string & resolved_path)
 const char *Filename::GetExtension()
 {
   std::string name = GetName();
-  std::string::size_type dot_pos = name.rfind(".");
+  std::string::size_type dot_pos = name.rfind('.');
   if(dot_pos != std::string::npos)
     {
     return GetName() + dot_pos;

@@ -90,7 +90,7 @@ TransferSyntax::TSType TransferSyntax::GetTSType(const char *cstr)
 {
   // trim trailing whitespace
   std::string str = cstr;
-  std::string::size_type notspace = str.find_last_not_of(" ") + 1;
+  std::string::size_type notspace = str.find_last_not_of(' ') + 1;
   if( notspace != str.size() )
     {
     gdcmDebugMacro( "BUGGY HEADER: TS contains " <<
