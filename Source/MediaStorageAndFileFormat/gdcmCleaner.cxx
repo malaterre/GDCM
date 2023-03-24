@@ -840,41 +840,6 @@ static inline bool bs_is_signature(const ByteValue *bv, const char *str) {
   return false;
 }
 
-static inline bool is_signature_end(const ByteValue *bv, const char *str) {
-  const size_t len = strlen(str);
-  if (bv->GetLength() >= len &&
-      memcmp(bv->GetPointer() + bv->GetLength() - len, str, len) == 0) {
-    return true;
-  }
-
-  return false;
-}
-
-static inline bool bs_is_signature_end(const ByteValue *bv, const char *str) {
-  const size_t len = strlen(str);
-  if (bv->GetLength() >= len &&
-      bs_memcmp(bv->GetPointer() + bv->GetLength() - len, str, len) == 0) {
-    return true;
-  }
-
-  return false;
-}
-
-static inline bool isSV10Legacy(const ByteValue *bv) {
-  // 4 bytes aligned:
-  if (bv->GetLength() % 4 == 0) {
-    uint32_t n;
-    uint32_t unused;
-    if (bv->GetLength() >= 8) {
-      const char *buffer = bv->GetPointer();
-      memcpy(&n, buffer, 4);
-      memcpy(&unused, buffer + 4, 4);
-      if (n < 0x100 && unused == 0x4d) return true;
-    }
-  }
-  return false;
-}
-
 static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
   const ByteValue *bv = de.GetByteValue();
   // fast path:
