@@ -128,6 +128,8 @@ bool SequenceOfFragments::WriteBuffer(std::ostream &os) const
   //  assert(0);
   //  return false;
   //  }
+  (void)total;
+  
   return true;
 }
 
