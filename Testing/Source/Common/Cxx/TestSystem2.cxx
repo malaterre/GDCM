@@ -14,7 +14,7 @@
 #include "gdcmSystem.h"
 #include "gdcmTesting.h"
 
-#define _FILE_OFFSET_BITS   64
+#define FILE_OFFSET_BITS   64
 #include <sys/stat.h>
 
 static bool mybool;

@@ -22,7 +22,7 @@
 #include "gdcmEvent.h"
 #include "gdcmProgressEvent.h"
 
-#define _FILE_OFFSET_BITS 64
+#define FILE_OFFSET_BITS 64
 
 #include <cstdio>
 #include <limits>
