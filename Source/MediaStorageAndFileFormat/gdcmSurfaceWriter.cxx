@@ -823,7 +823,7 @@ bool SurfaceWriter::Write()
   }
 
   assert( Stream );
-  if( !Writer::Write() )
+  if( !gdcm::SegmentWriter::Write() )
   {
     return false;
   }

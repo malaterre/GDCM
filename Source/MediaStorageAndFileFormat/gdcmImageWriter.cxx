@@ -416,7 +416,7 @@ Attribute<0x0028,0x0004> piat;
     }
 
   assert( Stream );
-  if( !Writer::Write() )
+  if( !gdcm::PixmapWriter::Write() )
     {
     return false;
     }
