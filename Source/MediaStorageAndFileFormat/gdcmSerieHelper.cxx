@@ -459,7 +459,7 @@ std::string SerieHelper::CreateUniqueSeriesIdentifier( File * inFile )
     // 0020 000e UI REL Series Instance UID
     //std::string uid = inFile->GetEntryValue (0x0020, 0x000e);
     std::string uid = sf.ToString( Tag(0x0020, 0x000e) );
-    std::string id = uid.c_str();
+    std::string id = uid;
     if(UseSeriesDetails)
       {
       for(SerieRestrictions::iterator it2 = Refine.begin();
