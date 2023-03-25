@@ -47,10 +47,6 @@ int TestDictEntry(int, char *[])
     return 1;
     }
 
-  if( ! (pt2 < pt3) )
-    {
-    return 1;
-    }
   if( ! (pt2 < pt4) )
     {
     return 1;

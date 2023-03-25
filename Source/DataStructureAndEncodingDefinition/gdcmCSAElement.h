@@ -136,7 +136,7 @@ inline std::ostream& operator<<(std::ostream &os, const CSAElement &val)
     std::string str(p, p + bv->GetLength() );
     if( val.ValueMultiplicityField == VM::VM1 )
       {
-      os << "'" << str.c_str() << "'";
+      os << "'" << str << "'";
       }
     else
       {
@@ -150,7 +150,7 @@ inline std::ostream& operator<<(std::ostream &os, const CSAElement &val)
           os << '\\';
           }
         sep = true;
-        os << "'" << s.c_str() << "'";
+        os << "'" << s << "'";
         }
       //bv->Print( os << "'" );
       //os << "'";

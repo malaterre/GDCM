@@ -1006,7 +1006,6 @@ bool Bitmap::GetBufferInternal(char *buffer, bool &lossyflag) const
   //if( !success ) success = TryDeltaEncodingCodec(buffer);
   if( !success )
     {
-    buffer = nullptr;
     //throw Exception( "No codec found for this image");
     }
 
@@ -1023,7 +1022,6 @@ bool Bitmap::GetBuffer2(std::ostream &os) const
   //if( !success ) success = TryRLECodec2(buffer);
   if( !success )
     {
-    //buffer = 0;
     throw Exception( "No codec found for this image");
     }
 
