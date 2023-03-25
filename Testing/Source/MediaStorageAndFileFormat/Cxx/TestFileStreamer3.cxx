@@ -126,7 +126,7 @@ int TestFileStream3(const char *filename, bool verbose = false)
     std::cerr << "Wrong length: " << bv->GetLength() << std::endl;
     return 1;
     }
-  if( memcmp( bv->GetPointer(), buffer, 2 ) )
+  if( memcmp( bv->GetPointer(), buffer, 2 ) != 0 )
     {
     std::cerr << "Wrong content" << std::endl;
     return 1;
@@ -138,7 +138,7 @@ int TestFileStream3(const char *filename, bool verbose = false)
   const ByteValue * bv = de.GetByteValue();
   if( !bv ) return 1;
   if( bv->GetLength() != 2 ) return 1;
-  if( memcmp( bv->GetPointer(), buffer, 2 ) )
+  if( memcmp( bv->GetPointer(), buffer, 2 ) != 0 )
     {
     std::cerr << "Wrong content" << std::endl;
     return 1;

@@ -788,7 +788,7 @@ bool FileStreamer::InitializeCopy()
       Reader reader;
       reader.SetFileName( filename );
       if( !reader.Read() ) return false;
-      if( strcmp( filename, outfilename ) )
+      if( strcmp( filename, outfilename ) != 0 )
         {
         Writer writer;
         writer.SetFileName( outfilename );
@@ -802,7 +802,7 @@ bool FileStreamer::InitializeCopy()
       assert( outfilename );
       std::ifstream is( filename, std::ios::binary );
       if( !is.good() ) return false;
-      if( strcmp( filename, outfilename ) )
+      if( strcmp( filename, outfilename ) != 0 )
         {
         std::ofstream of( outfilename, std::ios::binary );
         if( !of.good() ) return false;

@@ -103,7 +103,7 @@ int TestImageWrite(const char *subdir, const char* filename)
       //assert(0);
       res = 1;
       }
-    else if( strcmp(digest, ref) )
+    else if( strcmp(digest, ref) != 0 )
       {
       std::cerr << "Problem reading image from: " << outfilename << std::endl;
       std::cerr << "Found " << digest << " instead of " << ref << std::endl;
