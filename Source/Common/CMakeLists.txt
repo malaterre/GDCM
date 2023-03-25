@@ -62,7 +62,7 @@ CHECK_CXX_SOURCE_COMPILES(
   "int main() { const char *f = __FUNCTION__; return 0;}"
   GDCM_CXX_HAS_FUNCTION)
 CHECK_CXX_SOURCE_COMPILES(
-  "\#include <fstream>\nint main() { const wchar_t fn[10] = {}; std::ifstream is( fn ); return 0;}"
+  "\#include <fstream>\nint main() { const wchar_t fn[10] = {}; std::ifstream is( fn ); std::wcerr << fn; return 0;}"
   GDCM_HAVE_WCHAR_IFSTREAM)
 CHECK_CXX_SOURCE_COMPILES(
   "\#include <string>\n#include <codecvt>\n#include <locale>\nint main() { std::u16string u16; std::string utf8 = std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t>{}.to_bytes(u16); }"

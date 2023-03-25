@@ -98,7 +98,7 @@ int TestFilename(int argc, char *argv[])
   std::ofstream outputFileStream( fn );
   if ( ! outputFileStream.is_open() )
     {
-    std::cerr << "Failed to read UTF-16: " << fn << std::endl;
+    std::wcerr << "Failed to read UTF-16: " << fn << std::endl;
     return EXIT_FAILURE;
     }
   outputFileStream.close();
