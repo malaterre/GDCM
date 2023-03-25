@@ -49,7 +49,7 @@ public :
 };
 
 /// Generic inserter operator for Event and its subclasses.
-inline std::ostream& operator<<(std::ostream& os, Event &e)
+inline std::ostream& operator<<(std::ostream& os, const Event &e)
 {
   e.Print(os);
   return os;

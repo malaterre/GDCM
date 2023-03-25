@@ -53,7 +53,7 @@ class GDCM_EXPORT StrictScanner2 : public Subject {
   friend std::ostream &operator<<(std::ostream &_os, const StrictScanner2 &s);
 
  public:
-  StrictScanner2() : Values(), Filenames(), PublicMappings(), PrivateMappings() {}
+  StrictScanner2() : Values(), Filenames(), PublicMappings(), PrivateMappings(), Progress(0.0) {}
   ~StrictScanner2() override;
 
   /// struct to map a filename to a value
