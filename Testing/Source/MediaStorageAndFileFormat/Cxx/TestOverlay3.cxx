@@ -125,13 +125,13 @@ static int TestReadOverlay(const char* filename, bool verbose = false)
         std::cerr << name << std::endl;
         ++ret;
         }
-      if( refmd5 && strcmp(digest1, refmd5) )
+      if( refmd5 && strcmp(digest1, refmd5) != 0 )
         {
         std::cerr << "strcmp/ref: Problem with Overlay: #" << ovidx << std::endl;
         std::cerr << "ref: " << refmd5 << " vs " << digest1 << std::endl;
         ++ret;
         }
-      if( strcmp(digest1, digest2) )
+      if( strcmp(digest1, digest2) != 0 )
         {
         std::cerr << "strcmp/1/2: Problem with Overlay: #" << ovidx << std::endl;
         std::cerr << "digest1: " << digest1 << " vs " << digest2 << std::endl;

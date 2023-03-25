@@ -131,7 +131,7 @@ int TestStreamImageRead(const char* filename, bool verbose = false, bool lossydu
       //assert(0);
       res = 1;
       }
-    else if( strcmp(digest, ref) )
+    else if( strcmp(digest, ref) != 0 )
       {
         
         // let's be nice for now and only truly fails when file is proper DICOM

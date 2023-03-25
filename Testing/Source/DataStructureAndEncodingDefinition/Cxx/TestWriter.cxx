@@ -69,7 +69,7 @@ int TestWrite(const char *subdir, const char* filename, bool recursing, bool ver
   char digest[33], outdigest[33];
   Testing::ComputeFileMD5(filename, digest);
   Testing::ComputeFileMD5(outfilename.c_str(), outdigest);
-  if( strcmp(digest, outdigest) )
+  if( strcmp(digest, outdigest) != 0 )
     {
     if (recursing)
       return 1;
