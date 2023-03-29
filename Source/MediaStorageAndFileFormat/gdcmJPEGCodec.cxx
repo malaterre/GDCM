@@ -342,7 +342,7 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
       }
 
     std::string str = os.str();
-    assert( str.size() );
+    assert( !str.empty() );
     Fragment frag;
     //frag.SetTag( itemStart );
     VL::Type strSize = (VL::Type)str.size();
