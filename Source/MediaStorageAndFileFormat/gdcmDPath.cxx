@@ -17,9 +17,9 @@
 
 namespace gdcm {
 
-DPath::DPath() {}
+DPath::DPath() = default;
 
-DPath::~DPath() {}
+DPath::~DPath() = default;
 
 // LO mandates that '\\' is never used:
 static const char SEPARATOR = '\\';

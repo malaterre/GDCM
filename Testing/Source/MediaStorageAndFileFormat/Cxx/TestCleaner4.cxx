@@ -54,7 +54,7 @@ static bool IsTagEmpty(const DataSet &ds, const T1 &path, const T2 &pt) {
 }  // namespace gdcm
 
 struct TestCleaner4Impl {
-  virtual ~TestCleaner4Impl() {}
+  virtual ~TestCleaner4Impl() = default;
   virtual bool check_before(gdcm::DataSet &ds) = 0;
   virtual bool check_after(gdcm::DataSet &ds, bool preservePatientName) = 0;
   int run(std::string const &filename, std::string const &outfilename,
