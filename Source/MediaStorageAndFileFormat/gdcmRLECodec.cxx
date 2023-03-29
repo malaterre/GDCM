@@ -531,7 +531,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     //header.Print( std::cout );
     os.write((char*)&header,sizeof(header));
     std::string str = os.str() + datastr;
-    assert( str.size() );
+    assert( !str.empty() );
     Fragment frag;
     //frag.SetTag( itemStart );
     VL::Type strSize = (VL::Type)str.size();

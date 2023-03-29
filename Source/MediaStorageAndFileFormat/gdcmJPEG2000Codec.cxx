@@ -591,7 +591,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
       assert( r == true );
       }
     std::string str = os.str();
-    assert( str.size() );
+    assert( !str.empty() );
     out.SetByteValue( &str[0], (uint32_t)str.size() );
 
     return true;

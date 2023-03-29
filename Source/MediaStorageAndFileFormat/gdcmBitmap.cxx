@@ -1050,7 +1050,7 @@ void Bitmap::Print(std::ostream &os) const
   if( !IsEmpty() )
     {
     os << "NumberOfDimensions: " << NumberOfDimensions << "\n";
-    assert( Dimensions.size() );
+    assert( !Dimensions.empty() );
     os << "Dimensions: (";
     std::vector<unsigned int>::const_iterator it = Dimensions.begin();
     os << *it;

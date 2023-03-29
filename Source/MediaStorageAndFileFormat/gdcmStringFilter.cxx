@@ -218,7 +218,7 @@ bool StringFilter::ExecuteQuery(std::string const & query_const,
       }
     else
       {
-      assert( subtokens.size() );
+      assert( !subtokens.empty() );
       gdcmDebugMacro( "Unhandled token: " << subtokens[0] );
       state = -1;
       }
