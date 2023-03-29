@@ -27,14 +27,14 @@ namespace gdcm
 #error how did that happen ?
 #endif
 
-#include "gdcmDataFileNames.cxx"
-#include "gdcmMD5DataImages.cxx"
-#include "gdcmMD5DataBrokenImages.cxx"
-#include "gdcmMediaStorageDataFiles.cxx"
-#include "gdcmStreamOffsetDataFiles.cxx"
+#include "gdcmDataFileNames.cxx" // NOLINT(bugprone-suspicious-include)
+#include "gdcmMD5DataImages.cxx" // NOLINT(bugprone-suspicious-include)
+#include "gdcmMD5DataBrokenImages.cxx" // NOLINT(bugprone-suspicious-include)
+#include "gdcmMediaStorageDataFiles.cxx" // NOLINT(bugprone-suspicious-include)
+#include "gdcmStreamOffsetDataFiles.cxx" // NOLINT(bugprone-suspicious-include)
 // After gdcmStreamOffsetDataFiles:
-#include "gdcmSelectedTagsOffsetDataFiles.cxx"
-#include "gdcmSelectedPrivateGroupOffsetDataFiles.cxx"
+#include "gdcmSelectedTagsOffsetDataFiles.cxx" // NOLINT(bugprone-suspicious-include)
+#include "gdcmSelectedPrivateGroupOffsetDataFiles.cxx" // NOLINT(bugprone-suspicious-include)
 
 bool Testing::ComputeMD5(const char *buffer, size_t buf_len,
   char digest_str[33])
