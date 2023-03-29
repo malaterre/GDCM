@@ -287,7 +287,7 @@ void FileChangeTransferSyntax::SetTransferSyntax( TransferSyntax const & ts )
     &jpeg2000,
     &rle
   };
-  const int n = sizeof( codecs ) / sizeof( *codecs );
+  const int n = sizeof( codecs ) / sizeof( codecs[0] );
   for( int i = 0; i < n; ++i )
     {
     if( codecs[i]->CanCode( ts ) )
