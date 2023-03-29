@@ -971,7 +971,7 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
 
     if ( IsVRUI( tag ) )
       {
-      std::string UIDToAnonymize = "";
+      std::string UIDToAnonymize;
       UIDGenerator uid;
 
       if( !copy.IsEmpty() )
@@ -982,7 +982,7 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
           }
         }
 
-      std::string anonymizedUID = "";
+      std::string anonymizedUID;
       if( !UIDToAnonymize.empty() )
         {
         if ( dummyMapUIDTags.count( UIDToAnonymize ) == 0 )
