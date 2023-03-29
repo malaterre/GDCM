@@ -49,14 +49,8 @@ passed to a c-find or c-move query.
 namespace gdcm
 {
 
-  BaseQuery::BaseQuery()
-  {
-    //nothing to do, really
-  }
-  BaseQuery::~BaseQuery()
-  {
-    //nothing to do, really
-  }
+  BaseQuery::BaseQuery() = default;
+  BaseQuery::~BaseQuery() = default;
 
   void BaseQuery::SetSearchParameter(const Tag& inTag, const DictEntry& inDictEntry, const std::string& inValue)
   {
