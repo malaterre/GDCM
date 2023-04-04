@@ -38,7 +38,7 @@ public:
   { return (dynamic_cast<const Self*>(e) == nullptr ? false : true) ; }
   ::gdcm::Event* MakeObject() const override
     { return new Self; }
-  DataSetEvent(const Self&s) : AnyEvent(s){};
+  DataSetEvent(const Self&s) : AnyEvent(s){}
 
   DataSet const & GetDataSet() const { return *m_DataSet; }
 };

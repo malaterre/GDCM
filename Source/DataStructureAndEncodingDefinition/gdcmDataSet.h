@@ -229,7 +229,7 @@ public:
     }
 
   /// Returns if the dataset is empty
-  bool IsEmpty() const { return DES.empty(); };
+  bool IsEmpty() const { return DES.empty(); }
 
   DataSet& operator=(DataSet const &)
   = default;
