@@ -191,28 +191,28 @@ int main(int argc, char *argv[]) {
     // int this_option_optind = optind ? optind : 1;
     int option_index = 0;
     static struct option long_options[] = {
-        {"input", required_argument, NULL, 'i'},   // i
-        {"output", required_argument, NULL, 'o'},  // o
-        {"recursive", no_argument, NULL, 'r'},
+        {"input", required_argument, nullptr, 'i'},   // i
+        {"output", required_argument, nullptr, 'o'},  // o
+        {"recursive", no_argument, nullptr, 'r'},
         {"empty", required_argument, &empty_tag, 1},        // 3
         {"remove", required_argument, &remove_tag, 1},      // 4
         {"scrub", required_argument, &scrub_tag, 1},          // 5
         {"preserve", required_argument, &preserve_tag, 1},  // 5
-        {"continue", no_argument, NULL, 'c'},
+        {"continue", no_argument, nullptr, 'c'},
         {"skip-meta", 0, &skipmeta, 1},  // should I document this one ?
         {"preserve-missing-private-creator", 0,
          &preserveAllMissingPrivateCreator, 1},                    //
         {"preserve-group-length", 0, &preserveAllGroupLength, 1},  //
         {"preserve-illegal", 0, &preserveAllIllegal, 1},           //
 
-        {"verbose", no_argument, NULL, 'V'},
-        {"warning", no_argument, NULL, 'W'},
-        {"debug", no_argument, NULL, 'D'},
-        {"error", no_argument, NULL, 'E'},
-        {"help", no_argument, NULL, 'h'},
-        {"version", no_argument, NULL, 'v'},
+        {"verbose", no_argument, nullptr, 'V'},
+        {"warning", no_argument, nullptr, 'W'},
+        {"debug", no_argument, nullptr, 'D'},
+        {"error", no_argument, nullptr, 'E'},
+        {"help", no_argument, nullptr, 'h'},
+        {"version", no_argument, nullptr, 'v'},
 
-        {0, 0, 0, 0}};
+        {nullptr, 0, nullptr, 0}};
 
     c = getopt_long(argc, argv, "i:o:rcVWDEhv", long_options, &option_index);
     if (c == -1) {
