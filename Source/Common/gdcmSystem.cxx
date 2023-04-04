@@ -606,10 +606,10 @@ const char *System::GetCurrentResourcesDirectory()
  */
 inline int getlastdigit(unsigned char *data, unsigned long size)
 {
-  int extended, carry = 0;
+  int carry = 0;
   for(unsigned int i=0;i<size;i++)
     {
-    extended = (carry << 8) + data[i];
+    int extended = (carry << 8) + data[i];
     data[i] = (unsigned char)(extended / 10);
     carry = extended % 10;
     }
@@ -620,14 +620,13 @@ inline int getlastdigit(unsigned char *data, unsigned long size)
 size_t System::EncodeBytes(char *out, const unsigned char *data, int size)
 {
   bool zero = false;
-  int res;
   std::string sres;
   unsigned char buffer[32];
   unsigned char *addr = buffer;
   memcpy(addr, data, size);
   while(!zero)
     {
-    res = getlastdigit(addr, size);
+    int res = getlastdigit(addr, size);
     const char v = (char)('0' + res);
     sres.insert(sres.begin(), v);
     zero = true;
