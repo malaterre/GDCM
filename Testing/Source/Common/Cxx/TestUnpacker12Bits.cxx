@@ -17,7 +17,7 @@
 #include <set>
 #include <vector>
 
-#include <stdlib.h>
+#include <cstdlib>
 
 int TestUnpacker12Bits(int, char *[])
 {
@@ -69,8 +69,8 @@ int TestUnpacker12Bits(int, char *[])
   const unsigned char values[] = { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab };
   const size_t len = sizeof(values) / sizeof(*values);
   const size_t outlen = 16 * len / 12;
-  char * output = new char[outlen];
-  bool b = gdcm::Unpacker12Bits::Unpack(output, (const char*)values, len);
+  void * output = malloc(outlen); // use malloc to get generous alignment, unlike new
+  bool b = gdcm::Unpacker12Bits::Unpack((char *)output, (const char*)values, len);
   if (!b) res = 1;
   if( b )
     {
@@ -86,7 +86,7 @@ int TestUnpacker12Bits(int, char *[])
         }
       }
     }
-  delete[] output;
+  free(output);
 }
 
 {

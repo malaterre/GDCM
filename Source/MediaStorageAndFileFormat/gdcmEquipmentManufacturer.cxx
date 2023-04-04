@@ -72,7 +72,7 @@ static const char* const toshiba[] = {"TOSHIBA_MEC", "CANON_MEC",
                                       "Toshiba"};  // must include canon
 static const char* const uih[] = {"UIH"};          // United Imaging Healthcare
 
-#define ARRAY_SIZE(X) sizeof(X) / sizeof(*X)
+#define ARRAY_SIZE(X) (sizeof(X) / sizeof(*X))
 
 #define MAPPING(X, Y) \
   { X, ARRAY_SIZE(Y), Y }

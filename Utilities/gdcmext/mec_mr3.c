@@ -297,7 +297,7 @@ enum Type {
       0x001f4400,  // Fixed struct 516 bytes (struct with ASCII strings)
   STRUCT_325 =
       0x001f4600,  // Fixed struct 325 bytes (struct with ASCII strings)
-  SHIFT_JIS_STRING = 0xff002c00,  // SHIFT-JIS string
+  SHIFT_JIS_STRING = (int)0xff002c00,  // SHIFT-JIS string
 };
 
 enum SignatureType { SIG_UNK = 0, SIG_SIMPLE = 1, SIG_COMPLEX = 2 };

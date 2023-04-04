@@ -20,10 +20,10 @@
 #include "gdcmSmartPointer.h"
 #include "gdcmSwapper.h"
 
-#include <vector>
 #include <algorithm> // req C++11
-#include <stddef.h> // ptrdiff_t fix
+#include <cstddef> // ptrdiff_t fix
 #include <cstring>
+#include <vector>
 
 #include <gdcmrle/rle.h>
 
@@ -531,7 +531,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     //header.Print( std::cout );
     os.write((char*)&header,sizeof(header));
     std::string str = os.str() + datastr;
-    assert( str.size() );
+    assert( !str.empty() );
     Fragment frag;
     //frag.SetTag( itemStart );
     VL::Type strSize = (VL::Type)str.size();
@@ -771,8 +771,6 @@ bool RLECodec::DecodeByStreams(std::istream &is, std::ostream &os)
      return false;
   unsigned long numSegments = frame.Header.NumSegments;
 
-  unsigned long numberOfReadBytes = 0;
-
   unsigned long length = Length;
   assert( length );
   // Special case:
@@ -801,7 +799,7 @@ bool RLECodec::DecodeByStreams(std::istream &is, std::ostream &os)
   length /= numSegments;
   for(unsigned long i = 0; i<numSegments; ++i)
     {
-    numberOfReadBytes = 0;
+    unsigned long numberOfReadBytes = 0;
     std::streampos pos = is.tellg() - start;
     if ( frame.Header.Offset[i] - pos != 0 )
       {

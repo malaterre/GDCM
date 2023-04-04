@@ -13,9 +13,9 @@
 =========================================================================*/
 #include "gdcmDirectionCosines.h"
 
+#include <cmath> // fabs
+#include <cstdio> // sscanf
 #include <limits>
-#include <math.h> // fabs
-#include <stdio.h> // sscanf
 
 namespace gdcm
 {

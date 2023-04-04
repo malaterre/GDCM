@@ -217,13 +217,13 @@ enum Type {
       0x001f4400,  // Fixed struct 516 bytes (struct with ASCII strings)
   STRUCT_325 =
       0x001f4600,  // Fixed struct 325 bytes (struct with ASCII strings)
-  UINT32_VM1 = 0xff000400,      // uint32_t, range [0, 4] VM:1
-  FLOAT32_VM1 = 0xff000800,     // float/32bits VM:1
-  INT32_VM1N = 0xff002400,      // int32_t (signed) VM:1n
-  FLOAT32_VM1N = 0xff002800,    // float/32bits VM:1n
-  FLOAT64_VM1 = 0xff002900,     // float/64bits VM:1
-  BOOL32_VM1 = 0xff002a00,      // bool/32bits VM:1
-  UNICODE_STRING = 0xff002c00,  // ASCII, UTF-8 or SHIFT-JIS string
+  UINT32_VM1 = (int)0xff000400,      // uint32_t, range [0, 4] VM:1
+  FLOAT32_VM1 = (int)0xff000800,     // float/32bits VM:1
+  INT32_VM1N = (int)0xff002400,      // int32_t (signed) VM:1n
+  FLOAT32_VM1N = (int)0xff002800,    // float/32bits VM:1n
+  FLOAT64_VM1 = (int)0xff002900,     // float/64bits VM:1
+  BOOL32_VM1 = (int)0xff002a00,      // bool/32bits VM:1
+  UNICODE_STRING = (int)0xff002c00,  // ASCII, UTF-8 or SHIFT-JIS string
 };
 
 struct buffer19 {
@@ -238,6 +238,7 @@ struct buffer19 {
   char sig5;
 };
 
+#if 0
 static void dump2file(const char *in, int len) {
   static int debug = 0;
   char buffer[512];
@@ -247,6 +248,7 @@ static void dump2file(const char *in, int len) {
   fwrite(in, 1, len, f);
   fclose(f);
 }
+#endif
 
 // https://stackoverflow.com/questions/28270310/how-to-easily-detect-utf8-encoding-in-the-string
 static bool is_valid_utf8(const char *string) {

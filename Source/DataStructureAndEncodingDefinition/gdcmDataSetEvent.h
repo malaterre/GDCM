@@ -23,8 +23,6 @@ namespace gdcm
 /**
  * \brief DataSetEvent
  * \details Special type of event triggered during the DataSet store/move process
- *
- * \see
  */
 class DataSetEvent : public AnyEvent
 {

@@ -105,5 +105,6 @@ int TestParseXPATH(int argc, char *argv[])
     r += TestParseXPATHFile(filename);
     ++i;
     }
+  (void)r;
   return EXIT_SUCCESS;
 }

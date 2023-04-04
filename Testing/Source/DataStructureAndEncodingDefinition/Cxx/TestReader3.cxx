@@ -18,15 +18,13 @@
 #include <fstream>
 #include <iostream>
 
-#include <string.h> // strstr
+#include <cstring> // strstr
 // fstat
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h> /* close */
 
 // open
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
 
 // mmap

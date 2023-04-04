@@ -634,7 +634,7 @@ struct Cleaner::impl {
     return false;
   }
 
-  bool Scrub(Tag const &t) { return false; }
+  bool Scrub(Tag const & /*t*/) { return false; }
   bool Scrub(PrivateTag const &pt) {
     static const PrivateTag &csa1 = CSAHeader::GetCSAImageHeaderInfoTag();
     static const PrivateTag &csa2 = CSAHeader::GetCSASeriesHeaderInfoTag();
@@ -655,7 +655,7 @@ struct Cleaner::impl {
     return true;
   }
 
-  bool Scrub(VR const &vr) { return false; }
+  bool Scrub(VR const & /*vr*/) { return false; }
 
   bool Preserve(DPath const &dpath) {
     preserve_dpaths.insert(dpath);
@@ -665,7 +665,7 @@ struct Cleaner::impl {
   void RemoveAllMissingPrivateCreator(bool remove) {
     AllMissingPrivateCreator = remove;
   }
-  bool RemoveMissingPrivateCreator(Tag const &t) { return false; }
+  bool RemoveMissingPrivateCreator(Tag const & /*t*/) { return false; }
   void RemoveAllGroupLength(bool remove) { AllGroupLength = remove; }
   void RemoveAllIllegal(bool remove) { AllIllegal = remove; }
 };
@@ -840,41 +840,6 @@ static inline bool bs_is_signature(const ByteValue *bv, const char *str) {
   return false;
 }
 
-static inline bool is_signature_end(const ByteValue *bv, const char *str) {
-  const size_t len = strlen(str);
-  if (bv->GetLength() >= len &&
-      memcmp(bv->GetPointer() + bv->GetLength() - len, str, len) == 0) {
-    return true;
-  }
-
-  return false;
-}
-
-static inline bool bs_is_signature_end(const ByteValue *bv, const char *str) {
-  const size_t len = strlen(str);
-  if (bv->GetLength() >= len &&
-      bs_memcmp(bv->GetPointer() + bv->GetLength() - len, str, len) == 0) {
-    return true;
-  }
-
-  return false;
-}
-
-static inline bool isSV10Legacy(const ByteValue *bv) {
-  // 4 bytes aligned:
-  if (bv->GetLength() % 4 == 0) {
-    uint32_t n;
-    uint32_t unused;
-    if (bv->GetLength() >= 8) {
-      const char *buffer = bv->GetPointer();
-      memcpy(&n, buffer, 4);
-      memcpy(&unused, buffer + 4, 4);
-      if (n < 0x100 && unused == 0x4d) return true;
-    }
-  }
-  return false;
-}
-
 static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
   const ByteValue *bv = de.GetByteValue();
   // fast path:
@@ -888,13 +853,24 @@ static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
                                                 CSAImageHeaderTypeStrings);
   }
   static const char sv10[] = "SV10\4\3\2\1";  // 8
+  // what if a dumb anonymizer removed the CSA Image Header Type:
+  bool isSV10 = false;
+  if (image_type == IMAGE_UNK) {
+    if (is_signature(bv, sv10)) {
+      if (!ref.empty()) {
+        gdcmWarningMacro(
+            "Please report. SV10 Header found for new type: " << ref);
+      }
+      isSV10 = true;
+    }
+  }
 
   // easy case: recognized keywords:
   if (image_type == IMAGE_NUM_4        // MR Image Storage / NUMARIS/4
       || image_type == IMAGE_MR        // Enhanced SR Storage
       || image_type == NONIMAGE_NUM_4  // CSA Non-Image Storage
       || image_type == PET_NUM_4  // Positron Emission Tomography Image Storage
-  ) {
+      || isSV10) {
     DataElement clean(de.GetTag());
     clean.SetVR(de.GetVR());
     std::vector<char> v;
@@ -918,10 +894,8 @@ static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
   // else
   // add a dummy check for SV10 signature
   if (is_signature(bv, sv10)) {
-    if (image_type == IMAGE_UNK) {
-      gdcmErrorMacro("Please report. SV10 Header found for new type: " << ref);
-      return false;
-    }
+    gdcmErrorMacro("Failure to clean SV10 Header for type: " << ref);
+    return false;
   }
   return true;
 }
@@ -939,9 +913,20 @@ static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
                                                   CSASeriesHeaderTypeStrings);
   }
   static const char sv10[] = "SV10\4\3\2\1";  // 8
+  // what if a dumb anonymizer removed the CSA Series Header Type:
+  bool isSV10 = false;
+  if (series_type == SERIES_UNK) {
+    if (is_signature(bv, sv10)) {
+      if (!ref.empty()) {
+        gdcmWarningMacro(
+            "Please report. SV10 Header found for new type: " << ref);
+      }
+      isSV10 = true;
+    }
+  }
 
   // easy case: recognized keywords:
-  if (series_type == PT || series_type == SERIES_MR) {
+  if (series_type == PT || series_type == SERIES_MR || isSV10) {
     DataElement clean(de.GetTag());
     clean.SetVR(de.GetVR());
     std::vector<char> v;
@@ -965,10 +950,8 @@ static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
   // else
   // add a dummy check for SV10 signature
   if (is_signature(bv, sv10)) {
-    if (series_type == SERIES_UNK) {
-      gdcmErrorMacro("Please report. SV10 Header found for new type: " << ref);
-      return false;
-    }
+    gdcmErrorMacro("Failure to clean SV10 Header for type: " << ref);
+    return false;
   }
   return true;
 }
@@ -1082,7 +1065,7 @@ static bool IsDPathInSet(std::set<DPath> const &aset, DPath const dpath) {
 }
 
 Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
-    File const &file, DataSet &ds, const DataElement &de, VR const &ref_dict_vr,
+    File const & /*file*/, DataSet &ds, const DataElement &de, VR const &ref_dict_vr,
     const std::string &tag_path) {
   const Tag &tag = de.GetTag();
   // Group Length & Illegal cannot be preserved so it is safe to do them now:

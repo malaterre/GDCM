@@ -20,23 +20,22 @@
 #include <iostream>
 #include <string>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h> // strspn
-#include <assert.h>
-#include <errno.h>
+#include <cassert>
+#include <cerrno>
+#include <climits> // PATH_MAX
+#include <cstdio> // snprintf
+#include <cstdlib>
+#include <cstring> // strspn
 #include <sys/stat.h>
-#include <limits.h> // PATH_MAX
 
 // gettimeofday
 #ifdef GDCM_HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
-#include <time.h>
+#include <ctime>
 #ifdef GDCM_HAVE_WINSOCK_H
 #include <winsock.h>
 #endif
-#include <cstdio> // snprintf
 #if defined(_MSC_VER) && (_MSC_VER < 1900)
 #define snprintf _snprintf
 #endif
@@ -229,7 +228,7 @@ bool System::FileIsDirectory(const char* name)
   if(stat(name, &fs) == 0)
 #endif
     {
-#if _WIN32
+#ifdef _WIN32
     return ((fs.st_mode & _S_IFDIR) != 0);
 #else
     return S_ISDIR(fs.st_mode);
@@ -960,7 +959,7 @@ bool System::GetHostName(char name[255])
 {
 // http://msdn.microsoft.com/en-us/library/ms738527.aspx
 // WSANOTINITIALISED A successful WSAStartup call must occur before using this function.
-#if _WIN32
+#ifdef _WIN32
   // Get the hostname
   WORD wVersionRequested;
   WSADATA wsaData;

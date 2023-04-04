@@ -15,7 +15,7 @@
 #include "gdcmTesting.h"
 #include "gdcmSystem.h"
 
-#include <stdlib.h> // atoi
+#include <cstdlib> // atoi
 
 int TestOneDirectory(const char *path, bool recursive = false )
 {

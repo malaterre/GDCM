@@ -17,9 +17,9 @@
 #include <iostream>
 #include <fstream>
 
-#include <string.h> // strlen
+#include <cstring> // strlen
 
-#include <time.h>
+#include <ctime>
 
 int TestGetTimeOfDay()
 {

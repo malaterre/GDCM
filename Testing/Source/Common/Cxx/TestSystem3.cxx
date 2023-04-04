@@ -14,8 +14,8 @@
 #include "gdcmSystem.h"
 #include "gdcmTesting.h"
 
+#include <cstring> // strdup
 #include <vector>
-#include <string.h> // strdup
 
 int TestSystem3(int, char *[])
 {

@@ -18,7 +18,7 @@
 #include <iomanip>
 #include <algorithm>
 
-#include <string.h>
+#include <cstring>
 
 namespace gdcm
 {
@@ -279,6 +279,8 @@ namespace {
     uint64_t I;
   };
 
+#if 0
+  // FIXME: see comments below
   struct ltstr8
     {
     bool operator()(U8 u1, U8 u2) const
@@ -293,6 +295,7 @@ namespace {
       return u1.I < u2.I;
       }
     };
+#endif
 } // end namespace
 
 inline void printrgb( const unsigned char *rgb )

@@ -13,7 +13,7 @@
 =========================================================================*/
 #include "gdcmPhotometricInterpretation.h"
 
-#include <string.h> // strlen
+#include <cstring> // strlen
 
 int TestPhotometricInterpretation(int, char *[])
 {

@@ -17,7 +17,7 @@
 #include "gdcmImageHelper.h"
 #include "gdcmDirectionCosines.h"
 
-#include <math.h>
+#include <cmath>
 
 namespace gdcm
 {

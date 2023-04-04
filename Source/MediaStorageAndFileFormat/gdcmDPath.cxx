@@ -17,9 +17,9 @@
 
 namespace gdcm {
 
-DPath::DPath() {}
+DPath::DPath() = default;
 
-DPath::~DPath() {}
+DPath::~DPath() = default;
 
 // LO mandates that '\\' is never used:
 static const char SEPARATOR = '\\';
@@ -121,7 +121,7 @@ bool DPath::ConstructFromString(const char *spath) {
   gdcm::Tag t;
   std::ostringstream os;
   std::vector<std::string>::const_iterator it = comps.begin();
-  unsigned int index;
+  unsigned int index = 0;
   assert(comps.size() >= 2);
   // check root
   if (!it->empty()) return false;

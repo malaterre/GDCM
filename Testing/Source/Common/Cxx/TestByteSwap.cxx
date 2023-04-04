@@ -15,7 +15,7 @@
 #include "gdcmSwapCode.h"
 #include "gdcmByteSwap.h"
 
-#include <string.h> // memcpy
+#include <cstring> // memcpy
 
 int myfunc()
 {
@@ -23,8 +23,8 @@ int myfunc()
   const char raw[] = "\000\000\000\004";
   memcpy(vl_str, raw, 4);
   uint32_t vl;
-  gdcm::ByteSwap<uint32_t>::SwapRangeFromSwapCodeIntoSystem((uint32_t*)(&vl_str), gdcm::SwapCode::BigEndian, 1);
   memcpy(&vl, vl_str, 4);
+  gdcm::ByteSwap<uint32_t>::SwapRangeFromSwapCodeIntoSystem(&vl, gdcm::SwapCode::BigEndian, 1);
   if( vl != 0x00000004 )
     {
     std::cerr << std::hex << "vl: " << vl << std::endl;

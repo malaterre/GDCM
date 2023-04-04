@@ -285,6 +285,8 @@ bool basic_zip_streambuf<charT, traits>::zip_to_stream(
     }
     while(_zip_stream.avail_in != 0 && _err == Z_OK);
 
+    (void)total_written_byte_size;
+    
     return _err == Z_OK;
 }
 

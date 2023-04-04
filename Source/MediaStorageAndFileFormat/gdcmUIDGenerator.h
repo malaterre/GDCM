@@ -21,10 +21,7 @@ namespace gdcm
 
 /**
  * \brief Class for generating unique UID
- * \details 
- * \note bla
- * Usage:
- * When constructing a Series or Study UID, user *has* to keep around the UID,
+ * \details When constructing a Series or Study UID, user *has* to keep around the UID,
  * otherwise the UID Generator will simply forget the value and create a new UID.
  */
 class GDCM_EXPORT UIDGenerator

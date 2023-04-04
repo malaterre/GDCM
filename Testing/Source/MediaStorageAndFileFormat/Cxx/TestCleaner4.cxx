@@ -54,7 +54,7 @@ static bool IsTagEmpty(const DataSet &ds, const T1 &path, const T2 &pt) {
 }  // namespace gdcm
 
 struct TestCleaner4Impl {
-  virtual ~TestCleaner4Impl() {}
+  virtual ~TestCleaner4Impl() = default;
   virtual bool check_before(gdcm::DataSet &ds) = 0;
   virtual bool check_after(gdcm::DataSet &ds, bool preservePatientName) = 0;
   int run(std::string const &filename, std::string const &outfilename,
@@ -138,7 +138,7 @@ struct TestCleaner4Impl {
 };
 
 struct TestCleaner4Impl1 : public TestCleaner4Impl {
-  virtual bool check_before(gdcm::DataSet &ds) {
+  bool check_before(gdcm::DataSet &ds) override {
     const gdcm::Tag t1(0x0008, 0x0090);  //
     const gdcm::Tag t2(0x0008, 0x1050);  //
     const gdcm::Tag t3(0x0008, 0x1070);  //
@@ -163,7 +163,7 @@ struct TestCleaner4Impl1 : public TestCleaner4Impl {
     }
     return true;
   }
-  virtual bool check_after(gdcm::DataSet &ds, bool preservePatientName) {
+  bool check_after(gdcm::DataSet &ds, bool /*preservePatientName*/) override {
     const gdcm::Tag t1(0x0008, 0x0090);  //
     const gdcm::Tag t2(0x0008, 0x1050);  //
     const gdcm::Tag t3(0x0008, 0x1070);  //
@@ -181,7 +181,7 @@ struct TestCleaner4Impl1 : public TestCleaner4Impl {
 };
 
 struct TestCleaner4Impl2 : public TestCleaner4Impl {
-  virtual bool check_before(gdcm::DataSet &ds) {
+  bool check_before(gdcm::DataSet &ds) override {
     const gdcm::Tag t1(0x0008, 0x0090);  //     PN      6       EU^^^^
     const gdcm::Tag t2(0x0008, 0x1050);  //     PN      4       ^^^^
     const gdcm::Tag t3(0x0008, 0x1060);  //     PN      16      DR.H.DOOLITTLER
@@ -212,7 +212,7 @@ struct TestCleaner4Impl2 : public TestCleaner4Impl {
     }
     return true;
   }
-  virtual bool check_after(gdcm::DataSet &ds, bool preservePatientName) {
+  bool check_after(gdcm::DataSet &ds, bool /*preservePatientName*/) override {
     const gdcm::Tag t1(0x0008, 0x0090);  //     PN      6       EU^^^^
     const gdcm::Tag t2(0x0008, 0x1050);  //     PN      4       ^^^^
     const gdcm::Tag t3(0x0008, 0x1060);  //     PN      16      DR.H.DOOLITTLER
@@ -234,7 +234,7 @@ struct TestCleaner4Impl2 : public TestCleaner4Impl {
 };
 
 struct TestCleaner4Impl3 : public TestCleaner4Impl {
-  virtual bool check_before(gdcm::DataSet &ds) {
+  bool check_before(gdcm::DataSet &ds) override {
     const gdcm::Tag t1(0x0008, 0x0090);  //
     const gdcm::Tag t2(0x0008, 0x1070);  //
     const gdcm::Tag t3(0x0010, 0x0010);  //
@@ -263,7 +263,7 @@ struct TestCleaner4Impl3 : public TestCleaner4Impl {
     }
     return true;
   }
-  virtual bool check_after(gdcm::DataSet &ds, bool preservePatientName) {
+  bool check_after(gdcm::DataSet &ds, bool /*preservePatientName*/) override {
     const gdcm::Tag t1(0x0008, 0x0090);  //
     const gdcm::Tag t2(0x0008, 0x1070);  //
     const gdcm::Tag t3(0x0010, 0x0010);  //
@@ -284,7 +284,7 @@ struct TestCleaner4Impl3 : public TestCleaner4Impl {
 };
 
 struct TestCleaner4Impl4 : public TestCleaner4Impl {
-  virtual bool check_before(gdcm::DataSet &ds) {
+  bool check_before(gdcm::DataSet &ds) override {
     const gdcm::Tag t1(0x0008, 0x0090);  //
     const gdcm::Tag t2(0x0008, 0x1070);  //
     const gdcm::Tag t3(0x0010, 0x0010);  //
@@ -313,7 +313,7 @@ struct TestCleaner4Impl4 : public TestCleaner4Impl {
     }
     return true;
   }
-  virtual bool check_after(gdcm::DataSet &ds, bool preservePatientName) {
+  bool check_after(gdcm::DataSet &ds, bool preservePatientName) override {
     const gdcm::Tag t1(0x0008, 0x0090);  //
     const gdcm::Tag t2(0x0008, 0x1070);  //
     const gdcm::Tag t3(0x0010, 0x0010);  //
