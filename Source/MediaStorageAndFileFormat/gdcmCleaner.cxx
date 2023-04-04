@@ -888,13 +888,24 @@ static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
                                                 CSAImageHeaderTypeStrings);
   }
   static const char sv10[] = "SV10\4\3\2\1";  // 8
+  // what if a dumb anonymizer removed the CSA Image Header Type:
+  bool isSV10 = false;
+  if (image_type == IMAGE_UNK) {
+    if (is_signature(bv, sv10)) {
+      if (!ref.empty()) {
+        gdcmWarningMacro(
+            "Please report. SV10 Header found for new type: " << ref);
+      }
+      isSV10 = true;
+    }
+  }
 
   // easy case: recognized keywords:
   if (image_type == IMAGE_NUM_4        // MR Image Storage / NUMARIS/4
       || image_type == IMAGE_MR        // Enhanced SR Storage
       || image_type == NONIMAGE_NUM_4  // CSA Non-Image Storage
       || image_type == PET_NUM_4  // Positron Emission Tomography Image Storage
-  ) {
+      || isSV10) {
     DataElement clean(de.GetTag());
     clean.SetVR(de.GetVR());
     std::vector<char> v;
@@ -918,10 +929,8 @@ static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
   // else
   // add a dummy check for SV10 signature
   if (is_signature(bv, sv10)) {
-    if (image_type == IMAGE_UNK) {
-      gdcmErrorMacro("Please report. SV10 Header found for new type: " << ref);
-      return false;
-    }
+    gdcmErrorMacro("Failure to clean SV10 Header for type: " << ref);
+    return false;
   }
   return true;
 }
@@ -939,9 +948,20 @@ static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
                                                   CSASeriesHeaderTypeStrings);
   }
   static const char sv10[] = "SV10\4\3\2\1";  // 8
+  // what if a dumb anonymizer removed the CSA Series Header Type:
+  bool isSV10 = false;
+  if (series_type == SERIES_UNK) {
+    if (is_signature(bv, sv10)) {
+      if (!ref.empty()) {
+        gdcmWarningMacro(
+            "Please report. SV10 Header found for new type: " << ref);
+      }
+      isSV10 = true;
+    }
+  }
 
   // easy case: recognized keywords:
-  if (series_type == PT || series_type == SERIES_MR) {
+  if (series_type == PT || series_type == SERIES_MR || isSV10) {
     DataElement clean(de.GetTag());
     clean.SetVR(de.GetVR());
     std::vector<char> v;
@@ -965,10 +985,8 @@ static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
   // else
   // add a dummy check for SV10 signature
   if (is_signature(bv, sv10)) {
-    if (series_type == SERIES_UNK) {
-      gdcmErrorMacro("Please report. SV10 Header found for new type: " << ref);
-      return false;
-    }
+    gdcmErrorMacro("Failure to clean SV10 Header for type: " << ref);
+    return false;
   }
   return true;
 }
