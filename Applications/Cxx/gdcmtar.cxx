@@ -1026,12 +1026,12 @@ int main (int argc, char *argv[])
             assert( pattern.empty() );
             pattern = optarg;
             }
-           else if( option_index == 6 ) /* root uid */
+          else if( option_index == 6 ) /* root uid */
             {
             assert( strcmp(s, "root-uid") == 0 );
             root = optarg;
             }
-            else if( option_index == 7 ) /* resourcespath */
+          else if( option_index == 7 ) /* resourcespath */
             {
             assert( strcmp(s, "resources-path") == 0 );
             assert( xmlpath.empty() );

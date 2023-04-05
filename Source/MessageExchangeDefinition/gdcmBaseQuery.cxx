@@ -68,7 +68,7 @@ namespace gdcm
       {
         de.SetVR( VR::OW );
       }
-       else if( vr == VR::US_SS_OW )
+      else if( vr == VR::US_SS_OW )
       {
         de.SetVR( VR::OW );
       }
