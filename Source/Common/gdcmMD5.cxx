@@ -94,7 +94,7 @@ static bool process_file(const char *filename, md5_byte_t *digest)
   const size_t file_size = System::FileSize(filename);
   std::vector<char> v( file_size );
 
-  char *buffer = &v[0];
+  char *buffer = v.data();
   file.read(buffer, file_size);
 
   md5_state_t state;

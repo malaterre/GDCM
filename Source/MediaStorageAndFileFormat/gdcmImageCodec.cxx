@@ -542,14 +542,14 @@ bool ImageCodec::DoOverlayCleanup(std::istream &is, std::ostream &os)
       std::vector<uint16_t> buffer(bufferSize);
       while (is)
         {
-        is.read((char *)&buffer[0], bufferSize * sizeof(uint16_t));
+        is.read((char *)buffer.data(), bufferSize * sizeof(uint16_t));
         std::streamsize bytesRead = is.gcount();
         std::vector<uint16_t>::iterator validBufferEnd = buffer.begin() + bytesRead / sizeof(uint16_t);
         for (std::vector<uint16_t>::iterator it = buffer.begin(); it != validBufferEnd; ++it)
           {
           *it = ((*it >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask);
           }
-        os.write((char *)&buffer[0], bytesRead);
+        os.write((char *)buffer.data(), bytesRead);
         }
 #else
       //std::ostreambuf_iterator<char> end_of_stream_iterator;

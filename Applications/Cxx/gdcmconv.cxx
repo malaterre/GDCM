@@ -976,7 +976,7 @@ int main (int argc, char *argv[])
       tsuid.push_back( 0 ); // 0 padding
       }
     gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
-    de.SetByteValue( &tsuid[0], (uint32_t)tsuid.size() );
+    de.SetByteValue( tsuid.data(), (uint32_t)tsuid.size() );
     de.SetVR( gdcm::Attribute<0x0002, 0x0010>::GetVR() );
     fmi.Clear();
     fmi.Replace( de );
@@ -1412,7 +1412,7 @@ int main (int argc, char *argv[])
     std::vector<char> buffer;
     buffer.resize(len); // black image
 
-    ir.GetBuffer( &buffer[0] );
+    ir.GetBuffer( buffer.data() );
     gdcm::ByteValue *bv = new gdcm::ByteValue(buffer);
     gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
     pixeldata.SetValue( *bv );

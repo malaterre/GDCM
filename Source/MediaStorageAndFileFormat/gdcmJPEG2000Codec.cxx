@@ -553,7 +553,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
     if(!r) return false;
     out = in;
     std::string str = os.str();
-    out.SetByteValue( &str[0], (uint32_t)str.size() );
+    out.SetByteValue( str.data(), (uint32_t)str.size() );
     //memcpy(buffer, os.str().c_str(), len);
     return r;
     }
@@ -592,7 +592,7 @@ bool JPEG2000Codec::Decode(DataElement const &in, DataElement &out)
       }
     std::string str = os.str();
     assert( !str.empty() );
-    out.SetByteValue( &str[0], (uint32_t)str.size() );
+    out.SetByteValue( str.data(), (uint32_t)str.size() );
 
     return true;
     }
@@ -1376,12 +1376,12 @@ bool JPEG2000Codec::Code(DataElement const &in, DataElement &out)
     rgbyteCompressed.resize(image_width * image_height * 4);
 
     size_t cbyteCompressed;
-    const bool b = this->CodeFrameIntoBuffer((char*)&rgbyteCompressed[0], rgbyteCompressed.size(), cbyteCompressed, inputdata, inputlength );
+    const bool b = this->CodeFrameIntoBuffer((char*)rgbyteCompressed.data(), rgbyteCompressed.size(), cbyteCompressed, inputdata, inputlength );
     if( !b ) return false;
 
     Fragment frag;
     assert( cbyteCompressed <= rgbyteCompressed.size() ); // default alloc would be bogus
-    frag.SetByteValue( &rgbyteCompressed[0], (uint32_t)cbyteCompressed );
+    frag.SetByteValue( rgbyteCompressed.data(), (uint32_t)cbyteCompressed );
     sq->AddFragment( frag );
     }
 
@@ -1702,7 +1702,7 @@ bool JPEG2000Codec::DecodeExtent(
       // update
       buf_size = fraglen + oldlen;
       vdummybuffer.resize( buf_size );
-      dummy_buffer = &vdummybuffer[0];
+      dummy_buffer = vdummybuffer.data();
       // read J2K
       is.read( &vdummybuffer[oldlen], fraglen );
       }
@@ -1847,10 +1847,10 @@ bool JPEG2000Codec::AppendFrameEncode( std::ostream & out, const char * data, si
   rgbyteCompressed.resize(dimensions[0] * dimensions[1] * 4);
 
   size_t cbyteCompressed;
-  const bool b = this->CodeFrameIntoBuffer((char*)&rgbyteCompressed[0], rgbyteCompressed.size(), cbyteCompressed, data, datalen );
+  const bool b = this->CodeFrameIntoBuffer((char*)rgbyteCompressed.data(), rgbyteCompressed.size(), cbyteCompressed, data, datalen );
   if( !b ) return false;
 
-  out.write( (char*)&rgbyteCompressed[0], cbyteCompressed );
+  out.write( (char*)rgbyteCompressed.data(), cbyteCompressed );
 
   return true;
 }

@@ -68,7 +68,7 @@ static int TestImageRegionRead(const char* filename, bool verbose = false)
     }
   std::vector<char> vbuffer;
   vbuffer.resize( len );
-  char* buffer = &vbuffer[0];
+  char* buffer = vbuffer.data();
   bool b = reader.ReadIntoBuffer(buffer, len);
   if( !b )
     {

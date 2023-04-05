@@ -129,7 +129,7 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
     assert( header.val2[1] == 1280 );
 
     uLongf destLen = buf_size; // >= 608,427
-    Bytef *dest = (Bytef*)&outbuf[0];
+    Bytef *dest = (Bytef*)outbuf.data();
     assert( is.tellg() == offsets[r] + 16 );
     const Bytef *source = (const Bytef*)buf + offsets[r] + 16;
     uLong sourceLen;
@@ -143,7 +143,7 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
     assert( destLen >= (uLongf)size[0] * size[1] ); // 16bytes padding ?
     assert( header.imgsize == (uint32_t)size[0] * size[1] );
     //os.write( &outbuf[0], outbuf.size() );
-    os.write( &outbuf[0], size[0] * size[1] );
+    os.write( outbuf.data(), size[0] * size[1] );
 
     // skip data:
     is.seekg( sourceLen, std::ios::cur );
@@ -211,7 +211,7 @@ static bool ProcessNone( const char *outfilename, const int nslices, const
   ss << ".raw";
   std::ofstream os( ss.str().c_str(), std::ios::binary );
   outbuf.resize( buf_size ); // overallocated + 16
-  char *buffer = &outbuf[0];
+  char *buffer = outbuf.data();
 
   hframe header;
   for( unsigned int r = 0; r < nframes; ++r )

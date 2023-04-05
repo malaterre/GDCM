@@ -368,7 +368,7 @@ bool SplitMosaicFilter::Split()
   unsigned long l = inputimage.GetBufferLength();
   std::vector<char> buf;
   buf.resize(l);
-  inputimage.GetBuffer( &buf[0] );
+  inputimage.GetBuffer( buf.data() );
   DataElement pixeldata( Tag(0x7fe0,0x0010) );
 
   std::vector<char> outbuf;
@@ -378,19 +378,19 @@ bool SplitMosaicFilter::Split()
   if( inverted )
   {
     b = details::reorganize_mosaic_invert(
-        (unsigned short*)(void*)&buf[0], inputimage.GetDimensions(), div, dims,
-        (unsigned short*)(void*)&outbuf[0] );
+        (unsigned short*)(void*)buf.data(), inputimage.GetDimensions(), div, dims,
+        (unsigned short*)(void*)outbuf.data() );
   }
   else
   {
     b = details::reorganize_mosaic(
-        (unsigned short*)(void*)&buf[0], inputimage.GetDimensions(), div, dims,
-        (unsigned short*)(void*)&outbuf[0] );
+        (unsigned short*)(void*)buf.data(), inputimage.GetDimensions(), div, dims,
+        (unsigned short*)(void*)outbuf.data() );
   }
   if( !b ) return false;
 
   VL::Type outbufSize = (VL::Type)outbuf.size();
-  pixeldata.SetByteValue( &outbuf[0], outbufSize );
+  pixeldata.SetByteValue( outbuf.data(), outbufSize );
 
   Image &image = GetImage();
   const TransferSyntax &ts = image.GetTransferSyntax();

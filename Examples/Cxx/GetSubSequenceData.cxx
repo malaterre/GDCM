@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
     imbuffer.insert( imbuffer.begin(), bv5->GetPointer(), bv5->GetPointer() + bv5->GetLength() );
     }
   DataElement fakedata;
-  fakedata.SetByteValue( &imbuffer[0], (uint32_t)imbuffer.size() );
+  fakedata.SetByteValue( imbuffer.data(), (uint32_t)imbuffer.size() );
 
 
   gdcm::SmartPointer<gdcm::Image> im = new gdcm::Image;

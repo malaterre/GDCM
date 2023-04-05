@@ -299,7 +299,7 @@ int TestPrint(const char *filename, bool verbose= false)
       }
     }
   char digest[33];
-  gdcm::Testing::ComputeMD5(&buf[0], buf.size(), digest);
+  gdcm::Testing::ComputeMD5(buf.data(), buf.size(), digest);
 
   unsigned int i = 0;
   const char *p = printmd5[i][1];

@@ -93,7 +93,7 @@ bool TestRescaler2Func(
 
   std::vector<output_pixel> output;
   output.resize( nvalues );
-  if( !r.Rescale((char*)&output[0],(char*)&values[0],nvalues * sizeof( values[0] ) ) )
+  if( !r.Rescale((char*)output.data(),(char*)values.data(),nvalues * sizeof( values[0] ) ) )
     return false;
 
   // get the min/max:
@@ -122,7 +122,7 @@ bool TestRescaler2Func(
   if( check == values ) // dummy check
     return false;
 
-  if( !ir.InverseRescale((char*)&check[0],(char*)&output[0], nvalues * sizeof( output[0] ) ) )
+  if( !ir.InverseRescale((char*)check.data(),(char*)output.data(), nvalues * sizeof( output[0] ) ) )
     return false;
 
   if( check != values )
