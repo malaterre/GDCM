@@ -22,7 +22,6 @@
 #include "gdcmBase64.h"
 #include "gdcmExplicitDataElement.h"
 #include "gdcmSwapper.h"
-#include "gdcmPrinter.h"
 
 #include <iostream>
 #include <fstream>

@@ -113,7 +113,6 @@ Checks: '-*,
   -readability-redundant-string-cstr,
   -readability-make-member-function-const,
   -readability-static-definition-in-anonymous-namespace,
-  -readability-duplicate-include,
   -readability-function-size,
   -readability-string-compare,
   -readability-redundant-preprocessor'
