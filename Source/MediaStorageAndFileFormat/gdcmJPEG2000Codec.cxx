@@ -683,7 +683,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     break;
   default:
     gdcmErrorMacro( "Impossible happen" );
-    return std::make_pair<char*,size_t>(nullptr,0);
+    return std::pair<char*,size_t>(nullptr,0);
     }
 #if ((OPJ_VERSION_MAJOR == 2 && OPJ_VERSION_MINOR >= 3) || (OPJ_VERSION_MAJOR > 2))
   opj_codec_set_threads(dinfo, Internals->nNumberOfThreadsForDecompression);
@@ -714,7 +714,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     opj_destroy_codec(dinfo);
     opj_stream_destroy(cio);
     gdcmErrorMacro( "opj_setup_decoder failure" );
-    return std::make_pair<char*,size_t>(nullptr,0);
+    return std::pair<char*,size_t>(nullptr,0);
     }
 #if 0
   OPJ_INT32 l_tile_x0,l_tile_y0;
@@ -729,7 +729,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     opj_destroy_codec(dinfo);
     opj_stream_destroy(cio);
     gdcmErrorMacro( "opj_setup_decoder failure" );
-    return std::make_pair<char*,size_t>(nullptr,0);
+    return std::pair<char*,size_t>(nullptr,0);
     }
 #if 0
   /* Optional if you want decode the entire image */
@@ -743,7 +743,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     opj_destroy_codec(dinfo);
     opj_stream_destroy(cio);
     gdcmErrorMacro( "opj_decode failed" );
-    return std::make_pair<char*,size_t>(nullptr,0);
+    return std::pair<char*,size_t>(nullptr,0);
     }
   bResult = bResult && (image != nullptr);
   bResult = bResult && opj_end_decompress(dinfo,cio);
@@ -752,7 +752,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     opj_destroy_codec(dinfo);
     opj_stream_destroy(cio);
     gdcmErrorMacro( "opj_decode failed" );
-    return std::make_pair<char*,size_t>(nullptr,0);
+    return std::pair<char*,size_t>(nullptr,0);
     }
 
 #if 0
