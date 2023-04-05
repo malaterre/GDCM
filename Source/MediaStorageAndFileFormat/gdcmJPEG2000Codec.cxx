@@ -1260,6 +1260,7 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
     image_width, image_height,
     sample_pixel, bitsallocated, bitsstored, highbit, sign, quality, this->GetPlanarConfiguration() );
   if (!image) {
+    free(parameters.cp_comment);
     return false;
   }
 
@@ -1288,6 +1289,7 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
   cio = opj_stream_create_memory_stream(fsrc,OPJ_J2K_STREAM_CHUNK_SIZE,false);
   if (! cio)
     {
+    free(parameters.cp_comment);
     return false;
     }
   /* encode the image */
@@ -1301,6 +1303,7 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
   if (!bSuccess)
     {
     opj_stream_destroy(cio);
+    free(parameters.cp_comment);
     return false;
     }
   codestream_length = mysrc.len;
@@ -1309,6 +1312,7 @@ bool JPEG2000Codec::CodeFrameIntoBuffer(char * outdata, size_t outlen, size_t & 
   //f = fopen(parameters.outfile, "wb");
   //if (!f) {
   //  fprintf(stderr, "failed to open %s for writing\n", parameters.outfile);
+  //  free(parameters.cp_comment);
   //  return 1;
   //}
   //fwrite(cio->buffer, 1, codestream_length, f);
