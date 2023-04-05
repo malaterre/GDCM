@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
   for( unsigned int i = 0; i < niter; ++i)
     {
     //bool b =
-    interpolate(&out[0], out.size() / 3, out2);
+    interpolate(out.data(), out.size() / 3, out2);
     //const double *pout = &out[0];
     out = out2;
     out2.clear();
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 
   gdcm::Attribute<0x3006,0x0050> at_interpolate;
   at_interpolate.SetNumberOfValues( (unsigned int)(out.size() / 3) );
-  at_interpolate.SetValues( &out[0], (uint32_t)out.size() );
+  at_interpolate.SetValues( out.data(), (uint32_t)out.size() );
 
   ncontourpoints.SetValue( at_interpolate.GetNumberOfValues() / 3 );
   nestedds2.Replace( at_interpolate.GetAsDataElement() );

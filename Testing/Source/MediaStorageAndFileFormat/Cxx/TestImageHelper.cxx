@@ -93,7 +93,7 @@ int TestImageHelper(int, char *[])
   dircos.push_back( at.GetValue(3) );
   dircos.push_back( at.GetValue(4) );
   dircos.push_back( at.GetValue(5) );
-  gdcm::DirectionCosines dc( &dircos[0] );
+  gdcm::DirectionCosines dc( dircos.data() );
   if (!dc.IsValid()) return 1;
 
 

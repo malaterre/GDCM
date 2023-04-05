@@ -203,7 +203,7 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
   if( !sqi ) return false;
   assert( sqi );
   double normal[3];
-  DirectionCosines dc( &cosines[0] );
+  DirectionCosines dc( cosines.data() );
   dc.Cross( normal );
 
   // For each item
@@ -611,7 +611,7 @@ bool ImageHelper::GetDirectionCosinesFromDataSet(DataSet const & ds, std::vector
       {
       dircos[i] = at.GetValue(i);
       }
-    DirectionCosines dc( &dircos[0] );
+    DirectionCosines dc( dircos.data() );
     if( !dc.IsValid() )
       {
       dc.Normalize();
@@ -2143,7 +2143,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
   Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
 
   assert( dircos.size() == 6 );
-  DirectionCosines dc( &dircos[0] );
+  DirectionCosines dc( dircos.data() );
   if( !dc.IsValid() )
     {
     gdcmWarningMacro( "Direction Cosines are not valid. Using default value (1\\0\\0\\0\\1\\0)" );

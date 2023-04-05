@@ -534,7 +534,7 @@ int main(int argc, char *argv[])
         if( !gdcm::ImageHelper::GetDirectionCosinesFromDataSet(w.GetFile().GetDataSet(), iop_orig) )
           {
           erroriop = true;
-          gdcm::DirectionCosines dc( &iop_orig[0] );
+          gdcm::DirectionCosines dc( iop_orig.data() );
           assert( !dc.IsValid() );
             {
             gdcm::Attribute<0x0008,0x0008> imagetype;
@@ -551,7 +551,7 @@ int main(int argc, char *argv[])
               else if( str == "LOCALIZER" )
                 {
                 static const double fake_axial[] = { 1, 0, 0, 0, 0, 0 };
-                assert( memcmp( &iop_orig[0], fake_axial, 6 * sizeof( double ) ) == 0 ); (void)fake_axial;
+                assert( memcmp( iop_orig.data(), fake_axial, 6 * sizeof( double ) ) == 0 ); (void)fake_axial;
                 w.GetFile().GetDataSet().Replace( at_axial.GetAsDataElement() );
                 erroriop = false; // error has been corrected
                 }

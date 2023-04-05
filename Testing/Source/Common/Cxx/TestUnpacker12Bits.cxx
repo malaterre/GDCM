@@ -118,7 +118,7 @@ int TestUnpacker12Bits(int, char *[])
   assert( v[0] == 0 );
   const size_t outsize = 4096 / 2 * 3;
   unsigned char outvalues[outsize] = {};
-  gdcm::Unpacker12Bits::Pack( (char*)outvalues, (char*)&v[0], 4096 * sizeof(unsigned short) );
+  gdcm::Unpacker12Bits::Pack( (char*)outvalues, (char*)v.data(), 4096 * sizeof(unsigned short) );
   unsigned short outvalues2[4096] = {};
   gdcm::Unpacker12Bits::Unpack( (char*)outvalues2, (char*)outvalues, outsize);
 

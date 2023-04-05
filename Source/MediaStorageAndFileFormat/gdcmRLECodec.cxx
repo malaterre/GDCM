@@ -535,7 +535,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     Fragment frag;
     //frag.SetTag( itemStart );
     VL::Type strSize = (VL::Type)str.size();
-    frag.SetByteValue( &str[0], strSize );
+    frag.SetByteValue( str.data(), strSize );
     sq->AddFragment( frag );
     }
   out.SetValue( *sq );
@@ -624,7 +624,7 @@ bool RLECodec::Decode(DataElement const &in, DataElement &out)
     std::string::size_type check = str.size();
     assert( check == len );
     VL::Type checkCast = (VL::Type)check;
-    out.SetByteValue( &str[0], checkCast );
+    out.SetByteValue( str.data(), checkCast );
     return true;
     }
   else if ( NumberOfDimensions == 3 )
@@ -735,7 +735,7 @@ bool RLECodec::DecodeExtent(
 
   std::vector<char> buffer1;
   buffer1.resize( rowsize*bytesPerPixel );
-  char *tmpBuffer1 = &buffer1[0];
+  char *tmpBuffer1 = buffer1.data();
   unsigned int y, z;
   std::streamoff theOffset;
   for (z = zmin; z <= zmax; ++z)

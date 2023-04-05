@@ -351,7 +351,7 @@ static bool DumpToshibaDTI( const char * input, size_t len )
   std::reverse( copy.begin(), copy.end() );
 
   std::istringstream is;
-  std::string dup( &copy[0], copy.size() );
+  std::string dup( copy.data(), copy.size() );
   is.str( dup );
 
   gdcm::File file;
@@ -995,7 +995,7 @@ static int PrintMedComHistory(const std::string & filename, bool verbose)
 
   const size_t size = bv->GetLength();
   std::u16string u16((size / 2) + 0, '\0');
-  bv->GetBuffer( (char*)&u16[0], size );
+  bv->GetBuffer( (char*)u16.data(), size );
 
 #ifdef GDCM_HAVE_CODECVT
   std::string utf8 = std::wstring_convert<
@@ -1054,10 +1054,10 @@ static int PrintCSABase64Impl(gdcm::CSAHeader &csa, std::string const & csaname 
     size_t dl = gdcm::Base64::GetDecodeLength( str.c_str(), str.size() );
     std::vector<char> buf;
     buf.resize( dl );
-    size_t dl2 = gdcm::Base64::Decode( &buf[0], buf.size(), str.c_str(), str.size() );
+    size_t dl2 = gdcm::Base64::Decode( buf.data(), buf.size(), str.c_str(), str.size() );
     if( dl != dl2 ) return 1;
     std::stringstream ss;
-    ss.str( std::string(&buf[0], buf.size()) );
+    ss.str( std::string(buf.data(), buf.size()) );
     gdcm::File file;
     gdcm::DataSet &ds2 = file.GetDataSet();
     gdcm::DataElement xde;

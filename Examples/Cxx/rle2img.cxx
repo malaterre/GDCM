@@ -180,7 +180,7 @@ int main(int argc, char *argv [])
     {
     std::vector<unsigned short> buffer;
     delta_decode(bv2->GetPointer(), bv2->GetLength(), buffer);
-    pixeldata.SetByteValue( (char*)&buffer[0], (uint32_t)(buffer.size() * sizeof( unsigned short )) );
+    pixeldata.SetByteValue( (char*)buffer.data(), (uint32_t)(buffer.size() * sizeof( unsigned short )) );
     }
   // TODO we should check that decompress byte buffer match the expected size (row*col*...)
 

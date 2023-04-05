@@ -55,7 +55,7 @@ void delta_decode(const unsigned char *data_in, size_t data_size,
   };
 
   const byte* src = (const byte*)data_in;
-  byte* dest = (byte*)&new_stream[0];
+  byte* dest = (byte*)new_stream.data();
   union { byte gray; byte rgb[3]; } pixel;
   pixel.rgb[0] = pixel.rgb[1] = pixel.rgb[2] = 0;
   // always start in grayscale mode
@@ -222,7 +222,7 @@ int main(int argc, char *argv [])
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   pixeldata.SetVR( gdcm::VR::OW );
-  pixeldata.SetByteValue( (char*)&buffer[0], (uint32_t)buffer.size() );
+  pixeldata.SetByteValue( (char*)buffer.data(), (uint32_t)buffer.size() );
   // TODO we should check that decompress byte buffer match the expected size (row*col*...)
 
   // Add the pixel data element

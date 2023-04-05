@@ -56,10 +56,10 @@ const char *Filename::GetName()
 #endif
   if(slash_pos != std::string::npos)
     {
-    return &FileName[0] + slash_pos + 1;
+    return FileName.data() + slash_pos + 1;
     }
 
-  return &FileName[0];
+  return FileName.data();
 }
 
 const char *Filename::ToWindowsSlashes()

@@ -875,8 +875,8 @@ static bool CleanCSAImage(DataSet &ds, const DataElement &de) {
     clean.SetVR(de.GetVR());
     std::vector<char> v;
     v.resize(bv->GetLength());
-    if (csa_memcpy(&v[0], bv->GetPointer(), bv->GetLength())) {
-      clean.SetByteValue(&v[0], (uint32_t)v.size());
+    if (csa_memcpy(v.data(), bv->GetPointer(), bv->GetLength())) {
+      clean.SetByteValue(v.data(), (uint32_t)v.size());
       ds.Replace(clean);
       return true;
     }
@@ -931,8 +931,8 @@ static bool CleanCSASeries(DataSet &ds, const DataElement &de) {
     clean.SetVR(de.GetVR());
     std::vector<char> v;
     v.resize(bv->GetLength());
-    if (csa_memcpy(&v[0], bv->GetPointer(), bv->GetLength())) {
-      clean.SetByteValue(&v[0], (uint32_t)v.size());
+    if (csa_memcpy(v.data(), bv->GetPointer(), bv->GetLength())) {
+      clean.SetByteValue(v.data(), (uint32_t)v.size());
       ds.Replace(clean);
       return true;
     }
@@ -976,8 +976,8 @@ static bool CleanMEC_MR3(DataSet &ds, const DataElement &de) {
       return true;
     }
   }
-  if (mec_mr3_memcpy(&v[0], bv->GetPointer(), bv->GetLength())) {
-    clean.SetByteValue(&v[0], (uint32_t)v.size());
+  if (mec_mr3_memcpy(v.data(), bv->GetPointer(), bv->GetLength())) {
+    clean.SetByteValue(v.data(), (uint32_t)v.size());
     ds.Replace(clean);
     return true;
   }
@@ -1000,7 +1000,7 @@ static bool CleanPMTF(DataSet &ds, const DataElement &de) {
     {
       std::vector<char> copy(input, input + len);
       std::reverse(copy.begin(), copy.end());
-      std::string dup(&copy[0], copy.size());
+      std::string dup(copy.data(), copy.size());
       is.str(dup);
     }
 
@@ -1029,7 +1029,7 @@ static bool CleanPMTF(DataSet &ds, const DataElement &de) {
 
       DataElement clean(de.GetTag());
       clean.SetVR(de.GetVR());
-      clean.SetByteValue(&v[0], (uint32_t)v.size());
+      clean.SetByteValue(v.data(), (uint32_t)v.size());
       ds.Replace(clean);
     }
   } catch (...) {

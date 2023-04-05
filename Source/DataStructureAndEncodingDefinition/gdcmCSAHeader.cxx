@@ -993,7 +993,7 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
   // Some silly software consider the tag to be OW, therefore they byteswap it !!! sigh
   if( strcmp( signature, "VS01" ) == 0 )
   {
-    SwapperDoOp::SwapArray( (unsigned short*)(void*)&s[0], (s.size() + 1) / 2 );
+    SwapperDoOp::SwapArray( (unsigned short*)(void*)s.data(), (s.size() + 1) / 2 );
     ss.str( s );
     ss.read(signature, 4);
   }
@@ -1168,7 +1168,7 @@ bool CSAHeader::LoadFromDataElement(DataElement const &de)
       }
     std::string str = os.str();
     if( !str.empty() )
-      csael.SetByteValue( &str[0], (uint32_t)str.size());
+      csael.SetByteValue( str.data(), (uint32_t)str.size());
     //std::cout << std::endl;
     InternalCSADataSet.insert( csael );
     }

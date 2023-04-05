@@ -57,7 +57,7 @@ int TestFileStream1(const char *filename, bool verbose = false)
 
   std::vector<char> vbuffer;
   vbuffer.resize( 8192 );
-  const char *buffer = &vbuffer[0];
+  const char *buffer = vbuffer.data();
   const size_t len = vbuffer.size();
   PrivateTag pt( Tag(0x9,0x10), "MYTEST" );
   if( !fs.ReserveGroupDataElement( 20 ) )
