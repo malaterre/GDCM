@@ -98,7 +98,7 @@ static void printvalue(std::istream &is, uint32_t type, uint32_t numels, uint32_
   is.seekg( pos );
   std::cout << "[";
   typedef char (string81)[81]; // 80'th byte == 0
-  assert( sizeof( string81 ) == 81 );
+  static_assert( sizeof( string81 ) == 81 , "");
   switch( type )
     {
   case TYPE_FLOAT:
@@ -199,7 +199,7 @@ static void ProcessSDSData( std::istream & is )
   // haven't been able to figure out what was the begin meant for
   is.seekg( 0x20 - 8 );
   uint32_t version = 0;
-  assert( sizeof(uint32_t) == 4 );
+  static_assert( sizeof(uint32_t) == 4 , "");
   is.read( (char*)&version, sizeof(version) );
   assert( version == 8 );
   uint32_t numel = 0;
@@ -207,7 +207,7 @@ static void ProcessSDSData( std::istream & is )
   for( uint32_t el = 0; el < numel; ++el )
     {
     PDFElement pdfel;
-    assert( sizeof(pdfel) == 50 );
+    static_assert( sizeof(pdfel) == 50 , "");
     is.read( (char*)&pdfel, 50 );
     if( *pdfel.getname() )
       {

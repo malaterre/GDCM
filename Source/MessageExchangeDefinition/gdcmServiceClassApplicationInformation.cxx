@@ -48,7 +48,7 @@ const std::ostream &ServiceClassApplicationInformation::Write(std::ostream &os) 
 
 size_t ServiceClassApplicationInformation::Size() const
 {
-  assert( sizeof(InternalArray) == 6 );
+  static_assert( sizeof(InternalArray) == 6 , "");
   return 6;
 }
 
