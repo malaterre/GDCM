@@ -219,8 +219,8 @@ void AAssociateACPDU::InitFromRQ( AAssociateRQPDU const & rqpdu )
   const std::string reserved = rqpdu.GetReserved43_74();
   memcpy( Reserved43_74, reserved.c_str(), sizeof(Reserved43_74) );
 
-  assert( ProtocolVersion == 0x01 );
-  assert( Reserved9_10 == 0x0 );
+  static_assert( ProtocolVersion == 0x01 , "");
+  static_assert( Reserved9_10 == 0x0 , "");
   assert( memcmp( Reserved11_26, called.c_str(), sizeof( Reserved11_26) ) == 0 );
   assert( memcmp( Reserved27_42, calling.c_str(), sizeof(Reserved27_42) ) == 0 );
   assert( memcmp( Reserved43_74, reserved.c_str(), sizeof(Reserved43_74) ) == 0 );

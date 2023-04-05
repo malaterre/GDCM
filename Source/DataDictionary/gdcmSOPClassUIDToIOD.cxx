@@ -135,7 +135,7 @@ namespace gdcm
 unsigned int SOPClassUIDToIOD::GetNumberOfSOPClassToIOD()
 {
   static const unsigned int n = sizeof( SOPClassUIDToIODStrings ) / sizeof( *SOPClassUIDToIODStrings );
-  assert( n > 0 );
+  static_assert( n > 0 , "");
   return n - 1;
 }
 
