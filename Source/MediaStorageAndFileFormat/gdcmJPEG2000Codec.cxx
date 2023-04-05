@@ -187,8 +187,8 @@ static bool parsej2k_imp( const char * const stream, const size_t file_size, boo
         }
       cur += lenmarker; cur_size -= lenmarker;
       }
-      else if( marker == SOD )
-        return true;
+    else if( marker == SOD )
+      return true;
     }
   return false;
 }
@@ -931,7 +931,7 @@ void rawtoimage_fill2(const T *inputbuffer, int w, int h, int numcomps, opj_imag
     // nmask : to propagate sign bit on negative values
     int16_t nmask = (int16_t)0x8000;
     nmask = (int16_t)(nmask >> ( bitsallocated - bitsstored - 1 ));
-     if( pc )
+    if( pc )
       {
       for(int compno = 0; compno < numcomps; compno++)
         {

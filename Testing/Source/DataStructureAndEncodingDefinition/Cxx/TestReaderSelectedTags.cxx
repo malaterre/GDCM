@@ -34,7 +34,7 @@ int TestReadSelectedTags(const char* filename, bool verbose = false)
   if ( !reader.ReadSelectedTags( selectedtags ) )
     {
     if( verbose )
-    std::cerr << "TestReadSelectedTags : Failed to read: " << filename << std::endl;
+      std::cerr << "TestReadSelectedTags : Failed to read: " << filename << std::endl;
     return 1;
     }
 

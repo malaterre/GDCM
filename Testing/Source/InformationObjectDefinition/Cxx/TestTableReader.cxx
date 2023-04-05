@@ -27,15 +27,15 @@ void TestReadTable(const char *filename, bool dump = false )
 
   const gdcm::Modules &modules = defs.GetModules();
   if(dump)
-  std::cout << modules << std::endl;
+    std::cout << modules << std::endl;
 
   const gdcm::Macros &macros = defs.GetMacros();
   if(dump)
-  std::cout << macros << std::endl;
+    std::cout << macros << std::endl;
 
   const gdcm::IODs &iods = defs.GetIODs();
   if(dump)
-  std::cout << iods << std::endl;
+    std::cout << iods << std::endl;
 }
 
 int TestTableReader(int argc, char *argv[])

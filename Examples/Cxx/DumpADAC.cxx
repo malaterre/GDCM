@@ -312,7 +312,7 @@ bool DumpADAC( std::istream & is )
       float val = readfloat32(is);
       os << "" << std::dec << val << "";
       }
-     else
+    else
       {
       assert( 0 );
       }

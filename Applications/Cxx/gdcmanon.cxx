@@ -434,7 +434,8 @@ int main(int argc, char *argv[])
           //  assert( outfilename.empty() );
           //  outfilename = optarg;
           //  }
-          /*else*/ if( option_index == 2 ) /* root-uid */
+          //else...
+          if( option_index == 2 ) /* root-uid */
             {
             assert( strcmp(s, "root-uid") == 0 );
             assert( root.empty() );

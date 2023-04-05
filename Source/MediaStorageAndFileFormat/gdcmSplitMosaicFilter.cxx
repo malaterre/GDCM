@@ -398,7 +398,7 @@ bool SplitMosaicFilter::Split()
      {
      image.SetTransferSyntax( TransferSyntax::ExplicitVRLittleEndian );
      }
-   else
+  else
      {
      image.SetTransferSyntax( TransferSyntax::ImplicitVRLittleEndian );
      }
@@ -409,7 +409,7 @@ bool SplitMosaicFilter::Split()
 
   // Fix origin (direction is ok since we reorganize the tiles):
   if( hasOriginCSA )
-  image.SetOrigin( origin );
+    image.SetOrigin( origin );
 
   PhotometricInterpretation pi;
   pi = PhotometricInterpretation::MONOCHROME2;
