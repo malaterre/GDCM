@@ -18,6 +18,7 @@
 //
 #include <map>
 #include <algorithm>
+#include <cmath>
 #include <iterator>
 #include <vector>
 #include <deque>
@@ -87,7 +88,7 @@ namespace gdcm
                 double value_float
                     = static_cast<double>(y0)
                     + (static_cast<double>(i)/static_cast<double>(length)) * y01;
-                EntryType value_int = static_cast<EntryType>(value_float + 0.5);
+                EntryType value_int = static_cast<EntryType>(std::llround(value_float));
                 expanded.push_back(value_int);
             }
             return true;
