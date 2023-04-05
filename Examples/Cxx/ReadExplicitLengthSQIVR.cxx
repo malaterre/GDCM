@@ -11,12 +11,11 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmReader.h"
-#include "gdcmImplicitDataElement.h"
-#include "gdcmDataSet.h"
-#include "gdcmPrivateTag.h"
-#include "gdcmPrivateTag.h"
 #include "gdcmByteValue.h"
+#include "gdcmDataSet.h"
+#include "gdcmImplicitDataElement.h"
+#include "gdcmPrivateTag.h"
+#include "gdcmReader.h"
 #include "gdcmSequenceOfItems.h"
 
 using namespace gdcm;
