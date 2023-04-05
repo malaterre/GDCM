@@ -14,7 +14,11 @@
 #include "gdcmSystem.h"
 #include "gdcmTesting.h"
 
-#define _FILE_OFFSET_BITS   64
+// The GNU C library (glibc) requires this be defined to have fseeko() and ftello().
+#ifdef __GNU_LIBRARY__
+#define _FILE_OFFSET_BITS 64
+#endif
+
 #include <sys/stat.h>
 
 static bool mybool;

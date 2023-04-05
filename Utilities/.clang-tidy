@@ -139,4 +139,4 @@ CheckOptions:
   - key: readability-function-cognitive-complexity.Threshold
     value: 442
   - key: bugprone-reserved-identifier.AllowedIdentifiers
-    value: _BSD_SOURCE
+    value: _FILE_OFFSET_BITS
