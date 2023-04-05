@@ -82,8 +82,6 @@ Printer::Printer():PrintStyle(Printer::VERBOSE_STYLE),F(nullptr)
 }
 
 //-----------------------------------------------------------------------------
-Printer::~Printer()
-= default;
 
 void Printer::SetColor(bool c)
 {

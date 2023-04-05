@@ -27,9 +27,6 @@ DictPrinter::DictPrinter()
 }
 
 //-----------------------------------------------------------------------------
-DictPrinter::~DictPrinter()
-= default;
-
 VM GuessVMType(DataElement const &de)
 {
   if( de.IsEmpty() ) return VM::VM1;
