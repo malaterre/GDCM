@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
     }
 
   gdcm::Directory d;
-  d.Load( dir1.c_str(), true ); // recursive !
+  d.Load( dir1, true ); // recursive !
 
   gdcm::Scanner s;
   s.AddTag( gdcm::t1 );

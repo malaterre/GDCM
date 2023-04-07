@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     }
 
   gdcm::Directory d;
-  d.Load( dir1.c_str(), true ); // recursive !
+  d.Load( dir1, true ); // recursive !
   const gdcm::Directory::FilenamesType &l1 = d.GetFilenames();
   const size_t nfiles = l1.size();
   std::cout << nfiles << std::endl;

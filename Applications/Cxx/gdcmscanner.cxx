@@ -324,7 +324,7 @@ int main(int argc, char *argv[])
     }
 
   gdcm::Directory d;
-  unsigned int nfiles = d.Load( dirname.c_str(), recursive );
+  unsigned int nfiles = d.Load( dirname, recursive );
   if( !nfiles )
     {
     std::cerr << "No files found in: " << dirname << std::endl;

@@ -459,7 +459,7 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
     }
 
   gdcm::Directory d;
-  d.Load( filename.c_str(), true ); // recursive !
+  d.Load( filename, true ); // recursive !
 
   gdcm::Scanner s;
   s.AddTag( gdcm::T0 );

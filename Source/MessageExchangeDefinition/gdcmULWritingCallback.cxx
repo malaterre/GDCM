@@ -36,9 +36,10 @@ void ULWritingCallback::HandleDataSet(const DataSet& inDataSet)
     {
     const DataElement &de = inDataSet.GetDataElement(Tag(0x0008,0x0018));
     const ByteValue *bv = de.GetByteValue();
-    const std::string sopclassuid_str( bv->GetPointer(), bv->GetLength() );
+    std::string sopclassuid_str( bv->GetPointer(), bv->GetLength() );
+    sopclassuid_str.erase( sopclassuid_str.find('\0'));
     Writer w;
-    std::string theLoc = mDirectoryName + "/" + sopclassuid_str.c_str() + ".dcm";
+    std::string theLoc = mDirectoryName + "/" + sopclassuid_str + ".dcm";
     w.SetFileName(theLoc.c_str());
     File &f = w.GetFile();
     f.SetDataSet(inDataSet);

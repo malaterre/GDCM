@@ -38,7 +38,7 @@ Directory::FilenamesType DirectoryHelper::GetSeriesUIDsBySOPClassUID(const std::
       size_t endpos = theSOPClassUID.find_last_not_of(' '); // Find the first character position from reverse af
       if( std::string::npos != endpos )
         theSOPClassUID = theSOPClassUID.substr( 0, endpos+1 );
-      if (theSOPClassUID == inSOPClassUID.c_str()){
+      if (theSOPClassUID == inSOPClassUID){
         theReturn.push_back(theSeriesValues[i]);
       }
     }
