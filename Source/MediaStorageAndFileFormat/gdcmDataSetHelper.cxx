@@ -212,10 +212,9 @@ VR DataSetHelper::ComputeVR(File const &file, DataSet const &ds, const Tag& tag)
     else // ( pixeldata == t  )
       {
       // For Pixel Data:
-      if( !ds.FindDataElement( bitsallocated ) )
-        return VR::UN;
+      // if( !ds.FindDataElement( bitsallocated ) ) return VR::UN;
       Attribute<0x0028,0x0100> at;
-      at.SetFromDataElement( ds.GetDataElement( bitsallocated ) );
+      // at.SetFromDataElement( ds.GetDataElement( bitsallocated ) );
       }
     (void)v;
 
