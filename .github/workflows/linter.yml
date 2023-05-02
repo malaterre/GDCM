@@ -52,16 +52,3 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-# CMake Format
-# https://github.com/github/super-linter/issues/3606
-  cmake-format-linter:
-    name: Lint Code Base (cmake-format-lint)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Format CMake files
-        id: cmake-format
-        uses: PuneetMatharu/cmake-format-lint-action@v1.0.1
-        with:
-          args: --check
