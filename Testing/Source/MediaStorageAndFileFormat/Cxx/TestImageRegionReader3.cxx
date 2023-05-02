@@ -91,7 +91,7 @@ static int TestImageRegionRead(const char* filename, bool verbose = false)
       zlen = reader.ComputeBufferLength();
       assert( zlen );
       vbuffer.resize( zlen );
-      char* buffer = &vbuffer[0];
+      char* buffer = vbuffer.data();
       b = reader.ReadIntoBuffer(buffer, zlen);
       if( !b ) return 1;
       assert( zlen );

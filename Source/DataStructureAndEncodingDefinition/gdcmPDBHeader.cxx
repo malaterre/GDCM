@@ -183,7 +183,7 @@ int PDBHeader::readprotocoldatablock(const char *input, size_t inputlen, bool ve
       offset = 0;
       len = (uint32_t)inputlen;
       }
-      else
+    else
       {
       gdcmWarningMacro("Unhandled Protocol Data Block magic value: " << len );
       return 1;

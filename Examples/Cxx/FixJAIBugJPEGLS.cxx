@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 
     std::vector<char> vbuffer;
     vbuffer.resize( totalLen );
-    char *buffer = &vbuffer[0];
+    char *buffer = vbuffer.data();
     bv->GetBuffer(buffer, totalLen);
     const unsigned char* pbyteCompressed0 = (const unsigned char*)buffer;
     while( totalLen > 0 && pbyteCompressed0[totalLen-1] != 0xd9 )
@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
     of.close();
 #endif
 
-    const char *pbyteCompressed = &vbuffer[0];
+    const char *pbyteCompressed = vbuffer.data();
     size_t cbyteCompressed = vbuffer.size(); // updated legnth
 
     JlsParameters params;
@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
         / 8) * params.components);
 
     CharlsApiResultType result =
-      JpegLsDecode(&rgbyteOut[0], rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params, errorMsg );
+      JpegLsDecode(rgbyteOut.data(), rgbyteOut.size(), pbyteCompressed, cbyteCompressed, &params, errorMsg );
     if (result != charls::ApiResult::OK)
       {
       std::cerr << "Could not patch JAI-JPEGLS: " << errorMsg << std::endl;
@@ -206,7 +206,7 @@ int main(int argc, char *argv[])
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
   pixeldata.SetVR( gdcm::VR::OW );
-  pixeldata.SetByteValue( (char*)&rgbyteOutall[0], (uint32_t)rgbyteOutall.size() );
+  pixeldata.SetByteValue( (char*)rgbyteOutall.data(), (uint32_t)rgbyteOutall.size() );
 
 
   // Add the pixel data element

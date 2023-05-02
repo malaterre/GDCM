@@ -79,7 +79,7 @@ int TestFileStream4(const char *filename, bool verbose = false)
   std::vector<char> vbuffer;
   assert( dims[0] );
   vbuffer.resize( dims[0] * pixsize );
-  char *buffer = &vbuffer[0];
+  char *buffer = vbuffer.data();
   const size_t len = vbuffer.size();
 
   gdcm::FileStreamer fs;

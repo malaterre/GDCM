@@ -89,7 +89,7 @@ int TestIconImageFilterFunc(const char *filename, bool verbose = false)
     unsigned long len = icon.GetBufferLength();
     std::vector< char > vbuffer;
     vbuffer.resize( len );
-    char *buffer = &vbuffer[0];
+    char *buffer = vbuffer.data();
     bool res2 = icon.GetBuffer(buffer);
     if( !res2 )
       {

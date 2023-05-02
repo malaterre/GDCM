@@ -71,13 +71,13 @@ static int TestReadOverlay(const char* filename, bool verbose = false)
       const gdcm::Overlay& ov = img.GetOverlay(ovidx);
       size_t len = ov.GetUnpackBufferLength();
       overlay.resize( len );
-      if( !ov.GetUnpackBuffer(&overlay[0], len) )
+      if( !ov.GetUnpackBuffer(overlay.data(), len) )
         {
         std::cerr << "GetUnpackBuffer: Problem with Overlay: #" << ovidx << std::endl;
         ++ret;
         }
       char digest1[33];
-      if( !gdcm::Testing::ComputeMD5(&overlay[0], len, digest1) )
+      if( !gdcm::Testing::ComputeMD5(overlay.data(), len, digest1) )
         {
         std::cerr << "ComputeMD5: Problem with Overlay: #" << ovidx << std::endl;
         ++ret;

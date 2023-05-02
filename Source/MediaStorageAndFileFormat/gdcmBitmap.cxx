@@ -83,7 +83,7 @@ void Bitmap::SetNumberOfDimensions(unsigned int dim)
 const unsigned int *Bitmap::GetDimensions() const
 {
   assert( NumberOfDimensions );
-  return &Dimensions[0];
+  return Dimensions.data();
 }
 
 unsigned int Bitmap::GetDimension(unsigned int idx) const

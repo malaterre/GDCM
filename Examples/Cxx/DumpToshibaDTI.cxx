@@ -43,7 +43,7 @@ static bool DumpToshibaDTI( const char * input, size_t len )
 #else
 
   std::istringstream is;
-  std::string dup( &copy[0], copy.size() );
+  std::string dup( copy.data(), copy.size() );
   is.str( dup );
 
   gdcm::File file;

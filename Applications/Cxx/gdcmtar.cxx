@@ -413,7 +413,7 @@ static bool ConcatenateImages(Image &im1, Image const &im2)
     const std::vector<char> & v2 = *bv2;
     v1.insert( v1.end(), v2.begin(), v2.end() );
 
-    de1.SetByteValue(&v1[0], (uint32_t)v1.size());
+    de1.SetByteValue(v1.data(), (uint32_t)v1.size());
     }
   else if( de1.GetSequenceOfFragments() )
     {
@@ -1026,12 +1026,12 @@ int main (int argc, char *argv[])
             assert( pattern.empty() );
             pattern = optarg;
             }
-           else if( option_index == 6 ) /* root uid */
+          else if( option_index == 6 ) /* root uid */
             {
             assert( strcmp(s, "root-uid") == 0 );
             root = optarg;
             }
-            else if( option_index == 7 ) /* resourcespath */
+          else if( option_index == 7 ) /* resourcespath */
             {
             assert( strcmp(s, "resources-path") == 0 );
             assert( xmlpath.empty() );

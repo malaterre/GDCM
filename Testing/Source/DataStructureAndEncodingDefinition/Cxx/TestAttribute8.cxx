@@ -24,7 +24,7 @@
 int TestAttribute8Func(const char *filename, bool verbose = false)
 {
   if( verbose )
-  std::cout << "TestRead: " << filename << std::endl;
+    std::cout << "TestRead: " << filename << std::endl;
 
   gdcm::Reader reader;
   reader.SetFileName( filename );

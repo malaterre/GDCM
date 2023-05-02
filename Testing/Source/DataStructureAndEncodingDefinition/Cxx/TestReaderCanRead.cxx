@@ -22,7 +22,7 @@
 int TestReadCanRead(const char *subdir, const char* filename, bool verbose = false)
 {
   if( verbose )
-  std::cout << "TestReadCanRead: " << filename << std::endl;
+    std::cout << "TestReadCanRead: " << filename << std::endl;
 
   bool b1, b2;
 
@@ -58,7 +58,7 @@ int TestReadCanRead(const char *subdir, const char* filename, bool verbose = fal
     {
     std::cerr << "TestReadCanRead: incompatible result " << filename << std::endl;
     if( b1 )
-    std::cerr << "TestReadCanRead: CanRead was true: " << filename << std::endl;
+      std::cerr << "TestReadCanRead: CanRead was true: " << filename << std::endl;
     //assert( !ret );
     return ret;
     }

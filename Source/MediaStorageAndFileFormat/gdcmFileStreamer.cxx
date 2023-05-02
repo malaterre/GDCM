@@ -22,7 +22,10 @@
 #include "gdcmEvent.h"
 #include "gdcmProgressEvent.h"
 
+// The GNU C library (glibc) requires this be defined to have fseeko() and ftello().
+#ifdef __GNU_LIBRARY__
 #define _FILE_OFFSET_BITS 64
+#endif
 
 #include <cstdio>
 #include <limits>

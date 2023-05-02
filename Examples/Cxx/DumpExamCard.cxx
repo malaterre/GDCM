@@ -456,7 +456,7 @@ Wotsit ?
     {
     if( de1.IsEmpty() ) return false;
     const gdcm::ByteValue * bv1 = de1.GetByteValue();
-    gdcm::Element<gdcm::VR::SL,gdcm::VM::VM1> dlen = {{0l}};
+    gdcm::Element<gdcm::VR::SL,gdcm::VM::VM1> dlen = {{0L}};
     dlen.SetFromDataElement( de2 );
     std::string s1( bv1->GetPointer() , bv1->GetLength() );
 

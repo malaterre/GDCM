@@ -33,7 +33,7 @@ int TestStringFilter3(int , char *[])
     sf.SetFile( *f );
     const gdcm::Tag & t = at.GetTag();
     std::string s1 = sf.ToString( t );
-    std::string s2 = sf.FromString(t, &s1[0], s1.size() );
+    std::string s2 = sf.FromString(t, s1.data(), s1.size() );
 
     std::cout << s1 << std::endl;
     //std::cout << s2 << std::endl;
@@ -52,7 +52,7 @@ int TestStringFilter3(int , char *[])
     sf.SetFile( *f );
     const gdcm::Tag & t = at.GetTag();
     std::string s1 = sf.ToString( t );
-    std::string s2 = sf.FromString(t, &s1[0], s1.size() );
+    std::string s2 = sf.FromString(t, s1.data(), s1.size() );
 
     std::cout << "[" << s1 << "]" << std::endl;
     //std::cout << s2 << std::endl;

@@ -60,13 +60,13 @@ std::istream & element::read( std::istream & is )
   bytes.resize( l - 16 );
   if( !bytes.empty() )
     {
-    is.read( &bytes[0], l - 16 );
+    is.read( bytes.data(), l - 16 );
     }
   //os << "pos:" << is.tellg() << std::endl;
 
   if( strcmp(str, "TUSREMEASUREMENT" ) == 0 )
     {
-    const char *p = &bytes[0];
+    const char *p = bytes.data();
     uint32_t val;
     memcpy( (char*)&val, p, sizeof(val) );
     os << " " << val << std::endl;
