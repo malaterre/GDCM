@@ -40,8 +40,6 @@ DirectionCosines::DirectionCosines(const double dircos[6])
   Values[5] = dircos[5];
 }
 
-DirectionCosines::~DirectionCosines() = default;
-
 void DirectionCosines::Print(std::ostream &os) const
 {
   os << Values[0] << ",";
