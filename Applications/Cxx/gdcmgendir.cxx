@@ -208,9 +208,9 @@ int main(int argc, char *argv[])
       && outfilename.empty()
     )
       {
-      filename = files[0].c_str();
+      filename = files[0];
       filenames = files;
-      outfilename = files[ files.size() - 1 ].c_str();
+      outfilename = files[ files.size() - 1 ];
       filenames.pop_back();
       }
     else
