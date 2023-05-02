@@ -54,8 +54,8 @@ public:
     {
     // read Header (64 bytes)
     is.read((char*)(&Header), sizeof(uint32_t)*16);
-    assert( sizeof(uint32_t)*16 == 64 );
-    assert( sizeof(RLEHeader) == 64 );
+    static_assert( sizeof(uint32_t)*16 == 64 , "");
+    static_assert( sizeof(RLEHeader) == 64 , "");
     SwapperNoOp::SwapArray((uint32_t*)&Header,16);
     uint32_t numSegments = Header.NumSegments;
     if( numSegments >= 1 )

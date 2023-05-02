@@ -156,7 +156,7 @@ namespace gdcm_ns
         else
           {
           //in the rare case there are more ^ characters
-          assert("Name components exceeded");
+          static_assert("Name components exceeded", "");
           }
         }
       else if ( c == '=' )
@@ -201,7 +201,7 @@ namespace gdcm_ns
           }
         else
           {
-          assert("Impossible - only 3 names allowed");
+          static_assert("Impossible - only 3 names allowed", "");
           }
         count2=1;
         }
