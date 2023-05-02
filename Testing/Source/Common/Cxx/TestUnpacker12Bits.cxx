@@ -77,7 +77,7 @@ int TestUnpacker12Bits(int, char *[])
     unsigned short * output_s = (unsigned short*)output;
     const unsigned short outputvalues[] = { 0x301, 0x452, 0x967, 0xab8 };
     const size_t outputlen = sizeof(outputvalues) / sizeof(*outputvalues);
-    static_assert( outlen / 2 == outputlen , "");
+    assert( outlen / 2 == outputlen );
     for(size_t i = 0; i < outputlen; ++i)
       {
       if( outputvalues[i] != output_s[i] )

@@ -310,7 +310,7 @@ const char *VR::GetVRStringFromFile(VRType vr)
 {
 #if 1
   static const int N = sizeof(VRValue) / sizeof(VRType);
-  static_assert( N == 35 , "");
+  assert( N == 35 );
   static VRType *start = VRValue;
   static VRType *end   = VRValue+N;
   const VRType *p =

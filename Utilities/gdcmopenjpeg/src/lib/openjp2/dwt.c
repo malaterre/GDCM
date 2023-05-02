@@ -659,8 +659,8 @@ static void opj_idwt53_v_cas0_mcols_SSE2_OR_AVX2(
     assert(PARALLEL_COLS_53 == 16);
     assert(VREG_INT_COUNT == 8);
 #else
-    static_assert(PARALLEL_COLS_53 == 8, "");
-    static_assert(VREG_INT_COUNT == 4, "");
+    assert(PARALLEL_COLS_53 == 8);
+    assert(VREG_INT_COUNT == 4);
 #endif
 
     /* Note: loads of input even/odd values must be done in a unaligned */
@@ -761,8 +761,8 @@ static void opj_idwt53_v_cas1_mcols_SSE2_OR_AVX2(
     assert(PARALLEL_COLS_53 == 16);
     assert(VREG_INT_COUNT == 8);
 #else
-    static_assert(PARALLEL_COLS_53 == 8, "");
-    static_assert(VREG_INT_COUNT == 4, "");
+    assert(PARALLEL_COLS_53 == 8);
+    assert(VREG_INT_COUNT == 4);
 #endif
 
     /* Note: loads of input even/odd values must be done in a unaligned */
