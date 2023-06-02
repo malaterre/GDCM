@@ -349,11 +349,11 @@ bool Rescaler::InverseRescale(char *out, const char *in8, size_t n)
     InverseRescaleFunctionIntoBestFit<int32_t>(out,(const int32_t*)in,n);
     break;
   case PixelFormat::FLOAT32:
-    static_assert( sizeof(float) == 32 / 8 , "");
+    assert( sizeof(float) == 32 / 8 );
     InverseRescaleFunctionIntoBestFit<float>(out,(const float*)in,n);
     break;
   case PixelFormat::FLOAT64:
-    static_assert( sizeof(double) == 64 / 8 , "");
+    assert( sizeof(double) == 64 / 8 );
     InverseRescaleFunctionIntoBestFit<double>(out,(const double*)in,n);
     break;
   default:

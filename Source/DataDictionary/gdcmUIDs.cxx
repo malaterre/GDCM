@@ -512,7 +512,7 @@ const char * const * UIDs::GetTransferSyntaxString(unsigned int ts)
   if( ts > 0 && ts <= UIDs::GetNumberOfTransferSyntaxStrings() ) return TransferSyntaxStrings[ts];
   // else return the {0x0, 0x0} sentinel (begin or end)
   assert( *TransferSyntaxStrings[ UIDs::GetNumberOfTransferSyntaxStrings() + 1 ] == nullptr );
-  assert( *TransferSyntaxStrings[ 0 ] == nullptr);
+  assert( *TransferSyntaxStrings[ 0 ] == nullptr );
   return TransferSyntaxStrings[ UIDs::GetNumberOfTransferSyntaxStrings() + 1 ];
 }
 

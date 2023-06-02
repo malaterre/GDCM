@@ -349,21 +349,21 @@ static const MSModalityType MSModalityTypes[] = {
 unsigned int MediaStorage::GetNumberOfMSType()
 {
   const unsigned int n = MS_END;
-  static_assert( n > 0 , "");
+  assert( n > 0 );
   return n;
 }
 
 unsigned int MediaStorage::GetNumberOfMSString()
 {
   static const unsigned int n = sizeof( MSStrings ) / sizeof( *MSStrings );
-  static_assert( n > 0 , "");
+  assert( n > 0 );
   return n - 1;
 }
 
 unsigned int MediaStorage::GetNumberOfModality()
 {
   static const unsigned int n = sizeof( MSModalityTypes ) / sizeof( *MSModalityTypes );
-  static_assert( n > 0 , "");
+  assert( n > 0 );
   return n - 1;
 }
 

@@ -40,7 +40,7 @@ const char* UUIDGenerator::Generate()
   Unique.resize( 36 );
   char *uuid_data = &Unique[0];
 #if defined(HAVE_UUID_GENERATE)
-  static_assert( sizeof(uuid_t) == 16 , "");
+  assert( sizeof(uuid_t) == 16 );
   uuid_t g;
   uuid_generate(g);
   uuid_unparse(g, uuid_data);
