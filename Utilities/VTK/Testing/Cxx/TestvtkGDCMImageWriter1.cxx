@@ -203,7 +203,7 @@ int TestvtkGDCMImageWrite(const char *filename, bool verbose = false)
         std::cerr << "Missing md5: " << digest << std::endl;
         }
       else if( strcmp(digest, ref) != 0
-        // I do not support rewritting 12Bits pack image (illegal anyway)
+        // I do not support rewriting 12Bits pack image (illegal anyway)
         && comppf != gdcm::PixelFormat::UINT12
       )
         {

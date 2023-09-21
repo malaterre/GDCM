@@ -107,8 +107,8 @@ int main( int argc, char *argv[] )
   transform->Concatenate(reader->GetDirectionCosines());
   //axes2->SetShaftTypeToCylinder();
   axes2->SetUserTransform( transform );
-  //cube->SetUserTransform( transform ); // cant get it to work
-  cube->GetAssembly()->SetUserTransform( transform ); // cant get it to work
+  //cube->SetUserTransform( transform ); // can't get it to work
+  cube->GetAssembly()->SetUserTransform( transform ); // can't get it to work
 
   vtkPropAssembly* assembly = vtkPropAssembly::New();
   assembly->AddPart( axes2 );

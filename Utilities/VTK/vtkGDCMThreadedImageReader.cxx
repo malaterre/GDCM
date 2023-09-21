@@ -281,7 +281,7 @@ struct threadparams
   unsigned int nfiles;                // number of files the thread will process
   char *scalarpointer;                // start of the image buffer affected to the thread
   char *overlayscalarpointer;
-  unsigned long len;                  // This is not required but useful to check if files are consistant
+  unsigned long len;                  // This is not required but useful to check if files are consistent
   unsigned long overlaylen;
   unsigned long totalfiles;           // total number of files being processed (needed to compute progress)
   pthread_mutex_t lock;               // critial section for updating progress
@@ -324,7 +324,7 @@ void *ReadFilesThread(void *voidparams)
     // BUG:
     //const double shift = params->reader->GetShift();
     //const double scale = params->reader->GetScale();
-    // This is NOT safe to assume that shift/scale is constant thoughout the Series, this is better to
+    // This is NOT safe to assume that shift/scale is constant throughout the Series, this is better to
     // read the shift/scale from the image
     const gdcm::Image &image = reader.GetImage();
 

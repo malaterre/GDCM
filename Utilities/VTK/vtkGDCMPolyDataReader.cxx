@@ -363,7 +363,7 @@ refinstanceuid.GetValue().c_str() );
     // get the info object
     vtkInformation *outInfo1 = outputVector->GetInformationObject(pd);
 
-    // get the ouptut
+    // get the output
     vtkPolyData *output = vtkPolyData::SafeDownCast(
       outInfo1->Get(vtkDataObject::DATA_OBJECT()));
 
@@ -652,7 +652,7 @@ int vtkGDCMPolyDataReader::RequestData_HemodynamicWaveformStorage(gdcm::Reader c
   int pd = 0;
   vtkInformation *outInfo1 = outputVector->GetInformationObject(pd);
 
-  // get the ouptut
+  // get the output
   vtkPolyData *output = vtkPolyData::SafeDownCast(
     outInfo1->Get(vtkDataObject::DATA_OBJECT()));
 

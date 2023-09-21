@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
   const char *filename = argv[1];
   const char *outfilename = argv[2];
 
-  // Instanciate the image reader:
+  // Instantiate the image reader:
   gdcm::ImageReader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )

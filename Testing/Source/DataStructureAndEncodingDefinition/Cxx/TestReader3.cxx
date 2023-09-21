@@ -162,7 +162,7 @@ std::istream & DoTheMMapRead(std::istream &is)
 
 int TestRead3(const char *subdir, const char * filename)
 {
-/// FIXME Because GDCM is seeging back and forth in the DICOM file
+/// FIXME Because GDCM is seeking back and forth in the DICOM file
 // we cannot just apply mmap on any file, so let's clean them first:
 //
   gdcm::Reader r;

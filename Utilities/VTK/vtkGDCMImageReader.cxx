@@ -754,7 +754,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
   gdcm::MediaStorage ms;
   ms.SetFromFile( reader.GetFile() );
   assert( gdcm::MediaStorage::IsImage( ms ) || ms == gdcm::MediaStorage::MRSpectroscopyStorage );
-  // There is no point in adding world info to a SC object since noone but GDCM can use this info...
+  // There is no point in adding world info to a SC object since no one but GDCM can use this info...
   //if( ms != gdcm::MediaStorage::SecondaryCaptureImageStorage )
 
   const double *spacing = image.GetSpacing();
@@ -815,7 +815,7 @@ int vtkGDCMImageReader::RequestInformationCompat()
       // We are doing the Y-flip:
       // translate Image Position (Patient) along the Y-vector of the Image Orientation (Patient):
       // Step 1: Compute norm of translation vector:
-      // Because position is in the center of the pixel, we need to substract 1 to the dimY:
+      // Because position is in the center of the pixel, we need to subtract 1 to the dimY:
       assert( dims[1] >=1 );
       double norm = (dims[1] - 1) * this->DataSpacing[1];
       // Step 2: translate:

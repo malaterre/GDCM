@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
     }
   std::cout << bv->GetLength() << " " << len << std::endl;
 
-  std::cout << "Sucess to rewrite image !" << std::endl;
+  std::cout << "Success to rewrite image !" << std::endl;
   image.Print( std::cout );
   return 0;
 }

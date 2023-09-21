@@ -174,7 +174,7 @@ PyObject *DataElementToPyObject(DataElement const &de, VR const &vr)
 {
       const ByteValue *bv = de.GetByteValue();
       std::string s( bv->GetPointer(), bv->GetLength() );
-      s.resize( std::min( s.size(), strlen( s.c_str() ) ) ); // strlen is garantee to be lower or equal to ::size()
+      s.resize( std::min( s.size(), strlen( s.c_str() ) ) ); // strlen is guaranteed to be lower or equal to ::size()
       // http://www.python.org/doc/current/ext/buildValue.html
       // http://mail.python.org/pipermail/python-list/2002-April/137612.html
       unsigned int count;

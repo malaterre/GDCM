@@ -29,7 +29,7 @@ int main(int , char *[])
 
   //std::cout << pub << std::endl;
 
-  // 3 differents way to access the same information
+  // 3 different ways to access the same information
 
   // 1. From the public dict only:
   gdcm::Tag patient_name(0x10,0x10);

@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
   if( CheckSecondaryCaptureObjectIsMRImageStorage(r) ):
     # Special handling of the spacing:
-    # GDCM 1.2.0 would not rewrite correcly DICOM Object and would always set them as 'Secondary Capture Image Storage'
+    # GDCM 1.2.0 would not rewrite correctly DICOM Object and would always set them as 'Secondary Capture Image Storage'
     # while we would rather have 'MR Image Storage'
     gdcm.ImageHelper.SetForcePixelSpacing( True )
     mrspacing = gdcm.ImageHelper.GetSpacingValue( r.GetFile() )

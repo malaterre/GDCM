@@ -73,5 +73,5 @@ if not image_reader.Read():
   print "there is still a comma"
   sys.exit(1)
 
-print "Sucess!"
+print "Success!"
 sys.exit(0) # success

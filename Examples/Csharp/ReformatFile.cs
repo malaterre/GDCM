@@ -46,7 +46,7 @@ public class ReformatFile
 
     UIDGenerator uid = new UIDGenerator(); // helper for uid generation
     FileDerivation fd = new FileDerivation();
-    // For the pupose of this execise we will pretend that this image is referencing
+    // For the purpose of this exercise we will pretend that this image is referencing
     // two source image (we need to generate fake UID for that).
     string ReferencedSOPClassUID = "1.2.840.10008.5.1.4.1.1.7"; // Secondary Capture
     fd.AddReference( ReferencedSOPClassUID, uid.Generate() );
