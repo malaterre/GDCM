@@ -41,7 +41,7 @@ SWIG_LINK_LIBRARIES(php_gdcm LINK_PRIVATE gdcmMSFF gdcmMEXD)
 # with something like undefined reference to `zend_error'
 set_property(TARGET ${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTY NO_SONAME 1)
 
-# Remove 'lib' prefix :no-op on windows and valid for UNIX based syste
+# Remove 'lib' prefix :no-op on windows and valid for UNIX based systems
 set_target_properties(${SWIG_MODULE_php_gdcm_REAL_NAME} PROPERTIES PREFIX "")
 
 # For some reason the php glue module name is odd using swig 1.3.40, it is php_gdcm on windows

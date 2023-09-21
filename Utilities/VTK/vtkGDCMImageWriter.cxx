@@ -555,7 +555,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   case VTK_FLOAT:
     if( this->Shift == (int)this->Shift && this->Scale == (int)this->Scale )
       {
-      // I cannot consider that this is a problem, afterall a floating point type image
+      // I cannot consider that this is a problem, after all a floating point type image
       // could in fact really be only integer type, only print a warning to inform dummy user
       vtkWarningMacro( "Image is floating point type, but rescale type is integer type. Rescaling anyway" );
       }
@@ -569,7 +569,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   case VTK_DOUBLE:
     if( this->Shift == (int)this->Shift && this->Scale == (int)this->Scale )
       {
-      // I cannot consider that this is a problem, afterall a floating point type image
+      // I cannot consider that this is a problem, after all a floating point type image
       // could in fact really be only integer type, only print a warning to inform dummy user
       vtkWarningMacro( "Image is floating point type, but rescale type is integer type. Rescaling anyway" );
       }

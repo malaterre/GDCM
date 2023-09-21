@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     }
   const char *filename = argv[1];
 
-  // Instanciate the reader:
+  // Instantiate the reader:
   gdcm::Reader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )

@@ -224,7 +224,7 @@ const std::vector<std::shared_ptr<DICOMDIRReader::Patient>>& DICOMDIRReader::loa
     // VR field
     first_item_offset += it->GetVR().GetLength();
     // VL field
-    // For Explicit VR: adventitiously VL field lenght = VR field lenght,
+    // For Explicit VR: adventitiously VL field length = VR field length,
     // for SQ 4 bytes:
     // http://dicom.nema.org/medical/dicom/current/output/html/part05.html#table_7.1-1
     first_item_offset += it->GetVR().GetLength();

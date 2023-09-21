@@ -89,7 +89,7 @@ add_custom_command(
 # const as covariant return type
   COMMAND ${Java_JAVAC_EXECUTABLE} ARGS -source ${GDCM_JAVA_SOURCE_VERSION} -target ${GDCM_JAVA_TARGET_VERSION} "gdcm/*.java" #${javafiles}
 # 2. now that the *.class have been generated construct the jar file. We can
-# only rely on the gdcm.java / gdcm.class to build dependencie, I am pretty
+# only rely on the gdcm.java / gdcm.class to build dependencies, I am pretty
 # sure it will break parallel builds... oh well
   COMMAND ${Java_JAR_EXECUTABLE} ARGS cf ${GDCM_LIBRARY_DIR}/gdcm.jar gdcm/*.class ${GDCM_JAVA_SRCS}
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/java

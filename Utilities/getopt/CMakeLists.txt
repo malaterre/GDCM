@@ -39,7 +39,7 @@ set(GETOPT_LIBRARY_PROPERTIES ${GETOPT_LIBRARY_PROPERTIES}
 )
 
 # Only build this lib static. On most unix system
-# we will be using the standart getopt
+# we will be using the standard getopt
 # so this lib will be for the poor Win32 user (those
 # guys really need help)
 add_library(${GETOPT_LIBRARY_NAME} ${GETOPT_SRCS})

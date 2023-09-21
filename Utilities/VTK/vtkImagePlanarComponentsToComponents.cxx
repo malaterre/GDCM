@@ -75,7 +75,7 @@ void vtkImagePlanarComponentsToComponentsExecute(vtkImagePlanarComponentsToCompo
   const T *inPtr = (T*)inData->GetScalarPointer(outExt[0],outExt[2],outExt[4]);
   T *outPtr = static_cast<T*>(outData->GetScalarPointer(outExt[0],outExt[2],outExt[4]));
 
-  // Loop through ouput pixels
+  // Loop through output pixels
 
   size_t framesize = (maxX+1) * (maxY+1) * 3;
   for(int z = 0; z <= maxZ; ++z)

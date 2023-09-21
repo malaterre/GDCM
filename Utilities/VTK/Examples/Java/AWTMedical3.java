@@ -185,9 +185,9 @@ public class AWTMedical3  extends JComponent implements VtkPanelContainer {
 
     // Now we are creating three orthogonal planes passing through the
     // volume. Each plane uses a different texture map and therefore has
-    // diferent coloration.
+    // different coloration.
 
-    // Start by creatin a black/white lookup table.
+    // Start by creating a black/white lookup table.
     vtkLookupTable bwLut = new vtkLookupTable();
     bwLut.SetTableRange(0, 2000);
     bwLut.SetSaturationRange(0, 0);
@@ -222,12 +222,12 @@ public class AWTMedical3  extends JComponent implements VtkPanelContainer {
     // Note also that by specifying the DisplayExtent, the pipeline
     // requests data of this extent and the vtkImageMapToColors only
     // processes a slice of data.
-    vtkImageMapToColors saggitalColors = new vtkImageMapToColors();
-    saggitalColors.SetInput(theImageData);
-    saggitalColors.SetLookupTable(bwLut);
-    vtkImageActor saggital = new vtkImageActor();
-    saggital.SetInput(saggitalColors.GetOutput());
-    saggital.SetDisplayExtent(32, 32, 0, 63, 0, 92);
+    vtkImageMapToColors sagittalColors = new vtkImageMapToColors();
+    sagittalColors.SetInput(theImageData);
+    sagittalColors.SetLookupTable(bwLut);
+    vtkImageActor sagittal = new vtkImageActor();
+    sagittal.SetInput(sagittalColors.GetOutput());
+    sagittal.SetDisplayExtent(32, 32, 0, 63, 0, 92);
 
     // Create the second (axial); plane of the three planes. We use the same
     // approach as before except that the extent differs.
@@ -260,7 +260,7 @@ public class AWTMedical3  extends JComponent implements VtkPanelContainer {
     // Actors are added to the renderer. An initial camera view is created.
     // The Dolly() method moves the camera towards the FocalPoint,
     // thereby enlarging the image.
-    renWin.GetRenderer().AddActor(saggital);
+    renWin.GetRenderer().AddActor(sagittal);
     renWin.GetRenderer().AddActor(axial);
     renWin.GetRenderer().AddActor(coronal);
     renWin.GetRenderer().AddActor(outline);

@@ -42,7 +42,7 @@
 // as specified in the Image Orientation (Patient) tag. When Z-spacing is 0, this means the multi-frame object
 // contains image which do not represent uniform volume.
 // .SECTION Warning
-// When using vtkGDCMPolyDataReader in conjonction with vtkGDCMImageReader2
+// When using vtkGDCMPolyDataReader in conjunction with vtkGDCMImageReader2
 // it is *required* that FileLowerLeft is set to ON as coordinate system
 // would be inconsistent in between the two data structures.
 // .SECTION Color Space mapping:
@@ -156,7 +156,7 @@ public:
   // Description:
   // Get Overlay/IconImage
   // Remember to ALWAYS use those methods in your code, as the internal number for the output port
-  // is not garantee to remain the same, as features are added to the reader
+  // is not guaranteed to remain the same, as features are added to the reader
   vtkAlgorithmOutput* GetOverlayPort(int index);
   vtkAlgorithmOutput* GetIconImagePort();
   vtkImageData* GetOverlay(int i);
@@ -189,7 +189,7 @@ public:
   // Description:
   // Return the 'raw' information stored in the DICOM file:
   // In case of a series of multiple files, only the first file is considered. The Image Orientation (Patient)
-  // is garantee to remain the same, and image Image Position (Patient) in other slice can be computed
+  // is guaranteed to remain the same, and image Image Position (Patient) in other slice can be computed
   // using the ZSpacing (3rd dimension)
   // (0020,0032) DS [87.774866\-182.908510\168.629671]       #  32, 3 ImagePositionPatient
   // (0020,0037) DS [0.001479\0.999989\-0.004376\-0.002039\-0.004372\-0.999988] #  58, 6 ImageOrientationPatient
@@ -204,7 +204,7 @@ public:
   // Description:
   // \DEPRECATED:
   // Modality LUT
-  // Value returned by GetShift/GetScale might be inacurate since Shift/Scale could be
+  // Value returned by GetShift/GetScale might be inaccurate since Shift/Scale could be
   // varying along the Series read. Therefore user are advices not to use those functions
   // anymore
   vtkGetMacro(Shift,double);

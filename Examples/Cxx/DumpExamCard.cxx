@@ -242,7 +242,7 @@ struct param
   void read( std::istream & is )
     {
     is.read( name, 32 + 1);
-    // This is always the same issue the string can contains garbarge from previous run,
+    // This is always the same issue the string can contains garbage from previous run,
     // we need to print only until the first \0 character:
     assert( strlen( name ) <= 32 );
     is.read( (char*)&boolean,1);
@@ -528,7 +528,7 @@ Wotsit ?
       //fn += ".xml";
       std::ofstream csv( fn.c_str() );
 
-      // let's do some bookeeping:
+      // let's do some bookkeeping:
       uint32_t nfloats = 0;
       uint32_t nints = 0;
       uint32_t nstrings = 0;

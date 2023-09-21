@@ -17,7 +17,7 @@
 // .SECTION TODO
 // Need to do the same job for DVH Sequence/DVH Data...
 // .SECTION Warning
-// When using vtkGDCMPolyDataReader in conjonction with vtkGDCMImageReader
+// When using vtkGDCMPolyDataReader in conjunction with vtkGDCMImageReader
 // it is *required* that FileLowerLeft is set to ON as coordinate system
 // would be inconsistent in between the two data structures.
 //

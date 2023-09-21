@@ -20,7 +20,7 @@ cd $HOME/.cache/winetricks/junk
 # install VS 2005/SP1
 # see why: https://code.google.com/p/winetricks/issues/detail?id=18
 wget -c http://download.microsoft.com/download/7/7/3/7737290f-98e8-45bf-9075-85cc6ae34bf1/VS80sp1-KB926748-X86-INTL.exe
-# now instal SP1
+# now install SP1
 #wine VS80sp1-KB926748-X86-INTL.exe
 fi
 

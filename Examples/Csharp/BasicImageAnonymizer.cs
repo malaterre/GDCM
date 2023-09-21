@@ -23,7 +23,7 @@ public class BasicImageAnonymizer
     {
     string filename = args[0];
 
-    // instanciate the reader:
+    // instantiate the reader:
     gdcm.ImageReader reader = new gdcm.ImageReader();
     reader.SetFileName( filename );
 

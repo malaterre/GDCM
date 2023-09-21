@@ -141,7 +141,7 @@ file-out  DICOM output directory
 <refsection xml:id="gdcmclean_1caveat">
 <title>DICOM Path</title>
 
-<para>For ease of use on shell cmmand the syntax allow for the '/' separator in the DICOM Path notation. So the following is valid</para>
+<para>For ease of use on shell command the syntax allow for the '/' separator in the DICOM Path notation. So the following is valid</para>
 <para><literallayout>"/0040,0100/1/0040,0006"</literallayout></para>
 <para>However Private Creator can use all of Value Representation LO definition. So in some case you will be required to use backslash as separator (since illegal in VR:LO):</para>
 <para><literallayout>"\\4109,2,Applicare/Centricity Radiology Web/Version 1.0"</literallayout></para>

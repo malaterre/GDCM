@@ -734,7 +734,7 @@ int main(int argc, char *argv[])
     writer->SetCompressionType( vtkGDCMImageWriter::RLE_COMPRESSION );
     }
 
-  // HACK: call it *after* instanciating vtkGDCMImageWriter
+  // HACK: call it *after* instantiating vtkGDCMImageWriter
   if( !gdcm::UIDGenerator::IsValid( study_uid.c_str() ) )
     {
     std::cerr << "Invalid UID for Study UID: " << study_uid << std::endl;

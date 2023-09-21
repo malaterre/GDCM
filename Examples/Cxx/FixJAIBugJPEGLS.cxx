@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     char errorMsg[256+1]={'\0'};
     if (JpegLsReadHeader(buffer, totalLen, &metadata, errorMsg) != charls::ApiResult::OK)
       {
-      std::cerr << "Cant parse jpegls: " << errorMsg << std::endl;
+      std::cerr << "Can't parse jpegls: " << errorMsg << std::endl;
       return 1;
       }
 
@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
       }
     if( !marker_lse )
       {
-      std::cerr << "Cant handle: " << metadata.bitsPerSample << std::endl;
+      std::cerr << "Can't handle: " << metadata.bitsPerSample << std::endl;
       return 1;
       }
 
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
 #endif
 
     const char *pbyteCompressed = vbuffer.data();
-    size_t cbyteCompressed = vbuffer.size(); // updated legnth
+    size_t cbyteCompressed = vbuffer.size(); // updated length
 
     JlsParameters params;
     JpegLsReadHeader(pbyteCompressed, cbyteCompressed, &params, nullptr);

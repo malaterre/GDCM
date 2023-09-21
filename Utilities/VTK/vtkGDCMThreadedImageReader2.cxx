@@ -98,7 +98,7 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
   //printf("outExt:%d,%d,%d,%d,%d,%d\n",
   //  outExt[0], outExt[1], outExt[2], outExt[3], outExt[4], outExt[5]);
   // FIXME:
-  // The code could be a little tidier, all I am trying to do here is differenciate the
+  // The code could be a little tidier, all I am trying to do here is differentiate the
   // case where we have a series of 2D files and the case where we have a single multi-frames
   // files...
   vtkIdType maxfiles = self->GetFileNames()->GetNumberOfValues();
@@ -298,7 +298,7 @@ int vtkGDCMThreadedImageReader2::RequestInformation (
 // For streaming and threads.  Splits output update extent into num pieces.
 // This method needs to be called num times.  Results must not overlap for
 // consistent starting extent.  Subclass can override this method.
-// This method returns the number of peices resulting from a successful split.
+// This method returns the number of pieces resulting from a successful split.
 // This can be from 1 to "total".
 // If 1 is returned, the extent cannot be split.
 int vtkGDCMThreadedImageReader2::SplitExtent(int splitExt[6], int startExt[6],

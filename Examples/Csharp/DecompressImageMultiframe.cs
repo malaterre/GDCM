@@ -74,7 +74,7 @@ public class DecompressImageMultiframe
     // Create a new SequenceOfFragments C++ object, store it as a SmartPointer :
     SmartPtrFrag sq = SequenceOfFragments.New();
 
-    // Yeah, the file are not garantee to be in order, please adapt...
+    // Yeah, the files are not guaranteed to be in order, please adapt...
     for(uint i = 0; i < nfiles; ++i)
       {
       System.Console.WriteLine( filenames[(int)i] );

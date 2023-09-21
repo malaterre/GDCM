@@ -27,7 +27,7 @@ if __name__ == "__main__":
   file1 = sys.argv[1]
   file2 = sys.argv[2]
 
-  # Instanciate the reader.
+  # Instantiate the reader.
   r = gdcm.Reader()
   r.SetFileName( file1 )
   if not r.Read():

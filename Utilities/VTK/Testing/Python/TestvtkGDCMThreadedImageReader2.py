@@ -82,7 +82,7 @@ if __name__ == "__main__":
     r.SetNumberOfScalarComponents( numberOfScalarComponents )
     r.SetDataOrigin( origin )
     r.SetDataSpacing( spacing )
-    # Useless only for backward compatibily, the real shift/scale will be read from files:
+    # Useless only for backward compatibility, the real shift/scale will be read from files:
     #r.SetShift( intercept_slope[0] )
     #r.SetScale( intercept_slope[1] )
 

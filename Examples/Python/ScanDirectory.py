@@ -40,7 +40,7 @@ if __name__ == "__main__":
   #  Get rid of any Warning while parsing the DICOM files
   gdcm.Trace.WarningOff()
 
-  # instanciate Scanner:
+  # instantiate Scanner:
   sp = gdcm.Scanner.New();
   s = sp.__ref__()
   w = ProgressWatcher(s, 'Watcher')

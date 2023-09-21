@@ -26,9 +26,9 @@ class Foo : public Object {
    }
 };
 
-class Containter {
+class Container {
 public:
-  Containter():Instance(nullptr) {}
+  Container():Instance(nullptr) {}
   SmartPointer<Object> Instance;
 };
 
@@ -100,8 +100,8 @@ int TestSmartPointer(int, char *[])
   Foo &foo = *p7;
   foo.foo();
 
-  Containter c1;
-  Containter c2;
+  Container c1;
+  Container c2;
   c2 = c1;
 
   // TODO:

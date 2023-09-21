@@ -262,7 +262,7 @@ public";
 // File: classgdcm_1_1Attribute.xml
 %typemap("csclassmodifiers") gdcm::Attribute " /**  Attribute class
 This class use template metaprograming tricks to let the user know
-when the template instanciation does not match the public dictionary.
+when the template instantiation does not match the public dictionary.
 
 Typical example that compile is: Attribute<0x0008,0x9007> a =
 {\"ORIGINAL\",\"PRIMARY\",\"T1\",\"NONE\"};
@@ -802,7 +802,7 @@ gdcm::Bitmap::Clear()  */ public";
 %csmethodmodifiers  gdcm::Bitmap::GetBuffer " /** bool
 gdcm::Bitmap::GetBuffer(char *buffer) const
 
-Acces the raw data.
+Access the raw data.
 
 */ public";
 
@@ -965,7 +965,7 @@ gdcm::Bitmap::~Bitmap()  */ public";
 // File: classgdcm_1_1ByteBuffer.xml
 %typemap("csclassmodifiers") gdcm::ByteBuffer " /**  ByteBuffer.
 
-Detailled description here looks like a std::streambuf or std::filebuf
+Detailed description here looks like a std::streambuf or std::filebuf
 class with the get and peek pointer
 
 C++ includes: gdcmByteBuffer.h */ public class";
@@ -989,7 +989,7 @@ gdcm::ByteBuffer::UpdatePosition()  */ public";
 // File: classgdcm_1_1ByteSwap.xml
 %typemap("csclassmodifiers") gdcm::ByteSwap " /**  ByteSwap.
 
-Perform machine dependent byte swaping (Little Endian, Big Endian, Bad
+Perform machine dependent byte swapping (Little Endian, Big Endian, Bad
 Little Endian, Bad Big Endian). TODO: bswap_32 / bswap_64 ...
 
 C++ includes: gdcmByteSwap.h */ public class";
@@ -1579,7 +1579,7 @@ WARNING:  : You need to check for NULL return value
 SequenceOfItems in those case the return of the function will be NULL,
 while the Value would be a valid SequenceOfItems, in those case prefer
 GetValueAsSQ. In which case the code internally trigger an assert to
-warn developper.
+warn developer.
 
 */ public";
 
@@ -1608,7 +1608,7 @@ SmartPointer<SequenceOfItems> gdcm::DataElement::GetValueAsSQ() const
 
 Interpret the Value stored in the DataElement. This is more robust
 (but also more expensive) to call this function rather than the
-simpliest form: GetSequenceOfItems() It also return NULL when the
+simplest form: GetSequenceOfItems() It also return NULL when the
 Value is NOT of type SequenceOfItems WARNING:  in case
 GetSequenceOfItems() succeed the function return this value, otherwise
 it creates a new SequenceOfItems, you should handle that in your case,
@@ -2048,7 +2048,7 @@ DictEntry& gdcm::Dict::GetDictEntryByName(const char *name, Tag &tag)
 const
 
 Inefficient way of looking up tag by name. Technically DICOM does not
-garantee uniqueness (and Curve / Overlay are there to prove it). But
+guarantee uniqueness (and Curve / Overlay are there to prove it). But
 most of the time name is in fact uniq and can be uniquely link to a
 tag
 
@@ -2060,7 +2060,7 @@ gdcm::Dict::IsEmpty() const  */ public";
 
 // File: classgdcm_1_1DictConverter.xml
 %typemap("csclassmodifiers") gdcm::DictConverter " /** Class to
-convert a .dic file into something else: CXX code : embeded dict into
+convert a .dic file into something else: CXX code : embedded dict into
 shared lib (DICT_DEFAULT)
 
 Debug mode (DICT_DEBUG)
@@ -2312,7 +2312,7 @@ gdcm::DirectionCosines::~DirectionCosines()  */ public";
 manipulation directories.
 
 This implementation provide a cross platform implementation for
-manipulating directores: basically traversing directories and
+manipulating directories: basically traversing directories and
 harvesting files
 
 will not take into account unix type hidden file recursive option will
@@ -2896,7 +2896,7 @@ Write.
 %typemap("csclassmodifiers") gdcm::Filename " /** Class to manipulate
 file name's.
 
-OS independant representation of a filename (to query path, name and
+OS independent representation of a filename (to query path, name and
 extension from a filename)
 
 C++ includes: gdcmFilename.h */ public class";
@@ -3241,7 +3241,7 @@ Access the generated DICOM UID's.
 itk::GDCMImageIO2::itkGetStringMacro(UIDPrefix)
 
 Macro to access the DICOM UID prefix. By default this is the ITK root
-id. This default can be overriden if the exam is for example part of
+id. This default can be overridden if the exam is for example part of
 an existing study.
 
 */ public";
@@ -3329,7 +3329,7 @@ that the IORegion has been set properly.
 %csmethodmodifiers  itk::GDCMImageIO2::WriteImageInformation " /**
 virtual void itk::GDCMImageIO2::WriteImageInformation()
 
-Writes the spacing and dimentions of the image. Assumes SetFileName
+Writes the spacing and dimensions of the image. Assumes SetFileName
 has been called with a valid file name.
 
 */ public";
@@ -3374,7 +3374,7 @@ load time
 %csmethodmodifiers  gdcm::Global::LoadResourcesFiles " /** bool
 gdcm::Global::LoadResourcesFiles()
 
-Load all internal XML files, ressource path need to have been set
+Load all internal XML files, resource path need to have been set
 before calling this member function (see Append/Prepend members func)
 WARNING:  not thread safe !
 
@@ -3383,7 +3383,7 @@ WARNING:  not thread safe !
 %csmethodmodifiers  gdcm::Global::Prepend " /** bool
 gdcm::Global::Prepend(const char *path)
 
-Prepend path at the begining of the path list WARNING:  not thread
+Prepend path at the beginning of the path list WARNING:  not thread
 safe !
 
 */ public";
@@ -3500,7 +3500,7 @@ gdcm::Image::GetSpacing(unsigned int idx) const  */ public";
 gdcm::Image::GetSpacing() const
 
 Return a 3-tuples specifying the spacing NOTE: 3rd value can be an
-aribtrary 1 value when the spacing was not specified (ex. 2D image).
+arbitrary 1 value when the spacing was not specified (ex. 2D image).
 WARNING: when the spacing is not specifier, a default value of 1 will
 be returned
 
@@ -3597,7 +3597,7 @@ gdcm::ImageApplyLookupTable::~ImageApplyLookupTable()  */ public";
 %typemap("csclassmodifiers")
 gdcm::ImageChangePhotometricInterpretation " /**
 ImageChangePhotometricInterpretation class Class to change the
-Photometric Interpetation of an input DICOM.
+Photometric Interpretation of an input DICOM.
 
 C++ includes: gdcmImageChangePhotometricInterpretation.h */ public
 class";
@@ -3642,7 +3642,7 @@ gdcm::ImageChangePhotometricInterpretation::~ImageChangePhotometricInterpretatio
 %typemap("csclassmodifiers") gdcm::ImageChangePlanarConfiguration "
 /**  ImageChangePlanarConfiguration class Class to change the Planar
 configuration of an input DICOM By default it will change into the
-more usual reprensentation: PlanarConfiguration = 0.
+more usual representation: PlanarConfiguration = 0.
 
 C++ includes: gdcmImageChangePlanarConfiguration.h */ public class";
 
@@ -4114,7 +4114,7 @@ Usage::UsageType gdcm::IODEntry::GetUsageType() const  */ public";
 
 %csmethodmodifiers  gdcm::IODEntry::IODEntry " /**
 gdcm::IODEntry::IODEntry(const char *name=\"\", const char *ref=\"\",
-const char *usag=\"\")  */ public";
+const char *usage=\"\")  */ public";
 
 %csmethodmodifiers  gdcm::IODEntry::SetIE " /** void
 gdcm::IODEntry::SetIE(const char *ie)  */ public";
@@ -4126,7 +4126,7 @@ gdcm::IODEntry::SetName(const char *name)  */ public";
 gdcm::IODEntry::SetRef(const char *ref)  */ public";
 
 %csmethodmodifiers  gdcm::IODEntry::SetUsage " /** void
-gdcm::IODEntry::SetUsage(const char *usag)  */ public";
+gdcm::IODEntry::SetUsage(const char *usage)  */ public";
 
 
 // File: classgdcm_1_1IODs.xml
@@ -4178,7 +4178,7 @@ duplicate and will FAIL in case of duplicate IPP.
 
 WARNING:  See special note for SetZSpacingTolerance when computing the
 ZSpacing from the IPP of each DICOM files (default tolerance for
-consistant spacing is: 1e-6mm)
+consistent spacing is: 1e-6mm)
 
 C++ includes: gdcmIPPSorter.h */ public class";
 
@@ -4218,7 +4218,7 @@ along the Series
 gdcm::IPPSorter::SetZSpacingTolerance(double tol)
 
 2. Another reason for failure is that that Z-Spacing is only slightly
-changing (eg 1e-3) along the serie, a human can determine that this is
+changing (eg 1e-3) along the series, a human can determine that this is
 ok and change the tolerance from its default value: 1e-6
 
 */ public";
@@ -4228,8 +4228,8 @@ gdcm::IPPSorter::Sort(std::vector< std::string > const &filenames)
 
 Main entry point to the sorter. It will execute the filter, option
 should be set before running this function (SetZSpacingTolerance, ...)
-Return value indicate if sorting could be achived. Warning this does
-*NOT* imply that spacing is consistant, it only means the file are
+Return value indicate if sorting could be achieved. Warning this does
+*NOT* imply that spacing is consistent, it only means the file are
 sorted according to IPP You should check if ZSpacing is 0 or not to
 deduce if file are actually a 3D volume
 
@@ -4256,7 +4256,7 @@ gdcm::IPPSorter::~IPPSorter()  */ public";
 Item A component of the value of a Data Element that is of Value
 Representation Sequence of Items. An Item contains a Data Set . See PS
 3.5 7.5.1 Item Encoding Rules Each Item of a Data Element of VR SQ
-shall be encoded as a DICOM Standart Data Element with a specific Data
+shall be encoded as a DICOM Standard Data Element with a specific Data
 Element Tag of Value (FFFE,E000). The Item Tag is followed by a 4 byte
 Item Length field encoded in one of the following two ways Explicit/
 Implicit.
@@ -5109,7 +5109,7 @@ C++ includes: gdcmObject.h */ public class";
 %csmethodmodifiers  gdcm::Object::Object " /**
 gdcm::Object::Object(const Object &)
 
-Special requirement for copy/cstor, assigment operator.
+Special requirement for copy/cstor, assignment operator.
 
 */ public";
 
@@ -5178,7 +5178,7 @@ gdcm::Orientation::~Orientation()  */ public";
 
 see AreOverlaysInPixelData Todo Is there actually any way to recognize
 an overlay ? On images with multiple overlay I do not see any way to
-differenciate them (other than the group tag). Example:
+differentiate them (other than the group tag). Example:
 
 C++ includes: gdcmOverlay.h */ public class";
 
@@ -5402,7 +5402,7 @@ virtual gdcm::ParseException::~ParseException()  throw () */ public";
 %typemap("csclassmodifiers") gdcm::Parser " /**  Parser ala XML_Parser
 from expat (SAX).
 
-Detailled description here Simple API for DICOM
+Detailed description here Simple API for DICOM
 
 C++ includes: gdcmParser.h */ public class";
 
@@ -5623,7 +5623,7 @@ pi=UNKNOW)  */ public";
 // File: classgdcm_1_1PixelFormat.xml
 %typemap("csclassmodifiers") gdcm::PixelFormat " /**  PixelFormat.
 
-By default the Pixel Type will be instanciated with the following
+By default the Pixel Type will be instantiated with the following
 parameters: SamplesPerPixel : 1
 
 BitsAllocated : 8
@@ -6269,7 +6269,7 @@ This class is a non-validating reader, it will only performs well-
 formedness check only, and to some extent catch known error (non well-
 formed document).
 
-Detailled description here
+Detailed description here
 
 A DataSet DOES NOT contains group 0x0002
 
@@ -6960,7 +6960,7 @@ public";
 // File: classgdcm_1_1SerieHelper.xml
 %typemap("csclassmodifiers") gdcm::SerieHelper " /** DO NOT USE this
 class, it is only a temporary solution for ITK migration from GDCM 1.x
-to GDCM 2.x It will disapear soon, you've been warned.
+to GDCM 2.x It will disappear soon, you've been warned.
 
 Instead see gdcm::ImageHelper or gdcm::IPPSorter
 
@@ -7263,7 +7263,7 @@ includes: gdcmStaticAssert.h */ public class";
 %typemap("csclassmodifiers") gdcm::String " /**  String.
 
 TDelimiter template parameter is used to separate multiple String (VM1
->) TMaxLength is only a hint. Noone actually respect the max length
+>) TMaxLength is only a hint. No one actually respect the max length
 TPadChar is the string padding (0 or space)
 
 C++ includes: gdcmString.h */ public class";
@@ -7436,7 +7436,7 @@ gdcmSwapper.h */ public class";
 %typemap("csclassmodifiers") gdcm::System " /** Class to do system
 operation.
 
-OS independant functionalities
+OS independent functionalities
 
 C++ includes: gdcmSystem.h */ public class";
 
@@ -7653,7 +7653,7 @@ Read a tag from binary representation.
 gdcm::Tag::ReadFromCommaSeparatedString(const char *str)
 
 Read from a comma separated string. This is a highly user oriented
-function, the string should be formated as: 1234,5678 to specify the
+function, the string should be formatted as: 1234,5678 to specify the
 tag (0x1234,0x5678) The notation comes from the DICOM standard, and is
 handy to use from a command line program
 
@@ -8253,7 +8253,7 @@ gdcm::VR::Write(std::ostream &os) const  */ public";
 %typemap("csclassmodifiers") gdcm::VR16ExplicitDataElement " /** Class
 to read/write a DataElement as Explicit Data Element.
 
-This class support 16 bits when finding an unkown VR: For instance:
+This class support 16 bits when finding an unknown VR: For instance:
 Siemens_CT_Sensation64_has_VR_RT.dcm
 
 C++ includes: gdcmVR16ExplicitDataElement.h */ public class";
@@ -9074,7 +9074,7 @@ gdcm::Waveform::Waveform()  */ public";
 (Document Object Model) This class is a non-validating writer, it will
 only performs well- formedness check only.
 
-Detailled description here To avoid GDCM being yet another broken
+Detailed description here To avoid GDCM being yet another broken
 DICOM lib we try to be user level and avoid writing illegal stuff (odd
 length, non-zero value for Item start/end length ...) Therefore you
 cannot (well unless you are really smart) write DICOM with even length
@@ -9085,7 +9085,7 @@ Zero value for Item Length (0xfffe, 0xe00d/0xe0dd)
 
 Even length for any elements
 
-Alphabetical order for elements (garanteed by design of internals)
+Alphabetical order for elements (guaranteed by design of internals)
 
 32bits VR will be rewritten with 00
 

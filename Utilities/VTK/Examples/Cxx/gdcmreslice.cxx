@@ -131,7 +131,7 @@ int main( int argc, char *argv[] )
   transform->Concatenate(invert);
   //axes2->SetShaftTypeToCylinder();
   axes2->SetUserTransform( transform );
-  cube->GetAssembly()->SetUserTransform( transform ); // cant get it to work
+  cube->GetAssembly()->SetUserTransform( transform ); // can't get it to work
 
   vtkPropAssembly* assembly = vtkPropAssembly::New();
   assembly->AddPart( axes2 );

@@ -54,7 +54,7 @@ if os.name == 'posix':
 else:
   from vtkgdcmPython import *
 
-# to provide a compatibilty layer with VTK 4.2 and VTK 4.4 where vtkStringArray was not present
+# to provide a compatibility layer with VTK 4.2 and VTK 4.4 where vtkStringArray was not present
 # and VTK 5.x where there is one...
 try:
   # if vtkStringArray can be found in vtk let's use it !
