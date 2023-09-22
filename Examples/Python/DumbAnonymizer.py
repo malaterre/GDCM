@@ -56,7 +56,7 @@ tag_rules={
   (0x0018,0x1250):("Sequence Field","Receive Coil"),
   (0x0018,0x0088):("Sequence Field","Spacing Between Slice"),
   (0x0018,0x0095):("Sequence Field","Pixel Bandwidth"),
-  (0x0018,0x0082):("Sequence Field","Invertion Time"),
+  (0x0018,0x0082):("Sequence Field","Inversion Time"),
 }
 
 class MyAnon:
