@@ -63,7 +63,7 @@ public:
     }
   Preamble& operator=(Preamble const &)
     {
-    Internal = nullptr;
+    Remove();
     Create();
     return *this;
     }
