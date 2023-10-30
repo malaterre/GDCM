@@ -25,7 +25,8 @@ find_package(SQLITE3)
 
 find_package(MAGIC)
 
-find_package(Qt4 4.4.3 COMPONENTS QtCore QtGui)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets)
 # cmake 2.6.4 does not set it to advanced
 mark_as_advanced(QT_QMAKE_EXECUTABLE)
 
@@ -107,17 +108,14 @@ set(EXAMPLES_SRCS
   )
 endif()
 
-if(QT4_FOUND)
-  include(${QT_USE_FILE})
+if(QT5_FOUND OR QT6_FOUND)
   add_executable(ConvertToQImage ConvertToQImage.cxx)
-  # qtGUI will resolved QImage symbol
-  # qtcore will resolve qstring symbols
-  target_link_libraries(ConvertToQImage gdcmMSFF ${QT_LIBRARIES})
+  target_link_libraries(ConvertToQImage gdcmMSFF Qt${QT_VERSION_MAJOR}::Widgets)
 
   add_executable(ReadUTF8QtDir ReadUTF8QtDir.cxx)
-  target_link_libraries(ReadUTF8QtDir gdcmMSFF ${QT_LIBRARIES})
+  target_link_libraries(ReadUTF8QtDir gdcmMSFF Qt${QT_VERSION_MAJOR}::Widgets)
   add_executable(CStoreQtProgress CStoreQtProgress.cxx)
-  target_link_libraries(CStoreQtProgress gdcmMEXD gdcmMSFF ${QT_LIBRARIES})
+  target_link_libraries(CStoreQtProgress gdcmMEXD gdcmMSFF Qt${QT_VERSION_MAJOR}::Widgets)
 endif()
 
 if(MAGIC_FOUND)
