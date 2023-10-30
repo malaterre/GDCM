@@ -592,7 +592,7 @@ int vtkGDCMImageReader2::RequestInformationCompat()
       // We are doing the Y-flip:
       // translate Image Position (Patient) along the Y-vector of the Image Orientation (Patient):
       // Step 1: Compute norm of translation vector:
-      // Because position is in the center of the pixel, we need to substract 1 to the dimY:
+      // Because position is in the center of the pixel, we need to subtract 1 to the dimY:
       assert( dims[1] >=1 );
       double norm = (dims[1] - 1) * this->DataSpacing[1];
       // Step 2: translate:

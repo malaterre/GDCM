@@ -35,7 +35,7 @@ public class StandardizeFiles
       }
 
     ImageChangeTransferSyntax change = new ImageChangeTransferSyntax();
-    change.SetForce( false ); // do we really want to recompress when input is alread compressed in same alg ?
+    change.SetForce( false ); // do we really want to recompress when input is already compressed in same alg ?
     change.SetCompressIconImage( false ); // Keep it simple
     change.SetTransferSyntax( new TransferSyntax( TransferSyntax.TSType.JPEG2000Lossless ) );
     change.SetInput( reader.GetPixmap() );

@@ -60,7 +60,7 @@ void vtkImageYBRToRGBExecute(vtkImageYBRToRGB *self,
   int maxC = inData->GetNumberOfScalarComponents()-1;
 
   int R, G, B;
-  // Loop through ouput pixels
+  // Loop through output pixels
   while (!outIt.IsAtEnd())
     {
     T* inSI = inIt.BeginSpan();

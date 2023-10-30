@@ -22,7 +22,7 @@ if __name__ == "__main__":
   #gdcm.Trace.DebugOn()
   globInst = gdcm.Global.GetInstance()
   # Try to load Part3.xml file
-  # This fils is too big for being accessible directly at runtime.
+  # This file is too big for being accessible directly at runtime.
   globInst.LoadResourcesFiles()
 
 

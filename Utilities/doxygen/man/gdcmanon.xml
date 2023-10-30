@@ -231,7 +231,7 @@ In this case one could simply do, as a first step execute the reversible anonymi
 <para><literallayout>$ gdcmanon --dumb --remove 400,500 --remove 12,62 --remove 12,63 anonymized_reversible.dcm anonymized_irreversible.dcm
 </literallayout></para>
 
-<para>In recent GDCM version those two independant gdcmanon steps can be executed using simply:<literallayout>$ gdcmanon input.dcm anonymized_irreversible.dcm</literallayout></para>
+<para>In recent GDCM version those two independent gdcmanon steps can be executed using simply:<literallayout>$ gdcmanon input.dcm anonymized_irreversible.dcm</literallayout></para>
 <para>Or if one want for readability:<literallayout>$ gdcmanon -e input.dcm anonymized_irreversible.dcm</literallayout></para>
 
 <para><formalpara><title>Remarks: </title>

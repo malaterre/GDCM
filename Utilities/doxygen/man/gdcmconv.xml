@@ -324,7 +324,7 @@ When no option other is used, only the dataset is inspected. So encapsulated Pix
 <para><literallayout>$ gdcmconv --jpeg gdcmData/simpleImageWithIcon.dcm uncompressed_icon.dcm
 </literallayout></para>
 
-<para>In the following example we will explicitly compress the Icon Image Sequence Pixel Data attibute. In that case the same Transfer Syntax is being used for both the main Pixel Data and the Pixel Data from the Icon Image Sequence:</para>
+<para>In the following example we will explicitly compress the Icon Image Sequence Pixel Data attribute. In that case the same Transfer Syntax is being used for both the main Pixel Data and the Pixel Data from the Icon Image Sequence:</para>
 
 <para><literallayout>$ gdcmconv --jpeg --compress-icon gdcmData/simpleImageWithIcon.dcm compressed_icon.dcm
 </literallayout></para>

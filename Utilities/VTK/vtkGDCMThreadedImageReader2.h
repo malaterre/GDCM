@@ -30,7 +30,7 @@
 //
 // .SECTION FIXME: need to implement reading of series of 3D files
 //
-// .SECTION Implementation note: this class is meant to superseed vtkGDCMThreadedImageReader
+// .SECTION Implementation note: this class is meant to supersede vtkGDCMThreadedImageReader
 // because it had support for ProgressEvent support even from python layer. There is a
 // subtle trick down in the threading mechanism in VTK were the main thread (talking to the
 // python interpreter) is also part of the execution process (and the N-1 other thread

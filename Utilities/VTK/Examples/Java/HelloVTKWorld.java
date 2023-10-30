@@ -11,7 +11,7 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-// We are required to call the package 'vtk' eventhough I (MM) would have prefered
+// We are required to call the package 'vtk' even though I (MM) would have preferred
 // an import statement along the line of:
 // import vtkgdcm.*;
 import vtk.*;

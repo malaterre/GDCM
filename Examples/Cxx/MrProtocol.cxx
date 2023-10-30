@@ -493,7 +493,7 @@ One can find it also in the protocol:
 ...
 
 */
-  // Below is an attemp to play with the CSAHeader dict:
+  // Below is an attempt to play with the CSAHeader dict:
 #if 0
   const char gspec[] = "sGRADSPEC.flSensitivityX";
   it = mymap.find( gspec );

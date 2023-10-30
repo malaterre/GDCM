@@ -4047,7 +4047,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0011,0x0040,"GEMS_GDXE_FALCON_04",VR::SL,VM::VM1,"Pasting Overlap",false },
   {0x0011,0x0041,"GEMS_GDXE_FALCON_04",VR::IS,VM::VM24,"Sub-image Collimator Vertices",false },
   {0x0011,0x0042,"GEMS_GDXE_FALCON_04",VR::LO,VM::VM1,"View IP",false },
-  {0x0011,0x0043,"GEMS_GDXE_FALCON_04",VR::IS,VM::VM24,"Key-stone Co-ordinates",false },
+  {0x0011,0x0043,"GEMS_GDXE_FALCON_04",VR::IS,VM::VM24,"Key-stone Coordinates",false },
   {0x0011,0x0044,"GEMS_GDXE_FALCON_04",VR::CS,VM::VM1,"Receptor Type",false },
   {0x0011,0x0046,"GEMS_GDXE_FALCON_04",VR::LO,VM::VM1_n,"?",false },
   {0x0011,0x0047,"GEMS_GDXE_FALCON_04",VR::DS,VM::VM1,"?",false },

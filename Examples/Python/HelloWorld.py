@@ -29,7 +29,7 @@ if __name__ == "__main__":
   # Get the filename from the command line
   filename = sys.argv[1]
 
-  # Instanciate a gdcm.Reader
+  # Instantiate a gdcm.Reader
   # This is the main class to handle any type of DICOM object
   # You should check for gdcm.ImageReader for reading specifically DICOM Image file
   r = gdcm.Reader()

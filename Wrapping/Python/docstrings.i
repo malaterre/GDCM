@@ -6032,7 +6032,7 @@ See:   DictEntry
 C++ includes: gdcmIODEntry.h ";
 
 %feature("docstring")  gdcm::IODEntry::IODEntry "gdcm::IODEntry::IODEntry(const char *name=\"\", const char *ref=\"\",
-const char *usag=\"\") ";
+const char *usage=\"\") ";
 
 %feature("docstring")  gdcm::IODEntry::GetIE "const char*
 gdcm::IODEntry::GetIE() const ";
@@ -6059,7 +6059,7 @@ gdcm::IODEntry::SetName(const char *name) ";
 gdcm::IODEntry::SetRef(const char *ref) ";
 
 %feature("docstring")  gdcm::IODEntry::SetUsage "void
-gdcm::IODEntry::SetUsage(const char *usag) ";
+gdcm::IODEntry::SetUsage(const char *usage) ";
 
 
 // File: classgdcm_1_1IODs.xml

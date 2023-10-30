@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
   const char *filename = argv[1];
   const char *outfilename = argv[2];
 
-  // Instanciate the reader:
+  // Instantiate the reader:
   gdcm::Reader reader;
   reader.SetFileName( filename );
   if( !reader.Read() )
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
   // the dataset is the the set of element we are interested in:
   gdcm::DataSet &ds = file.GetDataSet();
 
-  // Contruct a static(*) type for Image Comments :
+  // Construct a static(*) type for Image Comments :
   gdcm::Attribute<0x0020,0x4000> imagecomments;
   imagecomments.SetValue( "Hello, World !" );
 

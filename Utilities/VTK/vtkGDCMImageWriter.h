@@ -74,7 +74,7 @@ public:
   virtual void Write();
 
   // Description:
-  // Get the entension for this file format.
+  // Get the extension for this file format.
   virtual const char* GetFileExtensions() {
     return ".dcm .DCM"; }
 
