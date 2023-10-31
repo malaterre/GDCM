@@ -58,7 +58,7 @@ def TestDCMTKMD5( filename, verbose = False ):
   jpegre = re.compile('^.*JPEGLossless.*$')
   jpegre2 = re.compile('^.*JPEGExtended.*$')
   jpegre3 = re.compile('^.*JPEGBaseline.*$')
-  j2kre = re.compile('^.*JPEG2000.*$')
+  jp2kre = re.compile('^.*JPEG2000.*$')
   jplsre = re.compile('^.*JPEGLS.*$')
   rlere = re.compile('^.*RLELossless.*$')
   lexre = re.compile('^.*LittleEndianExplicit.*$')
@@ -144,8 +144,27 @@ def TestDCMTKMD5( filename, verbose = False ):
       retval = 1
     #print outputfilename
     return retval
-  elif( j2kre.match( ret ) ):
-    return 0
+  elif( jp2kre.match( ret ) ):
+    #print "jpegls: ",filename
+    dcmdjp2k_exec = "dcmdjp2k " + filename + " " + outputfilename
+    ret = os.system( dcmdjp2k_exec )
+    if ret:
+      print("failed with: ", dcmdjp2k_exec)
+      return 1
+
+    gdcmraw_args = ' -i ' + outputfilename + ' -o ' + outputfilename + ".raw"
+    gdcmraw += gdcmraw_args
+    #print gdcmraw
+    ret = os.system( gdcmraw )
+    md5 = gdcm.Testing.ComputeFileMD5( outputfilename + ".raw" )
+    ref = gdcm.Testing.GetMD5FromFile(filename)
+    #print md5
+    retval  = 0
+    if ref != md5:
+      print("md5 are different: %s should be: %s for file %s"%(md5,ref,filename))
+      retval = 1
+    #print outputfilename
+    return retval
   elif( lexre.match( ret ) or leire.match(ret) or beire.match(ret) ):
     #print "rle: ",filename
     #dcmdrle_exec = "dcmdrle " + filename + " " + outputfilename

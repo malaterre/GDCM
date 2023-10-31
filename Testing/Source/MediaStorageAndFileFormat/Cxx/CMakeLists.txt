@@ -264,6 +264,30 @@ foreach(filename ${gdcm_data_filenames_glob})
   endif()
 endforeach()
 
+file(MAKE_DIRECTORY "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax2/dcmdjp2k/")
+
+foreach(filename ${gdcm_data_filenames_glob})
+  get_filename_component(filename_name ${filename} NAME)
+  string(REGEX MATCH ${filename_name} bad_dicom ${black_list_reader})
+  if(NOT bad_dicom)
+    if(GDCM_TEST_DCMTK)
+      if(DCMTK_DCMDJP2K_EXECUTABLE)
+        add_test(NAME "DCMDJP2K-${filename_name}" COMMAND ${DCMTK_DCMDJP2K_EXECUTABLE}
+          "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax2/${filename_name}"
+          "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax2/dcmdjp2k/${filename_name}")
+        # Special handling of the DICOMDIR files:
+        string(REGEX MATCH ${filename_name} is_dicomdir ${gdcm_data_dicomdir_filenames_glob})
+        if(is_dicomdir)
+          #message("IS DICOMDIR ${filename_name}")
+          set_tests_properties("DCMDJP2K-${filename_name}" PROPERTIES WILL_FAIL TRUE)
+        endif()
+        #
+      endif()
+    endif()
+  endif()
+endforeach()
+
+
 file(MAKE_DIRECTORY "${GDCM_TEMP_DIRECTORY}/TestImageChangeTransferSyntax3/dcmdrle/")
 
 foreach(filename ${gdcm_data_filenames_glob})
