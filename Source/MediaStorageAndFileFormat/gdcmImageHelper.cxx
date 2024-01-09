@@ -2896,6 +2896,7 @@ MediaStorage ImageHelper::ComputeMediaStorageFromModality(const char *modality,
       || pi == PhotometricInterpretation::YBR_RCT
       || pi == PhotometricInterpretation::YBR_ICT
       || pi == PhotometricInterpretation::YBR_PARTIAL_420
+      || pi == PhotometricInterpretation::YBR_FULL /* PI when coming from other gdcm filter */
       || pi == PhotometricInterpretation::YBR_FULL_422 ) &&
       pixeltype.GetBitsAllocated() == 8 &&
       pixeltype.GetBitsStored() == 8 &&
