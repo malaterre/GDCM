@@ -460,7 +460,8 @@ bool ImageCodec::CleanupUnusedBits(char * data8, size_t datalen)
       smask = (uint16_t)(
         smask << ( 16 - (PF.GetBitsAllocated() - PF.GetBitsStored() + 1) ));
       // nmask : to propagate sign bit on negative values
-      int16_t nmask = (int16_t)(0x8000U >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 ));
+      int16_t nmask = (int16_t)0x8000;
+      nmask = (int16_t)(nmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 ));
 
       uint16_t *start = (uint16_t*)data;
       for( uint16_t *p = start ; p != start + datalen / 2; ++p )
@@ -515,7 +516,8 @@ bool ImageCodec::DoOverlayCleanup(std::istream &is, std::ostream &os)
       smask = (uint16_t)(
         smask << ( 16 - (PF.GetBitsAllocated() - PF.GetBitsStored() + 1) ));
       // nmask : to propagate sign bit on negative values
-      int16_t nmask = (int16_t)(0x8000U >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 ));
+      int16_t nmask = (int16_t)0x8000;
+      nmask = (int16_t)(nmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 ));
 
       uint16_t c;
       while( is.read((char*)&c,2) )
