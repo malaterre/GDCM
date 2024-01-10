@@ -138,6 +138,10 @@ static void PrintHelp() {
   std::cout << "     --preserve-illegal                             Whether or "
                "not preserve illegal attributes (eg. group 0003...)."
             << std::endl;
+  std::cout
+      << "     --empty-when-scrub-fails                       Fallback to "
+         "emptying any attribute for which scrub operation failed."
+      << std::endl;
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose                more verbose (warning+error)."
             << std::endl;
@@ -171,6 +175,7 @@ int main(int argc, char *argv[]) {
   int preserveAllMissingPrivateCreator = 0;
   int preserveAllGroupLength = 0;
   int preserveAllIllegal = 0;
+  int emptyWhenScrubFails = 0;
   std::vector<gdcm::DPath> empty_dpaths;
   std::vector<gdcm::DPath> remove_dpaths;
   std::vector<gdcm::DPath> scrub_dpaths;
@@ -196,7 +201,7 @@ int main(int argc, char *argv[]) {
         {"recursive", no_argument, nullptr, 'r'},
         {"empty", required_argument, &empty_tag, 1},        // 3
         {"remove", required_argument, &remove_tag, 1},      // 4
-        {"scrub", required_argument, &scrub_tag, 1},          // 5
+        {"scrub", required_argument, &scrub_tag, 1},        // 5
         {"preserve", required_argument, &preserve_tag, 1},  // 5
         {"continue", no_argument, nullptr, 'c'},
         {"skip-meta", 0, &skipmeta, 1},  // should I document this one ?
@@ -204,6 +209,7 @@ int main(int argc, char *argv[]) {
          &preserveAllMissingPrivateCreator, 1},                    //
         {"preserve-group-length", 0, &preserveAllGroupLength, 1},  //
         {"preserve-illegal", 0, &preserveAllIllegal, 1},           //
+        {"empty-when-scrub-fails", 0, &emptyWhenScrubFails, 1},    //
 
         {"verbose", no_argument, nullptr, 'V'},
         {"warning", no_argument, nullptr, 'W'},
@@ -437,6 +443,7 @@ int main(int argc, char *argv[]) {
   cleaner.RemoveAllMissingPrivateCreator(!preserveAllMissingPrivateCreator);
   cleaner.RemoveAllGroupLength(!preserveAllGroupLength);
   cleaner.RemoveAllIllegal(!preserveAllIllegal);
+  cleaner.EmptyWhenScrubFails(!!emptyWhenScrubFails);
   // Preserve
   for (std::vector<gdcm::DPath>::const_iterator it = preserve_dpaths.begin();
        it != preserve_dpaths.end(); ++it) {
