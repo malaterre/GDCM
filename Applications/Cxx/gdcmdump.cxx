@@ -1137,8 +1137,9 @@ static int PrintCSA(const std::string & filename)
   int ret = 0;
   if( ds.FindDataElement( t1 ) )
     {
-    csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
-    csa.Print( std::cout );
+    if( csa.LoadFromDataElement( ds.GetDataElement( t1 ) ) )
+      csa.Print( std::cout );
+    else ret = 1;
     found = true;
     if( csa.GetFormat() == gdcm::CSAHeader::ZEROED_OUT )
       {
@@ -1156,8 +1157,9 @@ static int PrintCSA(const std::string & filename)
     }
   if( ds.FindDataElement( t2 ) )
     {
-    csa.LoadFromDataElement( ds.GetDataElement( t2 ) );
-    csa.Print( std::cout );
+    if( csa.LoadFromDataElement( ds.GetDataElement( t2 ) ) )
+      csa.Print( std::cout );
+    else ret = 1;
     found = true;
     if( csa.GetFormat() == gdcm::CSAHeader::ZEROED_OUT )
       {
@@ -1175,8 +1177,9 @@ static int PrintCSA(const std::string & filename)
     }
   if( ds.FindDataElement( t3 ) )
     {
-    csa.LoadFromDataElement( ds.GetDataElement( t3 ) );
-    csa.Print( std::cout );
+    if( csa.LoadFromDataElement( ds.GetDataElement( t3 ) ) )
+      csa.Print( std::cout );
+    else ret = 1;
     found = true;
     if( csa.GetFormat() == gdcm::CSAHeader::ZEROED_OUT )
       {
