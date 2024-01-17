@@ -342,7 +342,7 @@ bool SplitMosaicFilter::Split()
     return false;
     }
   const unsigned int div = (unsigned int )ceil(sqrt( (double)dims[2]) );
-  bool inverted;
+  bool inverted = false;
   double normal[3];
   bool hasOriginCSA = true;
   bool hasNormalCSA = true;
