@@ -66,7 +66,7 @@ public:
     const double dircos[6],
     const double pixelspacing[3],
     const unsigned int image_dims[3] ,
-    const unsigned int mosaic_dims[3] );
+    const unsigned int mosaic_dims[3], bool inverted );
 
   void SetImage(const Image& image);
   const Image &GetImage() const { return *I; }

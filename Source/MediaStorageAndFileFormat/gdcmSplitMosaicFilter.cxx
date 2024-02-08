@@ -288,11 +288,11 @@ bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double slicenormalvector[3], b
 }
 
 bool SplitMosaicFilter::ComputeMOSAICImagePositionPatient( double ret[3], 
-		const double ipp[6],
-		const double dircos[6],
-		const double pixelspacing[3],
-		const unsigned int image_dims[3] ,
-		const unsigned int mosaic_dims[3] )
+    const double ipp[6],
+    const double dircos[6],
+    const double pixelspacing[3],
+    const unsigned int image_dims[3] ,
+    const unsigned int mosaic_dims[3] , bool inverted)
 {
   CSAHeader csa;
   DataSet& ds = GetFile().GetDataSet();
@@ -313,11 +313,11 @@ bool SplitMosaicFilter::ComputeMOSAICImagePositionPatient( double ret[3],
     if( b ) {
       size_t size = sa.Slices.size();
       if( size ) {
-        size_t index = 0;
+        // Handle inverted case:
+        size_t index = inverted ? size - 1 : 0;
         MrProtocol::Slice & slice = sa.Slices[index];
         MrProtocol::Vector3 & p = slice.Position;
         double pos[3];
-        // FIXME should I care about inverted case ?
         pos[0] = p.dSag;
         pos[1] = p.dCor;
         pos[2] = p.dTra;
@@ -343,8 +343,8 @@ bool SplitMosaicFilter::ComputeMOSAICImagePositionPatient( double ret[3],
       diff[i] = ipp_dcm[i] - ipp_csa[i];
     }
     double n = DirectionCosines::Norm(diff);
-    if( n > 1e-6 ) {
-      gdcmErrorMacro( "Inconcistent values for IPP/CSA" );
+    if( n > 1e-4 ) {
+      gdcmErrorMacro( "Inconsistent values for IPP/CSA" );
       return false;
     }
   }
@@ -410,7 +410,7 @@ bool SplitMosaicFilter::Split()
     hasOriginCSA = false;
   }
 #else
-  if(!ComputeMOSAICImagePositionPatient( origin, inputimage.GetOrigin(), inputimage.GetDirectionCosines(), inputimage.GetSpacing(), inputimage.GetDimensions(), dims ))
+  if(!ComputeMOSAICImagePositionPatient( origin, inputimage.GetOrigin(), inputimage.GetDirectionCosines(), inputimage.GetSpacing(), inputimage.GetDimensions(), dims, inverted ))
   {
     gdcmWarningMacro( "Origin will not be accurate" );
     hasOriginCSA = false;
