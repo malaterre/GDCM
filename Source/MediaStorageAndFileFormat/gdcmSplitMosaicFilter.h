@@ -57,7 +57,11 @@ public:
   bool ComputeMOSAICSliceNormal( double dims[3], bool & inverted );
 
   /// Extract the value for ImagePositionPatient (requires inverted flag)
+  /// Deprecated
   bool ComputeMOSAICSlicePosition( double pos[3], bool inverted );
+
+  /// Extract the value for ImagePositionPatient
+  bool ComputeMOSAICImagePositionPatient( double pos[3], const unsigned int mosaic_dims[3] );
 
   void SetImage(const Image& image);
   const Image &GetImage() const { return *I; }
