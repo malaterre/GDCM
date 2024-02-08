@@ -287,13 +287,15 @@ bool SplitMosaicFilter::ComputeMOSAICSliceNormal( double slicenormalvector[3], b
   return snvfound;
 }
 
-bool SplitMosaicFilter::ComputeMOSAICImagePositionPatient( double ret[3], const unsigned int mosaic_dims[3] )
+bool SplitMosaicFilter::ComputeMOSAICImagePositionPatient( double ret[3], 
+		const double ipp[6],
+		const double dircos[6],
+		const double pixelspacing[3],
+		const unsigned int image_dims[3] ,
+		const unsigned int mosaic_dims[3] )
 {
   CSAHeader csa;
   DataSet& ds = GetFile().GetDataSet();
-  const Image &inputimage = GetImage();
-  const double *dircos = inputimage.GetDirectionCosines();
-  const double *pixelspacing = inputimage.GetSpacing();
   DirectionCosines dc( dircos );
   dc.Normalize();
   const double *dircos_normalized = dc;
@@ -330,8 +332,6 @@ bool SplitMosaicFilter::ComputeMOSAICImagePositionPatient( double ret[3], const 
   // https://nipy.org/nibabel/dicom/dicom_mosaic.html#dicom-mosaic
   double ipp_dcm[3] = {};
   {
-    const unsigned int * image_dims = inputimage.GetDimensions();
-    const double *ipp = inputimage.GetOrigin();
     for(int i = 0; i < 3; ++i ) {
       ipp_dcm[i] = ipp[i] + (image_dims[0]  - mosaic_dims[0]) / 2. * pixelspacing[0] * x[i] +
         (image_dims[1]  - mosaic_dims[1]) / 2. * pixelspacing[1] * y[i] ;
@@ -402,6 +402,7 @@ bool SplitMosaicFilter::Split()
   }
   (void)hasNormalCSA;
   double origin[3];
+  const Image &inputimage = GetImage();
 #if 0
   if( !ComputeMOSAICSlicePosition( origin, inverted ) )
   {
@@ -409,14 +410,13 @@ bool SplitMosaicFilter::Split()
     hasOriginCSA = false;
   }
 #else
-  if(!ComputeMOSAICImagePositionPatient( origin, dims ))
+  if(!ComputeMOSAICImagePositionPatient( origin, inputimage.GetOrigin(), inputimage.GetDirectionCosines(), inputimage.GetSpacing(), inputimage.GetDimensions(), dims ))
   {
     gdcmWarningMacro( "Origin will not be accurate" );
     hasOriginCSA = false;
   }
 #endif
 
-  const Image &inputimage = GetImage();
   if( inputimage.GetPixelFormat() != PixelFormat::UINT16 )
     {
     gdcmErrorMacro( "Expecting UINT16 PixelFormat" );
