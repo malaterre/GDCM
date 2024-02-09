@@ -313,21 +313,41 @@ bool SplitMosaicFilter::ComputeMOSAICImagePositionPatient( double ret[3],
     if( b ) {
       size_t size = sa.Slices.size();
       if( size ) {
-        if( size != mosaic_dims[2] ) {
+        // two cases:
+        if( size == mosaic_dims[2] ) {
+          // all mosaic have there own slice position, simply need to pick the right one
+          // Handle inverted case:
+          size_t index = inverted ? size - 1 : 0;
+          MrProtocol::Slice & slice = sa.Slices[index];
+          MrProtocol::Vector3 & p = slice.Position;
+          double pos[3];
+          pos[0] = p.dSag;
+          pos[1] = p.dCor;
+          pos[2] = p.dTra;
+          for(int i = 0; i < 3; ++i ) {
+            ipp_csa[i] = pos[i] - mosaic_dims[0] / 2. * pixelspacing[0] * x[i] - mosaic_dims[1] / 2. * pixelspacing[1] * y[i];
+          }
+          hasIppCsa = true;
+        } else if( size == 1 /*&& mosaic_dims[2] % 2 == 0*/) {
+          // there is a single SliceArray but multiple mosaics, assume this is exactly the center one
+          double z[3]={};
+          dc.Cross(z);
+          DirectionCosines::Normalize(z);
+          size_t index = 0;
+          MrProtocol::Slice & slice = sa.Slices[index];
+          MrProtocol::Vector3 & p = slice.Position;
+          double pos[3];
+          pos[0] = p.dSag;
+          pos[1] = p.dCor;
+          pos[2] = p.dTra;
+          for(int i = 0; i < 3; ++i ) {
+            ipp_csa[i] = pos[i] - mosaic_dims[0] / 2. * pixelspacing[0] * x[i] - mosaic_dims[1] / 2. * pixelspacing[1] * y[i]
+              - (mosaic_dims[2] - 1) / 2. * pixelspacing[2] * z[i];
+          }
+          hasIppCsa = true;
+        } else {
           gdcmWarningMacro( "Inconsistent SliceArray: " << size << " vs expected: " << mosaic_dims[2] );
         }
-        // Handle inverted case:
-        size_t index = inverted ? size - 1 : 0;
-        MrProtocol::Slice & slice = sa.Slices[index];
-        MrProtocol::Vector3 & p = slice.Position;
-        double pos[3];
-        pos[0] = p.dSag;
-        pos[1] = p.dCor;
-        pos[2] = p.dTra;
-        for(int i = 0; i < 3; ++i ) {
-          ipp_csa[i] = pos[i] - mosaic_dims[0] / 2. * pixelspacing[0] * x[i] - mosaic_dims[1] / 2. * pixelspacing[1] * y[i];
-        }
-        hasIppCsa = true;
       }
     }
   }
