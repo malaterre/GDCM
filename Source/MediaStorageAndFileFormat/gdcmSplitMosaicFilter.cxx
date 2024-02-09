@@ -313,6 +313,9 @@ bool SplitMosaicFilter::ComputeMOSAICImagePositionPatient( double ret[3],
     if( b ) {
       size_t size = sa.Slices.size();
       if( size ) {
+        if( size != mosaic_dims[2] ) {
+          gdcmWarningMacro( "Inconsistent SliceArray: " << size << " vs expected: " << mosaic_dims[2] );
+        }
         // Handle inverted case:
         size_t index = inverted ? size - 1 : 0;
         MrProtocol::Slice & slice = sa.Slices[index];
@@ -344,8 +347,7 @@ bool SplitMosaicFilter::ComputeMOSAICImagePositionPatient( double ret[3],
     }
     double n = DirectionCosines::Norm(diff);
     if( n > 1e-4 ) {
-      gdcmErrorMacro( "Inconsistent values for IPP/CSA" );
-      return false;
+      gdcmWarningMacro( "Inconsistent values for IPP/CSA: (" << ipp_dcm[0] << "," << ipp_dcm[1] << "," << ipp_dcm[2] << ") vs (" << ipp_csa[0] << "," << ipp_csa[1] << "," << ipp_csa[2] << ")" );
     }
   }
   // no error set origin:
