@@ -14,26 +14,41 @@ project(${ZLIB_NAMESPACE} C)
 # Do full dependency headers.
 include_regular_expression("^.*$")
 
-# source files for zlib
+#============================================================================
+# zlib
+#============================================================================
+
+set(ZLIB_PUBLIC_HDRS
+    ${CMAKE_CURRENT_BINARY_DIR}/zconf.h
+    zlib.h
+)
+set(ZLIB_PRIVATE_HDRS
+    crc32.h
+    deflate.h
+    gzguts.h
+    inffast.h
+    inffixed.h
+    inflate.h
+    inftrees.h
+    trees.h
+    zutil.h
+)
 set(ZLIB_SRCS
-  adler32.c
-  compress.c
-  crc32.c
-  deflate.c
-  #example.c
-  gzio.c
-  infback.c
-  inffast.c
-  inflate.c
-  inftrees.c
-  #minigzip.c
-  trees.c
-  uncompr.c
-  zutil.c
-  )
+    adler32.c
+    compress.c
+    crc32.c
+    deflate.c
+    inflate.c
+    infback.c
+    inftrees.c
+    inffast.c
+    trees.c
+    uncompr.c
+    zutil.c
+)
 
-
-# for windows add the .def and .rc files to the source list if building shared libs
+# for windows add the .def and .rc files to the source list
+# if building shared libs
 if(WIN32)
   if(BUILD_SHARED_LIBS)
     set(ZLIB_DLL 1)
@@ -42,15 +57,15 @@ if(WIN32)
         if(NOT MINGW)
           set(ZLIB_SRCS ${ZLIB_SRCS} zlib.def zlib.rc  )
         endif()
-      endif() 
-    endif()   
+      endif()
+    endif()
   endif()
 endif()
 
-  configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/zconf.in.h
-    ${CMAKE_CURRENT_BINARY_DIR}/zconf.h
-  )
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/zconf.in.h
+  ${CMAKE_CURRENT_BINARY_DIR}/zconf.h
+)
 include_directories(
  ${CMAKE_CURRENT_BINARY_DIR}
 )

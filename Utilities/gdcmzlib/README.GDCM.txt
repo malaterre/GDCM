@@ -1,17 +1,36 @@
-This is the venerable zlib:
-http://zlib.net/
+This directory contains a subset of the zlib library (1.3.1) and
+some custom changes.
 
-A subset of version 1.2.3 is included here.  There are a few small changes.
+We only include enough of the distribution to provide the functionalities
+required.
 
-Source:
-http://zlib.net/fossils/zlib-1.2.3.tar.gz
+We would like to thank the zlib team for distributing this library.
+https://www.zlib.net
 
-SHA 256 checksum:
-1795c7d067a43174113fdf03447532f373e1c6c57c08d61d9e4e9be5e244b05e
+Added Files
+-----------
 
-Changes:
- - CMakeLists.txt added
- - COPYING file added
- - #cmakedefine ZLIB_DLL was added at zconf.in.h:11
- - the ZEXTERN definition was tweaked in zconf.in.h
- 
+zlib.rc
+  -For MS Windows only: provide a version resource in a dll build so that
+   when you look at the dll file in Windows explorer, it will show you the
+   version in the "Version" tab of the file's properties view.
+
+zlib.def.in
+  -For MS Windows only: used to explicitly list the exports from dll builds.
+
+zconf.h.in
+  -a copy of zconf.h, but renamed
+  -#cmakedefine ZLIB_DLL was added at lines 11-12
+
+Changed Files
+-------------
+
+CMakeLists.txt
+  -This file was originally created when zlib didn't have CMake support,
+   which is why it's so different.
+
+COPYING
+  -An exact copy of LICENSE
+
+You can search the code for "GDCM_ZLIB_CHANGE" to find modifications
+vs the original zlib code
