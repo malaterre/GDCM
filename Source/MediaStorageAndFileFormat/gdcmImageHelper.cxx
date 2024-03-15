@@ -48,6 +48,7 @@ namespace gdcm
 bool ImageHelper::ForceRescaleInterceptSlope = false;
 bool ImageHelper::PMSRescaleInterceptSlope = true;
 bool ImageHelper::ForcePixelSpacing = false;
+bool ImageHelper::SecondaryCaptureImagePlaneModule = false;
 
 static bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)
 {
@@ -578,7 +579,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
 
   // else
   const Tag timagepositionpatient(0x0020, 0x0032);
-  if( ds.FindDataElement( timagepositionpatient ) )
+  if( (ms != MediaStorage::SecondaryCaptureImageStorage || SecondaryCaptureImagePlaneModule) && ds.FindDataElement( timagepositionpatient ) )
     {
     const DataElement& de = ds.GetDataElement( timagepositionpatient );
     Attribute<0x0020,0x0032> at = {{0,0,0}}; // default value if empty
@@ -730,7 +731,7 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
     }
 
   dircos.resize( 6 );
-  if( !GetDirectionCosinesFromDataSet(ds, dircos) )
+  if( (ms == MediaStorage::SecondaryCaptureImageStorage && !SecondaryCaptureImagePlaneModule) || !GetDirectionCosinesFromDataSet(ds, dircos) )
     {
     dircos[0] = 1;
     dircos[1] = 0;
@@ -772,6 +773,16 @@ void ImageHelper::SetForcePixelSpacing(bool b)
 bool ImageHelper::GetForcePixelSpacing()
 {
   return ForcePixelSpacing;
+}
+
+void ImageHelper::SetSecondaryCaptureImagePlaneModule(bool b)
+{
+  SecondaryCaptureImagePlaneModule = b;
+}
+
+bool ImageHelper::GetSecondaryCaptureImagePlaneModule()
+{
+  return SecondaryCaptureImagePlaneModule;
 }
 
 bool GetRescaleInterceptSlopeValueFromDataSet(const DataSet& ds, std::vector<double> & interceptslope)
