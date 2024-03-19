@@ -675,6 +675,7 @@ bool ImageCodec::DecodeByStreams(std::istream &is, std::ostream &os)
 
   // Do the overlay cleanup (cleanup the unused bits)
   // must be the last operation (duh!)
+  bool copySuccess = false;
   if ( PF.GetBitsAllocated() != PF.GetBitsStored()
     && PF.GetBitsAllocated() != 8 )
     {
@@ -685,21 +686,23 @@ bool ImageCodec::DecodeByStreams(std::istream &is, std::ostream &os)
     // Sigh, I finally found someone not declaring that unused bits where not zero:
     // gdcmConformanceTests/dcm4chee_unusedbits_not_zero.dcm
     if( NeedOverlayCleanup )
-      DoOverlayCleanup(*cur_is,os);
+      {
+      copySuccess = DoOverlayCleanup(*cur_is, os);
+      }
     else
       {
       // Once the issue with IMAGES/JPLY/RG3_JPLY aka gdcmData/D_CLUNIE_RG3_JPLY.dcm is solved the previous
       // code will be replace with a simple call to:
-      DoSimpleCopy(*cur_is,os);
+      copySuccess = DoSimpleCopy(*cur_is, os);
       }
     }
   else
     {
     assert( PF.GetBitsAllocated() == PF.GetBitsStored() );
-    DoSimpleCopy(*cur_is,os);
+    copySuccess = DoSimpleCopy(*cur_is, os);
     }
 
-  return true;
+  return copySuccess;
 }
 
 bool ImageCodec::IsValid(PhotometricInterpretation const &)
