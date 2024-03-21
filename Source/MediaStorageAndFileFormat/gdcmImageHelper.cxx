@@ -1400,7 +1400,20 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
   MediaStorage ms;
   ms.SetFromFile(f);
   const DataSet& ds = f.GetDataSet();
-  Tag spacingtag(0xffff,0xffff);
+  Tag spacingtag = GetSpacingTagFromMediaStorage(ms);
+  if( ms == MediaStorage::SecondaryCaptureImageStorage && SecondaryCaptureImagePlaneModule )
+    {
+      if( ds.FindDataElement( Tag(0x0028,0x0030) ) )
+        {
+        // Type 1C in 'SC Image' (for calibrated images)
+        spacingtag = Tag(0x0028,0x0030);
+        }
+      else if( ds.FindDataElement( Tag(0x0018,0x2010) ) )
+        {
+        // Type 3 in 'SC Image'
+        spacingtag = Tag(0x0018,0x2010);
+        }
+    }
 
   if( ms == MediaStorage::EnhancedCTImageStorage
     || ms == MediaStorage::EnhancedMRImageStorage
@@ -1462,23 +1475,6 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
       sp.push_back( 1.0 );
       return sp;
       }
-    }
-  else if( ms == MediaStorage::SecondaryCaptureImageStorage )
-    {
-      if( ds.FindDataElement( Tag(0x0028,0x0030) ) )
-        {
-        // Type 1C in 'SC Image' (for calibrated images)
-        spacingtag = Tag(0x0028,0x0030);
-        }
-      else if( ds.FindDataElement( Tag(0x0018,0x2010) ) )
-        {
-        // Type 3 in 'SC Image'
-        spacingtag = Tag(0x0018,0x2010);
-        }
-    }
-  else
-    {
-    spacingtag = GetSpacingTagFromMediaStorage(ms);
     }
 
   if( spacingtag != Tag(0xffff,0xffff) && ds.FindDataElement( spacingtag ) && !ds.GetDataElement( spacingtag ).IsEmpty() )

@@ -88,6 +88,10 @@ public:
   /// Opt into Image Plane Module for Secondary Capture Image Storage
   /// Enable reading Image Position Patient (IPP) and Image Orientation Patient (IOP)
   /// for Secondary Capture Image Storage.
+  /// Also, pixel spacing will be based on a Pixel Spacing tag (0028,0x0030), if present, and fall
+  /// back to Nominal Scanned Pixel Spacing (0018,2010), if present, as described:
+  /// https://dicom.nema.org/medical/dicom/current/output/chtml/part03/sect_C.8.6.2.html#table_C.8-2
+  /// https://dicom.nema.org/medical/dicom/current/output/chtml/part03/sect_10.7.html#table_10-10
   static void SetSecondaryCaptureImagePlaneModule(bool);
   static bool GetSecondaryCaptureImagePlaneModule();
 
