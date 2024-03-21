@@ -1188,7 +1188,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
 	// Case is: MAGNETOM Prisma / syngo MR XA30A with MFSPLIT
         interceptslope[0] = dummy[0];
         interceptslope[1] = dummy[1];
-        gdcmWarningMacro( "Forcing Modality LUT used for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
+        gdcmDebugMacro( "Forcing Modality LUT used for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
         }
         }
       }
