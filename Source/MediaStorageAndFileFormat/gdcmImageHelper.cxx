@@ -205,6 +205,7 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
   double normal[3];
   DirectionCosines dc( cosines.data() );
   dc.Cross( normal );
+  DirectionCosines::Normalize(normal);
 
   // For each item
   SequenceOfItems::SizeType nitems = sqi->GetNumberOfItems();
@@ -2027,6 +2028,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
 
     double normal[3];
     dc.Cross( normal );
+    DirectionCosines::Normalize(normal);
 
     for(unsigned int i = 0; i < dimz; ++i )
       {
