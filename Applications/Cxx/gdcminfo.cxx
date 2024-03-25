@@ -350,6 +350,7 @@ static void PrintHelp()
   std::cout << "     --force-rescale    force rescale." << std::endl;
   std::cout << "     --force-spacing    force spacing." << std::endl;
   std::cout << "     --mosaic           dump image information of MOSAIC." << std::endl;
+  std::cout << "     --scipm            Include Image Plane Module for Secondary Capture Image." << std::endl;
 
   std::cout << "General Options:" << std::endl;
   std::cout << "  -V --verbose   more verbose (warning+error)." << std::endl;
@@ -626,6 +627,7 @@ int main(int argc, char *argv[])
   std::string xmlpath;
   int forcerescale = 0;
   int forcespacing = 0;
+  int scipm = 0;
 
   int resourcespath = 0;
   int verbose = 0;
@@ -647,6 +649,7 @@ int main(int argc, char *argv[])
         {"force-rescale", 0, &forcerescale, 1},
         {"force-spacing", 0, &forcespacing, 1},
         {"mosaic", 0, &mosaic, 1},
+        {"scipm", 0, &scipm, 1},
 
         {"verbose", 0, &verbose, 1},
         {"warning", 0, &warning, 1},
@@ -769,6 +772,7 @@ int main(int argc, char *argv[])
 
   gdcm::ImageHelper::SetForceRescaleInterceptSlope(forcerescale ? true : false);
   gdcm::ImageHelper::SetForcePixelSpacing(forcespacing ? true : false);
+  gdcm::ImageHelper::SetSecondaryCaptureImagePlaneModule(scipm ? true : false);
 
   if( filename.empty() )
     {
