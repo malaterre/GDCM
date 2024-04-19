@@ -631,7 +631,7 @@ static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2
     /* fail */
     assert(0);
   }
-  result = PyEval_CallObject(func, arglist);
+  result = PyObject_CallObject(func, arglist);
   Py_DECREF(arglist);
   if (result && result != Py_None) {
     PyErr_SetString(PyExc_TypeError,
