@@ -564,6 +564,7 @@ if(APPLE)
   if(GDCM_USE_COREFOUNDATION_LIBRARY)
     find_library(COREFOUNDATION_LIBRARY CoreFoundation )
   endif()
+  mark_as_advanced(COREFOUNDATION_LIBRARY)
 endif()
 
 #-----------------------------------------------------------------------------
