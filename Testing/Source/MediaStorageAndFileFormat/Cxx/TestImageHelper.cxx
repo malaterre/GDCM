@@ -19,6 +19,8 @@
 
 int TestImageHelper(int, char *[])
 {
+  // Test written before DICOM CP 2330,
+  if( gdcm::ImageHelper::GetSecondaryCaptureImagePlaneModule() ) return 1;
 //  gdcm::ImageHelper sh;
   const double pos[] = { 0,0,0,
                          1,1,1};
