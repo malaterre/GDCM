@@ -427,6 +427,89 @@ return true;
 }
 } // end namespace gdcm
 
+namespace {
+
+int change_transfersyntax(const std::string &filename, const std::string &outfilename, int explicitts, int implicit, int deflated, int raw, int changeprivatetags )
+{
+    if( explicitts && implicit ) return 1; // guard
+    if( explicitts && deflated ) return 1; // guard
+    if( implicit && deflated ) return 1; // guard
+    gdcm::Reader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "Could not read: " << filename << std::endl;
+      return 1;
+      }
+    gdcm::MediaStorage ms;
+    ms.SetFromFile( reader.GetFile() );
+    if( ms == gdcm::MediaStorage::MediaStorageDirectoryStorage )
+      {
+      std::cerr << "Sorry DICOMDIR is not supported" << std::endl;
+      return 1;
+      }
+
+    gdcm::Writer writer;
+    writer.SetFileName( outfilename.c_str() );
+    writer.SetFile( reader.GetFile() );
+    gdcm::File & file = writer.GetFile();
+    gdcm::FileMetaInformation &fmi = file.GetHeader();
+
+    const gdcm::TransferSyntax &orits = fmi.GetDataSetTransferSyntax();
+    if( orits != gdcm::TransferSyntax::ExplicitVRLittleEndian
+      && orits != gdcm::TransferSyntax::ImplicitVRLittleEndian
+      && orits != gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian )
+      {
+      std::cerr << "Sorry input Transfer Syntax not supported for this conversion: " << orits << std::endl;
+      return 1;
+      }
+
+    gdcm::TransferSyntax ts = gdcm::TransferSyntax::ImplicitVRLittleEndian;
+    if( explicitts )
+      {
+      ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
+      }
+    else if( deflated )
+      {
+      ts = gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian;
+      }
+    std::string tsuid = gdcm::TransferSyntax::GetTSString( ts );
+    if( tsuid.size() % 2 == 1 )
+      {
+      tsuid.push_back( 0 ); // 0 padding
+      }
+    gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
+    de.SetByteValue( tsuid.data(), (uint32_t)tsuid.size() );
+    de.SetVR( gdcm::Attribute<0x0002, 0x0010>::GetVR() );
+    fmi.Clear();
+    fmi.Replace( de );
+
+    fmi.SetDataSetTransferSyntax(ts);
+
+    if( explicitts || deflated )
+      {
+      gdcm::FileExplicitFilter fef;
+      fef.SetChangePrivateTags( (changeprivatetags > 0 ? true: false));
+      fef.SetFile( reader.GetFile() );
+      if( !fef.Change() )
+        {
+        std::cerr << "Failed to change: " << filename << std::endl;
+        return 1;
+        }
+      }
+
+    if( !writer.Write() )
+      {
+      std::cerr << "Failed to write: " << outfilename << std::endl;
+      return 1;
+      }
+
+    return 0;
+
+}
+
+} // end anonymous namespace
+
 int main (int argc, char *argv[])
 {
   int c;
@@ -928,80 +1011,7 @@ int main (int argc, char *argv[])
   // Handle here the general file (not required to be image)
   if ( !raw && (explicitts || implicit || deflated) )
     {
-    if( explicitts && implicit ) return 1; // guard
-    if( explicitts && deflated ) return 1; // guard
-    if( implicit && deflated ) return 1; // guard
-    gdcm::Reader reader;
-    reader.SetFileName( filename.c_str() );
-    if( !reader.Read() )
-      {
-      std::cerr << "Could not read: " << filename << std::endl;
-      return 1;
-      }
-    gdcm::MediaStorage ms;
-    ms.SetFromFile( reader.GetFile() );
-    if( ms == gdcm::MediaStorage::MediaStorageDirectoryStorage )
-      {
-      std::cerr << "Sorry DICOMDIR is not supported" << std::endl;
-      return 1;
-      }
-
-    gdcm::Writer writer;
-    writer.SetFileName( outfilename.c_str() );
-    writer.SetFile( reader.GetFile() );
-    gdcm::File & file = writer.GetFile();
-    gdcm::FileMetaInformation &fmi = file.GetHeader();
-
-    const gdcm::TransferSyntax &orits = fmi.GetDataSetTransferSyntax();
-    if( orits != gdcm::TransferSyntax::ExplicitVRLittleEndian
-      && orits != gdcm::TransferSyntax::ImplicitVRLittleEndian
-      && orits != gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian )
-      {
-      std::cerr << "Sorry input Transfer Syntax not supported for this conversion: " << orits << std::endl;
-      return 1;
-      }
-
-    gdcm::TransferSyntax ts = gdcm::TransferSyntax::ImplicitVRLittleEndian;
-    if( explicitts )
-      {
-      ts = gdcm::TransferSyntax::ExplicitVRLittleEndian;
-      }
-    else if( deflated )
-      {
-      ts = gdcm::TransferSyntax::DeflatedExplicitVRLittleEndian;
-      }
-    std::string tsuid = gdcm::TransferSyntax::GetTSString( ts );
-    if( tsuid.size() % 2 == 1 )
-      {
-      tsuid.push_back( 0 ); // 0 padding
-      }
-    gdcm::DataElement de( gdcm::Tag(0x0002,0x0010) );
-    de.SetByteValue( tsuid.data(), (uint32_t)tsuid.size() );
-    de.SetVR( gdcm::Attribute<0x0002, 0x0010>::GetVR() );
-    fmi.Clear();
-    fmi.Replace( de );
-
-    fmi.SetDataSetTransferSyntax(ts);
-
-    if( explicitts || deflated )
-      {
-      gdcm::FileExplicitFilter fef;
-      fef.SetChangePrivateTags( (changeprivatetags > 0 ? true: false));
-      fef.SetFile( reader.GetFile() );
-      if( !fef.Change() )
-        {
-        std::cerr << "Failed to change: " << filename << std::endl;
-        return 1;
-        }
-      }
-
-    if( !writer.Write() )
-      {
-      std::cerr << "Failed to write: " << outfilename << std::endl;
-      return 1;
-      }
-
-    return 0;
+    return change_transfersyntax(filename, outfilename, raw, explicitts, implicit, deflated, changeprivatetags);
     }
 
   // split fragments
@@ -1259,7 +1269,7 @@ int main (int argc, char *argv[])
         }
       const gdcm::TransferSyntax &ts = image.GetTransferSyntax();
 #ifdef GDCM_WORDS_BIGENDIAN
-	(void)ts;
+      (void)ts;
       change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRBigEndian );
 #else
       if( ts.IsExplicit() )
