@@ -298,8 +298,9 @@ bool SplitMosaicFilter::ComputeMOSAICImagePositionPatient( double ret[3],
   DataSet& ds = GetFile().GetDataSet();
   DirectionCosines dc( dircos );
   dc.Normalize();
-  double z[3];
+  double z[3]={};
   dc.Cross (z);
+  DirectionCosines::Normalize(z);
 
   const double *dircos_normalized = dc;
   const double *x = dircos_normalized;
@@ -329,15 +330,13 @@ bool SplitMosaicFilter::ComputeMOSAICImagePositionPatient( double ret[3],
           for(int i = 0; i < 3; ++i ) {
             ipp_csa[i] = pos[i] - mosaic_dims[0] / 2. * pixelspacing[0] * x[i] - mosaic_dims[1] / 2. * pixelspacing[1] * y[i];
           }
+          int mult = mosaic_dims[2] % 2;
           if( inverted ) {
-            ipp_csa[2] = ipp_csa[2] + 1. * pixelspacing[2];
+            ipp_csa[2] = ipp_csa[2] + mult * pixelspacing[2];
           }
           hasIppCsa = true;
         } else if( size == 1 /*&& mosaic_dims[2] % 2 == 0*/) {
           // there is a single SliceArray but multiple mosaics, assume this is exactly the center one
-          double z[3]={};
-          dc.Cross(z);
-          DirectionCosines::Normalize(z);
           size_t index = 0;
           MrProtocol::Slice & slice = sa.Slices[index];
           MrProtocol::Vector3 & p = slice.Position;
