@@ -1151,6 +1151,12 @@ int main (int argc, char *argv[])
     reader.SetFileName( filename.c_str() );
     if( !reader.Read() )
       {
+      gdcm::MediaStorage ms;
+      ms.SetFromFile( reader.GetFile() );
+      // handle bulk decompression '--raw' on a set of file, which may contains a PDF
+      if( raw && ms == gdcm::MediaStorage::EncapsulatedPDFStorage ) 
+        return change_transfersyntax(filename, outfilename, raw, explicitts, implicit, deflated, changeprivatetags);
+      // else
       std::cerr << "Could not read (pixmap): " << filename << std::endl;
       return 1;
       }
