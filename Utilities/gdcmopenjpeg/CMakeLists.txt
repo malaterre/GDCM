@@ -174,6 +174,7 @@ if (APPLE)
     list(APPEND OPENJPEG_LIBRARY_PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${OPENJPEG_INSTALL_LIB_DIR}")
   endif()
   option(OPJ_USE_DSYMUTIL "Call dsymutil on binaries after build." OFF)
+  mark_as_advanced(OPJ_USE_DSYMUTIL)
 endif()
 
 #-----------------------------------------------------------------------------
