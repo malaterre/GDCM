@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.9.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.9.2 FATAL_ERROR) # travis-ci wants 3.9.2
 
-set(GDCM_MAX_VALIDATED_CMAKE_VERSION "3.13.1")
+set(GDCM_MAX_VALIDATED_CMAKE_VERSION "3.13.4")
 if("${CMAKE_VERSION}" VERSION_LESS_EQUAL "${GDCM_MAX_VALIDATED_CMAKE_VERSION}")
   # As of 2018-12-04 GDCM has been validated to build with cmake version 3.13.1 new policies.
   # Set and use the newest cmake policies that are validated to work
@@ -17,7 +17,7 @@ endif()
 #----------------------------------------------------------------------------
 
 project(GDCM
-  VERSION 3.0.24
+  VERSION 3.1.0
   LANGUAGES CXX C
 )
 ## NOTE: the "DESCRIPTION" feature of project() was introduced in cmake 3.10.0

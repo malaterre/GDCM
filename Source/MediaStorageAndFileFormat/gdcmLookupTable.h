@@ -82,7 +82,7 @@ public:
   /// Decode into RGB 8 bits space
   bool Decode8(char *outputbuffer, size_t outlen, const char *inputbuffer, size_t inlen) const;
 
-  LookupTable(LookupTable const &lut):Object(lut)
+  LookupTable(LookupTable const &lut):Object(lut), Internal(nullptr), BitSample(0), IncompleteLUT(false)
     {
     assert(0);
     }

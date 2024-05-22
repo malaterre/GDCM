@@ -523,7 +523,7 @@ MeshPrimitive & Surface::GetMeshPrimitive()
   return *Primitive;
 }
 
-void Surface::SetMeshPrimitive(MeshPrimitive & mp)
+void Surface::SetMeshPrimitive(MeshPrimitive const & mp)
 {
   Primitive = mp;
 }

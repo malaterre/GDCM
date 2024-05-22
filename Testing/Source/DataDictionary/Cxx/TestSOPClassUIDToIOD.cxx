@@ -25,7 +25,7 @@ int TestSOPClassUIDToIOD(int, char *[])
   if( std::string(s[1] ) != "Basic Directory IOD Modules" ) return 1;
 
   // points to { nullptr, nullptr }, hardcoded
-  gdcm::SOPClassUIDToIOD::SOPClassUIDToIODType& s2 = gdcm::SOPClassUIDToIOD::GetSOPClassUIDToIOD(107);
+  const gdcm::SOPClassUIDToIOD::SOPClassUIDToIODType& s2 = gdcm::SOPClassUIDToIOD::GetSOPClassUIDToIOD(107);
   std::cout << ( s2[0] == nullptr ) << std::endl;
   if( !(s2[0] == nullptr) ) {
     std::cerr <<  s2[1] << std::endl;

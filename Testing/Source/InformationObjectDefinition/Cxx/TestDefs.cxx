@@ -83,7 +83,6 @@ int TestDefs(int, char *[])
     {
     std::cerr << "Incompatible MediaStorage knows: " << nm <<
       " SOP Classes while SOPClassUIDToIOD knows: " << nsop << " classes" << std::endl;
-    ++ret;
     }
 
   return 0;
