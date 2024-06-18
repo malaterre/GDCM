@@ -187,6 +187,10 @@ macro(CHECK_INCLUDE_FILE_CONCAT FILE VARIABLE)
   endif()
 endmacro()
 
+if(UNIX)
+  include(GNUInstallDirs)
+endif()
+
 #include(${GDCM_SOURCE_DIR}/CMake/gdcmPlatformCxxTests.cmake)
 #
 #GDCM_PLATFORM_CXX_TEST(GDCM_CXX_HAS_FUNCTION
@@ -703,6 +707,7 @@ if(GDCM_STANDALONE)
         HEADERS_DESTINATION   "${GDCM_INSTALL_INCLUDE_DIR}/vtk${vtk_version_suffix}"
         CMAKE_DESTINATION     "${GDCM_INSTALL_PACKAGE_DIR}"
         LICENSE_DESTINATION   "${GDCM_INSTALL_DATA_DIR}/vtkgdcm-${GDCM_SHORT_VERSION}"
+        SPDX_DESTINATION      "${GDCM_INSTALL_DATA_DIR}/vtkgdcm-${GDCM_SHORT_VERSION}"
         HIERARCHY_DESTINATION "${GDCM_INSTALL_LIB_DIR}/vtk${vtk_version_suffix}/hierarchy/vtkgdcm"
         LIBRARY_NAME_SUFFIX   "${vtkgdcm_library_suffix}"
         VERSION               "${GDCM_VERSION}"
