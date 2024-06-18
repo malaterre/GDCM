@@ -187,6 +187,10 @@ macro(CHECK_INCLUDE_FILE_CONCAT FILE VARIABLE)
   endif()
 endmacro()
 
+if(UNIX)
+  include(GNUInstallDirs)
+endif()
+
 #include(${GDCM_SOURCE_DIR}/CMake/gdcmPlatformCxxTests.cmake)
 #
 #GDCM_PLATFORM_CXX_TEST(GDCM_CXX_HAS_FUNCTION
