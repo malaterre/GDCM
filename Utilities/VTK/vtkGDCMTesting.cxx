@@ -14,7 +14,6 @@
 #include "vtkGDCMTesting.h"
 
 #include "vtkObjectFactory.h"
-#include "vtkToolkits.h"
 #include "gdcmTesting.h"
 #include "gdcmFilename.h"
 

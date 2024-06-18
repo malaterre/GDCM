@@ -919,34 +919,6 @@ void vtkImageColorViewer::SetOverlayVisibility(double vis)
 }
 
 //----------------------------------------------------------------------------
-#ifndef VTK_LEGACY_REMOVE
-int vtkImageColorViewer::GetWholeZMin()
-{
-  VTK_LEGACY_REPLACED_BODY(vtkImageColorViewer::GetWholeZMin, "VTK 5.0",
-                           vtkImageColorViewer::GetSliceMin);
-  return this->GetSliceMin();
-}
-int vtkImageColorViewer::GetWholeZMax()
-{
-  VTK_LEGACY_REPLACED_BODY(vtkImageColorViewer::GetWholeZMax, "VTK 5.0",
-                           vtkImageColorViewer::GetSliceMax);
-  return this->GetSliceMax();
-}
-int vtkImageColorViewer::GetZSlice()
-{
-  VTK_LEGACY_REPLACED_BODY(vtkImageColorViewer::GetZSlice, "VTK 5.0",
-                           vtkImageColorViewer::GetSlice);
-  return this->GetSlice();
-}
-void vtkImageColorViewer::SetZSlice(int s)
-{
-  VTK_LEGACY_REPLACED_BODY(vtkImageColorViewer::SetZSlice, "VTK 5.0",
-                           vtkImageColorViewer::SetSlice);
-  this->SetSlice(s);
-}
-#endif
-
-//----------------------------------------------------------------------------
 void vtkImageColorViewer::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
