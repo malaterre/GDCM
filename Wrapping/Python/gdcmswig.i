@@ -437,7 +437,12 @@ EXTEND_CLASS_PRINT(gdcm::Bitmap)
   void GetBuffer(char **buffer, unsigned int *size) {
     *size = self->GetBufferLength();
     *buffer = (char*)malloc(*size);
-    self->GetBuffer(*buffer);
+    bool ret = self->GetBuffer(*buffer);
+    if (!ret) {
+      free(*buffer);
+      *buffer = 0;
+      *size = 0;
+    }
   }
 };
 %include "gdcmIconImage.h"
