@@ -607,7 +607,7 @@ public:
         Save = true; // ????
         if( Internal )
           {
-          memcpy(internal, Internal, len);
+          memcpy((void*)internal, (void*)Internal, Length);
           delete[] Internal;
           }
         Internal = internal;
@@ -622,7 +622,7 @@ public:
     bool save = false) {
     if( save ) {
       SetLength(len); // realloc
-      memcpy(Internal, array, len/*/sizeof(Type)*/);
+      memcpy((void*)Internal, (void*)array, len/*/sizeof(Type)*/);
       assert( Save == false );
       }
     else {

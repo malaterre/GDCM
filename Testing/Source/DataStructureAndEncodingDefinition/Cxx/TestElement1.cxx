@@ -114,7 +114,7 @@ int TestAT()
   list[0] = Tag(0x0010,0x0010);
   list[1] = Tag(0x0010,0x0020);
   list[2] = Tag(0x0020,0x0013);
-  memcpy(&a, list, sizeof(list));
+  memcpy((void*)&a, (void*)list, sizeof(list));
   a.Print( std::cout );
   std::cout << std::endl;
 
