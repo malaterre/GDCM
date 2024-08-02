@@ -22,6 +22,7 @@
 #include <iterator>
 #include <iomanip>
 #include <algorithm>
+#include <cstring>
 
 namespace gdcm_ns
 {
@@ -34,14 +35,15 @@ using namespace gdcm;
 class GDCM_EXPORT ByteValue : public Value
 {
 public:
-  ByteValue(const char* array = nullptr, VL const &vl = 0):
-    Internal(array, array+vl),Length(vl) {
+  ByteValue(const char* array = nullptr, VL const &vl = 0): Length(vl) {
       if( vl.IsOdd() )
         {
         gdcmDebugMacro( "Odd length" );
-        Internal.resize(vl+1);
         ++Length;
         }
+      Internal.resize(Length);
+      if(array)
+        std::memcpy(Internal.data(), array, Length);
   }
 
   /// \warning casting to uint32_t
