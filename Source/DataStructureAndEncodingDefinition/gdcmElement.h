@@ -28,7 +28,6 @@
 #include <limits>
 #include <cmath>
 #include <cstring>
-#include <algorithm>
 
 namespace gdcm_ns
 {
@@ -346,9 +345,6 @@ static int roundat(char *buf, size_t bufLen, unsigned int i, int iexp) {
   return 0;
 }
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wstringop-truncation"
-#define MIN(a, b)  ((a)<(b)?(a):(b))
 template < typename Float >
 static void x16printf(char *buf, int size, Float f) {
   char line[40];
@@ -413,14 +409,11 @@ static void x16printf(char *buf, int size, Float f) {
     for(j=0; j< -1 - iexp; j++) {
       buf[j+1] = '0';
     }
-    long unsigned int copy_len = size + 1 + iexp;
-    mant[MIN(copy_len, sizeof(line) - 1)] = '\n';
-    strncpy(buf - iexp, mant, copy_len);
-    buf[size] = '\n';
+    memcpy(buf - iexp, mant, size + 1 + iexp);
+    buf[size] = 0;
     clean(buf);
   }
 }
-#pragma GCC diagnostic pop
 #if defined(_MSC_VER) && (_MSC_VER < 1900)
 #undef snprintf
 #endif
