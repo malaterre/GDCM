@@ -45,7 +45,7 @@ public:
 
     CTable()
     {
-        ::memset(_rgtype, 0, sizeof(_rgtype));
+        ::memset((void*)_rgtype, 0, sizeof(_rgtype));
     }
 
     void AddEntry(uint8_t bvalue, Code c)
