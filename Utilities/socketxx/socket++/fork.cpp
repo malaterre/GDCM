@@ -37,14 +37,15 @@ Fork::~Fork ()
 Fork::KillForks::~KillForks ()
   // First, kill all children whose kill_child flag is set.
   // Second, wait for other children to die.
-{
-  
-  for (ForkProcess* cur = Fork::ForkProcess::list; cur != nullptr; cur = cur->next)
-    if (cur->kill_child) {
+{ 
+  ForkProcess* cur = Fork::ForkProcess::list;
+  while(cur != nullptr){
+    ForkProcess* next = cur->next; 
+    if(cur->kill_child)
       delete cur;
-      break;
-    }
-
+    cur = next;  
+  }
+ 
   while (Fork::ForkProcess::list && wait (nullptr) > 0) {}
 }
 
