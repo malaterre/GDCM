@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.7)
+cmake_minimum_required(VERSION 2.8.7...3.13.4)
 
 # Choose behavior based on whether we are building inside the GDCM tree.
 if(GDCM_BINARY_DIR)
