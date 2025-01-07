@@ -107,6 +107,7 @@ int TestImageChangeTransferSyntaxRAW(const char *filename, bool verbose = false)
   if( !res2 )
     {
     std::cerr << "could not get buffer: " << outfilename << std::endl;
+    delete[] buffer;
     return 1;
     }
   // On big Endian system we have byteswapped the buffer (duh!)
