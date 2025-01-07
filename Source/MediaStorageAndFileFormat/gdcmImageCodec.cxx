@@ -432,16 +432,6 @@ bool ImageCodec::DoInvertMonochrome(std::istream &is, std::ostream &os)
   return true;
 }
 
-struct ApplyMask
-{
-  uint16_t operator()(uint16_t c) const {
-    return (uint16_t)((c >> (BitsStored - HighBit - 1)) & pmask);
-  }
-  unsigned short BitsStored;
-  unsigned short HighBit;
-  uint16_t pmask;
-};
-
 bool ImageCodec::CleanupUnusedBits(char * data8, size_t datalen)
 {
   if( !NeedOverlayCleanup ) return true;
@@ -491,6 +481,43 @@ bool ImageCodec::CleanupUnusedBits(char * data8, size_t datalen)
         }
       }
     }
+  else if (PF.GetBitsAllocated() == 32) {
+    // pmask : to mask the 'unused bits' (may contain overlays)
+    uint32_t pmask = 0xffffffff;
+    pmask = (uint32_t)(pmask >> (PF.GetBitsAllocated() - PF.GetBitsStored()));
+
+    if (PF.GetPixelRepresentation()) {
+      // smask : to check the 'sign' when BitsStored != BitsAllocated
+      uint32_t smask = 0x00000001;
+      smask = (uint32_t)(smask << (32 - (PF.GetBitsAllocated() -
+                                         PF.GetBitsStored() + 1)));
+      // nmask : to propagate sign bit on negative values
+      int32_t nmask = (int32_t)0x80000000;
+      nmask =
+          (int32_t)(nmask >> (PF.GetBitsAllocated() - PF.GetBitsStored() - 1));
+
+      uint32_t *start = (uint32_t *)data;
+      for (uint32_t *p = start; p != start + datalen / 4; ++p) {
+        uint32_t c = *p;
+        c = (uint32_t)(c >> (PF.GetBitsStored() - PF.GetHighBit() - 1));
+        if (c & smask) {
+          c = (uint32_t)(c | nmask);
+        } else {
+          c = c & pmask;
+        }
+        *p = c;
+      }
+    } else  // Pixel are unsigned
+    {
+      uint32_t *start = (uint32_t *)data;
+      for (uint32_t *p = start; p != start + datalen / 4; ++p) {
+        uint32_t c = *p;
+        c = (uint32_t)((c >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) &
+                       pmask);
+        *p = c;
+      }
+    }
+  }
   else
     {
     assert(0); // TODO
