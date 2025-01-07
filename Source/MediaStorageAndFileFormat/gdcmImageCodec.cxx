@@ -581,6 +581,51 @@ bool ImageCodec::DoOverlayCleanup(std::istream &is, std::ostream &os)
         }
       }
     }
+  else if (PF.GetBitsAllocated() == 32) {
+    // pmask : to mask the 'unused bits' (may contain overlays)
+    uint16_t pmask = 0xffff;
+    pmask = (uint16_t)(pmask >> (PF.GetBitsAllocated() - PF.GetBitsStored()));
+
+    if (PF.GetPixelRepresentation()) {
+      // smask : to check the 'sign' when BitsStored != BitsAllocated
+      uint16_t smask = 0x0001;
+      smask = (uint16_t)(smask << (16 - (PF.GetBitsAllocated() -
+                                         PF.GetBitsStored() + 1)));
+      // nmask : to propagate sign bit on negative values
+      int16_t nmask = (int16_t)0x8000;
+      nmask =
+          (int16_t)(nmask >> (PF.GetBitsAllocated() - PF.GetBitsStored() - 1));
+
+      uint16_t c;
+      while (is.read((char *)&c, 2)) {
+        c = (uint16_t)(c >> (PF.GetBitsStored() - PF.GetHighBit() - 1));
+        if (c & smask) {
+          c = (uint16_t)(c | nmask);
+        } else {
+          c = c & pmask;
+        }
+        os.write((char *)&c, 2);
+      }
+    } else  // Pixel are unsigned
+    {
+      // On Windows, is.read and os.write are expensive operations.
+      // If we called it for each value then conversion would be extremely slow.
+      // Therefore we read/mask/write 1024 values at once.
+      const unsigned int bufferSize = 1024;
+      std::vector<uint16_t> buffer(bufferSize);
+      while (is) {
+        is.read((char *)buffer.data(), bufferSize * sizeof(uint16_t));
+        std::streamsize bytesRead = is.gcount();
+        std::vector<uint16_t>::iterator validBufferEnd =
+            buffer.begin() + bytesRead / sizeof(uint16_t);
+        for (std::vector<uint16_t>::iterator it = buffer.begin();
+             it != validBufferEnd; ++it) {
+          *it = ((*it >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask);
+        }
+        os.write((char *)buffer.data(), bytesRead);
+      }
+    }
+  }
   else
     {
     assert(0); // TODO
