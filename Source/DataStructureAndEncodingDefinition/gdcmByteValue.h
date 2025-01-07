@@ -22,6 +22,7 @@
 #include <iterator>
 #include <iomanip>
 #include <algorithm>
+#include <cstring>
 
 namespace gdcm_ns
 {
