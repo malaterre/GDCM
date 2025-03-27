@@ -86,7 +86,7 @@ void delta_decode(const char *inbuffer, size_t length, std::vector<unsigned shor
       }
     else
       {
-      unsigned short value = (unsigned short)(temp[i] + delta);
+      unsigned short value = (unsigned short)((signed char)temp[i] + delta);
       output.push_back( value );
       delta = value;
       }
