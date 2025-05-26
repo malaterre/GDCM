@@ -563,7 +563,7 @@ std::string StringFilter::FromString(const Tag&t, const char * value, size_t len
   if( vm.GetLength() == 0 )
     {
     // VM1_n
-    vl = (VL)( count * vr.GetSizeof());
+    vl = (VL)( (uint32_t)count * vr.GetSizeof());
 #if !defined(NDEBUG)
     VM check = VM::GetVMTypeFromLength(count, 1);
     if( vm != VM::VM0 )

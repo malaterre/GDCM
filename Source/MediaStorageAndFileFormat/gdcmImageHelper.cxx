@@ -53,6 +53,7 @@ bool ImageHelper::SecondaryCaptureImagePlaneModule = false;
 
 static bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &ori)
 {
+  ori.clear();
   if( !ds.FindDataElement( tfgs ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
@@ -88,6 +89,7 @@ static bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::
 
 static bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &dircos)
 {
+  dircos.clear();
   if( !ds.FindDataElement( tfgs ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
@@ -124,6 +126,7 @@ static bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& t
 
 static bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfgs, std::vector<double> &intslope)
 {
+  intslope.clear();
   if( !ds.FindDataElement( tfgs ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
@@ -139,6 +142,7 @@ static bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfg
   assert( sqi2 );
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
+  double intercept;
     {
     //  (0028,1052) DS [0]                                        # 2,1 Rescale Intercept
     const Tag tps(0x0028,0x1052);
@@ -148,8 +152,9 @@ static bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfg
     Attribute<0x0028,0x1052> at;
     at.SetFromDataElement( de );
     //at.Print( std::cout );
-    intslope.push_back( at.GetValue() );
+    intercept = at.GetValue();
     }
+  double slope;
     {
     // (0028,1053) DS [5.65470085470085]                         # 16,1 Rescale Slope
     const Tag tps(0x0028,0x1053);
@@ -159,8 +164,10 @@ static bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfg
     Attribute<0x0028,0x1053> at;
     at.SetFromDataElement( de );
     //at.Print( std::cout );
-    intslope.push_back( at.GetValue() );
+    slope = at.GetValue();
     }
+  intslope.push_back( intercept );
+  intslope.push_back( slope );
 
   assert( intslope.size() == 2 );
   return true;
