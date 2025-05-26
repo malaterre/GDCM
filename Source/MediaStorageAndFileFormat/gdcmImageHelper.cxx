@@ -1224,6 +1224,8 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
         }
       else
       {
+        // (0008,1090) LO [Gyroscan Intera ]                                 # 16,1 Manufacturer's Model Name
+        // (0018,1020) LO [NT 8.1.1\MOD Conversion Tool V1.0 ]               # 34,1-n Software Version(s)
         const Tag trwvms(0x0040,0x9096); // Real World Value Mapping Sequence
         if( ds.FindDataElement( trwvms ) )
         {
