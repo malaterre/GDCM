@@ -1047,6 +1047,18 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
 
 }
 
+// We need special care to handle VR:FD -> VR:DS conversion
+static double fd2ds(const double d)
+{
+  Element<VR::DS,VM::VM1> in = {{ 0 }};
+  in.SetValue( d );
+  std::stringstream ss;
+  in.Write( ss );
+  Element<VR::DS,VM::VM1> out = {{ 0 }};
+  out.Read( ss );
+  return out.GetValue();
+}
+
 std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
 {
   std::vector<double> interceptslope;
@@ -1210,6 +1222,34 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
         gdcmDebugMacro( "Forcing Modality LUT used for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
         }
         }
+      else
+      {
+        const Tag trwvms(0x0040,0x9096); // Real World Value Mapping Sequence
+        if( ds.FindDataElement( trwvms ) )
+        {
+          SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( trwvms ).GetValueAsSQ();
+          if( sqi )
+          {
+          const Tag trwvlutd(0x0040,0x9212); // Real World Value LUT Data
+          if( ds.FindDataElement( trwvlutd ) )
+            {
+            gdcmAssertAlwaysMacro(0); // Not supported !
+            }
+          // don't know how to handle multiples:
+          gdcmAssertAlwaysMacro( sqi->GetNumberOfItems() == 1 );
+          const Item &item = sqi->GetItem(1);
+          const DataSet & subds = item.GetNestedDataSet();
+          //const Tag trwvi(0x0040,0x9224); // Real World Value Intercept
+          //const Tag trwvs(0x0040,0x9225); // Real World Value Slope
+          Attribute<0x0040,0x9224> at1 = {0};
+          at1.SetFromDataSet( subds );
+          Attribute<0x0040,0x9225> at2 = {1};
+          at2.SetFromDataSet( subds );
+          interceptslope[0] = fd2ds(at1.GetValue());
+          interceptslope[1] = fd2ds(at2.GetValue());
+          }
+        }
+      }
       }
 #endif
   }
