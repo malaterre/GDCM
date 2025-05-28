@@ -232,7 +232,7 @@ int main(int argc, char *argv[]) {
         if (optarg) {
           if (option_index == 3) /* empty */
           {
-            assert(strcmp(s, "empty") == 0);
+            gdcm_assert(strcmp(s, "empty") == 0);
             if (gdcm::VR::IsValid(optarg))
               empty_vrs.push_back(gdcm::VR::GetVRTypeFromFile(optarg));
             else if (privatetag.ReadFromCommaSeparatedString(optarg))
@@ -289,18 +289,18 @@ int main(int argc, char *argv[]) {
               return 1;
             }
           } else {
-            assert(0);
+            gdcm_assert(0);
           }
         }
       } break;
 
       case 'i':
-        assert(filename.empty());
+        gdcm_assert(filename.empty());
         filename = optarg;
         break;
 
       case 'o':
-        assert(outfilename.empty());
+        gdcm_assert(outfilename.empty());
         outfilename = optarg;
         break;
 

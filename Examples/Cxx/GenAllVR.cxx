@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
     Tag t = FindTagFromVR( pubdict, vr );
     if( vr != VR::UN && vr != VR::SQ )
       {
-      assert( t != Tag(0xffff,0xffff) );
+      gdcm_assert( t != Tag(0xffff,0xffff) );
       gdcm::DataElement de( t );
       std::generate_n(ss, len, rnd_gen());
       de.SetVR( vr );

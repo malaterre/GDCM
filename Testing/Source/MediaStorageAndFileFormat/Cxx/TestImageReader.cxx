@@ -63,9 +63,9 @@ int TestImageRead(const char* filename, bool verbose = false, bool lossydump = f
 #ifdef GDCM_WORDS_BIGENDIAN
     if( img.GetPixelFormat().GetBitsAllocated() == 16 )
       {
-      assert( !(len % 2) );
+      gdcm_assert( !(len % 2) );
       // gdcm-US-ALOKA is a 16 bits image with PALETTE
-      //assert( img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1
+      //gdcm_assert( img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1
       //  || img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME2 );
       gdcm::ByteSwap<unsigned short>::SwapRangeFromSwapCodeIntoSystem(
         (unsigned short*)buffer, gdcm::SwapCode::LittleEndian, len/2);
@@ -84,7 +84,7 @@ int TestImageRead(const char* filename, bool verbose = false, bool lossydump = f
       {
       // new regression image needs a md5 sum
       std::cout << "Missing md5 " << digest << " for: " << filename <<  std::endl;
-      //assert(0);
+      //gdcm_assert(0);
       res = 1;
       }
     else if( strcmp(digest, ref) != 0 )
@@ -96,7 +96,7 @@ int TestImageRead(const char* filename, bool verbose = false, bool lossydump = f
       std::ofstream debug("/tmp/dump.gray",std::ios::binary);
       debug.write(buffer, len);
       debug.close();
-      //assert(0);
+      //gdcm_assert(0);
 #endif
       }
     delete[] buffer;
@@ -122,7 +122,7 @@ int TestImageRead(const char* filename, bool verbose = false, bool lossydump = f
   // else
   // well this is not an image, so thankfully we fail to read it
   std::cerr << "Could not read image(" << filename << "), since file is a: " << ms << std::endl;
-  //assert( ms != gdcm::MediaStorage::MS_END );
+  //gdcm_assert( ms != gdcm::MediaStorage::MS_END );
   return 0;
 }
 

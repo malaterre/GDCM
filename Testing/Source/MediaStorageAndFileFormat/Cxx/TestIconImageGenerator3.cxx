@@ -331,7 +331,7 @@ int TestIconImageGenerate3(const char *subdir, const char* filename, bool verbos
     }
   else
     {
-    assert( refmd5 == 0 );
+    gdcm_assert( refmd5 == 0 );
     std::cerr << "Could not generate Icon for: " << filename << std::endl;
     return 1;
     }

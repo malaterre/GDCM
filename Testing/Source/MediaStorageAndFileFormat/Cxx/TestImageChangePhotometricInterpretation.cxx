@@ -21,7 +21,7 @@ namespace gdcm
 {
 PhotometricInterpretation InvertPI(PhotometricInterpretation pi)
 {
-  assert( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 );
+  gdcm_assert( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 );
   if( pi == PhotometricInterpretation::MONOCHROME1 )
     {
     return PhotometricInterpretation::MONOCHROME2;

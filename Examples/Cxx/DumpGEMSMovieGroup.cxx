@@ -30,8 +30,8 @@ gdcm::SequenceOfItems *sqi_names, std::string const & indent )
   // prepare names mapping:
   typedef VRToType<VR::UL>::Type UL;
   std::map< UL, std::string > names;
-  assert( sqi_names );
-  assert( sqi_values );
+  gdcm_assert( sqi_names );
+  gdcm_assert( sqi_values );
   SequenceOfItems::SizeType s = sqi_names->GetNumberOfItems();
   PrivateTag tindex(0x7fe1,0x71,"GEMS_Ultrasound_MovieGroup_001");
   PrivateTag tname (0x7fe1,0x72,"GEMS_Ultrasound_MovieGroup_001");
@@ -43,14 +43,14 @@ gdcm::SequenceOfItems *sqi_names, std::string const & indent )
     if( !ds.FindDataElement( tindex )
       || !ds.FindDataElement( tname ) )
       {
-      assert( 0 );
+      gdcm_assert( 0 );
       return false;
       }
     const DataElement & index = ds.GetDataElement( tindex );
     const DataElement & name = ds.GetDataElement( tname );
     if( index.IsEmpty() || name.IsEmpty() )
       {
-      assert( 0 );
+      gdcm_assert( 0 );
       return false;
       }
     gdcm::Element<VR::UL, VM::VM1> el1;
@@ -63,7 +63,7 @@ gdcm::SequenceOfItems *sqi_names, std::string const & indent )
     }
 
   SequenceOfItems::SizeType s2 = sqi_values->GetNumberOfItems();
-  assert( s2 <= s );
+  gdcm_assert( s2 <= s );
   PrivateTag tindex2(0x7fe1,0x48,"GEMS_Ultrasound_MovieGroup_001");
   for( SequenceOfItems::SizeType i = 1; i <= s2; ++i )
     {
@@ -71,13 +71,13 @@ gdcm::SequenceOfItems *sqi_names, std::string const & indent )
     const DataSet & ds = item.GetNestedDataSet();
     if( !ds.FindDataElement( tindex2 ) )
       {
-      assert( 0 );
+      gdcm_assert( 0 );
       return false;
       }
     const DataElement & index2 = ds.GetDataElement( tindex2 );
     if( index2.IsEmpty() )
       {
-      assert( 0 );
+      gdcm_assert( 0 );
       return false;
       }
     gdcm::Element<VR::FD, VM::VM1_2> el1;
@@ -139,7 +139,7 @@ gdcm::SequenceOfItems *sqi_names, std::string const & indent )
       const DataElement & value = ds.GetDataElement( tvalueul );
       gdcm::Element<VR::UL,VM::VM1_n> el2;
       el2.SetFromDataElement( value );
-      assert( el2.GetLength() == 1 );
+      gdcm_assert( el2.GetLength() == 1 );
       std::cout << el2.GetValue() << std::endl;
       }
     else if( ds.FindDataElement( tvalueob ) )
@@ -163,7 +163,7 @@ gdcm::SequenceOfItems *sqi_names, std::string const & indent )
       gdcm::Element<VR::SL,VM::VM1_n> el2;
       el2.SetFromDataElement( value );
       el2.Print( std::cout );
-      assert( el2.GetLength() == 4 );
+      gdcm_assert( el2.GetLength() == 4 );
       std::cout << std::endl;
       }
     else if( ds.FindDataElement( tvaluesl3 ) )
@@ -172,7 +172,7 @@ gdcm::SequenceOfItems *sqi_names, std::string const & indent )
       gdcm::Element<VR::SL,VM::VM1_n> el2;
       el2.SetFromDataElement( value );
       el2.Print( std::cout );
-//      assert( el2.GetLength() == 4 );
+//      gdcm_assert( el2.GetLength() == 4 );
       std::cout << std::endl;
       }
     else if( ds.FindDataElement( tvaluefd ) )
@@ -181,7 +181,7 @@ gdcm::SequenceOfItems *sqi_names, std::string const & indent )
       gdcm::Element<VR::FD,VM::VM1_n> el2;
       el2.SetFromDataElement( value );
       el2.Print( std::cout );
-//      assert( el2.GetLength() == 4 || el2.GetLength() == 3 || el2.GetLength() == 8 );
+//      gdcm_assert( el2.GetLength() == 4 || el2.GetLength() == 3 || el2.GetLength() == 8 );
       std::cout << std::endl;
       }
     else if( ds.FindDataElement( tvaluefloat2 ) )
@@ -190,7 +190,7 @@ gdcm::SequenceOfItems *sqi_names, std::string const & indent )
       gdcm::Element<VR::FD,VM::VM1_n> el2;
       el2.SetFromDataElement( value );
       el2.Print( std::cout );
-      assert( el2.GetLength() == 2 );
+      gdcm_assert( el2.GetLength() == 2 );
       std::cout << std::endl;
       }
     else if( ds.FindDataElement( tvaluefd1 ) )
@@ -199,14 +199,14 @@ gdcm::SequenceOfItems *sqi_names, std::string const & indent )
       gdcm::Element<VR::FD,VM::VM1_n> el2;
       el2.SetFromDataElement( value );
       el2.Print( std::cout );
-      assert( el2.GetLength() == 4 );
+      gdcm_assert( el2.GetLength() == 4 );
       std::cout << std::endl;
       }
     else
       {
       std::cout << "(no value)" << std::endl;
 //      std::cout << ds << std::endl;
-      assert( ds.Size() == 2 );
+      gdcm_assert( ds.Size() == 2 );
       }
     }
   return true;
@@ -227,7 +227,7 @@ gdcm::SequenceOfItems *sqi_names, std::string const & indent )
 {
   if( !ds.FindDataElement( privtag1 ) )
     {
-    assert( 0 );
+    gdcm_assert( 0 );
     return false;
     }
   const gdcm::DataElement& values10name = ds.GetDataElement( privtag1 );
@@ -255,7 +255,7 @@ bool print73( gdcm::DataSet const & ds10, gdcm::SequenceOfItems *sqi_dict, std::
     {
     gdcm::Item &item_73 = sqi_values73->GetItem(i3);
     gdcm::DataSet &ds73 = item_73.GetNestedDataSet();
-    assert( ds73.Size() == 3 );
+    gdcm_assert( ds73.Size() == 3 );
 
     const gdcm::PrivateTag tseq_values74name(0x7fe1,0x74,"GEMS_Ultrasound_MovieGroup_001");
     const gdcm::PrivateTag tseq_values75(0x7fe1,0x75,"GEMS_Ultrasound_MovieGroup_001");
@@ -278,23 +278,23 @@ bool print36( gdcm::DataSet const & ds10, gdcm::SequenceOfItems *sqi_dict, std::
   gdcm::SmartPointer<gdcm::SequenceOfItems> sqi_values36 = seq_values36.GetValueAsSQ();
 
   size_t ni3 = sqi_values36->GetNumberOfItems();
-  assert( ni3 >= 1 );
+  gdcm_assert( ni3 >= 1 );
   for( size_t i3 = 1; i3 <= ni3; ++i3 )
     {
     gdcm::Item &item_36 = sqi_values36->GetItem(i3);
     gdcm::DataSet &ds36 = item_36.GetNestedDataSet();
-    assert( ds36.Size() == 4 );
+    gdcm_assert( ds36.Size() == 4 );
 
     // (7fe1,1037) UL 47  # 4,1 US MovieGroup Number of Frames
     // (7fe1,1043) OB 40\00\1c\c4\67\2f\0b\11\40         # 376,1 ?
     // (7fe1,1060) OB 4e\4e\49\4f\4e\47\46\43\2a         # 4562714,1 US MovieGroup Image Data
     //
     const gdcm::PrivateTag timagedata(0x7fe1,0x60,"GEMS_Ultrasound_MovieGroup_001");
-    assert( ds36.FindDataElement( timagedata ) );
+    gdcm_assert( ds36.FindDataElement( timagedata ) );
     gdcm::DataElement const & imagedata = ds36.GetDataElement( timagedata );
 
       const gdcm::ByteValue * bv = imagedata.GetByteValue();
-  assert( bv );
+  gdcm_assert( bv );
       static int c = 0;
       std::stringstream ss;
       ss << "/tmp/debug";
@@ -325,7 +325,7 @@ bool print83( gdcm::DataSet const & ds10, gdcm::SequenceOfItems *sqi_dict, std::
     {
     gdcm::Item &item_83 = sqi_values83->GetItem(i3);
     gdcm::DataSet &ds83 = item_83.GetNestedDataSet();
-    assert( ds83.Size() == 3 );
+    gdcm_assert( ds83.Size() == 3 );
 
     const gdcm::PrivateTag tseq_values84name(0x7fe1,0x84,"GEMS_Ultrasound_MovieGroup_001");
     const gdcm::PrivateTag tseq_values85(0x7fe1,0x85,"GEMS_Ultrasound_MovieGroup_001");
@@ -341,19 +341,19 @@ gdcm::SequenceOfItems *sqi_dict, std::string const & indent )
   (void)indent;
   if( !subds.FindDataElement( privtag0 ) )
     {
-    assert( 0 );
+    gdcm_assert( 0 );
     return false;
     }
   const gdcm::DataElement& seq_values10 = subds.GetDataElement( privtag0 );
   gdcm::SmartPointer<gdcm::SequenceOfItems> sqi_values10 = seq_values10.GetValueAsSQ();
 
   size_t ni1 = sqi_values10->GetNumberOfItems();
-//  assert( ni1 == 1 );
+//  gdcm_assert( ni1 == 1 );
   for( size_t i1 = 1; i1 <= ni1; ++i1 )
     {
     gdcm::Item &item_10 = sqi_values10->GetItem(i1);
     gdcm::DataSet &ds10 = item_10.GetNestedDataSet();
-    assert( ds10.Size() == 2 + 3 );
+    gdcm_assert( ds10.Size() == 2 + 3 );
     // (7fe1,0010)
     // (7fe1,1012)
     // (7fe1,1018)
@@ -366,20 +366,20 @@ gdcm::SequenceOfItems *sqi_dict, std::string const & indent )
     const gdcm::PrivateTag tseq_values20(0x7fe1,0x20,"GEMS_Ultrasound_MovieGroup_001");
     if( !ds10.FindDataElement( tseq_values20 ) )
       {
-      assert( 0 );
+      gdcm_assert( 0 );
       return false;
       }
     const gdcm::DataElement& seq_values20 = ds10.GetDataElement( tseq_values20 );
     gdcm::SmartPointer<gdcm::SequenceOfItems> sqi_values20 = seq_values20.GetValueAsSQ();
 
     size_t ni2 = sqi_values20->GetNumberOfItems();
-    //assert( ni == 1 );
+    //gdcm_assert( ni == 1 );
     for( size_t i2 = 1; i2 <= ni2; ++i2 )
       {
       gdcm::Item &item_20 = sqi_values20->GetItem(i2);
       gdcm::DataSet &ds20 = item_20.GetNestedDataSet();
       size_t count = ds20.Size(); (void)count;
-      assert( ds20.Size() == 2 + 3 || ds20.Size() == 2 + 2 );
+      gdcm_assert( ds20.Size() == 2 + 3 || ds20.Size() == 2 + 2 );
       // (7fe1,0010)
       // (7fe1,1024)
       // (7fe1,1026)
@@ -418,7 +418,7 @@ int main(int argc, char *argv[])
   const DataElement& seq = ds.GetDataElement( tseq );
 
   SmartPointer<SequenceOfItems> sqi = seq.GetValueAsSQ();
-  assert( sqi->GetNumberOfItems() == 1 );
+  gdcm_assert( sqi->GetNumberOfItems() == 1 );
 
   Item &item = sqi->GetItem(1);
   DataSet &subds = item.GetNestedDataSet();
@@ -442,7 +442,7 @@ int main(int argc, char *argv[])
   std::cout << el.GetValue() << std::endl;
 }
   size_t count = subds.Size(); (void)count;
-  assert( subds.Size() == 3 + 2 + 1 || subds.Size() == 3 + 2 + 2);
+  gdcm_assert( subds.Size() == 3 + 2 + 1 || subds.Size() == 3 + 2 + 2);
 
 //  (7fe1,0010) # 30,1 Private Creator
 //  (7fe1,1002) # 8,1 US MovieGroup Value 0008 Name

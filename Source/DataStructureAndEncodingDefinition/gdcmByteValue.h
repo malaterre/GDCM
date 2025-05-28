@@ -52,7 +52,7 @@ public:
   ByteValue(std::vector<char> &v):Internal(v),Length((uint32_t)v.size()) {}
   //ByteValue(std::ostringstream const &os) {
   //  (void)os;
-  //   assert(0); // TODO
+  //   gdcm_assert(0); // TODO
   //}
   ~ByteValue() override {
     Internal.clear();
@@ -66,13 +66,13 @@ public:
 
   // Either from Element Number (== 0x0000)
   void PrintGroupLength(std::ostream &os) {
-    assert( Length == 2 );
+    gdcm_assert( Length == 2 );
     (void)os;
   }
 
   bool IsEmpty() const {
 #if 0
-    if( Internal.empty() ) assert( Length == 0 );
+    if( Internal.empty() ) gdcm_assert( Length == 0 );
     return Internal.empty();
 #else
   return Length == 0;
@@ -132,8 +132,8 @@ public:
   bool GetBuffer(char *buffer, unsigned long length) const;
   bool WriteBuffer(std::ostream &os) const {
     if( Length ) {
-      //assert( Internal.size() <= Length );
-      assert( !(Internal.size() % 2) );
+      //gdcm_assert( Internal.size() <= Length );
+      gdcm_assert( !(Internal.size() % 2) );
       os.write(&Internal[0], Internal.size() );
       }
     return true;
@@ -150,7 +150,7 @@ public:
       if( readvalues )
         {
         is.read(&Internal[0], Length);
-        assert( Internal.size() == Length || Internal.size() == Length + 1 );
+        gdcm_assert( Internal.size() == Length || Internal.size() == Length + 1 );
         TSwap::SwapArray((TType*)GetVoidPointer(), Internal.size() / sizeof(TType) );
         }
       else
@@ -169,7 +169,7 @@ public:
 
   template <typename TSwap, typename TType>
   std::ostream const &Write(std::ostream &os) const {
-    assert( !(Internal.size() % 2) );
+    gdcm_assert( !(Internal.size() % 2) );
     if( !Internal.empty() ) {
       //os.write(&Internal[0], Internal.size());
       std::vector<char> copy = Internal;
@@ -191,7 +191,7 @@ public:
    *         UNICODE or character set...
    */
   bool IsPrintable(VL length) const {
-    assert( length <= Length );
+    gdcm_assert( length <= Length );
     for(unsigned int i=0; i<length; i++)
       {
       if ( i == (length-1) && Internal[i] == '\0') continue;

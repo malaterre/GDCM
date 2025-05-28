@@ -626,7 +626,7 @@ static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2
   func = 0; //(PyObject *)data;
   if (!(arglist = Py_BuildValue("()"))) {
     /* fail */
-    assert(0);
+    gdcm_assert(0);
   }
   result = PyObject_CallObject(func, arglist);
   Py_DECREF(arglist);
@@ -635,10 +635,10 @@ static bool callback_helper(gdcm::DataSet const & ds1, gdcm::DataSet const & ds2
                     "Callback function should return nothing");
     Py_DECREF(result);
     /* fail */
-    assert(0);
+    gdcm_assert(0);
   } else if (!result) {
     /* fail: a Python exception was raised */
-    assert(0);
+    gdcm_assert(0);
   }
   return true;
 }

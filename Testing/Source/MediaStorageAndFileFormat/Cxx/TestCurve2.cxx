@@ -145,7 +145,7 @@ static int TestCurve2Read(const char* filename, bool verbose = false)
         {
         // new regression image needs a md5 sum
         std::cout << "Missing md5 " << digest << " for: " << filename <<  std::endl;
-        //assert(0);
+        //gdcm_assert(0);
         res = 1;
         }
       else if( strcmp(digest, ref) != 0 )

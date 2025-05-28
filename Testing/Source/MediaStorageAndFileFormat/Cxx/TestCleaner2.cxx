@@ -24,7 +24,7 @@ static const DataSet &GetNestedDataSet(const DataSet &ds,
                                        const PrivateTag &path) {
   const DataElement &de = ds.GetDataElement(path);
   SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
-  assert(sqi && sqi->GetNumberOfItems() == 1);
+  gdcm_assert(sqi && sqi->GetNumberOfItems() == 1);
   const Item &item = sqi->GetItem(1);
   const DataSet &subds = item.GetNestedDataSet();
   return subds;

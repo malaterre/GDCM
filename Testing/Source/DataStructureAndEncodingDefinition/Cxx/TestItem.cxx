@@ -25,7 +25,7 @@ void CreateDataElement(gdcm::ExplicitDataElement &de, int offset)
   gdcm::VR vr = gdcm::VR::UN;
   const char str[] = "GDCM";
   uint32_t len = (uint32_t)strlen(str);
-  assert( sizeof(uint32_t) == 4 );
+  gdcm_assert( sizeof(uint32_t) == 4 );
   gdcm::ByteValue val(str, len);
   tag.Write<gdcm::SwapperNoOp>(ss);
   vr.Write(ss);

@@ -59,7 +59,7 @@ public:
   void ShowIteration()
     {
     index++;
-    assert( index <= nfiles );
+    gdcm_assert( index <= nfiles );
     // update refprogess (we are moving to the next file)
     refprogress = progress;
     }

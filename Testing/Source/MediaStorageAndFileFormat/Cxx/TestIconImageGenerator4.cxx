@@ -277,7 +277,7 @@ int TestIconImageGenerate4(const char *subdir, const char* filename, bool verbos
   if( is >> val )
     {
     iig.SetOutsideValuePixel( val );
-    assert( !strval.empty() );
+    gdcm_assert( !strval.empty() );
     }
   const unsigned int idims[2] = { 64, 64 };
   //const unsigned int idims[2] = { 600,430 };
@@ -354,7 +354,7 @@ int TestIconImageGenerate4(const char *subdir, const char* filename, bool verbos
     }
   else
     {
-    assert( refmd5 == 0 );
+    gdcm_assert( refmd5 == 0 );
     std::cerr << "Could not generate Icon for: " << filename << std::endl;
     return 1;
     }

@@ -43,7 +43,7 @@ bool interpolate(const double * pts, size_t npts, std::vector<double> &out )
       {
       if( j != npts - 1 )
         {
-        assert( 3*j+5 < 3*npts );
+        gdcm_assert( 3*j+5 < 3*npts );
         const double midpointx = (pts[3*j+0] + pts[3*j+3]) / 2;
         const double midpointy = (pts[3*j+1] + pts[3*j+4]) / 2;
         const double midpointz = (pts[3*j+2] + pts[3*j+5]) / 2;
@@ -54,13 +54,13 @@ bool interpolate(const double * pts, size_t npts, std::vector<double> &out )
       }
     else
       {
-      assert( j < npts );
+      gdcm_assert( j < npts );
       out.push_back( pts[3*j+0] );
       out.push_back( pts[3*j+1] );
       out.push_back( pts[3*j+2] );
       }
     }
-  assert( out.size() == 2 * npts * 3 - 3 );
+  gdcm_assert( out.size() == 2 * npts * 3 - 3 );
   return true;
 }
 
@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
     out = out2;
     out2.clear();
     }
-  assert( out.size() % 3 == 0 );
+  gdcm_assert( out.size() % 3 == 0 );
 
   gdcm::Attribute<0x3006,0x0050> at_interpolate;
   at_interpolate.SetNumberOfValues( (unsigned int)(out.size() / 3) );
@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
   nestedds2.Replace( at_interpolate.GetAsDataElement() );
   nestedds2.Replace( ncontourpoints.GetAsDataElement() );
 
-  //assert(0);
+  //gdcm_assert(0);
 
   // Let's take item one and subdivide it
 

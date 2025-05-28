@@ -151,7 +151,7 @@ static frame_diff get_frame_diff( const char* filename )
   skiptags.insert( dummy );
   if ( !reader.ReadUpToTag( dummy, skiptags) )
     {
-    assert(0);
+    gdcm_assert(0);
     }
 
   gdcm::CSAHeader csa;
@@ -165,7 +165,7 @@ static frame_diff get_frame_diff( const char* filename )
   if( ds.FindDataElement( t1 ) )
     {
     csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
-    assert( csa.GetFormat() == gdcm::CSAHeader::SV10
+    gdcm_assert( csa.GetFormat() == gdcm::CSAHeader::SV10
       || csa.GetFormat() == gdcm::CSAHeader::NOMAGIC );
     // SIEMENS / Diffusion
     const CSAElement &bvalue  = csa.GetCSAElementByName( "B_value" );
@@ -174,11 +174,11 @@ static frame_diff get_frame_diff( const char* filename )
     (void)bmatrix;
     const CSAElement &dgd = csa.GetCSAElementByName( "DiffusionGradientDirection" );
     (void)dgd;
-    //assert(0);
+    //gdcm_assert(0);
     }
   else
     {
-    assert(0);
+    gdcm_assert(0);
     }
 
   return ret;
@@ -209,7 +209,7 @@ void ProcessAIOP(Scanner const & s, Directory::FilenamesType const & subset, con
       //std::cerr << *file << std::endl;
       mm.insert( std::make_pair(get_frame_diff( file->c_str() ), file->c_str()) );
       }
-    //assert(0);
+    //gdcm_assert(0);
     for( std::multimap<frame_diff, std::string>::const_iterator it = mm.begin();
       it != mm.end(); ++it )
       {
@@ -261,13 +261,13 @@ void ProcessAFrameOfRef(Scanner const & s, Directory::FilenamesType const & subs
     {
     //std::cout << *file << std::endl;
     const char * value = s.GetValue(file->c_str(), gdcm::T4 );
-    assert( value );
+    gdcm_assert( value );
     iopset.insert( value );
     }
   size_t n = iopset.size();
   if ( n == 0 )
     {
-    assert( files.empty() );
+    gdcm_assert( files.empty() );
     return;
     }
 
@@ -418,11 +418,11 @@ static bool ConcatenateImages(Image &im1, Image const &im2)
   else if( de1.GetSequenceOfFragments() )
     {
     SequenceOfFragments *sqf1 = de1.GetSequenceOfFragments();
-    assert( sqf1 );
+    gdcm_assert( sqf1 );
     const DataElement& de2 = im2.GetDataElement();
     const SequenceOfFragments *sqf2 = de2.GetSequenceOfFragments();
-    assert( sqf2 );
-    assert( sqf2->GetNumberOfFragments() == 1 );
+    gdcm_assert( sqf2 );
+    gdcm_assert( sqf2->GetNumberOfFragments() == 1 );
     const Fragment& frag = sqf2->GetFragment(0);
     sqf1->AddFragment(frag);
     }
@@ -441,7 +441,7 @@ static void InsertIfExist( DataSet &enhds, const DataSet &ds, const Tag & t )
 {
   if( ds.FindDataElement( t ) )
     {
-    assert( !enhds.FindDataElement( t ) );
+    gdcm_assert( !enhds.FindDataElement( t ) );
     enhds.Insert( ds.GetDataElement( t ) );
     }
 }
@@ -538,17 +538,17 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
     fg.SetPattern( "%04d.dcm" );
     if( !fg.Generate() )
       {
-      assert( 0 );
+      gdcm_assert( 0 );
       }
 
     gdcm::ImageReader reader0;
     reader0.SetFileName( reffile );
     if( !reader0.Read() )
       {
-      assert( 0 );
+      gdcm_assert( 0 );
       }
     gdcm::Image &currentim = reader0.GetImage();
-    assert( currentim.GetNumberOfDimensions( ) == 2 );
+    gdcm_assert( currentim.GetNumberOfDimensions( ) == 2 );
     currentim.SetNumberOfDimensions( 3 );
     size_t count = 0;
 
@@ -559,7 +559,7 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
     writer0.GetFile().GetHeader().Clear();
     if( !writer0.Write() )
       {
-      assert( 0 );
+      gdcm_assert( 0 );
       }
     ++file;
     ++count;
@@ -714,7 +714,7 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
       reader.SetFileName( file->c_str() );
       if( !reader.Read() )
         {
-        assert( 0 );
+        gdcm_assert( 0 );
         }
       const gdcm::Image &im = reader.GetImage();
 
@@ -725,12 +725,12 @@ static int MakeImageEnhanced( std::string const & filename, std::string const &o
       writer.GetFile().GetHeader().Clear();
       if( !writer.Write() )
         {
-        assert( 0 );
+        gdcm_assert( 0 );
         }
 
       if( !ConcatenateImages(currentim, im) )
         {
-        assert( 0 );
+        gdcm_assert( 0 );
         }
 
       // check consistency 
@@ -829,10 +829,10 @@ static bool RemapSharedIntoOld( gdcm::DataSet & ds,
  SequenceOfItems *pffgs,
  unsigned int index )
 {
-  assert( sfgs );
-  assert( pffgs );
+  gdcm_assert( sfgs );
+  gdcm_assert( pffgs );
 
-  assert( sfgs->GetNumberOfItems() == 1 );
+  gdcm_assert( sfgs->GetNumberOfItems() == 1 );
   Item const &item1 = sfgs->GetItem( 1 );
   const DataSet & sfgs_ds = item1.GetNestedDataSet();
 #if 1
@@ -1016,31 +1016,31 @@ int main (int argc, char *argv[])
           {
           if( option_index == 0 ) /* input */
             {
-            assert( strcmp(s, "input") == 0 );
-            assert( filename.empty() );
+            gdcm_assert( strcmp(s, "input") == 0 );
+            gdcm_assert( filename.empty() );
             filename = optarg;
             }
           else if( option_index == 3 ) /* pattern */
             {
-            assert( strcmp(s, "pattern") == 0 );
-            assert( pattern.empty() );
+            gdcm_assert( strcmp(s, "pattern") == 0 );
+            gdcm_assert( pattern.empty() );
             pattern = optarg;
             }
           else if( option_index == 6 ) /* root uid */
             {
-            assert( strcmp(s, "root-uid") == 0 );
+            gdcm_assert( strcmp(s, "root-uid") == 0 );
             root = optarg;
             }
           else if( option_index == 7 ) /* resourcespath */
             {
-            assert( strcmp(s, "resources-path") == 0 );
-            assert( xmlpath.empty() );
+            gdcm_assert( strcmp(s, "resources-path") == 0 );
+            gdcm_assert( xmlpath.empty() );
             xmlpath = optarg;
             }
           else
             {
             printf (" with arg %s, index = %d", optarg, option_index);
-            assert(0);
+            gdcm_assert(0);
             }
           //printf (" with arg %s, index = %d", optarg, option_index);
           }
@@ -1049,30 +1049,30 @@ int main (int argc, char *argv[])
       break;
 
     case 'i':
-      assert( filename.empty() );
+      gdcm_assert( filename.empty() );
       filename = optarg;
       break;
 
     case 'o':
-      assert( outfilename.empty() );
+      gdcm_assert( outfilename.empty() );
       outfilename = optarg;
       break;
 
     case 'U':
-      //assert( outfilename.empty() );
+      //gdcm_assert( outfilename.empty() );
       //outfilename = optarg;
       //printf ("option unenhance \n");
       unenhance = 1;
       break;
 
     case 'M':
-      //assert( outfilename.empty() );
+      //gdcm_assert( outfilename.empty() );
       //outfilename = optarg;
       mosaic = 1;
       break;
 
     case 'p':
-      assert( pattern.empty() );
+      gdcm_assert( pattern.empty() );
       pattern = optarg;
       break;
 
@@ -1353,7 +1353,7 @@ int main (int argc, char *argv[])
       slice = filter.GetImage();
       slice.SetOrigin( new_origin );
       slice.SetNumberOfDimensions( 2 );
-      assert( slice.GetPixelFormat() == filter.GetImage().GetPixelFormat() );
+      gdcm_assert( slice.GetPixelFormat() == filter.GetImage().GetPixelFormat() );
       slice.SetSpacing(2, filter.GetImage().GetSpacing(2) );
       //slice.Print( std::cout );
       gdcm::DataElement &pd = slice.GetDataElement();
@@ -1422,8 +1422,8 @@ int main (int argc, char *argv[])
       return 1;
     }
     unsigned long slice_len = image.GetBufferLength() / dims[2];
-    assert( slice_len * dims[2] == image.GetBufferLength() );
-    //assert( image.GetBufferLength() == bv->GetLength() );
+    gdcm_assert( slice_len * dims[2] == image.GetBufferLength() );
+    //gdcm_assert( image.GetBufferLength() == bv->GetLength() );
 
     gdcm::FilenameGenerator fg;
     fg.SetNumberOfFilenames( dims[2] );
@@ -1445,24 +1445,24 @@ int main (int argc, char *argv[])
     gdcm::SmartPointer<gdcm::SequenceOfItems> sfgs =
       ds.GetDataElement( gdcm::Tag( 0x5200,0x9229 ) ).GetValueAsSQ();
     ds.Remove( gdcm::Tag( 0x5200,0x9229 ) );
-    assert( ds.FindDataElement( gdcm::Tag( 0x5200,0x9229 ) ) == false );
+    gdcm_assert( ds.FindDataElement( gdcm::Tag( 0x5200,0x9229 ) ) == false );
     // Remove PerFrameFunctionalGroupsSequence
     gdcm::SmartPointer<gdcm::SequenceOfItems> pffgs =
       ds.GetDataElement( gdcm::Tag( 0x5200,0x9230 ) ).GetValueAsSQ();
     ds.Remove( gdcm::Tag( 0x5200,0x9230 ) );
-    assert( ds.FindDataElement( gdcm::Tag( 0x5200,0x9230 ) ) == false );
+    gdcm_assert( ds.FindDataElement( gdcm::Tag( 0x5200,0x9230 ) ) == false );
     ds.Remove( gdcm::Tag( 0x28,0x8) );
     ds.Remove( gdcm::Tag( 0x7fe0,0x0010) );
-    assert( ds.FindDataElement( gdcm::Tag( 0x7fe0,0x0010) ) == false );
+    gdcm_assert( ds.FindDataElement( gdcm::Tag( 0x7fe0,0x0010) ) == false );
     //ds.Remove( gdcm::Tag( 0x0008,0x0012) );
     //ds.Remove( gdcm::Tag( 0x0008,0x0013) );
 
   // reference the old instance:
   // PS 3.3-2009 C.7.6.16.1.3
 #if 0
-  assert( ds.FindDataElement( gdcm::Tag(0x0008,0x1150) ) == false );
-  assert( ds.FindDataElement( gdcm::Tag(0x0008,0x1155) ) == false );
-  assert( ds.FindDataElement( gdcm::Tag(0x0008,0x1160) ) == false );
+  gdcm_assert( ds.FindDataElement( gdcm::Tag(0x0008,0x1150) ) == false );
+  gdcm_assert( ds.FindDataElement( gdcm::Tag(0x0008,0x1155) ) == false );
+  gdcm_assert( ds.FindDataElement( gdcm::Tag(0x0008,0x1160) ) == false );
   oldsopclassuid.SetTag( gdcm::Tag(0x8,0x1150) );
   oldinstanceuid.SetTag( gdcm::Tag(0x8,0x1155) );
   ds.Insert( oldsopclassuid );
@@ -1513,7 +1513,7 @@ int main (int argc, char *argv[])
       //slice = reader.GetImage();
 //      slice.SetOrigin( new_origin );
 //      slice.SetNumberOfDimensions( 2 );
-//      assert( slice.GetPixelFormat() == reader.GetImage().GetPixelFormat() );
+//      gdcm_assert( slice.GetPixelFormat() == reader.GetImage().GetPixelFormat() );
 //      slice.SetSpacing(2, reader.GetImage().GetSpacing(2) );
       //slice.Print( std::cout );
 //      gdcm::DataElement &pd = slice.GetDataElement();
@@ -1538,7 +1538,7 @@ int main (int argc, char *argv[])
     }
   else
     {
-    assert( enhance );
+    gdcm_assert( enhance );
     return MakeImageEnhanced( filename, outfilename );
 #if 0
     std::cerr << "Not implemented" << std::endl;
@@ -1557,7 +1557,7 @@ int main (int argc, char *argv[])
     const gdcm::DataElement &pixeldata = image.GetDataElement();
     const gdcm::ByteValue *bv = pixeldata.GetByteValue();
     unsigned long slice_len = image.GetBufferLength() / dims[2];
-    //assert( image.GetBufferLength() == bv->GetLength() );
+    //gdcm_assert( image.GetBufferLength() == bv->GetLength() );
 
     gdcm::FilenameGenerator fg;
     fg.SetNumberOfFilenames( dims[2] );
@@ -1597,7 +1597,7 @@ int main (int argc, char *argv[])
       slice = reader.GetImage();
       slice.SetOrigin( new_origin );
       slice.SetNumberOfDimensions( 2 );
-      assert( slice.GetPixelFormat() == reader.GetImage().GetPixelFormat() );
+      gdcm_assert( slice.GetPixelFormat() == reader.GetImage().GetPixelFormat() );
       slice.SetSpacing(2, reader.GetImage().GetSpacing(2) );
       //slice.Print( std::cout );
       gdcm::DataElement &pd = slice.GetDataElement();

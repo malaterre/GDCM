@@ -84,8 +84,8 @@ int TestImageWrite(const char *subdir, const char* filename)
 #ifdef GDCM_WORDS_BIGENDIAN
     if( img.GetPixelFormat().GetBitsAllocated() == 16 )
       {
-      assert( !(len % 2) );
-      assert( img.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
+      gdcm_assert( !(len % 2) );
+      gdcm_assert( img.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME1
         || img.GetPhotometricInterpretation() == PhotometricInterpretation::MONOCHROME2 );
       ByteSwap<unsigned short>::SwapRangeFromSwapCodeIntoSystem(
         (unsigned short*)buffer, SwapCode::LittleEndian, len/2);
@@ -100,7 +100,7 @@ int TestImageWrite(const char *subdir, const char* filename)
       {
       // new regression image needs a md5 sum
       std::cout << "Missing md5 " << digest << " for: " << outfilename <<  std::endl;
-      //assert(0);
+      //gdcm_assert(0);
       res = 1;
       }
     else if( strcmp(digest, ref) != 0 )
@@ -112,7 +112,7 @@ int TestImageWrite(const char *subdir, const char* filename)
       std::ofstream debug("/tmp/dump.gray", std::ios::binary);
       debug.write(buffer, len);
       debug.close();
-      //assert(0);
+      //gdcm_assert(0);
 #endif
       }
     delete[] buffer;

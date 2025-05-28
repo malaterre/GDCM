@@ -67,7 +67,7 @@ public:
     // Need to store Transfer Syntax for later getData() implementation
     // See Sup118 for details
     const char *tsstring = ts.GetString();
-    assert( tsstring );
+    gdcm_assert( tsstring );
     std::ofstream out2( tsfn.c_str(), std::ios::binary );
     out2.write( tsstring, strlen(tsstring) );
     out2.close();
@@ -112,7 +112,7 @@ static void PrintHelp()
 
 #define CHECK_READER \
   if(ret == -1) \
-    assert(0 && "unable to read");
+    gdcm_assert(0 && "unable to read");
 
 #define READ_NEXT\
   ret = xmlTextReaderRead(reader);\
@@ -172,7 +172,7 @@ static void HandlePN(xmlTextReaderPtr reader,DataElement &de)
   if(CHECK_NAME("DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15)
     return;//empty element
   else if(!(CHECK_NAME("PersonName") == 0))
-    assert(0 && "Invalid XML");
+    gdcm_assert(0 && "Invalid XML");
     
   int depth_curr = xmlTextReaderDepth(reader);
   (void)depth_curr;
@@ -330,7 +330,7 @@ static void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool
           READ_NEXT \
           name = (const char*)xmlTextReaderConstName(reader); }\
           } \
-        assert(CHECK_NAME("DicomAttribute") == 0);\
+        gdcm_assert(CHECK_NAME("DicomAttribute") == 0);\
         el.SetLength( (count) * vr.GetSizeof() ); \
         int total = 0; \
         while(total < count) \
@@ -355,7 +355,7 @@ static void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool
           READ_NEXT \
           char *value_char = (char*)xmlTextReaderConstValue(reader); \
           int nvalue = sscanf(value_char,"%d",&(values[count++]));  \
-          assert( nvalue == 1 ); (void)nvalue; \
+          gdcm_assert( nvalue == 1 ); (void)nvalue; \
           READ_NEXT /*Value ending tag*/ \
           name = (const char*)xmlTextReaderConstName(reader); \
           READ_NEXT \
@@ -478,7 +478,7 @@ static void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool
       char *tag_read =(char *)xmlTextReaderGetAttribute(reader,(const unsigned char*)"tag");
       Tag t;
       if(!t.ReadFromContinuousString((const char *)tag_read))
-        assert(0 && "Invalid Tag!");
+        gdcm_assert(0 && "Invalid Tag!");
       
       /* Reading VR */
       char vr_read[3] = "";
@@ -542,10 +542,10 @@ static void PopulateDataSet(xmlTextReaderPtr reader,DataSet &DS, int depth, bool
           int depth_UN=xmlTextReaderDepth(reader);
           while(!(CHECK_NAME("DicomAttribute") == 0 && xmlTextReaderNodeType(reader) == 15 && (depth_UN-1)  == xmlTextReaderDepth(reader)))
             {READ_NEXT}
-          //assert(0 && "UN not Handled yet");
+          //gdcm_assert(0 && "UN not Handled yet");
           }break;          
         default:
-          assert(0 && "Unknown VR");  
+          gdcm_assert(0 && "Unknown VR");
         };
       
       /*Modify de before insert*/
@@ -571,28 +571,28 @@ static void HandleSequence(SequenceOfItems *sqi, xmlTextReaderPtr reader,int dep
       {
       //at Item
       READ_NEXT  
-      //assert(0 && "Hi1");
+      //gdcm_assert(0 && "Hi1");
       //at DicomAtt
       if(   CHECK_NAME("DicomAttribute") == 0  &&  xmlTextReaderDepth(reader) == (depth + 1) && xmlTextReaderNodeType(reader) == 1)
         {
         //start of an item
         //Create Nested DataSet
-        //assert(0 && "Hi2");
+        //gdcm_assert(0 && "Hi2");
         Item *item = new Item();
         DataSet *NestedDS = new DataSet() ;
         PopulateDataSet(reader,*NestedDS,xmlTextReaderDepth(reader),true);
         item->SetNestedDataSet(*NestedDS);
         sqi->AddItem(*item);
-        //assert(0 && "Hi3");
+        //gdcm_assert(0 && "Hi3");
         
         }        
       else
-        assert("Empty Item or Invalid XML");
+        gdcm_assert("Empty Item or Invalid XML");
       
       READ_NEXT    
       }
     else
-      assert("Expected Item");  
+      gdcm_assert("Expected Item");
     }
 }
 
@@ -737,8 +737,8 @@ int main (int argc, char *argv[])
           {
           if( option_index == 0 ) /* input */
             {
-            assert( strcmp(s, "input") == 0 );
-            assert( file1.IsEmpty() );
+            gdcm_assert( strcmp(s, "input") == 0 );
+            gdcm_assert( file1.IsEmpty() );
             file1 = optarg;
             }
           }
@@ -747,12 +747,12 @@ int main (int argc, char *argv[])
 
     case 'i':
       //printf ("option i with value '%s'\n", optarg);
-      assert( file1.IsEmpty() );
+      gdcm_assert( file1.IsEmpty() );
       file1 = optarg;
       break;
 
     case 'o':
-      assert( file2.IsEmpty() );
+      gdcm_assert( file2.IsEmpty() );
       file2 = optarg;
       break;
 

@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
       {
         ds2.Insert( xde );
       }
-      assert( ss.eof() );
+      gdcm_assert( ss.eof() );
     }
     catch(std::exception &)
     {

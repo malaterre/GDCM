@@ -222,10 +222,10 @@ if (!theStreamWriter.WriteImageInformation()){
  memcpy(&(tmpBuffer2[sizeof(uint16_t)]), &secondTag1, sizeof(uint16_t));
  memcpy(&(tmpBuffer2[2*sizeof(uint16_t)]), &thirdTag1, sizeof(uint32_t));
  //memcpy(&(tmpBuffer2[3*sizeof(uint16_t)]), &fourthTag1, sizeof(uint16_t));
- assert( of && !of.eof() && of.good() );
+ gdcm_assert( of && !of.eof() && of.good() );
  of.write(tmpBuffer2, theBufferSize1);
  of.flush();
- assert( of );
+ gdcm_assert( of );
 
 
   return 0;

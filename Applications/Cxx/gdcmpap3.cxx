@@ -124,9 +124,9 @@ static bool DecompressPapyrus3( int pap3handle, int itemnum, gdcm::TransferSynta
         /* PIXEL DATA */
         theImage = (PapyUShort *)Papy3GetPixelData (fileNb, imageNb, group, ImagePixel);
 
-        //assert( dims[0] == 512 );
-        //assert( dims[1] == 512 );
-        //assert( pf.GetPixelSize() == 2 );
+        //gdcm_assert( dims[0] == 512 );
+        //gdcm_assert( dims[1] == 512 );
+        //gdcm_assert( pf.GetPixelSize() == 2 );
         const size_t imglen = dims[0] * dims[1] * pf.GetPixelSize();
         pixeldata.SetByteValue( (char*)theImage, (uint32_t)imglen );
 
@@ -231,19 +231,19 @@ int main(int argc, char *argv[])
           {
           if( option_index == 0 ) /* input */
             {
-            assert( strcmp(s, "input") == 0 );
-            assert( filename.empty() );
+            gdcm_assert( strcmp(s, "input") == 0 );
+            gdcm_assert( filename.empty() );
             filename = optarg;
             }
           else if( option_index == 1 ) /* output */
             {
-            assert( strcmp(s, "output") == 0 );
-            assert( outfilename.empty() );
+            gdcm_assert( strcmp(s, "output") == 0 );
+            gdcm_assert( outfilename.empty() );
             outfilename = optarg;
             }
           else if( option_index == 2 ) /* root-uid */
             {
-            assert( strcmp(s, "root-uid") == 0 );
+            gdcm_assert( strcmp(s, "root-uid") == 0 );
             root = optarg;
             }
           //printf (" with arg %s, index = %d", optarg, option_index);
@@ -254,13 +254,13 @@ int main(int argc, char *argv[])
 
     case 'i':
       //printf ("option i with value '%s'\n", optarg);
-      assert( filename.empty() );
+      gdcm_assert( filename.empty() );
       filename = optarg;
       break;
 
     case 'o':
       //printf ("option o with value '%s'\n", optarg);
-      assert( outfilename.empty() );
+      gdcm_assert( outfilename.empty() );
       outfilename = optarg;
       break;
 
@@ -535,7 +535,7 @@ int main(int argc, char *argv[])
           {
           erroriop = true;
           gdcm::DirectionCosines dc( iop_orig.data() );
-          assert( !dc.IsValid() );
+          gdcm_assert( !dc.IsValid() );
             {
             gdcm::Attribute<0x0008,0x0008> imagetype;
             imagetype.Set( w.GetFile().GetDataSet() );
@@ -551,12 +551,12 @@ int main(int argc, char *argv[])
               else if( str == "LOCALIZER" )
                 {
                 static const double fake_axial[] = { 1, 0, 0, 0, 0, 0 };
-                assert( memcmp( iop_orig.data(), fake_axial, 6 * sizeof( double ) ) == 0 ); (void)fake_axial;
+                gdcm_assert( memcmp( iop_orig.data(), fake_axial, 6 * sizeof( double ) ) == 0 ); (void)fake_axial;
                 w.GetFile().GetDataSet().Replace( at_axial.GetAsDataElement() );
                 erroriop = false; // error has been corrected
                 }
               }
-            assert( !erroriop ); // did our heuristic failed ?
+            gdcm_assert( !erroriop ); // did our heuristic failed ?
             }
           }
         if( erroriop )

@@ -40,7 +40,7 @@ int TestImageChangePlanarConfigurationFunc(const char *filename, bool verbose = 
   const gdcm::Image &image = reader.GetImage();
 
   unsigned int oldpc = image.GetPlanarConfiguration();
-  assert( oldpc == 1 || oldpc == 0 );
+  gdcm_assert( oldpc == 1 || oldpc == 0 );
 
   gdcm::ImageChangePlanarConfiguration pcfilt;
   pcfilt.SetPlanarConfiguration( !oldpc );
@@ -119,8 +119,8 @@ int TestImageChangePlanarConfigurationFunc(const char *filename, bool verbose = 
 #ifdef GDCM_WORDS_BIGENDIAN
   if( img.GetPixelFormat().GetBitsAllocated() == 16 )
     {
-    assert( !(len % 2) );
-    assert( img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1
+    gdcm_assert( !(len % 2) );
+    gdcm_assert( img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME1
       || img.GetPhotometricInterpretation() == gdcm::PhotometricInterpretation::MONOCHROME2 );
     gdcm::ByteSwap<unsigned short>::SwapRangeFromSwapCodeIntoSystem(
       (unsigned short*)buffer, gdcm::SwapCode::LittleEndian, len/2);
@@ -138,7 +138,7 @@ int TestImageChangePlanarConfigurationFunc(const char *filename, bool verbose = 
     {
     // new regression image needs a md5 sum
     std::cerr << "Missing md5 " << digest << " for: " << filename <<  std::endl;
-    //assert(0);
+    //gdcm_assert(0);
     res = 1;
     }
   else if( strcmp(digest, ref) != 0 )

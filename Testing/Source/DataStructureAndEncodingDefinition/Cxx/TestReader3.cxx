@@ -225,7 +225,7 @@ int TestRead3(const char *subdir, const char * filename)
   DoTheMMapRead(is);
 
   // cleanup
-  assert( handle );
+  gdcm_assert( handle );
   bool error = false;
   error = ::munmap(data, size) != 0 || error;
   error = ::close(handle) != 0 || error;
