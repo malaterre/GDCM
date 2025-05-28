@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
       if (optarg)
         {
         const char *s = long_options[option_index].name; (void)s;
-        assert(0);
+        gdcm_assert(0);
         }
       break;
 

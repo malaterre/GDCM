@@ -83,11 +83,11 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
 
   std::streamoff totalsize;
   is.read( (char*)&totalsize, sizeof( totalsize ));
-  assert( totalsize == len );
+  gdcm_assert( totalsize == len );
 
   uint32_t nframes;
   is.read( (char*)&nframes, sizeof( nframes ));
-  assert( nframes == (uint32_t)nslices );
+  gdcm_assert( nframes == (uint32_t)nslices );
 
   std::vector< std::streamoff > offsets;
   offsets.reserve( nframes );
@@ -113,7 +113,7 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
   ss << ".raw";
   std::ofstream os( ss.str().c_str(), std::ios::binary );
 
-  assert( buf_size >= size[0] * size[1] );
+  gdcm_assert( buf_size >= size[0] * size[1] );
   outbuf.resize( buf_size );
 
   hframe header;
@@ -122,15 +122,15 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
     {
     is.read( (char*)&header, sizeof( header ));
 
-    assert( header == crcheaders[r] );
-    assert( header.val1[0] == 2000 );
-    assert( header.val1[1] == 3 );
-    assert( header.val2[0] == 1 );
-    assert( header.val2[1] == 1280 );
+    gdcm_assert( header == crcheaders[r] );
+    gdcm_assert( header.val1[0] == 2000 );
+    gdcm_assert( header.val1[1] == 3 );
+    gdcm_assert( header.val2[0] == 1 );
+    gdcm_assert( header.val2[1] == 1280 );
 
     uLongf destLen = buf_size; // >= 608,427
     Bytef *dest = (Bytef*)outbuf.data();
-    assert( is.tellg() == offsets[r] + 16 );
+    gdcm_assert( is.tellg() == offsets[r] + 16 );
     const Bytef *source = (const Bytef*)buf + offsets[r] + 16;
     uLong sourceLen;
     if( r + 1 == nframes )
@@ -139,9 +139,9 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
       sourceLen = (uLong)offsets[r+1] - (uLong)offsets[r] - 16;
     // FIXME: in-memory decompression:
     int ret = uncompress (dest, &destLen, source, sourceLen);
-    assert( ret == Z_OK ); (void)ret;
-    assert( destLen >= (uLongf)size[0] * size[1] ); // 16bytes padding ?
-    assert( header.imgsize == (uint32_t)size[0] * size[1] );
+    gdcm_assert( ret == Z_OK ); (void)ret;
+    gdcm_assert( destLen >= (uLongf)size[0] * size[1] ); // 16bytes padding ?
+    gdcm_assert( header.imgsize == (uint32_t)size[0] * size[1] );
     //os.write( &outbuf[0], outbuf.size() );
     os.write( outbuf.data(), size[0] * size[1] );
 
@@ -149,7 +149,7 @@ static bool ProcessDeflate( const char *outfilename, const int nslices, const
     is.seekg( sourceLen, std::ios::cur );
     }
   os.close();
-  assert( is.tellg() == totalsize );
+  gdcm_assert( is.tellg() == totalsize );
 
   return true;
 }
@@ -184,11 +184,11 @@ static bool ProcessNone( const char *outfilename, const int nslices, const
 
   std::streampos totalsize;
   is.read( (char*)&totalsize, sizeof( totalsize ));
-  assert( totalsize == len );
+  gdcm_assert( totalsize == len );
 
   uint32_t nframes;
   is.read( (char*)&nframes, sizeof( nframes ));
-  assert( nframes == (uint32_t)nslices );
+  gdcm_assert( nframes == (uint32_t)nslices );
 
   std::vector< uint32_t > offsets;
   offsets.reserve( nframes );
@@ -225,12 +225,12 @@ static bool ProcessNone( const char *outfilename, const int nslices, const
          << " " << header.val2[1]
          << " " << header.imgsize << std::endl;
 #endif
-    assert( header == crcheaders[r] );
+    gdcm_assert( header == crcheaders[r] );
 
     is.read( buffer, buf_size - 16 );
     os.write( buffer, header.imgsize );
     }
-  assert( is.tellg() == totalsize );
+  gdcm_assert( is.tellg() == totalsize );
   os.close();
 
   return true;
@@ -302,7 +302,7 @@ int main(int argc, char *argv[])
   const DataElement& seq1 = ds1.GetDataElement( tseq1 );
 
   SmartPointer<SequenceOfItems> sqi1 = seq1.GetValueAsSQ();
-  assert( sqi1->GetNumberOfItems() >= 1 );
+  gdcm_assert( sqi1->GetNumberOfItems() >= 1 );
 
   const size_t nitems = sqi1->GetNumberOfItems();
   for( size_t item = 1; item < nitems; ++item )
@@ -322,10 +322,10 @@ int main(int argc, char *argv[])
     const DataElement& seq2 = ds2.GetDataElement( tseq2 );
 
     SmartPointer<SequenceOfItems> sqi2 = seq2.GetValueAsSQ();
-    assert( sqi2->GetNumberOfItems() >= 1 );
+    gdcm_assert( sqi2->GetNumberOfItems() >= 1 );
 
     // FIXME: what if not in first Item ?
-    assert( sqi2->GetNumberOfItems() == 1 );
+    gdcm_assert( sqi2->GetNumberOfItems() == 1 );
     Item &item2 = sqi2->GetItem(1);
     DataSet &ds3 = item2.GetNestedDataSet();
 
@@ -344,7 +344,7 @@ int main(int argc, char *argv[])
     Element<VR::IS,VM::VM1> elnslices;
     elnslices.SetFromDataElement( nslices );
     const int nslicesref = elnslices.GetValue();
-    assert( nslicesref >= 0 );
+    gdcm_assert( nslicesref >= 0 );
     // (200d,3011)  IS  6  259648
     const PrivateTag tzalloc(0x200d,0x3011,"Philips US Imaging DD 033");
     if( !ds3.FindDataElement( tzalloc ) ) return 1;
@@ -352,7 +352,7 @@ int main(int argc, char *argv[])
     Element<VR::IS,VM::VM1> elzalloc;
     elzalloc.SetFromDataElement( zalloc );
     const int zallocref = elzalloc.GetValue();
-    assert( zallocref >= 0 );
+    gdcm_assert( zallocref >= 0 );
     // (200d,3021)  IS  2  0
     const PrivateTag tzero(0x200d,0x3021,"Philips US Imaging DD 033");
     if( !ds3.FindDataElement( tzero ) ) return 1;
@@ -360,7 +360,7 @@ int main(int argc, char *argv[])
     Element<VR::IS,VM::VM1> elzero;
     elzero.SetFromDataElement( zero );
     const int zerocref = elzero.GetValue();
-    assert( zerocref == 0 ); (void)zerocref;
+    gdcm_assert( zerocref == 0 ); (void)zerocref;
 
     // (200d,3cf3) OB
     const PrivateTag tdeflate(0x200d,0x3cf3,"Philips US Imaging DD 045");
@@ -377,12 +377,12 @@ int main(int argc, char *argv[])
     std::string outfile = std::string( bvdatatype->GetPointer(), bvdatatype->GetLength() );
     outfile = LOComp::Trim( outfile.c_str() );
     const char *outfilename = outfile.c_str();
-    assert( is_valid(outfilename) );
+    gdcm_assert( is_valid(outfilename) );
     if( bv2 )
       {
-      assert( bv3 );
-      assert( zallocref > 0 );
-      assert( nslicesref > 0 );
+      gdcm_assert( bv3 );
+      gdcm_assert( zallocref > 0 );
+      gdcm_assert( nslicesref > 0 );
       std::cout << ds2 << std::endl;
 
       if( strncmp(bv->GetPointer(), "ZLib", 4) == 0 )

@@ -84,7 +84,7 @@ gdcm::DataElement CreateFakeElement(gdcm::Tag const &tag, bool toremove)
     it.SetVLToUndefined();
     gdcm::DataSet &nds = it.GetNestedDataSet();
     // Insert sequence into data set
-    assert(de.GetVR() == gdcm::VR::SQ );
+    gdcm_assert(de.GetVR() == gdcm::VR::SQ );
     gdcm::SmartPointer<gdcm::SequenceOfItems> sq = new gdcm::SequenceOfItems();
     sq->SetLengthToUndefined();
     de.SetValue(*sq);

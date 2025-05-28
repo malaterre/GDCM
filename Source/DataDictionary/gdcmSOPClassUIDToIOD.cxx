@@ -135,7 +135,7 @@ namespace gdcm
 unsigned int SOPClassUIDToIOD::GetNumberOfSOPClassToIOD()
 {
   static const unsigned int n = sizeof( SOPClassUIDToIODStrings ) / sizeof( *SOPClassUIDToIODStrings );
-  assert( n > 0 );
+  gdcm_assert( n > 0 );
   return n - 1;
 }
 
@@ -188,7 +188,7 @@ SOPClassUIDToIOD::SOPClassUIDToIODType& SOPClassUIDToIOD::GetSOPClassUIDToIOD(un
   if( i < SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() )
     return SOPClassUIDToIODStrings[i];
   // else return the {0x0, 0x0} sentinel:
-  assert( *SOPClassUIDToIODStrings[ SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() ] == nullptr );
+  gdcm_assert( *SOPClassUIDToIODStrings[ SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() ] == nullptr );
   return SOPClassUIDToIODStrings[ SOPClassUIDToIOD::GetNumberOfSOPClassToIOD() ];
 
 }
@@ -209,7 +209,7 @@ const char *SOPClassUIDToIOD::GetSOPClassUIDFromIOD(const char *iod)
     p = sopclassuidtoiods[i][1];
     }
   // \postcondition always valid (before sentinel)
-  assert( i <= GetNumberOfSOPClassToIOD() );
+  gdcm_assert( i <= GetNumberOfSOPClassToIOD() );
   return sopclassuidtoiods[i][0];
 }
 
@@ -229,7 +229,7 @@ const char *SOPClassUIDToIOD::GetIODFromSOPClassUID(const char *sopclassuid)
     p = sopclassuidtoiods[i][0];
     }
   // \postcondition always valid (before sentinel)
-  assert( i <= GetNumberOfSOPClassToIOD() );
+  gdcm_assert( i <= GetNumberOfSOPClassToIOD() );
   return sopclassuidtoiods[i][1];
 }
 

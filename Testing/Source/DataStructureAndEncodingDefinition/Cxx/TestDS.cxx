@@ -175,7 +175,7 @@ static bool singleTestDS(double d, int sz, bool se = false)
   if ( checkerror(d, s, se) )
     fail = true;
 
-  assert(sz >= 0);
+  gdcm_assert(sz >= 0);
   if( s.size() != (unsigned int)sz )
   {
     std::cout << "ERROR: Size = " << s.size() << " (should be " << sz << ")" << std::endl;

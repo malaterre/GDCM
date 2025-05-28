@@ -158,7 +158,7 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
         {
           // new regression image needs a md5 sum
           std::cout << "Missing md5 " << digest << " for: " << filename <<  std::endl;
-          //assert(0);
+          //gdcm_assert(0);
           res = 1;
         }
       else if( strcmp(digest, ref) )
@@ -203,7 +203,7 @@ int TestStreamImageWrite(const char *subdir, const char* filename, bool verbose 
   // else
   // well this is not an image, so thankfully we fail to read it
   std::cerr << "Could not read image(" << filename << "), since file is a: " << ms << std::endl;
-  //assert( ms != gdcm::MediaStorage::MS_END );
+  //gdcm_assert( ms != gdcm::MediaStorage::MS_END );
 #endif
   return 0;
 }

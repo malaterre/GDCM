@@ -100,13 +100,13 @@ void ProcessAFrameOfRef(Scanner const & s, Directory::FilenamesType const & subs
     {
     //std::cout << *file << std::endl;
     const char * value = s.GetValue(file->c_str(), gdcm::t4 );
-    assert( value );
+    gdcm_assert( value );
     iopset.insert( value );
     }
   size_t n = iopset.size();
   if ( n == 0 )
     {
-    assert( files.empty() );
+    gdcm_assert( files.empty() );
     return;
     }
 

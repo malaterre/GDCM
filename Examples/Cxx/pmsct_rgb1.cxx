@@ -42,7 +42,7 @@ void delta_decode(const unsigned char *data_in, size_t data_size,
   const size_t outputlen = 3 * plane_size;
   new_stream.resize( outputlen );
 
-  assert( data_size != outputlen );
+  gdcm_assert( data_size != outputlen );
   if( data_size == outputlen )
     {
     return;
@@ -79,7 +79,7 @@ void delta_decode(const unsigned char *data_in, size_t data_size,
     {
     // next byte:
     byte b = *src++;
-    assert( src < data_in + data_size );
+    gdcm_assert( src < data_in + data_size );
     // mode selection:
     switch ( b )
       {

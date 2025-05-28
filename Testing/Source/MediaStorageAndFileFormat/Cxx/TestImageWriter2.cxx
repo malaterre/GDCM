@@ -168,7 +168,7 @@ int TestImageWriter2(int , char *[])
   image.SetPhotometricInterpretation( pi );
 
   unsigned long len = image.GetBufferLength();
-  assert( len = ir.GetBufferLength() );
+  gdcm_assert( len = ir.GetBufferLength() );
   std::vector<char> buffer;
   buffer.resize(len); // black image
 

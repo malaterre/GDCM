@@ -50,7 +50,7 @@ int TestReadSelectedTags(const char* filename, bool verbose = false)
     return 1;
     }
   size_t filesize = gdcm::System::FileSize(filename);
-  assert( (size_t)refoffset <= filesize );
+  gdcm_assert( (size_t)refoffset <= filesize );
 
   std::streamoff refoffset2 = gdcm::Testing::GetStreamOffsetFromFile(filename);
   (void)refoffset2;
@@ -76,11 +76,11 @@ int TestReadSelectedTags(const char* filename, bool verbose = false)
       {
       if( ts.GetNegociatedType() == gdcm::TransferSyntax::Explicit )
         {
-        assert( refoffset + 12 == refoffset2 );
+        gdcm_assert( refoffset + 12 == refoffset2 );
         }
       else
         {
-        assert( refoffset + 8 == refoffset2 );
+        gdcm_assert( refoffset + 8 == refoffset2 );
         }
       }
     }

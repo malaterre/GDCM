@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
   char *buffer2 = new char[s2];
   is2.read(buffer2, s2);
 
-  assert( s1 == s2 );
+  gdcm_assert( s1 == s2 );
   if( memcmp(buffer1, buffer2, s1 ) == 0 )
     {
     std::cout << "memcmp succeed ! File are bit identical" << std::endl;

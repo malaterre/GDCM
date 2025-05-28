@@ -658,29 +658,29 @@ int main (int argc, char *argv[])
           {
           if( option_index == 0 ) /* input */
             {
-            assert( strcmp(s, "input") == 0 );
-            assert( filename.empty() );
+            gdcm_assert( strcmp(s, "input") == 0 );
+            gdcm_assert( filename.empty() );
             filename = optarg;
             }
           else if( option_index == 14 ) /* root-uid */
             {
-            assert( strcmp(s, "root-uid") == 0 );
-            assert( root.empty() );
+            gdcm_assert( strcmp(s, "root-uid") == 0 );
+            gdcm_assert( root.empty() );
             root = optarg;
             }
           else if( option_index == 28 ) /* split */
             {
-            assert( strcmp(s, "split") == 0 );
+            gdcm_assert( strcmp(s, "split") == 0 );
             fragmentsize = atoi(optarg);
             }
           else if( option_index == 29 ) /* planar conf*/
             {
-            assert( strcmp(s, "planar-configuration") == 0 );
+            gdcm_assert( strcmp(s, "planar-configuration") == 0 );
             planarconfval = atoi(optarg);
             }
           else if( option_index == 34 ) /* icon minmax*/
             {
-            assert( strcmp(s, "icon-minmax") == 0 );
+            gdcm_assert( strcmp(s, "icon-minmax") == 0 );
             std::stringstream ss;
             ss.str( optarg );
             ss >> iconmin;
@@ -690,33 +690,33 @@ int main (int argc, char *argv[])
             }
           else if( option_index == 40 ) /* photometricinterpretation */
             {
-            assert( strcmp(s, "photometric-interpretation") == 0 );
+            gdcm_assert( strcmp(s, "photometric-interpretation") == 0 );
             photometricinterpretation_str = optarg;
             }
           else if( option_index == 42 ) /* rate */
             {
-            assert( strcmp(s, "rate") == 0 );
+            gdcm_assert( strcmp(s, "rate") == 0 );
             readvector(rates, optarg);
             }
           else if( option_index == 43 ) /* quality */
             {
-            assert( strcmp(s, "quality") == 0 );
+            gdcm_assert( strcmp(s, "quality") == 0 );
             readvector(qualities, optarg);
             }
           else if( option_index == 44 ) /* tile */
             {
-            assert( strcmp(s, "tile") == 0 );
+            gdcm_assert( strcmp(s, "tile") == 0 );
             size_t n = readvector(tilesize, optarg);
-            assert( n == 2 ); (void)n;
+            gdcm_assert( n == 2 ); (void)n;
             }
           else if( option_index == 45 ) /* number of resolution */
             {
-            assert( strcmp(s, "number-resolution") == 0 );
+            gdcm_assert( strcmp(s, "number-resolution") == 0 );
             nresvalue = atoi(optarg);
             }
           else if( option_index == 47 ) /* JPEG-LS error */
             {
-            assert( strcmp(s, "allowed-error") == 0 );
+            gdcm_assert( strcmp(s, "allowed-error") == 0 );
             jpeglserror_value = atoi(optarg);
             }
           //printf (" with arg %s, index = %d", optarg, option_index);
@@ -727,13 +727,13 @@ int main (int argc, char *argv[])
 
     case 'i':
       //printf ("option i with value '%s'\n", optarg);
-      assert( filename.empty() );
+      gdcm_assert( filename.empty() );
       filename = optarg;
       break;
 
     case 'o':
       //printf ("option o with value '%s'\n", optarg);
-      assert( outfilename.empty() );
+      gdcm_assert( outfilename.empty() );
       outfilename = optarg;
       break;
 
@@ -1202,7 +1202,7 @@ int main (int argc, char *argv[])
         jpegcodec.SetLossless( false );
         if( quality )
           {
-          assert( qualities.size() == 1 );
+          gdcm_assert( qualities.size() == 1 );
           jpegcodec.SetQuality( static_cast<double>(qualities[0]) );
           }
         change.SetUserCodec( &jpegcodec );
@@ -1286,7 +1286,7 @@ int main (int argc, char *argv[])
         }
       else
         {
-        assert( ts.IsImplicit() );
+        gdcm_assert( ts.IsImplicit() );
         change.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
         if( explicitts )
         change.SetTransferSyntax( gdcm::TransferSyntax::ExplicitVRLittleEndian );
@@ -1405,7 +1405,7 @@ int main (int argc, char *argv[])
       }
     else
       {
-      assert( ts.IsImplicit() );
+      gdcm_assert( ts.IsImplicit() );
       image.SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
       }
 
@@ -1424,7 +1424,7 @@ int main (int argc, char *argv[])
 */
 
     unsigned long len = ir.GetBufferLength();
-    //assert( len = ir.GetBufferLength() );
+    //gdcm_assert( len = ir.GetBufferLength() );
     std::vector<char> buffer;
     buffer.resize(len); // black image
 

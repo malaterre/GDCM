@@ -165,7 +165,7 @@ int TestStrictScanner1(int argc, char *argv[])
   // The following breaks with Papyrus file: PET-cardio-Multiframe-Papyrus.dcm
   unsigned int i = 0;
   gdcm::StrictScanner::MappingType::const_iterator it = mt.find(filename);
-  assert( it != mt.end() );
+  gdcm_assert( it != mt.end() );
   while( it == mt.end() )
     {
     ++i;
@@ -199,7 +199,7 @@ int TestStrictScanner1(int argc, char *argv[])
     const char *value =  s.GetValue( filename, reftag );
     if( value )
       {
-      assert( value );
+      gdcm_assert( value );
       std::cout << filename << " has " << reftag << " = " << value << std::endl;
       }
     else

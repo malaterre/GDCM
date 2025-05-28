@@ -93,12 +93,12 @@ static void printvaluet(std::istream & is, uint32_t numels)
 
 static void printvalue(std::istream &is, uint32_t type, uint32_t numels, uint32_t pos)
 {
-  assert( numels > 0 );
+  gdcm_assert( numels > 0 );
   std::streampos start = is.tellg();
   is.seekg( pos );
   std::cout << "[";
   typedef char (string81)[81]; // 80'th byte == 0
-  assert( sizeof( string81 ) == 81 );
+  gdcm_assert( sizeof( string81 ) == 81 );
   switch( type )
     {
   case TYPE_FLOAT:
@@ -114,7 +114,7 @@ static void printvalue(std::istream &is, uint32_t type, uint32_t numels, uint32_
     printvaluet<uint32_t>(is, numels);
     break;
   default:
-    assert( 0 );
+    gdcm_assert( 0 );
     }
   std::cout << "]";
   std::cout << " # " << numels;
@@ -146,7 +146,7 @@ static void printbinary(std::istream &is, PDFElement const & pdfel )
   uint32_t type = pdfel.gettype();
   uint32_t numels = pdfel.getnumelems();
   //uint32_t dummy = pdfel.getdummy();
-  //assert( dummy == 0 ); (void)dummy;
+  //gdcm_assert( dummy == 0 ); (void)dummy;
   uint32_t offset = pdfel.getoffset();
   uint32_t pos = (uint32_t)(offset + is.tellg() - 4);
   printvalue(is, type, numels, pos);
@@ -165,28 +165,28 @@ static void ProcessSDSDataString( std::istream & is )
 #if 0
   int32_t v1;
   is.read( (char*)&v1,sizeof(v1));
-  assert( v1 == 0x1 );
+  gdcm_assert( v1 == 0x1 );
   uint32_t bla;
   is.read( (char*)&bla, sizeof(bla) );
   char name0[32];
   memset(name0,0,sizeof(name0));
-  assert( bla < sizeof(name0) );
+  gdcm_assert( bla < sizeof(name0) );
   is.read( name0, bla);
   size_t l = strlen(name0);
-  assert( l == bla );
+  gdcm_assert( l == bla );
   std::cerr << "name0:" << name0 << std::endl;
 
   is.read( (char*)&bla, sizeof(bla) );
-  assert( bla == 0x1 );
+  gdcm_assert( bla == 0x1 );
   is.read( (char*)&bla, sizeof(bla) );
   char value[32];
   memset(value,0,sizeof(value));
-  assert( bla < sizeof(value) );
+  gdcm_assert( bla < sizeof(value) );
   is.read( value, bla);
   is.read( (char*)&bla, sizeof(bla) );
-  assert( bla == 0 ); // trailing stuff ?
+  gdcm_assert( bla == 0 ); // trailing stuff ?
   is.read( (char*)&bla, sizeof(bla) );
-  assert( bla == 0 ); // trailing stuff ?
+  gdcm_assert( bla == 0 ); // trailing stuff ?
   const uint32_t cur = (uint32_t)is.tellg();
   std::cerr << "offset:" << cur << std::endl;
 #else
@@ -199,15 +199,15 @@ static void ProcessSDSData( std::istream & is )
   // haven't been able to figure out what was the begin meant for
   is.seekg( 0x20 - 8 );
   uint32_t version = 0;
-  assert( sizeof(uint32_t) == 4 );
+  gdcm_assert( sizeof(uint32_t) == 4 );
   is.read( (char*)&version, sizeof(version) );
-  assert( version == 8 );
+  gdcm_assert( version == 8 );
   uint32_t numel = 0;
   is.read( (char*)&numel, sizeof(numel) );
   for( uint32_t el = 0; el < numel; ++el )
     {
     PDFElement pdfel;
-    assert( sizeof(pdfel) == 50 );
+    gdcm_assert( sizeof(pdfel) == 50 );
     is.read( (char*)&pdfel, 50 );
     if( *pdfel.getname() )
       {
@@ -273,7 +273,7 @@ static int DumpPMS_MRSDS(const gdcm::DataSet & ds)
         else if( s1 == "COILSTATE " )
           ProcessSDSDataString( is );
         else
-          assert(0);
+          gdcm_assert(0);
       } else {
         ProcessSDSData( is );
       }
@@ -530,7 +530,7 @@ static bool ProcessData( const char *buf, size_t len )
 {
   Data2 data2;
   const size_t s = sizeof(data2);
-  assert( len >= s); (void)len;
+  gdcm_assert( len >= s); (void)len;
   // VIMDATA2 is generally 2048 bytes, while s = 1786
   // the end is filled with \0 bytes
   memcpy(&data2, buf, s);
@@ -598,7 +598,7 @@ struct el
     readastring( name, input );
     const char *p = input + 1+  name.size();
     memcpy( &pad, p, sizeof( pad ) );
-    //assert( pad == 1 || pad == 2 || pad == 3 || pad == 6 );
+    //gdcm_assert( pad == 1 || pad == 2 || pad == 3 || pad == 6 );
     values.resize( pad );
     const char *pp = p + sizeof(uint32_t);
     for( uint32_t pidx = 0; pidx < pad; ++pidx )
@@ -683,11 +683,11 @@ struct info
       // postcondition
       uint32_t fixme;
       memcpy( &fixme, in, sizeof(fixme) );
-      assert( fixme == 0x0006981A );
+      gdcm_assert( fixme == 0x0006981A );
       }
     else
       {
-      assert( 0 );
+      gdcm_assert( 0 );
       }
     return in - m;
     }
@@ -725,7 +725,7 @@ static int DumpEl2_new(const gdcm::DataSet & ds)
   } else {
   uint32_t val0[3];
   memcpy( &val0, begin, sizeof( val0 ) );
-  assert( val0[0] == 0xF22D );
+  gdcm_assert( val0[0] == 0xF22D );
   begin += sizeof( val0 );
 
   // 1A 98 06 00 -> start element
@@ -735,7 +735,7 @@ static int DumpEl2_new(const gdcm::DataSet & ds)
   std::cout << "ELSCINT1 Dumping info from tag " << t01f7_26 << std::endl;
   info i;
   size_t o;
-  assert( val0[1] == 0x1 );
+  gdcm_assert( val0[1] == 0x1 );
   for( uint32_t idx = 0; idx < val0[2]; ++idx )
     {
     o = i.Read( begin );
@@ -1067,7 +1067,7 @@ static int PrintCSABase64Impl(gdcm::CSAHeader &csa, std::string const & csaname 
       {
         ds2.Insert( xde );
       }
-      assert( ss.eof() );
+      gdcm_assert( ss.eof() );
     }
     catch(std::exception &)
     {
@@ -1419,8 +1419,8 @@ int main (int argc, char *argv[])
           {
           if( option_index == 0 ) /* input */
             {
-            assert( strcmp(s, "input") == 0 );
-            assert( filename.empty() );
+            gdcm_assert( strcmp(s, "input") == 0 );
+            gdcm_assert( filename.empty() );
             filename = optarg;
             }
           //printf (" with arg %s", optarg);
@@ -1431,7 +1431,7 @@ int main (int argc, char *argv[])
 
     case 'i':
       //printf ("option i with value '%s'\n", optarg);
-      assert( filename.empty() );
+      gdcm_assert( filename.empty() );
       filename = optarg;
       break;
 
@@ -1671,7 +1671,7 @@ int main (int argc, char *argv[])
     }
   else
     {
-    assert( gdcm::System::FileExists(filename.c_str()) );
+    gdcm_assert( gdcm::System::FileExists(filename.c_str()) );
     if( printdict )
       {
       res += DoOperation<gdcm::DictPrinter>(filename);

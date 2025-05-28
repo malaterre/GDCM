@@ -61,7 +61,7 @@ static const char *PDFStrings[] = { // Keep me ordered please
 
 static bool isvalidpdfstring( const char *pdfstring )
 {
-  assert( pdfstring );
+  gdcm_assert( pdfstring );
   static const size_t n = sizeof( PDFStrings ) / sizeof( *PDFStrings );
   static const char **begin = PDFStrings;
   static const char **end = begin + n;
@@ -99,7 +99,7 @@ static const char *gettypenamefromtype( int i)
     ret = "enum";
     break;
     }
-  assert( ret );
+  gdcm_assert( ret );
   return ret;
 }
 
@@ -137,20 +137,20 @@ struct header
       numparams = 0;
       uint32_t bla;
       is.read( (char*)&bla, sizeof(bla) );
-      assert( bla == 0x2 || bla == 0x3 );
+      gdcm_assert( bla == 0x2 || bla == 0x3 );
       nstrings = 1;
       numparams = 1;
     } else {
       // indirect
       is.read( (char*)&nints,sizeof(nints));
       is.read( (char*)&v3,sizeof(v3));
-      assert( v3 == 0 ); // looks like this is always 0
+      gdcm_assert( v3 == 0 ); // looks like this is always 0
       is.read( (char*)&v4,sizeof(v4));
       is.read( (char*)&nfloats,sizeof(nfloats));
       is.read( (char*)&v6,sizeof(v6));
       is.read( (char*)&nstrings,sizeof(nstrings));
       is.read( (char*)&v8,sizeof(v8));
-      assert( v8 == 8 );
+      gdcm_assert( v8 == 8 );
       is.read( (char*)&numparams,sizeof(numparams));
     }
     }
@@ -191,10 +191,10 @@ struct param
     is.read( (char*)&bla, sizeof(bla) );
     char name0[32];
     memset(name0,0,sizeof(name0));
-    assert( bla < sizeof(name0) );
+    gdcm_assert( bla < sizeof(name0) );
     is.read( name0, bla);
     size_t l = strlen(name0);
-    assert( l == bla ); (void)l;
+    gdcm_assert( l == bla ); (void)l;
     char * ptr = strdup( name0 );
     v4.ptr = ptr;
     type = param_string;
@@ -206,22 +206,22 @@ struct param
     is.read( (char*)&bla, sizeof(bla) );
     char name0[32];
     memset(name0,0,sizeof(name0));
-    assert( bla < sizeof(name0) );
+    gdcm_assert( bla < sizeof(name0) );
     is.read( name0, bla);
     size_t l = strlen(name0);
-    assert( l == bla ); (void)l;
+    gdcm_assert( l == bla ); (void)l;
     memcpy( this->name, name0, bla );
     is.read( (char*)&bla, sizeof(bla) );
-    assert( bla == 0x1 );
+    gdcm_assert( bla == 0x1 );
     is.read( (char*)&bla, sizeof(bla) );
     char value[32];
     memset(value,0,sizeof(value));
-    assert( bla < sizeof(value) );
+    gdcm_assert( bla < sizeof(value) );
     is.read( value, bla);
     is.read( (char*)&bla, sizeof(bla) );
-    assert( bla == 0 ); // trailing stuff ?
+    gdcm_assert( bla == 0 ); // trailing stuff ?
     is.read( (char*)&bla, sizeof(bla) );
-    assert( bla == 0 ); // trailing stuff ?
+    gdcm_assert( bla == 0 ); // trailing stuff ?
     const uint32_t cur = (uint32_t)is.tellg();
     std::cerr << "offset:" << cur << std::endl;
     if( cur == 65 )
@@ -231,7 +231,7 @@ struct param
     else if( cur == 122 )
       is.read( (char*)&bla, 2 );
     else
-      assert(0);
+      gdcm_assert(0);
     type = param_string;
     dim = 1;
     // FIXME: store the value in v4 for now:
@@ -244,17 +244,17 @@ struct param
     is.read( name, 32 + 1);
     // This is always the same issue the string can contains garbage from previous run,
     // we need to print only until the first \0 character:
-    assert( strlen( name ) <= 32 );
+    gdcm_assert( strlen( name ) <= 32 );
     is.read( (char*)&boolean,1);
-    assert( boolean == 0 || boolean == 1 || boolean == 0x69 ); // some kind of bool, or digital trash ?
+    gdcm_assert( boolean == 0 || boolean == 1 || boolean == 0x69 ); // some kind of bool, or digital trash ?
     is.read( (char*)&type, sizeof( type ) );
-    assert( gettypenamefromtype( type ) );
+    gdcm_assert( gettypenamefromtype( type ) );
     is.read( (char*)&dim, sizeof( dim ) ); // number of elements
     is.read( (char*)&v4.val, sizeof( v4.val ) );
-    //assert( v4.val == 0 ); // always 0 ? sometimes not...
+    //gdcm_assert( v4.val == 0 ); // always 0 ? sometimes not...
     const uint32_t cur = (uint32_t)is.tellg();
     is.read( (char*)&offset, sizeof( offset ) );
-    assert( offset != 0 );
+    gdcm_assert( offset != 0 );
     offset += cur;
     }
 
@@ -411,7 +411,7 @@ Wotsit ?
 
   if( s0 == "ExamCardBlob" )
     {
-    assert( de1.IsEmpty() );
+    gdcm_assert( de1.IsEmpty() );
 
     std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
     fn += ".xml";
@@ -464,13 +464,13 @@ Wotsit ?
       {
 
       std::istringstream is;
-      assert( bv->GetLength() == (size_t)dlen.GetValue() || bv->GetLength() == (size_t)(dlen.GetValue() + 1) );
+      gdcm_assert( bv->GetLength() == (size_t)dlen.GetValue() || bv->GetLength() == (size_t)(dlen.GetValue() + 1) );
       std::string dup( bv->GetPointer(), dlen.GetValue() /*bv->GetLength()*/ );
       is.str( dup );
 
       header h;
       h.read( is );
-      //assert( is.peek() && is.eof() );
+      //gdcm_assert( is.peek() && is.eof() );
 #if 1
       static int c = 0;
       std::string fn0 = gdcm::LOComp::Trim( s1.c_str() ); // remove trailing space
@@ -504,12 +504,12 @@ Wotsit ?
             }
           else
             {
-            assert(0);
+            gdcm_assert(0);
             }
           params.push_back( p );
         }
       } else {
-        assert( is.tellg() == std::streampos(0x20) );
+        gdcm_assert( is.tellg() == std::streampos(0x20) );
         is.seekg( 0x20 );
 
         param p;
@@ -523,7 +523,7 @@ Wotsit ?
 
       std::string fn = gdcm::LOComp::Trim( s0.c_str() ); // remove trailing space
       bool b1 = isvalidpdfstring( fn.c_str() );
-      assert( b1 ); (void)b1;
+      gdcm_assert( b1 ); (void)b1;
       fn += ".csv";
       //fn += ".xml";
       std::ofstream csv( fn.c_str() );
@@ -557,9 +557,9 @@ Wotsit ?
       std::cout << "nints:" << nints << std::endl;
       std::cout << "nstrings:" << nstrings << std::endl;
 #endif
-      assert( h.getnints() >= nints );
-      assert( h.getnfloats() >= nfloats );
-      assert( h.getnstrings() >= nstrings);
+      gdcm_assert( h.getnints() >= nints );
+      gdcm_assert( h.getnfloats() >= nfloats );
+      gdcm_assert( h.getnstrings() >= nstrings);
 
       for( uint32_t i = 0; i < h.getnparams(); ++i )
         {
@@ -585,7 +585,7 @@ Wotsit ?
 
       const char *beg = bv->GetPointer();
       const char *end = beg + bv->GetLength();
-      assert( *beg == 0 );
+      gdcm_assert( *beg == 0 );
       const char *p = beg + 1; // skip first \0
       size_t prev = 0;
       for( ; p != end; ++p )
@@ -631,7 +631,7 @@ Wotsit ?
       }
     }
   // else -> ret == false
-  assert( ret );
+  gdcm_assert( ret );
 
   return ret;
 }

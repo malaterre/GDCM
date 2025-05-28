@@ -92,7 +92,7 @@ int TestDataElement2(const uint16_t group, const uint16_t element,
   ss.write(vr, strlen(vr) );
   str = reinterpret_cast<const char*>(&vl);
   ss.write(str, sizeof(vl));
-  assert( !(strlen(value) % 2) );
+  gdcm_assert( !(strlen(value) % 2) );
   ss.write(value, strlen(value) );
   //DebugElement(ss);
 

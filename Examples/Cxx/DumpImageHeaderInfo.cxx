@@ -46,7 +46,7 @@ std::istream & element::read( std::istream & is )
     return is;
     }
   //os << magic << std::endl;
-  assert( magic == ref ); (void)ref;
+  gdcm_assert( magic == ref ); (void)ref;
 
   uint32_t l;
   is.read( (char*)&l, sizeof(l) );
@@ -127,7 +127,7 @@ static bool DumpImageHeaderInfo( std::istream & is, size_t reflen )
     {
     }
   //size_t pos = is.tellg();
-  //assert( pos == reflen );
+  //gdcm_assert( pos == reflen );
   (void)reflen;
 
   return true;

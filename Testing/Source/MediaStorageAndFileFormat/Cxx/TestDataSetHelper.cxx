@@ -37,42 +37,42 @@ public:
       const PrivateTag pt4(0x0029,0x1140,"SIEMENS MEDCOM HEADER");
       if( PrivateTag(de.GetTag(),"GEMS_IMAG_01") == pt1 )
       {
-        assert( vr == VR::UL );
-        assert( vr2 == VR::SL );
+        gdcm_assert( vr == VR::UL );
+        gdcm_assert( vr2 == VR::SL );
         return vr;
       }
       if( PrivateTag(de.GetTag(),"GEMS_IMAG_01") == pt2
        || PrivateTag(de.GetTag(),"GEMS_IMAG_01") == pt3 )
       {
-        assert( vr == VR::IS );
-        assert( vr2 == VR::DS );
+        gdcm_assert( vr == VR::IS );
+        gdcm_assert( vr2 == VR::DS );
         return vr;
       }
       if( PrivateTag(de.GetTag(),"SIEMENS MEDCOM HEADER") == pt4 )
       {
-        assert( vr == VR::OB );
-        assert( vr2 == VR::SQ );
+        gdcm_assert( vr == VR::OB );
+        gdcm_assert( vr2 == VR::SQ );
         return vr;
       }
       // ELSCINT1_PMSCT_RLE1.dcm
       if( de.GetTag() == Tag(0x0020,0x0070) )
       {
-        assert( vr == VR::CS );
-        assert( vr2 == VR::LO );
+        gdcm_assert( vr == VR::CS );
+        gdcm_assert( vr2 == VR::LO );
         return vr;
       }
       // EmptyIcon_Bug417.dcm
       if( de.GetTag() == Tag(0x0040,0x1008) )
       {
-        assert( vr == VR::ST );
-        assert( vr2 == VR::LO );
+        gdcm_assert( vr == VR::ST );
+        gdcm_assert( vr2 == VR::LO );
         return vr;
       }
       // GE_CT_With_Private_compressed-icon.dcm
       if( de.GetTag() == Tag(0x0040,0x0253) )
       {
-        assert( vr == VR::CS );
-        assert( vr2 == VR::SH );
+        gdcm_assert( vr == VR::CS );
+        gdcm_assert( vr2 == VR::SH );
         return vr;
       }
       // JPEGInvalidSecondFrag.dcm
@@ -81,8 +81,8 @@ public:
        || de.GetTag() == Tag(0x0018,0x9307)
        || de.GetTag() == Tag(0x0023,0x1070) )
       {
-        assert( vr == VR::OB );
-        assert( vr2 == VR::FD );
+        gdcm_assert( vr == VR::OB );
+        gdcm_assert( vr2 == VR::FD );
         return vr;
       }
       // NM-PAL-16-PixRep1.dcm...FIXME: dcmconv +te
@@ -93,8 +93,8 @@ public:
        || de.GetTag() == Tag(0x0028,0x1202)
        || de.GetTag() == Tag(0x0028,0x1203) )
       {
-        assert( vr == VR::US );
-        assert( vr2 == VR::SS || vr2 == VR::OW );
+        gdcm_assert( vr == VR::US );
+        gdcm_assert( vr2 == VR::SS || vr2 == VR::OW );
         return vr;
       }
       // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
@@ -102,8 +102,8 @@ public:
        || de.GetTag() == Tag(0x0018,0x4000)
        || de.GetTag() == Tag(0x0020,0x3402) )
       {
-        assert( vr == VR::LO );
-        assert( vr2 == VR::CS || vr2 == VR::LT || vr2 == VR::SH );
+        gdcm_assert( vr == VR::LO );
+        gdcm_assert( vr2 == VR::CS || vr2 == VR::LT || vr2 == VR::SH );
         return vr;
       }
       // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
@@ -112,22 +112,22 @@ public:
        || de.GetTag() == Tag(0x0028,0x0040)
        || de.GetTag() == Tag(0x0028,0x0200) )
       {
-        assert( vr == VR::DS || vr == VR::SS || vr == VR::SH );
-        assert( vr2 == VR::IS || vr2 == VR::US || vr2 == VR::CS );
+        gdcm_assert( vr == VR::DS || vr == VR::SS || vr == VR::SH );
+        gdcm_assert( vr2 == VR::IS || vr2 == VR::US || vr2 == VR::CS );
         return vr;
       }
       // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
       if( de.GetTag() == Tag(0x0008,0x0040) )
       {
-        assert( vr == VR::SS );
-        assert( vr2 == VR::US );
+        gdcm_assert( vr == VR::SS );
+        gdcm_assert( vr2 == VR::US );
         return vr;
       }
       if( vr == VR::SQ || vr2 == VR::SQ )
-        assert( vr == vr2 );
+        gdcm_assert( vr == vr2 );
       if( !de.GetTag().IsPrivate() )
-        assert( vr == vr2 );
-      //assert( vr.Compatible(vr2) );
+        gdcm_assert( vr == vr2 );
+      //gdcm_assert( vr.Compatible(vr2) );
     }
     return vr;
   }

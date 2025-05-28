@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
   //const unsigned int nitems = 1000;
   const unsigned int ptr_len = 42; /*94967296 / nitems; */
-  //assert( ptr_len == 42949672 );
+  //gdcm_assert( ptr_len == 42949672 );
   char *ptr = new char[ptr_len];
   memset(ptr,0,ptr_len);
 

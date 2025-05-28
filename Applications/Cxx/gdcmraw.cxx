@@ -134,19 +134,19 @@ int main(int argc, char *argv[])
           {
           if( option_index == 0 ) /* input */
             {
-            assert( strcmp(s, "input") == 0 );
-            assert( filename.empty() );
+            gdcm_assert( strcmp(s, "input") == 0 );
+            gdcm_assert( filename.empty() );
             filename = optarg;
             }
           else if( option_index == 2 ) /* tag */
             {
-            assert( strcmp(s, "tag") == 0 );
+            gdcm_assert( strcmp(s, "tag") == 0 );
             rawTag.ReadFromCommaSeparatedString(optarg);
             }
           else if( option_index == 5 ) /* pattern */
             {
-            assert( strcmp(s, "pattern") == 0 );
-            assert( pattern.empty() );
+            gdcm_assert( strcmp(s, "pattern") == 0 );
+            gdcm_assert( pattern.empty() );
             pattern = optarg;
             }
           //printf (" with arg %s", optarg);
@@ -157,13 +157,13 @@ int main(int argc, char *argv[])
 
     case 'i':
       //printf ("option i with value '%s'\n", optarg);
-      assert( filename.empty() );
+      gdcm_assert( filename.empty() );
       filename = optarg;
       break;
 
     case 'o':
       //printf ("option o with value '%s'\n", optarg);
-      assert( outfilename.empty() );
+      gdcm_assert( outfilename.empty() );
       outfilename = optarg;
       break;
 
@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
       break;
 
     case 'p':
-      assert( pattern.empty() );
+      gdcm_assert( pattern.empty() );
       pattern = optarg;
       break;
 

@@ -98,7 +98,7 @@ int TestGlobal(int, char *[])
   std::cout << s.empty() << std::endl;
   const gdcm::DictEntry& de = pub.GetDictEntry( gdcm::Tag(0x0028,0x0015) );
   const char *v = de.GetName();
-  //assert( v );
+  //gdcm_assert( v );
   std::cout << "TOTO:" << de << std::endl;
 #endif
 
