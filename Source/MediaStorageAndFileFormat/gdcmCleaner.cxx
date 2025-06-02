@@ -684,13 +684,13 @@ static VR ComputeDictVR(File &file, DataSet &ds, DataElement const &de) {
   } else {
     const PrivateTag pt = ds.GetPrivateTag(tag);
     const char *owner = pt.GetOwner();
-    assert(owner);
+    gdcm_assert(owner);
     compute_dict_vr = *owner != 0;
   }
   if (compute_dict_vr) dict_vr = DataSetHelper::ComputeVR(file, ds, tag);
 
   if (de.GetVR() == VR::SQ) {
-    assert(dict_vr != VR::UN);
+    gdcm_assert(dict_vr != VR::UN);
     if (!dict_vr.Compatible(de.GetVR())) {
       gdcmErrorMacro("Impossible. Dict states VR is: "
                      << dict_vr << " which is impossible for SQ");
@@ -700,7 +700,7 @@ static VR ComputeDictVR(File &file, DataSet &ds, DataElement const &de) {
   if (dict_vr != VR::SQ) {
     if (de.GetVL().IsUndefined()) {
       Tag pixelData(0x7fe0, 0x0010);
-      assert(dict_vr == VR::OB);
+      gdcm_assert(dict_vr == VR::OB);
       if (tag != pixelData) {
         gdcmErrorMacro("Impossible happen: " << de);
         return VR::SQ;
@@ -812,7 +812,7 @@ static inline int bs_memcmp(const void *s1, const void *s2, size_t n) {
   size_t i;
   const unsigned char *us1 = (const unsigned char *)s1;
   const unsigned char *us2 = (const unsigned char *)s2;
-  assert(n % 2 == 0);
+  gdcm_assert(n % 2 == 0);
 
   for (i = 0; i < n; i += 2, us1 += 2, us2 += 2) {
     if (*us1 < *(us2 + 1)) {
@@ -1107,9 +1107,9 @@ Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
     // Empty
     if (empty_tags.find(tag) != empty_tags.end() ||
         IsDPathInSet(empty_dpaths, dpath)) {
-      assert(!tag.IsGroupLength());
-      assert(!tag.IsPrivateCreator());
-      assert(ds.FindDataElement(tag));
+      gdcm_assert(!tag.IsGroupLength());
+      gdcm_assert(!tag.IsPrivateCreator());
+      gdcm_assert(ds.FindDataElement(tag));
       return Cleaner::impl::EMPTY;
     }
     // Remove
@@ -1122,7 +1122,7 @@ Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
   if (tag.IsPrivate() && !tag.IsPrivateCreator() && !tag.IsGroupLength()) {
     const PrivateTag pt = ds.GetPrivateTag(tag);
     const char *owner = pt.GetOwner();
-    assert(owner);
+    gdcm_assert(owner);
     if (*owner == 0 && AllMissingPrivateCreator) {
       return Cleaner::impl::REMOVE;
     }
@@ -1150,7 +1150,7 @@ Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
   // VR cleanup
   if (!empty_vrs.empty() || !remove_vrs.empty()) {
     VR vr = de.GetVR();
-    assert(ref_dict_vr != VR::INVALID);
+    gdcm_assert(ref_dict_vr != VR::INVALID);
     // be careful with vr handling since we must always prefer the one from
     // the dict in case of attribute written as 'OB' but dict states 'PN':
     if (ref_dict_vr != VR::UN /*&& ref_dict_vr != VR::INVALID*/) {
@@ -1161,7 +1161,7 @@ Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
         vr = ref_dict_vr;
       }
       if (vr != ref_dict_vr) {
-        // assert(vr == VR::OB || vr == VR::OW);
+        // gdcm_assert(vr == VR::OB || vr == VR::OW);
         vr = ref_dict_vr;
       }
     }

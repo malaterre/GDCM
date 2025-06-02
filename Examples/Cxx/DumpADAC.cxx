@@ -247,16 +247,16 @@ bool DumpADAC( std::istream & is )
   magic[6] = 0;
   is.read( magic, 6);
 //  std::cout << magic << " ";
-  assert( strcmp( magic, "adac01" ) == 0 );
+  gdcm_assert( strcmp( magic, "adac01" ) == 0 );
   int c = is.get();
-  assert( c == 0 ); (void)c;
+  gdcm_assert( c == 0 ); (void)c;
   c = is.get();
-  assert( c == 'X' );
+  gdcm_assert( c == 'X' );
 
   uint16_t v;
   v = readint16(is);
 //  std::cout << v << std::endl;
-  assert( v == 512 ); (void)v; // ??
+  gdcm_assert( v == 512 ); (void)v; // ??
 
   int nel = 87;
   for (int i = 0; i <= nel; ++i )
@@ -292,7 +292,7 @@ bool DumpADAC( std::istream & is )
     else if( e.v2 == 0x100 )
       {
       mult = diff / 2;
-      assert( diff == 2 * mult );
+      gdcm_assert( diff == 2 * mult );
       for ( int ii = 0; ii < mult; ++ii )
         {
         if ( ii ) os << "\\";
@@ -302,19 +302,19 @@ bool DumpADAC( std::istream & is )
       }
     else if( e.v2 == 0x200 )
       {
-      assert( diff == 4 );
+      gdcm_assert( diff == 4 );
       uint32_t val = readint32(is);
       os << "" << std::dec << val << "";
       }
     else if( e.v2 == 0x300 )
       {
-      assert( diff == 4 );
+      gdcm_assert( diff == 4 );
       float val = readfloat32(is);
       os << "" << std::dec << val << "";
       }
     else
       {
-      assert( 0 );
+      gdcm_assert( 0 );
       }
     os << std::endl;
     }

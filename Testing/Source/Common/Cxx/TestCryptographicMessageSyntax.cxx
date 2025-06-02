@@ -188,8 +188,8 @@ bool TestCMSCompatibility(gdcm::CryptographicMessageSyntax& cms1, const char * p
     cms2.SetCipherType(ciphers[i]);
     //cms2.Encrypt(encout, encoutlen, tstr, tstr_l);
     //cms1.Decrypt(decout, decoutlen, encout, encoutlen);
-    //assert(decoutlen == tstr_l);
-    //assert(memcmp(tstr, decout, tstr_l) == 0);
+    //gdcm_assert(decoutlen == tstr_l);
+    //gdcm_assert(memcmp(tstr, decout, tstr_l) == 0);
 
     bool encryptSuccess = cms1.Encrypt(encout, encoutlen, tstr, tstr_l);
     if (!encryptSuccess)

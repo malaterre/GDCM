@@ -245,24 +245,24 @@ int main(int argc, char *argv[])
         {
           if( option_index == 0 ) /* input */
           {
-            assert( strcmp(s, "input") == 0 );
+            gdcm_assert( strcmp(s, "input") == 0 );
             filenames.push_back( optarg );
           }
           else if( option_index == 7 ) /* calling aetitle */
           {
-            assert( strcmp(s, "aetitle") == 0 );
-            //assert( callingaetitle.empty() );
+            gdcm_assert( strcmp(s, "aetitle") == 0 );
+            //gdcm_assert( callingaetitle.empty() );
             callingaetitle = optarg;
           }
           else if( option_index == 8 ) /* called aetitle */
           {
-            assert( strcmp(s, "call") == 0 );
-            //assert( callaetitle.empty() );
+            gdcm_assert( strcmp(s, "call") == 0 );
+            //gdcm_assert( callaetitle.empty() );
             callaetitle = optarg;
           }
           else if( option_index == 15 ) /* key */
           {
-            assert( strcmp(s, "key") == 0 );
+            gdcm_assert( strcmp(s, "key") == 0 );
             if( !tag.ReadFromCommaSeparatedString(optarg) )
             {
               std::cerr << "Could not read Tag: " << optarg << std::endl;
@@ -273,13 +273,13 @@ int main(int argc, char *argv[])
             uint16_t dummy;
             char cdummy; // comma
             ss >> std::hex >> dummy;
-            assert( tag.GetGroup() == dummy );
+            gdcm_assert( tag.GetGroup() == dummy );
             ss >> cdummy;
-            assert( cdummy == ',' );
+            gdcm_assert( cdummy == ',' );
             ss >> std::hex >> dummy;
-            assert( tag.GetElement() == dummy );
+            gdcm_assert( tag.GetElement() == dummy );
             ss >> cdummy;
-            assert( cdummy == ',' || cdummy == '=' );
+            gdcm_assert( cdummy == ',' || cdummy == '=' );
             std::string str;
             //ss >> str;
             std::getline(ss, str); // do not skip whitespace
@@ -288,29 +288,29 @@ int main(int argc, char *argv[])
           }
           else if( option_index == 20 ) /* port-scp */
           {
-            assert( strcmp(s, "port-scp") == 0 );
+            gdcm_assert( strcmp(s, "port-scp") == 0 );
             portscpnum = atoi(optarg);
           }
           else if( option_index == 21 ) /* output */
           {
-            assert( strcmp(s, "output") == 0 );
+            gdcm_assert( strcmp(s, "output") == 0 );
             outputdir = optarg;
           }
           else if( option_index == 23 ) /* store-query */
           {
-            assert( strcmp(s, "store-query") == 0 );
+            gdcm_assert( strcmp(s, "store-query") == 0 );
             queryfile = optarg;
           }
           else if( option_index == 29 ) /* log-file */
           {
-            assert( strcmp(s, "log-file") == 0 );
+            gdcm_assert( strcmp(s, "log-file") == 0 );
             logfilename = optarg;
           }
           else
           {
             // If you reach here someone mess-up the index and the argument in
             // the getopt table
-            assert( 0 );
+            gdcm_assert( 0 );
           }
           //printf (" with arg %s", optarg);
         }
@@ -330,13 +330,13 @@ int main(int argc, char *argv[])
         uint16_t dummy;
         char cdummy; // comma
         ss >> std::hex >> dummy;
-        assert( tag.GetGroup() == dummy );
+        gdcm_assert( tag.GetGroup() == dummy );
         ss >> cdummy;
-        assert( cdummy == ',' );
+        gdcm_assert( cdummy == ',' );
         ss >> std::hex >> dummy;
-        assert( tag.GetElement() == dummy );
+        gdcm_assert( tag.GetElement() == dummy );
         ss >> cdummy;
-        assert( cdummy == ',' || cdummy == '=' );
+        gdcm_assert( cdummy == ',' || cdummy == '=' );
         std::string str;
         std::getline(ss, str); // do not skip whitespace
         keys.emplace_back(tag, str );
@@ -353,7 +353,7 @@ int main(int argc, char *argv[])
         break;
         
       case 'o':
-        assert( outputdir.empty() );
+        gdcm_assert( outputdir.empty() );
         outputdir = optarg;
         break;
         
@@ -434,7 +434,7 @@ int main(int argc, char *argv[])
       {
       return 1;
       }
-    assert( optind == argc );
+    gdcm_assert( optind == argc );
     }
   
   if( version )
@@ -771,7 +771,7 @@ int main(int argc, char *argv[])
     }
   else
     {
-    assert( 0 );
+    gdcm_assert( 0 );
     return 1;
     }
 

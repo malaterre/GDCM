@@ -29,7 +29,7 @@ bool WriteIconAsPNM(const char* filename, const gdcm::IconImage& icon)
   pnm.SetLUT( icon.GetLUT() );
   const gdcm::DataElement& in = icon.GetDataElement();
   bool b = pnm.Write( filename, in );
-  assert( b );
+  gdcm_assert(b);
   return b;
 }
 
@@ -65,7 +65,7 @@ int main(int argc, char *argv [])
       {
       const gdcm::DataElement& in = icon.GetDataElement();
       const gdcm::ByteValue *bv = in.GetByteValue();
-      assert( bv );
+      gdcm_assert( bv );
       std::ofstream out( "icon.jpg", std::ios::binary );
       out.write( bv->GetPointer(), bv->GetLength() );
       out.close();
@@ -73,7 +73,7 @@ int main(int argc, char *argv [])
     }
   else
     {
-    assert( iif.GetNumberOfIconImages() == 0 );
+    gdcm_assert( iif.GetNumberOfIconImages() == 0 );
     std::cerr << "No Icon Found anywhere in file" << std::endl;
 
     const gdcm::Image &img = reader.GetImage();

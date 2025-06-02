@@ -50,7 +50,7 @@ public:
   //static DictEntry GroupLengthDictEntry; // = DictEntry("Group Length",VR::UL,VM::VM1);
 
   Dict():DictInternal() {
-    assert( DictInternal.empty() );
+    gdcm_assert( DictInternal.empty() );
   }
   Dict &operator=(const Dict &_val) = delete;
   Dict(const Dict &_val) = delete;
@@ -69,7 +69,7 @@ public:
 #endif
     DictInternal.insert(
       MapDictEntry::value_type(tag, de));
-    assert( s < DictInternal.size() );
+    gdcm_assert( s < DictInternal.size() );
     }
 
   const DictEntry &GetDictEntry(const Tag &tag) const
@@ -92,13 +92,13 @@ public:
         && tag != Tag(0x40,0xa125)
       )
         {
-        assert( 0 && "Impossible" );
+        gdcm_assert( 0 && "Impossible" );
         }
 #endif
       it = DictInternal.find( Tag(0xffff,0xffff) );
       return it->second;
       }
-    assert( DictInternal.count(tag) == 1 );
+    gdcm_assert( DictInternal.count(tag) == 1 );
     return it->second;
     }
 
@@ -111,7 +111,7 @@ public:
       {
       return nullptr;
       }
-    assert( DictInternal.count(tag) == 1 );
+    gdcm_assert( DictInternal.count(tag) == 1 );
     return it->second.GetKeyword();
     }
 
@@ -145,7 +145,7 @@ public:
       it = DictInternal.find( tag );
       return it->second;
       }
-    assert( DictInternal.count(tag) == 1 );
+    gdcm_assert( DictInternal.count(tag) == 1 );
     return it->second;
     }
 
@@ -178,7 +178,7 @@ public:
       it = DictInternal.find( tag );
       return it->second;
       }
-    assert( DictInternal.count(tag) == 1 );
+    gdcm_assert( DictInternal.count(tag) == 1 );
     return it->second;
     }
 
@@ -234,23 +234,23 @@ public:
       {
       MapDictEntry::iterator it =
         DictInternal.find(tag);
-      assert( it != DictInternal.end() );
+      gdcm_assert( it != DictInternal.end() );
       DictEntry &duplicate = it->second;
-      assert( de.GetVR() == VR::UN || duplicate.GetVR() == VR::UN );
-      assert( de.GetVR() != duplicate.GetVR() );
+      gdcm_assert( de.GetVR() == VR::UN || duplicate.GetVR() == VR::UN );
+      gdcm_assert( de.GetVR() != duplicate.GetVR() );
       if( duplicate.GetVR() == VR::UN )
         {
-        assert( de.GetVR() != VR::UN );
+        gdcm_assert( de.GetVR() != VR::UN );
         duplicate.SetVR( de.GetVR() );
         duplicate.SetVM( de.GetVM() );
-        assert( GetDictEntry(tag).GetVR() != VR::UN );
-        assert( GetDictEntry(tag).GetVR() == de.GetVR() );
-        assert( GetDictEntry(tag).GetVM() == de.GetVM() );
+        gdcm_assert( GetDictEntry(tag).GetVR() != VR::UN );
+        gdcm_assert( GetDictEntry(tag).GetVR() == de.GetVR() );
+        gdcm_assert( GetDictEntry(tag).GetVM() == de.GetVM() );
         }
       return;
       }
 #endif
-    assert( s < DictInternal.size() /*&& std::cout << tag << "," << de << std::endl*/ );
+    gdcm_assert( s < DictInternal.size() /*&& std::cout << tag << "," << de << std::endl*/ );
     }
   /// Remove entry 'tag'. Return true on success (element was found
   /// and remove). return false if element was not found.
@@ -258,7 +258,7 @@ public:
     {
     MapDictEntry::size_type s =
       DictInternal.erase(tag);
-    assert( s == 1 || s == 0 );
+    gdcm_assert( s == 1 || s == 0 );
     return s == 1;
     }
   bool FindDictEntry(const PrivateTag &tag) const
@@ -278,12 +278,12 @@ public:
       DictInternal.find(tag);
     if (it == DictInternal.end())
       {
-      //assert( 0 && "Impossible" );
+      //gdcm_assert( 0 && "Impossible" );
       it = DictInternal.find( PrivateTag(0xffff,0xffff,"GDCM Private Sentinel" ) );
       assert (it != DictInternal.end());
       return it->second;
       }
-    assert( DictInternal.count(tag) == 1 );
+    gdcm_assert( DictInternal.count(tag) == 1 );
     return it->second;
     }
 

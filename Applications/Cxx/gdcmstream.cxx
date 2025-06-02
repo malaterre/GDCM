@@ -108,17 +108,17 @@ static int No_Of_Resolutions(const char *filename)
     // gdcmData/MAROTECH_CT_JP2Lossy.dcm
     //gdcmWarningMacro( "J2K start like JPEG-2000 compressed image data instead of codestream" );
     parameters.decod_format = 1; //JP2_CFMT;
-    //assert(parameters.decod_format == JP2_CFMT);
+    //gdcm_assert(parameters.decod_format == JP2_CFMT);
     }
   else
     {
     /* JPEG-2000 codestream */
     //parameters.decod_format = J2K_CFMT;
-    //assert(parameters.decod_format == J2K_CFMT);
-    assert( 0 );
+    //gdcm_assert(parameters.decod_format == J2K_CFMT);
+    gdcm_assert( 0 );
     }
   parameters.cod_format = 11; // PGX_DFMT;
-  //assert(parameters.cod_format == PGX_DFMT);
+  //gdcm_assert(parameters.cod_format == PGX_DFMT);
 
   /* get a decoder handle */
   dinfo = opj_create_decompress(CODEC_JP2);
@@ -196,17 +196,17 @@ static bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const ch
     // gdcmData/MAROTECH_CT_JP2Lossy.dcm
     //gdcmWarningMacro( "J2K start like JPEG-2000 compressed image data instead of codestream" );
     parameters.decod_format = 1; //JP2_CFMT;
-    //assert(parameters.decod_format == JP2_CFMT);
+    //gdcm_assert(parameters.decod_format == JP2_CFMT);
     }
   else
     {
     /* JPEG-2000 codestream */
     //parameters.decod_format = J2K_CFMT;
-    //assert(parameters.decod_format == J2K_CFMT);
-    assert( 0 );
+    //gdcm_assert(parameters.decod_format == J2K_CFMT);
+    gdcm_assert( 0 );
     }
   parameters.cod_format = 11; // PGX_DFMT;
-  //assert(parameters.cod_format == PGX_DFMT);
+  //gdcm_assert(parameters.cod_format == PGX_DFMT);
 
   /* get a decoder handle */
   dinfo = opj_create_decompress(CODEC_JP2);
@@ -725,7 +725,7 @@ static bool Different_Resolution_From_DICOM( gdcm::StreamImageWriter & theStream
 
 
   gdcm::DataElement row = ds1.GetDataElement( gdcm::Tag(0x0048,0x0006) );
-  assert( row.GetVR() == gdcm::VR::UL );
+  gdcm_assert( row.GetVR() == gdcm::VR::UL );
   ds.Insert(row);
 
   gdcm::DataElement col = ds1.GetDataElement( gdcm::Tag(0x0048,0x0007) );
@@ -831,10 +831,10 @@ static void end_of_WSIFile(std::ostream& of)
   memcpy(&(tmpBuffer2[sizeof(uint16_t)]), &secondTag1, sizeof(uint16_t));
   memcpy(&(tmpBuffer2[2*sizeof(uint16_t)]), &thirdTag1, sizeof(uint32_t));
   //memcpy(&(tmpBuffer2[3*sizeof(uint16_t)]), &fourthTag1, sizeof(uint16_t));
-  assert( of && !of.eof() && of.good() );
+  gdcm_assert( of && !of.eof() && of.good() );
   of.write(tmpBuffer2, theBufferSize1);
   of.flush();
-  assert( of );
+  gdcm_assert( of );
 }
 
 int main (int argc, char *argv[])
@@ -899,44 +899,44 @@ int main (int argc, char *argv[])
           {
           if( option_index == 0 ) /* input */
             {
-            assert( strcmp(s, "input") == 0 );
-            assert( filename.IsEmpty() );
+            gdcm_assert( strcmp(s, "input") == 0 );
+            gdcm_assert( filename.IsEmpty() );
             filename = optarg;
             }
           //printf (" with arg %s, index = %d", optarg, option_index)
           else if( option_index == 1 ) /* input */
             {
-            assert( strcmp(s, "output") == 0 );
-            assert( outfilename.IsEmpty() );
+            gdcm_assert( strcmp(s, "output") == 0 );
+            gdcm_assert( outfilename.IsEmpty() );
             outfilename = optarg;
             }
           //printf (" with arg %s, index = %d", optarg, option_index);
 
           else if( option_index == 8 ) /* number of resolution */
             {
-            assert( strcmp(s, "resolution") == 0 );
+            gdcm_assert( strcmp(s, "resolution") == 0 );
             nres = atoi(optarg);
             }
 
           else if( option_index == 9 ) /* number of resolution */
             {
-            assert( strcmp(s, "resolution-only") == 0 );
+            gdcm_assert( strcmp(s, "resolution-only") == 0 );
             res = atoi(optarg);
             }
 
           else if( option_index == 10 ) /* tile */
             {
-            assert( strcmp(s, "roi-start") == 0 );
+            gdcm_assert( strcmp(s, "roi-start") == 0 );
             tile = 1;
             unsigned int n = readvector(start, optarg);
-            assert( n == 2 ); (void)n;
+            gdcm_assert( n == 2 ); (void)n;
             }
           else if( option_index == 11 ) /* tile */
             {
-            assert( strcmp(s, "roi-end") == 0 );
+            gdcm_assert( strcmp(s, "roi-end") == 0 );
             tile = 1;
             unsigned int n = readvector(end, optarg);
-            assert( n == 2 ); (void)n;
+            gdcm_assert( n == 2 ); (void)n;
             }
 
           //printf ("\n");
@@ -946,12 +946,12 @@ int main (int argc, char *argv[])
       break;
 
     case 'i':
-      assert( filename.IsEmpty() );
+      gdcm_assert( filename.IsEmpty() );
       filename = optarg;
       break;
 
     case 'o':
-      assert( outfilename.IsEmpty() );
+      gdcm_assert( outfilename.IsEmpty() );
       outfilename = optarg;
       break;
 

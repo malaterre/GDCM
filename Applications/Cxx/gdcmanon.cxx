@@ -424,44 +424,44 @@ int main(int argc, char *argv[])
           {
           //if( option_index == 0 ) /* input */
           //  {
-          //  assert( strcmp(s, "input") == 0 );
-          //  assert( filename.empty() );
+          //  gdcm_assert( strcmp(s, "input") == 0 );
+          //  gdcm_assert( filename.empty() );
           //  filename = optarg;
           //  }
           //else if( option_index == 1 ) /* output */
           //  {
-          //  assert( strcmp(s, "output") == 0 );
-          //  assert( outfilename.empty() );
+          //  gdcm_assert( strcmp(s, "output") == 0 );
+          //  gdcm_assert( outfilename.empty() );
           //  outfilename = optarg;
           //  }
           //else...
           if( option_index == 2 ) /* root-uid */
             {
-            assert( strcmp(s, "root-uid") == 0 );
-            assert( root.empty() );
+            gdcm_assert( strcmp(s, "root-uid") == 0 );
+            gdcm_assert( root.empty() );
             root = optarg;
             }
           else if( option_index == 3 ) /* resources-path */
             {
-            assert( strcmp(s, "resources-path") == 0 );
-            assert( xmlpath.empty() );
+            gdcm_assert( strcmp(s, "resources-path") == 0 );
+            gdcm_assert( xmlpath.empty() );
             xmlpath = optarg;
             }
           //else if( option_index == 6 ) /* key */
           //  {
-          //  assert( strcmp(s, "key") == 0 );
-          //  assert( rsa_path.empty() );
+          //  gdcm_assert( strcmp(s, "key") == 0 );
+          //  gdcm_assert( rsa_path.empty() );
           //  rsa_path = optarg;
           //  }
           //else if( option_index == 7 ) /* certificate */
           //  {
-          //  assert( strcmp(s, "certificate") == 0 );
-          //  assert( cert_path.empty() );
+          //  gdcm_assert( strcmp(s, "certificate") == 0 );
+          //  gdcm_assert( cert_path.empty() );
           //  cert_path = optarg;
           //  }
           else if( option_index == 15 ) /* empty */
             {
-            assert( strcmp(s, "empty") == 0 );
+            gdcm_assert( strcmp(s, "empty") == 0 );
             if( privatetag.ReadFromCommaSeparatedString(optarg) )
               empty_privatetags.push_back( privatetag );
             else if( tag.ReadFromCommaSeparatedString(optarg) )
@@ -474,7 +474,7 @@ int main(int argc, char *argv[])
             }
           else if( option_index == 16 ) /* clear */
             {
-            assert( strcmp(s, "clear") == 0 );
+            gdcm_assert( strcmp(s, "clear") == 0 );
             if( privatetag.ReadFromCommaSeparatedString(optarg) )
               clear_privatetags.push_back( privatetag );
             else if( tag.ReadFromCommaSeparatedString(optarg) )
@@ -487,7 +487,7 @@ int main(int argc, char *argv[])
             }
           else if( option_index == 17 ) /* remove */
             {
-            assert( strcmp(s, "remove") == 0 );
+            gdcm_assert( strcmp(s, "remove") == 0 );
             if( privatetag.ReadFromCommaSeparatedString(optarg) )
               remove_privatetags.push_back( privatetag );
             else if( tag.ReadFromCommaSeparatedString(optarg) )
@@ -500,7 +500,7 @@ int main(int argc, char *argv[])
             }
           else if( option_index == 18 ) /* replace */
             {
-            assert( strcmp(s, "replace") == 0 );
+            gdcm_assert( strcmp(s, "replace") == 0 );
             if( privatetag.ReadFromCommaSeparatedString(optarg) )
               {
               return 1;
@@ -512,13 +512,13 @@ int main(int argc, char *argv[])
               uint16_t dummy;
               char cdummy; // comma
               ss >> std::hex >> dummy;
-              assert( tag.GetGroup() == dummy );
+              gdcm_assert( tag.GetGroup() == dummy );
               ss >> cdummy;
-              assert( cdummy == ',' );
+              gdcm_assert( cdummy == ',' );
               ss >> std::hex >> dummy;
-              assert( tag.GetElement() == dummy );
+              gdcm_assert( tag.GetElement() == dummy );
               ss >> cdummy;
-              assert( cdummy == ',' || cdummy == '=' );
+              gdcm_assert( cdummy == ',' || cdummy == '=' );
               std::string str;
               //ss >> str;
               std::getline(ss, str); // do not skip whitespace
@@ -532,7 +532,7 @@ int main(int argc, char *argv[])
             }
           else if( option_index == 20 ) /* crypto */
             {
-            assert( strcmp(s, "crypto") == 0 );
+            gdcm_assert( strcmp(s, "crypto") == 0 );
             if (strcmp(optarg, "openssl") == 0)
               crypto_lib = gdcm::CryptoFactory::OPENSSL;
             else if (strcmp(optarg, "capi") == 0)
@@ -552,12 +552,12 @@ int main(int argc, char *argv[])
       break;
 
     case 'i':
-      assert( filename.empty() );
+      gdcm_assert( filename.empty() );
       filename = optarg;
       break;
 
     case 'o':
-      assert( outfilename.empty() );
+      gdcm_assert( outfilename.empty() );
       outfilename = optarg;
       break;
 
@@ -566,17 +566,17 @@ int main(int argc, char *argv[])
       break;
 
     case 'k': // key
-      assert( rsa_path.empty() );
+      gdcm_assert( rsa_path.empty() );
       rsa_path = optarg;
       break;
 
     case 'c': // certificate
-      assert( cert_path.empty() );
+      gdcm_assert( cert_path.empty() );
       cert_path = optarg;
       break;
 
     case 'p': // password
-      assert( password.empty() );
+      gdcm_assert( password.empty() );
       password = optarg;
       break;
 

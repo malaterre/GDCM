@@ -102,7 +102,7 @@ int main(int argc, char *argv [])
   const gdcm::DataElement& wave = ds.GetDataElement( twave );
   if ( wave.IsEmpty() ) return 1;
   const gdcm::ByteValue * bv = wave.GetByteValue();
-  assert( bv );
+  gdcm_assert( bv );
 
   std::ofstream os( outfilename, std::ios::binary );
   // Dump that to a CSV file:

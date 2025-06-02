@@ -113,31 +113,31 @@ int main(int argc, char *argv[])
           {
           if( option_index == 0 ) /* input */
             {
-            assert( strcmp(s, "input") == 0 );
-            assert( filename.empty() );
+            gdcm_assert( strcmp(s, "input") == 0 );
+            gdcm_assert( filename.empty() );
             filename = optarg;
             }
           else if( option_index == 1 ) /* output */
             {
-            assert( strcmp(s, "output") == 0 );
-            assert( outfilename.empty() );
+            gdcm_assert( strcmp(s, "output") == 0 );
+            gdcm_assert( outfilename.empty() );
             outfilename = optarg;
             }
           else if( option_index == 3 ) /* root-uid */
             {
-            assert( strcmp(s, "root-uid") == 0 );
+            gdcm_assert( strcmp(s, "root-uid") == 0 );
             root = optarg;
             }
           else if( option_index == 4 ) /* resources-path */
             {
-            assert( strcmp(s, "resources-path") == 0 );
-            assert( xmlpath.empty() );
+            gdcm_assert( strcmp(s, "resources-path") == 0 );
+            gdcm_assert( xmlpath.empty() );
             xmlpath = optarg;
             }
           else if( option_index == 5 ) /* descriptor */
             {
-            assert( strcmp(s, "descriptor") == 0 );
-            assert( descriptor_str.empty() );
+            gdcm_assert( strcmp(s, "descriptor") == 0 );
+            gdcm_assert( descriptor_str.empty() );
             descriptor_str = optarg;
             }
           //printf (" with arg %s", optarg);
@@ -148,12 +148,12 @@ int main(int argc, char *argv[])
 
     case 'i':
       //printf ("option i with value '%s'\n", optarg);
-      assert( filename.empty() );
+      gdcm_assert( filename.empty() );
       filename = optarg;
       break;
 
     case 'o':
-      assert( outfilename.empty() );
+      gdcm_assert( outfilename.empty() );
       outfilename = optarg;
       break;
 

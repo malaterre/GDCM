@@ -121,7 +121,7 @@ int TestSystem1(int, char *[])
     std::cerr << "bres" << std::endl;
     return 1;
     }
-  assert( datetime[21] == 0 );
+  gdcm_assert( datetime[21] == 0 );
   std::cerr << datetime << std::endl;
 
   const char *cwd = gdcm::System::GetCWD();
@@ -169,7 +169,7 @@ int TestSystem1(int, char *[])
     std::cerr << "GetCurrentDateTime: " << date << std::endl;
     return 1;
     }
-  assert( date[21] == 0 );
+  gdcm_assert( date[21] == 0 );
   time_t timep; long milliseconds;
   if( !gdcm::System::ParseDateTime(timep, milliseconds, date) )
     {
@@ -181,7 +181,7 @@ int TestSystem1(int, char *[])
     {
     return 1;
     }
-  assert( date2[21] == 0 );
+  gdcm_assert( date2[21] == 0 );
 
   if( strcmp( date, date2 ) != 0 )
     {
@@ -326,7 +326,7 @@ return 1;
     std::cerr << "FormatDateTime" << std::endl;
   return 1;
 }
-assert( fixed_date2[21] == 0 );
+gdcm_assert( fixed_date2[21] == 0 );
   if( strcmp( fixed_date, fixed_date2 ) != 0 )
 {
     std::cerr << "fixed_date | fixed_date2" << std::endl;

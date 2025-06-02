@@ -73,7 +73,7 @@ if( $ds->FindDataElement( $tDoseGridScaling ) )
 
   // Let's assume for a moment we knew the tag number:
   $at=new Tag(0x3004,0x000e);
-  assert( $at.GetTag() == $tDoseGridScaling );
+  gdcm_assert( $at.GetTag() == $tDoseGridScaling );
   $at->SetFromDataSet( $ds );
   // For the sake of long term maintenance, we will not write
   // that this particular attribute is stored as a double. What if

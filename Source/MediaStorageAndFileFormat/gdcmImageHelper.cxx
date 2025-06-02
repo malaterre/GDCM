@@ -74,7 +74,7 @@ static bool GetOriginValueFromSequence(const DataSet& ds, const Tag& tfgs, std::
   const Tag tps(0x0020,0x0032);
   if( !subds2.FindDataElement(tps) ) return false;
   const DataElement &de = subds2.GetDataElement( tps );
-  //assert( bv );
+  //gdcm_assert( bv );
   Attribute<0x0020,0x0032> at;
   at.SetFromDataElement( de );
   //at.Print( std::cout );
@@ -103,7 +103,7 @@ static bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& t
   //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
   if( !(sqi2 && sqi2->GetNumberOfItems()) ) return false;
-  assert( sqi2 && sqi2->GetNumberOfItems() );
+  gdcm_assert( sqi2 && sqi2->GetNumberOfItems() );
   // Take it from the first item
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
@@ -111,7 +111,7 @@ static bool GetDirectionCosinesValueFromSequence(const DataSet& ds, const Tag& t
   const Tag tps(0x0020,0x0037);
   if( !subds2.FindDataElement(tps) ) return false;
   const DataElement &de = subds2.GetDataElement( tps );
-  //assert( bv );
+  //gdcm_assert( bv );
   Attribute<0x0020,0x0037> at;
   at.SetFromDataElement( de );
   dircos.push_back( at.GetValue(0) );
@@ -139,7 +139,7 @@ static bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfg
   if( !subds.FindDataElement(tpms) ) return false;
   //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
-  assert( sqi2 );
+  gdcm_assert( sqi2 );
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
   double intercept;
@@ -148,7 +148,7 @@ static bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfg
     const Tag tps(0x0028,0x1052);
     if( !subds2.FindDataElement(tps) ) return false;
     const DataElement &de = subds2.GetDataElement( tps );
-    //assert( bv );
+    //gdcm_assert( bv );
     Attribute<0x0028,0x1052> at;
     at.SetFromDataElement( de );
     //at.Print( std::cout );
@@ -160,7 +160,7 @@ static bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfg
     const Tag tps(0x0028,0x1053);
     if( !subds2.FindDataElement(tps) ) return false;
     const DataElement &de = subds2.GetDataElement( tps );
-    //assert( bv );
+    //gdcm_assert( bv );
     Attribute<0x0028,0x1053> at;
     at.SetFromDataElement( de );
     //at.Print( std::cout );
@@ -169,7 +169,7 @@ static bool GetInterceptSlopeValueFromSequence(const DataSet& ds, const Tag& tfg
   intslope.push_back( intercept );
   intslope.push_back( slope );
 
-  assert( intslope.size() == 2 );
+  gdcm_assert( intslope.size() == 2 );
   return true;
 }
 
@@ -203,14 +203,14 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
       cosines[5] = 0;
       }
     }
-  assert( b1 && cosines.size() == 6 ); // yeah we really need that
+  gdcm_assert( b1 && cosines.size() == 6 ); // yeah we really need that
 
   const Tag tfgs(0x5200,0x9230);
   if( !ds.FindDataElement( tfgs ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
   if( !sqi ) return false;
-  assert( sqi );
+  gdcm_assert( sqi );
   double normal[3];
   DirectionCosines dc( cosines.data() );
   dc.Cross( normal );
@@ -230,13 +230,13 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     if( !subds.FindDataElement(tpms) ) return false;
     //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
     SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
-    assert( sqi2 );
+    gdcm_assert( sqi2 );
     const Item &item2 = sqi2->GetItem(1);
     const DataSet & subds2 = item2.GetNestedDataSet();
     // Check Image Orientation (Patient)
     if( ImageHelper::GetDirectionCosinesFromDataSet(subds2, dircos_subds2) )
       {
-      assert( dircos_subds2 == cosines );
+      gdcm_assert( dircos_subds2 == cosines );
       }
     // (0020,0032) DS [-82.5\-82.5\1153.75]                    #  20, 3 ImagePositionPatient
     const Tag tps(0x0020,0x0032);
@@ -248,7 +248,7 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     for (int i = 0; i < 3; ++i) dist += normal[i]*ipp[i];
     distances.push_back( dist );
     }
-  assert( distances.size() == nitems );
+  gdcm_assert( distances.size() == nitems );
   double meanspacing = 0;
   double prev = distances[0];
   for(unsigned int i = 1; i < nitems; ++i)
@@ -272,7 +272,7 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
 
   zspacing = meanspacing;
   if( nitems > 1 )
-    assert( zspacing != 0.0 ); // technically this should not happen
+    gdcm_assert( zspacing != 0.0 ); // technically this should not happen
 
   if( !timeseries )
     {
@@ -306,7 +306,7 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     if( !subds.FindDataElement(tpms) ) return true;
     //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
     SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
-    assert( sqi2 );
+    gdcm_assert( sqi2 );
     const Item &item2 = sqi2->GetItem(1);
     const DataSet & subds2 = item2.GetNestedDataSet();
     // <entry group="0028" element="0030" vr="DS" vm="2" name="Pixel Spacing"/>
@@ -330,7 +330,7 @@ static bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std:
   // <entry group="5200" element="9229" vr="SQ" vm="1" name="Shared Functional Groups Sequence"/>
   //const Tag tfgs(0x5200,0x9229);
   //const Tag tfgs(0x5200,0x9230);
-  //assert( ds.FindDataElement( tfgs ) );
+  //gdcm_assert( ds.FindDataElement( tfgs ) );
   if( !ds.FindDataElement( tfgs ) ) return false;
   //const SequenceOfItems * sqi = ds.GetDataElement( tfgs ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
@@ -343,14 +343,14 @@ static bool GetSpacingValueFromSequence(const DataSet& ds, const Tag& tfgs, std:
   if( !subds.FindDataElement(tpms) ) return false;
   //const SequenceOfItems * sqi2 = subds.GetDataElement( tpms ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi2 = subds.GetDataElement( tpms ).GetValueAsSQ();
-  assert( sqi2 );
+  gdcm_assert( sqi2 );
   const Item &item2 = sqi2->GetItem(1);
   const DataSet & subds2 = item2.GetNestedDataSet();
   // <entry group="0028" element="0030" vr="DS" vm="2" name="Pixel Spacing"/>
   const Tag tps(0x0028,0x0030);
   if( !subds2.FindDataElement(tps) ) return false;
   const DataElement &de = subds2.GetDataElement( tps );
-  //assert( bv );
+  //gdcm_assert( bv );
   Attribute<0x0028,0x0030> at;
   at.SetFromDataElement( de );
   //at.Print( std::cout );
@@ -389,7 +389,7 @@ static SmartPointer<SequenceOfItems> InsertOrReplaceSQ( DataSet & ds, const Tag 
     DataElement de( tag );
     de.SetVR( VR::SQ );
     de.SetValue( *sqi );
-    assert( de.GetVL().IsUndefined() );
+    gdcm_assert( de.GetVL().IsUndefined() );
     de.SetVLToUndefined();
     ds.Insert( de );
   }
@@ -431,7 +431,7 @@ static bool GetUltraSoundSpacingValueFromSequence(const DataSet& ds, std::vector
   //const SequenceOfItems * sqi = ds.GetDataElement( tsqusreg ).GetSequenceOfItems();
   SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tsqusreg ).GetValueAsSQ();
   if( !sqi ) return false;
-  assert( sqi );
+  gdcm_assert( sqi );
   // Get first item:
   const Item &item = sqi->GetItem(1);
   const DataSet & subds = item.GetNestedDataSet();
@@ -441,10 +441,10 @@ static bool GetUltraSoundSpacingValueFromSequence(const DataSet& ds, std::vector
   Attribute<0x0018,0x602e> at2;
   const DataElement &de1 = subds.GetDataElement( at1.GetTag() );
   at1.SetFromDataElement( de1 );
-  assert( at1.GetNumberOfValues() == 1 );
+  gdcm_assert( at1.GetNumberOfValues() == 1 );
   const DataElement &de2 = subds.GetDataElement( at2.GetTag() );
   at2.SetFromDataElement( de2 );
-  assert( at2.GetNumberOfValues() == 1 );
+  gdcm_assert( at2.GetNumberOfValues() == 1 );
   sp.push_back( at1.GetValue() );
   sp.push_back( at2.GetValue() );
 
@@ -549,7 +549,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
     if( GetOriginValueFromSequence(ds,t1, ori)
      || GetOriginValueFromSequence(ds, t2, ori) )
       {
-      assert( ori.size() == 3 );
+      gdcm_assert( ori.size() == 3 );
       return ori;
       }
     ori.resize( 3 );
@@ -568,7 +568,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
         const Item &item = sqi->GetItem(1);
         const DataSet & subds = item.GetNestedDataSet();
         const Tag timagepositionpatient(0x0020, 0x0032);
-        assert( subds.FindDataElement( timagepositionpatient ) );
+        gdcm_assert( subds.FindDataElement( timagepositionpatient ) );
         Attribute<0x0020,0x0032> at = {{0,0,0}}; // default value if empty
         at.SetFromDataSet( subds );
         ori.resize( at.GetNumberOfValues() );
@@ -603,7 +603,7 @@ std::vector<double> ImageHelper::GetOriginValue(File const & f)
     ori[1] = 0;
     ori[2] = 0;
     }
-  assert( ori.size() == 3 );
+  gdcm_assert( ori.size() == 3 );
   return ori;
 }
 
@@ -682,7 +682,7 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
     if( GetDirectionCosinesValueFromSequence(ds,t1, dircos)
      || GetDirectionCosinesValueFromSequence(ds, t2, dircos) )
       {
-      assert( dircos.size() == 6 );
+      gdcm_assert( dircos.size() == 6 );
       return dircos;
       }
     else
@@ -749,7 +749,7 @@ std::vector<double> ImageHelper::GetDirectionCosinesValue(File const & f)
     dircos[5] = 0;
     }
 
-  assert( dircos.size() == 6 );
+  gdcm_assert( dircos.size() == 6 );
   return dircos;
 }
 
@@ -960,7 +960,7 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
   MediaStorage ms;
   ms.SetFromFile(f);
   DataSet& ds = f.GetDataSet();
-  assert( MediaStorage::IsImage( ms ) );
+  gdcm_assert( MediaStorage::IsImage( ms ) );
   {
     Attribute<0x0028,0x0010> rows;
     rows.SetValue( (uint16_t)dims[1] );
@@ -1031,7 +1031,7 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
       {
         const DataElement &de = ds.GetDataElement( tfgs );
         SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
-        assert( sqi );
+        gdcm_assert( sqi );
         sqi->SetNumberOfItems( dims[2] );
         {
           // Simple mechanism to avoid recomputation of Sequence Length: make
@@ -1085,7 +1085,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
     if( GetInterceptSlopeValueFromSequence(ds,t1, interceptslope)
      || GetInterceptSlopeValueFromSequence(ds,t2, interceptslope) )
       {
-      assert( interceptslope.size() == 2 );
+      gdcm_assert( interceptslope.size() == 2 );
       return interceptslope;
       }
 
@@ -1273,7 +1273,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
     }
 
   // \post condition slope can never be 0:
-  assert( interceptslope[1] != 0. );
+  gdcm_assert( interceptslope[1] != 0. );
   return interceptslope;
 }
 
@@ -1357,7 +1357,7 @@ Tag ImageHelper::GetSpacingTagFromMediaStorage(MediaStorage const &ms)
   case MediaStorage::UltrasoundMultiFrameImageStorage:
     // gdcmData/US-MONO2-8-8x-execho.dcm
     // this should be handled somewhere else
-    //assert(0);
+    //gdcm_assert(0);
     gdcmWarningMacro( "FIXME" );
     t = Tag(0xffff,0xffff);
     break;
@@ -1496,7 +1496,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     if( GetSpacingValueFromSequence(ds,t1, sp)
       || GetSpacingValueFromSequence(ds, t2, sp) )
       {
-      assert( sp.size() == 3 );
+      gdcm_assert( sp.size() == 3 );
       return sp;
       }
     // Else.
@@ -1557,7 +1557,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     const Dicts &dicts = g.GetDicts();
     const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
     const VR & vr = entry.GetVR();
-    assert( vr.Compatible( de.GetVR() ) );
+    gdcm_assert( vr.Compatible( de.GetVR() ) );
     switch(vr)
       {
     case VR::DS:
@@ -1565,7 +1565,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         Element<VR::DS,VM::VM1_n> el;
         std::stringstream ss;
         const ByteValue *bv = de.GetByteValue();
-        assert( bv );
+        gdcm_assert( bv );
         std::string s = std::string( bv->GetPointer(), bv->GetLength() );
         ss.str( s );
         // Stupid file: CT-MONO2-8-abdo.dcm
@@ -1576,7 +1576,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         if( found != std::string::npos )
           {
           el.Read( ss );
-          assert( el.GetLength() == 2 );
+          gdcm_assert( el.GetLength() == 2 );
           for(unsigned int i = 0; i < el.GetLength(); ++i)
             {
             if( el.GetValue(i) )
@@ -1602,7 +1602,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
           sp.push_back( singleval );
           sp.push_back( singleval );
           }
-        assert( sp.size() == (unsigned int)entry.GetVM() );
+        gdcm_assert( sp.size() == (unsigned int)entry.GetVM() );
         }
       break;
     case VR::IS:
@@ -1610,7 +1610,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
         Element<VR::IS,VM::VM1_n> el;
         std::stringstream ss;
         const ByteValue *bv = de.GetByteValue();
-        assert( bv );
+        gdcm_assert( bv );
         std::string s = std::string( bv->GetPointer(), bv->GetLength() );
         ss.str( s );
         el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
@@ -1626,11 +1626,11 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
             }
         }
         std::swap( sp[0], sp[1]);
-        assert( sp.size() == (unsigned int)entry.GetVM() );
+        gdcm_assert( sp.size() == (unsigned int)entry.GetVM() );
         }
       break;
     default:
-      assert(0);
+      gdcm_assert(0);
       break;
       }
     }
@@ -1639,7 +1639,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     sp.push_back( 1.0 );
     sp.push_back( 1.0 );
     }
-  assert( sp.size() == 2 );
+  gdcm_assert( sp.size() == 2 );
   // Make sure multiframe:
   std::vector<unsigned int> dims = ImageHelper::GetDimensionsValue( f );
 
@@ -1658,7 +1658,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
       const Dicts &dicts = g.GetDicts();
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();
-      assert( de.GetVR() == vr || de.GetVR() == VR::INVALID || de.GetVR() == VR::UN );
+      gdcm_assert( de.GetVR() == vr || de.GetVR() == VR::INVALID || de.GetVR() == VR::UN );
       if( entry.GetVM() == VM::VM1 )
         {
         switch(vr)
@@ -1668,7 +1668,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
             Element<VR::DS,VM::VM1_n> el;
             std::stringstream ss;
             const ByteValue *bv = de.GetByteValue();
-            assert( bv );
+            gdcm_assert( bv );
             std::string s = std::string( bv->GetPointer(), bv->GetLength() );
             ss.str( s );
             el.SetLength( entry.GetVM().GetLength() * entry.GetVR().GetSizeof() );
@@ -1678,18 +1678,18 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
               const double value = el.GetValue(i);
               sp.push_back( value );
               }
-            //assert( sp.size() == entry.GetVM() );
+            //gdcm_assert( sp.size() == entry.GetVM() );
             }
           break;
         default:
-          assert(0);
+          gdcm_assert(0);
           break;
           }
         }
       else
         {
-        assert( entry.GetVM() == VM::VM2_n );
-        assert( vr == VR::DS );
+        gdcm_assert( entry.GetVM() == VM::VM2_n );
+        gdcm_assert( vr == VR::DS );
         Attribute<0x28,0x8> numberoframes;
         const DataElement& de1 = ds.GetDataElement( numberoframes.GetTag() );
         numberoframes.SetFromDataElement( de1 );
@@ -1708,7 +1708,7 @@ std::vector<double> ImageHelper::GetSpacingValue(File const & f)
     const DataElement& de = ds.GetDataElement( Tag(0x0028,0x0009) );
     Attribute<0x0028,0x0009,VR::AT,VM::VM1> at;
     at.SetFromDataElement( de );
-    assert( ds.FindDataElement( at.GetTag() ) );
+    gdcm_assert( ds.FindDataElement( at.GetTag() ) );
     if( ds.FindDataElement( at.GetValue() ) )
       {
 /*
@@ -1755,11 +1755,11 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
     sp.push_back( 1.0 );
     }
 
-  assert( sp.size() == 3 );
-  assert( sp[0] != 0. );
-  assert( sp[1] != 0. );
+  gdcm_assert( sp.size() == 3 );
+  gdcm_assert( sp[0] != 0. );
+  gdcm_assert( sp[1] != 0. );
   //if( ms != MediaStorage::MRImageStorage )
-  //  assert( sp[2] != 0. );
+  //  gdcm_assert( sp[2] != 0. );
   return sp;
 }
 
@@ -1767,7 +1767,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
 {
   MediaStorage ms;
   ms.SetFromDataSet(ds);
-  assert( MediaStorage::IsImage( ms ) );
+  gdcm_assert( MediaStorage::IsImage( ms ) );
   if( ms == MediaStorage::SecondaryCaptureImageStorage )
     {
     Tag pixelspacing(0x0028,0x0030);
@@ -1778,7 +1778,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
     //ds.Remove( spacingbetweenslice );
     //return;
     }
-  assert( spacing.size() == 3 );
+  gdcm_assert( spacing.size() == 3 );
 
   if( ms == MediaStorage::EnhancedCTImageStorage
    || ms == MediaStorage::EnhancedMRImageStorage
@@ -1889,21 +1889,21 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();
       const VM & vm = entry.GetVM(); (void)vm;
-      assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
+      gdcm_assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
       switch(vr)
         {
       case VR::DS:
           {
           Element<VR::DS,VM::VM1_n> el;
           el.SetLength( entry.GetVM().GetLength() * vr.GetSizeof() );
-          assert( entry.GetVM() == VM::VM2 );
+          gdcm_assert( entry.GetVM() == VM::VM2 );
           for( unsigned int i = 0; i < entry.GetVM().GetLength(); ++i)
             {
             el.SetValue( spacing[i], i );
             }
           el.SetValue( spacing[1], 0 );
           el.SetValue( spacing[0], 1 );
-          //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
+          //gdcm_assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
           std::stringstream os;
           el.Write( os );
           de.SetVR( VR::DS );
@@ -1917,12 +1917,12 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
           {
           Element<VR::IS,VM::VM1_n> el;
           el.SetLength( entry.GetVM().GetLength() * vr.GetSizeof() );
-          assert( entry.GetVM() == VM::VM2 );
+          gdcm_assert( entry.GetVM() == VM::VM2 );
           for( unsigned int i = 0; i < entry.GetVM().GetLength(); ++i)
             {
             el.SetValue( (int)spacing[i], i );
             }
-          //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
+          //gdcm_assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
           std::stringstream os;
           el.Write( os );
           de.SetVR( VR::IS );
@@ -1933,7 +1933,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
           }
         break;
       default:
-        assert(0);
+        gdcm_assert(0);
         }
       }
     }
@@ -1947,11 +1947,11 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
       const DictEntry &entry = dicts.GetDictEntry(de.GetTag());
       const VR & vr = entry.GetVR();
       const VM & vm = entry.GetVM(); (void)vm;
-      assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
+      gdcm_assert( de.GetVR() == vr || de.GetVR() == VR::INVALID );
       if( entry.GetVM() == VM::VM2_n )
         {
-        assert( vr == VR::DS );
-        assert( de.GetTag() == Tag(0x3004,0x000c) );
+        gdcm_assert( vr == VR::DS );
+        gdcm_assert( de.GetTag() == Tag(0x3004,0x000c) );
         Attribute<0x28,0x8> numberoframes;
         // Make we are multiframes:
         if( ds.FindDataElement( numberoframes.GetTag() ) )
@@ -1961,15 +1961,15 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
 
           Element<VR::DS,VM::VM2_n> el;
           el.SetLength( numberoframes.GetValue() * vr.GetSizeof() );
-          assert( entry.GetVM() == VM::VM2_n );
+          gdcm_assert( entry.GetVM() == VM::VM2_n );
           double spacing_start = 0;
-          assert( 0 < numberoframes.GetValue() );
+          gdcm_assert( 0 < numberoframes.GetValue() );
           for( int i = 0; i < numberoframes.GetValue(); ++i)
             {
             el.SetValue( spacing_start, i );
             spacing_start += spacing[2];
             }
-          //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
+          //gdcm_assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
           std::stringstream os;
           el.Write( os );
           de.SetVR( VR::DS );
@@ -1987,12 +1987,12 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
             {
             Element<VR::DS,VM::VM1_n> el;
             el.SetLength( entry.GetVM().GetLength() * vr.GetSizeof() );
-            assert( entry.GetVM() == VM::VM1 );
+            gdcm_assert( entry.GetVM() == VM::VM1 );
             for( unsigned int i = 0; i < entry.GetVM().GetLength(); ++i)
               {
               el.SetValue( spacing[i+2], i );
               }
-            //assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
+            //gdcm_assert( el.GetValue(0) == spacing[0] && el.GetValue(1) == spacing[1] );
             std::stringstream os;
             el.Write( os );
             de.SetVR( VR::DS );
@@ -2003,7 +2003,7 @@ void ImageHelper::SetSpacingValue(DataSet & ds, const std::vector<double> & spac
             }
           break;
         default:
-          assert(0);
+          gdcm_assert(0);
           }
         }
       }
@@ -2045,10 +2045,10 @@ static void SetDataElementInSQAsItemNumber(DataSet & ds, DataElement const & de,
 void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
 {
   const double *origin = image.GetOrigin();
-  //assert( origin.size() == 3 );
+  //gdcm_assert( origin.size() == 3 );
   MediaStorage ms;
   ms.SetFromDataSet(ds);
-  assert( MediaStorage::IsImage( ms ) );
+  gdcm_assert( MediaStorage::IsImage( ms ) );
 
   if( ms == MediaStorage::SecondaryCaptureImageStorage && !ImageHelper::SecondaryCaptureImagePlaneModule )
     {
@@ -2149,7 +2149,7 @@ void ImageHelper::SetOriginValue(DataSet & ds, const Image & image)
       if( ds.FindDataElement( tfgs0 ) )
       {
         SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs0 ).GetValueAsSQ();
-        assert( sqi );
+        gdcm_assert( sqi );
         SequenceOfItems::SizeType nitems = sqi->GetNumberOfItems();
         for(SequenceOfItems::SizeType i0 = 1; i0 <= nitems; ++i0)
         {
@@ -2200,7 +2200,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
 {
   MediaStorage ms;
   ms.SetFromDataSet(ds);
-  assert( MediaStorage::IsImage( ms ) );
+  gdcm_assert( MediaStorage::IsImage( ms ) );
 
   if( ms == MediaStorage::SecondaryCaptureImageStorage && !ImageHelper::SecondaryCaptureImagePlaneModule )
     {
@@ -2243,7 +2243,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
   // Image Orientation (Patient)
   Attribute<0x0020,0x0037> iop = {{1,0,0,0,1,0}}; // default value
 
-  assert( dircos.size() == 6 );
+  gdcm_assert( dircos.size() == 6 );
   DirectionCosines dc( dircos.data() );
   if( !dc.IsValid() )
     {
@@ -2316,7 +2316,7 @@ void ImageHelper::SetDirectionCosinesValue(DataSet & ds, const std::vector<doubl
       if( ds.FindDataElement( tfgs ) )
       {
         SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
-        assert( sqi );
+        gdcm_assert( sqi );
         SequenceOfItems::SizeType nitems = sqi->GetNumberOfItems();
         for(SequenceOfItems::SizeType i0 = 1; i0 <= nitems; ++i0)
         {
@@ -2346,7 +2346,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
   MediaStorage ms;
   // SetFromFile is required here, SetFromDataSet is not enough for all cases
   ms.SetFromFile(f);
-  assert( MediaStorage::IsImage( ms ) );
+  gdcm_assert( MediaStorage::IsImage( ms ) );
   DataSet &ds = f.GetDataSet();
 
   // FIXME Hardcoded
@@ -2441,7 +2441,7 @@ void ImageHelper::SetRescaleInterceptSlopeValue(File & f, const Image & img)
       if( ds.FindDataElement( tfgs ) )
       {
         SmartPointer<SequenceOfItems> sqi = ds.GetDataElement( tfgs ).GetValueAsSQ();
-        assert( sqi );
+        gdcm_assert( sqi );
         SequenceOfItems::SizeType nitems = sqi->GetNumberOfItems();
         for(SequenceOfItems::SizeType i0 = 1; i0 <= nitems; ++i0)
         {
@@ -2860,7 +2860,7 @@ SmartPointer<LookupTable> ImageHelper::GetLUT(File const& f)
         // LookupTableType::RED == 0
         lut->SetLUT( LookupTable::LookupTableType(i),
           (const unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
-        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+        //gdcm_assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
         }
       else
         {
@@ -2870,7 +2870,7 @@ SmartPointer<LookupTable> ImageHelper::GetLUT(File const& f)
       unsigned long check =
         (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536)
         * el_us3.GetValue(2) / 8;
-      assert( !lut->Initialized() || check == lut_raw->GetLength() ); (void)check;
+      gdcm_assert( !lut->Initialized() || check == lut_raw->GetLength() ); (void)check;
       }
     else if( ds.FindDataElement( seglut ) )
       {
@@ -2879,7 +2879,7 @@ SmartPointer<LookupTable> ImageHelper::GetLUT(File const& f)
         {
         lut->SetLUT( LookupTable::LookupTableType(i),
           (const unsigned char*)lut_raw->GetPointer(), lut_raw->GetLength() );
-        //assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
+        //gdcm_assert( pf.GetBitsAllocated() == el_us3.GetValue(2) );
         }
       else
         {
@@ -2889,11 +2889,11 @@ SmartPointer<LookupTable> ImageHelper::GetLUT(File const& f)
       //unsigned long check =
       //  (el_us3.GetValue(0) ? el_us3.GetValue(0) : 65536)
        // * el_us3.GetValue(2) / 8;
-      //assert( check == lut_raw->GetLength() ); (void)check;
+      //gdcm_assert( check == lut_raw->GetLength() ); (void)check;
       }
     else
       {
-      assert(0);
+      gdcm_assert(0);
       }
     }
   if( ! lut->Initialized() ) {

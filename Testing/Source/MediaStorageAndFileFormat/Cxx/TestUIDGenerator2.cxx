@@ -64,7 +64,7 @@ int TestUIDGenerator2(int , char *[])
     it += nuids*2;
     }
   std::cout << v_one.size() << std::endl;
-  assert( v_one.size() == nuids * nthreads ); // programmer error
+  gdcm_assert( v_one.size() == nuids * nthreads ); // programmer error
 
   std::copy(v_one.begin(), v_one.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
 

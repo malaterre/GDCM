@@ -346,7 +346,7 @@ static bool PopulateSingeFile( gdcm::PixmapWriter & writer,
 
 static bool Populate( gdcm::PixmapWriter & writer, gdcm::ImageCodec & jpeg, gdcm::Directory::FilenamesType const & filenames, unsigned int ndim = 2, std::streampos const & pos = 0 )
 {
-  assert( !filenames.empty() );
+  gdcm_assert( !filenames.empty() );
   std::vector<std::string>::const_iterator it = filenames.begin();
   bool b = true;
   gdcm::Pixmap &image = writer.GetPixmap();
@@ -509,92 +509,92 @@ int main (int argc, char *argv[])
           {
           if( option_index == 0 ) /* input */
             {
-            assert( strcmp(s, "input") == 0 );
-            assert( filename.IsEmpty() );
+            gdcm_assert( strcmp(s, "input") == 0 );
+            gdcm_assert( filename.IsEmpty() );
             filename = optarg;
             filenames.emplace_back(filename);
             }
           else if( option_index == 2 ) /* depth */
             {
-            assert( strcmp(s, "depth") == 0 );
+            gdcm_assert( strcmp(s, "depth") == 0 );
             bpp = atoi(optarg);
             }
           else if( option_index == 3 ) /* size */
             {
-            assert( strcmp(s, "size") == 0 );
+            gdcm_assert( strcmp(s, "size") == 0 );
             ndimension = readsize(optarg, size);
             }
           else if( option_index == 4 ) /* region */
             {
-            assert( strcmp(s, "region") == 0 );
+            gdcm_assert( strcmp(s, "region") == 0 );
             readgeometry(optarg, region);
             }
           else if( option_index == 5 ) /* fill */
             {
-            assert( strcmp(s, "fill") == 0 );
+            gdcm_assert( strcmp(s, "fill") == 0 );
             color = atoi(optarg);
             }
           else if( option_index == 6 ) /* study-uid */
             {
-            assert( strcmp(s, "study-uid") == 0 );
+            gdcm_assert( strcmp(s, "study-uid") == 0 );
             study_uid = optarg;
             }
           else if( option_index == 7 ) /* series-uid */
             {
-            assert( strcmp(s, "series-uid") == 0 );
+            gdcm_assert( strcmp(s, "series-uid") == 0 );
             series_uid = optarg;
             }
           else if( option_index == 8 ) /* root-uid */
             {
-            assert( strcmp(s, "root-uid") == 0 );
+            gdcm_assert( strcmp(s, "root-uid") == 0 );
             root = optarg;
             }
           else if( option_index == 9 ) /* sop-class-uid */
             {
-            assert( strcmp(s, "sop-class-uid") == 0 );
+            gdcm_assert( strcmp(s, "sop-class-uid") == 0 );
             sopclass = optarg;
             }
           else if( option_index == 10 ) /* endian */
             {
-            assert( strcmp(s, "endian") == 0 );
+            gdcm_assert( strcmp(s, "endian") == 0 );
             lsb_msb = optarg;
             }
           else if( option_index == 11 ) /* sign */
             {
-            assert( strcmp(s, "sign") == 0 );
+            gdcm_assert( strcmp(s, "sign") == 0 );
             pixelsign = atoi(optarg);
             }
           else if( option_index == 12 ) /* spp */
             {
-            assert( strcmp(s, "spp") == 0 );
+            gdcm_assert( strcmp(s, "spp") == 0 );
             pixelspp = atoi(optarg);
             }
           else if( option_index == 13 ) /* pconf */
             {
-            assert( strcmp(s, "pc") == 0 );
+            gdcm_assert( strcmp(s, "pc") == 0 );
             pconf = atoi(optarg);
             }
           else if( option_index == 14 ) /* pinter */
             {
-            assert( strcmp(s, "pi") == 0 );
+            gdcm_assert( strcmp(s, "pi") == 0 );
             pinter = 1;
             pinterstr = optarg;
             }
           else if( option_index == 15 ) /* pformat */
             {
-            assert( strcmp(s, "pf") == 0 );
+            gdcm_assert( strcmp(s, "pf") == 0 );
             pformat = 1;
             pformatstr = optarg;
             }
           else if( option_index == 16 ) /* start_pos */
             {
-            assert( strcmp(s, "offset") == 0 );
+            gdcm_assert( strcmp(s, "offset") == 0 );
             poffset = 1;
             start_pos = (size_t)std::atoll(optarg);
             }
           else if( option_index == 17 ) /* template */
             {
-            assert( strcmp(s, "template") == 0 );
+            gdcm_assert( strcmp(s, "template") == 0 );
             templated = 1;
             templatefilename = optarg;
             }
@@ -606,14 +606,14 @@ int main (int argc, char *argv[])
 
     case 'i':
       //printf ("option i with value '%s'\n", optarg);
-      assert( filename.IsEmpty() );
+      gdcm_assert( filename.IsEmpty() );
       filename = optarg;
       filenames.emplace_back(filename);
       break;
 
     case 'o':
       //printf ("option o with value '%s'\n", optarg);
-      assert( outfilename.IsEmpty() );
+      gdcm_assert( outfilename.IsEmpty() );
       outfilename = optarg;
       break;
 
@@ -1175,7 +1175,7 @@ int main (int argc, char *argv[])
   if( fill )
     {
     const gdcm::PixelFormat &pixeltype = imageori.GetPixelFormat();
-    assert( imageori.GetNumberOfDimensions() == 2 || imageori.GetNumberOfDimensions() == 3 );
+    gdcm_assert( imageori.GetNumberOfDimensions() == 2 || imageori.GetNumberOfDimensions() == 3 );
     unsigned long len = imageori.GetBufferLength();
     gdcm::SmartPointer<gdcm::Pixmap> image = new gdcm::Pixmap;
     image->SetNumberOfDimensions( 2 ); // good default
@@ -1248,7 +1248,7 @@ int main (int argc, char *argv[])
       }
     else
       {
-      assert( ts.IsImplicit() );
+      gdcm_assert( ts.IsImplicit() );
       image->SetTransferSyntax( gdcm::TransferSyntax::ImplicitVRLittleEndian );
       }
     //imageori.Print( std::cout );

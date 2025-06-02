@@ -100,17 +100,17 @@ bool Write_Resolution(gdcm::StreamImageWriter & theStreamWriter, const char *fil
     // gdcmData/MAROTECH_CT_JP2Lossy.dcm
     //gdcmWarningMacro( "J2K start like JPEG-2000 compressed image data instead of codestream" );
     parameters.decod_format = 1; //JP2_CFMT;
-    //assert(parameters.decod_format == JP2_CFMT);
+    //gdcm_assert(parameters.decod_format == JP2_CFMT);
     }
   else
     {
     /* JPEG-2000 codestream */
     //parameters.decod_format = J2K_CFMT;
-    //assert(parameters.decod_format == J2K_CFMT);
-    assert( 0 );
+    //gdcm_assert(parameters.decod_format == J2K_CFMT);
+    gdcm_assert( 0 );
     }
   parameters.cod_format = 11; // PGX_DFMT;
-  //assert(parameters.cod_format == PGX_DFMT);
+  //gdcm_assert(parameters.cod_format == PGX_DFMT);
 
   /* get a decoder handle */
     dinfo = opj_create_decompress(CODEC_JP2);
@@ -447,10 +447,10 @@ int main(int argc, char *argv[])
  memcpy(&(tmpBuffer2[sizeof(uint16_t)]), &secondTag1, sizeof(uint16_t));
  memcpy(&(tmpBuffer2[2*sizeof(uint16_t)]), &thirdTag1, sizeof(uint32_t));
  //memcpy(&(tmpBuffer2[3*sizeof(uint16_t)]), &fourthTag1, sizeof(uint16_t));
- assert( of && !of.eof() && of.good() );
+ gdcm_assert( of && !of.eof() && of.good() );
  of.write(tmpBuffer2, theBufferSize1);
  of.flush();
- assert( of );
+ gdcm_assert( of );
 
 
 

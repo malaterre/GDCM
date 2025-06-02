@@ -44,7 +44,7 @@ static bool processgroup(Item & item3, std::string const & outfilename)
   const DataElement& seq6 = subds3.GetDataElement( tseq6 );
   SmartPointer<SequenceOfItems> sqi6 = seq6.GetValueAsSQ();
   size_t ni6= sqi6->GetNumberOfItems();
-  assert( sqi6->GetNumberOfItems() >= 1 );
+  gdcm_assert( sqi6->GetNumberOfItems() >= 1 );
   const PrivateTag tseq7(0x7fe1,0x86,"GEMS_Ultrasound_MovieGroup_001");
   int dimx = 0, dimy = 0;
   for( size_t i6 = 1; i6 <= ni6; ++i6 )
@@ -70,7 +70,7 @@ static bool processgroup(Item & item3, std::string const & outfilename)
 
   SmartPointer<SequenceOfItems> sqi4 = seq3.GetValueAsSQ();
   size_t ni4= sqi4->GetNumberOfItems();
-  assert( sqi4->GetNumberOfItems() >= 1 );
+  gdcm_assert( sqi4->GetNumberOfItems() >= 1 );
   const PrivateTag tseq8(0x7fe1,0x37,"GEMS_Ultrasound_MovieGroup_001");
   const PrivateTag tseq4(0x7fe1,0x43,"GEMS_Ultrasound_MovieGroup_001");
   const PrivateTag tseq5(0x7fe1,0x60,"GEMS_Ultrasound_MovieGroup_001");
@@ -102,7 +102,7 @@ static bool processgroup(Item & item3, std::string const & outfilename)
     el0.SetFromDataElement( seq4 );
     std::cout << "TimeStamp (" << el0.GetLength() << "): ";
     // Seems like the 3D volumes is split into chunks of max 100 frames...
-    assert( ldimz.GetValue() == el0.GetLength() );
+    gdcm_assert( ldimz.GetValue() == el0.GetLength() );
     for( unsigned long i = 0; i < el0.GetLength(); ++i ) {
       if(i) std::cout << ",";
       std::cout << el0.GetValue(i);
@@ -141,7 +141,7 @@ static bool processgroup(Item & item3, std::string const & outfilename)
   (void)l1;
   size_t l2 = im->GetBufferLength();
   (void)l2;
-  assert( im->GetBufferLength() == imbuffer.size() );
+  gdcm_assert( im->GetBufferLength() == imbuffer.size() );
   im->SetPhotometricInterpretation( gdcm::PhotometricInterpretation::MONOCHROME2 );
 
   im->SetDataElement( fakedata );
@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
   const DataElement& seq = ds.GetDataElement( tseq );
 
   SmartPointer<SequenceOfItems> sqi = seq.GetValueAsSQ();
-  assert( sqi->GetNumberOfItems() == 1 );
+  gdcm_assert( sqi->GetNumberOfItems() == 1 );
   Item &item = sqi->GetItem(1);
   DataSet &subds = item.GetNestedDataSet();
 
@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
   const DataElement& seq1 = subds.GetDataElement( tseq1 );
 
   SmartPointer<SequenceOfItems> sqi2 = seq1.GetValueAsSQ();
-  assert( sqi2->GetNumberOfItems() == 1 );
+  gdcm_assert( sqi2->GetNumberOfItems() == 1 );
   //int n = sqi2->GetNumberOfItems();
   int index = 1;
   Item &item2 = sqi2->GetItem(index);
@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
 
   SmartPointer<SequenceOfItems> sqi3 = seq2.GetValueAsSQ();
   size_t ni3 = sqi3->GetNumberOfItems(); (void)ni3;
-  assert( sqi3->GetNumberOfItems() >= 1 );
+  gdcm_assert( sqi3->GetNumberOfItems() >= 1 );
   std::cout << "#Groups = " << sqi3->GetNumberOfItems() << std::endl;
   for( SequenceOfItems::SizeType i = 1; i <= sqi3->GetNumberOfItems(); ++i) {
     Item &item3 = sqi3->GetItem(i);

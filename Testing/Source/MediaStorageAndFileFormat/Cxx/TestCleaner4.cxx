@@ -24,7 +24,7 @@ template <typename T>
 static const DataSet &GetNestedDataSet(const DataSet &ds, const T &path) {
   const DataElement &de = ds.GetDataElement(path);
   SmartPointer<SequenceOfItems> sqi = de.GetValueAsSQ();
-  assert(sqi && sqi->GetNumberOfItems() == 1);
+  gdcm_assert(sqi && sqi->GetNumberOfItems() == 1);
   const Item &item = sqi->GetItem(1);
   const DataSet &subds = item.GetNestedDataSet();
   return subds;
@@ -328,7 +328,7 @@ struct TestCleaner4Impl4 : public TestCleaner4Impl {
     const bool b5 = IsTagEmpty(ds, path1, t5);
 
     if (!b1 || !b2 || !b3 || !b4 || !b5) {
-      assert(0);
+      gdcm_assert(0);
       return false;
     }
     return true;

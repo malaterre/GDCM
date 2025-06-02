@@ -84,7 +84,7 @@ public:
 
   LookupTable(LookupTable const &lut):Object(lut), Internal(nullptr), BitSample(0), IncompleteLUT(false)
     {
-    assert(0);
+    gdcm_assert(0);
     }
 
   /// return the LUT as RGBA buffer
