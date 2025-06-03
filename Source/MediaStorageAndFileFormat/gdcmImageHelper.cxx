@@ -221,6 +221,7 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
   if( nitems > 1 ) {
   std::vector<double> dircos_subds2; dircos_subds2.resize(6);
   std::vector<double> distances;
+  std::set<double> unique_distances;
   for(SequenceOfItems::SizeType i0 = 1; i0 <= nitems; ++i0)
     {
     const Item &item = sqi->GetItem(i0);
@@ -247,8 +248,22 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     double dist = 0;
     for (int i = 0; i < 3; ++i) dist += normal[i]*ipp[i];
     distances.push_back( dist );
+    unique_distances.insert(dist);
     }
   assert( distances.size() == nitems );
+  if( unique_distances.size() != distances.size() )
+    {
+    if( distances.size() % distances.size() == 0 )
+      {
+      // same order ?
+      if( distances[0] == *unique_distances.begin() )
+        {
+        distances.assign(unique_distances.begin(), unique_distances.end());
+        nitems = unique_distances.size();
+        }
+      }
+    }
+
   double meanspacing = 0;
   double prev = distances[0];
   for(unsigned int i = 1; i < nitems; ++i)
@@ -264,7 +279,7 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
     if( meanspacing == 0.0 )
       {
       // Could be a time series. Assume time spacing of 1. for now:
-      gdcmDebugMacro( "Assuming time series for Z-spacing" );
+      gdcmWarningMacro( "Assuming time series for Z-spacing" );
       meanspacing = 1.0;
       timeseries = true;
       }
@@ -285,7 +300,8 @@ static bool ComputeZSpacingFromIPP(const DataSet &ds, double &zspacing)
       if( fabs(current - zspacing) > ZTolerance )
         {
         // For now simply gives up
-        gdcmErrorMacro( "This Enhanced Multiframe is not supported for now. Sorry" );
+        gdcmDebugMacro( "This Enhanced Multiframe is not supported for now: " << i << " gives " << fabs(current - zspacing) );
+        zspacing = 1.0;
         return false;
         }
       prev = distances[i];
@@ -989,7 +1005,7 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
       {
         // Only include Multi-Frame when required (not Conditional):
         if( ms == MediaStorage::XRayAngiographicImageStorage // A.14.3 XA Image IOD Module Table: Multi-frame C.7.6.6 C - Required if pixel data is Multi - frame Cine data
-		 )
+     )
         {
            ds.Remove(numframes.GetTag());
         }
@@ -1216,7 +1232,7 @@ std::vector<double> ImageHelper::GetRescaleInterceptSlopeValue(File const & f)
         {
         if(dummy[0] != 0 || dummy[1] != 1) {
         // SIEMENS is sending MFSPLIT with Modality LUT
-	// Case is: MAGNETOM Prisma / syngo MR XA30A with MFSPLIT
+  // Case is: MAGNETOM Prisma / syngo MR XA30A with MFSPLIT
         interceptslope[0] = dummy[0];
         interceptslope[1] = dummy[1];
         gdcmDebugMacro( "Forcing Modality LUT used for MR Image Storage: [" << dummy[0] << "," << dummy[1] << "]" );
@@ -2585,23 +2601,23 @@ bool ImageHelper::GetRealWorldValueMappingContent(File const & f, RealWorldValue
 
   if( ms == MediaStorage::MRImageStorage || ms == MediaStorage::NuclearMedicineImageStorage )
   {
-	  const Tag trwvms(0x0040,0x9096); // Real World Value Mapping Sequence
-	  if( ds.FindDataElement( trwvms ) )
-	  {
-		  SmartPointer<SequenceOfItems> sqi0 = ds.GetDataElement( trwvms ).GetValueAsSQ();
-		  if( sqi0 )
-		  {
-			  const Tag trwvlutd(0x0040,0x9212); // Real World Value LUT Data
-			  if( ds.FindDataElement( trwvlutd ) )
-			  {
-				  gdcmAssertAlwaysMacro(0); // Not supported !
-			  }
-			  // don't know how to handle multiples:
-			  gdcmAssertAlwaysMacro( sqi0->GetNumberOfItems() == 1 );
-			  const Item &item0 = sqi0->GetItem(1);
-			  const DataSet & subds0 = item0.GetNestedDataSet();
-			  //const Tag trwvi(0x0040,0x9224); // Real World Value Intercept
-			  //const Tag trwvs(0x0040,0x9225); // Real World Value Slope
+    const Tag trwvms(0x0040,0x9096); // Real World Value Mapping Sequence
+    if( ds.FindDataElement( trwvms ) )
+    {
+      SmartPointer<SequenceOfItems> sqi0 = ds.GetDataElement( trwvms ).GetValueAsSQ();
+      if( sqi0 )
+      {
+        const Tag trwvlutd(0x0040,0x9212); // Real World Value LUT Data
+        if( ds.FindDataElement( trwvlutd ) )
+        {
+          gdcmAssertAlwaysMacro(0); // Not supported !
+        }
+        // don't know how to handle multiples:
+        gdcmAssertAlwaysMacro( sqi0->GetNumberOfItems() == 1 );
+        const Item &item0 = sqi0->GetItem(1);
+        const DataSet & subds0 = item0.GetNestedDataSet();
+        //const Tag trwvi(0x0040,0x9224); // Real World Value Intercept
+        //const Tag trwvs(0x0040,0x9225); // Real World Value Slope
         {
           Attribute<0x0040,0x9224> at1 = {0};
           at1.SetFromDataSet( subds0 );
@@ -2610,26 +2626,26 @@ bool ImageHelper::GetRealWorldValueMappingContent(File const & f, RealWorldValue
           ret.RealWorldValueIntercept = at1.GetValue();
           ret.RealWorldValueSlope = at2.GetValue();
         }
-			  const Tag tmucs(0x0040,0x08ea); // Measurement Units Code Sequence
-			  if( subds0.FindDataElement( tmucs ) )
-			  {
-				  SmartPointer<SequenceOfItems> sqi = subds0.GetDataElement( tmucs ).GetValueAsSQ();
-				  if( sqi )
-				  {
-					  gdcmAssertAlwaysMacro( sqi->GetNumberOfItems() == 1 );
-					  const Item &item = sqi->GetItem(1);
-					  const DataSet & subds = item.GetNestedDataSet();
-					  Attribute<0x0008,0x0100> at1;
-					  at1.SetFromDataSet( subds );
-					  Attribute<0x0008,0x0104> at2;
-					  at2.SetFromDataSet( subds );
-					  ret.CodeValue = at1.GetValue().Trim();
-					  ret.CodeMeaning = at2.GetValue().Trim();
-				  }
-			  }
-		  }
-	  return true;
-	  }
+        const Tag tmucs(0x0040,0x08ea); // Measurement Units Code Sequence
+        if( subds0.FindDataElement( tmucs ) )
+        {
+          SmartPointer<SequenceOfItems> sqi = subds0.GetDataElement( tmucs ).GetValueAsSQ();
+          if( sqi )
+          {
+            gdcmAssertAlwaysMacro( sqi->GetNumberOfItems() == 1 );
+            const Item &item = sqi->GetItem(1);
+            const DataSet & subds = item.GetNestedDataSet();
+            Attribute<0x0008,0x0100> at1;
+            at1.SetFromDataSet( subds );
+            Attribute<0x0008,0x0104> at2;
+            at2.SetFromDataSet( subds );
+            ret.CodeValue = at1.GetValue().Trim();
+            ret.CodeMeaning = at2.GetValue().Trim();
+          }
+        }
+      }
+    return true;
+    }
   }
   return false;
 }
