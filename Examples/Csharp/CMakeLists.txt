@@ -17,6 +17,7 @@ set(CSHARP_EXAMPLES
   NewSequence
   GenerateDICOMDIR
   StandardizeFiles
+  ExplicitLittleEndian
   ReformatFile
   CompressLossyJPEG
   SendFileSCU
