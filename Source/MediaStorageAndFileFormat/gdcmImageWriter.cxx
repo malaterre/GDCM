@@ -247,7 +247,11 @@ bool ImageWriter::Write()
   if( pi == PhotometricInterpretation::MONOCHROME1 || pi == PhotometricInterpretation::MONOCHROME2 )
   {
     assert( pf.GetSamplesPerPixel() == 1 );
-    ImageHelper::SetRescaleInterceptSlopeValue(GetFile(), pixeldata);
+    try {
+      ImageHelper::SetRescaleInterceptSlopeValue(GetFile(), pixeldata);
+    } catch( const char *impossible ) {
+      return false;
+    }
     if( ms == MediaStorage::RTDoseStorage && pixeldata.GetIntercept() != 0 )
     {
       return false;
