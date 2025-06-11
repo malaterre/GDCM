@@ -377,7 +377,9 @@ int main(int argc, char *argv[])
     std::string outfile = std::string( bvdatatype->GetPointer(), bvdatatype->GetLength() );
     outfile = LOComp::Trim( outfile.c_str() );
     const char *outfilename = outfile.c_str();
+#ifndef NDEBUG
     gdcm_assert( is_valid(outfilename) );
+#endif
     if( bv2 )
       {
       gdcm_assert( bv3 );

@@ -2,7 +2,9 @@
 add_subdirectory(Cxx)
 
 if(GDCM_WRAP_CSHARP)
-  add_subdirectory(Csharp)
+  if(VTKGDCM_WRAP_CSHARP)
+    add_subdirectory(Csharp)
+  endif()
 endif()
 
 if(GDCM_WRAP_JAVA)
