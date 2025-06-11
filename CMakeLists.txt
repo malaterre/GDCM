@@ -693,24 +693,45 @@ if(GDCM_STANDALONE)
       )
 
       # documented at https://vtk.org/doc/nightly/html/group__module.html
-      vtk_module_build(
-        MODULES               ${vtkgdcm_modules}
-        INSTALL_EXPORT        GDCM
-        ARCHIVE_DESTINATION   "${GDCM_INSTALL_LIB_DIR}"
-        HEADERS_DESTINATION   "${GDCM_INSTALL_INCLUDE_DIR}/vtk${vtk_version_suffix}"
-        CMAKE_DESTINATION     "${GDCM_INSTALL_PACKAGE_DIR}"
-        LICENSE_DESTINATION   "${GDCM_INSTALL_DATA_DIR}/vtkgdcm-${GDCM_SHORT_VERSION}"
-        SPDX_DESTINATION      "${GDCM_INSTALL_DATA_DIR}/vtkgdcm-${GDCM_SHORT_VERSION}"
-        HIERARCHY_DESTINATION "${GDCM_INSTALL_LIB_DIR}/vtk${vtk_version_suffix}/hierarchy/vtkgdcm"
-        LIBRARY_NAME_SUFFIX   "${vtkgdcm_library_suffix}"
-        VERSION               "${GDCM_VERSION}"
-        SOVERSION             "1"
-        # TODO: these are probably not set as they should be
-        #USE_EXTERNAL          "${GDCM_USE_EXTERNAL}"
-        #TEST_DATA_TARGET      vtkgdcmData
-        #TEST_INPUT_DATA_DIRECTORY  "${vtkgdcm_test_data_directory_input}"
-        #TEST_OUTPUT_DATA_DIRECTORY "${vtkgdcm_test_data_directory_output}"
-      )
+      if(VTK_VERSION VERSION_LESS 9.3)
+        vtk_module_build(
+          MODULES               ${vtkgdcm_modules}
+          INSTALL_EXPORT        GDCM
+          ARCHIVE_DESTINATION   "${GDCM_INSTALL_LIB_DIR}"
+          HEADERS_DESTINATION   "${GDCM_INSTALL_INCLUDE_DIR}/vtk${vtk_version_suffix}"
+          CMAKE_DESTINATION     "${GDCM_INSTALL_PACKAGE_DIR}"
+          LICENSE_DESTINATION   "${GDCM_INSTALL_DATA_DIR}/vtkgdcm-${GDCM_SHORT_VERSION}"
+          #SPDX_DESTINATION      "${GDCM_INSTALL_DATA_DIR}/vtkgdcm-${GDCM_SHORT_VERSION}"
+          HIERARCHY_DESTINATION "${GDCM_INSTALL_LIB_DIR}/vtk${vtk_version_suffix}/hierarchy/vtkgdcm"
+          LIBRARY_NAME_SUFFIX   "${vtkgdcm_library_suffix}"
+          VERSION               "${GDCM_VERSION}"
+          SOVERSION             "1"
+          # TODO: these are probably not set as they should be
+          #USE_EXTERNAL          "${GDCM_USE_EXTERNAL}"
+          #TEST_DATA_TARGET      vtkgdcmData
+          #TEST_INPUT_DATA_DIRECTORY  "${vtkgdcm_test_data_directory_input}"
+          #TEST_OUTPUT_DATA_DIRECTORY "${vtkgdcm_test_data_directory_output}"
+        )
+      else()
+        vtk_module_build(
+          MODULES               ${vtkgdcm_modules}
+          INSTALL_EXPORT        GDCM
+          ARCHIVE_DESTINATION   "${GDCM_INSTALL_LIB_DIR}"
+          HEADERS_DESTINATION   "${GDCM_INSTALL_INCLUDE_DIR}/vtk${vtk_version_suffix}"
+          CMAKE_DESTINATION     "${GDCM_INSTALL_PACKAGE_DIR}"
+          LICENSE_DESTINATION   "${GDCM_INSTALL_DATA_DIR}/vtkgdcm-${GDCM_SHORT_VERSION}"
+          SPDX_DESTINATION      "${GDCM_INSTALL_DATA_DIR}/vtkgdcm-${GDCM_SHORT_VERSION}"
+          HIERARCHY_DESTINATION "${GDCM_INSTALL_LIB_DIR}/vtk${vtk_version_suffix}/hierarchy/vtkgdcm"
+          LIBRARY_NAME_SUFFIX   "${vtkgdcm_library_suffix}"
+          VERSION               "${GDCM_VERSION}"
+          SOVERSION             "1"
+          # TODO: these are probably not set as they should be
+          #USE_EXTERNAL          "${GDCM_USE_EXTERNAL}"
+          #TEST_DATA_TARGET      vtkgdcmData
+          #TEST_INPUT_DATA_DIRECTORY  "${vtkgdcm_test_data_directory_input}"
+          #TEST_OUTPUT_DATA_DIRECTORY "${vtkgdcm_test_data_directory_output}"
+        )
+      endif()
 
       if(VTKGDCM_WRAP_PYTHON)
         find_package(PythonInterp ${VTK_PYTHON_VERSION} QUIET)
