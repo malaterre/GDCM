@@ -43,7 +43,9 @@ public:
 #endif
     TableInternal.insert(
       MapTableEntry::value_type(tag, te));
+#ifndef NDEBUG
     gdcm_assert( s < TableInternal.size() );
+#endif
     }
 
   const TableEntry &GetTableEntry(const Tag &tag) const

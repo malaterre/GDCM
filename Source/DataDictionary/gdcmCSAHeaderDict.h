@@ -57,7 +57,9 @@ public:
     MapCSAHeaderDictEntry::size_type s = CSAHeaderDictInternal.size();
 #endif
     CSAHeaderDictInternal.insert( de );
+#ifndef NDEBUG
     gdcm_assert( s < CSAHeaderDictInternal.size() );
+#endif
     }
 
   const CSAHeaderDictEntry &GetCSAHeaderDictEntry(const char *name) const

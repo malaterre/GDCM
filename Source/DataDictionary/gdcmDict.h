@@ -69,7 +69,9 @@ public:
 #endif
     DictInternal.insert(
       MapDictEntry::value_type(tag, de));
+#ifndef NDEBUG
     gdcm_assert( s < DictInternal.size() );
+#endif
     }
 
   const DictEntry &GetDictEntry(const Tag &tag) const
@@ -250,7 +252,9 @@ public:
       return;
       }
 #endif
+#ifndef NDEBUG
     gdcm_assert( s < DictInternal.size() /*&& std::cout << tag << "," << de << std::endl*/ );
+#endif
     }
   /// Remove entry 'tag'. Return true on success (element was found
   /// and remove). return false if element was not found.
