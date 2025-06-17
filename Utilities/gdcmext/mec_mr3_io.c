@@ -229,12 +229,12 @@ static int guess_unicode_and_convert(struct app *self, const char *str, size_t l
   char *dest_str = self->shift_jis_buffer;
   int utype = kError;
 #if MEC3_HAS_ICONV
-  char *in_str = str;
+  const char *in_str = str;
   char *out_str = dest_str;
   size_t inbytes = len;
   size_t outbytes = guesstimate;
   utype = kSHIFT_JIS;
-  if (iconv(self->conv, &in_str, &inbytes, &out_str, &outbytes) == (size_t)-1) {
+  if (iconv(self->conv, (char**)&in_str, &inbytes, &out_str, &outbytes) == (size_t)-1) {
 #if 0
     // at this point both gbk_str & inbytes have been modified, prefer original
     // values:
@@ -250,7 +250,7 @@ static int guess_unicode_and_convert(struct app *self, const char *str, size_t l
     } else {
       self->conv = iconv_open("utf-8", "euc-jp");
       in_str = str;
-      size_t ret = iconv(self->conv, &in_str, &inbytes, &out_str, &outbytes);
+      size_t ret = iconv(self->conv, (char**)&in_str, &inbytes, &out_str, &outbytes);
       assert(ret != (size_t)-1);
       iconv_close(self->conv);
       utype = kEUC_JP;
