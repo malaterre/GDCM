@@ -1744,13 +1744,9 @@ $ dcmdump D_CLUNIE_NM1_JPLL.dcm" | grep 0028,0009
           {
           if( at2.GetValue() != 0. )
             {
-            gdcmErrorMacro( "Number of Frame should be equal to 0" );
-            sp.push_back( 0.0 );
+            gdcmErrorMacro( "Frame time for a single frame image should equal to 0, but found "<< at.GetValue() << ". Default to 1.0.");
             }
-          else
-            {
-            sp.push_back( 1.0 );
-            }
+          sp.push_back( 1.0 );
           }
         }
       else
