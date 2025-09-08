@@ -2,9 +2,9 @@ name: C/C++ CI
 
 on:
   push:
-    branches: [ "release" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "release" ]
+    branches: [ "master" ]
 
 jobs:
   example_matrix:
