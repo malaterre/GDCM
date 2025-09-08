@@ -68,6 +68,7 @@ foreach(app ${GDCM_VTK_APPS})
     target_link_libraries(${app}
       VTK::FiltersCore VTK::FiltersModeling VTK::ImagingColor VTK::IOXML)
     set(_rendering_libs
+      VTK::InteractionImage
       VTK::InteractionWidgets VTK::RenderingAnnotation VTK::RenderingCore
       VTK::InteractionStyle VTK::RenderingFreeType VTK::RenderingOpenGL2
       VTK::RenderingVolume VTK::RenderingVolumeOpenGL2)
