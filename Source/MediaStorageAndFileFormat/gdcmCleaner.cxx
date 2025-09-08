@@ -523,6 +523,7 @@ typedef std::set<DataElement> DataElementSet;
 typedef DataElementSet::const_iterator ConstIterator;
 
 struct Cleaner::impl {
+  std::set<CodedEntryData> coded_entry_datas;
   std::set<DPath> preserve_dpaths;
   std::set<DPath> empty_dpaths;
   std::set<DPath> remove_dpaths;
@@ -545,7 +546,13 @@ struct Cleaner::impl {
         AllIllegal(true),
         WhenScrubFails(false) {}
 
-  enum ACTION { NONE, EMPTY, REMOVE, SCRUB };
+  // CODE_MEANING:
+  // In general, there are no Code Sequence Attributes in this table, since it
+  // is usually safe to assume that coded sequence entries, including private
+  // codes, do not contain identifying information. Exceptions are codes for
+  // providers and staff.
+  // https://dicom.nema.org/medical/dicom/current/output/chtml/part15/chapter_E.html#para_d0913a6e-9386-42b2-b2b3-e87c84cdb304
+  enum ACTION { NONE, EMPTY, REMOVE, SCRUB, CODE_MEANING };
   enum ACTION ComputeAction(File const &file, DataSet &ds,
                             const DataElement &de, VR const &ref_dict_vr,
                             const std::string &tag_path);
@@ -659,6 +666,11 @@ struct Cleaner::impl {
 
   bool Scrub(VR const & /*vr*/) { return false; }
 
+  bool EmptyCodeMeaning(CodedEntryData const &ced) { 
+      coded_entry_datas.insert(ced);
+      return true; 
+  }
+  
   bool Preserve(DPath const &dpath) {
     preserve_dpaths.insert(dpath);
     return true;
@@ -1096,7 +1108,29 @@ Cleaner::impl::ACTION Cleaner::impl::ComputeAction(
   }
 
   if (tag.IsPublic()) {
+    // CodeMeaning
+    if (tag == gdcm::Tag(0x0008, 0x0104)) {
+      Attribute<0x0008, 0x0100> codeValue{};
+      codeValue.SetFromDataSet(ds);
+      Attribute<0x0008, 0x0102> codingSchemeDesignator{};
+      codingSchemeDesignator.SetFromDataSet(ds);
+      Attribute<0x0008, 0x0103> codingSchemeVersion{};
+      codingSchemeVersion.SetFromDataSet(ds);
+      const std::string codeValueStr = codeValue.GetValue().Trim();
+      const std::string codingSchemeDesignatorStr = codingSchemeDesignator.GetValue().Trim();
+      const std::string codingSchemeVersionStr = codingSchemeVersion.GetValue().Trim();
+      {
+        CodedEntryData ced;
+        ced = std::make_tuple(codeValueStr, codingSchemeDesignatorStr,
+                              codingSchemeVersionStr);
+        if( coded_entry_datas.find(ced) != coded_entry_datas.end() )
+          return Cleaner::impl::CODE_MEANING;
+      }
+        
+      return Cleaner::impl::NONE;
+    }
     const DPath dpath = ConstructDPath(tag_path, ds, tag);
+
     // Preserve
     if (IsDPathInSet(preserve_dpaths, dpath)) return Cleaner::impl::NONE;
     // Scrub
@@ -1283,6 +1317,12 @@ bool Cleaner::impl::ProcessDataSet(Subject &subject, File &file, DataSet &ds,
         return false;
       }
       subject.InvokeEvent(ae);
+    } else if (action == Cleaner::impl::CODE_MEANING) {
+      // CodeMeaning is a public tag, we must empty (and not remove) for compatibility with IOD
+      DataElement clean(de.GetTag());
+      clean.SetVR(de.GetVR());
+      ds.Replace(clean);
+      subject.InvokeEvent(ae);
     } else {
       gdcmErrorMacro("Missing handling of action: " << action);
       return false;
@@ -1309,6 +1349,10 @@ bool Cleaner::Scrub(Tag const &t) { return pimpl->Scrub(t); }
 bool Cleaner::Scrub(PrivateTag const &pt) { return pimpl->Scrub(pt); }
 bool Cleaner::Scrub(DPath const &dpath) { return pimpl->Scrub(dpath); }
 bool Cleaner::Scrub(VR const &vr) { return pimpl->Scrub(vr); }
+
+bool Cleaner::EmptyCodeMeaning(Cleaner::CodedEntryData const &ced) {
+  return pimpl->EmptyCodeMeaning(ced);
+}
 
 bool Cleaner::Preserve(DPath const &dpath) { return pimpl->Preserve(dpath); }
 
