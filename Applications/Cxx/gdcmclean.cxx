@@ -126,7 +126,7 @@ static void PrintHelp() {
             << std::endl;
   std::cout << "                %s            DICOM keyword/path(s) to scrub"
             << std::endl;
-  std::cout << "     --code_meaning %s,%s,%s  DICOM code meaning(s) to empty"
+  std::cout << "     --code_meaning %s,%s,%s  DICOM code meaning(s) to alter"
             << std::endl;
   std::cout << "     --preserve %s            DICOM path(s) to preserve"
             << std::endl;
