@@ -155,7 +155,7 @@ static void PrintHelp() {
 }
 
 namespace {
-std::vector<std::string> split(const std::string &str, char delimiter = ',') {
+std::vector<std::string> split(const std::string &str, const char delimiter = ',') {
   std::vector<std::string> tokens;
   std::stringstream ss(str);
   std::string item;
