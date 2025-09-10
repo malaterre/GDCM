@@ -155,7 +155,7 @@ static void PrintHelp() {
 }
 
 namespace {
-std::vector<std::string> split(const std::string &str, char delimiter = ',') {
+std::vector<std::string> split(const std::string &str, const char delimiter = ',') {
   std::vector<std::string> tokens;
   std::stringstream ss(str);
   std::string item;
@@ -164,17 +164,23 @@ std::vector<std::string> split(const std::string &str, char delimiter = ',') {
   }
   return tokens;
 }
-// Helper to print tuple elements
-template <std::size_t I = 0, typename... Ts>
-typename std::enable_if<I == sizeof...(Ts), void>::type print_tuple(
-    const std::tuple<Ts...> &) {}
+template <std::size_t I, std::size_t TupleSize, typename Tuple>
+struct print_tuple_helper {
+  static void print(const Tuple& t) {
+    if (I > 0) std::cerr << ", ";
+    std::cerr << std::get<I>(t);
+    print_tuple_helper<I + 1, TupleSize, Tuple>::print(t);
+  }
+};
 
-template <std::size_t I = 0, typename... Ts>
-    typename std::enable_if <
-    I<sizeof...(Ts), void>::type print_tuple(const std::tuple<Ts...> &t) {
-  if (I > 0) std::cerr << ", ";
-  std::cerr << std::get<I>(t);
-  print_tuple<I + 1, Ts...>(t);
+template <std::size_t TupleSize, typename Tuple>
+struct print_tuple_helper<TupleSize, TupleSize, Tuple> {
+  static void print(const Tuple&) {}
+};
+
+template <typename... Ts>
+void print_tuple(const std::tuple<Ts...>& t) {
+  print_tuple_helper<0, sizeof...(Ts), std::tuple<Ts...>>::print(t);
 }
 }  // namespace
 
