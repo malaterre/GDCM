@@ -1318,9 +1318,15 @@ bool Cleaner::impl::ProcessDataSet(Subject &subject, File &file, DataSet &ds,
       }
       subject.InvokeEvent(ae);
     } else if (action == Cleaner::impl::CODE_MEANING) {
-      // CodeMeaning is a public tag, we must empty (and not remove) for compatibility with IOD
+      // Cannot simply 'empty' public data element in this case:
+      // Code Meaning (0008, 0104) 1 Text that conveys the meaning of the Coded Entry.
+      // https://dicom.nema.org/medical/dicom/current/output/chtml/part03/sect_8.8.html#table_8.8-1a
+      // Action Code 'Z' states:
+      // replace with a zero length value, or a non - zero length value that may be a dummy value and consistent with the VR
       DataElement clean(de.GetTag());
       clean.SetVR(de.GetVR());
+      static const char clean_str[] = "ALTERED CODE MEANING"; // len=20
+      clean.SetByteValue(clean_str, strlen( clean_str));
       ds.Replace(clean);
       subject.InvokeEvent(ae);
     } else {
