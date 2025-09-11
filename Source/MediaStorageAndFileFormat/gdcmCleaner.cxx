@@ -711,13 +711,15 @@ static VR ComputeDictVR(File &file, DataSet &ds, DataElement const &de) {
   }
   if (dict_vr != VR::SQ) {
     if (de.GetVL().IsUndefined()) {
-      const Tag pixelData(0x7fe0, 0x0010);
-      gdcm_assert(dict_vr == VR::OB
-      /* old version of GDCM used to do that: */
-        || dict_vr == VR::OW);
-      if (tag != pixelData) {
-        gdcmErrorMacro("Impossible happen: " << de);
-        return VR::SQ;
+      if (dict_vr == VR::UN) {
+        // implicit dataset, where SQ is undefined length
+      } else {
+        const Tag pixelData(0x7fe0, 0x0010);
+        gdcm_assert(dict_vr == VR::OB);
+        if (tag != pixelData) {
+          gdcmErrorMacro("Impossible happen: " << de);
+          return VR::SQ;
+        }
       }
     }
   }
