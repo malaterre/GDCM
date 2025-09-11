@@ -666,7 +666,7 @@ struct Cleaner::impl {
 
   bool Scrub(VR const & /*vr*/) { return false; }
 
-  bool EmptyCodeMeaning(CodedEntryData const &ced) { 
+  bool ReplaceCodeMeaning(CodedEntryData const &ced) { 
       coded_entry_datas.insert(ced);
       return true; 
   }
@@ -1356,8 +1356,8 @@ bool Cleaner::Scrub(PrivateTag const &pt) { return pimpl->Scrub(pt); }
 bool Cleaner::Scrub(DPath const &dpath) { return pimpl->Scrub(dpath); }
 bool Cleaner::Scrub(VR const &vr) { return pimpl->Scrub(vr); }
 
-bool Cleaner::EmptyCodeMeaning(Cleaner::CodedEntryData const &ced) {
-  return pimpl->EmptyCodeMeaning(ced);
+bool Cleaner::ReplaceCodeMeaning(Cleaner::CodedEntryData const &ced) {
+  return pimpl->ReplaceCodeMeaning(ced);
 }
 
 bool Cleaner::Preserve(DPath const &dpath) { return pimpl->Preserve(dpath); }

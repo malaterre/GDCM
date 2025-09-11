@@ -54,7 +54,7 @@ class GDCM_EXPORT Cleaner : public Subject {
   typedef std::tuple<std::string, std::string, std::string> CodedEntryData;
 
   ///  Coded Entry Data
-  bool EmptyCodeMeaning(CodedEntryData const &ced);
+  bool ReplaceCodeMeaning(CodedEntryData const &ced);
 
   ///  Preserve
   bool Preserve(DPath const &dpath);

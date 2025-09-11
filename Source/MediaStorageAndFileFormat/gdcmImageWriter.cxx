@@ -249,7 +249,7 @@ bool ImageWriter::Write()
     gdcm_assert( pf.GetSamplesPerPixel() == 1 );
     try {
       ImageHelper::SetRescaleInterceptSlopeValue(GetFile(), pixeldata);
-    } catch( const char *impossible ) {
+    } catch( const char * ) {
       return false;
     }
     if( ms == MediaStorage::RTDoseStorage && pixeldata.GetIntercept() != 0 )
