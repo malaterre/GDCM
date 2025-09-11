@@ -59,12 +59,12 @@ static const OPJ_FLOAT64 opj_mct_norms[3] = { 1.732, .8292, .8292 };
 /* </summary> */
 static const OPJ_FLOAT64 opj_mct_norms_real[3] = { 1.732, 1.805, 1.573 };
 
-const OPJ_FLOAT64 * opj_mct_get_mct_norms()
+const OPJ_FLOAT64 * opj_mct_get_mct_norms(void)
 {
     return opj_mct_norms;
 }
 
-const OPJ_FLOAT64 * opj_mct_get_mct_norms_real()
+const OPJ_FLOAT64 * opj_mct_get_mct_norms_real(void)
 {
     return opj_mct_norms_real;
 }
