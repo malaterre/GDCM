@@ -592,7 +592,7 @@ int main(int argc, char *argv[]) {
   // Coded Data Entry (empty "code meaning")
   for (std::vector<gdcm::Cleaner::CodedEntryData>::const_iterator it = coded_entry_datas.begin();
        it != coded_entry_datas.end(); ++it) {
-    if (!cleaner.EmptyCodeMeaning(*it)) {
+    if (!cleaner.ReplaceCodeMeaning(*it)) {
       std::cerr << "Impossible to CodedEntryData: ";
       print_tuple(*it);
       std::cerr << std::endl;
