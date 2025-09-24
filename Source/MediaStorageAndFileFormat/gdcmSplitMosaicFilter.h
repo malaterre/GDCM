@@ -81,6 +81,9 @@ public:
 
   /// Return the value for NumberOfImagesInMosaic, or compute it from Acquisition Size
   static unsigned int GetNumberOfImagesInMosaic( File const & file );
+  
+  /// Return the DataElement for the CSA Image Header
+  static const DataElement& ComputeCSAImageHeaderInfo(const DataSet& ds, bool handleMissingPrivateCreator = true);
 
 protected:
 
