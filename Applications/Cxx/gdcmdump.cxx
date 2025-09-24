@@ -52,6 +52,7 @@
 #include "gdcmMEC_MR3.h"
 #include "gdcmTagKeywords.h"
 #include "gdcmDeflateStream.h"
+#include "gdcmSplitMosaicFilter.h"
 
 #include <string>
 #include <iostream>
@@ -1097,20 +1098,20 @@ static int PrintCSABase64(const std::string & filename, std::vector<std::string>
   int ret = 0;
 
   gdcm::CSAHeader csa;
-  const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
-  if( !ds.FindDataElement( t1 ) ) return 1;
-  csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
-  for( std::vector<std::string>::const_iterator it = csanames.begin();
-		  it != csanames.end(); ++it ) {
-    ret += PrintCSABase64Impl(csa, *it );
+  const gdcm::DataElement &csaEl1 = gdcm::SplitMosaicFilter::ComputeCSAImageHeaderInfo(ds);
+  if ( csa.LoadFromDataElement( csaEl1 ) ) {
+    for( std::vector<std::string>::const_iterator it = csanames.begin();
+                    it != csanames.end(); ++it ) {
+      ret += PrintCSABase64Impl(csa, *it );
+      }
   }
 
-  const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
-  if( !ds.FindDataElement( t2 ) ) return 1;
-  csa.LoadFromDataElement( ds.GetDataElement( t2 ) );
-  for( std::vector<std::string>::const_iterator it = csanames.begin();
-		  it != csanames.end(); ++it ) {
-    ret += PrintCSABase64Impl(csa, *it );
+  const gdcm::DataElement &csaEl2 = gdcm::SplitMosaicFilter::ComputeCSASeriesHeaderInfo(ds);
+  if( csa.LoadFromDataElement( csaEl2 ) ) {
+    for( std::vector<std::string>::const_iterator it = csanames.begin();
+                    it != csanames.end(); ++it ) {
+      ret += PrintCSABase64Impl(csa, *it );
+      }
   }
 
   return ret;
@@ -1129,15 +1130,13 @@ static int PrintCSA(const std::string & filename)
   gdcm::CSAHeader csa;
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
 
-  const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
-  const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
   const gdcm::PrivateTag &t3 = csa.GetCSADataInfo();
 
   bool found = false;
   int ret = 0;
-  if( ds.FindDataElement( t1 ) )
     {
-    if( csa.LoadFromDataElement( ds.GetDataElement( t1 ) ) )
+    const gdcm::DataElement &csaEl1 = gdcm::SplitMosaicFilter::ComputeCSAImageHeaderInfo(ds);
+    if( csa.LoadFromDataElement( csaEl1 ) )
       csa.Print( std::cout );
     else ret = 1;
     found = true;
@@ -1155,9 +1154,9 @@ static int PrintCSA(const std::string & filename)
       p.Print( std::cout );
       }
     }
-  if( ds.FindDataElement( t2 ) )
     {
-    if( csa.LoadFromDataElement( ds.GetDataElement( t2 ) ) )
+    const gdcm::DataElement &csaEl2 = gdcm::SplitMosaicFilter::ComputeCSASeriesHeaderInfo(ds);
+    if( csa.LoadFromDataElement( csaEl2 ) )
       csa.Print( std::cout );
     else ret = 1;
     found = true;
