@@ -157,14 +157,13 @@ static frame_diff get_frame_diff( const char* filename )
   gdcm::CSAHeader csa;
   const gdcm::DataSet& ds = reader.GetFile().GetDataSet();
 
-  const gdcm::PrivateTag &t1 = csa.GetCSAImageHeaderInfoTag();
   //const gdcm::PrivateTag &t2 = csa.GetCSASeriesHeaderInfoTag();
   //const gdcm::PrivateTag &t3 = csa.GetCSADataInfo();
 
   //bool found = false;
-  if( ds.FindDataElement( t1 ) )
+  const gdcm::DataElement &csaEl = gdcm::SplitMosaicFilter::ComputeCSAImageHeaderInfo(ds);
+  if ( csa.LoadFromDataElement( csaEl ))
     {
-    csa.LoadFromDataElement( ds.GetDataElement( t1 ) );
     gdcm_assert( csa.GetFormat() == gdcm::CSAHeader::SV10
       || csa.GetFormat() == gdcm::CSAHeader::NOMAGIC );
     // SIEMENS / Diffusion
