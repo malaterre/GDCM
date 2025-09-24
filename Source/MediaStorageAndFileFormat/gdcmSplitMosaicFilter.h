@@ -84,6 +84,9 @@ public:
   
   /// Return the DataElement for the CSA Image Header
   static const DataElement& ComputeCSAImageHeaderInfo(const DataSet& ds, bool handleMissingPrivateCreator = true);
+  
+  /// Return the DataElement for the CSA Series Header
+  static const DataElement& ComputeCSASeriesHeaderInfo(const DataSet& ds, bool handleMissingPrivateCreator = true);
 
 protected:
 

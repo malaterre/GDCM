@@ -121,19 +121,9 @@ bool SplitMosaicFilter::GetAcquisitionSize(unsigned int size[2], DataSet const &
   return found;
 }
 
-// For some reason anoymizer from ADNI DICOM remove the private creator for SIEMENS CSA
-// Since dcm2niix has a hardcoded location for SIEMENS CSA tag 0029,1010 we want to reproduce
-// the behavior for the average user.
-// ref: LEVEY^ADNI3 Basic / Axial rsfMRI (Eyes Open)
-// (0029,1008) CS [IMAGE NUM 4]                            #  12, 1 Unknown Tag & Data
-// (0029,1010) OB 53\56\31\30\04\03\02\01\65\00\00\00\4d\00\00\00\45\63\68\6f\4c\69... # 13012, 1 Unknown Tag & Data
-// (0029,1018) CS [MR]                                     #   2, 1 Unknown Tag & Data
-// (0029,1020) OB 53\56\31\30\04\03\02\01\4f\00\00\00\4d\00\00\00\55\73\65\64\50\61... # 132968, 1 Unknown Tag & Data
-const DataElement& SplitMosaicFilter::ComputeCSAImageHeaderInfo(const DataSet& ds, const bool handleMissingPrivateCreator ) {
-  const PrivateTag &t1 = CSAHeader::GetCSAImageHeaderInfoTag();
-  if ( handleMissingPrivateCreator && !ds.FindDataElement(t1) ) {
-    // chgeck hardcoded location first:
-    const Tag hardcodedCsaLocation(0x0029,0x1010);
+const DataElement& ComputeCSAHeaderInfo(const DataSet& ds, const PrivateTag &pt, const Tag &hardcodedCsaLocation, bool handleMissingPrivateCreator ) {
+  if ( handleMissingPrivateCreator && !ds.FindDataElement(pt) ) {
+    // check hardcoded location first:
     if ( ds.FindDataElement(hardcodedCsaLocation) ) {
       Attribute<0x0008, 0x0008> imageType;
       imageType.SetFromDataSet(ds);
@@ -151,7 +141,27 @@ const DataElement& SplitMosaicFilter::ComputeCSAImageHeaderInfo(const DataSet& d
       }
     }
   }
-  return ds.GetDataElement(t1);
+  return ds.GetDataElement(pt);
+}
+
+// For some reason anoymizer from ADNI DICOM remove the private creator for SIEMENS CSA
+// Since dcm2niix has a hardcoded location for SIEMENS CSA tag 0029,1010 we want to reproduce
+// the behavior for the average user.
+// ref: LEVEY^ADNI3 Basic / Axial rsfMRI (Eyes Open)
+// (0029,1008) CS [IMAGE NUM 4]                            #  12, 1 Unknown Tag & Data
+// (0029,1010) OB 53\56\31\30\04\03\02\01\65\00\00\00\4d\00\00\00\45\63\68\6f\4c\69... # 13012, 1 Unknown Tag & Data
+// (0029,1018) CS [MR]                                     #   2, 1 Unknown Tag & Data
+// (0029,1020) OB 53\56\31\30\04\03\02\01\4f\00\00\00\4d\00\00\00\55\73\65\64\50\61... # 132968, 1 Unknown Tag & Data
+const DataElement& SplitMosaicFilter::ComputeCSAImageHeaderInfo(const DataSet& ds, const bool handleMissingPrivateCreator ) {
+  const PrivateTag &pt = CSAHeader::GetCSAImageHeaderInfoTag();
+  const Tag hardcodedCsaLocation(0x0029,0x1010);
+  return ComputeCSAHeaderInfo(ds, pt, hardcodedCsaLocation, handleMissingPrivateCreator);
+}
+
+const DataElement& SplitMosaicFilter::ComputeCSASeriesHeaderInfo(const DataSet& ds, const bool handleMissingPrivateCreator ) {
+  const PrivateTag &pt = CSAHeader::GetCSASeriesHeaderInfoTag();
+  const Tag hardcodedCsaLocation(0x0029,0x1020);
+  return ComputeCSAHeaderInfo(ds, pt, hardcodedCsaLocation, handleMissingPrivateCreator);
 }
 
 unsigned int SplitMosaicFilter::GetNumberOfImagesInMosaic( File const & file )
