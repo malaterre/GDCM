@@ -181,10 +181,7 @@ void Writer::SetFileName(const char *utf8path)
 #else
       Ofstream->open(utf8path, std::ios::out | std::ios::binary);
 #endif
-      gdcm_assert(Ofstream->is_open());
-      gdcm_assert(!Ofstream->fail());
-    }
-    //std::cerr << Stream.is_open() << std::endl;
+      }
     Stream = Ofstream;
   }
 

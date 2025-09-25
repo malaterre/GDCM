@@ -711,11 +711,15 @@ static VR ComputeDictVR(File &file, DataSet &ds, DataElement const &de) {
   }
   if (dict_vr != VR::SQ) {
     if (de.GetVL().IsUndefined()) {
-      Tag pixelData(0x7fe0, 0x0010);
-      gdcm_assert(dict_vr == VR::OB);
-      if (tag != pixelData) {
-        gdcmErrorMacro("Impossible happen: " << de);
-        return VR::SQ;
+      if (dict_vr == VR::UN) {
+        // implicit dataset, where SQ is undefined length
+      } else {
+        const Tag pixelData(0x7fe0, 0x0010);
+        gdcm_assert(dict_vr == VR::OB);
+        if (tag != pixelData) {
+          gdcmErrorMacro("Impossible happen: " << de);
+          return VR::SQ;
+        }
       }
     }
   }
@@ -1326,7 +1330,7 @@ bool Cleaner::impl::ProcessDataSet(Subject &subject, File &file, DataSet &ds,
       DataElement clean(de.GetTag());
       clean.SetVR(de.GetVR());
       static const char clean_str[] = "ALTERED CODE MEANING"; // len=20
-      clean.SetByteValue(clean_str, strlen( clean_str));
+      clean.SetByteValue(clean_str, static_cast<uint32_t>(strlen(clean_str)));
       ds.Replace(clean);
       subject.InvokeEvent(ae);
     } else {
