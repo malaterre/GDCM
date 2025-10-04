@@ -113,7 +113,7 @@ int TestvtkGDCMImageWrite2(const char *filename, bool verbose = false)
     // Need to check we can still read those files back:
     for(int file=0; file<filenames->GetNumberOfValues(); ++file)
       {
-      const char *fname = filenames->GetValue(file);
+      const char *fname = filenames->GetValue(file).c_str();
       gdcm::ImageReader r;
       //r.SetFileName( gdcmfile.c_str() );
       r.SetFileName( fname );
