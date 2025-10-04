@@ -255,7 +255,7 @@ int vtkGDCMImageWriter::RequestData(
 {
   if( this->FileNames->GetNumberOfValues() )
     {
-    const char *filename = this->FileNames->GetValue(0);
+    const char *filename = this->FileNames->GetValue(0).c_str();
     return const_cast<char*>(filename);
     }
   return this->Superclass::GetFileName();
@@ -1148,7 +1148,7 @@ int vtkGDCMImageWriter::WriteGDCMData(vtkImageData *data, int timeStep)
   if( this->FileNames->GetNumberOfValues() )
     {
     //int n = this->FileNames->GetNumberOfValues();
-    filename = this->FileNames->GetValue(k);
+    filename = this->FileNames->GetValue(k).c_str();
     }
   else
     {

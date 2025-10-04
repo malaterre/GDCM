@@ -71,7 +71,7 @@ vtkGDCMThreadedImageReader2::~vtkGDCMThreadedImageReader2()
 //----------------------------------------------------------------------------
 const char *vtkGDCMThreadedImageReader2::GetFileName(int i)
 {
-  return this->FileNames->GetValue( i );
+  return this->FileNames->GetValue( i ).c_str();
 }
 
 //----------------------------------------------------------------------------
@@ -106,7 +106,7 @@ void vtkGDCMThreadedImageReader2Execute(vtkGDCMThreadedImageReader2 *self,
   for( int i = outExt[4]; i <= outExt[5] && i < maxfiles; ++i )
     {
     assert( i < maxfiles );
-    const char *filename = self->GetFileNames()->GetValue( i );
+    const char *filename = self->GetFileNames()->GetValue( i ).c_str();
     //ReadOneFile( filename );
     //outData->GetPointData()->GetScalars()->SetName("GDCMImage");
 

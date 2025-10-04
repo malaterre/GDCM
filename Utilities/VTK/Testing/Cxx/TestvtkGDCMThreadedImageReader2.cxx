@@ -160,7 +160,7 @@ int TestvtkGDCMThreadedImageRead2(const char *filename, bool verbose = false)
     assert( sarray->GetNumberOfValues() == (int)nfiles );
     reader->SetFileNames( sarray );
     sarray->Delete();
-    refimage = sarray->GetValue( 0 ); // Ok since sarray is ref count
+    refimage = sarray->GetValue( 0 ).c_str(); // Ok since sarray is ref count
     }
   else
     {
