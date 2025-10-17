@@ -124,7 +124,6 @@ bool RAWCodec::DecodeBytes(const char* inBytes, size_t inBufferLength,
       delete[] copy;
       return false;
       }
-    assert (len == inOutBufferLength);
     gdcm_assert(inOutBufferLength == len);
     memcpy(outBytes, copy, len);
 
