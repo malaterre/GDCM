@@ -108,7 +108,7 @@ public:
   /// Make Data Element empty (no Value)
   void Empty() { ValueField = nullptr; ValueLengthField = 0; }
 
-  /// Clear Data Element (make Value empty and invalidate Tag & VR)
+  /// Clear Data Element (make Value empty and invalidate Tag + VR)
   void Clear()
     {
     TagField = 0;
