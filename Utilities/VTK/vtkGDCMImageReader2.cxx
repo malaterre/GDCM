@@ -388,7 +388,7 @@ ComputePixelTypeFromFiles(const char *inputfilename, vtkStringArray *filenames,
     // FIXME a gdcm::Scanner would be much faster here:
     for(int i = 0; i < filenames->GetNumberOfValues(); ++i )
       {
-      const char *filename = filenames->GetValue( i );
+      const char *filename = filenames->GetValue( i ).c_str();
       gdcm::ImageReader reader;
       reader.SetFileName( filename );
       if( !reader.Read() )
@@ -480,7 +480,7 @@ int vtkGDCMImageReader2::RequestInformationCompat()
     }
   else if ( this->FileNames && this->FileNames->GetNumberOfValues() > 0 )
     {
-    filename = this->FileNames->GetValue( 0 );
+    filename = this->FileNames->GetValue( 0 ).c_str();
     }
   else
     {
@@ -1177,7 +1177,7 @@ int vtkGDCMImageReader2::RequestDataCompat()
     for(int j = outExt[4]; !this->AbortExecute && j <= outExt[5]; ++j)
       {
       assert( j >= 0 && j <= this->FileNames->GetNumberOfValues() );
-      const char *filename = this->FileNames->GetValue( j );
+      const char *filename = this->FileNames->GetValue( j ).c_str();
       int load = this->LoadSingleFile( filename, pointer, len );
       vtkDebugMacro( "LoadSingleFile: " << filename );
       if( !load )

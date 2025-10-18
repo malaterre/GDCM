@@ -498,7 +498,7 @@ int main(int argc, char *argv[])
     {
     imgreader->SetFileLowerLeft( lowerleft );
     if( names->GetNumberOfValues() == 1 )
-      imgreader->SetFileName( names->GetValue(0) );
+      imgreader->SetFileName( names->GetValue(0).c_str() );
     else
       imgreader->SetFileNames(names);
     imgreader->Update();
