@@ -87,6 +87,8 @@ static const char *TSStrings[] = {
   "1.2.840.10008.1.2.4.202",
   // High-Throughput JPEG 2000 Image Compression
   "1.2.840.10008.1.2.4.203",
+  // Deflated Image Frame Compression
+  "1.2.840.10008.1.2.8.1",
   // Unknown
   "Unknown Transfer Syntax", // Pretty sure we never use this case... until a new transfer syntax is added
   nullptr // Compilers have no obligation to finish by NULL, do it ourselves
@@ -195,6 +197,7 @@ bool TransferSyntax::CanStoreLossy() const
     TSField == JPEGLSLossless ||
     TSField == JPEG2000Lossless ||
     TSField == JPEG2000Part2Lossless ||
+    TSField == DeflatedImageFrameCompression ||
     TSField == RLELossless
   )
     {
@@ -311,6 +314,7 @@ bool TransferSyntax::IsEncapsulated() const
   case HTJ2KLossless:
   case HTJ2KRPCLLossless:
   case HTJ2K:
+  case DeflatedImageFrameCompression:
 
     ret = true;
     break;

@@ -89,6 +89,7 @@ public:
     HTJ2KLossless,
     HTJ2KRPCLLossless,
     HTJ2K,
+    DeflatedImageFrameCompression,
     TS_END
   } TSType;
 
