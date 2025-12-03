@@ -835,7 +835,7 @@ void FileMetaInformation::ComputeDataSetTransferSyntax()
   const ByteValue *bv = de.GetByteValue();
   if( !bv )
     {
-    throw Exception( "Unknown Transfer syntax" );
+    throw Exception( "NULL Transfer syntax" );
     }
   // Pad string with a \0
   ts = std::string(bv->GetPointer(), bv->GetLength());
