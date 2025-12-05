@@ -43,6 +43,9 @@ static const int losslylosslessarray[][3] = {
     { 1, 0, 1 }, //    MPEG2MainProfileHighLevel
     { 1, 0, 1 }, //    MPEG4AVCH264HighProfileLevel4_1
     { 1, 0, 1 }, //    MPEG4AVCH264BDcompatibleHighProfileLevel4_1
+    { 0, 1, 1 }, //    HTJ2KLossless
+    { 0, 1, 1 }, //    HTJ2KRPCLLossless
+    { 1, 0, 1 }, //    HTJ2K
 };
 
 static int TestTransferSyntaxAll()
