@@ -24,6 +24,7 @@
 #include <cstddef> // ptrdiff_t fix
 #include <cstring>
 #include <vector>
+#include <array>
 
 #include <gdcmrle/rle.h>
 
@@ -33,37 +34,75 @@ namespace gdcm
 // TODO ideally this code should be in utilities for ease of reuse
 class RLEHeader
 {
-public:
-  uint32_t NumSegments;
-  uint32_t Offset[15];
+private:
+  uint32_t NumSegments = 0;
+  uint32_t Offset[15] = {0};
 
-  void Print(std::ostream &os)
+public:
+  uint32_t GetNumSegments() const { return NumSegments; }
+  bool SetNumSegments(uint32_t num) 
+    { 
+      if (num > 15) 
+        {
+          gdcmErrorMacro("Number of segments cannot be bigger than 15");
+          return false;
+        }
+      NumSegments = num;
+      return true;
+    };
+  bool SetOffset(const std::array<uint32_t, 15> &offset) 
     {
-    os << "NumSegments:" << NumSegments << "\n";
-    for(int i=0; i<15; ++i)
-      {
-      os << i << ":" << Offset[i] << "\n";
+      std::copy(offset.begin(), offset.end(), Offset);
+      return true;
+    };
+  uint32_t GetOffset(size_t index) const 
+    {
+      if (index < 15) return Offset[index];
+      return 0;
+    };
+  bool SetOffset(size_t index, uint32_t value) {
+    if (index >= 15) return false;
+
+    Offset[index] = value;
+    return true;
+  }
+
+  bool Read(std::istream &is) 
+    {
+      // read Header (64 bytes)
+      uint32_t buffer[16] = {0};
+      is.read(reinterpret_cast<char *>(buffer), 64);
+      if (static_cast<size_t>(is.gcount()) != 64) 
+        {
+          gdcmErrorMacro("RLE Header truncated: expected 64 bytes, got " << is.gcount());
+          return false;
+        }
+      gdcm_assert(sizeof(uint32_t) * 16 == 64);
+      SwapperNoOp::SwapArray(reinterpret_cast<uint32_t *>(buffer), 16);
+      if (!SetNumSegments(buffer[0])) return false;
+      memcpy(Offset, &buffer[1], sizeof(uint32_t) * 15);
+      if (NumSegments >= 1) {
+        if (Offset[0] != 64) return false;
+      }
+      // We just check that we are indeed at the proper position start+64
+      return true;
+    }
+  void Print(std::ostream &os) 
+    {
+      os << "NumSegments:" << NumSegments << "\n";
+      for (int i = 0; i < 15; ++i) {
+        os << i << ":" << Offset[i] << "\n";
       }
     }
-};
 
+};
+static_assert(sizeof(RLEHeader) == 64, "RLEHeader size must be 64 bits to comply with dicom standard");
 class RLEFrame
 {
 public:
   bool Read(std::istream &is)
     {
-    // read Header (64 bytes)
-    is.read((char*)(&Header), sizeof(uint32_t)*16);
-    gdcm_assert( sizeof(uint32_t)*16 == 64 );
-    gdcm_assert( sizeof(RLEHeader) == 64 );
-    SwapperNoOp::SwapArray((uint32_t*)&Header,16);
-    uint32_t numSegments = Header.NumSegments;
-    if( numSegments >= 1 )
-      {
-      if( Header.Offset[0] != 64 ) return false;
-      }
-    // We just check that we are indeed at the proper position start+64
-    return true;
+    return Header.Read(is);
     }
   void Print(std::ostream &os)
     {
@@ -379,7 +418,9 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
     gdcm_assert( MaxNumSegments % 3 == 0 );
     }
 
-  RLEHeader header = { static_cast<uint32_t> ( MaxNumSegments ), { 64 } };
+  RLEHeader header;
+  header.SetNumSegments(static_cast<uint32_t>(MaxNumSegments));
+  header.SetOffset({64});
   // there cannot be any space in between the end of the RLE header and the start
   // of the first RLE segment
   //
@@ -521,12 +562,12 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
         length += llength;
         }
       // update header
-      header.Offset[1+seg] = (uint32_t)(header.Offset[seg] + length);
+      header.SetOffset(1 + seg, (uint32_t)(header.GetOffset(seg) + length));
 
       gdcm_assert( data.str().size() == length );
       datastr += data.str();
       }
-    header.Offset[MaxNumSegments] = 0;
+    header.SetOffset(MaxNumSegments, 0);
     std::stringstream os;
     //header.Print( std::cout );
     os.write((char*)&header,sizeof(header));
@@ -769,7 +810,7 @@ bool RLECodec::DecodeByStreams(std::istream &is, std::ostream &os)
   RLEFrame &frame = Internals->Frame;
   if( !frame.Read(is) )
      return false;
-  unsigned long numSegments = frame.Header.NumSegments;
+  unsigned long numSegments = frame.Header.GetNumSegments();
 
   unsigned long length = Length;
   gdcm_assert( length );
@@ -801,18 +842,24 @@ bool RLECodec::DecodeByStreams(std::istream &is, std::ostream &os)
     {
     unsigned long numberOfReadBytes = 0;
     std::streampos pos = is.tellg() - start;
-    if ( frame.Header.Offset[i] - pos != 0 )
+    if (frame.Header.GetOffset(i) > BufferLength) 
+      {
+        gdcmErrorMacro("Offset is bigger then buffer Length");
+        return false;
+      }
+
+    if ( frame.Header.GetOffset(i) - pos != 0 )
       {
       // ACUSON-24-YBR_FULL-RLE.dcm
       // D_CLUNIE_CT1_RLE.dcm
       // This should be at most the \0 padding
       //gdcmWarningMacro( "RLE Header says: " << frame.Header.Offset[i] <<
       //   " when it should says: " << pos << std::endl );
-      std::streamoff check = frame.Header.Offset[i] - pos;//should it be a streampos or a uint32? mmr
+      std::streamoff check = frame.Header.GetOffset(i) - pos;//should it be a streampos or a uint32? mmr
       // check == 2 for gdcmDataExtra/gdcmSampleData/US_DataSet/GE_US/2929J686-breaker
       //gdcm_assert( check == 1 || check == 2);
       (void)check; //warning removal
-      is.seekg( frame.Header.Offset[i] + start, std::ios::beg );
+      is.seekg(frame.Header.GetOffset(i) + start, std::ios::beg);
       }
 
     unsigned long numOutBytes = 0;
@@ -865,8 +912,8 @@ bool RLECodec::GetHeaderInfo(std::istream &is, TransferSyntax &ts)
      return false;
   // numsegments = num_comp * bpp / 8;
   // numsegments >0 && numsegments <= 12
-  uint32_t bytespercomp = frame.Header.NumSegments;
-  if( frame.Header.NumSegments % 3 == 0 )
+  uint32_t bytespercomp = frame.Header.GetNumSegments();
+  if (frame.Header.GetNumSegments() % 3 == 0)
   {
     PI = PhotometricInterpretation::RGB;
     PlanarConfiguration = 1;
