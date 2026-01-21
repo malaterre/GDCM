@@ -148,7 +148,11 @@ static std::string getInfoString(Dict *infoDict, const char *key, UnicodeMap *uM
       isUnicode = false;
       i = 0;
       }
+#ifdef LIBPOPPLER_GOOSTRING_HAS_SIZE
+    while (i < obj.getString()->size())
+#else
     while (i < obj.getString()->getLength())
+#endif
       {
       if (isUnicode)
         {
