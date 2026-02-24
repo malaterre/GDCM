@@ -576,6 +576,12 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
       }
     else
       {
+      if( ts_orig == TransferSyntax::JPEG2000Lossless )
+        {
+        static const CSComp newvalues2[] = {"ISO_15444_1"};
+        at3.SetValues(  newvalues2, 1 );
+        ds.Replace( at3.GetAsDataElement() );
+        } 
       if( ds.FindDataElement( at1.GetTag() ) ) {
         at1.Set( ds );
         if( atoi(at1.GetValue().c_str()) != 1 ) {
@@ -584,16 +590,13 @@ bool PixmapWriter::PrepareWrite( MediaStorage const & ref_ms )
           ds.Replace( at1.GetAsDataElement() );
         }
       } else {
+        at1.SetValue( "01" );
+        ds.Replace( at1.GetAsDataElement() );
+        // Assume originally JPEGLossy and override previous value ISO_15444_1
         if( pi_orig == PhotometricInterpretation::YBR_FULL_422 ) {
-          at1.SetValue( "01" );
-          ds.Replace( at1.GetAsDataElement() );
-
           static const CSComp newvalues2[] = {"ISO_10918_1"};
           at3.SetValues(  newvalues2, 1 );
           ds.Replace( at3.GetAsDataElement() );
-        } else {
-          gdcmErrorMacro( "Unhandled Lossy flag for Pixel Data" );
-          return false;
         }
       }
       }
