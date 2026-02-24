@@ -122,6 +122,12 @@ if(GDCM_USE_SYSTEM_POPPLER)
   if(LIBPOPPLER_PDFDOC_HAS_OPTIONAL)
     list(APPEND libpoppler_flags -DLIBPOPPLER_PDFDOC_HAS_OPTIONAL)
   endif()
+  CHECK_CXX_SOURCE_COMPILES(
+    "\#include <poppler/goo/GooString.h>\nint main() { GooString gs; gs.size(); return 0; }"
+    LIBPOPPLER_GOOSTRING_HAS_SIZE)
+  if(LIBPOPPLER_GOOSTRING_HAS_SIZE)
+    list(APPEND libpoppler_flags -DLIBPOPPLER_GOOSTRING_HAS_SIZE)
+  endif()
   if(libpoppler_flags)
     string(REPLACE ";" " " libpoppler_flags_string "${libpoppler_flags}")
     set_source_files_properties(
