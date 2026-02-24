@@ -631,13 +631,17 @@ bool PixmapReader::ReadImageInternal(MediaStorage const &ms, bool handlepixeldat
     {
     // PHILIPS_Gyroscan-12-MONO2-Jpeg_Lossless.dcm
     // PHILIPS_Gyroscan-12-Jpeg_Extended_Process_2_4.dcm
-    gdcmDebugMacro( "Mixture of ACR NEMA and DICOM file" );
-    isacrnema = true;
     const char *str = ds.GetDataElement( trecognitioncode ).GetByteValue()->GetPointer();
-    gdcm_assert( strncmp( str, "ACR-NEMA", strlen( "ACR-NEMA" ) ) == 0 ||
-      strncmp( str, "ACRNEMA", strlen( "ACRNEMA" ) ) == 0 ||
-      strncmp( str, "MIPS 2.0", strlen( "MIPS 2.0" ) ) == 0 );
-    (void)str;//warning removal
+    if( strncmp( str, "ACR-NEMA", strlen( "ACR-NEMA" ) ) == 0 ||
+        strncmp( str, "ACRNEMA", strlen( "ACRNEMA" ) ) == 0 ||
+        strncmp( str, "MIPS 2.0", strlen( "MIPS 2.0" ) ) == 0) {
+      gdcmDebugMacro("Mixture of ACR NEMA and DICOM file");
+      isacrnema = true;
+      } else {
+        Attribute<0x0008, 0x0010> at;
+        at.SetFromDataSet(ds);
+        gdcmWarningMacro("Junk recognition code: " + at.GetValue());
+      }
     }
 
   std::vector<unsigned int> vdims = ImageHelper::GetDimensionsValue(*F);

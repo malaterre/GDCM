@@ -642,7 +642,7 @@ VR Printer::PrintDataElement(std::ostringstream &os, const Dicts &dicts, const D
           }
         else if ( sqf )
           {
-          gdcm_assert( t == Tag(0x7fe0,0x0010) );
+          gdcm_assert( t == Tag(0x7fe0,0x0010) || t == Tag(0x7fe1,0x1060) );
           //os << *sqf;
           }
         else if ( sqi )

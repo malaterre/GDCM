@@ -203,6 +203,11 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is, bool readvalues)
       gdcm_assert( VRField & VR::OB_OW || VRField == VR::UN );
       ValueField = new SequenceOfFragments;
       }
+    else if( TagField == Tag(0x7fe1,0x1060) && VRField == VR::OB )
+      {
+      gdcmWarningMacro( "IllegalPrivatePixelSequence (7fe1,1060)" );
+      ValueField = new SequenceOfFragments;
+      }
     else
       {
       // Support cp246 conforming file:
