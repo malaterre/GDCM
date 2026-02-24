@@ -1168,6 +1168,13 @@ bool JPEGBITSCodec::InternalCode(const char* input, unsigned long len, std::ostr
   int image_height = dims[1];  /* Number of rows in image */
   int image_width = dims[0];    /* Number of columns in image */
 
+  // Check if provided buffer correspond to image parameters for current frame
+  size_t expected_frame_size = (size_t)image_width * image_height *
+                               this->GetPixelFormat().GetPixelSize();
+  if (len != expected_frame_size) {
+    gdcmErrorMacro("Frame size don't match");
+    return false;
+  }
   /* This struct contains the JPEG compression parameters and pointers to
    * working space (which is allocated as needed by the JPEG library).
    * It is possible to have several such structures, representing multiple
