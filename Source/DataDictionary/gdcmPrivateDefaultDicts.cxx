@@ -11007,7 +11007,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0019,0x0078,"SVISION",VR::DS,VM::VM1,"Filter Thickness 1",false },
   {0x0019,0x0079,"SVISION",VR::DS,VM::VM1,"Filter Thickness 2",false },
   {0x0019,0x0080,"SVISION",VR::IS,VM::VM1,"Bucky Format",false },
-  {0x0019,0x0081,"SVISION",VR::IS,VM::VM1,"Object Position",false },
+  {0x0019,0x0081,"SVISION",VR::ST,VM::VM1,"Object Position",false },
   {0x0019,0x0090,"SVISION",VR::LO,VM::VM1,"Desk Command",false },
   {0x0019,0x0091,"SVISION",VR::IS,VM::VM1,"Central Beam X",false },
   {0x0019,0x0092,"SVISION",VR::IS,VM::VM1,"Central Beam Y",false },
