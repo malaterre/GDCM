@@ -137,7 +137,7 @@ struct header
       numparams = 0;
       uint32_t bla;
       is.read( (char*)&bla, sizeof(bla) );
-      gdcm_assert( bla == 0x2 || bla == 0x3 );
+      gdcm_assert( bla == 0x2 || bla == 0x3 || bla == 0x4 || bla == 0x7 );
       nstrings = 1;
       numparams = 1;
     } else {
@@ -204,7 +204,7 @@ struct param
   void read_direct_string( std::istream & is ) {
     uint32_t bla;
     is.read( (char*)&bla, sizeof(bla) );
-    char name0[32];
+    char name0[32*2];
     memset(name0,0,sizeof(name0));
     gdcm_assert( bla < sizeof(name0) );
     is.read( name0, bla);
@@ -228,6 +228,10 @@ struct param
       is.read( (char*)&bla, 1 );
     else if( cur == 66 )
       is.read( (char*)&bla, 1 );
+    else if( cur == 89 )
+      is.read( (char*)&bla, 1 );
+    else if( cur == 95 )
+      is.read( (char*)&bla, 2 );
     else if( cur == 122 )
       is.read( (char*)&bla, 2 );
     else
@@ -246,7 +250,7 @@ struct param
     // we need to print only until the first \0 character:
     gdcm_assert( strlen( name ) <= 32 );
     is.read( (char*)&boolean,1);
-    gdcm_assert( boolean == 0 || boolean == 1 || boolean == 0x69 ); // some kind of bool, or digital trash ?
+    gdcm_assert( boolean == 0 || boolean == 1 || boolean == 0x69 || boolean == 128 || boolean == 95 || boolean == 116 ); // some kind of bool, or digital trash ?
     is.read( (char*)&type, sizeof( type ) );
     gdcm_assert( gettypenamefromtype( type ) );
     is.read( (char*)&dim, sizeof( dim ) ); // number of elements
