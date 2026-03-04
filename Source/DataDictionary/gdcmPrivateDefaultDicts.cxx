@@ -38,6 +38,14 @@ using DICT_ENTRY = struct
 };
 
 static const DICT_ENTRY DICOMV3DataDict [] = {
+  {0x0033,0x0001,"KONICA MINOLTA QA 1.4",VR::SQ,VM::VM1,"?Possibly PHI?",false },
+  {0x0033,0x0004,"KONICA MINOLTA QA 1.4",VR::SS,VM::VM1,"?",false },
+  {0x0033,0x0006,"KONICA MINOLTA QA 1.4",VR::SS,VM::VM1,"?",false },
+  {0x0033,0x0008,"KONICA MINOLTA QA 1.4",VR::SS,VM::VM1,"?",false },
+  {0x0033,0x0010,"KONICA MINOLTA QA 1.4",VR::SS,VM::VM1,"?",false },
+  {0x0033,0x0011,"KONICA MINOLTA QA 1.4",VR::SS,VM::VM1,"?",false },
+  {0x0033,0x0014,"KONICA MINOLTA QA 1.4",VR::SS,VM::VM1,"?",false },
+  {0x0033,0x0016,"KONICA MINOLTA QA 1.4",VR::SS,VM::VM1,"?",false },
   {0x0049,0x0010,"AIR",VR::LO,VM::VM1,"?Possibly PHI?",false },
   {0x0049,0x0011,"AIR",VR::LO,VM::VM1,"?number?",false },
   {0x0049,0x0013,"AIR",VR::LT,VM::VM1,"?Long desc possibly PHI?",false },
