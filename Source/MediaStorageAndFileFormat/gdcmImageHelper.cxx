@@ -976,7 +976,9 @@ void ImageHelper::SetDimensionsValue(File& f, const Pixmap & img)
   MediaStorage ms;
   ms.SetFromFile(f);
   DataSet& ds = f.GetDataSet();
-  gdcm_assert( MediaStorage::IsImage( ms ) );
+  if (!MediaStorage::IsImage(ms)) {
+    gdcmWarningMacro("Wrong SOP Class");
+  }
   {
     Attribute<0x0028,0x0010> rows;
     rows.SetValue( (uint16_t)dims[1] );
