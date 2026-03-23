@@ -1,4 +1,4 @@
-This directory contains a subset of the zlib library (1.3.1) and
+This directory contains a subset of the zlib library (1.3.2) and
 some custom changes.
 
 We only include enough of the distribution to provide the functionalities
