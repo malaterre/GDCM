@@ -88,6 +88,7 @@ set(MSFF_TEST_SRCS
   TestPhotometricInterpretation.cxx
   TestLookupTable.cxx
   TestOverlay.cxx
+  TestOverlayGrabOOB.cxx
   TestOverlay3.cxx
   TestCurve.cxx
   TestCurve2.cxx
