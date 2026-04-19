@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <errno.h>
 
-#include "zlib/zlib.h"
+#include "gdcm_zlib.h"
 
 #define CHUNK 16384
 
