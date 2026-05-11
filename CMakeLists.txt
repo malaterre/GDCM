@@ -334,8 +334,7 @@ option(GDCM_USE_SYSTEM_JSON "Use system json" OFF)
 option(GDCM_USE_SYSTEM_PAPYRUS3 "Use system papyrus3" OFF)
 option(GDCM_USE_SYSTEM_SOCKETXX "Use system socket++" OFF)
 option(GDCM_USE_SYSTEM_LJPEG "Use system ljpeg (ijg lib)" OFF)
-option(GDCM_USE_SYSTEM_OPENJPEG "Use system openjpeg" OFF)
-option(GDCM_USE_SYSTEM_CHARLS "Use system charls" OFF)
+option(GDCM_USE_JPEGTURBO "Use libjpeg-turbo instead of IJG for JPEG codec" OFF)
 mark_as_advanced(
   GDCM_USE_SYSTEM_ZLIB
   GDCM_USE_SYSTEM_OPENSSL
@@ -347,6 +346,7 @@ mark_as_advanced(
   GDCM_USE_SYSTEM_LJPEG
   GDCM_USE_SYSTEM_OPENJPEG
   GDCM_USE_SYSTEM_CHARLS
+  GDCM_USE_JPEGTURBO
   )
 option(GDCM_USE_SYSTEM_POPPLER "Use system poppler (pdf)" OFF)
 if(GDCM_USE_SYSTEM_POPPLER)
@@ -360,7 +360,16 @@ if(GDCM_USE_SYSTEM_LIBXML2)
 endif()
 mark_as_advanced(GDCM_USE_SYSTEM_LIBXML2)
 
-if(GDCM_USE_SYSTEM_LJPEG)
+if(GDCM_USE_JPEGTURBO)
+  find_package(libjpeg-turbo REQUIRED)
+  set(GDCM_JPEGTURBO_INCLUDE_DIRS ${libjpeg-turbo_INCLUDE_DIRS})
+  set(GDCM_JPEGTURBO_LIBRARIES ${libjpeg-turbo_LIBRARIES})
+  # Modern config uses imported targets for libraries
+  if(NOT GDCM_JPEGTURBO_LIBRARIES AND TARGET libjpeg-turbo::jpeg)
+    set(GDCM_JPEGTURBO_LIBRARIES libjpeg-turbo::jpeg)
+  endif()
+  set(GDCM_LJPEG_LIBRARIES "")
+elseif(GDCM_USE_SYSTEM_LJPEG)
   find_package(LJPEG REQUIRED)
   set(GDCM_LJPEG_LIBRARIES ${LJPEG_LIBRARIES})
 else()
@@ -374,6 +383,9 @@ if(GDCM_USE_SYSTEM_CHARLS)
 else()
   set(GDCM_CHARLS_LIBRARIES gdcmcharls)
 endif()
+
+option(GDCM_USE_SYSTEM_OPENJPEG "Use system openjpeg" OFF)
+option(GDCM_USE_SYSTEM_CHARLS "Use system charls" OFF)
 
 if(GDCM_USE_SYSTEM_OPENJPEG)
   find_package(OpenJPEG 2.0.0 REQUIRED)
