@@ -168,6 +168,15 @@ if(GDCM_USE_JPEGLS)
     )
 endif()
 
+if(GDCM_USE_JPEGTURBO)
+  set(MSFF_TEST_SRCS
+    ${MSFF_TEST_SRCS}
+    TestImageChangeTransferSyntax8.cxx
+    TestImageChangeTransferSyntax9.cxx
+    TestImageChangeTransferSyntax10.cxx
+    )
+endif()
+
 if(GDCM_HAVE_PTHREAD_H)
   set(MSFF_TEST_SRCS
     ${MSFF_TEST_SRCS}
