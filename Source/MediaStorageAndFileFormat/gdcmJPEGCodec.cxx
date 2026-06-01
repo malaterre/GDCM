@@ -188,6 +188,8 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       if( !r )
         {
         gdcmDebugMacro( "Failed to decompress Frag #" << i );
+        if( !Internal )
+          return false;
         const bool suspended = Internal->IsStateSuspension();
         const size_t nfrags = sf0->GetNumberOfFragments();
         // In case of chunked-jpeg, this is always an error
@@ -376,6 +378,8 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
 bool JPEGCodec::DecodeByStreams(std::istream &is, std::ostream &os)
 {
   std::stringstream tmpos;
+  if ( !Internal )
+    return false;
   if ( !Internal->DecodeByStreams(is,tmpos) )
     {
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
