@@ -17,9 +17,13 @@
 #include "gdcmDataElement.h"
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmSwapper.h"
+#ifdef GDCM_USE_JPEGTURBO
+#include "gdcmJPEGTurboCodec.h"
+#else
 #include "gdcmJPEG8Codec.h"
 #include "gdcmJPEG12Codec.h"
 #include "gdcmJPEG16Codec.h"
+#endif
 
 #include <cstring>
 #include <numeric>
@@ -101,6 +105,17 @@ void JPEGCodec::SetupJPEGBitCodec(int bit)
 {
   BitSample = bit;
   delete Internal; Internal = nullptr;
+#ifdef GDCM_USE_JPEGTURBO
+  if ( bit >= 1 && bit <= 16 )
+    {
+    gdcmDebugMacro( "Using JPEGTurbo" );
+    Internal = new JPEGTurboCodec;
+    }
+  else
+    {
+    gdcmWarningMacro( "Cannot instantiate JPEG codec for bit sample: " << bit );
+    }
+#else
   // what should I do with those single bit images ?
   if ( BitSample <= 8 )
     {
@@ -122,6 +137,7 @@ void JPEGCodec::SetupJPEGBitCodec(int bit)
     // gdcmNonImageData/RT/RTDOSE.dcm
     gdcmWarningMacro( "Cannot instantiate JPEG codec for bit sample: " << bit );
     }
+#endif
 }
 
 void JPEGCodec::SetBitSample(int bit)
@@ -172,6 +188,8 @@ bool JPEGCodec::Decode(DataElement const &in, DataElement &out)
       if( !r )
         {
         gdcmDebugMacro( "Failed to decompress Frag #" << i );
+        if( !Internal )
+          return false;
         const bool suspended = Internal->IsStateSuspension();
         const size_t nfrags = sf0->GetNumberOfFragments();
         // In case of chunked-jpeg, this is always an error
@@ -360,6 +378,8 @@ bool JPEGCodec::Code(DataElement const &in, DataElement &out)
 bool JPEGCodec::DecodeByStreams(std::istream &is, std::ostream &os)
 {
   std::stringstream tmpos;
+  if ( !Internal )
+    return false;
   if ( !Internal->DecodeByStreams(is,tmpos) )
     {
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
