@@ -1251,6 +1251,9 @@ int main (int argc, char *argv[])
       std::cerr << "Could not split : " << filename << std::endl;
       return 1;
       }
+    double n[3];
+    bool inverted;
+    b = filter.ComputeGRIDSliceNormal( n, inverted );
 
     const gdcm::Image &image = filter.GetImage();
     const unsigned int *dims = image.GetDimensions();
@@ -1269,10 +1272,14 @@ int main (int argc, char *argv[])
       }
     const double *cosines = image.GetDirectionCosines();
     gdcm::DirectionCosines dc( cosines );
-    double normal[3];
+    dc.Normalize();
+    double normal[3]={};
     dc.Cross( normal );
+    gdcm::DirectionCosines::Normalize(normal);
+
     const double *origin = image.GetOrigin();
-    double zspacing = image.GetSpacing(2);
+    const double *spacing = image.GetSpacing();
+    double zspacing = spacing[2]; // image.GetSpacing(2);
 
     gdcm::DataSet & ds = reader.GetFile().GetDataSet();
     
@@ -1296,10 +1303,23 @@ int main (int argc, char *argv[])
       double new_origin[3];
       for (int j = 0; j < 3; j++)
         {
-        // the n'th slice is n * z-spacing aloung the IOP-derived
+        // the n'th slice is n * z-spacing along the IOP-derived
         // z-axis
         new_origin[j] = origin[j] + normal[j] * i * zspacing;
         }
+      
+      double ref_pos[3];
+      unsigned int index = i;
+      if ( inverted && false )
+        index = dims[2] - i - 1;
+      bool ret = filter.GetGRIDSlicePosition( index, ref_pos);
+      if (ret) {
+        double dot = gdcm::DirectionCosines::Distance(ref_pos, new_origin);
+        if ( dot > 1e-6) {
+          gdcmWarningMacro("Distance seems to indicate error");
+        }
+      }
+      
 
       kwd::SOPInstanceUID sid;
       sid.SetValue( ug.Generate() );
