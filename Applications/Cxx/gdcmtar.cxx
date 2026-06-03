@@ -1314,9 +1314,9 @@ int main (int argc, char *argv[])
         index = dims[2] - i - 1;
       bool ret = filter.GetGRIDSlicePosition( index, ref_pos);
       if (ret) {
-        double dot = gdcm::DirectionCosines::Distance(ref_pos, new_origin);
-        if ( dot > 1e-6) {
-          gdcmWarningMacro("Distance seems to indicate error");
+        double dist = gdcm::DirectionCosines::Distance(ref_pos, new_origin);
+        if ( dist > 1e-5) {
+          gdcmWarningMacro("Distance seems to indicate error: " << dist);
         }
       }
       
