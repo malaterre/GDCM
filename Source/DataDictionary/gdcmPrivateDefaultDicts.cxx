@@ -43,6 +43,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   // See https://github.com/rordenlab/dcm2niix/issues/225
   {0x0019,0x0018,"EPI Private Header",VR::IS,VM::VM1,"?",false },
   {0x0019,0x0028,"EPI Private Header",VR::FD,VM::VM1,"?",false },
+  {0x0051,0x0011,"EPI Private Header",VR::LO,VM::VM1,"?",false },
   {0x0061,0x0002,"DB Dicom Private Creator",VR::US,VM::VM1,"Generate Private",false },
   {0x0061,0x0004,"EditStatus",VR::US,VM::VM1,"?",false },
   {0x0061,0x0001,"Common Private Header",VR::SH,VM::VM1,"?",false },
