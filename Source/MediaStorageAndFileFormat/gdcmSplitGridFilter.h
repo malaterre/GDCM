@@ -26,6 +26,9 @@ namespace gdcm
  * 
  * Only known documentation at the time was found at:
  * https://github.com/rordenlab/dcm2niix/issues/225
+ * 
+ * Pay attention that SliceNormalVector seems to be inspired from SIEMENS but is 
+ * always inverted. Also the IPP in the SQ seems to be accurate, do not use this value for now.
  */
 class GDCM_EXPORT SplitGridFilter
 {
@@ -40,8 +43,11 @@ public:
   /// stored in the GRID header.
   bool ComputeGRIDDimensions(unsigned int dims[3]);
 
-  /// Extract the value for SliceNormalVector (CSA header)
+  /// Extract the value for SliceNormalVector (UIH header)
   bool ComputeGRIDSliceNormal( double dims[3], bool & inverted );
+
+  /// Extract the value for ImagePositionPatient at index
+  bool GetGRIDSlicePosition( unsigned int index, double pos[3]);
 
   /// Extract the value for ImagePositionPatient
   bool ComputeGRIDImagePositionPatient( double pos[3],

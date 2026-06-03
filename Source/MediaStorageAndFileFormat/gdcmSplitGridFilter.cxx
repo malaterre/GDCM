@@ -138,7 +138,7 @@ bool SplitGridFilter::ComputeGRIDDimensions(unsigned int dims[3]) {
   }
 
   std::vector<unsigned int> colrow =
-  ImageHelper::GetDimensionsValue( GetFile() );
+      ImageHelper::GetDimensionsValue(GetFile());
 
   dims[0] = colrow[0];
   dims[1] = colrow[1];
@@ -146,8 +146,9 @@ bool SplitGridFilter::ComputeGRIDDimensions(unsigned int dims[3]) {
   const unsigned int div = static_cast<unsigned int>(std::ceil(
     std::sqrt(static_cast<double>(numberOfImagesInGrid))));
   dims[0] /= div;
-  assert( numberOfImagesInGrid % div == 0);
-  const unsigned int div2 = (numberOfImagesInGrid / div);
+  const unsigned int div2 = static_cast<unsigned int>(std::ceil(
+    static_cast<double>(numberOfImagesInGrid) / div));
+  assert( div * div2 >= numberOfImagesInGrid);
   dims[1] /= div2;
   dims[2] = numberOfImagesInGrid;
   return true;
@@ -161,12 +162,12 @@ bool SplitGridFilter::ComputeGRIDSliceNormal(double slicenormalvector[3],
   bool snvfound = false;
   {
     {
-  static const PrivateTag t1(0x0065, 0x14, "Image Private Header");
+      static const PrivateTag t1(0x0065, 0x14, "Image Private Header");
       if (ds.FindDataElement(t1)) {
         DataElement const& de1 = ds.GetDataElement(t1);
         Element<VR::DS, VM::VM3> el1 = {{0}};
         el1.SetFromDataElement(de1);
-        
+
         normal[0] = el1[0];
         normal[1] = el1[1];
         normal[2] = el1[2];
@@ -176,33 +177,27 @@ bool SplitGridFilter::ComputeGRIDSliceNormal(double slicenormalvector[3],
       }
     }
   }
-  if( snvfound )
-  {
-    Attribute<0x20,0x37> iop;
-    iop.SetFromDataSet( ds );
-    DirectionCosines dc( iop.GetValues() );
+  if (snvfound) {
+    Attribute<0x20, 0x37> iop;
+    iop.SetFromDataSet(ds);
+    DirectionCosines dc(iop.GetValues());
     double z[3];
-    dc.Cross (z);
-    const double snv_dot = dc.Dot( normal, z );
-    if( fabs(1. - snv_dot) < 1e-6 )
-    {
+    dc.Cross(z);
+    const double snv_dot = dc.Dot(normal, z);
+    if (fabs(1. - snv_dot) < 1e-6) {
       gdcmDebugMacro("Same direction");
       inverted = false;
-    }
-    else if( fabs(-1. - snv_dot) < 1e-6 )
-    {
+    } else if (fabs(-1. - snv_dot) < 1e-6) {
       gdcmDebugMacro("SliceNormalVector is opposite direction");
       inverted = true;
-    }
-    else
-    {
-      gdcmErrorMacro( "Unexpected normal for SliceNormalVector, dot is: " << snv_dot );
+    } else {
+      gdcmErrorMacro(
+        "Unexpected normal for SliceNormalVector, dot is: " << snv_dot);
       return false;
     }
   }
- 
-  for( int i = 0; i < 3; ++i)
-    slicenormalvector[i] = normal[i];
+
+  for (int i = 0; i < 3; ++i) slicenormalvector[i] = normal[i];
 
   return snvfound;
 }
@@ -214,93 +209,117 @@ bool SplitGridFilter::ComputeGRIDImagePositionPatient(double ret[3],
   const unsigned int image_dims[3],
   const unsigned int grid_dims[3], bool inverted) {
   DataSet& ds = GetFile().GetDataSet();
-  DirectionCosines dc( dircos );
+  DirectionCosines dc(dircos);
   dc.Normalize();
-  double z[3]={};
-  dc.Cross (z);
+  double z[3] = {};
+  dc.Cross(z);
   DirectionCosines::Normalize(z);
 
-  const double *dircos_normalized = dc;
-  const double *x = dircos_normalized;
-  const double *y = dircos_normalized + 3;
+  const double* dircos_normalized = dc;
+  const double* x = dircos_normalized;
+  const double* y = dircos_normalized + 3;
 
   bool hasIppCsa = false;
   double ipp_dcm[3] = {};
-        double pos1[3];
-        double pos2[3];
+  double pos1[3];
+  double pos2[3];
   {
     // (0065,1051) SQ (Sequence with undefined length)                   # u/l,1 MR VFrame Sequence
     static const PrivateTag t1(0x0065, 0x51, "Image Private Header");
-    if (ds.FindDataElement(t1))
-    {
+    if (ds.FindDataElement(t1)) {
       DataElement const& de1 = ds.GetDataElement(t1);
       SmartPointer<SequenceOfItems> sq = de1.GetValueAsSQ();
       size_t size = sq->GetNumberOfItems();
       const unsigned int numberOfImagesInGrid = grid_dims[2];
-      if( size == numberOfImagesInGrid ) {
-          // all grid have their own slice position, always pick the first one for computation:
+      if (size == numberOfImagesInGrid) {
+        // all grid have their own slice position, always pick the first one for computation:
         //    (0020,0032) DS [-90.7223282\-120.779121\-60.4080467 ]         # 36,3 Image Position (Patient)
         const Tag timagepositionpatient(0x0020, 0x0032);
         {
           const Item& item1 = sq->GetItem(1);
-          DataSet const &subds1 = item1.GetNestedDataSet();
-          assert(  subds1.FindDataElement( timagepositionpatient ));
-          const DataElement& de = subds1.GetDataElement( timagepositionpatient );
-          Attribute<0x0020,0x0032> at = {{0,0,0}}; // default value if empty
-          at.SetFromDataElement( de );
-          for( unsigned int i = 0; i < at.GetNumberOfValues(); ++i )
-          {
+          DataSet const& subds1 = item1.GetNestedDataSet();
+          assert(subds1.FindDataElement( timagepositionpatient ));
+          const DataElement& de = subds1.GetDataElement(timagepositionpatient);
+          Attribute<0x0020, 0x0032> at = {{0, 0, 0}}; // default value if empty
+          at.SetFromDataElement(de);
+          for (unsigned int i = 0; i < at.GetNumberOfValues(); ++i) {
             pos1[i] = at.GetValue(i);
           }
         }
         double dist1 = 0;
-        for (int i = 0; i < 3; ++i) dist1 += z[i]*pos1[i];
+        for (int i = 0; i < 3; ++i) dist1 += z[i] * pos1[i];
         {
           const Item& item2 = sq->GetItem(size);
-          DataSet const &subds2 = item2.GetNestedDataSet();
-          assert(  subds2.FindDataElement( timagepositionpatient ));
-          const DataElement& de = subds2.GetDataElement( timagepositionpatient );
-          Attribute<0x0020,0x0032> at = {{0,0,0}}; // default value if empty
-          at.SetFromDataElement( de );
-          for( unsigned int i = 0; i < at.GetNumberOfValues(); ++i )
-          {
+          DataSet const& subds2 = item2.GetNestedDataSet();
+          assert(subds2.FindDataElement( timagepositionpatient ));
+          const DataElement& de = subds2.GetDataElement(timagepositionpatient);
+          Attribute<0x0020, 0x0032> at = {{0, 0, 0}}; // default value if empty
+          at.SetFromDataElement(de);
+          for (unsigned int i = 0; i < at.GetNumberOfValues(); ++i) {
             pos2[i] = at.GetValue(i);
           }
         }
         double dist2 = 0;
-        for (int i = 0; i < 3; ++i) dist2 += z[i]*pos2[i];
+        for (int i = 0; i < 3; ++i) dist2 += z[i] * pos2[i];
         // (0018,0088) DS [2 ]                                               # 2,1 Spacing Between Slices
-        double delta = (dist1 - dist2) / (grid_dims[2] - 1);
-        if ( std::fabs(std::fabs(delta) - pixelspacing[2]) > 1e-6 ) {
+        const double delta = (dist1 - dist2) / (grid_dims[2] - 1);
+        if (std::fabs(std::fabs(delta) - pixelspacing[2]) > 1e-6) {
           gdcmWarningMacro("Pixel Spacing is incorrect");
         }
-        if ( inverted ) {
-          if ( delta > 0 ) {
+        if (inverted) {
+          if (delta > 0) {
             gdcmWarningMacro("SNV is inverted inconsistent with slice ordering");
           }
         } else {
-          if ( delta < 0 ) {
-            gdcmWarningMacro("SNV is not inverted inconsistent with slice ordering");
-          }          
+          if (delta < 0) {
+            gdcmWarningMacro(
+              "SNV is not inverted inconsistent with slice ordering");
+          }
         }
-          hasIppCsa = true;
-        } else {
-          gdcmWarningMacro( "Inconsistent SliceArray: " << size << " vs expected: " << grid_dims[2] );
-        }
+        hasIppCsa = true;
+      } else {
+        gdcmWarningMacro(
+          "Inconsistent SliceArray: " << size << " vs expected: " << grid_dims[2
+          ]);
       }
+    }
   }
 
   // no error set origin:
-  if ( inverted ) {
-    for(int i = 0; i < 3; ++i )
-      ret[i] = pos2[i];    
+  if (inverted && false) {
+    for (int i = 0; i < 3; ++i) ret[i] = pos2[i];
   } else {
-    for(int i = 0; i < 3; ++i )
-      ret[i] = pos1[i];        
+    for (int i = 0; i < 3; ++i) ret[i] = pos1[i];
   }
 
-
   return true;
+}
+
+bool SplitGridFilter::GetGRIDSlicePosition( unsigned int index, double pos[3])
+{
+  pos[0] = pos[1] = pos[2] = 0.0;
+  DataSet& ds = GetFile().GetDataSet();
+  // (0065,1051) SQ (Sequence with undefined length)                   # u/l,1 MR VFrame Sequence
+  static const PrivateTag t1(0x0065, 0x51, "Image Private Header");
+  if (ds.FindDataElement(t1)) {
+    DataElement const& de1 = ds.GetDataElement(t1);
+    SmartPointer<SequenceOfItems> sq = de1.GetValueAsSQ();
+    size_t size = sq->GetNumberOfItems();
+    if ( /*index >= 0 &&*/ index < size ) {
+      const Item& item = sq->GetItem(index+1);
+      DataSet const& subds2 = item.GetNestedDataSet();
+      const Tag timagepositionpatient(0x0020, 0x0032);
+      assert(subds2.FindDataElement( timagepositionpatient ));
+      const DataElement& de = subds2.GetDataElement(timagepositionpatient);
+      Attribute<0x0020, 0x0032> at = {{0, 0, 0}}; // default value if empty
+      at.SetFromDataElement(de);
+      for (unsigned int i = 0; i < at.GetNumberOfValues(); ++i) {
+        pos[i] = at.GetValue(i);
+      } 
+      return true;
+    }
+  }
+  return false;
 }
 
 bool SplitGridFilter::Split() {
@@ -311,7 +330,8 @@ bool SplitGridFilter::Split() {
   if (!ComputeGRIDDimensions(dims)) {
     return false;
   }
-  const unsigned int div = static_cast<unsigned int>(std::ceil(std::sqrt(static_cast<double>(dims[2]))));
+  const unsigned int div = static_cast<unsigned int>(std::ceil(
+    std::sqrt(static_cast<double>(dims[2]))));
   bool inverted = false;
   double normal[3];
   bool hasOriginCSA = true;
@@ -374,9 +394,6 @@ bool SplitGridFilter::Split() {
 
   // Fix origin (direction is ok since we reorganize the tiles):
   if (hasOriginCSA) image.SetOrigin(origin);
-
-  PhotometricInterpretation pi;
-  pi = PhotometricInterpretation::MONOCHROME2;
 
   image.SetDataElement(pixeldata);
 
