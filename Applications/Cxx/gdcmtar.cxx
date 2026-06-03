@@ -25,6 +25,7 @@
 #include "gdcmImageReader.h"
 #include "gdcmDataElement.h"
 #include "gdcmImageWriter.h"
+#include "gdcmSplitGridFilter.h"
 #include "gdcmSplitMosaicFilter.h"
 #include "gdcmFilename.h"
 #include "gdcmFilenameGenerator.h"
@@ -68,6 +69,7 @@ static void PrintHelp()
   std::cout << "     --enhance        Enhance (default)" << std::endl;
   std::cout << "  -U --unenhance      Unenhance" << std::endl;
   std::cout << "  -M --mosaic         Split SIEMENS Mosaic image into multiple frames." << std::endl;
+  std::cout << "     --grid           Split UIH Grid image into multiple frames." << std::endl;
   std::cout << "     --mosaic-private When splitting SIEMENS Mosaic image into multiple frames, preserve private attributes (advanced user only)." << std::endl;
   std::cout << "  -p --pattern        Specify trailing file pattern." << std::endl;
   std::cout << "     --root-uid       Root UID." << std::endl;
@@ -959,7 +961,9 @@ int main (int argc, char *argv[])
   std::string outfilename;
   std::string root;
   int resourcespath = 0;
+  int grid = 0;
   int mosaic = 0;
+  int grid_private = 0;
   int mosaic_private = 0;
   int enhance = 1;
   int unenhance = 0;
@@ -986,6 +990,8 @@ int main (int argc, char *argv[])
         {"root-uid", 1, &rootuid, 1}, // specific Root (not GDCM)
         //{"resources-path", 0, &resourcespath, 1},
         {"mosaic-private", 0, &mosaic_private, 1}, // keep private attributes
+        {"grid", 0, &grid, 1}, // split uih grid into multiple frames
+        {"grid-private", 0, &grid_private, 1}, // keep private attributes
 
 // General options !
         {"verbose", 0, &verbose, 1},
@@ -1227,7 +1233,133 @@ int main (int argc, char *argv[])
     }
 
 
-  if( mosaic )
+  if( grid ) {
+    gdcm::ImageReader reader;
+    reader.SetFileName( filename.c_str() );
+    if( !reader.Read() )
+      {
+      std::cerr << "could not read: " << filename << std::endl;
+      return 1;
+      }
+
+    gdcm::SplitGridFilter filter;
+    filter.SetImage( reader.GetImage() );
+    filter.SetFile( reader.GetFile() );
+    bool b = filter.Split();
+    if( !b )
+      {
+      std::cerr << "Could not split : " << filename << std::endl;
+      return 1;
+      }
+    double n[3];
+    bool inverted;
+    b = filter.ComputeGRIDSliceNormal( n, inverted );
+
+    const gdcm::Image &image = filter.GetImage();
+    const unsigned int *dims = image.GetDimensions();
+    const gdcm::DataElement &pixeldata = image.GetDataElement();
+    const gdcm::ByteValue *bv = pixeldata.GetByteValue();
+    size_t slice_len = image.GetBufferLength() / dims[2];
+
+    gdcm::FilenameGenerator fg;
+    fg.SetNumberOfFilenames( dims[2] );
+    fg.SetPrefix( outfilename.c_str() );
+    fg.SetPattern( pattern.c_str() );
+    if( !fg.Generate() )
+      {
+      std::cerr << "could not generate filenames" << std::endl;
+      return 1;
+      }
+    const double *cosines = image.GetDirectionCosines();
+    gdcm::DirectionCosines dc( cosines );
+    dc.Normalize();
+    double normal[3]={};
+    dc.Cross( normal );
+    gdcm::DirectionCosines::Normalize(normal);
+
+    const double *origin = image.GetOrigin();
+    const double *spacing = image.GetSpacing();
+    double zspacing = spacing[2]; // image.GetSpacing(2);
+
+    gdcm::DataSet & ds = reader.GetFile().GetDataSet();
+    
+    if( !grid_private )
+    {
+      gdcm::Anonymizer ano;
+      ano.SetFile( reader.GetFile() );
+      // Remove CSA header
+      ano.RemovePrivateTags();
+    }
+
+    namespace kwd = gdcm::Keywords;
+    gdcm::UIDGenerator ug;
+
+    kwd::InstanceNumber instart;
+    instart.Set(ds);
+    int istart = instart.GetValue();
+
+    for(unsigned int i = 0; i < dims[2]; ++i)
+      {
+      double new_origin[3];
+      for (int j = 0; j < 3; j++)
+        {
+        // the n'th slice is n * z-spacing along the IOP-derived
+        // z-axis
+        new_origin[j] = origin[j] + normal[j] * i * zspacing;
+        }
+      
+      double ref_pos[3];
+      unsigned int index = i;
+      if ( inverted && false )
+        index = dims[2] - i - 1;
+      bool ret = filter.GetGRIDSlicePosition( index, ref_pos);
+      if (ret) {
+        double dot = gdcm::DirectionCosines::Distance(ref_pos, new_origin);
+        if ( dot > 1e-6) {
+          gdcmWarningMacro("Distance seems to indicate error");
+        }
+      }
+      
+
+      kwd::SOPInstanceUID sid;
+      sid.SetValue( ug.Generate() );
+      ds.Replace( sid.GetAsDataElement() );
+
+      const char *outfilenamei = fg.GetFilename(i);
+      kwd::SliceLocation sl;
+      sl.SetValue( new_origin[2] );
+      ds.Replace( sl.GetAsDataElement() );
+      kwd::InstanceNumber in;
+      in.SetValue( istart + i ); // Start at mosaic instance number
+      ds.Replace( in.GetAsDataElement() );
+      gdcm::ImageWriter writer;
+      writer.SetFileName( outfilenamei );
+      //writer.SetFile( filter.GetFile() );
+      writer.SetFile( reader.GetFile() );
+
+      //
+      //writer.SetImage( filter.GetImage() );
+      gdcm::Image &slice = writer.GetImage();
+      slice = filter.GetImage();
+      slice.SetOrigin( new_origin );
+      slice.SetNumberOfDimensions( 2 );
+      gdcm_assert( slice.GetPixelFormat() == filter.GetImage().GetPixelFormat() );
+      slice.SetSpacing(2, filter.GetImage().GetSpacing(2) );
+      //slice.Print( std::cout );
+      gdcm::DataElement &pd = slice.GetDataElement();
+      const char *sliceptr = bv->GetPointer() + i * slice_len;
+      pd.SetByteValue( sliceptr, (uint32_t)slice_len);
+
+      if( !writer.Write() )
+        {
+        std::cerr << "Failed to write: " << outfilename << std::endl;
+        return 1;
+        }
+      }
+
+    return 0;    
+  }
+  else if( mosaic )
     {
     gdcm::ImageReader reader;
     reader.SetFileName( filename.c_str() );

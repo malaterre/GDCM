@@ -42,6 +42,7 @@ set(MSFF_SRCS
   gdcmDICOMDIR.cxx
   gdcmSpectroscopy.cxx
   gdcmEncapsulatedDocument.cxx
+  gdcmSplitGridFilter.cxx
   gdcmSplitMosaicFilter.cxx
   gdcmFiducials.cxx
   gdcmWaveform.cxx
