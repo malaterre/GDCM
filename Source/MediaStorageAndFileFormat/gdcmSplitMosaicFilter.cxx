@@ -363,7 +363,7 @@ bool SplitMosaicFilter::ComputeMOSAICImagePositionPatient( double ret[3],
       if( size ) {
         // two cases:
         if( size == mosaic_dims[2] ) {
-          // all mosaic have there own slice position, always pick the first one for computation:
+          // all mosaic have their own slice position, always pick the first one for computation:
           size_t index = 0;
           MrProtocol::Slice & slice = sa.Slices[index];
           MrProtocol::Vector3 & p = slice.Position;
