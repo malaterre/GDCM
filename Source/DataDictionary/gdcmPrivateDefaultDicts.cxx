@@ -43,6 +43,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   // See https://github.com/rordenlab/dcm2niix/issues/225
   {0x0019,0x0018,"EPI Private Header",VR::IS,VM::VM1,"?",false },
   {0x0019,0x0028,"EPI Private Header",VR::FD,VM::VM1,"?",false },
+  {0x0051,0x0011,"EPI Private Header",VR::LO,VM::VM1,"?",false },
   {0x0061,0x0002,"DB Dicom Private Creator",VR::US,VM::VM1,"Generate Private",false },
   {0x0061,0x0004,"EditStatus",VR::US,VM::VM1,"?",false },
   {0x0061,0x0001,"Common Private Header",VR::SH,VM::VM1,"?",false },
@@ -83,6 +84,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0065,0x0039,"Image Private Header",VR::SH,VM::VM6,"MRGradRange",false },
   {0x0065,0x0040,"Image Private Header",VR::LO,VM::VM1,"?",false },
   {0x0065,0x0041,"Image Private Header",VR::LT,VM::VM1,"?NIN?",false },
+  {0x0065,0x0048,"Image Private Header",VR::OB,VM::VM1,"?",false },
   {0x0065,0x0049,"Image Private Header",VR::DS,VM::VM3,"?",false },
   {0x0065,0x0050,"Image Private Header",VR::DS,VM::VM1,"MR Number Of Slice In Volume",false },
   {0x0065,0x0051,"Image Private Header",VR::SQ,VM::VM1,"MR VFrame Sequence",false },
@@ -91,6 +93,7 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
   {0x0065,0x0058,"Image Private Header",VR::IS,VM::VM1,"?",false },
   {0x0065,0x0059,"Image Private Header",VR::LO,VM::VM1,"?",false },
   {0x0065,0x0060,"Image Private Header",VR::LO,VM::VM1,"?",false },
+  {0x0065,0x006a,"Image Private Header",VR::LO,VM::VM1,"?",false },
   {0x0065,0x006c,"Image Private Header",VR::OB,VM::VM1,"?",false },
   {0x0065,0x0071,"Image Private Header",VR::US,VM::VM1,"?",false },
   {0x0065,0x0073,"Image Private Header",VR::OB,VM::VM1,"?",false },
