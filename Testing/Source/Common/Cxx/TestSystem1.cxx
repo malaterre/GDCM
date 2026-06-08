@@ -284,18 +284,6 @@ int TestSystem1(int, char *[])
   //int n = sscanf( long_str8, "%8ld", &l );
   //std::cout << "Long:" << l << std::endl;
 
-  char hostname[255+1];
-  hostname[255] = 0;
-  if( gdcm::System::GetHostName( hostname ) )
-    {
-    std::cout << "Host:" <<  hostname << std::endl;
-    }
-  else
-  {
-    std::cerr << "cannot get Hostname" << std::endl;
-  return 1;
-  }
-
   //time_t t = gdcm::System::FileTime("/etc/debian_version");
   //char date3[22];
   //gdcm::System::FormatDateTime(date3, t);

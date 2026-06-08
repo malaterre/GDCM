@@ -954,41 +954,6 @@ int System::StrCaseCmp(const char *s1, const char *s2)
 #endif
 }
 
-bool System::GetHostName(char name[255])
-{
-// http://msdn.microsoft.com/en-us/library/ms738527.aspx
-// WSANOTINITIALISED A successful WSAStartup call must occur before using this function.
-#ifdef _WIN32
-  // Get the hostname
-  WORD wVersionRequested;
-  WSADATA wsaData;
-  wVersionRequested = MAKEWORD(2,0);
-
-  if ( WSAStartup( wVersionRequested, &wsaData ) == 0 )
-    {
-    bool ret = false;
-    if( gethostname(name,255) == 0 )
-      {
-      ret = true;
-      }
-    else
-      {
-      *name = 0;
-      }
-    WSACleanup( );
-    return ret;
-    }
-#else
-  if( gethostname(name, 255) == 0 )
-    {
-    return true;
-    }
-#endif
-  // If reach here gethostname failed, uninit name just in case
-  *name = 0;
-  return false;
-}
-
 char *System::StrTokR(char *str, const char *delim, char **nextp)
 {
 #if 1
