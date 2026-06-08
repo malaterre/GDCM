@@ -86,7 +86,10 @@ if(GDCM_VERSION_MINOR MATCHES "[02468]$")
   # So unless the user *specifically* requested a particular cmake_build_type
   # do the work internally and append the NDEBUG def flag (hopefully portable)
   if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNDEBUG")
+    get_cmake_property(is_multi_config_generator GENERATOR_IS_MULTI_CONFIG)
+    if (NOT is_multi_config_generator)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNDEBUG")
+    endif()
   endif()
   # Since we are on a release branch, chance is that people don't care about testing
   # let's disable it for them
