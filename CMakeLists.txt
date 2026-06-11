@@ -333,9 +333,12 @@ if(UNIX)
   option(GDCM_USE_SYSTEM_UUID "Use system uuid" OFF)
 endif()
 option(GDCM_USE_SYSTEM_EXPAT "Use system expat" OFF)
+option(GDCM_BUILD_NETWORK "Build DICOM network (DIMSE/SCU) functionality" ON)
 option(GDCM_USE_SYSTEM_JSON "Use system json" OFF)
 option(GDCM_USE_SYSTEM_PAPYRUS3 "Use system papyrus3" OFF)
-option(GDCM_USE_SYSTEM_SOCKETXX "Use system socket++" OFF)
+if(GDCM_BUILD_NETWORK)
+  option(GDCM_USE_SYSTEM_SOCKETXX "Use system socket++" OFF)
+endif()
 option(GDCM_USE_SYSTEM_LJPEG "Use system ljpeg (ijg lib)" OFF)
 option(GDCM_USE_JPEGTURBO "Use libjpeg-turbo instead of IJG for JPEG codec" OFF)
 mark_as_advanced(
@@ -1174,7 +1177,7 @@ endmacro()
 #message("${theoutput}")
 
 # For DICOM Q/R testing
-if(GDCM_BUILD_TESTING)
+if(GDCM_BUILD_TESTING AND GDCM_BUILD_NETWORK)
   set(GDCM_DICOM_CLIENT_AETITLE "" CACHE STRING "DICOM CLIENT AETITLE")
   set(GDCM_DICOM_SERVER_AETITLE "" CACHE STRING "DICOM SERVER AETITLE")
   set(GDCM_DICOM_SERVER_PEER    "" CACHE STRING "DICOM SERVER PEER")
@@ -1196,10 +1199,12 @@ set(GDCM_INCLUDE_PATH
   "${GDCM_BINARY_DIR}/Source/Common"
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
-  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   )
+if(GDCM_BUILD_NETWORK)
+  list(APPEND GDCM_INCLUDE_PATH "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition")
+endif()
 if(GDCM_USE_VTK)
     set(GDCM_INCLUDE_PATH
       ${GDCM_INCLUDE_PATH}

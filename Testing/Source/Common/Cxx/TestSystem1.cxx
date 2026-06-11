@@ -284,6 +284,7 @@ int TestSystem1(int, char *[])
   //int n = sscanf( long_str8, "%8ld", &l );
   //std::cout << "Long:" << l << std::endl;
 
+#ifdef GDCM_BUILD_NETWORK
   char hostname[255+1];
   hostname[255] = 0;
   if( gdcm::System::GetHostName( hostname ) )
@@ -295,6 +296,7 @@ int TestSystem1(int, char *[])
     std::cerr << "cannot get Hostname" << std::endl;
   return 1;
   }
+#endif // GDCM_BUILD_NETWORK
 
   //time_t t = gdcm::System::FileTime("/etc/debian_version");
   //char date3[22];
