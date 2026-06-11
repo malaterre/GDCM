@@ -44,9 +44,11 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
-  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
+if(GDCM_BUILD_NETWORK)
+  include_directories("${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition")
+endif()
 
 find_package(PythonInterp ${GDCM_DEFAULT_PYTHON_VERSION} REQUIRED)
 find_package(PythonLibs ${GDCM_DEFAULT_PYTHON_VERSION} REQUIRED)
@@ -68,6 +70,9 @@ else()
   )
 endif()
 set_source_files_properties(gdcmswig.i PROPERTIES CPLUSPLUS ON)
+if(GDCM_BUILD_NETWORK)
+  set_property(SOURCE gdcmswig.i APPEND PROPERTY INCLUDE_DIRECTORIES "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition")
+endif()
 
 set(GDCM_PYTHON_IMPLEMENTATION_NAME gdcmswig)
 set(MODULE_NAME gdcmswig)
@@ -99,7 +104,11 @@ else()
     SOURCES gdcmswig.i gdcmPythonFilter.cxx
   )
 endif()
-SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} LINK_PRIVATE gdcmMEXD gdcmMSFF gdcmIOD)
+if(GDCM_BUILD_NETWORK)
+  SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} LINK_PRIVATE gdcmMEXD gdcmMSFF gdcmIOD)
+else()
+  SWIG_LINK_LIBRARIES(${GDCM_PYTHON_IMPLEMENTATION_NAME} LINK_PRIVATE gdcmMSFF gdcmIOD)
+endif()
 # Apparently on my UNIX, python module (/usr/lib/pyshared/pythonX.Y/*/*.so) do not explicitly
 # link to python libraries...Leave default to always link to python libraries since
 # this is required at least on Apple & Win32, but leave the option to advanced user to explicitly

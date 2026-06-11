@@ -12,8 +12,10 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
-  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
-)
+  )
+if(GDCM_BUILD_NETWORK)
+  include_directories("${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition")
+endif()
 
 # $ export JAVA_HOME=/usr/lib/j2sdk1.6-sun/
 # $ export JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun/
@@ -23,6 +25,9 @@ include_directories(
   ${JNI_INCLUDE_DIRS}
   )
 set_source_files_properties(gdcm.i PROPERTIES CPLUSPLUS ON)
+if(GDCM_BUILD_NETWORK)
+  set_property(SOURCE gdcm.i APPEND PROPERTY INCLUDE_DIRECTORIES "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition")
+endif()
 
 set(GDCM_JAVA_HOME ${CMAKE_CURRENT_BINARY_DIR}/java/gdcm)
 file(MAKE_DIRECTORY ${GDCM_JAVA_HOME})
@@ -36,12 +41,15 @@ SWIG_ADD_LIBRARY(
   LANGUAGE java
   SOURCES gdcm.i
 )
-SWIG_LINK_LIBRARIES(gdcmjni LINK_PRIVATE gdcmMSFF
-  gdcmMEXD
-  # There is no real point in linking explicitly to jni libraries. This is a java module
-  # it could contains undefined symbols after all.
-  #${JNI_LIBRARIES}
-)
+if(GDCM_BUILD_NETWORK)
+  SWIG_LINK_LIBRARIES(gdcmjni LINK_PRIVATE gdcmMSFF gdcmMEXD
+    # There is no real point in linking explicitly to jni libraries. This is a java module
+    # it could contains undefined symbols after all.
+    #${JNI_LIBRARIES}
+  )
+else()
+  SWIG_LINK_LIBRARIES(gdcmjni LINK_PRIVATE gdcmMSFF)
+endif()
 if (WIN32)
   # disable lib prefix on windows with mingw
   set_target_properties(${SWIG_MODULE_gdcmjni_REAL_NAME} PROPERTIES PREFIX "")

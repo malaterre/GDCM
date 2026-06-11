@@ -10,8 +10,10 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
-  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
 )
+if(GDCM_BUILD_NETWORK)
+  include_directories("${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition")
+endif()
 
 #find_package(PHP4 REQUIRED)
 find_package(PHP5 REQUIRED)
@@ -22,6 +24,9 @@ include_directories(
 )
 
 set_source_files_properties(gdcm.i PROPERTIES CPLUSPLUS ON)
+if(GDCM_BUILD_NETWORK)
+  set_property(SOURCE gdcm.i APPEND PROPERTY INCLUDE_DIRECTORIES "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition")
+endif()
 
 # Some old swig 1.3 did not support this option:
 #set(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}")
@@ -32,7 +37,11 @@ SWIG_ADD_LIBRARY(
   LANGUAGE php
   SOURCES gdcm.i
 )
-SWIG_LINK_LIBRARIES(php_gdcm LINK_PRIVATE gdcmMSFF gdcmMEXD)
+if(GDCM_BUILD_NETWORK)
+  SWIG_LINK_LIBRARIES(php_gdcm LINK_PRIVATE gdcmMSFF gdcmMEXD)
+else()
+  SWIG_LINK_LIBRARIES(php_gdcm LINK_PRIVATE gdcmMSFF)
+endif()
 # warning, by default there are undefined symbols in the generated php/gdcm module
 # one would need to actually link to : /usr/lib/apache2/modules/libphp5.so
 # I do not believe this is correct, instead make sure that

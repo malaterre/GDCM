@@ -22,7 +22,7 @@
 # UseCSharp.cmake
 
 macro(ADD_CSHARP_TEST TESTNAME FILENAME)
-  get_source_file_property(loc ${FILENAME} LOCATION)
+  set(loc ${FILENAME})
   get_source_file_property(pyenv ${FILENAME} RUNTIMEPATH)
   if(CMAKE_CONFIGURATION_TYPES)
     # I cannot use CMAKE_CFG_INTDIR since it expand to "$(OutDir)"

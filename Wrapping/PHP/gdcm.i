@@ -173,6 +173,7 @@
 #include "gdcmDICOMDIRGenerator.h"
 #include "gdcmFileDerivation.h"
 
+#ifdef GDCM_BUILD_NETWORK
 #include "gdcmQueryBase.h"
 #include "gdcmQueryFactory.h"
 #include "gdcmBaseRootQuery.h"
@@ -180,6 +181,7 @@
 #include "gdcmPresentationContextGenerator.h"
 #include "gdcmCompositeNetworkFunctions.h"
 #include "gdcmServiceClassUser.h"
+#endif // GDCM_BUILD_NETWORK
 
 #include "gdcmStreamImageReader.h"
 
@@ -669,10 +671,11 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 // MEXD:
 %template(DataSetArrayType) std::vector< gdcm::DataSet >;
 %template(FileArrayType) std::vector< gdcm::File >;
-%template(PresentationContextArrayType) std::vector< gdcm::PresentationContext >;
 %template(KeyValuePairType) std::pair< gdcm::Tag, std::string>;
 %template(KeyValuePairArrayType) std::vector< std::pair< gdcm::Tag, std::string> >;
 %template(TagArrayType) std::vector< gdcm::Tag >;
+#ifdef GDCM_BUILD_NETWORK
+%template(PresentationContextArrayType) std::vector< gdcm::PresentationContext >;
 %include "gdcmQueryBase.h"
 %include "gdcmBaseRootQuery.h"
 %include "gdcmQueryFactory.h"
@@ -683,6 +686,7 @@ EXTEND_CLASS_PRINT(gdcm::ModuleEntry)
 %include "gdcmPresentationContextGenerator.h"
 typedef int64_t time_t; // FIXME
 %include "gdcmServiceClassUser.h"
+#endif
 %apply char[] { char* inReadBuffer }
 %include "gdcmStreamImageReader.h"
 %clear char* inReadBuffer;
