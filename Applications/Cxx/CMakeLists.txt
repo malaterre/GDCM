@@ -19,19 +19,21 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Source/DataStructureAndEncodingDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
-  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
 # FIXME:
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
   "${GDCM_SOURCE_DIR}/Utilities"
 
   )
 
-if(NOT GDCM_USE_SYSTEM_SOCKETXX)
-  include_directories(
-    "${GDCM_SOURCE_DIR}/Utilities/socketxx"
-    "${GDCM_SOURCE_DIR}/Utilities/socketxx/socket++" # local.h
-    "${GDCM_BINARY_DIR}/Utilities/socketxx/socket++" # config.h
-    )
+if(GDCM_BUILD_NETWORK)
+  include_directories("${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition")
+  if(NOT GDCM_USE_SYSTEM_SOCKETXX)
+    include_directories(
+      "${GDCM_SOURCE_DIR}/Utilities/socketxx"
+      "${GDCM_SOURCE_DIR}/Utilities/socketxx/socket++" # local.h
+      "${GDCM_BINARY_DIR}/Utilities/socketxx/socket++" # config.h
+      )
+  endif()
 endif()
 
 if(WIN32)
@@ -55,10 +57,12 @@ set(GDCM_EXECUTABLE_NAME
   #gdcmstream
   gdcmtar
   gdcminfo
-  gdcmscu
   gdcmxml
   gdcmpap3
   )
+if(GDCM_BUILD_NETWORK)
+  list(APPEND GDCM_EXECUTABLE_NAME gdcmscu)
+endif()
 # poppler people have the worse API backward compatibility I know of.
 # there is absolutely no way to check the version of poppler
 # they change the API during a minor change of the version
@@ -187,10 +191,12 @@ foreach(exename ${GDCM_EXECUTABLE_NAME})
   elseif(${exename} STREQUAL "gdcmxml")
     target_link_libraries(${exename} ${LIBXML2_LIBRARIES})
   elseif(${exename} STREQUAL "gdcmscu")
-    if(NOT GDCM_USE_SYSTEM_SOCKETXX)
-      target_link_libraries(${exename} gdcmMEXD socketxx)
-    else()
-      target_link_libraries(${exename} gdcmMEXD socket++)
+    if(GDCM_BUILD_NETWORK)
+      if(NOT GDCM_USE_SYSTEM_SOCKETXX)
+        target_link_libraries(${exename} gdcmMEXD socketxx)
+      else()
+        target_link_libraries(${exename} gdcmMEXD socket++)
+      endif()
     endif()
   elseif(${exename} STREQUAL "gdcmstream")
     target_link_libraries(${exename} ${GDCM_OPENJPEG_LIBRARIES})
@@ -231,7 +237,7 @@ endif()
 #  endif()
 #endif()
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND GDCM_BUILD_NETWORK)
   # http://www.na-mic.org/Wiki/index.php/CTSC:ARRA:Mockup
   # http://www.dicomserver.co.uk/
   # the NAMIC server is offline, Steve Pieper has volunteered his servers, but they are intermittent

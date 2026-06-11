@@ -14,8 +14,10 @@ include_directories(
   "${GDCM_SOURCE_DIR}/Source/InformationObjectDefinition"
   "${GDCM_SOURCE_DIR}/Source/MediaStorageAndFileFormat"
   "${GDCM_SOURCE_DIR}/Source/DataDictionary"
-  "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition"
-)
+  )
+if(GDCM_BUILD_NETWORK)
+  include_directories("${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition")
+endif()
 
 # Add FileVersion info, only visible on WIN32
 configure_file(
@@ -23,6 +25,9 @@ configure_file(
   ${CMAKE_CURRENT_BINARY_DIR}/version.rc
   @ONLY)
 set_source_files_properties(gdcm.i PROPERTIES CPLUSPLUS ON)
+if(GDCM_BUILD_NETWORK)
+  set_property(SOURCE gdcm.i APPEND PROPERTY INCLUDE_DIRECTORIES "${GDCM_SOURCE_DIR}/Source/MessageExchangeDefinition")
+endif()
 
 # See sf.net bug #2895067
 set(CMAKE_SWIG_FLAGS "-namespace gdcm -dllimport gdcmsharpglue")
@@ -33,9 +38,11 @@ SWIG_ADD_LIBRARY(
   LANGUAGE csharp
   SOURCES gdcm.i ${CMAKE_CURRENT_BINARY_DIR}/version.rc
 )
-SWIG_LINK_LIBRARIES(gdcmsharpglue LINK_PRIVATE gdcmMSFF
-  gdcmMEXD
-)
+if(GDCM_BUILD_NETWORK)
+  SWIG_LINK_LIBRARIES(gdcmsharpglue LINK_PRIVATE gdcmMSFF gdcmMEXD)
+else()
+  SWIG_LINK_LIBRARIES(gdcmsharpglue LINK_PRIVATE gdcmMSFF)
+endif()
 if(UNIX)
   set_target_properties(${SWIG_MODULE_gdcmsharpglue_REAL_NAME} PROPERTIES PREFIX "lib")
 endif()
