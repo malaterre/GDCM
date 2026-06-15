@@ -27,6 +27,8 @@
 #pragma SWIG nowarn=302,303,312,362,383,389,401,503,504,509,510,514,516
 %{
 #include <cstddef> // ptrdiff_t
+#include <new>      // std::bad_alloc
+#include <exception> // std::exception
 #include "gdcmTypes.h"
 #include "gdcmASN1.h"
 #include "gdcmSmartPointer.h"
@@ -250,6 +252,30 @@ using namespace gdcm;
 %define EXTEND_CLASS_PRINT(classname)
 EXTEND_CLASS_PRINT_GENERAL(__str__,classname)
 %enddef
+#endif
+
+// Translate any uncaught C++ exception into a Python exception. Without a global
+// handler, a throw escaping a wrapped method -- e.g. std::bad_alloc, or the
+// gdcm::Exception thrown by gdcm_assert out of Bitmap::GetBuffer when a decode
+// allocation fails under memory pressure -- crosses the generated extern "C"
+// wrapper uncaught and reaches std::terminate() -> abort(), killing the host
+// process instead of raising a catchable error. Declared before the class
+// %include's so it covers Bitmap/Image/Pixmap decode and everything after.
+#if defined(SWIGPYTHON)
+%exception {
+  try {
+    $action
+  } catch (const std::bad_alloc &e) {
+    PyErr_SetString(PyExc_MemoryError, e.what());
+    SWIG_fail;
+  } catch (const std::exception &e) { // gdcm::Exception derives from std::exception
+    PyErr_SetString(PyExc_RuntimeError, e.what());
+    SWIG_fail;
+  } catch (...) {
+    PyErr_SetString(PyExc_RuntimeError, "Unknown C++ exception in GDCM");
+    SWIG_fail;
+  }
+}
 #endif
 
 //%feature("autodoc", "1")
