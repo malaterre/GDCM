@@ -330,7 +330,7 @@ bool SplitGridFilter::Split() {
   imtype.SetFromDataSet( ds );
   const unsigned int nvalues = imtype.GetNumberOfValues();
   if( nvalues < 2 || imtype[nvalues-1].Trim() != "VFRAME" ) {
-    gdcmErrorMacro("Unhandled MOSAIC");
+    gdcmErrorMacro("Unhandled VFRAME");
     return false;
   }
 
