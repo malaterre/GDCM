@@ -325,6 +325,14 @@ bool SplitGridFilter::GetGRIDSlicePosition( unsigned int index, double pos[3])
 bool SplitGridFilter::Split() {
   bool success = true;
   DataSet& ds = GetFile().GetDataSet();
+  // sentinel
+  Attribute<0x0008, 0x0008> imtype;
+  imtype.SetFromDataSet( ds );
+  const unsigned int nvalues = imtype.GetNumberOfValues();
+  if( nvalues < 2 || imtype[nvalues-1].Trim() != "VFRAME" ) {
+    gdcmErrorMacro("Unhandled MOSAIC");
+    return false;
+  }
 
   unsigned int dims[3] = {0, 0, 0};
   if (!ComputeGRIDDimensions(dims)) {
