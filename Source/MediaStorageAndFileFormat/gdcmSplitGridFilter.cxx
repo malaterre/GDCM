@@ -189,6 +189,7 @@ bool SplitGridFilter::ComputeGRIDSliceNormal(double slicenormalvector[3],
       inverted = false;
     } else if (fabs(-1. - snv_dot) < 1e-6) {
       gdcmDebugMacro("SliceNormalVector is opposite direction");
+      // FIXME SNV is always opposite dir but actually not used in code
       inverted = true;
     } else {
       gdcmErrorMacro(
@@ -374,7 +375,7 @@ bool SplitGridFilter::Split() {
   outbuf.resize(l);
 
   bool b;
-  if (inverted) {
+  if (inverted && false) {
     b = details::reorganize_grid_invert(
       (unsigned short*)(void*)buf.data(), inputimage.GetDimensions(), div, dims,
       (unsigned short*)(void*)outbuf.data());
