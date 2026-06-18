@@ -189,6 +189,7 @@ bool SplitGridFilter::ComputeGRIDSliceNormal(double slicenormalvector[3],
       inverted = false;
     } else if (fabs(-1. - snv_dot) < 1e-6) {
       gdcmDebugMacro("SliceNormalVector is opposite direction");
+      // FIXME SNV is always opposite dir but actually not used in code
       inverted = true;
     } else {
       gdcmErrorMacro(
@@ -325,6 +326,14 @@ bool SplitGridFilter::GetGRIDSlicePosition( unsigned int index, double pos[3])
 bool SplitGridFilter::Split() {
   bool success = true;
   DataSet& ds = GetFile().GetDataSet();
+  // sentinel
+  Attribute<0x0008, 0x0008> imtype;
+  imtype.SetFromDataSet( ds );
+  const unsigned int nvalues = imtype.GetNumberOfValues();
+  if( nvalues < 2 || imtype[nvalues-1].Trim() != "VFRAME" ) {
+    gdcmErrorMacro("Unhandled VFRAME");
+    return false;
+  }
 
   unsigned int dims[3] = {0, 0, 0};
   if (!ComputeGRIDDimensions(dims)) {
@@ -366,7 +375,7 @@ bool SplitGridFilter::Split() {
   outbuf.resize(l);
 
   bool b;
-  if (inverted) {
+  if (inverted && false) {
     b = details::reorganize_grid_invert(
       (unsigned short*)(void*)buf.data(), inputimage.GetDimensions(), div, dims,
       (unsigned short*)(void*)outbuf.data());
