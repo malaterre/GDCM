@@ -708,7 +708,29 @@ if(GDCM_STANDALONE)
   if(GDCM_USE_VTK)
     option(GDCM_USE_PARAVIEW "paraview plugin ?" OFF)
     # needed here so that we have VTK_WRAP_PYTHON and al. available
-    find_package(VTK REQUIRED)
+
+    if("${VTK_MAJOR_VERSION}" LESS 9)
+      find_package(VTK REQUIRED)
+    else()
+      # VTK components list was extracted from Utilities/VTK/vtkgdcm.module.
+      # Classifications were ignored.  For future, some modules may be optional.
+      # Outer signature copied from openEMS/CMakeLists.txt.
+      find_package(VTK REQUIRED COMPONENTS
+          CommonCore
+          CommonDataModel
+          CommonExecutionModel
+          IOImage
+          IOLegacy
+          ImagingSources
+          CommonMisc
+          ImagingCore
+          IOCore
+          InteractionStyle
+          RenderingCore
+          TestingCore
+        NO_MODULE REQUIRED)
+    endif()
+
     mark_as_advanced(VTK_DIR)
     set(GDCM_VTK_DIR ${VTK_DIR})
     mark_as_advanced(GDCM_USE_PARAVIEW)
