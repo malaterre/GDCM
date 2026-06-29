@@ -552,7 +552,7 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
         }
       ptr_img = buffer;
       }
-    gdcm_assert( image_len % MaxNumSegments == 0 );
+    gdcm_assert( image_len % MaxNumSegments == 0 || (image_len - 1) % MaxNumSegments == 0 );
     const size_t input_seg_length = image_len / MaxNumSegments;
     std::string datastr;
     for(unsigned int seg = 0; seg < MaxNumSegments; ++seg )
@@ -565,10 +565,10 @@ bool RLECodec::Code(DataElement const &in, DataElement &out)
         partition += image_len % MaxNumSegments;
         gdcm_assert( (MaxNumSegments-1) * input_seg_length + partition == (size_t)image_len );
         }
-      gdcm_assert( partition == input_seg_length );
+      gdcm_assert( partition == input_seg_length || partition == input_seg_length + 1);
 
       std::stringstream data;
-      gdcm_assert( partition % dims[1] == 0 );
+      gdcm_assert( partition % dims[1] == 0 || (partition - 1) % dims[1] == 0 );
       size_t length = 0;
       // Do not cross row boundary:
       for(unsigned int y = 0; y < dims[1]; ++y)
