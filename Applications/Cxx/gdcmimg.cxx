@@ -290,6 +290,10 @@ static bool PopulateSingeFile( gdcm::PixmapWriter & writer,
    * the encapsulated Pixel Data Element...
    */
   std::ifstream is(filename, std::ios::binary);
+  if (!is) {
+    std::cerr << "Could not open: " << filename << std::endl;
+    return false;    
+  }
   gdcm::TransferSyntax ts;
   bool b = jpeg.GetHeaderInfo( is, ts );
   if( !b )

@@ -798,6 +798,7 @@ int main(int argc, char *argv[])
 
   if( !gdcm::System::FileExists(filename.c_str()) )
     {
+    std::cerr << "no such file: " << filename << std::endl;
     return 1;
     }
 
