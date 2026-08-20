@@ -903,15 +903,19 @@ bool Cleaner::impl::CleanCSAImage(DataSet &ds, const DataElement &de) {
       return true;
     }
     // we failed to clean CSA, let's check possible well known errors
+    bool bogus = false;
     if (bs_is_signature(bv, sv10)) {
-      gdcmWarningMacro("Found byte-swapped SV10. Skipping.");
-      return true;
+      gdcmWarningMacro("Found byte-swapped SV10.");
+      bogus = true;
     } else if (isAllZero(bv->GetPointer(), bv->GetLength())) {
       gdcmDebugMacro("Zero-out CSA header");
-      return true;
+      bogus = true;
+    } else if (image_type != IMAGE_UNK && !is_signature(bv, sv10)) {
+      gdcmDebugMacro("Header declaration imply SV1O like");
+      bogus = true;
     }
     // fallback logic:
-    if (WhenScrubFails && is_signature(bv, sv10)) {
+    if (WhenScrubFails && bogus) {
       // so SV10 header has been identified, but we failed to 'scrub', let's
       // empty it:
       ds.Replace(clean);
@@ -966,15 +970,19 @@ bool Cleaner::impl::CleanCSASeries(DataSet &ds, const DataElement &de) {
       return true;
     }
     // we failed to clean CSA, let's check possible well known errors
+    bool bogus = false;
     if (bs_is_signature(bv, sv10)) {
-      gdcmWarningMacro("Found byte-swapped SV10. Skipping.");
-      return true;
+      gdcmWarningMacro("Found byte-swapped SV10.");
+      bogus = true;
     } else if (isAllZero(bv->GetPointer(), bv->GetLength())) {
       gdcmDebugMacro("Zero-out CSA header");
-      return true;
+      bogus = true;
+    } else if (series_type != SERIES_UNK && !is_signature(bv, sv10)) {
+      gdcmDebugMacro("Header declaration imply SV1O like");
+      bogus = true;
     }
     // fallback logic:
-    if (WhenScrubFails && is_signature(bv, sv10)) {
+    if (WhenScrubFails && bogus) {
       // so SV10 header has been identified, but we failed to 'scrub', let's
       // empty it:
       ds.Replace(clean);
