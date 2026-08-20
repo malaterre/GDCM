@@ -910,8 +910,8 @@ bool Cleaner::impl::CleanCSAImage(DataSet &ds, const DataElement &de) {
     } else if (isAllZero(bv->GetPointer(), bv->GetLength())) {
       gdcmDebugMacro("Zero-out CSA header");
       bogus = true;
-    } else if (image_type != IMAGE_UNK && !is_signature(bv, sv10)) {
-      gdcmDebugMacro("Header declaration imply SV1O like");
+    } else if (image_type != IMAGE_UNK) {
+      gdcmWarningMacro("Header declaration imply SV1O like");
       bogus = true;
     }
     // fallback logic:
@@ -977,8 +977,8 @@ bool Cleaner::impl::CleanCSASeries(DataSet &ds, const DataElement &de) {
     } else if (isAllZero(bv->GetPointer(), bv->GetLength())) {
       gdcmDebugMacro("Zero-out CSA header");
       bogus = true;
-    } else if (series_type != SERIES_UNK && !is_signature(bv, sv10)) {
-      gdcmDebugMacro("Header declaration imply SV1O like");
+    } else if (series_type != SERIES_UNK) {
+      gdcmWarningMacro("Header declaration imply SV1O like");
       bogus = true;
     }
     // fallback logic:
