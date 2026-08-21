@@ -554,16 +554,17 @@ const char *System::GetCurrentProcessFileName()
    return nullptr;
 }
 
-#ifdef __USE_GNU
+#ifdef GDCM_HAVE_DLADDR
 static void where_am_i() {}
 #endif
 
 const char *System::GetCurrentModuleFileName()
 {
-#ifdef __USE_GNU
+#ifdef GDCM_HAVE_DLADDR
   static char path[PATH_MAX];
   Dl_info info;
-  if (dladdr( (void*)&where_am_i, &info ) == 0)
+  // dladdr returns non-zero on success, unlike most POSIX calls.
+  if (dladdr( (void*)&where_am_i, &info ) != 0)
     {
     size_t len = strlen(info.dli_fname);
     if( len >= PATH_MAX ) return nullptr; // throw error ?
