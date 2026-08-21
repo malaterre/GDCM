@@ -144,12 +144,21 @@ else()
                               )
 endif()
 
+# iconv availability is a feature, not a platform: detect it once here and
+# feed the answer to both the compile definition and the link line below.
+find_package(Iconv)
+if(Iconv_FOUND)
+  set(GDCM_MEC3_HAS_ICONV 1)
+else()
+  set(GDCM_MEC3_HAS_ICONV 0)
+endif()
+
 set_source_files_properties(  ${GDCM_SOURCE_DIR}/Utilities/gdcmext/csa.c
                               ${GDCM_SOURCE_DIR}/Utilities/gdcmext/mec_mr3.c
                               ${GDCM_SOURCE_DIR}/Utilities/gdcmext/mec_mr3_io.c
                               ${GDCM_SOURCE_DIR}/Utilities/gdcmext/mec_mr3_dict.c
                               PROPERTIES
-                              COMPILE_DEFINITIONS _POSIX_C_SOURCE=200809L # posix_memalign and strnlen
+                              COMPILE_DEFINITIONS "_POSIX_C_SOURCE=200809L;MEC3_HAS_ICONV=${GDCM_MEC3_HAS_ICONV}" # posix_memalign and strnlen
 )
 
 # Add the include paths
@@ -253,8 +262,8 @@ endif()
 if(GDCM_USE_SYSTEM_JSON)
   target_link_libraries(gdcmMSFF LINK_PRIVATE ${JSON_LIBRARIES})
 endif()
-if(UNIX)
-  find_package(Iconv)
+if(Iconv_FOUND)
+  target_include_directories(gdcmMSFF PRIVATE ${Iconv_INCLUDE_DIRS})
   target_link_libraries(gdcmMSFF LINK_PRIVATE ${Iconv_LIBRARIES})
 endif()
 # handling of static lib within shared is a mess:
