@@ -905,11 +905,11 @@ bool Cleaner::impl::CleanCSAImage(DataSet &ds, const DataElement &de) {
     // we failed to clean CSA, let's check possible well known errors
     bool bogus = false;
     if (bs_is_signature(bv, sv10)) {
-      gdcmWarningMacro("Found byte-swapped SV10.");
-      bogus = true;
+      gdcmWarningMacro("Found byte-swapped SV10. Skipping.");
+      return true;
     } else if (isAllZero(bv->GetPointer(), bv->GetLength())) {
       gdcmDebugMacro("Zero-out CSA header");
-      bogus = true;
+      return true;
     } else if (image_type != IMAGE_UNK) {
       gdcmWarningMacro("Header declaration imply SV1O like");
       bogus = true;
@@ -972,11 +972,11 @@ bool Cleaner::impl::CleanCSASeries(DataSet &ds, const DataElement &de) {
     // we failed to clean CSA, let's check possible well known errors
     bool bogus = false;
     if (bs_is_signature(bv, sv10)) {
-      gdcmWarningMacro("Found byte-swapped SV10.");
-      bogus = true;
+      gdcmWarningMacro("Found byte-swapped SV10. Skipping.");
+      return true;
     } else if (isAllZero(bv->GetPointer(), bv->GetLength())) {
       gdcmDebugMacro("Zero-out CSA header");
-      bogus = true;
+      return true;
     } else if (series_type != SERIES_UNK) {
       gdcmWarningMacro("Header declaration imply SV1O like");
       bogus = true;
