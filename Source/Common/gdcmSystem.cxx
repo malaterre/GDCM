@@ -50,6 +50,9 @@
 #else
 //#include <features.h> // we want GNU extensions
 #include <dlfcn.h>
+#if defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__) || defined(__OpenBSD__)
+#include <sys/sysctl.h>
+#endif
 #include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h> /* gethostname */
@@ -529,23 +532,35 @@ const char *System::GetCurrentProcessFileName()
   // solaris
   const char *ret = getexecname();
   if( ret ) return ret;
-//#elif defined(__NetBSD__)
-//  static char path[PATH_MAX];
-//  if ( readlink ("/proc/curproc/exe", path, sizeof(path)) > 0)
-//    {
-//    return path;
-//    }
-#elif defined(__DragonFly__) || defined(__OpenBSD__) || defined(__FreeBSD__)
+#elif defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__) || defined(__OpenBSD__)
   static char path[PATH_MAX];
-  if ( readlink ("/proc/curproc/file", path, sizeof(path)) > 0)
+#if defined(KERN_PROC_PATHNAME)
+  // procfs is not mounted by default on these systems, so ask the kernel.
+#if defined(__NetBSD__)
+  int mib[4] = { CTL_KERN, KERN_PROC_ARGS, -1, KERN_PROC_PATHNAME };
+#else
+  int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1 };
+#endif
+  size_t pathlen = sizeof(path);
+  if ( sysctl(mib, 4, path, &pathlen, nullptr, 0) == 0 && pathlen > 1 )
     {
+    return path;
+    }
+#endif
+  // Only reachable when procfs happens to be mounted.
+  const ssize_t len = readlink("/proc/curproc/file", path, sizeof(path) - 1);
+  if ( len > 0 )
+    {
+    path[len] = '\0';
     return path;
     }
 #elif defined(__linux__)
   static char path[PATH_MAX];
-  if ( readlink ("/proc/self/exe", path, sizeof(path)) > 0) // Technically 0 is not an error, but that would mean
-                                                            // 0 byte were copied ... thus considered it as an error
+  // readlink does not terminate, and returns the buffer size when it truncates.
+  const ssize_t len = readlink("/proc/self/exe", path, sizeof(path) - 1);
+  if ( len > 0 )
     {
+    path[len] = '\0';
     return path;
     }
 #else
