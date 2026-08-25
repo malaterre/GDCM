@@ -403,7 +403,7 @@ using namespace gdcm;
  int n = arg1->GetNumberOfDimensions();
  $result = PyList_New(n);
  for (i = 0; i < n; i++) {
-   PyObject *o = PyInt_FromLong((long) $1[i]);
+   PyObject *o = PyLong_FromLong((long) $1[i]);
    PyList_SetItem($result,i,o);
  }
 }
