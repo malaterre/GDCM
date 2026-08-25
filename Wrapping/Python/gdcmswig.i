@@ -366,11 +366,11 @@ EXTEND_CLASS_PRINT(gdcm::ByteValue)
 %template(SmartPtrSQ) gdcm::SmartPointer<gdcm::SequenceOfItems>;
 %template(SmartPtrFrag) gdcm::SmartPointer<gdcm::SequenceOfFragments>;
 %typemap(in) (const char* array, uint32_t length) {
-  $1 = PyString_AsString($input);
+  $1 = PyBytes_AsString($input);
   if ($1 == NULL) {
     SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '$symname', argument $argnum expected byte string.");
   }
-  Py_ssize_t length = PyString_Size($input);
+  Py_ssize_t length = PyBytes_Size($input);
   if (static_cast<size_t>(length) > std::numeric_limits<uint32_t>::max()) {
     SWIG_exception_fail(SWIG_ArgError(SWIG_OverflowError), "in method '$symname', array in argument $argnum is too large.");
   }
@@ -436,7 +436,7 @@ EXTEND_CLASS_PRINT(gdcm::File)
  int n = arg1->GetNumberOfDimensions();
  $result = PyList_New(n);
  for (i = 0; i < n; i++) {
-   PyObject *o = PyInt_FromLong((long) $1[i]);
+   PyObject *o = PyLong_FromLong((long) $1[i]);
    PyList_SetItem($result,i,o);
  }
 }
