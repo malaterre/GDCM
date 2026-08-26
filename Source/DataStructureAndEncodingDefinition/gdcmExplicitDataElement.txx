@@ -18,6 +18,7 @@
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmVL.h"
 #include "gdcmParseException.h"
+#include "gdcmValueLengthCheck.h"
 #include "gdcmImplicitDataElement.h"
 
 #include "gdcmValueIO.h"
@@ -242,6 +243,10 @@ std::istream &ExplicitDataElement::ReadValue(std::istream &is, bool readvalues)
     {
     //gdcm_assert( TagField != Tag(0x7fe0,0x0010) );
     ValueField = new ByteValue;
+    if( readvalues )
+      {
+      CheckValueLengthAgainstStream( is, *this, ValueLengthField );
+      }
     }
   // We have the length we should be able to read the value
   this->SetValueFieldLength( ValueLengthField, readvalues );

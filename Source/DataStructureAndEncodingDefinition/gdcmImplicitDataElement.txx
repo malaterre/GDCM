@@ -215,6 +215,10 @@ std::istream &ImplicitDataElement::ReadValue(std::istream &is, bool readvalues)
     ValueLengthField = 202; // 0xca
     }
 #endif
+  if( !ValueLengthField.IsUndefined() && readvalues )
+    {
+    CheckValueLengthAgainstStream( is, *this, ValueLengthField );
+    }
   // We have the length we should be able to read the value
   this->SetValueFieldLength( ValueLengthField, readvalues );
   bool failed;
