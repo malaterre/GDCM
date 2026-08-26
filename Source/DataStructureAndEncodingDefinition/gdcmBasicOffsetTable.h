@@ -16,6 +16,7 @@
 #define GDCMBASICOFFSETTABLE_H
 
 #include "gdcmFragment.h"
+#include "gdcmValueLengthCheck.h"
 
 namespace gdcm_ns
 {
@@ -65,6 +66,10 @@ public:
       return is;
       }
     // Self
+    // Reject a Basic Offset Table length the stream cannot supply before
+    // allocating for it (CVE-2026-3650): this reader was not covered by the
+    // original fix, and 367 bytes were enough to request 4.26GB here.
+    CheckValueLengthAgainstStream( is, *this, ValueLengthField );
     SmartPointer<ByteValue> bv = new ByteValue;
     bv->SetLength(ValueLengthField);
     if( !bv->Read<TSwap>(is) )
