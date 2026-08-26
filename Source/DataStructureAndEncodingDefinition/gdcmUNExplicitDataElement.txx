@@ -19,6 +19,7 @@
 #include "gdcmSequenceOfFragments.h"
 #include "gdcmVL.h"
 #include "gdcmParseException.h"
+#include "gdcmValueLengthCheck.h"
 
 #include "gdcmValueIO.h"
 #include "gdcmSwapper.h"
@@ -193,6 +194,13 @@ std::istream &UNExplicitDataElement::ReadValue(std::istream &is, bool readvalues
     {
     //gdcm_assert( TagField != Tag(0x7fe0,0x0010) );
     ValueField = new ByteValue;
+    }
+  // Recovery reader: cap rather than reject, so the fallback chain still
+  // works on files with a nonsense length, without allocating for it
+  // (CVE-2026-3650).
+  if( readvalues )
+    {
+    ValueLengthField = ClampValueLengthToStream( is, ValueLengthField );
     }
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
