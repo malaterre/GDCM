@@ -23,6 +23,7 @@
 #include "gdcmImplicitDataElement.h"
 #include "gdcmValueIO.h"
 #include "gdcmSwapper.h"
+#include "gdcmValueLengthCheck.h"
 
 namespace gdcm
 {
@@ -274,6 +275,8 @@ std::istream &ExplicitImplicitDataElement::ReadPreValue(std::istream &is)
     ValueLengthField = 202; // 0xca
     }
 #endif
+  // Recovery reader: cap rather than reject (CVE-2026-3650).
+  ValueLengthField = ClampValueLengthToStream( is, ValueLengthField );
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
   if( !ValueIO<ImplicitDataElement,TSwap>::Read(is,*ValueField,true) )
@@ -398,6 +401,11 @@ std::istream &ExplicitImplicitDataElement::ReadValue(std::istream &is, bool read
     {
     //gdcm_assert( TagField != Tag(0x7fe0,0x0010) );
     ValueField = new ByteValue;
+    // Recovery reader: cap rather than reject (CVE-2026-3650).
+    if( readvalues )
+      {
+      ValueLengthField = ClampValueLengthToStream( is, ValueLengthField );
+      }
     }
   // We have the length we should be able to read the value
   this->SetValueFieldLength( ValueLengthField, readvalues );
