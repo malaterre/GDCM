@@ -23,10 +23,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if defined(_MSC_VER) || defined(__OpenBSD__)
+// Set by the build system from find_package(Iconv).
+#ifndef MEC3_HAS_ICONV
 #define MEC3_HAS_ICONV 0
-#else
-#define MEC3_HAS_ICONV 1
 #endif
 
 #if MEC3_HAS_ICONV
