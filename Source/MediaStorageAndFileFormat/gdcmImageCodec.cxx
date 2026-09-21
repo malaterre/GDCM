@@ -645,6 +645,7 @@ bool ImageCodec::DecodeByStreams(std::istream &is, std::ostream &os)
   gdcm_assert( PI != PhotometricInterpretation::UNKNOWN );
   std::stringstream bs_os; // ByteSwap
   std::stringstream pcpc_os; // Padded Composite Pixel Code
+  std::stringstream ybr_os; // YBR_FULL_422 expansion
   //std::stringstream pi_os; // PhotometricInterpretation
   std::stringstream pl_os; // PlanarConf
   std::istream *cur_is = &is;
@@ -706,8 +707,8 @@ bool ImageCodec::DecodeByStreams(std::istream &is, std::ostream &os)
         {
         //gdcmErrorMacro( "YBR_FULL_422 is not implemented in GDCM. Image will be displayed incorrectly" );
         //this->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
-        DoYBRFull422(*cur_is,pl_os);
-        cur_is = &pl_os;
+        DoYBRFull422(*cur_is,ybr_os);
+        cur_is = &ybr_os;
         }
       }
     break;
