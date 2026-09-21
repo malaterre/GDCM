@@ -663,7 +663,12 @@ size_t RLECodec::DecodeFragment(Fragment const & frag, char *buffer, size_t llen
     gdcmWarningMacro( "Bad RLE stream" );
     }
   std::string::size_type check = os.str().size();
-  // If the following assert fail expect big troubles:
+  if( check > llen )
+    {
+    gdcmErrorMacro( "RLE frame decoded to " << check << " bytes but only "
+      << llen << " bytes are available for it" );
+    return 0;
+    }
   memcpy(buffer, os.str().c_str(), check);
 //  pos += check;
   return check;
@@ -837,6 +842,11 @@ bool RLECodec::DecodeByStreams(std::istream &is, std::ostream &os)
   if( !frame.Read(is) )
      return false;
   unsigned long numSegments = frame.Header.GetNumSegments();
+  if( numSegments == 0 )
+    {
+    gdcmErrorMacro( "RLE header declares zero segments" );
+    return false;
+    }
 
   unsigned long length = Length;
   gdcm_assert( length );
