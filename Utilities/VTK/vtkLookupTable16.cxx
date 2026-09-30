@@ -381,9 +381,9 @@ void vtkLookupTable16::MapScalarsThroughTable2(void *input,
                                              int inputIncrement,
                                              int outputFormat)
 {
-  if (this->UseMagnitude && inputIncrement > 1)
-    {
-assert(0);
+//if (this->UseMagnitude && inputIncrement > 1)
+//  {
+//assert(0);
 //    switch (inputDataType)
 //      {
 //      vtkTemplateMacro(
@@ -397,7 +397,7 @@ assert(0);
 //      default:
 //        vtkErrorMacro(<< "MapImageThroughTable: Unknown input ScalarType");
 //      }
-    }
+//  }
 
   switch (inputDataType)
     {
