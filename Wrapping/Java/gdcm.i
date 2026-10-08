@@ -252,17 +252,23 @@ EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 // instead of raising a catchable error. Declared before the class 
 // %include's so it covers every wrapped method. 
 // Same approach as the Python bindings.
+// Java wrapper has no cleanup label (python has SWIG_fail): 
+// the early return would skip argout/freearg and leak the native copies of every array argument. 
+// $cleanup emits the freearg typemaps here; see GDCM_JAVA_ARRAY_RELEASE
 #if defined(SWIGJAVA)
 %exception {
   try {
     $action
   } catch (const std::bad_alloc &e) {
+    $cleanup
     SWIG_JavaThrowException(jenv, SWIG_JavaOutOfMemoryError, e.what());
     return $null;
   } catch (const std::exception &e) { // gdcm::Exception derives from std::exception
+    $cleanup
     SWIG_JavaThrowException(jenv, SWIG_JavaRuntimeException, e.what());
     return $null;
   } catch (...) {
+    $cleanup
     SWIG_JavaThrowException(jenv, SWIG_JavaRuntimeException, "Unknown C++ exception in GDCM");
     return $null;
   }
@@ -503,6 +509,30 @@ EXTEND_CLASS_PRINT(gdcm::Value)
 %clear unsigned char* buffer;
 
 %include "arrays_java.i"
+
+// arrays_java.i releases the JNI array elements in argout, which an early return
+// (e.g. %exception) skips, and only frees the C copy in freearg. Make freearg release the JNI elements too.
+#if defined(SWIGJAVA)
+%define GDCM_JAVA_ARRAY_RELEASE(CTYPE, JFUNCNAME, JNIFUNCNAME)
+%typemap(argout) CTYPE[ANY], CTYPE[]
+%{ SWIG_JavaArrayArgout##JFUNCNAME(jenv, jarr$argnum, (CTYPE *)$1, $input); jarr$argnum = 0; %}
+%typemap(freearg) CTYPE[ANY], CTYPE[]
+%{ if (jarr$argnum) JCALL3(Release##JNIFUNCNAME##ArrayElements, jenv, $input, jarr$argnum, JNI_ABORT);
+   delete [] $1; %}
+%enddef
+GDCM_JAVA_ARRAY_RELEASE(bool, Bool, Boolean)
+GDCM_JAVA_ARRAY_RELEASE(signed char, Schar, Byte)
+GDCM_JAVA_ARRAY_RELEASE(unsigned char, Uchar, Short)
+GDCM_JAVA_ARRAY_RELEASE(short, Short, Short)
+GDCM_JAVA_ARRAY_RELEASE(unsigned short, Ushort, Int)
+GDCM_JAVA_ARRAY_RELEASE(int, Int, Int)
+GDCM_JAVA_ARRAY_RELEASE(unsigned int, Uint, Long)
+GDCM_JAVA_ARRAY_RELEASE(long, Long, Int)
+GDCM_JAVA_ARRAY_RELEASE(unsigned long, Ulong, Long)
+GDCM_JAVA_ARRAY_RELEASE(long long, Longlong, Long)
+GDCM_JAVA_ARRAY_RELEASE(float, Float, Float)
+GDCM_JAVA_ARRAY_RELEASE(double, Double, Double)
+#endif
 
 %ignore gdcm::ByteValue::WriteBuffer(std::ostream &os) const;
 %ignore gdcm::ByteValue::GetPointer() const;
