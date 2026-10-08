@@ -27,6 +27,8 @@
 #endif
 
 %{
+#include <new>       // std::bad_alloc
+#include <exception> // std::exception
 #include "gdcmTypes.h"
 #include "gdcmASN1.h"
 #include "gdcmSmartPointer.h"
@@ -240,6 +242,31 @@ using namespace gdcm;
 //%ignore classname::Print
 EXTEND_CLASS_PRINT_GENERAL(toString,classname)
 %enddef
+#endif
+
+// Translate any uncaught C++ exception into a Java exception. Without a global
+// handler, a throw escaping a wrapped method -- e.g. the gdcm::Exception thrown
+// by Fragment::ReadPreValue out of ImageRegionReader::ReadIntoBuffer on a
+// truncated encapsulated Pixel Data, or std::bad_alloc -- crosses the generated
+// JNI function uncaught and terminates the JVM (std::terminate() -> abort()) 
+// instead of raising a catchable error. Declared before the class 
+// %include's so it covers every wrapped method. 
+// Same approach as the Python bindings.
+#if defined(SWIGJAVA)
+%exception {
+  try {
+    $action
+  } catch (const std::bad_alloc &e) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaOutOfMemoryError, e.what());
+    return $null;
+  } catch (const std::exception &e) { // gdcm::Exception derives from std::exception
+    SWIG_JavaThrowException(jenv, SWIG_JavaRuntimeException, e.what());
+    return $null;
+  } catch (...) {
+    SWIG_JavaThrowException(jenv, SWIG_JavaRuntimeException, "Unknown C++ exception in GDCM");
+    return $null;
+  }
+}
 #endif
 
 //%feature("autodoc", "1")
