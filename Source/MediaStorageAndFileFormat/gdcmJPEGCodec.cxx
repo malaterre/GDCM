@@ -612,14 +612,22 @@ bool JPEGCodec::DecodeExtent(
     std::streamoff thestart = is.tellg();
     unsigned int numfrags = 0;
     std::vector< size_t > offsets;
-    while( frag.ReadPreValue<SwapperNoOp>(is) && frag.GetTag() != seqDelItem )
+    try
       {
-      //std::streamoff relstart = is.tellg();
-      //gdcm_assert( relstart - thestart == 8 );
-      const std::streamoff off = frag.GetVL();
-      offsets.push_back( (size_t)off );
-      is.seekg( off, std::ios::cur );
-      ++numfrags;
+      while( frag.ReadPreValue<SwapperNoOp>(is) && frag.GetTag() != seqDelItem )
+        {
+        //std::streamoff relstart = is.tellg();
+        //gdcm_assert( relstart - thestart == 8 );
+        const std::streamoff off = frag.GetVL();
+        offsets.push_back( (size_t)off );
+        is.seekg( off, std::ios::cur );
+        ++numfrags;
+        }
+      }
+    catch(Exception &ex)
+      {
+      gdcmErrorMacro( "Could not read Pixel Data fragment #" << numfrags << ": " << ex.what() );
+      return false;
       }
     gdcm_assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
     gdcm_assert( numfrags == offsets.size() );
@@ -640,8 +648,8 @@ bool JPEGCodec::DecodeExtent(
       //is.read( dummy_buffer, buf_size );
 
       std::stringstream os;
-      const bool b = DecodeByStreams(is, os); (void)b;
-      gdcm_assert(b);
+      const bool b = DecodeByStreams(is, os);
+      if(!b) return false;
       /* free the memory containing the code-stream */
       //delete[] dummy_buffer;
 
