@@ -16,6 +16,7 @@
 
 #include "gdcmSequenceOfItems.h"
 #include "gdcmValueIO.h"
+#include "gdcmValueLengthCheck.h"
 #include "gdcmSwapper.h"
 #ifdef GDCM_WORDS_BIGENDIAN
 #include "gdcmTagToVR.h"
@@ -215,6 +216,16 @@ std::istream &ImplicitDataElement::ReadValue(std::istream &is, bool readvalues)
     ValueLengthField = 202; // 0xca
     }
 #endif
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  if( readvalues && TagField == Tag(0x7fe0,0x0010) )
+    {
+    ValueLengthField = TruncatePixelDataLength( is, *ValueField, ValueLengthField );
+    }
+#endif
+  if( readvalues && ValueLengthExceedsStream( is, *ValueField, ValueLengthField ) )
+    {
+    throw Exception("Should not happen (imp)");
+    }
   // We have the length we should be able to read the value
   this->SetValueFieldLength( ValueLengthField, readvalues );
   bool failed;
@@ -453,6 +464,16 @@ std::istream &ImplicitDataElement::ReadValueWithLength(std::istream& is, VL & le
     ValueLengthField = 202; // 0xca
     }
 #endif
+#ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
+  if( TagField == Tag(0x7fe0,0x0010) )
+    {
+    ValueLengthField = TruncatePixelDataLength( is, *ValueField, ValueLengthField );
+    }
+#endif
+  if( ValueLengthExceedsStream( is, *ValueField, ValueLengthField ) )
+    {
+    throw Exception("Should not happen (imp)");
+    }
   // We have the length we should be able to read the value
   ValueField->SetLength(ValueLengthField); // perform realloc
   bool failed;

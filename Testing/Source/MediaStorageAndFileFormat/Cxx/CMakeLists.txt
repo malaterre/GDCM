@@ -78,6 +78,7 @@ set(MSFF_TEST_SRCS
   TestImageRegionReader3.cxx
   #TestStreamImageWriter.cxx
   TestImageReaderRandomEmpty.cxx
+  TestImageReaderTruncatedPixelData.cxx
   TestDirectionCosines.cxx
   TestImageWriter.cxx
   TestCodec.cxx
