@@ -144,12 +144,40 @@ else()
                               )
 endif()
 
+# A GNU libiconv iconv.h renames iconv_open, so link-test the header and library together.
+# Without FindIconv (CMake < 3.11) the probe tests the C library alone.
+find_package(Iconv)
+include(CheckCSourceCompiles)
+include(CMakePushCheckState)
+cmake_push_check_state(RESET)
+set(CMAKE_REQUIRED_INCLUDES ${Iconv_INCLUDE_DIRS})
+set(CMAKE_REQUIRED_LIBRARIES ${Iconv_LIBRARIES})
+check_c_source_compiles(
+  "#include <iconv.h>
+   int main(void) {
+     const char *in = \"a\";
+     char buf[8];
+     char *out = buf;
+     size_t inlen = 1, outlen = sizeof(buf);
+     iconv_t cd = iconv_open(\"UTF-8\", \"SHIFT-JIS\");
+     if (cd == (iconv_t)-1) return 1;
+     iconv(cd, (char**)&in, &inlen, &out, &outlen);
+     return iconv_close(cd);
+   }"
+  GDCM_HAVE_ICONV)
+cmake_pop_check_state()
+if(GDCM_HAVE_ICONV)
+  set(GDCM_MEC3_HAS_ICONV 1)
+else()
+  set(GDCM_MEC3_HAS_ICONV 0)
+endif()
+
 set_source_files_properties(  ${GDCM_SOURCE_DIR}/Utilities/gdcmext/csa.c
                               ${GDCM_SOURCE_DIR}/Utilities/gdcmext/mec_mr3.c
                               ${GDCM_SOURCE_DIR}/Utilities/gdcmext/mec_mr3_io.c
                               ${GDCM_SOURCE_DIR}/Utilities/gdcmext/mec_mr3_dict.c
                               PROPERTIES
-                              COMPILE_DEFINITIONS _POSIX_C_SOURCE=200809L # posix_memalign and strnlen
+                              COMPILE_DEFINITIONS "_POSIX_C_SOURCE=200809L;MEC3_HAS_ICONV=${GDCM_MEC3_HAS_ICONV}"
 )
 
 # Add the include paths
@@ -253,8 +281,8 @@ endif()
 if(GDCM_USE_SYSTEM_JSON)
   target_link_libraries(gdcmMSFF LINK_PRIVATE ${JSON_LIBRARIES})
 endif()
-if(UNIX)
-  find_package(Iconv)
+if(GDCM_MEC3_HAS_ICONV)
+  target_include_directories(gdcmMSFF PRIVATE ${Iconv_INCLUDE_DIRS})
   target_link_libraries(gdcmMSFF LINK_PRIVATE ${Iconv_LIBRARIES})
 endif()
 # handling of static lib within shared is a mess:
