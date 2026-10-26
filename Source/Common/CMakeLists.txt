@@ -67,6 +67,12 @@ CHECK_CXX_SOURCE_COMPILES(
 CHECK_CXX_SOURCE_COMPILES(
   "\#include <string>\n#include <codecvt>\n#include <locale>\nint main() { std::u16string u16; std::string utf8 = std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t>{}.to_bytes(u16); }"
   GDCM_HAVE_CODECVT)
+set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_DL_LIBS})
+# C++ probe: glibc declares dladdr only under _GNU_SOURCE, which g++ predefines.
+CHECK_CXX_SOURCE_COMPILES(
+  "\#include <dlfcn.h>\nint main() { Dl_info i; return dladdr((void*)0, &i); }"
+  GDCM_HAVE_DLADDR)
+unset(CMAKE_REQUIRED_LIBRARIES)
 if(GDCM_USE_SYSTEM_OPENSSL)
 set(CMAKE_REQUIRED_INCLUDES ${OPENSSL_INCLUDE_DIR})
 set(CMAKE_REQUIRED_LIBRARIES ${OPENSSL_LIBRARIES}
