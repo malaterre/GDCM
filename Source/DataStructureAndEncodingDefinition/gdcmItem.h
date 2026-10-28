@@ -42,6 +42,27 @@ class DataSet;
  * ITEM: A component of the Value of a Data Element that is of Value
  * Representation Sequence of Items. An Item contains a Data Set.
  */
+/** \brief Recursion guard for nested data set parsing.
+ *
+ * Parsing a DICOM data set recurses once per nested sequence. A file may nest as
+ * deeply as it likes (PS3.5 sets no limit), so an attacker-supplied file can exhaust
+ * the native stack and kill the process before any error is reported. An instance of
+ * this class counts nesting depth for the current thread and throws gdcm::Exception
+ * once the configured limit is exceeded, turning a stack overflow into a catchable
+ * failure. The limit is configurable via SetLimit().
+ */
+class GDCM_EXPORT ParseDepthGuard
+{
+public:
+  ParseDepthGuard();
+  ~ParseDepthGuard();
+  static unsigned int GetLimit();
+  static void SetLimit(unsigned int limit);
+private:
+  ParseDepthGuard(const ParseDepthGuard &) = delete;
+  ParseDepthGuard &operator=(const ParseDepthGuard &) = delete;
+};
+
 class GDCM_EXPORT Item : public DataElement
 {
 public:
@@ -97,6 +118,7 @@ public:
 
   template <typename TDE, typename TSwap>
   std::istream &Read(std::istream &is) {
+    ParseDepthGuard depth_guard;
     // Superclass
     {
         DataSet &nested = NestedDataSet;
