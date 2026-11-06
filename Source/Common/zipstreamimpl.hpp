@@ -168,7 +168,7 @@ std::streamsize basic_zip_streambuf<charT, traits>::flush()
 				std::streamsize theDiff = written_byte_size-remainder;
 				//assert (theDiff > 0 && theDiff < std::numeric_limits<unsigned int>::max());
 
-                memcpy(&(_output_buffer[0]),
+                memmove(&(_output_buffer[0]),
                        &(_output_buffer[(unsigned int)theDiff]), remainder);
 
             }
@@ -273,7 +273,7 @@ bool basic_zip_streambuf<charT, traits>::zip_to_stream(
                 // copy to the beginning of the stream
 				std::streamsize theDiff = written_byte_size-remainder;
 				//gdcm_assert(theDiff > 0 && theDiff < std::numeric_limits<unsigned int>::max());
-                memcpy(&_output_buffer[0],
+                memmove(&_output_buffer[0],
                        &_output_buffer[(unsigned int)theDiff],
                        remainder);
             }
@@ -355,7 +355,7 @@ basic_unzip_streambuf<charT, traits>::underflow()
     if(n_putback > 4)
         n_putback = 4;
 
-    memcpy(&_buffer[0] + (4 - n_putback),
+    memmove(&_buffer[0] + (4 - n_putback),
            this->gptr() - n_putback,
            n_putback * sizeof(char_type));
 
