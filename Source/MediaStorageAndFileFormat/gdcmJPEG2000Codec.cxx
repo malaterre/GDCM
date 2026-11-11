@@ -179,7 +179,7 @@ static bool parsej2k_imp( const char * const stream, const size_t file_size, boo
 
       if( marker == COD )
         {
-        if( cur_size < 10 )
+        if( lenmarker < 10 )
           break;
         const uint8_t MCTransformation = *(cur+4);
         if( MCTransformation == 0x0 ) *mct = false;
@@ -214,7 +214,8 @@ static bool parsejp2_imp( const char * const stream, const size_t file_size, boo
     if( len32 == 1 ) /* 64bits ? */
       {
       bool b = read64(&cur, &cur_size, &len64);
-      gdcm_assert(b); (void)b;
+      if( !b || len64 < 8 )
+        break;
       len64 -= 8;
       }
     if( marker == JP2C )
@@ -224,13 +225,15 @@ static bool parsejp2_imp( const char * const stream, const size_t file_size, boo
         {
         len64 = (size_t)(file_size - start + 8);
         }
-      gdcm_assert( len64 >= 8 );
+      if( len64 < 8 || (len64 - 8) > cur_size )
+        return false;
       return parsej2k_imp( cur, (size_t)(len64 - 8), lossless, mct );
       }
       if( len64 < 8 || (len64 - 8) > cur_size )
         break;
       const size_t lenmarker = (size_t)(len64 - 8);
       cur += lenmarker;
+      cur_size -= lenmarker;
     }
 
   return false;
