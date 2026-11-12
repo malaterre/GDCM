@@ -943,6 +943,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     {
     opj_destroy_codec(dinfo);
     opj_stream_destroy(cio);
+    opj_image_destroy(image);
     gdcmErrorMacro( "opj_decode failed" );
     return std::pair<char*,size_t>(nullptr,0);
     }
@@ -952,6 +953,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     {
     opj_destroy_codec(dinfo);
     opj_stream_destroy(cio);
+    opj_image_destroy(image);
     gdcmErrorMacro( "opj_decode failed" );
     return std::pair<char*,size_t>(nullptr,0);
     }
@@ -1027,10 +1029,14 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
              (parameters.cod_format != TIF_DFMT)) {
     //color_cmyk_to_rgb(image);
     gdcmErrorMacro("Not handled: CMYK color space");
+    opj_destroy_codec(dinfo);
+    opj_image_destroy(image);
     return std::pair<char*,size_t>(nullptr,0);
              } else if (image->color_space == OPJ_CLRSPC_EYCC) {
      //          color_esycc_to_rgb(image);
                gdcmErrorMacro("Not handled: EYCC color space");
+    opj_destroy_codec(dinfo);
+    opj_image_destroy(image);
     return std::pair<char*,size_t>(nullptr,0);
              }
 
