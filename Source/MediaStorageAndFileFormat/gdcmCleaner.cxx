@@ -913,6 +913,9 @@ bool Cleaner::impl::CleanCSAImage(DataSet &ds, const DataElement &de) {
     } else if (image_type != IMAGE_UNK) {
       gdcmWarningMacro("Header declaration imply SV1O like");
       bogus = true;
+    } else if (isSV10) {
+      gdcmWarningMacro("Header signature imply SV10 like");
+      bogus = true;
     }
     // fallback logic:
     if (WhenScrubFails && bogus) {
@@ -979,6 +982,9 @@ bool Cleaner::impl::CleanCSASeries(DataSet &ds, const DataElement &de) {
       return true;
     } else if (series_type != SERIES_UNK) {
       gdcmWarningMacro("Header declaration imply SV1O like");
+      bogus = true;
+    } else if (isSV10) {
+      gdcmWarningMacro("Header signature imply SV10 like");
       bogus = true;
     }
     // fallback logic:
