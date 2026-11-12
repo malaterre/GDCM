@@ -1244,6 +1244,30 @@ void rawtoimage_fill2(const T *inputbuffer, int w, int h, int numcomps, opj_imag
   }
 }
 
+static void rawtoimage_fill4(const uint32_t *inputbuffer, int w, int h, int numcomps, opj_image_t *image, int pc, int bitsstored, int highbit, int sign)
+{
+  const uint32_t pmask = 0xffffffffu >> ( 32 - bitsstored );
+  const uint32_t smask = 1u << ( bitsstored - 1 );
+  const uint32_t *p = inputbuffer;
+  for (int n = 0; n < w * h * numcomps; n++)
+    {
+    const int compno = pc ? n / (w * h) : n % numcomps;
+    const int i = pc ? n % (w * h) : n / numcomps;
+    uint32_t c = *p >> (bitsstored - highbit - 1);
+    if( sign && ( c & smask ) )
+      {
+      c = c | ~pmask;
+      }
+    else
+      {
+      c = c & pmask;
+      }
+    int32_t fix; memcpy(&fix, &c, sizeof fix);
+    image->comps[compno].data[i] = fix;
+    ++p;
+    }
+}
+
 template<typename T>
 void rawtoimage_fill(const T *inputbuffer, int w, int h, int numcomps, opj_image_t *image, int pc)
 {
@@ -1334,7 +1358,8 @@ opj_image_t* rawtoimage(const char *inputbuffer8, opj_cparameters_t *parameters,
   //gdcm_assert( bitsallocated == 8 );
   for(int i = 0; i < numcomps; i++) {
     cmptparm[i].prec = bitsstored;
-    if( bitsstored <= 8 )
+    // decoder sizes output from precision; OpenJPEG rejects precision > 31
+    if( bitsstored <= 8 && bitsallocated <= 16 )
       cmptparm[i].prec = bitsallocated;
     cmptparm[i].bpp = (bitsallocated == 12) ? 16 : bitsallocated;  // 12-bit uses 16-bit container
     cmptparm[i].sgnd = sign;
@@ -1414,6 +1439,10 @@ opj_image_t* rawtoimage(const char *inputbuffer8, opj_cparameters_t *parameters,
         rawtoimage_fill<uint16_t>((const uint16_t*)actual_inputbuffer,w,h,numcomps,image,pc);
         }
       }
+    }
+  else if (bitsallocated == 32 && bitsstored < 32)
+    {
+    rawtoimage_fill4((const uint32_t*)actual_inputbuffer,w,h,numcomps,image,pc, bitsstored, highbit, sign);
     }
   else if (bitsallocated <= 32)
     {
