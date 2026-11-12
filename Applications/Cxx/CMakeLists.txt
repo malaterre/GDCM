@@ -160,7 +160,7 @@ else()
     )
 endif()
 
-if(NOT BUILD_SHARED_LIBS)
+if(NOT BUILD_SHARED_LIBS AND NOT GDCM_USE_SYSTEM_OPENJPEG)
   set_source_files_properties(gdcmstream.cxx
                               PROPERTIES
                               COMPILE_FLAGS -DOPJ_STATIC
