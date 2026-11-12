@@ -943,6 +943,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     {
     opj_destroy_codec(dinfo);
     opj_stream_destroy(cio);
+    opj_image_destroy(image);
     gdcmErrorMacro( "opj_decode failed" );
     return std::pair<char*,size_t>(nullptr,0);
     }
@@ -952,6 +953,7 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
     {
     opj_destroy_codec(dinfo);
     opj_stream_destroy(cio);
+    opj_image_destroy(image);
     gdcmErrorMacro( "opj_decode failed" );
     return std::pair<char*,size_t>(nullptr,0);
     }
