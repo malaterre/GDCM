@@ -30,6 +30,7 @@ set(MSFF_TEST_SRCS
   TestFileDerivation.cxx
   TestSegmentedPaletteColorLookupTable.cxx
   TestPNMCodec.cxx
+  TestJPEG2000Codec1.cxx
   TestSpacing.cxx
   TestSerieHelper.cxx
   TestFileExplicitFilter.cxx

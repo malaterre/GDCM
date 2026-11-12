@@ -1023,6 +1023,9 @@ std::pair<char *, size_t> JPEG2000Codec::DecodeByStreamsCommon(char *dummy_buffe
 
   if (image->color_space == OPJ_CLRSPC_SYCC) {
     color_sycc_to_rgb(image);
+    if (image->color_space == OPJ_CLRSPC_SRGB) {
+      PI = PhotometricInterpretation::RGB;
+    }
   } else if ((image->color_space == OPJ_CLRSPC_CMYK) &&
              (parameters.cod_format != TIF_DFMT)) {
     //color_cmyk_to_rgb(image);
