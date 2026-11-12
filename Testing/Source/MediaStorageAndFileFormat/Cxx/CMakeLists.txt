@@ -96,6 +96,7 @@ set(MSFF_TEST_SRCS
   TestPersonName.cxx
   TestImageCodec.cxx
   TestImageConverter.cxx
+  TestImageChangeTransferSyntax11.cxx
   TestJPEGCodec.cxx
   TestRAWCodec.cxx
   TestDICOMDIR.cxx
