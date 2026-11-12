@@ -917,7 +917,8 @@ bool Bitmap::TryJPEG2000Codec(char *buffer, bool &lossyflag) const
       // OsirixFake16BitsStoredFakeSpacing.dcm
       const PixelFormat & cpf = codec.GetPixelFormat();
       const PixelFormat & pf = GetPixelFormat();
-        if( codec.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422 ) {
+        if( codec.GetPhotometricInterpretation() == PhotometricInterpretation::YBR_FULL_422
+          || codec.GetPhotometricInterpretation() == PhotometricInterpretation::RGB ) {
           Bitmap *i = const_cast<Bitmap*>(this);
           i->SetPhotometricInterpretation( PhotometricInterpretation::RGB );
       }
