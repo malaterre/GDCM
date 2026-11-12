@@ -18,6 +18,7 @@
 #include "gdcmByteValue.h"
 #include "gdcmSmartPointer.h"
 #include "gdcmParseException.h"
+#include "gdcmValueLengthCheck.h"
 
 namespace gdcm_ns
 {
@@ -91,9 +92,18 @@ public:
     {
     // Self
     SmartPointer<ByteValue> bv = new ByteValue;
+    // Keep a truncated fragment's bytes with a matching VL; decoders size buffers from VL.
+    const VL fit = TruncateLengthToStream( is, *bv, ValueLengthField );
+    const bool truncated = fit != ValueLengthField;
+    ValueLengthField = fit;
     bv->SetLength(ValueLengthField);
-    if( !bv->Read<TSwap>(is) )
+    if( !bv->Read<TSwap>(is) || truncated )
       {
+      if( truncated )
+        {
+        is.seekg(0, std::ios::end);
+        is.setstate(std::ios::failbit | std::ios::eofbit);
+        }
       // Fragment is incomplete, but is a itemStart, let's try to push it anyway...
       gdcmWarningMacro( "Fragment could not be read" );
       //bv->SetLength(is.gcount());
@@ -144,9 +154,18 @@ public:
 
     // Self
     SmartPointer<ByteValue> bv = new ByteValue;
+    // Keep a truncated fragment's bytes with a matching VL; decoders size buffers from VL.
+    const VL fit = TruncateLengthToStream( is, *bv, ValueLengthField );
+    const bool truncated = fit != ValueLengthField;
+    ValueLengthField = fit;
     bv->SetLength(ValueLengthField);
-    if( !bv->Read<TSwap>(is) )
+    if( !bv->Read<TSwap>(is) || truncated )
       {
+      if( truncated )
+        {
+        is.seekg(0, std::ios::end);
+        is.setstate(std::ios::failbit | std::ios::eofbit);
+        }
       // Fragment is incomplete, but is a itemStart, let's try to push it anyway...
       gdcmWarningMacro( "Fragment could not be read" );
       //bv->SetLength(is.gcount());

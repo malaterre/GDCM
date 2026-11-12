@@ -35,6 +35,7 @@ set(DSED_TEST_SRCS
   TestFile.cxx
   TestFileSet.cxx
   TestFragment.cxx
+  TestCVE20263650.cxx
   #TestImplicitDataElement.cxx
   TestItem.cxx
   #TestParser.cxx
