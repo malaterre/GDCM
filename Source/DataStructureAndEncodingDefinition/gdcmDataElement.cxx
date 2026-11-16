@@ -82,6 +82,10 @@ namespace gdcm_ns
             ss.str( s );
             sqi->Read<ImplicitDataElement,SwapperNoOp>( ss, true );
             }
+          catch( NestingDepthException & )
+            {
+            throw; // not malformed data: do not retry with another decoder
+            }
           catch(Exception &ex)
             {
             const Tag itemPMSStart(0xfeff, 0x00e0);
@@ -123,6 +127,10 @@ namespace gdcm_ns
             ss.str( s );
             sqi->Read<ImplicitDataElement,SwapperNoOp>( ss, true );
             }
+          catch( NestingDepthException & )
+            {
+            throw; // not malformed data: do not retry with another decoder
+            }
           catch ( Exception &ex0 )
             {
             // Some people like to skew things up and write invalid SQ in VR:UN field
@@ -137,6 +145,10 @@ namespace gdcm_ns
               sqi->Read<ExplicitDataElement,SwapperDoOp>( ss, true );
               gdcmWarningMacro(ex0.what()); (void)ex0;
               }
+            catch( NestingDepthException & )
+              {
+              throw; // not malformed data: do not retry with another decoder
+              }
             catch ( Exception &ex1 )
               {
               // Let's try again this time but without the byte swapping option:
@@ -147,6 +159,10 @@ namespace gdcm_ns
                 ss.str(s);
                 sqi->Read<ExplicitDataElement,SwapperNoOp>( ss, true );
                 gdcmWarningMacro(ex1.what()); (void)ex1;
+                }
+              catch( NestingDepthException & )
+                {
+                throw; // not malformed data: do not retry with another decoder
                 }
               catch ( Exception &ex2 )
                 {
@@ -177,6 +193,10 @@ namespace gdcm_ns
             std::stringstream ss;
             ss.str( s );
             sqi->Read<ImplicitDataElement,SwapperNoOp>( ss, true );
+            }
+          catch( NestingDepthException & )
+            {
+            throw; // not malformed data: do not retry with another decoder
             }
           catch ( Exception &ex0 )
             {

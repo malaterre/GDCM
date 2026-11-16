@@ -84,6 +84,10 @@ std::istream &UNExplicitDataElement::ReadPreValue(std::istream &is)
       return is;
       }
     }
+  catch( NestingDepthException & )
+    {
+    throw; // not malformed data: do not retry with another decoder
+    }
   catch( Exception &ex )
     {
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
@@ -171,6 +175,10 @@ std::istream &UNExplicitDataElement::ReadValue(std::istream &is, bool readvalues
           {
           gdcm_assert(0);
           }
+        }
+      catch( NestingDepthException & )
+        {
+        throw; // not malformed data: do not retry with another decoder
         }
       catch( std::exception &)
         {

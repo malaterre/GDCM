@@ -493,6 +493,10 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
       }
     }
   // Only catch parse exception at this point
+  catch( NestingDepthException & )
+    {
+    throw; // not malformed data: do not retry with another decoder
+    }
   catch( ParseException &ex )
     {
 #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
@@ -595,6 +599,10 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
           caller.template ReadCommon<VR16ExplicitDataElement,SwapperNoOp>(is);
           // This file can only be rewritten as implicit...
           }
+        catch( NestingDepthException & )
+          {
+          throw; // not malformed data: do not retry with another decoder
+          }
         catch ( Exception & )
           {
           try
@@ -627,6 +635,10 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
             F->GetDataSet().Clear(); // remove garbage from 1st attempt...
             //F->GetDataSet().template Read<ExplicitImplicitDataElement,SwapperNoOp>(is);
             caller.template ReadCommon<ExplicitImplicitDataElement,SwapperNoOp>(is);
+            }
+          catch( NestingDepthException & )
+            {
+            throw; // not malformed data: do not retry with another decoder
             }
           catch ( Exception &ex2 )
             {
@@ -696,6 +708,12 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
 
   //if( success ) gdcm_assert( Stream->eof() );
   caller.Check(success, *Stream );
+    }
+  catch( NestingDepthException &ex )
+    {
+    (void)ex;  //to avoid unreferenced variable warning on release
+    gdcmErrorMacro( ex.what() );
+    success = false;
     }
   catch( Exception &ex )
     {
