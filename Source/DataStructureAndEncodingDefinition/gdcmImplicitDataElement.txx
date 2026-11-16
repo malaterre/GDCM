@@ -155,6 +155,10 @@ std::istream &ImplicitDataElement::ReadValue(std::istream &is, bool readvalues)
           gdcmWarningMacro( "Illegal: Explicit SQ found in a file with "
             "TransferSyntax=Implicit for tag: " << TagField );
           }
+        catch( NestingDepthException & )
+          {
+          throw; // not malformed data: do not retry with another decoder
+          }
         catch( Exception & )
           {
           // MR_ELSCINT1_00e1_1042_SQ_feff_00e0_Item.dcm
@@ -391,6 +395,10 @@ std::istream &ImplicitDataElement::ReadValueWithLength(std::istream& is, VL & le
             }
           gdcmWarningMacro( "Illegal: Explicit SQ found in a file with "
             "TransferSyntax=Implicit for tag: " << TagField );
+          }
+        catch( NestingDepthException & )
+          {
+          throw; // not malformed data: do not retry with another decoder
           }
         catch( Exception &)
           {

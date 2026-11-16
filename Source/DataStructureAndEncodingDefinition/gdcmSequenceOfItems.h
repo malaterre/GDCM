@@ -128,6 +128,10 @@ public:
           {
           item.Read<TDE,TSwap>(is);
           }
+        catch( NestingDepthException & )
+          {
+          throw; // not malformed data: do not retry with another decoder
+          }
         catch( Exception &ex )
           {
           if( strcmp( ex.GetDescription(), "Changed Length" ) == 0 )

@@ -91,6 +91,10 @@ std::istream &VR16ExplicitDataElement::ReadPreValue(std::istream &is)
       return is;
       }
     }
+  catch( NestingDepthException & )
+    {
+    throw; // not malformed data: do not retry with another decoder
+    }
   catch( Exception & )
     {
     VRField = VR::INVALID;
@@ -211,6 +215,10 @@ std::istream &VR16ExplicitDataElement::ReadValue(std::istream &is, bool readvalu
           gdcm_assert(0);
           }
         }
+      catch( NestingDepthException & )
+        {
+        throw; // not malformed data: do not retry with another decoder
+        }
       catch( std::exception &)
         {
         // Must be one of those non-cp246 file...
@@ -277,6 +285,10 @@ std::istream &VR16ExplicitDataElement::ReadValue(std::istream &is, bool readvalu
         ByteSwapFilter bsf(ds);
         bsf.ByteSwap();
         }
+      }
+    catch( NestingDepthException & )
+      {
+      throw; // not malformed data: do not retry with another decoder
       }
     catch( std::exception &ex )
       {

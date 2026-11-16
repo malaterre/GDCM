@@ -79,6 +79,20 @@ private:
   DataElement LastElement;
 };
 
+/**
+ * \brief Thrown when nested Sequence of Items exceed ParseDepthGuard::GetLimit().
+ * \details This is not a ParseException: it does not describe malformed data that
+ * an alternate decoding could recover from. Code that retries a failed read with
+ * another decoder must rethrow it rather than retry.
+ */
+class NestingDepthException : public Exception
+{
+public:
+  explicit NestingDepthException(const char *desc = "Nesting depth limit exceeded while parsing data set",
+    const char *file = __FILE__, unsigned int lineNumber = __LINE__, const char *func = "")
+    : Exception(desc, file, lineNumber, func) {}
+};
+
 } // end namespace gdcm_ns
 
 // Undo warning suppression.

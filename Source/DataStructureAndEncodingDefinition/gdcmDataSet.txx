@@ -15,6 +15,7 @@
 #define GDCMDATASET_TXX
 
 #include "gdcmByteValue.h"
+#include "gdcmParseException.h"
 #include "gdcmPrivateTag.h"
 #include "gdcmParseException.h"
 
@@ -34,6 +35,10 @@ namespace gdcm_ns
         //std::cerr << "DEBUG Nested: " << de << std::endl;
         InsertDataElement( de );
         }
+      }
+    catch( NestingDepthException & )
+      {
+      throw; // not malformed data: do not retry with another decoder
       }
     catch(ParseException &pe)
       {
@@ -409,6 +414,10 @@ namespace gdcm_ns
           }
         }
     }
+    catch( NestingDepthException & )
+      {
+      throw; // not malformed data: do not retry with another decoder
+      }
     catch(ParseException &pe)
       {
       if( pe.GetLastElement().GetTag() == Tag(0xfffe,0xe000) )

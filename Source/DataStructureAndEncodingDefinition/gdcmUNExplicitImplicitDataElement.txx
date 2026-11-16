@@ -52,6 +52,10 @@ std::istream &UNExplicitImplicitDataElement::ReadValue(std::istream &is)
     {
     //de.template ReadValue<UNExplicitDataElement,TSwap>( is );
     }
+  catch( NestingDepthException & )
+    {
+    throw; // not malformed data: do not retry with another decoder
+    }
   catch(ParseException &ex)
     {
     de.SetVR( VR::INVALID ); // EXTREMELY IMPORTANT !

@@ -28,6 +28,31 @@ namespace gdcm_ns
 {
 
 class DataSet;
+
+/**
+ * \brief Recursion guard for nested data set parsing.
+ * \details Parsing a DICOM data set recurses once per nested Sequence of Items, and
+ * PS3.5 sets no nesting limit, so a crafted file can exhaust the native stack and
+ * terminate the process before any error is reported. Each Item::Read holds one
+ * instance; it counts nesting depth for the current thread and throws
+ * NestingDepthException once the limit is exceeded.
+ *
+ * The default limit (128) is far above the nesting found in real data sets and
+ * small enough to be safe on small thread stacks. The limit is process-wide;
+ * SetLimit() ignores 0.
+ */
+class GDCM_EXPORT ParseDepthGuard
+{
+public:
+  ParseDepthGuard();
+  ~ParseDepthGuard();
+  static unsigned int GetLimit();
+  /// Set the maximum nesting depth. A value of 0 is ignored and returns false.
+  static bool SetLimit(unsigned int limit);
+  ParseDepthGuard(const ParseDepthGuard &) = delete;
+  ParseDepthGuard &operator=(const ParseDepthGuard &) = delete;
+};
+
 /**
  * \brief Class to represent an Item
  * \details A component of the value of a Data Element that is of Value Representation
@@ -97,6 +122,7 @@ public:
 
   template <typename TDE, typename TSwap>
   std::istream &Read(std::istream &is) {
+    ParseDepthGuard depth_guard;
     // Superclass
     {
         DataSet &nested = NestedDataSet;
@@ -152,6 +178,10 @@ public:
           nested.template ReadNested<TDE,SwapperDoOp>(is);
           ByteSwapFilter bsf(nested);
           bsf.ByteSwap();
+          }
+        catch( NestingDepthException & )
+          {
+          throw; // not malformed data: do not retry with another decoder
           }
         catch(ParseException &pe)
           {

@@ -136,6 +136,10 @@ std::istream &ExplicitImplicitDataElement::ReadPreValue(std::istream &is)
 #endif
     }
     }
+  catch( NestingDepthException & )
+    {
+    throw; // not malformed data: do not retry with another decoder
+    }
   catch( Exception &ex )
     {
     (void)ex;
@@ -221,6 +225,10 @@ std::istream &ExplicitImplicitDataElement::ReadPreValue(std::istream &is)
             {
             gdcm_assert(0 && "Should not happen");
             }
+          }
+        catch( NestingDepthException & )
+          {
+          throw; // not malformed data: do not retry with another decoder
           }
         catch( std::exception &ex2 )
           {
@@ -375,6 +383,10 @@ std::istream &ExplicitImplicitDataElement::ReadValue(std::istream &is, bool read
           gdcm_assert(0);
           }
         }
+      catch( NestingDepthException & )
+        {
+        throw; // not malformed data: do not retry with another decoder
+        }
       catch( std::exception &)
         {
         // Must be one of those non-cp246 file...
@@ -434,6 +446,10 @@ std::istream &ExplicitImplicitDataElement::ReadValue(std::istream &is, bool read
         ByteSwapFilter bsf(ds);
         bsf.ByteSwap();
         }
+      }
+    catch( NestingDepthException & )
+      {
+      throw; // not malformed data: do not retry with another decoder
       }
     catch( std::exception &ex )
       {

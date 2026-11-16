@@ -37,6 +37,7 @@ set(DSED_TEST_SRCS
   TestFragment.cxx
   #TestImplicitDataElement.cxx
   TestItem.cxx
+  TestParseDepthGuard.cxx
   #TestParser.cxx
   TestSequenceOfFragments.cxx
   TestSequenceOfItems.cxx
