@@ -629,7 +629,11 @@ bool JPEGCodec::DecodeExtent(
       gdcmErrorMacro( "Could not read Pixel Data fragment #" << numfrags << ": " << ex.what() );
       return false;
       }
-    gdcm_assert( frag.GetTag() == seqDelItem && frag.GetVL() == 0 );
+    if( frag.GetTag() != seqDelItem || frag.GetVL() != 0 )
+      {
+      gdcmErrorMacro( "Pixel Data fragments are not terminated by an empty Sequence Delimitation Item" );
+      return false;
+      }
     gdcm_assert( numfrags == offsets.size() );
     if( numfrags != Dimensions[2] )
       {
