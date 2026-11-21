@@ -245,7 +245,12 @@ typename TRAITS::SAMPLE JlsCodec<TRAITS,STRATEGY>::DoRegular(int32_t Qs, int32_t
     int32_t Px = traits.CorrectPrediction(pred + ApplySign(ctx.C, sign));
 
     int32_t ErrVal;
-    const Code& code = decodingTables[k].Get(STRATEGY::PeekByte());
+    // decodingTables only has entries for k in [0,16); a corrupt or crafted
+    // stream can drive the Golomb parameter k past that (GetGolomb() is only
+    // bounded by a debug ASSERT), so fall back to the general decoder instead
+    // of indexing the table out of bounds.
+    static const Code NOCODE(0, 0);
+    const Code& code = (k < 16) ? decodingTables[k].Get(STRATEGY::PeekByte()) : NOCODE;
     if (code.GetLength() != 0)
     {
         STRATEGY::Skip(code.GetLength());
